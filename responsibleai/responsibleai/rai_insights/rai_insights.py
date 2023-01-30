@@ -3,8 +3,11 @@
 
 """Defines the RAIInsights class."""
 
+from enum import Enum
+import inspect
 import json
 import pickle
+import sys
 import warnings
 from pathlib import Path
 from typing import Any, List, Optional
@@ -42,6 +45,10 @@ _MIN_VALUE = 'min_value'
 _MAX_VALUE = 'max_value'
 
 
+_MODEL_METHOD_EXCEPTION_MESSAGE = (
+    'The passed model cannot be used for getting predictions via {0}')
+
+
 class ForecastingWrapper(object):
     def __init__(self, forecast_method, forecast_quantiles_method=None):
         self._forecast_method = forecast_method
@@ -54,17 +61,53 @@ class ForecastingWrapper(object):
         return self._forecast_quantiles_method(X, quantiles)
 
 
+# Internally we can treat forecasts as predictions and quantiles as
+# probabilities since we only need to forward them to the UI.
+# Depending on task type they get interpreted as either one and
+# we don't need to duplicate a lot of code here.
+class MethodPurpose(Enum):
+    PREDICTION = "prediction"
+    FORECAST = PREDICTION
+    PROBABILITY = "probability"
+    QUANTILES = PROBABILITY
+
+class ModelMethod:
+    def __init__(self, *, name, optional, purpose):
+        self.name = name
+        self.optional = optional
+        self.purpose = purpose
+
+
+# Model methods by task type
+# Every task has one required method (optional=False) to make predictions,
+# forecasts etc. and can additionally have optional methods to calculate
+# probabilities, quantiles, etc.
 model_methods = {
     ModelTask.CLASSIFICATON: [
-        'predict',
-        'predict_proba'
+        ModelMethod(
+            name=SKLearn.PREDICT,
+            optional=False,
+            purpose=MethodPurpose.PREDICTION),
+        ModelMethod(
+            name=SKLearn.PREDICT_PROBA,
+            optional=True,
+            purpose=MethodPurpose.PROBABILITY)
     ],
     ModelTask.REGRESSION: [
-        'predict'
+        ModelMethod(
+            name=SKLearn.PREDICT,
+            optional=False,
+            purpose=MethodPurpose.PREDICTION)
     ],
     ModelTask.FORECASTING: [
-        'forecast',
-        'forecast_quantiles'
+        ModelMethod(
+            name=Forecasting.FORECAST,
+            optional=False,
+            purpose=MethodPurpose.FORECAST),
+        ModelMethod(
+            name=Forecasting.FORECAST_QUANTILES,
+            optional=True,
+            purpose=MethodPurpose.QUANTILES)
     ]
 }
 
@@ -134,14 +177,9 @@ class RAIInsights(RAIBaseInsights):
 
             if model is not None:
                 # Cache predictions of the model
-                self._large_predict_output = model.predict(
-                    self._large_test.drop(columns=[target_column]))
-                if hasattr(model, SKLearn.PREDICT_PROBA):
-                    # TODO generalize to use forecasting forecast_quantiles
-                    self._large_predict_proba_output = model.predict_proba(
-                        self._large_test.drop(columns=[target_column]))
-                else:
-                    self._large_predict_proba_output = None
+                self._set_model_outputs(
+                    input_data=self._large_test.drop(columns=[target_column]),
+                    large=True)
             else:
                 self._large_predict_output = None
                 self._large_predict_proba_output = None
@@ -149,6 +187,10 @@ class RAIInsights(RAIBaseInsights):
             self._large_test = None
             self._large_predict_output = None
             self._large_predict_proba_output = None
+        
+        super(RAIInsights, self).__init__(
+            model, train, test, target_column, task_type, serializer)
+        self._wrap_model_if_needed()
 
         self._validate_rai_insights_input_parameters(
             model=model, train=train,
@@ -179,10 +221,6 @@ class RAIInsights(RAIBaseInsights):
                 categorical_features=self.categorical_features,
                 dataset=test.drop(columns=[target_column]))
 
-        super(RAIInsights, self).__init__(
-            model, train, test, target_column, task_type,
-            serializer)
-
         self._try_add_data_balance()
 
         self.predict_output = None
@@ -190,20 +228,8 @@ class RAIInsights(RAIBaseInsights):
         self.quantile_predict_output = None
         if model is not None:
             # Cache predictions of the model
-            if is_forecaster(self.model):
-                self.predict_output = self.model.forecast(
-                    self._test_without_true_y)
-                if is_quantile_forecaster:
-                    self.quantile_predict_output = self.model.forecast_quantiles(
-                        self._test_without_true_y, [0.025, 0.975])
-            else:
-                self.predict_output = model.predict(
-                    self.get_test_data(
-                        test_data=test).drop(columns=[target_column]))
-                if hasattr(model, SKLearn.PREDICT_PROBA):
-                    self.predict_proba_output = model.predict_proba(
-                        self.get_test_data(
-                            test_data=test).drop(columns=[target_column]))
+            self._set_model_outputs(input_data=self.get_test_data(
+                test_data=test).drop(columns=[target_column]), large=False)
             
 
     def get_train_data(self):
@@ -519,7 +545,6 @@ class RAIInsights(RAIBaseInsights):
                 self._ensure_time_column_available(
                     feature_metadata, feature_names, model)
 
-
         if model is not None:
             # Pick one row from train and test data
             small_train_data = train[0:1]
@@ -552,83 +577,46 @@ class RAIInsights(RAIBaseInsights):
                         'one feature.'
                     )
 
-            small_train_features_before = list(small_train_data.columns)
+            # Ensure that the model has the required methods and that they
+            # do not change the input data.
+            self._ensure_model_outputs(input_data=small_train_data)
+            self._ensure_model_outputs(input_data=small_test_data)
 
-            if task_type in [ModelTask.CLASSIFICATION, ModelTask.REGRESSION]:
-                # Run predict() of the model
-                try:
-                    model.predict(small_train_data)
-                    model.predict(small_test_data)
-                except Exception:
+            if task_type == ModelTask.REGRESSION:
+                if hasattr(model, SKLearn.PREDICT_PROBA):
                     raise UserConfigValidationException(
-                        'The model passed cannot be used for'
-                        ' getting predictions via predict()'
-                    )
-                self._validate_features_same(small_train_features_before,
-                                            small_train_data,
-                                            SKLearn.PREDICT)
-
-                # Run predict_proba() of the model
-                if task_type == ModelTask.CLASSIFICATION:
-                    try:
-                        model.predict_proba(small_train_data)
-                        model.predict_proba(small_test_data)
-                    except Exception:
-                        raise UserConfigValidationException(
-                            'The model passed cannot be used for'
-                            ' getting predictions via predict_proba()'
-                        )
-                self._validate_features_same(small_train_features_before,
-                                            small_train_data,
-                                            SKLearn.PREDICT_PROBA)
-
-                if task_type == ModelTask.REGRESSION:
-                    if hasattr(model, SKLearn.PREDICT_PROBA):
-                        raise UserConfigValidationException(
-                            'The regression model'
-                            'provided has a predict_proba function. '
-                            'Please check the task_type.')
-            elif task_type == ModelTask.FORECASTING:
-                # Run forecast() of the model
-                self._validate_model_forecast(model, small_test_data, small_test_features_before)
+                        'The regression model provided has a predict_proba '
+                        'function. Please check the task_type.')                
                 
-                # Wrap model to make forecasting API compatible.
-                # Detect if the model is from AzureML as a special case.
-                model_package = sys.modules[inspect.getmodule(model).__name__.partition('.')[0]].__package__
-                if model_package == "azureml":
-                    def forecast(forecasting_model, X):
-                        # AzureML forecasting models return a tuple of (forecast, data)
-                        # but we only want to return the actual forecast.
-                        return forecasting_model.forecast(X)[0]
-                    def forecast_quantiles(forecasting_model, X, quantiles):
-                        # AzureML forecasting models don't take quantiles as an argument but
-                        # instead need to have it set on the model object.
-                        if type(quantiles) == list and len(quantiles) > 0 and \
-                                all([type(q) == float and q > 0 and q < 1 for q in quantiles]):
-                            forecasting_model.quantiles = quantiles
-                            return forecasting_model.forecast_quantiles(X)
-                        else:
-                            raise ValueError("quantiles must be a list of floats between 0 and 1.")
-                    wrapper = ForecastingWrapper(
-                        lambda X: forecast(model, X),
-                        lambda X, quantiles: forecast_quantiles(model, X, quantiles))
-                    self._validate_model_forecast(wrapper, small_test_data, small_test_features_before)
-                    self.model = wrapper
-                else:
-                    self.model = model
-
-    def _validate_model_forecast(self, model, small_test_data,
-                                 small_test_features_before):
-        try:
-            model.forecast(small_test_data)
-        except Exception:
-            raise UserConfigValidationException(
-                'The model passed cannot be used for'
-                ' getting forecasts via forecast()'
-            )
-        self._validate_features_same(small_test_features_before,
-                                     small_test_data,
-                                     Forecasting.FORECAST)
+    def _wrap_model_if_needed(self):
+        """Wrap the model in a compatible format if needed.
+        TODO        
+        """
+        if self.task_type == ModelTask.FORECASTING:
+            # Wrap model to make forecasting API compatible.
+            # Detect if the model is from AzureML as a special case.
+            module_name = inspect.getmodule(self.model).__name__.partition('.')[0]
+            model_package = sys.modules[module_name].__package__
+            if model_package == "azureml":
+                def forecast(forecasting_model, X):
+                    # AzureML forecasting models return a tuple of (forecast, data)
+                    # but we only want to return the actual forecast.
+                    return forecasting_model.forecast(X)[0]
+                def forecast_quantiles(forecasting_model, X, quantiles=None):
+                    # AzureML forecasting models don't take quantiles as an argument but
+                    # instead need to have it set on the model object.
+                    if quantiles is None:
+                        quantiles = [0.025, 0.975]
+                    if type(quantiles) == list and len(quantiles) > 0 and \
+                            all([type(q) == float and q > 0 and q < 1 for q in quantiles]):
+                        forecasting_model.quantiles = quantiles
+                        return forecasting_model.forecast_quantiles(X)
+                    else:
+                        raise ValueError("quantiles must be a list of floats between 0 and 1.")
+                wrapper = ForecastingWrapper(
+                    lambda X: forecast(self.model, X),
+                    lambda X, quantiles: forecast_quantiles(self.model, X, quantiles))
+                self.model = wrapper
 
     def _validate_features_same(self, small_train_features_before,
                                 small_train_data, function):
@@ -648,7 +636,7 @@ class RAIInsights(RAIBaseInsights):
             raise UserConfigValidationException(
                 f'Calling model {function} function modifies '
                 'input dataset features. Please check if '
-                '{function} function is defined correctly.')
+                f'{function} function is defined correctly.')
 
     def _ensure_time_column_available(
             self,
@@ -825,10 +813,6 @@ class RAIInsights(RAIBaseInsights):
         except Exception as ex:
             raise ValueError("Unsupported dataset type") from ex
         if dataset is not None and self.model is not None:
-            if self.task_type in [ModelTask.CLASSIFICATION, ModelTask.REGRESSION]:
-                predict_method = self.model.predict
-            if self.task_type == ModelTask.FORECASTING:
-                predict_method = self.model.forecast
             try:
                 predict_dataset = dataset
                 metadata = self._feature_metadata
@@ -839,11 +823,14 @@ class RAIInsights(RAIBaseInsights):
                         len(metadata.dropped_features) != 0):
                     predict_dataset = predict_dataset.drop(
                         metadata.dropped_features, axis=1)
-                    predicted_y = predict_method(predict_dataset)
+                    predicted_y = self._get_model_output(
+                        predict_dataset, purpose=MethodPurpose.PREDICTION)
             except Exception as ex:
-                msg = f"Model does not support {predict_method.__name__} method for given"
-                "dataset type"
-                raise ValueError(msg) from ex
+                model_method = self._get_model_method(
+                    purpose=MethodPurpose.PREDICTION)
+                raise ValueError(
+                    f"Model does not support {model_method.__name__} method "
+                    "for the given dataset type,") from ex
             try:
                 predicted_y = convert_to_list(predicted_y)
             except Exception as ex:
@@ -855,8 +842,8 @@ class RAIInsights(RAIBaseInsights):
                 predicted_y = [dashboard_dataset.class_names.index(
                     y) for y in predicted_y]
             dashboard_dataset.predicted_y = predicted_y
-        row_length = 0
 
+        row_length = 0
         if list_dataset is not None:
             row_length, feature_length = np.shape(list_dataset)
             if row_length > 100000:
@@ -880,8 +867,8 @@ class RAIInsights(RAIBaseInsights):
                         .apply(lambda dt: dt.strftime("%Y-%m-%dT%H:%M:%SZ")))
             except Exception as ex:
                 raise ValueError(
-                    "The time column should be parseable by pandas.to_datetime, ideally in ISO format"
-                    ) from ex
+                    "The time column should be parseable by "
+                    "pandas.to_datetime, ideally in ISO format,") from ex
 
 
         if true_y is not None and len(true_y) == row_length:
@@ -902,17 +889,9 @@ class RAIInsights(RAIBaseInsights):
             dashboard_dataset.feature_names = features
         dashboard_dataset.target_column = self.target_column
 
-        predict_proba_method = None
-        if (self.task_type == ModelTask.CLASSIFICATION and 
-                is_classifier(self.model)):
-            predict_proba_method = self.model.predict_proba
-        elif (self.task_type == ModelTask.FORECASTING and
-                is_quantile_forecaster(self.model)):
-            predict_proba_method = \
-                lambda dataset: self.model.forecast_quantiles(dataset, [0.025, 0.975])
-            predict_proba_method.__name__ = Forecasting.FORECAST_QUANTILES
-
-        if predict_proba_method is not None and dataset is not None:
+        model_method = self._get_model_method(
+            purpose=MethodPurpose.PROBABILITY)
+        if model_method is not None and dataset is not None:
             try:
                 predict_dataset = dataset
                 metadata = self._feature_metadata
@@ -923,16 +902,16 @@ class RAIInsights(RAIBaseInsights):
                         len(metadata.dropped_features) != 0):
                     predict_dataset = predict_dataset.drop(
                         metadata.dropped_features, axis=1)
-                probability_y = predict_proba_method(predict_dataset)
+                probability_y = model_method(predict_dataset)
             except Exception as ex:
                 raise ValueError(
-                    f"Model does not support {predict_proba_method.__name__} method"
+                    f"Model does not support {model_method.__name__} method"
                     " for given dataset type,") from ex
             try:
                 probability_y = convert_to_list(probability_y)
             except Exception as ex:
                 raise ValueError(
-                    f"Model {predict_proba_method.__name__} "
+                    f"Model {model_method.__name__} "
                     "output of unsupported type,") from ex
             dashboard_dataset.probability_y = probability_y
 
@@ -1029,6 +1008,63 @@ class RAIInsights(RAIBaseInsights):
         """
         super(RAIInsights, self).save(path)
         self._save_large_data(path)
+
+    def _get_model_method(self, *, purpose):
+        """TODO"""
+        methods = model_methods[self.task_type].filter(
+            lambda model_method: purpose == model_method.purpose)
+        if len(methods) == 0:
+            return None
+        return getattr(self.model, methods[0].name)
+
+    def _get_model_output(self, *, input_data, purpose):
+        """Get the output from a model method.
+        TODO
+        """
+        model_method = self._get_model_method(purpose)
+        if model_method:
+            return model_method(input_data)
+        return None
+    
+    def _ensure_model_outputs(self, *, input_data):
+        input_features = input_data.columns
+        for method in model_methods[self.task_type]:
+            if not hasattr(self.model, method.name) and not method.optional:
+                raise UserConfigValidationException(
+                    _MODEL_METHOD_EXCEPTION_MESSAGE.format(method.name))
+            try:
+                model_method = getattr(self.model, method.name)
+                model_method(input_data)
+                self._validate_features_same(
+                    input_features,
+                    input_data,
+                    method.name)
+            except Exception:
+                raise UserConfigValidationException(
+                    _MODEL_METHOD_EXCEPTION_MESSAGE.format(method.name))
+
+
+    def _set_model_output(self, *, model_method, input_data, large=False):
+        """TODO"""
+        field_name = f"_{'large_' if large else ''}{model_method.name}_output"
+        try:
+            model_method = getattr(self.model, model_method.name)
+        except AttributeError as err:
+            if model_method.optional:
+                setattr(self, field_name, None)
+                return
+            else:
+                raise ValueError(
+                    f"The model is expected to have a {model_method.name} method,") from err
+        setattr(self, field_name, model_method(input_data))
+    
+    def _set_model_outputs(self, *, input_data, large=False):
+        """TODO"""
+        for model_method in model_methods[self.task_type]:
+            self.set_model_output(
+                model_method=model_method,
+                input_data=input_data,
+                large=large)
 
     @staticmethod
     def _get_feature_ranges(test, categorical_features, feature_columns,
