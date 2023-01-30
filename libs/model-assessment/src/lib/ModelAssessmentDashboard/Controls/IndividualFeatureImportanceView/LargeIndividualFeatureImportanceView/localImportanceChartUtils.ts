@@ -1,9 +1,13 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import {
   IsClassifier,
   ModelExplanationUtils,
   ModelTypes,
   WeightVectorOption
 } from "@responsible-ai/core-ui";
+
 import {
   ILocalImportanceData,
   regressionKeyValue
@@ -12,9 +16,9 @@ import {
 export function getSortedData(
   selectedWeightVector: WeightVectorOption,
   modelType: ModelTypes,
-  sortedData: Array<{ [key: string]: number[] }>,
-  unSortedX: string[],
+  sortedData: Array<{ [key: string]: number[] | number | undefined }>,
   sortAbsolute: boolean,
+  unSortedX?: string[],
   rowNumber?: number
 ): ILocalImportanceData[] {
   const localExplanationsData: ILocalImportanceData[] = [];
@@ -36,7 +40,9 @@ export function getSortedData(
   const sortedLocalExplanationsData = sortedLocalExplanationsIndices.map(
     (index) => localData[index]
   );
-  const sortedX = sortedLocalExplanationsIndices.map((i) => unSortedX[i]);
+  const sortedX = unSortedX
+    ? sortedLocalExplanationsIndices.map((i) => unSortedX[i])
+    : [];
   sortedX.forEach((x: string, index: string | number) => {
     localExplanationsData.push({
       label: x,

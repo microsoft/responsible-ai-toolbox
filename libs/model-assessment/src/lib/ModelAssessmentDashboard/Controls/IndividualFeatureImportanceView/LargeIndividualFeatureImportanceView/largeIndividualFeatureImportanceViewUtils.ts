@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import {
   calculateBubblePlotDataFromErrorCohort,
   Cohort,
@@ -15,6 +18,7 @@ import {
   hasAxisTypeChanged
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
+
 import {
   ILargeIndividualFeatureImportanceViewProps,
   ILargeIndividualFeatureImportanceViewState
@@ -222,7 +226,6 @@ export function hasAxisTypeUpdated(
   if (currentChartProps && prevChartProps) {
     changedKeys = [];
     compareChartProps(prevChartProps, currentChartProps, changedKeys);
-    console.log("!!CK, ", changedKeys);
     return hasAxisTypeChanged(changedKeys);
   }
   return false;

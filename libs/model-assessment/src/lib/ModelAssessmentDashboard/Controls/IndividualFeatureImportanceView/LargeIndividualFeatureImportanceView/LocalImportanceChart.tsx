@@ -6,6 +6,7 @@ import {
   BasicHighChart,
   defaultModelAssessmentContext,
   getPrimaryChartColor,
+  ILocalExplanations,
   IsClassifier,
   LoadingSpinner,
   MissingParametersPlaceholder,
@@ -15,6 +16,7 @@ import {
 } from "@responsible-ai/core-ui";
 import { ClassImportanceWeights } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
+import { Dictionary } from "lodash";
 import React from "react";
 
 import { localImportanceChartStyles } from "./LocalImportanceChart.styles";
@@ -22,20 +24,20 @@ import { getSortedData } from "./localImportanceChartUtils";
 
 export interface ILocalImportanceChartProps {
   rowNumber?: number;
-  data: any;
+  data?: ILocalExplanations;
   theme?: string;
   isLocalExplanationsDataLoading?: boolean;
   localExplanationsErrorMessage?: string;
   selectedWeightVector: WeightVectorOption;
   weightOptions: WeightVectorOption[];
-  weightLabels: any;
+  weightLabels: Dictionary<string>;
   modelType: ModelTypes;
   onWeightChange: (option: WeightVectorOption) => void;
 }
 
 export interface ILocalImportanceChartState {
   sortAbsolute: boolean;
-  sortedData: Array<{ [key: string]: number[] }>;
+  sortedData: Array<{ [key: string]: number[] | number | undefined }>;
   topK: number;
 }
 export interface ILocalImportanceData {
@@ -169,8 +171,9 @@ export class LocalImportanceChart extends React.PureComponent<
     this.setState({ topK: newValue });
   };
 
-  private generateSortedData(): any {
-    const sortedData = [];
+  private generateSortedData(): void {
+    let sortedData: Array<{ [key: string]: number[] | number | undefined }> =
+      [];
     if (IsClassifier(this.props.modelType)) {
       sortedData.push({
         [this.props.weightOptions[0]]: this.getAbsoluteValues(
@@ -194,16 +197,16 @@ export class LocalImportanceChart extends React.PureComponent<
     if (!values) {
       return values;
     }
-    const sortedScores = values.map((score: any) => Math.abs(score));
+    const sortedScores = values.map((score) => Math.abs(score));
     return sortedScores;
   }
 
-  private addScores(): any {
+  private addScores(): Array<{ [key: string]: number[] }> {
     const scores: Array<{ [key: string]: number[] }> = new Array(
       this.props.data?.precomputedExplanations?.localFeatureImportance.scores.length
     );
     this.props.data?.precomputedExplanations?.localFeatureImportance.scores.forEach(
-      (score: any[], index: number) => {
+      (score, index) => {
         scores.push({ [this.props.weightOptions[index + 1]]: score[0] });
       }
     );
@@ -215,9 +218,9 @@ export class LocalImportanceChart extends React.PureComponent<
       this.props.selectedWeightVector,
       this.props.modelType,
       this.state.sortedData,
-      this.props.data.precomputedExplanations.globalFeatureImportance
-        .feature_list,
       this.state.sortAbsolute,
+      this.props.data?.precomputedExplanations.globalFeatureImportance
+        .feature_list,
       this.props.rowNumber
     );
     const x = sortedData.map((d) => d.label);

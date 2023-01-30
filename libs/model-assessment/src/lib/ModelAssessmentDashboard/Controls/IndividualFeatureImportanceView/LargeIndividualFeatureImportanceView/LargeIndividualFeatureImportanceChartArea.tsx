@@ -12,7 +12,8 @@ import {
   IGenericChartProps,
   ChartTypes,
   ColumnCategories,
-  ISelectorConfig
+  ISelectorConfig,
+  IHighchartsConfig
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -23,7 +24,7 @@ import { largeIndividualFeatureImportanceViewStyles } from "./LargeIndividualFea
 export interface ILargeIndividualFeatureImportanceChartAreaProps {
   chartProps?: IGenericChartProps;
   isBubbleChartRendered?: boolean;
-  highChartConfigOverride?: any;
+  highChartConfigOverride?: IHighchartsConfig;
   isBubbleChartDataLoading?: boolean;
   bubbleChartErrorMessage?: string;
   isLocalExplanationsDataLoading?: boolean;

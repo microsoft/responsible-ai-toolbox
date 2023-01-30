@@ -8,6 +8,7 @@ import {
   getScatterOption,
   IGenericChartProps,
   IHighchartsConfig,
+  ILocalExplanations,
   instanceOfHighChart,
   IScatterPoint,
   ISelectorConfig,
@@ -57,17 +58,11 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       this.context.jointDataset,
       OtherChartTypes.Bubble
     );
-    generateHighChartConfigOverride(
-      chartProps,
-      false,
-      false,
-      false,
-      true,
-      false,
-      false,
-      this.updateBubblePlotData,
-      this.updateScatterPlotData
-    );
+    if (!this.state.chartProps) {
+      this.setState({
+        chartProps: chartProps
+      });
+    }
   }
 
   public componentDidUpdate(
@@ -292,7 +287,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     }
     this.setState({
       isLocalExplanationsDataLoading: false,
-      localExplanationsData
+      localExplanationsData: localExplanationsData as ILocalExplanations
     });
   };
 }

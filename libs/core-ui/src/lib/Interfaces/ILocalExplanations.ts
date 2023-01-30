@@ -18,5 +18,5 @@ interface IGlobalFeatureImportance {
 
 interface ILocalFeatureImportance {
   intercept: number[];
-  scores: number[][];
+  scores: number[][] | number[];
 }
