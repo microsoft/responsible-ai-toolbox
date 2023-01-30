@@ -60,7 +60,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     );
     if (!this.state.chartProps) {
       this.setState({
-        chartProps: chartProps
+        chartProps
       });
     }
   }

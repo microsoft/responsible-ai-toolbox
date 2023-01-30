@@ -172,7 +172,7 @@ export class LocalImportanceChart extends React.PureComponent<
   };
 
   private generateSortedData(): void {
-    let sortedData: Array<{ [key: string]: number[] | number | undefined }> =
+    const sortedData: Array<{ [key: string]: number[] | number | undefined }> =
       [];
     if (IsClassifier(this.props.modelType)) {
       sortedData.push({

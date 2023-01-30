@@ -69,7 +69,7 @@ export class LargeIndividualFeatureImportanceChartArea extends React.PureCompone
           <Stack.Item className={classNames.chartWithAxes}>
             <Stack horizontal>
               <Stack.Item className={classNames.verticalAxis}>
-                <div className={classNames.rotatedVerticalBox}>
+                <Stack.Item className={classNames.rotatedVerticalBox}>
                   {chartProps && (
                     <AxisConfig
                       orderedGroupTitles={yAxisCategories}
@@ -98,7 +98,7 @@ export class LargeIndividualFeatureImportanceChartArea extends React.PureCompone
                       }
                     />
                   )}
-                </div>
+                </Stack.Item>
               </Stack.Item>
               <Stack.Item className={classNames.chartContainer}>
                 {bubbleChartErrorMessage && (
@@ -122,7 +122,7 @@ export class LargeIndividualFeatureImportanceChartArea extends React.PureCompone
               </Stack.Item>
             </Stack>
           </Stack.Item>
-          <div className={classNames.horizontalAxis}>
+          <Stack.Item className={classNames.horizontalAxis}>
             {chartProps && (
               <AxisConfig
                 orderedGroupTitles={[
@@ -152,7 +152,7 @@ export class LargeIndividualFeatureImportanceChartArea extends React.PureCompone
                 }
               />
             )}
-          </div>
+          </Stack.Item>
         </Stack.Item>
         <Stack.Item className={classNames.legendContainer}>
           <LargeIndividualFeatureImportanceLegend
