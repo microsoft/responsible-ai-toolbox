@@ -3,27 +3,17 @@
 
 import { Stack } from "@fluentui/react";
 import {
-  calculateBubblePlotDataFromErrorCohort,
-  Cohort,
   defaultModelAssessmentContext,
   generateDefaultChartAxes,
   getScatterOption,
   hasAxisTypeChanged,
   IGenericChartProps,
-  IHighchartBubbleSDKClusterData,
   IHighchartsConfig,
-  ILocalExplanations,
   instanceOfHighChart,
   IScatterPoint,
   ISelectorConfig,
-  ITelemetryEvent,
-  JointDataset,
   ModelAssessmentContext,
-  ModelTypes,
-  OtherChartTypes,
-  TelemetryEventName,
-  TelemetryLevels,
-  WeightVectorOption
+  OtherChartTypes
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import React from "react";
@@ -31,34 +21,22 @@ import React from "react";
 import { verticalComponentTokens } from "../IndividualFeatureImportanceView.styles";
 
 import { getLocalExplanationsFromSDK } from "./getOnScatterPlotPointClick";
+import {
+  getInitialSpec,
+  ILargeIndividualFeatureImportanceViewProps,
+  ILargeIndividualFeatureImportanceViewState
+} from "./ILargeIndividualFeatureImportanceViewSpec";
 import { LargeIndividualFeatureImportanceChartArea } from "./LargeIndividualFeatureImportanceChartArea";
+import {
+  generateHighChartConfigOverride,
+  getBubblePlotData,
+  getNewChartProps,
+  getNewSelections,
+  instanceOfLocalExplanation,
+  selectPointFromChartLargeData,
+  shouldUpdateHighchart
+} from "./largeIndividualFeatureImportanceViewUtils";
 import { LocalImportanceChart } from "./LocalImportanceChart";
-
-export interface ILargeIndividualFeatureImportanceViewProps {
-  cohort: Cohort;
-  selectedWeightVector: WeightVectorOption;
-  weightOptions: WeightVectorOption[];
-  weightLabels: any;
-  modelType: ModelTypes;
-  telemetryHook?: (message: ITelemetryEvent) => void;
-  onWeightChange: (option: WeightVectorOption) => void;
-}
-
-export interface ILargeIndividualFeatureImportanceViewState {
-  chartProps?: IGenericChartProps;
-  highChartConfigOverride?: any;
-  isBubbleChartRendered?: boolean;
-  xSeries: number[];
-  ySeries: number[];
-  indexSeries: number[];
-  isBubbleChartDataLoading: boolean;
-  bubbleChartErrorMessage?: string;
-  isRevertButtonClicked: boolean;
-  selectedPointsIndexes: number[];
-  localExplanationsData: any;
-  isLocalExplanationsDataLoading?: boolean;
-  localExplanationsErrorMessage?: string;
-}
 
 export class LargeIndividualFeatureImportanceView extends React.Component<
   ILargeIndividualFeatureImportanceViewProps,
@@ -71,19 +49,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
 
   public constructor(props: ILargeIndividualFeatureImportanceViewProps) {
     super(props);
-    this.state = {
-      bubbleChartErrorMessage: undefined,
-      indexSeries: [],
-      isBubbleChartDataLoading: false,
-      isBubbleChartRendered: true,
-      isLocalExplanationsDataLoading: false,
-      isRevertButtonClicked: false,
-      localExplanationsData: undefined,
-      localExplanationsErrorMessage: undefined,
-      selectedPointsIndexes: [],
-      xSeries: [],
-      ySeries: []
-    };
+    this.state = getInitialSpec();
   }
 
   public componentDidMount(): void {
@@ -91,14 +57,16 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       this.context.jointDataset,
       OtherChartTypes.Bubble
     );
-    this.generateHighChartConfigOverride(
+    generateHighChartConfigOverride(
       chartProps,
       false,
       false,
       false,
       true,
       false,
-      false
+      false,
+      this.updateBubblePlotData,
+      this.updateScatterPlotData
     );
   }
 
@@ -106,40 +74,31 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     prevProps: ILargeIndividualFeatureImportanceViewProps,
     prevState: ILargeIndividualFeatureImportanceViewState
   ): void {
-    const hasSelectedPointIndexesUpdated = !_.isEqual(
-      this.state.selectedPointsIndexes,
-      prevState.selectedPointsIndexes
-    );
-    const hasIsLocalExplanationsDataLoadingUpdated = !_.isEqual(
-      this.state.isLocalExplanationsDataLoading,
-      prevState.isLocalExplanationsDataLoading
-    );
-    const hasRevertToBubbleChartUpdated =
-      this.state.isRevertButtonClicked &&
-      prevState.isRevertButtonClicked !== this.state.isRevertButtonClicked;
-    const hasCohortUpdated = this.props.cohort.name !== prevProps.cohort.name;
-    const hasChartPropsUpdated = !_.isEqual(
-      this.state.chartProps,
-      prevState.chartProps
-    );
+    const [
+      shouldUpdate,
+      hasSelectedPointIndexesUpdated,
+      hasIsLocalExplanationsDataLoadingUpdated,
+      hasRevertToBubbleChartUpdated,
+      hasCohortUpdated,
+      hasChartPropsUpdated
+    ] = shouldUpdateHighchart(prevState, prevProps, this.state, this.props);
     const hasAxisTypeChanged = this.hasAxisTypeChanged(prevState.chartProps);
-    if (
-      hasRevertToBubbleChartUpdated ||
-      hasSelectedPointIndexesUpdated ||
-      hasChartPropsUpdated ||
-      hasIsLocalExplanationsDataLoadingUpdated ||
-      hasCohortUpdated ||
-      hasAxisTypeChanged
-    ) {
-      this.generateHighChartConfigOverride(
-        this.state.chartProps,
-        hasSelectedPointIndexesUpdated,
-        hasIsLocalExplanationsDataLoadingUpdated,
-        hasRevertToBubbleChartUpdated,
-        hasChartPropsUpdated,
-        hasCohortUpdated,
-        hasAxisTypeChanged
-      );
+    if (shouldUpdate || hasAxisTypeChanged) {
+      this.state.chartProps
+        ? generateHighChartConfigOverride(
+            this.state.chartProps,
+            hasSelectedPointIndexesUpdated,
+            hasIsLocalExplanationsDataLoadingUpdated,
+            hasRevertToBubbleChartUpdated,
+            hasChartPropsUpdated,
+            hasCohortUpdated,
+            hasAxisTypeChanged,
+            this.updateBubblePlotData,
+            this.updateScatterPlotData
+          )
+        : this.setState({
+            chartProps: this.state.chartProps
+          });
     }
   }
 
@@ -147,7 +106,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     return (
       <Stack
         tokens={verticalComponentTokens}
-        id="IndividualFeatureImportanceView"
+        id="LargeIndividualFeatureImportanceView"
       >
         <LargeIndividualFeatureImportanceChartArea
           chartProps={this.state.chartProps}
@@ -185,42 +144,6 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     this.setState({ isRevertButtonClicked: status });
   };
 
-  private async generateHighChartConfigOverride(
-    chartProps: IGenericChartProps | undefined,
-    hasSelectedPointIndexesUpdated: boolean,
-    hasIsLocalExplanationsDataLoadingUpdated: boolean,
-    hasRevertToBubbleChartUpdated: boolean,
-    hasChartPropsUpdated: boolean,
-    hasCohortUpdated: boolean,
-    hasAxisTypeChanged: boolean
-  ): Promise<void> {
-    if (chartProps) {
-      if (hasCohortUpdated || hasRevertToBubbleChartUpdated) {
-        this.updateBubblePlotData(chartProps);
-        return;
-      }
-      if (hasAxisTypeChanged) {
-        this.updateScatterPlotData(chartProps);
-        return;
-      }
-      if (hasChartPropsUpdated) {
-        this.updateBubblePlotData(chartProps);
-        return;
-      }
-      if (
-        hasSelectedPointIndexesUpdated ||
-        hasIsLocalExplanationsDataLoadingUpdated
-      ) {
-        this.updateScatterPlotData(chartProps);
-        return;
-      }
-    } else {
-      this.setState({
-        chartProps
-      });
-    }
-  }
-
   private updateBubblePlotData = async (
     chartProps?: IGenericChartProps
   ): Promise<void> => {
@@ -235,7 +158,16 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
         xSeries: [],
         ySeries: []
       });
-      const datasetBarConfigOverride = await this.getBubblePlotData(chartProps);
+      const datasetBarConfigOverride = await getBubblePlotData(
+        chartProps,
+        this.props.cohort,
+        this.context.jointDataset,
+        this.context.dataset,
+        this.state.isLocalExplanationsDataLoading,
+        this.context.requestBubblePlotData,
+        this.selectPointFromChartLargeData,
+        this.onBubbleClick
+      );
       if (
         datasetBarConfigOverride &&
         !instanceOfHighChart(datasetBarConfigOverride)
@@ -254,40 +186,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
   };
 
   private updateScatterPlotData = (chartProps: IGenericChartProps): void => {
-    const datasetBarConfigOverride = this.getScatterPlotData(chartProps);
-    this.setState({
-      chartProps,
-      highChartConfigOverride: datasetBarConfigOverride,
-      isBubbleChartRendered: false,
-      isRevertButtonClicked: false
-    });
-  };
-
-  private getBubblePlotData = async (
-    chartProps: IGenericChartProps
-  ): Promise<
-    IHighchartBubbleSDKClusterData | IHighchartsConfig | undefined
-  > => {
-    return await calculateBubblePlotDataFromErrorCohort(
-      this.props.cohort,
-      chartProps,
-      [],
-      this.context.jointDataset,
-      this.context.dataset,
-      this.state.isLocalExplanationsDataLoading,
-      true,
-      false,
-      this.context.requestBubblePlotData,
-      this.selectPointFromChartLargeData,
-      this.onBubbleClick,
-      undefined
-    );
-  };
-
-  private getScatterPlotData = (
-    chartProps: IGenericChartProps
-  ): IHighchartsConfig | undefined => {
-    return getScatterOption(
+    const datasetBarConfigOverride = getScatterOption(
       this.state.xSeries,
       this.state.ySeries,
       this.state.indexSeries,
@@ -300,6 +199,12 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       false,
       this.selectPointFromChartLargeData
     );
+    this.setState({
+      chartProps,
+      highChartConfigOverride: datasetBarConfigOverride,
+      isBubbleChartRendered: false,
+      isRevertButtonClicked: false
+    });
   };
 
   private readonly hasAxisTypeChanged = (
@@ -344,62 +249,47 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     ySeries: number[],
     indexSeries: number[]
   ): void => {
-    // if (!this.state.chartProps) {
-    //   return;
-    // }
-    // const newProps = _.cloneDeep(this.state.chartProps);
-    // newProps.chartType = ChartTypes.Scatter;
     this.setState({
       highChartConfigOverride: scatterPlotData,
       indexSeries,
       isBubbleChartRendered: false,
       xSeries,
       ySeries
-      //  chartProps: newProps
     });
   };
 
   private onXSet = (value: ISelectorConfig): void => {
-    if (!this.state.chartProps) {
-      return;
+    const newProps = getNewChartProps(value, true, this.state.chartProps);
+    if (newProps) {
+      this.setState({ chartProps: newProps });
     }
-    const newProps = _.cloneDeep(this.state.chartProps);
-    newProps.xAxis = value;
-    this.setState({ chartProps: newProps });
   };
 
   private onYSet = (value: ISelectorConfig): void => {
-    if (!this.state.chartProps) {
-      return;
+    const newProps = getNewChartProps(value, false, this.state.chartProps);
+    if (newProps) {
+      this.setState({ chartProps: newProps });
     }
-    const newProps = _.cloneDeep(this.state.chartProps);
-    newProps.yAxis = value;
-    this.setState({ chartProps: newProps });
   };
 
   private selectPointFromChartLargeData = async (
     data: IScatterPoint
   ): Promise<void> => {
-    const index = data.customData[JointDataset.IndexLabel];
-    const absoluteIndex = data.customData[JointDataset.AbsoluteIndexLabel];
-    this.setLocalExplanationsData(absoluteIndex);
-    this.toggleSelectionOfPoint(index);
-    this.props.telemetryHook?.({
-      level: TelemetryLevels.ButtonClick,
-      type: TelemetryEventName.FeatureImportancesNewDatapointSelectedFromChart
-    });
+    selectPointFromChartLargeData(
+      data,
+      this.setLocalExplanationsData,
+      this.toggleSelectionOfPoint,
+      this.props.telemetryHook
+    );
   };
 
   private toggleSelectionOfPoint = (index?: number): void => {
-    if (index === undefined) {
+    const newSelections = getNewSelections(
+      this.state.selectedPointsIndexes,
+      index
+    );
+    if (newSelections === undefined) {
       return;
-    }
-    const indexOf = this.state.selectedPointsIndexes.indexOf(index);
-    let newSelections = [...this.state.selectedPointsIndexes];
-    if (indexOf === -1) {
-      newSelections = [index];
-    } else {
-      newSelections.splice(indexOf, 1);
     }
     this.setState({
       selectedPointsIndexes: newSelections
@@ -439,10 +329,4 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       });
     }
   };
-}
-
-export function instanceOfLocalExplanation(
-  object: any
-): object is ILocalExplanations {
-  return "method" in object;
 }

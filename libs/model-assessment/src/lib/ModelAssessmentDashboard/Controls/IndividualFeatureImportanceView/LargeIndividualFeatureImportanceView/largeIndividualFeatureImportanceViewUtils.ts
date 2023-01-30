@@ -1,0 +1,188 @@
+import {
+  calculateBubblePlotDataFromErrorCohort,
+  Cohort,
+  IDataset,
+  IGenericChartProps,
+  IHighchartBubbleSDKClusterData,
+  IHighchartsConfig,
+  ILocalExplanations,
+  IScatterPoint,
+  ISelectorConfig,
+  ITelemetryEvent,
+  JointDataset,
+  TelemetryEventName,
+  TelemetryLevels
+} from "@responsible-ai/core-ui";
+import _ from "lodash";
+import {
+  ILargeIndividualFeatureImportanceViewProps,
+  ILargeIndividualFeatureImportanceViewState
+} from "./ILargeIndividualFeatureImportanceViewSpec";
+
+export function instanceOfLocalExplanation(
+  object: any
+): object is ILocalExplanations {
+  return "method" in object;
+}
+
+export function shouldUpdateHighchart(
+  prevState: ILargeIndividualFeatureImportanceViewState,
+  prevProps: ILargeIndividualFeatureImportanceViewProps,
+  currentState: ILargeIndividualFeatureImportanceViewState,
+  currentProps: ILargeIndividualFeatureImportanceViewProps
+): [boolean, boolean, boolean, boolean, boolean, boolean] {
+  const hasSelectedPointIndexesUpdated = !_.isEqual(
+    currentState.selectedPointsIndexes,
+    prevState.selectedPointsIndexes
+  );
+  const hasIsLocalExplanationsDataLoadingUpdated = !_.isEqual(
+    currentState.isLocalExplanationsDataLoading,
+    prevState.isLocalExplanationsDataLoading
+  );
+  const hasRevertToBubbleChartUpdated =
+    currentState.isRevertButtonClicked &&
+    prevState.isRevertButtonClicked !== currentState.isRevertButtonClicked;
+  const hasCohortUpdated = currentProps.cohort.name !== prevProps.cohort.name;
+  const hasChartPropsUpdated = !_.isEqual(
+    currentState.chartProps,
+    prevState.chartProps
+  );
+
+  const shouldUpdate =
+    hasRevertToBubbleChartUpdated ||
+    hasSelectedPointIndexesUpdated ||
+    hasChartPropsUpdated ||
+    hasIsLocalExplanationsDataLoadingUpdated ||
+    hasCohortUpdated;
+  return [
+    shouldUpdate,
+    hasSelectedPointIndexesUpdated,
+    hasIsLocalExplanationsDataLoadingUpdated,
+    hasRevertToBubbleChartUpdated,
+    hasCohortUpdated,
+    hasChartPropsUpdated
+  ];
+}
+
+export async function generateHighChartConfigOverride(
+  chartProps: IGenericChartProps | undefined,
+  hasSelectedPointIndexesUpdated: boolean,
+  hasIsLocalExplanationsDataLoadingUpdated: boolean,
+  hasRevertToBubbleChartUpdated: boolean,
+  hasChartPropsUpdated: boolean,
+  hasCohortUpdated: boolean,
+  hasAxisTypeChanged: boolean,
+  updateBubblePlotData: (chartProps: IGenericChartProps) => void,
+  updateScatterPlotData: (chartProps: IGenericChartProps) => void
+): Promise<void> {
+  if (chartProps) {
+    if (hasCohortUpdated || hasRevertToBubbleChartUpdated) {
+      updateBubblePlotData(chartProps);
+      return;
+    }
+    if (hasAxisTypeChanged) {
+      updateScatterPlotData(chartProps);
+      return;
+    }
+    if (hasChartPropsUpdated) {
+      updateBubblePlotData(chartProps);
+      return;
+    }
+    if (
+      hasSelectedPointIndexesUpdated ||
+      hasIsLocalExplanationsDataLoadingUpdated
+    ) {
+      updateScatterPlotData(chartProps);
+      return;
+    }
+  }
+}
+
+export function getNewSelections(
+  selectedPointsIndexes: number[],
+  index?: number
+): number[] | undefined {
+  if (index === undefined) {
+    return;
+  }
+  const indexOf = selectedPointsIndexes.indexOf(index);
+  let newSelections = [...selectedPointsIndexes];
+  if (indexOf === -1) {
+    newSelections = [index];
+  } else {
+    newSelections.splice(indexOf, 1);
+  }
+  return newSelections;
+}
+
+export async function selectPointFromChartLargeData(
+  data: IScatterPoint,
+  setLocalExplanationsData: (absoluteIndex?: number) => Promise<void>,
+  toggleSelectionOfPoint: (index?: number) => void,
+  telemetryHook?: ((message: ITelemetryEvent) => void) | undefined
+): Promise<void> {
+  const index = data.customData[JointDataset.IndexLabel];
+  const absoluteIndex = data.customData[JointDataset.AbsoluteIndexLabel];
+  setLocalExplanationsData(absoluteIndex);
+  toggleSelectionOfPoint(index);
+  telemetryHook?.({
+    level: TelemetryLevels.ButtonClick,
+    type: TelemetryEventName.FeatureImportancesNewDatapointSelectedFromChart
+  });
+}
+
+export async function getBubblePlotData(
+  chartProps: IGenericChartProps,
+  cohort: Cohort,
+  jointDataset: JointDataset,
+  dataset: IDataset,
+  isLocalExplanationsDataLoading?: boolean,
+  requestBubblePlotData?:
+    | ((
+        filter: unknown[],
+        compositeFilter: unknown[],
+        xAxis: string,
+        yAxis: string,
+        abortSignal: AbortSignal
+      ) => Promise<IHighchartBubbleSDKClusterData>)
+    | undefined,
+  selectPointFromChartLargeData?: (data: IScatterPoint) => Promise<void>,
+  onBubbleClick?: (
+    scatterPlotData: IHighchartsConfig,
+    xSeries: number[],
+    ySeries: number[],
+    indexSeries: number[]
+  ) => void
+): Promise<IHighchartBubbleSDKClusterData | IHighchartsConfig | undefined> {
+  return await calculateBubblePlotDataFromErrorCohort(
+    cohort,
+    chartProps,
+    [],
+    jointDataset,
+    dataset,
+    isLocalExplanationsDataLoading,
+    true,
+    false,
+    requestBubblePlotData,
+    selectPointFromChartLargeData,
+    onBubbleClick,
+    undefined
+  );
+}
+
+export function getNewChartProps(
+  value: ISelectorConfig,
+  xSet: boolean,
+  chartProps?: IGenericChartProps
+): IGenericChartProps | undefined {
+  if (!chartProps) {
+    return;
+  }
+  const newProps = _.cloneDeep(chartProps);
+  if (xSet) {
+    newProps.xAxis = value;
+  } else {
+    newProps.yAxis = value;
+  }
+  return newProps;
+}

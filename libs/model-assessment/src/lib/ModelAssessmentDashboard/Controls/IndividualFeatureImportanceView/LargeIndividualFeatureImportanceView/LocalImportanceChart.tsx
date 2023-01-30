@@ -10,7 +10,6 @@ import {
   LoadingSpinner,
   MissingParametersPlaceholder,
   ModelAssessmentContext,
-  ModelExplanationUtils,
   ModelTypes,
   WeightVectorOption
 } from "@responsible-ai/core-ui";
@@ -19,6 +18,7 @@ import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { localImportanceChartStyles } from "./LocalImportanceChart.styles";
+import { getSortedData } from "./localImportanceChartUtils";
 
 export interface ILocalImportanceChartProps {
   rowNumber?: number;
@@ -43,7 +43,7 @@ export interface ILocalImportanceData {
   value: number;
 }
 
-const regressionKeyValue = "regressionScore";
+export const regressionKeyValue = "regressionScore";
 
 export class LocalImportanceChart extends React.PureComponent<
   ILocalImportanceChartProps,
@@ -211,7 +211,15 @@ export class LocalImportanceChart extends React.PureComponent<
   }
 
   private getLocalImportanceBarOptions(): any {
-    const sortedData = this.getSortedData();
+    const sortedData = getSortedData(
+      this.props.selectedWeightVector,
+      this.props.modelType,
+      this.state.sortedData,
+      this.props.data.precomputedExplanations.globalFeatureImportance
+        .feature_list,
+      this.state.sortAbsolute,
+      this.props.rowNumber
+    );
     const x = sortedData.map((d) => d.label);
     const y = sortedData.map((d) => d.value);
     let yAxisLabels: string = localization.Interpret.featureImportance;
@@ -245,59 +253,6 @@ export class LocalImportanceChart extends React.PureComponent<
         }
       }
     };
-  }
-
-  private findValue(sortedData: any, keyToFind: string): number[] | undefined {
-    const sortedDataTemp: Array<{ [key: string]: number[] }> = sortedData;
-    let valToReturn: number[] | undefined;
-    for (const data of sortedDataTemp) {
-      const entry = Object.entries(data).find(
-        (pair) => pair[0] === keyToFind.toString()
-      );
-      if (entry) {
-        valToReturn = entry[1]; // value of the entry
-        break;
-      }
-    }
-    return valToReturn;
-  }
-
-  private getSortedData(): ILocalImportanceData[] {
-    const data: ILocalImportanceData[] = [];
-    if (this.props.rowNumber === undefined) {
-      return data;
-    }
-    const keyToFind = IsClassifier(this.props.modelType)
-      ? (this.props.selectedWeightVector as string)
-      : regressionKeyValue;
-    const localExplanationsData = this.findValue(
-      this.state.sortedData,
-      keyToFind
-    );
-
-    if (!localExplanationsData) {
-      return data;
-    }
-
-    const unSortedX =
-      this.props.data.precomputedExplanations.globalFeatureImportance
-        .feature_list;
-    const sortedLocalExplanationsIndices = this.state.sortAbsolute
-      ? ModelExplanationUtils.getAbsoluteSortIndices(
-          localExplanationsData
-        ).reverse()
-      : ModelExplanationUtils.getSortIndices(localExplanationsData).reverse();
-    const sortedLocalExplanationsData = sortedLocalExplanationsIndices.map(
-      (index) => localExplanationsData[index]
-    );
-    const sortedX = sortedLocalExplanationsIndices.map((i) => unSortedX[i]);
-    sortedX.forEach((x: string, index: string | number) => {
-      data.push({
-        label: x,
-        value: sortedLocalExplanationsData[index] || -Infinity
-      });
-    });
-    return data;
   }
 
   private toggleSortAbsolute = (
