@@ -7,7 +7,8 @@ import {
   IErrorAnalysisMatrix,
   IHighchartBoxData,
   IHighchartBubbleSDKClusterData,
-  ICounterfactualData
+  ICounterfactualData,
+  ILocalExplanations
 } from "@responsible-ai/core-ui";
 import {
   ModelAssessmentDashboard,
@@ -198,7 +199,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       callBack.requestLocalExplanations = async (
         absoluteIndex: number,
         abortSignal: AbortSignal
-      ): Promise<any> => {
+      ): Promise<ILocalExplanations> => {
         return callFlaskService(
           this.props.config,
           [absoluteIndex],

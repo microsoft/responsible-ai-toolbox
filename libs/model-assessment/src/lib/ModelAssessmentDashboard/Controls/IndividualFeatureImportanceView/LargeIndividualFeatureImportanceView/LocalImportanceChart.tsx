@@ -85,7 +85,7 @@ export class LocalImportanceChart extends React.PureComponent<
     if (this.props.rowNumber === undefined) {
       return (
         <MissingParametersPlaceholder>
-          {localization.Counterfactuals.localImportanceSelectData}
+          {localization.Counterfactuals.largeLocalImportanceSelectData}
         </MissingParametersPlaceholder>
       );
     }
