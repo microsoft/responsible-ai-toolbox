@@ -25,7 +25,8 @@ from tests.error_analysis_validator import (setup_error_analysis,
 from tests.explainer_manager_validator import (setup_explainer,
                                                validate_explainer)
 
-from responsibleai import ModelAnalysis, ModelTask
+from raiutils.models import ModelTask
+from responsibleai import ModelAnalysis
 from responsibleai._internal.constants import ManagerNames
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager

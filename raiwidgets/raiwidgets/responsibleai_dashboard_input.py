@@ -14,7 +14,7 @@ from raiwidgets.cohort import Cohort, CohortFilter, CohortFilterMethods
 from raiwidgets.constants import ErrorMessages
 from raiwidgets.error_handling import _format_exception
 from raiwidgets.interfaces import WidgetRequestResponseConstants
-from responsibleai import RAIInsights, RAIForecastingInsights
+from responsibleai import RAIInsights
 from responsibleai._internal.constants import ManagerNames
 from responsibleai.exceptions import UserConfigValidationException
 
@@ -24,13 +24,13 @@ EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 class ResponsibleAIDashboardInput:
     def __init__(
             self,
-            analysis: Union[RAIInsights, RAIForecastingInsights],
+            analysis: RAIInsights,
             cohort_list: Optional[List[Cohort]] = None):
         """Initialize the Explanation Dashboard Input.
 
         :param analysis:
             A RAIInsights object that represents an explanation.
-        :type analysis: Union[RAIInsights, RAIForecastingInsights]
+        :type analysis: RAIInsights
         :param cohort_list:
             List of cohorts defined by the user for the dashboard.
         :type cohort_list: List[Cohort]

@@ -21,7 +21,7 @@ from responsibleai._tools.shared.state_directory_management import \
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.managers.base_manager import BaseManager
-from responsibleai.rai_insights.constants import ModelTask
+from raiutils.models import ModelTask
 
 
 class CausalManager(BaseManager):

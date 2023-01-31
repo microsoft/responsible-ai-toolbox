@@ -27,7 +27,8 @@ class TestModelAnalysisValidations:
         X_test['target'] = y_test
 
         message = ("Unsupported task type 'regre'. "
-                   "Should be one of \\['classification', 'regression'\\]")
+                   "Should be one of \\['classification', "
+                   "'regression', 'forecasting'\\]")
         with pytest.raises(UserConfigValidationException, match=message):
             ModelAnalysis(
                 model=model,
@@ -46,11 +47,10 @@ class TestModelAnalysisValidations:
 
         with pytest.warns(
                 UserWarning,
-                match="The size of test set {0} is greater than "
+                match="The size of test set {0} is greater than the "
                       "supported limit of {1}. Computing insights"
-                      " for first {1} samples "
-                      "of test set".format(len(y_test),
-                                           len(y_test) - 1)):
+                      " for the first {1} samples of "
+                      "the test set".format(len(y_test), len(y_test) - 1)):
             ModelAnalysis(
                 model=model,
                 train=X_train,

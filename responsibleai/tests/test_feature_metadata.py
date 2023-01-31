@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import pytest
+import pandas as pd
 
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
@@ -19,6 +20,7 @@ class TestFeatureMetadata:
         expected_feature_metadata_dict = {
             'identity_feature_name': None,
             'time_column_name': None,
+            'time_series_id_column_names': None,
             'categorical_features': None,
             'dropped_features': None
         }
@@ -35,12 +37,13 @@ class TestFeatureMetadata:
                 match='The given identity feature id is not present '
                       'in the provided features: id1, s1, s2.'):
             feature_metadata.validate(
-                user_features=['id1', 's1', 's2'])
+                feature_names=['id1', 's1', 's2'])
 
         feature_metadata_dict = feature_metadata.to_dict()
         expected_feature_metadata_dict = {
             'identity_feature_name': 'id',
             'time_column_name': None,
+            'time_series_id_column_names': None,
             'categorical_features': None,
             'dropped_features': None
         }
@@ -57,6 +60,7 @@ class TestFeatureMetadata:
         expected_feature_metadata_dict = {
             'identity_feature_name': None,
             'time_column_name': 'd1',
+            'time_series_id_column_names': None,
             'categorical_features': None,
             'dropped_features': None
         }
@@ -77,6 +81,7 @@ class TestFeatureMetadata:
         expected_feature_metadata_dict = {
             'identity_feature_name': None,
             'time_column_name': None,
+            'time_series_id_column_names': None,
             'categorical_features': ['c1', 'c2'],
             'dropped_features': None
         }
@@ -111,8 +116,7 @@ class TestFeatureMetadata:
                 match='The given time series ID column g1 is not present '
                       'in the provided features: A, B, C, D, E, F, G.'):
             feature_metadata.validate(
-                test = pd.DataFrame(columns=['A','B','C','D','E','F','G']), \
-                    train = pd.DataFrame(columns=['A','B','C','D','E','F','G']))
+                feature_names=['A','B','C','D','E','F','G'])
 
         feature_metadata_dict = feature_metadata.to_dict()
         expected_feature_metadata_dict = {

@@ -6,6 +6,7 @@ import pickle
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from uuid import UUID
+from typing import Union
 
 import numpy as np
 import pandas as pd
@@ -24,7 +25,9 @@ from tests.error_analysis_validator import (setup_error_analysis,
 from tests.explainer_manager_validator import (setup_explainer,
                                                validate_explainer)
 
-from responsibleai import ModelTask, RAIInsights
+from raiutils.models import ModelTask
+
+from responsibleai import RAIInsights
 from responsibleai._internal.constants import (ManagerNames,
                                                SerializationAttributes)
 from responsibleai._tools.shared.state_directory_management import \
@@ -366,14 +369,14 @@ def validate_rai_insights(
         assert len(ind_data) == expected_length
 
     if rai_insights.model is None:
-        assert rai_insights.predict_output is None
-        assert rai_insights.predict_proba_output is None
+        assert rai_insights._predict_output is None
+        assert rai_insights._predict_proba_output is None
     else:
-        assert rai_insights.predict_output is not None
+        assert rai_insights._predict_output is not None
         if task_type == ModelTask.CLASSIFICATION:
-            assert rai_insights.predict_proba_output is not None
-            assert isinstance(rai_insights.predict_proba_output, np.ndarray)
-            assert len(rai_insights.predict_proba_output.tolist()[0]) == \
+            assert rai_insights._predict_proba_output is not None
+            assert isinstance(rai_insights._predict_proba_output, np.ndarray)
+            assert len(rai_insights._predict_proba_output.tolist()[0]) == \
                 len(rai_insights._classes)
 
     if task_type == ModelTask.CLASSIFICATION:

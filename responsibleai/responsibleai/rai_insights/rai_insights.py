@@ -10,7 +10,7 @@ import pickle
 import sys
 import warnings
 from pathlib import Path
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -18,8 +18,7 @@ import pandas as pd
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
-from raiutils.models import SKLearn, is_classifier
-from raiutils.models.model_utils import Forecasting, is_forecaster, is_quantile_forecaster
+from raiutils.models import SKLearn, ModelTask, MethodPurpose, MODEL_METHODS
 from responsibleai._interfaces import Dataset, RAIInsightsData
 from responsibleai._internal.constants import (FileFormats, ManagerNames,
                                                Metadata,
@@ -31,7 +30,6 @@ from responsibleai.managers.counterfactual_manager import CounterfactualManager
 from responsibleai.managers.data_balance_manager import DataBalanceManager
 from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai.managers.explainer_manager import ExplainerManager
-from responsibleai.rai_insights.constants import ModelTask
 from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
 
 _TRAIN_LABELS = 'train_labels'
@@ -46,20 +44,6 @@ _UNIQUE_VALUES = 'unique_values'
 _MIN_VALUE = 'min_value'
 _MAX_VALUE = 'max_value'
 
-
-# Internally we can treat forecasts as predictions and quantiles as
-# probabilities since we only need to forward them to the UI.
-# Depending on task type they get interpreted as either one and
-# we don't need to duplicate a lot of code here.
-class _Purpose(Enum):
-    PREDICTION = "prediction"
-    FORECAST = PREDICTION
-    PROBABILITY = "probability"
-    QUANTILES = PROBABILITY
-
-class _Size(Enum):
-    SMALL = 1
-    LARGE = 2
 
 _DATA_TO_FILE_MAPPING = {
     "_" + _PREDICT_OUTPUT: SerializationAttributes.PREDICT_JSON,
@@ -89,46 +73,6 @@ class ForecastingWrapper(object):
     
     def forecast_quantiles(self, X, quantiles):
         return self._forecast_quantiles_method(X, quantiles)
-
-class ModelMethod:
-    def __init__(self, *, name, optional, purpose):
-        self.name = name
-        self.optional = optional
-        self.purpose = purpose
-
-
-# Model methods by task type
-# Every task has one required method (optional=False) to make predictions,
-# forecasts etc. and can additionally have optional methods to calculate
-# probabilities, quantiles, etc.
-model_methods = {
-    ModelTask.CLASSIFICATON: [
-        ModelMethod(
-            name=SKLearn.PREDICT,
-            optional=False,
-            purpose=_Purpose.PREDICTION),
-        ModelMethod(
-            name=SKLearn.PREDICT_PROBA,
-            optional=True,
-            purpose=_Purpose.PROBABILITY)
-    ],
-    ModelTask.REGRESSION: [
-        ModelMethod(
-            name=SKLearn.PREDICT,
-            optional=False,
-            purpose=_Purpose.PREDICTION)
-    ],
-    ModelTask.FORECASTING: [
-        ModelMethod(
-            name=Forecasting.FORECAST,
-            optional=False,
-            purpose=_Purpose.FORECAST),
-        ModelMethod(
-            name=Forecasting.FORECAST_QUANTILES,
-            optional=True,
-            purpose=_Purpose.QUANTILES)
-    ]
-}
 
 
 class RAIInsights(RAIBaseInsights):
@@ -182,9 +126,14 @@ class RAIInsights(RAIBaseInsights):
         :type feature_metadata: FeatureMetadata
         """
         self._feature_metadata = feature_metadata or FeatureMetadata()
-        self._consolidate_categorical_features(
-            self._feature_metadata.categorical_features,
-            categorical_features)
+        self.categorical_features = categorical_features or []
+        self._consolidate_categorical_features()
+        self._classes = RAIInsights._get_classes(
+            task_type=task_type,
+            train=train,
+            target_column=target_column,
+            classes=classes
+        )
         super(RAIInsights, self).__init__(
             model, train, test, target_column, task_type, serializer)
         self._wrap_model_if_needed()
@@ -203,12 +152,6 @@ class RAIInsights(RAIBaseInsights):
             self._large_test = test.copy()
             test = test.copy()[0:maximum_rows_for_test]
 
-            if model is not None:
-                # Cache predictions of the model
-                self._set_model_outputs(
-                    input_data=self._large_test.drop(columns=[target_column]),
-                    large=True)
-
         self._validate_rai_insights_input_parameters(
             model=model, train=train,
             test=test,
@@ -216,19 +159,13 @@ class RAIInsights(RAIBaseInsights):
             task_type=task_type,
             classes=classes,
             serializer=serializer,
-            maximum_rows_for_test=maximum_rows_for_test,
             feature_metadata=self._feature_metadata)
-        self._classes = RAIInsights._get_classes(
-            task_type=task_type,
-            train=train,
-            target_column=target_column,
-            classes=classes
-        )
+
         self._feature_columns = \
             test.drop(columns=[target_column]).columns.tolist()
         self._feature_ranges = RAIInsights._get_feature_ranges(
             test=test,
-            categorical_features=categorical_features,
+            categorical_features=self.categorical_features,
             feature_columns=self._feature_columns,
             time_column_name=self._feature_metadata.time_column_name)
         self._categories, self._categorical_indexes, \
@@ -248,6 +185,11 @@ class RAIInsights(RAIBaseInsights):
             # Cache predictions of the model
             self._set_model_outputs(input_data=self.get_test_data(
                 test_data=test).drop(columns=[target_column]), large=False)
+            
+            if len(test) > maximum_rows_for_test:
+                self._set_model_outputs(
+                    input_data=self._large_test.drop(columns=[target_column]),
+                    large=True)
             
 
     def get_train_data(self):
@@ -291,10 +233,7 @@ class RAIInsights(RAIBaseInsights):
                         columns=self._feature_metadata.dropped_features,
                         axis=1)
 
-    def _consolidate_categorical_features(
-            self,
-            categorical_features_from_feature_metadata,
-            categorical_features):
+    def _consolidate_categorical_features(self):
         """Consolidates the categorical features.
         
         Originally, only the RAIInsights constructor accepted categorical_features.
@@ -304,19 +243,21 @@ class RAIInsights(RAIBaseInsights):
         the self._feature_metadata object. Eventually, the categorical_features
         argument on the RAIInsights constructor will be deprecated.
         """
-        if categorical_features_from_feature_metadata is None:
-            if categorical_features is None:
+        if self._feature_metadata.categorical_features is None:
+            if self.categorical_features is None:
                 return
             else:
-                self._feature_metadata.categorical_features = categorical_features
+                self._feature_metadata.categorical_features = self.categorical_features
                 return
         else:
-            if categorical_features is None:
+            if self.categorical_features is None:
+                self.categorical_features = \
+                    self._feature_metadata.categorical_features
                 return
             else:
                 # Both are specified, so raise an exception if they don't match.
-                if (set(categorical_features) ==
-                        set(categorical_features_from_feature_metadata)):
+                if (set(self.categorical_features) ==
+                        set(self._feature_metadata.categorical_features)):
                     return
                 else:
                     raise UserConfigValidationException(
@@ -352,8 +293,8 @@ class RAIInsights(RAIBaseInsights):
         self._error_analysis_manager = ErrorAnalysisManager(
             self.model, self.test, self.target_column,
             self._classes,
-            self.categorical_features,
-            dropped_features)
+            categorical_features=self.categorical_features,
+            dropped_features=dropped_features)
 
         self._explainer_manager = ExplainerManager(
             self.model, self.get_train_data(), self.get_test_data(),
@@ -486,7 +427,7 @@ class RAIInsights(RAIBaseInsights):
             raise UserConfigValidationException(
                 f'Target name {target_column} not present in train/test data')
         
-        categorical_features = self._feature_metadata.categorical_features
+        categorical_features = self.categorical_features
         if (categorical_features is not None and
                 len(categorical_features) > 0):
             if target_column in categorical_features:
@@ -607,9 +548,7 @@ class RAIInsights(RAIBaseInsights):
                         'function. Please check the task_type.')                
                 
     def _wrap_model_if_needed(self):
-        """Wrap the model in a compatible format if needed.
-        TODO        
-        """
+        """Wrap the model in a compatible format if needed."""
         if self.task_type == ModelTask.FORECASTING:
             # Wrap model to make forecasting API compatible.
             # Detect if the model is from AzureML as a special case.
@@ -650,7 +589,7 @@ class RAIInsights(RAIBaseInsights):
         :type function: str
         """
         small_train_features_after = list(small_train_data.columns)
-        if small_train_features_before != small_train_features_after:
+        if (small_train_features_before != small_train_features_after).any():
             raise UserConfigValidationException(
                 f'Calling model {function} function modifies '
                 'input dataset features. Please check if '
@@ -757,7 +696,7 @@ class RAIInsights(RAIBaseInsights):
         large = use_entire_test_data and self._large_test is not None
         pred_y = getattr(
             self,
-            self._get_model_output_name(purpose=_Purpose.PREDICT,
+            self._get_model_output_name(purpose=MethodPurpose.PREDICTION,
                                         large=large))
         if large:
             test_data = self._large_test
@@ -771,7 +710,7 @@ class RAIInsights(RAIBaseInsights):
             model=self.model,
             dataset=X_test,
             features=X_test.columns,
-            categorical_features=self._feature_metadata.categorical_features,
+            categorical_features=self.categorical_features,
             categories=self._categories,
             true_y=true_y,
             pred_y=pred_y,
@@ -800,7 +739,7 @@ class RAIInsights(RAIBaseInsights):
     def _get_dataset(self):
         dashboard_dataset = Dataset()
         dashboard_dataset.task_type = self.task_type
-        dashboard_dataset.categorical_features = self._feature_metadata.categorical_features
+        dashboard_dataset.categorical_features = self.categorical_features
         dashboard_dataset.class_names = convert_to_list(
             self._classes)
         dashboard_dataset.is_large_data_scenario = \
@@ -840,10 +779,10 @@ class RAIInsights(RAIBaseInsights):
                     predict_dataset = predict_dataset.drop(
                         metadata.dropped_features, axis=1)
                     predicted_y = self._get_model_output(
-                        predict_dataset, purpose=_Purpose.PREDICTION)
+                        predict_dataset, purpose=MethodPurpose.PREDICTION)
             except Exception as ex:
                 model_method = self._get_model_method(
-                    purpose=_Purpose.PREDICTION)
+                    purpose=MethodPurpose.PREDICTION)
                 raise ValueError(
                     f"Model does not support {model_method.__name__} method "
                     "for the given dataset type,") from ex
@@ -905,7 +844,7 @@ class RAIInsights(RAIBaseInsights):
         dashboard_dataset.target_column = self.target_column
 
         model_method = self._get_model_method(
-            purpose=_Purpose.PROBABILITY)
+            purpose=MethodPurpose.PROBABILITY)
         if model_method is not None and dataset is not None:
             try:
                 predict_dataset = dataset
@@ -992,7 +931,7 @@ class RAIInsights(RAIBaseInsights):
             Metadata.TARGET_COLUMN: self.target_column,
             Metadata.TASK_TYPE: self.task_type,
             Metadata.CATEGORICAL_FEATURES: \
-                self._feature_metadata.categorical_features,
+                self.categorical_features,
             Metadata.CLASSES: classes,
             Metadata.FEATURE_COLUMNS: self._feature_columns,
             Metadata.FEATURE_RANGES: self._feature_ranges,
@@ -1010,17 +949,33 @@ class RAIInsights(RAIBaseInsights):
         super(RAIInsights, self).save(path)
         self._save_large_data(path)
 
-    def _get_model_method(self, *, purpose):
-        """TODO"""
-        methods = model_methods[self.task_type].filter(
-            lambda model_method: purpose == model_method.purpose)
+    def _get_model_method(self, *, purpose: MethodPurpose):
+        """Get the model's method for the indicated purpose.
+        
+        :param purpose: the purpose to identify suitable model methods
+        :type purpose: MethodPurpose
+        :return: the model's first method with the corresponding purpose
+            if any, otherwise None 
+        :rtype: Union[None, Any]
+        """
+        methods = [m for m in MODEL_METHODS[self.task_type]
+                   if m.purpose == purpose]
         if len(methods) == 0:
             return None
         return getattr(self.model, methods[0].name)
 
-    def _get_model_output(self, *, input_data, purpose):
+    def _get_model_output(self, *, input_data: Union[None, np.array],
+                          purpose: MethodPurpose):
         """Get the output from a model method.
-        TODO
+
+        The model method is chosen based on the specified purpose
+        
+        :param input_data: the data to pass to the model
+        :type input_data: Union[pd.DataFrame, np.array]
+        :param purpose: the purpose to identify suitable model methods
+        :type purpose: MethodPurpose
+        :return: the model output if a suitable method exists, otherwise None
+        :rtype: Union[None, np.array]
         """
         model_method = self._get_model_method(purpose)
         if model_method:
@@ -1028,9 +983,17 @@ class RAIInsights(RAIBaseInsights):
         return None
     
     def _ensure_model_outputs(self, *, input_data):
-        """TODO"""
+        """Ensure that the model outputs are as expected.
+
+        Raises an UserConfigValidationException if the model does not have the
+        expected required methods, fails while calling any of its methods, or
+        changes the input features.
+        
+        :param input_data: the data to pass to the model
+        :type input_data: Union[pd.DataFrame, np.array]
+        """
         input_features = input_data.columns
-        for method in model_methods[self.task_type]:
+        for method in MODEL_METHODS[self.task_type]:
             if not hasattr(self.model, method.name) and not method.optional:
                 raise UserConfigValidationException(
                     _MODEL_METHOD_EXCEPTION_MESSAGE.format(method.name))
@@ -1046,14 +1009,33 @@ class RAIInsights(RAIBaseInsights):
                     _MODEL_METHOD_EXCEPTION_MESSAGE.format(method.name))
 
     def _get_model_output_name(self, *, purpose, large=False):
+        """Get the name of the attribute representing the model's output.
+
+        :param purpose: the purpose to identify suitable model methods
+        :type purpose: MethodPurpose
+        :param large: whether or not the output is based on a large (full)
+            dataset
+        :type large: boolean
+        :return: the attribute's name
+        :rtype: str
+        """
         model_method = self._get_model_method(purpose=purpose)
         return f"_{'large_' if large else ''}{model_method.__name__}_output"
 
     def _set_model_output(self, *, model_method, input_data, large=False):
-        """TODO"""
+        """Store the model output on a suitable field.
+        
+        :param model_method: the method to use to produce the model output
+        :type model_method: ModelMethod
+        :param input_data: the data to pass to the model
+        :type input_data: Union[pd.DataFrame, np.array]
+        :param large: whether or not the output is based on a large (full)
+            dataset
+        :type large: boolean
+        """
         field_name = f"_{'large_' if large else ''}{model_method.name}_output"
         try:
-            model_method = getattr(self.model, model_method.name)
+            method = getattr(self.model, model_method.name)
         except AttributeError as err:
             if model_method.optional:
                 setattr(self, field_name, None)
@@ -1061,12 +1043,19 @@ class RAIInsights(RAIBaseInsights):
             else:
                 raise ValueError(
                     f"The model is expected to have a {model_method.name} method,") from err
-        setattr(self, field_name, model_method(input_data))
+        setattr(self, field_name, method(input_data))
     
     def _set_model_outputs(self, *, input_data, large=False):
-        """TODO"""
-        for model_method in model_methods[self.task_type]:
-            self.set_model_output(
+        """Store all model outputs on suitable fields.
+        
+        :param input_data: the data to pass to the model
+        :type input_data: Union[pd.DataFrame, np.array]
+        :param large: whether or not the output is based on a large (full)
+            dataset
+        :type large: boolean
+        """
+        for model_method in MODEL_METHODS[self.task_type]:
+            self._set_model_output(
                 model_method=model_method,
                 input_data=input_data,
                 large=large)
