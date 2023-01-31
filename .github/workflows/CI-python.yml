@@ -11,7 +11,7 @@ on:
       - "rai_test_utils/**"
       - "raiutils/**"
       - "responsibleai/**"
-      - ".github/workflows"
+      - ".github/workflows/CI-python.yml"
 
 jobs:
   ci-python:
