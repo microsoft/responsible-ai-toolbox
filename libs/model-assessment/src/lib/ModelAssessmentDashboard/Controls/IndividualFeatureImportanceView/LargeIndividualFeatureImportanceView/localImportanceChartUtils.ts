@@ -7,11 +7,12 @@ import {
   ModelTypes,
   WeightVectorOption
 } from "@responsible-ai/core-ui";
+export interface ILocalImportanceData {
+  label: string;
+  value: number;
+}
 
-import {
-  ILocalImportanceData,
-  regressionKeyValue
-} from "./LocalImportanceChart";
+export const regressionKeyValue = "regressionScore";
 
 export function getSortedData(
   selectedWeightVector: WeightVectorOption,

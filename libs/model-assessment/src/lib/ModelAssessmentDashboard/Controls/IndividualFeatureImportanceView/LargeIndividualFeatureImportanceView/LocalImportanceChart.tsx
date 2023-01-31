@@ -20,7 +20,7 @@ import { Dictionary } from "lodash";
 import React from "react";
 
 import { localImportanceChartStyles } from "./LocalImportanceChart.styles";
-import { getSortedData } from "./localImportanceChartUtils";
+import { getSortedData, regressionKeyValue } from "./localImportanceChartUtils";
 
 export interface ILocalImportanceChartProps {
   rowNumber?: number;
@@ -40,12 +40,6 @@ export interface ILocalImportanceChartState {
   sortedData: Array<{ [key: string]: number[] | number | undefined }>;
   topK: number;
 }
-export interface ILocalImportanceData {
-  label: string;
-  value: number;
-}
-
-export const regressionKeyValue = "regressionScore";
 
 export class LocalImportanceChart extends React.PureComponent<
   ILocalImportanceChartProps,
