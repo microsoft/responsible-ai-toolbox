@@ -128,29 +128,29 @@ class RAIInsights(RAIBaseInsights):
         self._feature_metadata = feature_metadata or FeatureMetadata()
         self.categorical_features = categorical_features or []
         self._consolidate_categorical_features()
-        self._classes = RAIInsights._get_classes(
-            task_type=task_type,
-            train=train,
-            target_column=target_column,
-            classes=classes
-        )
-        super(RAIInsights, self).__init__(
-            model, train, test, target_column, task_type, serializer)
-        self._wrap_model_if_needed()
 
         self._large_test = None
-        self._large_predict_output = None
-        self._large_forecast_output = None
-        self._large_predict_proba_output = None
-        self._large_forecast_quantiles_output = None
+
         if len(test) > maximum_rows_for_test:
             warnings.warn(
-                f"The size of test set {len(test)} is greater than the "
+                f"The size of the test set {len(test)} is greater than the "
                 f"supported limit of {maximum_rows_for_test}. "
                 "Computing insights for the first "
                 f"{maximum_rows_for_test} samples of the test set")
             self._large_test = test.copy()
             test = test.copy()[0:maximum_rows_for_test]
+        
+        super(RAIInsights, self).__init__(
+            model, train, test, target_column, task_type, serializer)
+
+        self._predict_output = None
+        self._forecast_output = None
+        self._predict_proba_output = None
+        self._forecast_quantiles_output = None
+        self._large_predict_output = None
+        self._large_forecast_output = None
+        self._large_predict_proba_output = None
+        self._large_forecast_quantiles_output = None
 
         self._validate_rai_insights_input_parameters(
             model=model, train=train,
@@ -160,6 +160,14 @@ class RAIInsights(RAIBaseInsights):
             classes=classes,
             serializer=serializer,
             feature_metadata=self._feature_metadata)
+        
+        self._classes = RAIInsights._get_classes(
+            task_type=task_type,
+            train=train,
+            target_column=target_column,
+            classes=classes
+        )
+        self._wrap_model_if_needed()
 
         self._feature_columns = \
             test.drop(columns=[target_column]).columns.tolist()
@@ -175,21 +183,18 @@ class RAIInsights(RAIBaseInsights):
                 categorical_features=self.categorical_features,
                 dataset=test.drop(columns=[target_column]))
 
-        self._try_add_data_balance()
-
-        self._predict_output = None
-        self._forecast_output = None
-        self._predict_proba_output = None
-        self._forecast_quantiles_output = None
         if model is not None:
             # Cache predictions of the model
             self._set_model_outputs(input_data=self.get_test_data(
                 test_data=test).drop(columns=[target_column]), large=False)
             
-            if len(test) > maximum_rows_for_test:
+            if self._large_test is not None:
                 self._set_model_outputs(
                     input_data=self._large_test.drop(columns=[target_column]),
                     large=True)
+        # keep managers at the end since they rely on everything above
+        self._initialize_managers()
+        self._try_add_data_balance()
             
 
     def get_train_data(self):
@@ -472,8 +477,8 @@ class RAIInsights(RAIBaseInsights):
         non_categorical_string_columns = string_features_set - set(categorical_features)
         if len(non_categorical_string_columns) > 0:
             raise UserConfigValidationException(
-                f"The following string features were not "
-                "identified as categorical features: {non_categorical_string_columns}")
+                "The following string features were not "
+                f"identified as categorical features: {non_categorical_string_columns}")
 
         if classes is not None and task_type == ModelTask.CLASSIFICATION:
             if (len(set(train[target_column].unique()) -
@@ -575,25 +580,26 @@ class RAIInsights(RAIBaseInsights):
                     lambda X, quantiles: forecast_quantiles(self.model, X, quantiles))
                 self.model = wrapper
 
-    def _validate_features_same(self, small_train_features_before,
-                                small_train_data, function):
+    def _validate_features_same(self, features_before,
+                                train_data, function):
         """
         Validate the features are unmodified on the DataFrame.
 
-        :param small_train_features_before: The features saved before
+        :param sfeatures_before: The features saved before
             an operation was performed.
-        :type small_train_features_before: list[str]
-        :param small_train_data: The DataFrame after the operation.
-        :type small_train_data: pandas.DataFrame
+        :type features_before: list[str]
+        :param train_data: The DataFrame after the operation.
+        :type train_data: pandas.DataFrame
         :param function: The name of the operation performed.
         :type function: str
         """
-        small_train_features_after = list(small_train_data.columns)
-        if (small_train_features_before != small_train_features_after).any():
-            raise UserConfigValidationException(
-                f'Calling model {function} function modifies '
-                'input dataset features. Please check if '
-                f'{function} function is defined correctly.')
+        exc_msg = (f'Calling model {function} function modifies input dataset'
+                   f' features. Please check if {function} function is '
+                   'defined correctly.')
+        features_after = list(train_data.columns)
+        if (len(features_before) != len(features_after) or
+                (features_before != features_after).any()):
+            raise UserConfigValidationException(exc_msg)
 
     def _ensure_time_column_available(
             self,
@@ -1000,13 +1006,11 @@ class RAIInsights(RAIBaseInsights):
             try:
                 model_method = getattr(self.model, method.name)
                 model_method(input_data)
-                self._validate_features_same(
-                    input_features,
-                    input_data,
-                    method.name)
             except Exception:
                 raise UserConfigValidationException(
                     _MODEL_METHOD_EXCEPTION_MESSAGE.format(method.name))
+            self._validate_features_same(input_features, input_data,
+                                         method.name)
 
     def _get_model_output_name(self, *, purpose, large=False):
         """Get the name of the attribute representing the model's output.

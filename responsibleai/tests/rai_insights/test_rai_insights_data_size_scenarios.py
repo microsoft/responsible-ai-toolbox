@@ -46,12 +46,12 @@ class TestRAIInsightsLargeData(object):
             target_column,
             categorical_features, task_type):
 
+        length = len(test_data)
         with pytest.warns(
                 UserWarning,
-                match="The size of test set {0} is greater than the "
-                      "supported limit of {1}. Computing insights"
-                      " for the first {1} samples of the "
-                      "test set".format(len(test_data), len(test_data) - 1)):
+                match=f"The size of the test set {length} is greater than the"
+                      f" supported limit of {length - 1}. Computing insights"
+                      f" for the first {length - 1} samples of the test set"):
             rai_insights = RAIInsights(
                 model, train_data, test_data,
                 LABELS,
