@@ -37,13 +37,43 @@ from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
 _TRAIN_LABELS = 'train_labels'
 _MODEL = "model"
 _PREDICT_OUTPUT = 'predict_output'
+_FORECAST_OUTPUT = 'forecast_output'
 _PREDICT_PROBA_OUTPUT = 'predict_proba_output'
+_FORECAST_QUANTILES_OUTPUT = 'forecast_quantiles_output'
 _COLUMN_NAME = 'column_name'
 _RANGE_TYPE = 'range_type'
 _UNIQUE_VALUES = 'unique_values'
 _MIN_VALUE = 'min_value'
 _MAX_VALUE = 'max_value'
 
+
+# Internally we can treat forecasts as predictions and quantiles as
+# probabilities since we only need to forward them to the UI.
+# Depending on task type they get interpreted as either one and
+# we don't need to duplicate a lot of code here.
+class _Purpose(Enum):
+    PREDICTION = "prediction"
+    FORECAST = PREDICTION
+    PROBABILITY = "probability"
+    QUANTILES = PROBABILITY
+
+class _Size(Enum):
+    SMALL = 1
+    LARGE = 2
+
+_DATA_TO_FILE_MAPPING = {
+    "_" + _PREDICT_OUTPUT: SerializationAttributes.PREDICT_JSON,
+    "_" + _FORECAST_OUTPUT: SerializationAttributes.FORECAST_JSON,
+    "_" + _PREDICT_PROBA_OUTPUT: SerializationAttributes.PREDICT_PROBA_JSON,
+    "_" + _FORECAST_QUANTILES_OUTPUT:
+        SerializationAttributes.FORECAST_QUANTILES_JSON,
+    "_large_" + _PREDICT_OUTPUT: SerializationAttributes.LARGE_PREDICT_JSON,
+    "_large_" + _FORECAST_OUTPUT: SerializationAttributes.LARGE_FORECAST_JSON,
+    "_large_" + _PREDICT_PROBA_OUTPUT:
+        SerializationAttributes.LARGE_PREDICT_PROBA_JSON,
+    "_large_" + _FORECAST_QUANTILES_OUTPUT:
+        SerializationAttributes.LARGE_FORECAST_QUANTILES_JSON,
+}
 
 _MODEL_METHOD_EXCEPTION_MESSAGE = (
     'The passed model cannot be used for getting predictions via {0}')
@@ -59,17 +89,6 @@ class ForecastingWrapper(object):
     
     def forecast_quantiles(self, X, quantiles):
         return self._forecast_quantiles_method(X, quantiles)
-
-
-# Internally we can treat forecasts as predictions and quantiles as
-# probabilities since we only need to forward them to the UI.
-# Depending on task type they get interpreted as either one and
-# we don't need to duplicate a lot of code here.
-class MethodPurpose(Enum):
-    PREDICTION = "prediction"
-    FORECAST = PREDICTION
-    PROBABILITY = "probability"
-    QUANTILES = PROBABILITY
 
 class ModelMethod:
     def __init__(self, *, name, optional, purpose):
@@ -87,27 +106,27 @@ model_methods = {
         ModelMethod(
             name=SKLearn.PREDICT,
             optional=False,
-            purpose=MethodPurpose.PREDICTION),
+            purpose=_Purpose.PREDICTION),
         ModelMethod(
             name=SKLearn.PREDICT_PROBA,
             optional=True,
-            purpose=MethodPurpose.PROBABILITY)
+            purpose=_Purpose.PROBABILITY)
     ],
     ModelTask.REGRESSION: [
         ModelMethod(
             name=SKLearn.PREDICT,
             optional=False,
-            purpose=MethodPurpose.PREDICTION)
+            purpose=_Purpose.PREDICTION)
     ],
     ModelTask.FORECASTING: [
         ModelMethod(
             name=Forecasting.FORECAST,
             optional=False,
-            purpose=MethodPurpose.FORECAST),
+            purpose=_Purpose.FORECAST),
         ModelMethod(
             name=Forecasting.FORECAST_QUANTILES,
             optional=True,
-            purpose=MethodPurpose.QUANTILES)
+            purpose=_Purpose.QUANTILES)
     ]
 }
 
@@ -166,6 +185,15 @@ class RAIInsights(RAIBaseInsights):
         self._consolidate_categorical_features(
             self._feature_metadata.categorical_features,
             categorical_features)
+        super(RAIInsights, self).__init__(
+            model, train, test, target_column, task_type, serializer)
+        self._wrap_model_if_needed()
+
+        self._large_test = None
+        self._large_predict_output = None
+        self._large_forecast_output = None
+        self._large_predict_proba_output = None
+        self._large_forecast_quantiles_output = None
         if len(test) > maximum_rows_for_test:
             warnings.warn(
                 f"The size of test set {len(test)} is greater than the "
@@ -180,17 +208,6 @@ class RAIInsights(RAIBaseInsights):
                 self._set_model_outputs(
                     input_data=self._large_test.drop(columns=[target_column]),
                     large=True)
-            else:
-                self._large_predict_output = None
-                self._large_predict_proba_output = None
-        else:
-            self._large_test = None
-            self._large_predict_output = None
-            self._large_predict_proba_output = None
-        
-        super(RAIInsights, self).__init__(
-            model, train, test, target_column, task_type, serializer)
-        self._wrap_model_if_needed()
 
         self._validate_rai_insights_input_parameters(
             model=model, train=train,
@@ -223,9 +240,10 @@ class RAIInsights(RAIBaseInsights):
 
         self._try_add_data_balance()
 
-        self.predict_output = None
-        self.predict_proba_output = None
-        self.quantile_predict_output = None
+        self._predict_output = None
+        self._forecast_output = None
+        self._predict_proba_output = None
+        self._forecast_quantiles_output = None
         if model is not None:
             # Cache predictions of the model
             self._set_model_outputs(input_data=self.get_test_data(
@@ -736,19 +754,17 @@ class RAIInsights(RAIBaseInsights):
         :return: The filtered test data.
         :rtype: pandas.DataFrame
         """
-        if not use_entire_test_data:
-            test_data = self.test
-            pred_y = self.predict_output
-            true_y = self.test[self.target_column]
+        large = use_entire_test_data and self._large_test is not None
+        pred_y = getattr(
+            self,
+            self._get_model_output_name(purpose=_Purpose.PREDICT,
+                                        large=large))
+        if large:
+            test_data = self._large_test
+            true_y = self._large_test[self.target_column]
         else:
-            if self._large_test is not None:
-                test_data = self._large_test
-                pred_y = self._large_predict_output
-                true_y = self._large_test[self.target_column]
-            else:
-                test_data = self.test
-                pred_y = self.predict_output
-                true_y = self.test[self.target_column]
+            test_data = self.test
+            true_y = self.test[self.target_column]
 
         X_test = test_data.drop(columns=[self.target_column])
         filter_data_with_cohort = FilterDataWithCohortFilters(
@@ -824,10 +840,10 @@ class RAIInsights(RAIBaseInsights):
                     predict_dataset = predict_dataset.drop(
                         metadata.dropped_features, axis=1)
                     predicted_y = self._get_model_output(
-                        predict_dataset, purpose=MethodPurpose.PREDICTION)
+                        predict_dataset, purpose=_Purpose.PREDICTION)
             except Exception as ex:
                 model_method = self._get_model_method(
-                    purpose=MethodPurpose.PREDICTION)
+                    purpose=_Purpose.PREDICTION)
                 raise ValueError(
                     f"Model does not support {model_method.__name__} method "
                     "for the given dataset type,") from ex
@@ -870,7 +886,6 @@ class RAIInsights(RAIBaseInsights):
                     "The time column should be parseable by "
                     "pandas.to_datetime, ideally in ISO format,") from ex
 
-
         if true_y is not None and len(true_y) == row_length:
             if (self.task_type == "classification" and
                dashboard_dataset.class_names is not None):
@@ -890,7 +905,7 @@ class RAIInsights(RAIBaseInsights):
         dashboard_dataset.target_column = self.target_column
 
         model_method = self._get_model_method(
-            purpose=MethodPurpose.PROBABILITY)
+            purpose=_Purpose.PROBABILITY)
         if model_method is not None and dataset is not None:
             try:
                 predict_dataset = dataset
@@ -931,28 +946,14 @@ class RAIInsights(RAIBaseInsights):
         if self.model is None:
             return
 
-        self._write_to_file(
-            prediction_output_path / SerializationAttributes.PREDICT_JSON,
-            json.dumps(self.predict_output.tolist()))
-
-        if self.predict_proba_output is not None:
-            self._write_to_file(
-                prediction_output_path /
-                SerializationAttributes.PREDICT_PROBA_JSON,
-                json.dumps(self.predict_proba_output.tolist()))
+        for data_name, file_name in _DATA_TO_FILE_MAPPING.items():
+            if (data_name in self.__dict__ and 
+                    self.__dict__[data_name] is not None):
+                self._write_to_file(
+                    prediction_output_path / file_name,
+                    json.dumps(self.__dict__[data_name].tolist()))
 
         if self._large_test is not None:
-            self._write_to_file(
-                prediction_output_path /
-                SerializationAttributes.LARGE_PREDICT_JSON,
-                json.dumps(self._large_predict_output.tolist()))
-
-            if self._large_predict_proba_output is not None:
-                self._write_to_file(
-                    prediction_output_path /
-                    SerializationAttributes.LARGE_PREDICT_PROBA_JSON,
-                    json.dumps(self._large_predict_proba_output.tolist()))
-
             # Save large test data
             self._write_to_file(
                 prediction_output_path /
@@ -1027,6 +1028,7 @@ class RAIInsights(RAIBaseInsights):
         return None
     
     def _ensure_model_outputs(self, *, input_data):
+        """TODO"""
         input_features = input_data.columns
         for method in model_methods[self.task_type]:
             if not hasattr(self.model, method.name) and not method.optional:
@@ -1043,6 +1045,9 @@ class RAIInsights(RAIBaseInsights):
                 raise UserConfigValidationException(
                     _MODEL_METHOD_EXCEPTION_MESSAGE.format(method.name))
 
+    def _get_model_output_name(self, *, purpose, large=False):
+        model_method = self._get_model_method(purpose=purpose)
+        return f"_{'large_' if large else ''}{model_method.__name__}_output"
 
     def _set_model_output(self, *, model_method, input_data, large=False):
         """TODO"""
@@ -1164,27 +1169,21 @@ class RAIInsights(RAIBaseInsights):
         :type path: str
         """
         if inst.__dict__[_MODEL] is None:
-            inst.__dict__[_PREDICT_OUTPUT] = None
-            inst.__dict__[_PREDICT_PROBA_OUTPUT] = None
+            for data_name in list(_DATA_TO_FILE_MAPPING.keys()):
+                inst.__dict__[data_name] = None
             return
 
         prediction_output_path = (
             Path(path) /
             SerializationAttributes.PREDICTIONS_DIRECTORY)
-
-        with open(prediction_output_path / (
-                SerializationAttributes.PREDICT_JSON), 'r') as file:
-            predict_output = json.load(file)
-        inst.__dict__[_PREDICT_OUTPUT] = np.array(predict_output)
-
-        if inst.__dict__[Metadata.TASK_TYPE] == ModelTask.CLASSIFICATION:
-            with open(prediction_output_path / (
-                    SerializationAttributes.PREDICT_PROBA_JSON), 'r') as file:
-                predict_proba_output = json.load(file)
-            inst.__dict__[_PREDICT_PROBA_OUTPUT] = np.array(
-                predict_proba_output)
-        else:
-            inst.__dict__[_PREDICT_PROBA_OUTPUT] = None
+        
+        for data_name, file_name in _DATA_TO_FILE_MAPPING.items():
+            file_path = prediction_output_path / file_name
+            if file_path.exists():
+                with open(file_path, 'r') as file:
+                    inst.__dict__[data_name] = np.array(json.load(file))
+            else:
+                inst.__dict__[data_name] = None
 
         large_test_path = prediction_output_path / (
             SerializationAttributes.LARGE_TEST_JSON)
@@ -1198,26 +1197,6 @@ class RAIInsights(RAIBaseInsights):
                     pd.read_json(file, dtype=types, orient='split')
         else:
             inst.__dict__["_large_test"] = None
-
-        large_predict_output_path = prediction_output_path / (
-            SerializationAttributes.LARGE_PREDICT_JSON)
-        if large_predict_output_path.exists():
-            with open(large_predict_output_path, 'r') as file:
-                large_predict_output = json.load(file)
-            inst.__dict__["_large_predict_output"] = np.array(
-                large_predict_output)
-        else:
-            inst.__dict__["_large_predict_output"] = None
-
-        large_predict_proba_output_path = prediction_output_path / (
-            SerializationAttributes.LARGE_PREDICT_PROBA_JSON)
-        if large_predict_proba_output_path.exists():
-            with open(large_predict_proba_output_path, 'r') as file:
-                large_predict_proba_output = json.load(file)
-            inst.__dict__["_large_predict_proba_output"] = np.array(
-                large_predict_proba_output)
-        else:
-            inst.__dict__["_large_predict_proba_output"] = None
 
     @staticmethod
     def _load_large_data(inst, path):
