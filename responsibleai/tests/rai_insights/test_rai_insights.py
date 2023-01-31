@@ -5,8 +5,8 @@ import os
 import pickle
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from uuid import UUID
 from typing import Union
+from uuid import UUID
 
 import numpy as np
 import pandas as pd
@@ -26,7 +26,6 @@ from tests.explainer_manager_validator import (setup_explainer,
                                                validate_explainer)
 
 from raiutils.models import ModelTask
-
 from responsibleai import RAIInsights
 from responsibleai._internal.constants import (ManagerNames,
                                                SerializationAttributes)

@@ -3,13 +3,14 @@
 
 """Defines the Model Analysis Dashboard class."""
 
-from flask import jsonify, request
 from typing import Union
+
+from flask import jsonify, request
 
 from raiwidgets.dashboard import Dashboard
 from raiwidgets.responsibleai_dashboard_input import \
     ResponsibleAIDashboardInput
-from responsibleai import RAIInsights, RAIForecastingInsights
+from responsibleai import RAIForecastingInsights, RAIInsights
 
 
 class ResponsibleAIDashboard(Dashboard):

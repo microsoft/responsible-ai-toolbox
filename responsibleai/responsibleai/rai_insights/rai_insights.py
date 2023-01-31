@@ -3,12 +3,12 @@
 
 """Defines the RAIInsights class."""
 
-from enum import Enum
 import inspect
 import json
 import pickle
 import sys
 import warnings
+from enum import Enum
 from pathlib import Path
 from typing import Any, List, Optional, Union
 
@@ -18,7 +18,7 @@ import pandas as pd
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
-from raiutils.models import SKLearn, ModelTask, MethodPurpose, MODEL_METHODS
+from raiutils.models import MODEL_METHODS, MethodPurpose, ModelTask, SKLearn
 from responsibleai._interfaces import Dataset, RAIInsightsData
 from responsibleai._internal.constants import (FileFormats, ManagerNames,
                                                Metadata,

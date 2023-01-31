@@ -1,8 +1,8 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import pytest
 import pandas as pd
+import pytest
 
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
