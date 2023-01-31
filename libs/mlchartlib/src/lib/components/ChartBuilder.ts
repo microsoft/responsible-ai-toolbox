@@ -43,7 +43,7 @@ export class ChartBuilder {
     // the preferred solution of size ref
     const maxBubbleValue = 10;
     projectedRows.forEach((row) => {
-      let series: Partial<Data>;
+      let series: Partial<IData>;
 
       // Handle mutiple group by in the future
       if (datum.groupBy && datum.groupBy.length > 0) {
@@ -52,20 +52,20 @@ export class ChartBuilder {
           if (defaultSeries === undefined) {
             defaultSeries = ChartBuilder.buildDefaultSeries(datum);
           }
-          series = defaultSeries;
+          series = defaultSeries as IData;
         } else {
           if (groupingDictionary[key] === undefined) {
             const temp = ChartBuilder.buildDefaultSeries(datum);
             temp.name = key;
             groupingDictionary[key] = temp;
           }
-          series = groupingDictionary[key];
+          series = groupingDictionary[key] as IData;
         }
       } else {
         if (defaultSeries === undefined) {
           defaultSeries = ChartBuilder.buildDefaultSeries(datum);
         }
-        series = defaultSeries;
+        series = defaultSeries as IData;
       }
 
       // Due to logging supporting heterogeneous metric types, a metric can be a scalar on one run and a vector on another
@@ -170,7 +170,7 @@ export class ChartBuilder {
     return { hasVectorValues, maxLength };
   }
 
-  private static buildDefaultSeries(datum: IData): Partial<Data> {
+  private static buildDefaultSeries(datum: IData): Partial<IData> {
     const series: Partial<Data> = _.cloneDeep(datum);
     // defining an x/y accessor will overwrite any hardcoded x or y values.
     if (datum.xAccessor) {

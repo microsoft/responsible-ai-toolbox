@@ -4,6 +4,7 @@
 import Plotly from "plotly.js";
 
 import { IPlotlyProperty } from "./IPlotlyProperty";
+import { IData } from "./IData";
 
 export class DefaultSelectionFunctions {
   public static scatterSelection(
@@ -14,10 +15,10 @@ export class DefaultSelectionFunctions {
     const selectedPoints =
       selections.length === 0
         ? undefined
-        : plotlyProps.data.map((trace) => {
+        : plotlyProps.data.map((trace: IData) => {
             const selectedIndexes: number[] = [];
-            if (trace.customdata) {
-              trace.customdata.forEach((data, index) => {
+            if (trace["customdata"]) {
+              trace["customdata"].forEach((data: IData, index: number) => {
                 const id = data?.toString();
                 if (id && selections.includes(id)) {
                   selectedIndexes.push(index);
@@ -31,10 +32,10 @@ export class DefaultSelectionFunctions {
       selections.length === 0
         ? [0]
         : plotlyProps.data.map((trace) => {
-            if (trace.customdata) {
-              const customData = trace.customdata;
+            if (trace["customdata"]) {
+              const customData = trace["customdata"];
               const newWidths: number[] = new Array(customData.length).fill(0);
-              customData.forEach((data, index) => {
+              customData.forEach((data: IData, index: number) => {
                 const id = data?.toString();
                 if (id && selections.includes(id)) {
                   newWidths[index] = 2;

@@ -1,0 +1,41 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/interpret-text/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/interpret-text",
+        "tsConfig": "libs/interpret-text/tsconfig.lib.json",
+        "webpackConfig": "./webpack.config.js",
+        "project": "libs/interpret-text/package.json",
+        "main": "libs/interpret-text/src/index.ts",
+        "external": ["react/jsx-runtime"],
+        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+        "assets": [
+          {
+            "glob": "libs/interpret-text/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/interpret-text/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/interpret-text"],
+      "options": {
+        "jestConfig": "libs/interpret-text/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

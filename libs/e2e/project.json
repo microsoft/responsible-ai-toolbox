@@ -1,0 +1,53 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/e2e/src",
+  "projectType": "library",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "libs/e2e/cypress.json",
+        "tsConfig": "libs/e2e/tsconfig.e2e.json"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "widget:serve:production"
+        }
+      }
+    },
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/e2e",
+        "tsConfig": "libs/e2e/tsconfig.lib.json",
+        "webpackConfig": "./webpack.config.js",
+        "project": "libs/e2e/package.json",
+        "main": "libs/e2e/src/index.ts",
+        "external": ["react/jsx-runtime"],
+        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+        "assets": [
+          {
+            "glob": "libs/e2e/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/e2e/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/e2e"],
+      "options": {
+        "jestConfig": "libs/e2e/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

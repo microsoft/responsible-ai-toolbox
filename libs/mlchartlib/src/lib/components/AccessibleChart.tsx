@@ -10,6 +10,7 @@ import { v4 } from "uuid";
 
 import { accessibleChartStyles } from "./AccessibleChart.styles";
 import { formatValue } from "./DisplayFormatters";
+import { IData } from "./IData";
 import { IPlotlyProperty } from "./IPlotlyProperty";
 import { PlotlyThemes, IPlotlyTheme } from "./PlotlyThemes";
 
@@ -92,7 +93,7 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
       this.props.plotlyProps.data.length > 0 &&
       _.some(
         this.props.plotlyProps.data,
-        (datum) => !_.isEmpty(datum.y) || !_.isEmpty(datum.x)
+        (datum: IData) => !_.isEmpty(datum.y) || !_.isEmpty(datum.x)
       )
     );
   }
@@ -102,8 +103,9 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
       <table className={accessibleChartStyles.plotlyTable}>
         <tbody>
           {data.map((datum, index) => {
-            const xDataLength = datum.x ? datum.x.length : 0;
-            const yDataLength = datum.y ? datum.y.length : 0;
+            const dataPoint = datum as IData;
+            const xDataLength = dataPoint.x ? dataPoint.x.length : 0;
+            const yDataLength = dataPoint.y ? dataPoint.y.length : 0;
             const tableWidth = Math.max(xDataLength, yDataLength);
             // Building this table is slow, need better accessibility for large charts than an unreadable table
             if (tableWidth > 500) {
@@ -115,10 +117,14 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
             for (let i = 0; i < tableWidth; i++) {
               // Add String() because sometimes data may be Nan
               xRowCells.push(
-                <td key={`${i}.x`}>{datum.x ? formatValue(datum.x[i]) : ""}</td>
+                <td key={`${i}.x`}>
+                  {dataPoint.x ? formatValue(dataPoint.x[i]) : ""}
+                </td>
               );
               yRowCells.push(
-                <td key={`${i}.y`}>{datum.y ? formatValue(datum.y[i]) : ""}</td>
+                <td key={`${i}.y`}>
+                  {dataPoint.y ? formatValue(dataPoint.y[i]) : ""}
+                </td>
               );
             }
             return [
