@@ -4,8 +4,8 @@
 import pandas as pd
 import pytest
 
+from raiutils.exceptions import UserConfigValidationException
 from responsibleai._interfaces import ModelExplanationData
-from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.rai_insights import RAIInsights
 
 from ..common_utils import create_iris_data, create_lightgbm_classifier

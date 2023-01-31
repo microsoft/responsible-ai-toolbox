@@ -4,7 +4,7 @@
 import warnings
 from typing import Any, Dict, List, Optional
 
-from responsibleai.exceptions import UserConfigValidationException
+from raiutils.exceptions import UserConfigValidationException
 
 
 class FeatureMetadata:

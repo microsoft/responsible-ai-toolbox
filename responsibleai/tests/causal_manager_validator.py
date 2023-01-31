@@ -6,6 +6,7 @@ import pandas as pd
 import pytest
 from econml.solutions.causal_analysis._causal_analysis import CausalAnalysis
 
+from raiutils.exceptions import UserConfigValidationException
 from responsibleai import ModelTask
 from responsibleai._interfaces import (CausalConfig, CausalData, CausalPolicy,
                                        CausalPolicyGains,
@@ -14,7 +15,6 @@ from responsibleai._interfaces import (CausalConfig, CausalData, CausalPolicy,
 from responsibleai._internal.constants import (CausalManagerKeys,
                                                ListProperties, ManagerNames)
 from responsibleai._tools.causal.causal_result import CausalResult
-from responsibleai.exceptions import UserConfigValidationException
 
 EFFECTS_ATTRIBUTES = [
     'point',

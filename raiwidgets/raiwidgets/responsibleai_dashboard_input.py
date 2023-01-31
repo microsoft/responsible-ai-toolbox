@@ -9,6 +9,7 @@ import pandas as pd
 
 from erroranalysis._internal.constants import ModelTask, display_name_to_metric
 from raiutils.data_processing import convert_to_list, serialize_json_safe
+from raiutils.exceptions import UserConfigValidationException
 from raiutils.models import is_classifier
 from raiwidgets.cohort import Cohort
 from raiwidgets.constants import ErrorMessages
@@ -16,7 +17,6 @@ from raiwidgets.error_handling import _format_exception
 from raiwidgets.interfaces import WidgetRequestResponseConstants
 from responsibleai import RAIInsights
 from responsibleai._internal.constants import ManagerNames
-from responsibleai.exceptions import UserConfigValidationException
 
 EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 
@@ -120,24 +120,6 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: []
             }
 
-    def _prepare_filtered_error_analysis_data(self, features, filters,
-                                              composite_filters, metric):
-        filtered_data_df = self._analysis.get_filtered_test_data(
-            filters=filters,
-            composite_filters=composite_filters,
-            include_original_columns_only=False)
-
-        msg = "Feature {} not found in dataset. Existing features: {}"
-        for feature in features:
-            if feature is None:
-                continue
-            if feature not in filtered_data_df.columns:
-                raise UserConfigValidationException(
-                    msg.format(feature, filtered_data_df.columns))
-
-        self._error_analyzer.update_metric(metric)
-        return filtered_data_df
-
     def debug_ml(self, data):
         try:
             features = data[0]
@@ -148,8 +130,12 @@ class ResponsibleAIDashboardInput:
             min_child_samples = data[5]
             metric = display_name_to_metric[data[6]]
 
-            filtered_data_df = self._prepare_filtered_error_analysis_data(
-                features, filters, composite_filters, metric)
+            filtered_data_df = self._analysis.get_filtered_test_data(
+                filters=filters,
+                composite_filters=composite_filters,
+                include_original_columns_only=False)
+
+            self._error_analyzer.update_metric(metric)
 
             tree = self._error_analyzer.compute_error_tree_on_dataset(
                 features, filtered_data_df,
@@ -179,8 +165,12 @@ class ResponsibleAIDashboardInput:
             num_bins = data[4]
             metric = display_name_to_metric[data[5]]
 
-            filtered_data_df = self._prepare_filtered_error_analysis_data(
-                features, filters, composite_filters, metric)
+            filtered_data_df = self._analysis.get_filtered_test_data(
+                filters=filters,
+                composite_filters=composite_filters,
+                include_original_columns_only=False)
+
+            self._error_analyzer.update_metric(metric)
 
             matrix = self._error_analyzer.compute_matrix_on_dataset(
                 features, filtered_data_df,

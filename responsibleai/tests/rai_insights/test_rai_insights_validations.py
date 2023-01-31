@@ -13,8 +13,8 @@ from tests.common_utils import (create_binary_classification_dataset,
                                 create_iris_data, create_lightgbm_classifier,
                                 create_sklearn_random_forest_regressor)
 
+from raiutils.exceptions import UserConfigValidationException
 from responsibleai import RAIInsights
-from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
 
 TARGET = 'target'

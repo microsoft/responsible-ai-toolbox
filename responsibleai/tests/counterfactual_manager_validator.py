@@ -5,10 +5,10 @@ import pytest
 from dice_ml.utils.exception import \
     UserConfigValidationException as DiceException
 
+from raiutils.exceptions import UserConfigValidationException
 from responsibleai._internal.constants import (CounterfactualManagerKeys,
                                                ListProperties, ManagerNames)
-from responsibleai.exceptions import (DuplicateManagerConfigException,
-                                      UserConfigValidationException)
+from responsibleai.exceptions import DuplicateManagerConfigException
 
 
 def verify_counterfactual_object(counterfactual_obj, feature_importance=False):

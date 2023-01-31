@@ -15,6 +15,7 @@ from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.error_report import as_error_report
 from erroranalysis._internal.error_report import \
     json_converter as report_json_converter
+from raiutils.exceptions import UserConfigValidationException
 from responsibleai._config.base_config import BaseConfig
 from responsibleai._interfaces import ErrorAnalysisData
 from responsibleai._internal.constants import ErrorAnalysisManagerKeys as Keys
@@ -23,8 +24,7 @@ from responsibleai._internal.constants import (FileFormats, ListProperties,
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.exceptions import (ConfigAndResultMismatchException,
-                                      DuplicateManagerConfigException,
-                                      UserConfigValidationException)
+                                      DuplicateManagerConfigException)
 from responsibleai.managers.base_manager import BaseManager
 
 REPORTS = 'reports'
