@@ -15,7 +15,6 @@ import {
   ModelAssessmentContext,
   OtherChartTypes
 } from "@responsible-ai/core-ui";
-import _ from "lodash";
 import React from "react";
 
 import { verticalComponentTokens } from "../IndividualFeatureImportanceView.styles";
