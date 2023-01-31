@@ -5,7 +5,6 @@ import os
 import pickle
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Union
 from uuid import UUID
 
 import numpy as np

@@ -1,7 +1,6 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import pandas as pd
 import pytest
 
 from responsibleai.exceptions import UserConfigValidationException
@@ -105,7 +104,8 @@ class TestFeatureMetadata:
         assert feature_metadata_dict == expected_feature_metadata_dict
 
     def test_feature_metadata_with_time_series_id_column_names(self):
-        feature_metadata = FeatureMetadata(time_series_id_column_names=['g1', 'g2'])
+        feature_metadata = FeatureMetadata(
+            time_series_id_column_names=['g1', 'g2'])
         assert feature_metadata.identity_feature_name is None
         assert feature_metadata.time_column_name is None
         assert feature_metadata.categorical_features is None
@@ -116,7 +116,7 @@ class TestFeatureMetadata:
                 match='The given time series ID column g1 is not present '
                       'in the provided features: A, B, C, D, E, F, G.'):
             feature_metadata.validate(
-                feature_names=['A','B','C','D','E','F','G'])
+                feature_names=['A', 'B', 'C', 'D', 'E', 'F', 'G'])
 
         feature_metadata_dict = feature_metadata.to_dict()
         expected_feature_metadata_dict = {

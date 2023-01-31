@@ -177,6 +177,3 @@ class RAIInsightsData:
     causalAnalysisData: List[CausalData]
     counterfactualData: List[CounterfactualData]
     errorAnalysisData: List[ErrorAnalysisData]
-
-class RAIForecastingInsightsData:
-    dataset: Dataset

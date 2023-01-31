@@ -30,7 +30,8 @@ class TestRAIInsightsValidations:
         X_test[TARGET] = y_test
 
         message = ("Unsupported task type 'regre'. "
-                   "Should be one of \\['classification', 'regression', 'forecasting'\\]")
+                   "Should be one of \\['classification', 'regression', "
+                   "'forecasting'\\]")
         with pytest.raises(UserConfigValidationException, match=message):
             RAIInsights(
                 model=model,

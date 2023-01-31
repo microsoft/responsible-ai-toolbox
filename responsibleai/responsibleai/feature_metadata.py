@@ -45,18 +45,22 @@ class FeatureMetadata:
 
     def validate(self, feature_names: List[str]):
         """Validate the user-provided feature metadata.
-        
+
         :param feature_names: list of features in the dataset.
         :type feature_names: List[str]
         """
+        identity_feature = ([self.identity_feature_name]
+                            if self.identity_feature_name else None)
+        time_column = ([self.time_column_name]
+                       if self.time_column_name else None)
         self._validate_columns(
             'dropped feature', self.dropped_features, feature_names)
         self._validate_columns(
             'categorical feature', self.categorical_features, feature_names)
         self._validate_columns(
-            'identity feature', [self.identity_feature_name] if self.identity_feature_name else None, feature_names)
+            'identity feature', identity_feature, feature_names)
         self._validate_columns(
-            'time column', [self.time_column_name] if self.time_column_name else None, feature_names)
+            'time column', time_column, feature_names)
         self._validate_columns(
             'time series ID column',
             self.time_series_id_column_names,
@@ -107,7 +111,8 @@ class FeatureMetadata:
         :type column_purpose: str
         :param column_names: List of column names to validate.
         :type column_names: List[str]
-        :param self.identity_feature_name: List of features in the user input dataset.
+        :param self.identity_feature_name: List of features in the input
+            dataset.
         :type self.identity_feature_name: List[str]
         """
         if column_names is None:

@@ -8,7 +8,6 @@ import json
 import pickle
 import sys
 import warnings
-from enum import Enum
 from pathlib import Path
 from typing import Any, List, Optional, Union
 
@@ -70,7 +69,7 @@ class ForecastingWrapper(object):
 
     def forecast(self, X):
         return self._forecast_method(X)
-    
+
     def forecast_quantiles(self, X, quantiles):
         return self._forecast_quantiles_method(X, quantiles)
 
@@ -139,7 +138,7 @@ class RAIInsights(RAIBaseInsights):
                 f"{maximum_rows_for_test} samples of the test set")
             self._large_test = test.copy()
             test = test.copy()[0:maximum_rows_for_test]
-        
+
         super(RAIInsights, self).__init__(
             model, train, test, target_column, task_type, serializer)
 
@@ -160,7 +159,7 @@ class RAIInsights(RAIBaseInsights):
             classes=classes,
             serializer=serializer,
             feature_metadata=self._feature_metadata)
-        
+
         self._classes = RAIInsights._get_classes(
             task_type=task_type,
             train=train,
@@ -187,7 +186,7 @@ class RAIInsights(RAIBaseInsights):
             # Cache predictions of the model
             self._set_model_outputs(input_data=self.get_test_data(
                 test_data=test).drop(columns=[target_column]), large=False)
-            
+
             if self._large_test is not None:
                 self._set_model_outputs(
                     input_data=self._large_test.drop(columns=[target_column]),
@@ -195,7 +194,6 @@ class RAIInsights(RAIBaseInsights):
         # keep managers at the end since they rely on everything above
         self._initialize_managers()
         self._try_add_data_balance()
-            
 
     def get_train_data(self):
         """Returns the training dataset after dropping
@@ -240,19 +238,21 @@ class RAIInsights(RAIBaseInsights):
 
     def _consolidate_categorical_features(self):
         """Consolidates the categorical features.
-        
-        Originally, only the RAIInsights constructor accepted categorical_features.
-        Later on, feature_metadata was added as an argument that also includes
-        categorical_features. This method consolidates them or raises an exception
-        if it is not possible. The resulting categorical features should be set on
-        the self._feature_metadata object. Eventually, the categorical_features
+
+        Originally, only the RAIInsights constructor accepted
+        categorical_features. Later on, feature_metadata was added as an
+        argument that also includes categorical_features.
+        This method consolidates them or raises an exception if it is not
+        possible. The resulting categorical features should be set on the
+        self._feature_metadata object. Eventually, the categorical_features
         argument on the RAIInsights constructor will be deprecated.
         """
         if self._feature_metadata.categorical_features is None:
             if self.categorical_features is None:
                 return
             else:
-                self._feature_metadata.categorical_features = self.categorical_features
+                self._feature_metadata.categorical_features = \
+                    self.categorical_features
                 return
         else:
             if self.categorical_features is None:
@@ -260,15 +260,16 @@ class RAIInsights(RAIBaseInsights):
                     self._feature_metadata.categorical_features
                 return
             else:
-                # Both are specified, so raise an exception if they don't match.
+                # Both are specified. Raise an exception if they don't match.
                 if (set(self.categorical_features) ==
                         set(self._feature_metadata.categorical_features)):
                     return
                 else:
                     raise UserConfigValidationException(
-                        'The categorical_features provided via the RAIInsights '
-                        'constructor and the categorical_features provided via '
-                        'the feature_metadata argument do not match.')
+                        'The categorical_features provided via the '
+                        'RAIInsights constructor and the categorical_features '
+                        'provided via the feature_metadata argument do not '
+                        'match.')
 
     def _initialize_managers(self):
         """Initializes the managers.
@@ -409,7 +410,8 @@ class RAIInsights(RAIBaseInsights):
                 raise UserConfigValidationException(
                     'The serializer should be serializable via pickle')
 
-        if not isinstance(train, pd.DataFrame) or not isinstance(test, pd.DataFrame):
+        if (not isinstance(train, pd.DataFrame) or
+                not isinstance(test, pd.DataFrame)):
             raise UserConfigValidationException(
                 "Unsupported data type for either train or test. "
                 "Expecting pandas DataFrame for train and test."
@@ -431,7 +433,7 @@ class RAIInsights(RAIBaseInsights):
                 target_column not in list(test.columns)):
             raise UserConfigValidationException(
                 f'Target name {target_column} not present in train/test data')
-        
+
         categorical_features = self.categorical_features
         if (categorical_features is not None and
                 len(categorical_features) > 0):
@@ -446,8 +448,8 @@ class RAIInsights(RAIBaseInsights):
                 train.drop(columns=[target_column]).columns)
             if len(difference_set) > 0:
                 message = ("Feature names in categorical_features "
-                            "do not exist in train data: "
-                            f"{list(difference_set)}")
+                           "do not exist in train data: "
+                           f"{list(difference_set)}")
                 raise UserConfigValidationException(message)
 
             for column in categorical_features:
@@ -474,11 +476,13 @@ class RAIInsights(RAIBaseInsights):
                 feature_metadata is not None and
                 feature_metadata.time_column_name is not None):
             string_features_set.remove(feature_metadata.time_column_name)
-        non_categorical_string_columns = string_features_set - set(categorical_features)
+        non_categorical_string_columns = \
+            string_features_set - set(categorical_features)
         if len(non_categorical_string_columns) > 0:
             raise UserConfigValidationException(
                 "The following string features were not "
-                f"identified as categorical features: {non_categorical_string_columns}")
+                "identified as categorical features: "
+                f"{non_categorical_string_columns}")
 
         if classes is not None and task_type == ModelTask.CLASSIFICATION:
             if (len(set(train[target_column].unique()) -
@@ -550,34 +554,43 @@ class RAIInsights(RAIBaseInsights):
                 if hasattr(model, SKLearn.PREDICT_PROBA):
                     raise UserConfigValidationException(
                         'The regression model provided has a predict_proba '
-                        'function. Please check the task_type.')                
-                
+                        'function. Please check the task_type.')
+
     def _wrap_model_if_needed(self):
         """Wrap the model in a compatible format if needed."""
         if self.task_type == ModelTask.FORECASTING:
             # Wrap model to make forecasting API compatible.
             # Detect if the model is from AzureML as a special case.
-            module_name = inspect.getmodule(self.model).__name__.partition('.')[0]
+            module = inspect.getmodule(self.model)
+            module_name = module.__name__.partition('.')[0]
             model_package = sys.modules[module_name].__package__
             if model_package == "azureml":
+
                 def forecast(forecasting_model, X):
-                    # AzureML forecasting models return a tuple of (forecast, data)
-                    # but we only want to return the actual forecast.
+                    # AzureML forecasting models return a tuple of
+                    # (forecast, data) but we only want to return the actual
+                    # forecast.
                     return forecasting_model.forecast(X)[0]
+
                 def forecast_quantiles(forecasting_model, X, quantiles=None):
-                    # AzureML forecasting models don't take quantiles as an argument but
-                    # instead need to have it set on the model object.
+                    # AzureML forecasting models don't take quantiles as an
+                    # argument but instead need to have it set on the model
+                    # object.
                     if quantiles is None:
                         quantiles = [0.025, 0.975]
-                    if type(quantiles) == list and len(quantiles) > 0 and \
-                            all([type(q) == float and q > 0 and q < 1 for q in quantiles]):
+                    if (type(quantiles) == list and len(quantiles) > 0 and
+                            all([type(q) == float and q > 0 and
+                                 q < 1 for q in quantiles])):
                         forecasting_model.quantiles = quantiles
                         return forecasting_model.forecast_quantiles(X)
                     else:
-                        raise ValueError("quantiles must be a list of floats between 0 and 1.")
+                        raise ValueError(
+                            "quantiles must be a list of floats between "
+                            "0 and 1.")
                 wrapper = ForecastingWrapper(
                     lambda X: forecast(self.model, X),
-                    lambda X, quantiles: forecast_quantiles(self.model, X, quantiles))
+                    lambda X, quantiles:
+                        forecast_quantiles(self.model, X, quantiles))
                 self.model = wrapper
 
     def _validate_features_same(self, features_before,
@@ -825,7 +838,7 @@ class RAIInsights(RAIBaseInsights):
                 dashboard_dataset.index = convert_to_list(
                     pd.to_datetime(
                         self.test[self._feature_metadata.time_column_name])
-                        .apply(lambda dt: dt.strftime("%Y-%m-%dT%H:%M:%SZ")))
+                    .apply(lambda dt: dt.strftime("%Y-%m-%dT%H:%M:%SZ")))
             except Exception as ex:
                 raise ValueError(
                     "The time column should be parseable by "
@@ -892,7 +905,7 @@ class RAIInsights(RAIBaseInsights):
             return
 
         for data_name, file_name in _DATA_TO_FILE_MAPPING.items():
-            if (data_name in self.__dict__ and 
+            if (data_name in self.__dict__ and
                     self.__dict__[data_name] is not None):
                 self._write_to_file(
                     prediction_output_path / file_name,
@@ -936,8 +949,7 @@ class RAIInsights(RAIBaseInsights):
         meta = {
             Metadata.TARGET_COLUMN: self.target_column,
             Metadata.TASK_TYPE: self.task_type,
-            Metadata.CATEGORICAL_FEATURES: \
-                self.categorical_features,
+            Metadata.CATEGORICAL_FEATURES: self.categorical_features,
             Metadata.CLASSES: classes,
             Metadata.FEATURE_COLUMNS: self._feature_columns,
             Metadata.FEATURE_RANGES: self._feature_ranges,
@@ -957,11 +969,11 @@ class RAIInsights(RAIBaseInsights):
 
     def _get_model_method(self, *, purpose: MethodPurpose):
         """Get the model's method for the indicated purpose.
-        
+
         :param purpose: the purpose to identify suitable model methods
         :type purpose: MethodPurpose
         :return: the model's first method with the corresponding purpose
-            if any, otherwise None 
+            if any, otherwise None
         :rtype: Union[None, Any]
         """
         methods = [m for m in MODEL_METHODS[self.task_type]
@@ -975,7 +987,7 @@ class RAIInsights(RAIBaseInsights):
         """Get the output from a model method.
 
         The model method is chosen based on the specified purpose
-        
+
         :param input_data: the data to pass to the model
         :type input_data: Union[pd.DataFrame, np.array]
         :param purpose: the purpose to identify suitable model methods
@@ -987,14 +999,14 @@ class RAIInsights(RAIBaseInsights):
         if model_method:
             return model_method(input_data)
         return None
-    
+
     def _ensure_model_outputs(self, *, input_data):
         """Ensure that the model outputs are as expected.
 
         Raises an UserConfigValidationException if the model does not have the
         expected required methods, fails while calling any of its methods, or
         changes the input features.
-        
+
         :param input_data: the data to pass to the model
         :type input_data: Union[pd.DataFrame, np.array]
         """
@@ -1028,7 +1040,7 @@ class RAIInsights(RAIBaseInsights):
 
     def _set_model_output(self, *, model_method, input_data, large=False):
         """Store the model output on a suitable field.
-        
+
         :param model_method: the method to use to produce the model output
         :type model_method: ModelMethod
         :param input_data: the data to pass to the model
@@ -1046,12 +1058,13 @@ class RAIInsights(RAIBaseInsights):
                 return
             else:
                 raise ValueError(
-                    f"The model is expected to have a {model_method.name} method,") from err
+                    f"The model is expected to have a {model_method.name} "
+                    "method,") from err
         setattr(self, field_name, method(input_data))
-    
+
     def _set_model_outputs(self, *, input_data, large=False):
         """Store all model outputs on suitable fields.
-        
+
         :param input_data: the data to pass to the model
         :type input_data: Union[pd.DataFrame, np.array]
         :param large: whether or not the output is based on a large (full)
@@ -1169,7 +1182,7 @@ class RAIInsights(RAIBaseInsights):
         prediction_output_path = (
             Path(path) /
             SerializationAttributes.PREDICTIONS_DIRECTORY)
-        
+
         for data_name, file_name in _DATA_TO_FILE_MAPPING.items():
             file_path = prediction_output_path / file_name
             if file_path.exists():
