@@ -4,7 +4,6 @@ module.exports = (config) => {
   nrwlConfig(config); // first call it so that it @nrwl/react plugin adds its configs,
 
   config.resolve = {
-    // resolve: {
     fallback: {
       module: false,
       dgram: false,
@@ -14,8 +13,8 @@ module.exports = (config) => {
       net: false,
       tls: false,
       child_process: false
-    }
-    // };
+    },
+    extensions: [".ts", ".js", ".tsx"]
   };
   config.module.rules.push({
     test: /\.py$/i,
