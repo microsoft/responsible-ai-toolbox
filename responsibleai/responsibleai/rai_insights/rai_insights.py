@@ -98,11 +98,10 @@ class RAIInsights(RAIBaseInsights):
             categorical_features, feature_metadata)
 
         if len(test) > maximum_rows_for_test:
-            warnings.warn("The size of test set {0} is greater than "
-                          "supported limit of {1}. Computing insights"
-                          " for first {1} samples of "
-                          "test set".format(len(test),
-                                            maximum_rows_for_test))
+            warnings.warn(f"The size of test set {len(test)} is greater than "
+                          f"supported limit of {maximum_rows_for_test}. "
+                          "Computing insights for first "
+                          f"{maximum_rows_for_test} samples of test set")
             self._large_test = test.copy()
             test = test.copy()[0:maximum_rows_for_test]
 
@@ -128,7 +127,6 @@ class RAIInsights(RAIBaseInsights):
             target_column=target_column, task_type=task_type,
             classes=classes,
             serializer=serializer,
-            maximum_rows_for_test=maximum_rows_for_test,
             feature_metadata=self._feature_metadata)
         self._classes = RAIInsights._get_classes(
             task_type=task_type,
@@ -428,7 +426,7 @@ class RAIInsights(RAIBaseInsights):
                         target_column)
                 )
 
-            categorical_features = features_metadata.categorical_features
+            categorical_features = feature_metadata.categorical_features
             if (categorical_features is not None and
                     len(categorical_features) > 0):
                 if target_column in categorical_features:
@@ -960,8 +958,10 @@ class RAIInsights(RAIBaseInsights):
             inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata(
                 identity_feature_name=meta[Metadata.FEATURE_METADATA][
                     'identity_feature_name'],
-                datetime_features=meta[Metadata.FEATURE_METADATA][
-                    'datetime_features'],
+                time_column_name=meta[Metadata.FEATURE_METADATA][
+                    'time_column_name'],
+                time_series_id_column_names=meta[Metadata.FEATURE_METADATA][
+                    'time_series_id_column_names'],
                 categorical_features=meta[Metadata.FEATURE_METADATA][
                     'categorical_features'],
                 dropped_features=meta[Metadata.FEATURE_METADATA][
