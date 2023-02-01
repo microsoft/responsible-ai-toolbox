@@ -1,7 +1,6 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import warnings
 from typing import Any, Dict, List, Optional
 
 from responsibleai.exceptions import UserConfigValidationException

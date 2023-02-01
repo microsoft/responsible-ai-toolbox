@@ -531,7 +531,7 @@ class TestRAIInsightsValidations:
 
         assert "The following string features were not " + \
             "identified as categorical features: {\'c1\'}" in str(ucve.value)
-    
+
     @pytest.mark.parametrize(
         'categorical_features',
         [[], ["c1"], ["c2"], ["c1", "c2"]])
@@ -539,7 +539,7 @@ class TestRAIInsightsValidations:
     def test_feature_metadata_and_categorical_features_deprecation_warning(
             self, categorical_features, no_feature_metadata):
         X = pd.DataFrame(data=[[1, 1], [2, 3]],
-                               columns=['c1', 'c2'])
+                         columns=['c1', 'c2'])
         y = np.array([1, 0])
         model = create_lightgbm_classifier(X, y)
 
@@ -564,7 +564,7 @@ class TestRAIInsightsValidations:
                 task_type='classification',
                 categorical_features=categorical_features,
                 feature_metadata=feature_metadata)
-    
+
     @pytest.mark.parametrize(
         'categorical_features',
         [([], ['c1']),
@@ -579,7 +579,7 @@ class TestRAIInsightsValidations:
         arg_categorical_features, feature_metadata_categorical_features = \
             categorical_features
         X = pd.DataFrame(data=[[1, 1], [2, 3]],
-                               columns=['c1', 'c2'])
+                         columns=['c1', 'c2'])
         y = np.array([1, 0])
         model = create_lightgbm_classifier(X, y)
 
@@ -602,14 +602,14 @@ class TestRAIInsightsValidations:
                 task_type='classification',
                 categorical_features=arg_categorical_features,
                 feature_metadata=feature_metadata)
-    
+
     @pytest.mark.parametrize(
         'categorical_features',
         [None, ['c1'], ['c1', 'c2']])
     def test_feature_metadata_categorical_features_only(
             self, categorical_features):
         X = pd.DataFrame(data=[[1, 1], [2, 3]],
-                               columns=['c1', 'c2'])
+                         columns=['c1', 'c2'])
         y = np.array([1, 0])
         model = create_lightgbm_classifier(X, y)
 
