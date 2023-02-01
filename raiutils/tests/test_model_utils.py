@@ -1,8 +1,8 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from raiutils.models import \
-    is_classifier, is_forecaster, is_quantile_forecaster
+from raiutils.models import (is_classifier, is_forecaster,
+                             is_quantile_forecaster)
 
 
 class Classifier:
@@ -38,7 +38,7 @@ class TestIsClassifier:
         assert not is_classifier(regressor)
         assert not is_forecaster(regressor)
         assert not is_quantile_forecaster(regressor)
-    
+
     def test_forecaster(self):
         forecaster = Forecaster()
         assert not is_classifier(forecaster)
