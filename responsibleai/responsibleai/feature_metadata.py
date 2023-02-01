@@ -40,9 +40,6 @@ class FeatureMetadata:
         self.dropped_features = dropped_features
         self.time_series_id_column_names = time_series_id_column_names
 
-        if self.categorical_features is not None:
-            warnings.warn('categorical_features are not in use currently.')
-
     def validate(self, feature_names: List[str]):
         """Validate the user-provided feature metadata.
 

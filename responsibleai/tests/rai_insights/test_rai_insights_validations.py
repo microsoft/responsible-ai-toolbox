@@ -531,6 +531,100 @@ class TestRAIInsightsValidations:
 
         assert "The following string features were not " + \
             "identified as categorical features: {\'c1\'}" in str(ucve.value)
+    
+    @pytest.mark.parametrize(
+        'categorical_features',
+        [[], ["c1"], ["c2"], ["c1", "c2"]])
+    @pytest.mark.parametrize('no_feature_metadata', [True, False])
+    def test_feature_metadata_and_categorical_features_deprecation_warning(
+            self, categorical_features, no_feature_metadata):
+        X = pd.DataFrame(data=[[1, 1], [2, 3]],
+                               columns=['c1', 'c2'])
+        y = np.array([1, 0])
+        model = create_lightgbm_classifier(X, y)
+
+        X[TARGET] = y
+        from responsibleai.feature_metadata import FeatureMetadata
+        feature_metadata = FeatureMetadata(
+            categorical_features=categorical_features) \
+            if no_feature_metadata else None
+
+        with pytest.warns(
+                UserWarning,
+                match="The categorical_features argument on the "
+                      "RAIInsights constructor is deprecated and will "
+                      "be removed after version 0.26. Please provide "
+                      "categorical features via the feature_metadata "
+                      "argument instead."):
+            RAIInsights(
+                model=model,
+                train=X,
+                test=X,
+                target_column=TARGET,
+                task_type='classification',
+                categorical_features=categorical_features,
+                feature_metadata=feature_metadata)
+    
+    @pytest.mark.parametrize(
+        'categorical_features',
+        [([], ['c1']),
+         (['c1'], []),
+         (['c1'], ['c2']),
+         (['c1'], ['c1', 'c2']),
+         (['c1', 'c2'], ['c1']),
+         ([], ['c1', 'c2']),
+         (['c1', 'c2'], [])])
+    def test_feature_metadata_and_categorical_features_mismatch(
+            self, categorical_features):
+        arg_categorical_features, feature_metadata_categorical_features = \
+            categorical_features
+        X = pd.DataFrame(data=[[1, 1], [2, 3]],
+                               columns=['c1', 'c2'])
+        y = np.array([1, 0])
+        model = create_lightgbm_classifier(X, y)
+
+        X[TARGET] = y
+        from responsibleai.feature_metadata import FeatureMetadata
+        feature_metadata = FeatureMetadata(
+            categorical_features=feature_metadata_categorical_features)
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match='The categorical_features provided via the '
+                      'RAIInsights constructor and the categorical_features '
+                      'provided via the feature_metadata argument do not '
+                      'match.'):
+            RAIInsights(
+                model=model,
+                train=X,
+                test=X,
+                target_column=TARGET,
+                task_type='classification',
+                categorical_features=arg_categorical_features,
+                feature_metadata=feature_metadata)
+    
+    @pytest.mark.parametrize(
+        'categorical_features',
+        [None, ['c1'], ['c1', 'c2']])
+    def test_feature_metadata_categorical_features_only(
+            self, categorical_features):
+        X = pd.DataFrame(data=[[1, 1], [2, 3]],
+                               columns=['c1', 'c2'])
+        y = np.array([1, 0])
+        model = create_lightgbm_classifier(X, y)
+
+        X[TARGET] = y
+        from responsibleai.feature_metadata import FeatureMetadata
+        feature_metadata = FeatureMetadata(
+            categorical_features=categorical_features)
+
+        RAIInsights(
+            model=model,
+            train=X,
+            test=X,
+            target_column=TARGET,
+            task_type='classification',
+            feature_metadata=feature_metadata)
 
 
 class TestCausalUserConfigValidations:

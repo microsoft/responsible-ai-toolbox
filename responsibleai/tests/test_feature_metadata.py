@@ -12,6 +12,7 @@ class TestFeatureMetadata:
         feature_metadata = FeatureMetadata()
         assert feature_metadata.identity_feature_name is None
         assert feature_metadata.time_column_name is None
+        assert feature_metadata.time_series_id_column_names is None
         assert feature_metadata.categorical_features is None
         assert feature_metadata.dropped_features is None
 
@@ -29,6 +30,7 @@ class TestFeatureMetadata:
         feature_metadata = FeatureMetadata(identity_feature_name='id')
         assert feature_metadata.identity_feature_name == 'id'
         assert feature_metadata.time_column_name is None
+        assert feature_metadata.time_series_id_column_names is None
         assert feature_metadata.categorical_features is None
         assert feature_metadata.dropped_features is None
         with pytest.raises(
@@ -52,6 +54,7 @@ class TestFeatureMetadata:
         feature_metadata = FeatureMetadata(time_column_name='d1')
         assert feature_metadata.identity_feature_name is None
         assert feature_metadata.time_column_name == 'd1'
+        assert feature_metadata.time_series_id_column_names is None
         assert feature_metadata.categorical_features is None
         assert feature_metadata.dropped_features is None
 
@@ -66,13 +69,11 @@ class TestFeatureMetadata:
         assert feature_metadata_dict == expected_feature_metadata_dict
 
     def test_feature_metadata_with_categorical_features(self):
-        with pytest.warns(
-                UserWarning,
-                match='categorical_features are not in use currently.'):
-            feature_metadata = FeatureMetadata(
-                categorical_features=['c1', 'c2'])
+        feature_metadata = FeatureMetadata(
+            categorical_features=['c1', 'c2'])
         assert feature_metadata.identity_feature_name is None
         assert feature_metadata.time_column_name is None
+        assert feature_metadata.time_series_id_column_names is None
         assert feature_metadata.categorical_features == ['c1', 'c2']
         assert feature_metadata.dropped_features is None
 
@@ -90,6 +91,7 @@ class TestFeatureMetadata:
         feature_metadata = FeatureMetadata(dropped_features=['d1', 'd2'])
         assert feature_metadata.identity_feature_name is None
         assert feature_metadata.time_column_name is None
+        assert feature_metadata.time_series_id_column_names is None
         assert feature_metadata.categorical_features is None
         assert feature_metadata.dropped_features == ['d1', 'd2']
 
