@@ -10,7 +10,7 @@ from flask import jsonify, request
 from raiwidgets.dashboard import Dashboard
 from raiwidgets.responsibleai_dashboard_input import \
     ResponsibleAIDashboardInput
-from responsibleai import RAIForecastingInsights, RAIInsights
+from responsibleai import RAIInsights
 
 
 class ResponsibleAIDashboard(Dashboard):
@@ -29,7 +29,7 @@ class ResponsibleAIDashboard(Dashboard):
         List of cohorts defined by the user for the dashboard.
     :type cohort_list: List[Cohort]
     """
-    def __init__(self, analysis: Union[RAIInsights, RAIForecastingInsights],
+    def __init__(self, analysis: RAIInsights,
                  public_ip=None, port=None, locale=None,
                  cohort_list=None, **kwargs):
         self.input = ResponsibleAIDashboardInput(
@@ -49,7 +49,8 @@ class ResponsibleAIDashboard(Dashboard):
             return jsonify(self.input.on_predict(data))
         self.add_url_rule(predict, '/predict', methods=["POST"])
 
-        if isinstance(analysis, RAIInsights):
+        if analysis.task_type in [
+                ModelTask.CLASSIFICATION, ModelTask.REGRESSION]:
             def tree():
                 data = request.get_json(force=True)
                 return jsonify(self.input.debug_ml(data))
@@ -86,7 +87,7 @@ class ResponsibleAIDashboard(Dashboard):
                 return jsonify(self.input.get_exp(data))
             self.add_url_rule(get_exp, '/get_exp', methods=["POST"])
 
-        elif isinstance(analysis, RAIForecastingInsights):
+        if analysis.task_type == ModelTask.FORECASTING:
             def forecast():
                 data = request.get_json(force=True)
                 return jsonify(self.input.forecast(data))
