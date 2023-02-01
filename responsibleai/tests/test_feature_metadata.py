@@ -35,7 +35,7 @@ class TestFeatureMetadata:
         assert feature_metadata.dropped_features is None
         with pytest.raises(
                 UserConfigValidationException,
-                match='The given identity feature id is not present '
+                match='The given identity feature name id is not present '
                       'in the provided features: id1, s1, s2.'):
             feature_metadata.validate(
                 feature_names=['id1', 's1', 's2'])
