@@ -2,10 +2,10 @@
 # Licensed under the MIT License.
 
 """Module for defining common utilities related to models."""
-from .model_utils import (MODEL_METHODS, Forecasting, MethodPurpose, ModelTask,
+from .model_utils import (Forecasting, ModelTask,
                           SKLearn, is_classifier, is_forecaster,
                           is_quantile_forecaster)
 
 __all__ = [
     'is_classifier', 'SKLearn', 'Forecasting', 'is_forecaster',
-    'is_quantile_forecaster', 'ModelTask', 'MODEL_METHODS', 'MethodPurpose']
+    'is_quantile_forecaster', 'ModelTask']
