@@ -19,8 +19,9 @@ import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
 import React from "react";
 
+import { regressionKeyValue } from "./constants";
 import { localImportanceChartStyles } from "./LocalImportanceChart.styles";
-import { getSortedData, regressionKeyValue } from "./localImportanceChartUtils";
+import { getSortedData } from "./localImportanceChartUtils";
 
 export interface ILocalImportanceChartProps {
   rowNumber?: number;
@@ -201,10 +202,12 @@ export class LocalImportanceChart extends React.PureComponent<
     );
     this.props.data?.precomputedExplanations?.localFeatureImportance.scores.forEach(
       (score, index) => {
-        scores.push({ [this.props.weightOptions[index + 1]]: score[0] });
+        if (score[0]) {
+          scores[index] = { [this.props.weightOptions[index + 1]]: score[0] };
+        }
       }
     );
-    return scores.filter((s) => s);
+    return scores;
   }
 
   private getLocalImportanceBarOptions(): any {
@@ -237,9 +240,6 @@ export class LocalImportanceChart extends React.PureComponent<
         type: "column"
       },
       series: seriesData,
-      title: {
-        text: ""
-      },
       xAxis: {
         categories: x,
         max: this.state.topK - 1
@@ -262,7 +262,6 @@ export class LocalImportanceChart extends React.PureComponent<
   };
 
   private onWeightChange = (option: WeightVectorOption): void => {
-    // add logic to update plot
     this.props.onWeightChange(option);
   };
 }
