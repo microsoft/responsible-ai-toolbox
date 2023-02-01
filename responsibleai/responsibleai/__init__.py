@@ -4,7 +4,7 @@
 """Responsible AI SDK package."""
 
 # importing ModelTask from raiutils.models for backwards compatibility.
-from raiutils.models import ModelTask
+from responsibleai.rai_insights import ModelTask
 from responsibleai.modelanalysis import ModelAnalysis
 from responsibleai.rai_insights import RAIInsights
 

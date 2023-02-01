@@ -24,7 +24,7 @@ from tests.error_analysis_validator import (setup_error_analysis,
 from tests.explainer_manager_validator import (setup_explainer,
                                                validate_explainer)
 
-from raiutils.models import ModelTask
+from responsibleai.rai_insights import ModelTask
 from responsibleai import RAIInsights
 from responsibleai._internal.constants import (ManagerNames,
                                                SerializationAttributes)

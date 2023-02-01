@@ -18,7 +18,8 @@ import pandas as pd
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
-from raiutils.models import ModelTask, SKLearn
+from raiutils.models import SKLearn
+from responsibleai.rai_insights import ModelTask
 from raiutils.models.model_utils import Forecasting
 from responsibleai._interfaces import Dataset, RAIInsightsData
 from responsibleai._internal.constants import (FileFormats, ManagerNames,

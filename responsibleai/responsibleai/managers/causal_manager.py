@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 from econml.solutions.causal_analysis import CausalAnalysis
 
-from raiutils.models import ModelTask
+from responsibleai.rai_insights import ModelTask
 from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._internal.constants import (CausalManagerKeys,
                                                ListProperties, ManagerNames)
