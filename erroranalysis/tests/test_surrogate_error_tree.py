@@ -15,7 +15,8 @@ from erroranalysis._internal.constants import (ARG, COLUMN, COMPOSITE_FILTERS,
                                                OPERATION, PRED_Y, ROW_INDEX,
                                                SPLIT_FEATURE, SPLIT_INDEX,
                                                TRUE_Y, CohortFilterMethods,
-                                               CohortFilterOps, Metrics)
+                                               CohortFilterOps, Metrics,
+                                               ModelTask)
 from erroranalysis._internal.error_analyzer import (ModelAnalyzer,
                                                     PredictionsAnalyzer)
 from erroranalysis._internal.surrogate_error_tree import (
@@ -30,7 +31,6 @@ from rai_test_utils.models.sklearn import (
     create_kneighbors_classifier, create_sklearn_random_forest_regressor,
     create_titanic_pipeline)
 from raiutils.exceptions import UserConfigValidationException
-from raiutils.models import ModelTask
 
 SIZE = 'size'
 PARENTID = 'parentId'

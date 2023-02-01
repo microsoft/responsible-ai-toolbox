@@ -7,7 +7,7 @@ import pytest
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (ROW_INDEX, TRUE_Y, MatrixParams,
-                                               Metrics, f1_metrics,
+                                               Metrics, ModelTask, f1_metrics,
                                                metric_to_display_name,
                                                precision_metrics,
                                                recall_metrics)
@@ -30,7 +30,6 @@ from rai_test_utils.models.model_utils import (create_models_classification,
 from rai_test_utils.models.sklearn import (create_kneighbors_classifier,
                                            create_titanic_pipeline)
 from raiutils.exceptions import UserConfigValidationException
-from raiutils.models import ModelTask
 
 TOLERANCE = 1e-5
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD

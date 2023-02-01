@@ -22,7 +22,7 @@ except ImportError:
 
 from test_surrogate_error_tree import run_error_analyzer
 
-from raiutils.models import ModelTask
+from erroranalysis._internal.constants import ModelTask
 
 
 class TestPysparkSurrogateErrorTree(object):

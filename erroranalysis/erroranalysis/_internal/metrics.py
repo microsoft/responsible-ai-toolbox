@@ -7,10 +7,9 @@ from sklearn.metrics import (accuracy_score, confusion_matrix, f1_score,
                              median_absolute_error, precision_score, r2_score,
                              recall_score)
 
-from erroranalysis._internal.constants import (Metrics, f1_metrics,
+from erroranalysis._internal.constants import (Metrics, ModelTask, f1_metrics,
                                                precision_metrics,
                                                recall_metrics)
-from raiutils.models import ModelTask
 
 MICRO = 'micro'
 MACRO = 'macro'

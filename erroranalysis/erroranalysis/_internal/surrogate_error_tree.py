@@ -15,7 +15,7 @@ from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
                                                PRED_Y, ROW_INDEX,
                                                SPLIT_FEATURE, SPLIT_INDEX,
                                                TRUE_Y, CohortFilterMethods,
-                                               Metrics, TreeNode,
+                                               Metrics, ModelTask, TreeNode,
                                                error_metrics, f1_metrics,
                                                metric_to_display_name,
                                                precision_metrics,
@@ -24,7 +24,6 @@ from erroranalysis._internal.metrics import get_ordered_classes, metric_to_func
 from erroranalysis._internal.process_categoricals import process_categoricals
 from erroranalysis._internal.utils import is_spark
 from raiutils.exceptions import UserConfigValidationException
-from raiutils.models import ModelTask
 
 # imports required for pyspark support
 try:
@@ -214,7 +213,7 @@ def compute_error_tree(analyzer,
     >>> from erroranalysis._internal.error_analyzer import ModelAnalyzer
     >>> from erroranalysis._internal.surrogate_error_tree import (
     ...     compute_error_tree)
-    >>> from from raiutils.models import ModelTask
+    >>> from erroranalysis._internal.constants import ModelTask
     >>> from sklearn.datasets import load_breast_cancer
     >>> from sklearn.model_selection import train_test_split
     >>> from sklearn import svm

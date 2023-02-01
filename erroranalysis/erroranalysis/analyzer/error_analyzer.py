@@ -10,7 +10,8 @@ import pandas as pd
 from sklearn.feature_selection import (mutual_info_classif,
                                        mutual_info_regression)
 
-from erroranalysis._internal.constants import (MatrixParams, Metrics, RootKeys,
+from erroranalysis._internal.constants import (MatrixParams, Metrics,
+                                               ModelTask, RootKeys,
                                                metric_to_display_name)
 from erroranalysis._internal.matrix_filter import \
     compute_matrix as _compute_matrix
@@ -25,7 +26,6 @@ from erroranalysis._internal.surrogate_error_tree import \
 from erroranalysis._internal.utils import generate_random_unique_indexes
 from erroranalysis._internal.version_checker import check_pandas_version
 from erroranalysis.report import ErrorReport
-from raiutils.models import ModelTask
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 IMPORTANCES_THRESHOLD = 50000

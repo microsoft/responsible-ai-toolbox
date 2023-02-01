@@ -7,6 +7,7 @@ import numpy as np
 import pytest
 from common_utils import replicate_dataset
 
+from erroranalysis._internal.constants import ModelTask
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from rai_test_utils.datasets.tabular import (
     create_binary_classification_dataset, create_cancer_data,
@@ -17,7 +18,6 @@ from rai_test_utils.models.model_utils import (create_models_classification,
 from rai_test_utils.models.sklearn import (
     create_sklearn_random_forest_classifier,
     create_sklearn_random_forest_regressor, create_titanic_pipeline)
-from raiutils.models import ModelTask
 
 TOL = 1e-10
 NUM_SAMPLE_ROWS = 100

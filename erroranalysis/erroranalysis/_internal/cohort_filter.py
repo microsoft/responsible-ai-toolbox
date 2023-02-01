@@ -10,10 +10,9 @@ from erroranalysis._internal.constants import (ARG, COLUMN, COMPOSITE_FILTERS,
                                                METHOD, OPERATION, PRED_Y,
                                                ROW_INDEX, TRUE_Y,
                                                CohortFilterMethods,
-                                               CohortFilterOps)
+                                               CohortFilterOps, ModelTask)
 from erroranalysis._internal.metrics import get_ordered_classes
 from erroranalysis._internal.utils import is_spark
-from raiutils.models import ModelTask
 
 MODEL = 'model'
 CLASSIFICATION_OUTCOME = 'Classification outcome'

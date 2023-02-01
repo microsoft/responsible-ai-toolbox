@@ -13,8 +13,7 @@ from tests.common_utils import (create_adult_income_dataset,
                                 create_complex_classification_pipeline,
                                 create_iris_data, create_lightgbm_classifier)
 
-from raiutils.models import ModelTask
-from responsibleai import RAIInsights
+from responsibleai import ModelTask, RAIInsights
 from responsibleai._internal.constants import (ManagerNames,
                                                SerializationAttributes)
 from responsibleai.feature_metadata import FeatureMetadata

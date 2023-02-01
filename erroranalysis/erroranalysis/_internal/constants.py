@@ -3,9 +3,6 @@
 
 from enum import Enum
 
-# keep the following line for backward compatibility
-from raiutils.models import ModelTask  # noqa: F401
-
 ARG = 'arg'
 COLUMN = 'column'
 COMPOSITE_FILTERS = 'compositeFilters'
@@ -40,6 +37,22 @@ class CohortFilterOps:
 
     AND = 'and'
     OR = 'or'
+
+
+class ModelTask(str, Enum):
+    """Provide model task constants.
+
+    Can be 'classification', 'regression' or 'unknown'.
+
+    Note: Keeping sentence case constants (Classification, Regression)
+    for backwards compatibility, please use ALL_UPPER_CASE instead.
+    """
+
+    CLASSIFICATION = 'classification'
+    REGRESSION = 'regression'
+    UNKNOWN = 'unknown'
+    Classification = 'classification'
+    Regression = 'regression'
 
 
 class MatrixParams:
