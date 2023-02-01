@@ -44,8 +44,8 @@ export class CausalAnalysisView extends React.PureComponent<
   public constructor(props: ICausalAnalysisViewProps) {
     super(props);
     this.state = {
-      currentGlobalCausalEffects: this.props.data.global_effects.sort(
-        (d1, d2) => d2.point - d1.point
+      currentGlobalCausalEffects: this.sortGlobalCausalEffects(
+        this.props.data.global_effects
       ),
       currentGlobalCausalPolicy: this.props.data.policies,
       currentLocalCausalEffects: this.props.data.local_effects
@@ -119,14 +119,14 @@ export class CausalAnalysisView extends React.PureComponent<
         new AbortController().signal
       );
       this.setState({
-        currentGlobalCausalEffects: result.global_effects.sort(
-          (d1, d2) => d2.point - d1.point
+        currentGlobalCausalEffects: this.sortGlobalCausalEffects(
+          result.global_effects
         )
       });
     } else {
       this.setState({
-        currentGlobalCausalEffects: this.props.data.global_effects.sort(
-          (d1, d2) => d2.point - d1.point
+        currentGlobalCausalEffects: this.sortGlobalCausalEffects(
+          this.props.data.global_effects
         )
       });
     }
@@ -156,4 +156,10 @@ export class CausalAnalysisView extends React.PureComponent<
       this.setState({ currentGlobalCausalPolicy: this.props.data.policies });
     }
   };
+
+  private sortGlobalCausalEffects(
+    globalCausalEffects: ICausalAnalysisSingleData[]
+  ): ICausalAnalysisSingleData[] {
+    return globalCausalEffects.sort((d1, d2) => d2.point - d1.point);
+  }
 }
