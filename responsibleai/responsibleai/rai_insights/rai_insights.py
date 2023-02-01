@@ -267,7 +267,6 @@ class RAIInsights(RAIBaseInsights):
         self._feature_metadata.categorical_features = \
             consolidated_categorical_features
 
-
     def _initialize_managers(self):
         """Initializes the managers.
 
