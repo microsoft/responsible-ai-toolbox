@@ -72,6 +72,10 @@ export interface IModelAssessmentContext {
     absoluteIndex: number,
     abortSignal: AbortSignal
   ) => Promise<ICounterfactualData>;
+  requestLocalExplanations?: (
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   requestGlobalCausalEffects?: (
     id: string,
     filter: unknown[],

@@ -20,6 +20,7 @@ export interface IClassImportanceWeightsProps {
   selectedWeightVector: WeightVectorOption;
   weightOptions: WeightVectorOption[];
   weightLabels: any;
+  disabled?: boolean;
 }
 interface IClassImportanceWeightsState {
   crossClassInfoVisible: boolean;
@@ -66,6 +67,7 @@ export class ClassImportanceWeights extends React.Component<
             selectedKey={this.props.selectedWeightVector}
             onChange={this.setWeightOption}
             ariaLabel={localization.Interpret.GlobalTab.weightOptions}
+            disabled={this.props.disabled ?? false}
           />
         )}
         {this.state.crossClassInfoVisible && (
