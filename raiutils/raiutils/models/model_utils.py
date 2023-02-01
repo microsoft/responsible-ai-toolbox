@@ -6,7 +6,7 @@ from enum import Enum
 
 class ModelTask(str, Enum):
     """Provide model task constants.
-    
+
     Can be 'classification', 'regression', 'forecasting', or 'unknown'.
 
     Note: Keeping sentence case constants (Classification, Regression)

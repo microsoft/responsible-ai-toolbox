@@ -4,7 +4,7 @@
 from enum import Enum
 
 # keep the following line for backward compatibility
-from raiutils.models import ModelTask
+from raiutils.models import ModelTask  # noqa: F401
 
 ARG = 'arg'
 COLUMN = 'column'
