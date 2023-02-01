@@ -176,7 +176,7 @@ export class ConfusionMatrixHeatmap extends React.Component<
                     marginTop: 80,
                     plotBorderWidth: 1,
                     type: "heatmap",
-                    width: this.state.selectedClasses.length * 40 + 200
+                    width: this.state.selectedClasses.length * 100 + 200
                   },
                   colorAxis: {
                     maxColor: theme.palette.blue,
@@ -228,7 +228,10 @@ export class ConfusionMatrixHeatmap extends React.Component<
                   xAxis: {
                     categories: this.state.selectedClasses,
                     title: {
-                      text: `<b>${localization.ModelAssessment.ModelOverview.confusionMatrix.confusionMatrixXAxisLabel}</b>`
+                      style: {
+                        fontWeight: "bold"
+                      },
+                      text: `${localization.ModelAssessment.ModelOverview.confusionMatrix.confusionMatrixXAxisLabel}`
                     }
                   },
                   yAxis: {
