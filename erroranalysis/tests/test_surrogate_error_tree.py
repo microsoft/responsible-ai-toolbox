@@ -10,10 +10,12 @@ import pytest
 from common_utils import replicate_dataset
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
-from erroranalysis._internal.constants import (
-    ARG, COLUMN, COMPOSITE_FILTERS, DIFF, LEAF_INDEX, METHOD, OPERATION,
-    PRED_Y, ROW_INDEX, SPLIT_FEATURE, SPLIT_INDEX, TRUE_Y,
-    CohortFilterMethods, CohortFilterOps, Metrics)
+from erroranalysis._internal.constants import (ARG, COLUMN, COMPOSITE_FILTERS,
+                                               DIFF, LEAF_INDEX, METHOD,
+                                               OPERATION, PRED_Y, ROW_INDEX,
+                                               SPLIT_FEATURE, SPLIT_INDEX,
+                                               TRUE_Y, CohortFilterMethods,
+                                               CohortFilterOps, Metrics)
 from erroranalysis._internal.error_analyzer import (ModelAnalyzer,
                                                     PredictionsAnalyzer)
 from erroranalysis._internal.surrogate_error_tree import (

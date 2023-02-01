@@ -11,9 +11,8 @@ from tests.common_utils import (create_housing_data, create_iris_data,
                                 create_titanic_pipeline)
 
 from erroranalysis._internal.constants import PRED_Y, ROW_INDEX, TRUE_Y
-from responsibleai.rai_insights import RAIInsights
 from raiutils.models import ModelTask
-
+from responsibleai.rai_insights import RAIInsights
 
 TOL = 1e-10
 SEPAL_WIDTH = 'sepal width'

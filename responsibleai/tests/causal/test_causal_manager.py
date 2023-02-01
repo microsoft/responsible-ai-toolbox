@@ -6,6 +6,7 @@ from unittest.mock import ANY, patch
 import numpy as np
 import pytest
 
+from raiutils.models import ModelTask
 from responsibleai import RAIInsights
 from responsibleai._interfaces import CausalData
 from responsibleai._internal.constants import FileFormats
@@ -13,7 +14,6 @@ from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.managers.causal_manager import CausalManager
-from raiutils.models import ModelTask
 
 
 class TestCausalManager:

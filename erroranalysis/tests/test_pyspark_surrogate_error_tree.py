@@ -24,6 +24,7 @@ from test_surrogate_error_tree import run_error_analyzer
 
 from raiutils.models import ModelTask
 
+
 class TestPysparkSurrogateErrorTree(object):
     @pytest.mark.skipif(not spark_installed, reason="requires pyspark")
     def test_surrogate_error_tree_adult_census_income(self):

@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 from enum import Enum
+
 # keep the following line for backward compatibility
 from raiutils.models import ModelTask
 

@@ -15,7 +15,7 @@ import pandas as pd
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
-from raiutils.models import SKLearn, is_classifier
+from raiutils.models import ModelTask, SKLearn, is_classifier
 from responsibleai._interfaces import Dataset, RAIInsightsData
 from responsibleai._internal.constants import (FileFormats, ManagerNames,
                                                Metadata,
@@ -27,7 +27,6 @@ from responsibleai.managers.counterfactual_manager import CounterfactualManager
 from responsibleai.managers.data_balance_manager import DataBalanceManager
 from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai.managers.explainer_manager import ExplainerManager
-from raiutils.models import ModelTask
 from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
 
 _TRAIN_LABELS = 'train_labels'
