@@ -24,12 +24,13 @@ from tests.error_analysis_validator import (setup_error_analysis,
 from tests.explainer_manager_validator import (setup_explainer,
                                                validate_explainer)
 
-from responsibleai import ModelTask, RAIInsights
+from responsibleai import RAIInsights
 from responsibleai._internal.constants import (ManagerNames,
                                                SerializationAttributes)
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.feature_metadata import FeatureMetadata
+from raiutils.models import ModelTask
 
 LABELS = 'labels'
 

@@ -12,12 +12,12 @@ from sklearn.metrics import multilabel_confusion_matrix
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (DIFF, PRED_Y, ROW_INDEX, TRUE_Y,
                                                MatrixParams, MetricKeys,
-                                               Metrics, ModelTask,
-                                               metric_to_display_name)
+                                               Metrics, metric_to_display_name)
 from erroranalysis._internal.metrics import (get_ordered_classes,
                                              is_multi_agg_metric,
                                              metric_to_func)
 from raiutils.exceptions import UserConfigValidationException
+from raiutils.models import ModelTask
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 CATEGORY1 = 'category1'
@@ -321,7 +321,7 @@ def compute_matrix(analyzer, features, filters, composite_filters,
     >>> from erroranalysis._internal.error_analyzer import ModelAnalyzer
     >>> from erroranalysis._internal.matrix_filter import (
     ...     compute_matrix)
-    >>> from erroranalysis._internal.constants import ModelTask
+    >>> from raiutils.models import ModelTask
     >>> from sklearn.datasets import load_breast_cancer
     >>> from sklearn.model_selection import train_test_split
     >>> from sklearn import svm

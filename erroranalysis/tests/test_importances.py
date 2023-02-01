@@ -7,7 +7,7 @@ import numpy as np
 import pytest
 from common_utils import replicate_dataset
 
-from erroranalysis._internal.constants import ModelTask
+from raiutils.models import ModelTask
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from rai_test_utils.datasets.tabular import (
     create_binary_classification_dataset, create_cancer_data,

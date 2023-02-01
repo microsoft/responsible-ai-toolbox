@@ -22,8 +22,7 @@ except ImportError:
 
 from test_surrogate_error_tree import run_error_analyzer
 
-from erroranalysis._internal.constants import ModelTask
-
+from raiutils.models import ModelTask
 
 class TestPysparkSurrogateErrorTree(object):
     @pytest.mark.skipif(not spark_installed, reason="requires pyspark")

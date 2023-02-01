@@ -10,22 +10,22 @@ import pandas as pd
 from sklearn.feature_selection import (mutual_info_classif,
                                        mutual_info_regression)
 
-from erroranalysis._internal.constants import (MatrixParams, Metrics,
-                                               ModelTask, RootKeys,
-                                               metric_to_display_name)
-from erroranalysis._internal.matrix_filter import \
-    compute_matrix as _compute_matrix
-from erroranalysis._internal.matrix_filter import \
-    compute_matrix_on_dataset as _compute_matrix_on_dataset
+from erroranalysis._internal.constants import (
+    MatrixParams, Metrics, RootKeys, metric_to_display_name)
+from erroranalysis._internal.matrix_filter import (
+    compute_matrix as _compute_matrix)
+from erroranalysis._internal.matrix_filter import (
+    compute_matrix_on_dataset as _compute_matrix_on_dataset)
 from erroranalysis._internal.metrics import metric_to_func
 from erroranalysis._internal.process_categoricals import process_categoricals
-from erroranalysis._internal.surrogate_error_tree import \
-    compute_error_tree as _compute_error_tree
-from erroranalysis._internal.surrogate_error_tree import \
-    compute_error_tree_on_dataset as _compute_error_tree_on_dataset
+from erroranalysis._internal.surrogate_error_tree import (
+    compute_error_tree as _compute_error_tree)
+from erroranalysis._internal.surrogate_error_tree import (
+    compute_error_tree_on_dataset as _compute_error_tree_on_dataset)
 from erroranalysis._internal.utils import generate_random_unique_indexes
 from erroranalysis._internal.version_checker import check_pandas_version
 from erroranalysis.report import ErrorReport
+from raiutils.models import ModelTask
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 IMPORTANCES_THRESHOLD = 50000

@@ -3,7 +3,7 @@
 
 import pytest
 
-from responsibleai import ModelTask
+from raiutils.models import ModelTask
 from responsibleai._internal.constants import ListProperties, ManagerNames
 from responsibleai.exceptions import UserConfigValidationException
 

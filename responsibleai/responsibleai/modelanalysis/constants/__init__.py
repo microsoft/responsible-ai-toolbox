@@ -3,6 +3,6 @@
 
 """Defines ModelTask for backcompat by reimporting from new location."""
 
-from responsibleai.rai_insights.constants import ModelTask
+from raiutils.models import ModelTask
 
 __all__ = ["ModelTask"]
