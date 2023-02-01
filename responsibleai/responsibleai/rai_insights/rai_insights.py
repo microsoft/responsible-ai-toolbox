@@ -467,8 +467,8 @@ class RAIInsights(RAIBaseInsights):
                     include='number').columns.tolist()
             string_features_set = set(train_features) - set(numeric_features)
             non_categorical_string_columns = \
-                len(string_features_set - set(categorical_features))
-            if non_categorical_string_columns > 0:
+                string_features_set - set(categorical_features)
+            if len(non_categorical_string_columns) > 0:
                 raise UserConfigValidationException(
                     "The following string features were not "
                     "identified as categorical features: "

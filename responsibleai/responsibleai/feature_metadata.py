@@ -58,7 +58,7 @@ class FeatureMetadata:
         self._validate_columns(
             'categorical feature', self.categorical_features, feature_names)
         self._validate_columns(
-            'identity feature', identity_feature, feature_names)
+            'identity feature name', identity_feature, feature_names)
         self._validate_columns(
             'time column', time_column, feature_names)
         self._validate_columns(

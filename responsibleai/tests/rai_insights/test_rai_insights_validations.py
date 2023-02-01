@@ -47,13 +47,13 @@ class TestRAIInsightsValidations:
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
 
+        length = len(y_test)
         with pytest.warns(
                 UserWarning,
-                match="The size of test set {0} is greater than "
-                      "supported limit of {1}. Computing insights"
-                      " for first {1} samples "
-                      "of test set".format(len(y_test),
-                                           len(y_test) - 1)):
+                match=f"The size of test set {length} is greater than "
+                      f"supported limit of {length - 1}. Computing "
+                      f"insights for first {length - 1} samples "
+                      "of test set"):
             RAIInsights(
                 model=model,
                 train=X_train,
@@ -496,7 +496,7 @@ class TestRAIInsightsValidations:
         feature_metadata = FeatureMetadata(identity_feature_name='id')
 
         err_msg = ('The given identity feature name id is not present'
-                   ' in user features.')
+                   f' in the provided features: {", ".join(X_train.columns)}.')
         with pytest.raises(UserConfigValidationException, match=err_msg):
             RAIInsights(
                 model=model,
