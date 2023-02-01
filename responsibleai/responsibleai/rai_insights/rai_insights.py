@@ -911,13 +911,6 @@ class RAIInsights(RAIBaseInsights):
                     prediction_output_path / file_name,
                     json.dumps(self.__dict__[data_name].tolist()))
 
-        if self._large_test is not None:
-            # Save large test data
-            self._write_to_file(
-                prediction_output_path /
-                SerializationAttributes.LARGE_TEST_JSON,
-                self._large_test.to_json(orient='split'))
-
     def _save_large_data(self, path):
         """Save the large data.
 
@@ -1190,19 +1183,6 @@ class RAIInsights(RAIBaseInsights):
                     inst.__dict__[data_name] = np.array(json.load(file))
             else:
                 inst.__dict__[data_name] = None
-
-        large_test_path = prediction_output_path / (
-            SerializationAttributes.LARGE_TEST_JSON)
-        if large_test_path.exists():
-            data_directory = Path(path) / "data"
-            with open(data_directory / (
-                    Metadata.TEST + 'dtypes' + FileFormats.JSON), 'r') as file:
-                types = json.load(file)
-            with open(large_test_path, 'r') as file:
-                inst.__dict__["_large_test"] = \
-                    pd.read_json(file, dtype=types, orient='split')
-        else:
-            inst.__dict__["_large_test"] = None
 
     @staticmethod
     def _load_large_data(inst, path):
