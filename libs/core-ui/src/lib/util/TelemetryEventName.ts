@@ -44,6 +44,7 @@ export enum TelemetryEventName {
   FeatureImportancesWhatDoValuesMeanCalloutClick = "RAI_FeatureImportancesWhatDoValuesMeanCalloutClick",
   FeatureImportancesCrossClassWeightsCalloutClick = "RAI_FeatureImportancesCrossClassWeightsCalloutClick",
   FeatureImportancesHowToReadChartCalloutClick = "RAI_FeatureImportancesHowToReadChartCalloutClick",
+  FeatureImportancesNewDatapointSelectedFromChart = "RAI_FeatureImportancesNewDatapointSelectedFromChart",
   // Counterfactual
   CounterfactualNewDatapointSelectedFromChart = "RAI_CounterfactualNewDatapointSelectedFromChart",
   CounterfactualNewDatapointSelectedFromDropdown = "RAI_CounterfactualNewDatapointSelectedFromDropdown",

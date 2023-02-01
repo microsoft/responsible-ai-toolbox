@@ -779,12 +779,6 @@ class RAIInsights(RAIBaseInsights):
                     SerializationAttributes.LARGE_PREDICT_PROBA_JSON,
                     json.dumps(self._large_predict_proba_output.tolist()))
 
-            # Save large test data
-            self._write_to_file(
-                prediction_output_path /
-                SerializationAttributes.LARGE_TEST_JSON,
-                self._large_test.to_json(orient='split'))
-
     def _save_large_data(self, path):
         """Save the large data.
 
@@ -948,19 +942,6 @@ class RAIInsights(RAIBaseInsights):
                 predict_proba_output)
         else:
             inst.__dict__[_PREDICT_PROBA_OUTPUT] = None
-
-        large_test_path = prediction_output_path / (
-            SerializationAttributes.LARGE_TEST_JSON)
-        if large_test_path.exists():
-            data_directory = Path(path) / "data"
-            with open(data_directory / (
-                    Metadata.TEST + 'dtypes' + FileFormats.JSON), 'r') as file:
-                types = json.load(file)
-            with open(large_test_path, 'r') as file:
-                inst.__dict__["_large_test"] = \
-                    pd.read_json(file, dtype=types, orient='split')
-        else:
-            inst.__dict__["_large_test"] = None
 
         large_predict_output_path = prediction_output_path / (
             SerializationAttributes.LARGE_PREDICT_JSON)
