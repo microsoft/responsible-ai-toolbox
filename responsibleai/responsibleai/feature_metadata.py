@@ -16,21 +16,22 @@ class FeatureMetadata:
         """Placeholder class for feature metadata provided by the user.
 
         :param identity_feature_name: Name of the feature which helps to
-                                      uniquely identify a row or instance
-                                      in user input dataset.
+            uniquely identify a row or instance in user input dataset.
         :type identity_feature_name: Optional[str]
-        :param datetime_features: names of datetime features in the user input
-                                  dataset.
+        :param datetime_features: Names of datetime features in the user input
+            dataset.
         :type datetime_features: Optional[List[str]]
         :param categorical_features: List of categorical features in the
-                                     user input dataset.
+            user input dataset.
         :type categorical_features: Optional[List[str]]
         :param dropped_features: List of features that were dropped by the
-                                 the user during training of their model.
+            the user during training of their model.
         :type dropped_features: Optional[List[str]]
         :param time_series_id_features: List of features that are used
-                                        to uniquely identify a time
-                                        series in the user input dataset.
+            to uniquely identify a time series in the user input dataset.
+            Time series ID features are only relevant for forecasting, i.e.,
+            when the task is 'forecasting'. Specifying time series ID features
+            for other tasks will result in validation errors.
         :type time_series_id_features: Optional[List[str]]
         """
         self.identity_feature_name = identity_feature_name
