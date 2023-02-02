@@ -497,7 +497,8 @@ class RAIInsights(RAIBaseInsights):
                         f"{type(feature_metadata)}")
 
                 feature_names = list(train.columns)
-                feature_metadata.validate(feature_names)
+                feature_metadata.validate_feature_metadata_with_user_features(
+                    feature_names)
 
                 if task_type != ModelTask.FORECASTING:
                     if feature_metadata.time_series_id_features:

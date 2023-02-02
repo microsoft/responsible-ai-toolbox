@@ -37,7 +37,7 @@ class TestFeatureMetadata:
                 UserConfigValidationException,
                 match='The given identity feature name id is not present '
                       'in the provided features: id1, s1, s2.'):
-            feature_metadata.validate(
+            feature_metadata.validate_feature_metadata_with_user_features(
                 feature_names=['id1', 's1', 's2'])
 
         feature_metadata_dict = feature_metadata.to_dict()
@@ -117,7 +117,7 @@ class TestFeatureMetadata:
                 UserConfigValidationException,
                 match='The given time series ID feature g1 is not present '
                       'in the provided features: A, B, C, D, E, F, G.'):
-            feature_metadata.validate(
+            feature_metadata.validate_feature_metadata_with_user_features(
                 feature_names=['A', 'B', 'C', 'D', 'E', 'F', 'G'])
 
         feature_metadata_dict = feature_metadata.to_dict()
