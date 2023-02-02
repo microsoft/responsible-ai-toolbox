@@ -5,7 +5,6 @@ from typing import Any, Dict, List, Optional
 
 from responsibleai.exceptions import UserConfigValidationException
 
-
 _DROPPED_FEATURE_PURPOSE = 'dropped feature'
 _CATEGORICAL_FEATURE_PURPOSE = 'categorical feature'
 _IDENTITY_FEATURE_PURPOSE = 'identity feature name'
