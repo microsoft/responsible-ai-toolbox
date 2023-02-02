@@ -650,8 +650,6 @@ class TestRAIInsightsValidations:
                 task_type='classification',
                 feature_metadata=feature_metadata)
 
-    @pytest.mark.skip(
-        "Skip forecasting validation test until forecasting is enabled.")
     def test_feature_metadata_forecasting_multiple_datetime_features(self):
         X = pd.DataFrame(data=[[1, 1], [2, 3]],
                          columns=['c1', 'c2'])

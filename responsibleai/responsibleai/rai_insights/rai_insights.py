@@ -20,7 +20,6 @@ from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
 from raiutils.models import SKLearn
 from responsibleai.rai_insights import ModelTask
-from raiutils.models.model_utils import Forecasting
 from responsibleai._interfaces import Dataset, RAIInsightsData
 from responsibleai._internal.constants import (FileFormats, ManagerNames,
                                                Metadata,
@@ -88,6 +87,13 @@ class ModelMethod:
         self.name = name
         self.optional = optional
         self.purpose = purpose
+
+
+class Forecasting(object):
+    """Provide forecasting related constants."""
+
+    FORECAST = "forecast"
+    FORECAST_QUANTILES = "forecast_quantiles"
 
 
 # Model methods by task type
@@ -554,6 +560,8 @@ class RAIInsights(RAIBaseInsights):
                         f"Error finding unique values in column {column}. "
                         "Please check your test data.")
 
+        # Check if any features exist that are not numeric, datetime, or
+        # categorical.
         train_features = train.drop(columns=[target_column]).columns
         numeric_features = train.drop(
             columns=[target_column]).select_dtypes(
@@ -561,15 +569,16 @@ class RAIInsights(RAIBaseInsights):
         string_features_set = set(train_features) - set(numeric_features)
         if (task_type == ModelTask.FORECASTING and
                 feature_metadata is not None and
-                feature_metadata.time_column_name is not None):
-            string_features_set.remove(feature_metadata.time_column_name)
-        non_categorical_string_columns = \
+                feature_metadata.datetime_features is not None):
+            string_features_set = \
+                string_features_set - set(feature_metadata.datetime_features)
+        non_categorical_or_time_string_columns = \
             string_features_set - set(categorical_features)
-        if len(non_categorical_string_columns) > 0:
+        if len(non_categorical_or_time_string_columns) > 0:
             raise UserConfigValidationException(
                 "The following string features were not "
                 "identified as categorical features: "
-                f"{non_categorical_string_columns}")
+                f"{non_categorical_or_time_string_columns}")
 
         if classes is not None and task_type == ModelTask.CLASSIFICATION:
             if (len(set(train[target_column].unique()) -
@@ -736,21 +745,21 @@ class RAIInsights(RAIBaseInsights):
         :param model: the model
         :type model: object
         """
-        fm_time_column = feature_metadata.time_column_name
+        fm_time_columns = feature_metadata.datetime_features
         model_time_column = getattr(model, "time_column_name", None)
 
         # goal: set time column in feature metadata
         if model_time_column is None:
-            if fm_time_column is not None:
+            if fm_time_columns is not None:
                 return
             else:
                 raise UserConfigValidationException(
                     'There was no time column name in feature metadata. '
                     'A time column is required for forecasting.')
         else:
-            if fm_time_column is None:
+            if fm_time_columns is None:
                 if model_time_column in feature_names:
-                    feature_metadata.time_column_name = model_time_column
+                    feature_metadata.datetime_features = [model_time_column]
                     self._feature_metadata = feature_metadata
                     return
                 else:
@@ -760,10 +769,10 @@ class RAIInsights(RAIBaseInsights):
                         'provided dataset.')
             else:
                 # both time columns were provided, ensure that they match
-                if fm_time_column != model_time_column:
+                if model_time_column not in fm_time_columns:
                     raise UserConfigValidationException(
-                        f'The provided time column name {fm_time_column} '
-                        "does not match the model's expected time column "
+                        f'The provided datetime features {fm_time_columns} '
+                        "do not include the model's expected time column "
                         f'name {model_time_column}.')
 
     @property
@@ -939,13 +948,17 @@ class RAIInsights(RAIBaseInsights):
         true_y = self.test[self.target_column]
         if self.task_type == ModelTask.FORECASTING:
             try:
-                dashboard_dataset.index = convert_to_list(
-                    pd.to_datetime(
-                        self.test[self._feature_metadata.time_column_name])
-                    .apply(lambda dt: dt.strftime("%Y-%m-%dT%H:%M:%SZ")))
+                # This assumes that there is only 1 datetime feature.
+                if (self._feature_metadata and
+                        self._feature_metadata.datetime_features and
+                        len(self._feature_metadata.datetime_features) >= 1):
+                    time_column_name = self._feature_metadata.datetime_features[0]
+                    dashboard_dataset.index = convert_to_list(
+                        pd.to_datetime(self.test[time_column_name])
+                        .apply(lambda dt: dt.strftime("%Y-%m-%dT%H:%M:%SZ")))
             except Exception as ex:
                 raise ValueError(
-                    "The time column should be parseable by "
+                    "The datetime feature should be parseable by "
                     "pandas.to_datetime, ideally in ISO format,") from ex
 
         if true_y is not None and len(true_y) == row_length:

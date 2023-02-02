@@ -34,7 +34,7 @@ class FeatureMetadata:
         :type time_series_id_features: Optional[List[str]]
         """
         self.identity_feature_name = identity_feature_name
-        self.time_column_name = time_column_name
+        self.datetime_features = datetime_features
         self.categorical_features = categorical_features
         self.dropped_features = dropped_features
         self.time_series_id_features = time_series_id_features
@@ -70,7 +70,7 @@ class FeatureMetadata:
         """
         return {
             'identity_feature_name': self.identity_feature_name,
-            'time_column_name': self.time_column_name,
+            'datetime_features': self.datetime_features,
             'categorical_features': self.categorical_features,
             'dropped_features': self.dropped_features,
             'time_series_id_features': self.time_series_id_features
@@ -87,8 +87,8 @@ class FeatureMetadata:
         """
         return self.identity_feature_name == \
             other_feature_metadata.identity_feature_name and \
-            self.time_column_name == \
-            other_feature_metadata.time_column_name and \
+            self.datetime_features == \
+            other_feature_metadata.datetime_features and \
             self.categorical_features == \
             other_feature_metadata.categorical_features and \
             self.dropped_features == \
