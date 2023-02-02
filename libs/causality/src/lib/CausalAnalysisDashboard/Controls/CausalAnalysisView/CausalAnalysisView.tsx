@@ -18,6 +18,7 @@ import { CausalAnalysisOptions } from "../../CausalAnalysisEnums";
 
 import { CausalAggregateView } from "./CausalAggregateView/CausalAggregateView";
 import { CausalIndividualView } from "./CausalIndividualView/CausalIndividualView";
+import { LargeCausalIndividualView } from "./CausalIndividualView/LargeCausalIndividualView/LargeCausalIndividualView";
 import { TreatmentView } from "./TreatmentView/TreatmentView";
 
 export interface ICausalAnalysisViewProps {
@@ -59,6 +60,13 @@ export class CausalAnalysisView extends React.PureComponent<
             telemetryHook={this.props.telemetryHook}
           />
         )}
+        {this.props.viewOption === CausalAnalysisOptions.Individual &&
+          ifEnableLargeData(this.context.dataset) && (
+            <LargeCausalIndividualView
+              localEffects={this.state.currentLocalCausalEffects}
+              telemetryHook={this.props.telemetryHook}
+            />
+          )}
         {this.props.viewOption === CausalAnalysisOptions.Individual &&
           !ifEnableLargeData(this.context.dataset) && (
             <CausalIndividualView
