@@ -12,6 +12,7 @@ _IDENTITY_FEATURE_PURPOSE = 'identity feature name'
 _DATETIME_FEATURE_PURPOSE = 'datetime feature'
 _TIME_SERIES_ID_FEATURE_PURPOSE = 'time series ID feature'
 
+
 class FeatureMetadata:
     def __init__(self,
                  identity_feature_name: Optional[str] = None,

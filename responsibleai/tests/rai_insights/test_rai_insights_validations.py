@@ -537,8 +537,7 @@ class TestRAIInsightsValidations:
     @pytest.mark.parametrize('no_feature_metadata', [True, False])
     def test_feature_metadata_and_categorical_features_deprecation_warning(
             self, categorical_features, no_feature_metadata):
-        X = pd.DataFrame(data=[[1, 1], [2, 3]],
-                         columns=['c1', 'c2'])
+        X = pd.DataFrame(data=[[1, 1], [2, 3]], columns=['c1', 'c2'])
         y = np.array([1, 0])
         model = create_lightgbm_classifier(X, y)
 
@@ -576,8 +575,7 @@ class TestRAIInsightsValidations:
             self, categorical_features):
         arg_categorical_features, feature_metadata_categorical_features = \
             categorical_features
-        X = pd.DataFrame(data=[[1, 1], [2, 3]],
-                         columns=['c1', 'c2'])
+        X = pd.DataFrame(data=[[1, 1], [2, 3]], columns=['c1', 'c2'])
         y = np.array([1, 0])
         model = create_lightgbm_classifier(X, y)
 
@@ -605,8 +603,7 @@ class TestRAIInsightsValidations:
         [None, ['c1'], ['c1', 'c2']])
     def test_feature_metadata_categorical_features_only(
             self, categorical_features):
-        X = pd.DataFrame(data=[[1, 1], [2, 3]],
-                         columns=['c1', 'c2'])
+        X = pd.DataFrame(data=[[1, 1], [2, 3]], columns=['c1', 'c2'])
         y = np.array([1, 0])
         model = create_lightgbm_classifier(X, y)
 
@@ -628,8 +625,7 @@ class TestRAIInsightsValidations:
     ])
     def test_feature_metadata_unsupported_time_series_features(
             self, feature_metadata):
-        X = pd.DataFrame(data=[[1, 1], [2, 3]],
-                         columns=['c1', 'c2'])
+        X = pd.DataFrame(data=[[1, 1], [2, 3]], columns=['c1', 'c2'])
         y = np.array([1, 0])
         model = create_lightgbm_classifier(X, y)
         X[TARGET] = y
@@ -653,15 +649,12 @@ class TestRAIInsightsValidations:
     @pytest.mark.skip(
         "Skip forecasting validation test until forecasting is enabled.")
     def test_feature_metadata_forecasting_multiple_datetime_features(self):
-        X = pd.DataFrame(data=[[1, 1], [2, 3]],
-                         columns=['c1', 'c2'])
+        X = pd.DataFrame(data=[[1, 1], [2, 3]], columns=['c1', 'c2'])
         y = np.array([1, 0])
         model = MagicMock()
         model.forecast.return_value = y
         X[TARGET] = y
-        feature_metadata = FeatureMetadata(
-            datetime_features=['c1', 'c2']
-        )
+        feature_metadata = FeatureMetadata(datetime_features=['c1', 'c2'])
 
         with pytest.raises(
                 UserConfigValidationException,
