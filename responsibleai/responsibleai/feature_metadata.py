@@ -55,8 +55,6 @@ class FeatureMetadata:
         """
         identity_feature = ([self.identity_feature_name]
                             if self.identity_feature_name else None)
-        datetime_features = (self.datetime_features
-                             if self.datetime_features else None)
         self._validate_columns(
             _DROPPED_FEATURE_PURPOSE, self.dropped_features, feature_names)
         self._validate_columns(
@@ -65,7 +63,7 @@ class FeatureMetadata:
         self._validate_columns(
             _IDENTITY_FEATURE_PURPOSE, identity_feature, feature_names)
         self._validate_columns(
-            _DATETIME_FEATURE_PURPOSE, datetime_features, feature_names)
+            _DATETIME_FEATURE_PURPOSE, self.datetime_features, feature_names)
         self._validate_columns(
             _TIME_SERIES_ID_FEATURE_PURPOSE, self.time_series_id_features,
             feature_names)
