@@ -490,32 +490,8 @@ class RAIInsights(RAIBaseInsights):
                         'The train labels and distinct values in '
                         'target (test data) do not match')
 
-            if feature_metadata is not None:
-                if not isinstance(feature_metadata, FeatureMetadata):
-                    raise UserConfigValidationException(
-                        "Expecting type FeatureMetadata but got "
-                        f"{type(feature_metadata)}")
-
-                feature_names = list(train.columns)
-                feature_metadata.validate_feature_metadata_with_user_features(
-                    feature_names)
-
-                if task_type != ModelTask.FORECASTING:
-                    if feature_metadata.time_series_id_features:
-                        raise UserConfigValidationException(
-                            "The specified metadata time_series_id_features "
-                            "is only supported for the forecasting task type.")
-
-                    if feature_metadata.datetime_features:
-                        raise UserConfigValidationException(
-                            "The specified metadata datetime_features "
-                            "is only supported for the forecasting task type.")
-                else:
-                    if (feature_metadata.datetime_features and
-                            len(feature_metadata.datetime_features) > 1):
-                        raise UserConfigValidationException(
-                            "Only a single datetime feature is supported at "
-                            "this point.")
+            self._validate_feature_metadata(
+                feature_metadata, train, task_type)            
 
             if model is not None:
                 # Pick one row from train and test data
@@ -589,6 +565,33 @@ class RAIInsights(RAIBaseInsights):
                 "Unsupported data type for either train or test. "
                 "Expecting pandas DataFrame for train and test."
             )
+
+    def _validate_feature_metadata(self, feature_metadata, train, task_type):
+        if feature_metadata is not None:
+            if not isinstance(feature_metadata, FeatureMetadata):
+                raise UserConfigValidationException(
+                    "Expecting type FeatureMetadata but got "
+                    f"{type(feature_metadata)}")
+
+            feature_names = list(train.columns)
+            feature_metadata.validate_feature_metadata_with_user_features(
+                feature_names)
+
+            if task_type != ModelTask.FORECASTING:
+                if feature_metadata.time_series_id_features:
+                    raise UserConfigValidationException(
+                        "The specified metadata time_series_id_features "
+                        "is only supported for the forecasting task type.")
+
+                if feature_metadata.datetime_features:
+                    raise UserConfigValidationException(
+                        "The specified metadata datetime_features "
+                        "is only supported for the forecasting task type.")
+            elif (feature_metadata.datetime_features and
+                    len(feature_metadata.datetime_features) > 1):
+                raise UserConfigValidationException(
+                    "Only a single datetime feature is supported at "
+                    "this point.")
 
     def _validate_features_same(self, small_train_features_before,
                                 small_train_data, function):
