@@ -37,7 +37,7 @@ import {
   IDatasetExplorerTabState
 } from "./ILargeDatasetExplorerTabSpec";
 import { LargeDatasetExplorerChartArea } from "./LargeDatasetExplorerChartArea";
-import { getDefaultChart } from "./LargeDatasetExplorerTabUtils";
+import { getDefaultChart } from "./largeDatasetExplorerTabUtils";
 
 export class LargeDatasetExplorerTab extends React.Component<
   IDatasetExplorerTabProps,

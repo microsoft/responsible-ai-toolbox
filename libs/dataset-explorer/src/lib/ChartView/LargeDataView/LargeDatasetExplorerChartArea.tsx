@@ -71,11 +71,11 @@ export class LargeDatasetExplorerChartArea extends React.PureComponent<ILargeDat
     const isScatterChart = chartProps.chartType === ChartTypes.Scatter;
 
     return (
-      <div className={classNames.chart}>
+      <Stack.Item className={classNames.chart}>
         <Stack.Item className={classNames.chartWithAxes}>
           <Stack horizontal className={classNames.chartWithVertical}>
             <Stack.Item className={classNames.verticalAxis}>
-              <div className={classNames.rotatedVerticalBox}>
+              <Stack.Item className={classNames.rotatedVerticalBox}>
                 <AxisConfig
                   orderedGroupTitles={yAxisCategories}
                   selectedColumn={chartProps.yAxis}
@@ -99,7 +99,7 @@ export class LargeDatasetExplorerChartArea extends React.PureComponent<ILargeDat
                   }
                   disabled={isBubbleChartDataLoading}
                 />
-              </div>
+              </Stack.Item>
             </Stack.Item>
             <Stack.Item className={classNames.chartContainer}>
               {(!canRenderChart || bubbleChartErrorMessage) && (
@@ -123,7 +123,7 @@ export class LargeDatasetExplorerChartArea extends React.PureComponent<ILargeDat
             </Stack.Item>
           </Stack>
         </Stack.Item>
-        <div className={classNames.horizontalAxis}>
+        <Stack.Item className={classNames.horizontalAxis}>
           <AxisConfig
             orderedGroupTitles={[
               ColumnCategories.Index,
@@ -149,8 +149,8 @@ export class LargeDatasetExplorerChartArea extends React.PureComponent<ILargeDat
             }
             disabled={isBubbleChartDataLoading}
           />
-        </div>
-      </div>
+        </Stack.Item>
+      </Stack.Item>
     );
   }
 }
