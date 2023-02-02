@@ -9,26 +9,20 @@ import pytest
 # Defines common utilities for responsibleai tests
 from dice_ml.utils import helpers
 from sklearn.compose import ColumnTransformer
-from sklearn.datasets import (fetch_california_housing, load_breast_cancer,
-                              load_iris)
+from sklearn.datasets import fetch_california_housing, load_breast_cancer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
+from rai_test_utils.datasets.tabular import \
+    create_iris_data as _create_iris_data
 from raiutils.common.retries import retry_function
 
 
 def create_iris_data():
-    # Import Iris dataset
-    iris = load_iris()
-    # Split data into train and test
-    X_train, X_test, y_train, y_test = train_test_split(
-        iris.data, iris.target, test_size=0.2, random_state=0)
-    feature_names = [name.replace(' (cm)', '') for name in iris.feature_names]
-    classes = iris.target_names
-    X_train = pd.DataFrame(X_train, columns=feature_names)
-    X_test = pd.DataFrame(X_test, columns=feature_names)
+    X_train, X_test, y_train, y_test, feature_names, classes = \
+        _create_iris_data()
 
     # create duplicate index
     test_index_list = X_test.index.tolist()
