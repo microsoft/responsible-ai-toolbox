@@ -970,8 +970,8 @@ class RAIInsights(RAIBaseInsights):
                     'identity_feature_name'],
                 datetime_features=meta[Metadata.FEATURE_METADATA][
                     'datetime_features'],
-                time_series_id_column_names=meta[Metadata.FEATURE_METADATA][
-                    'time_series_id_column_names'],
+                time_series_id_features=meta[Metadata.FEATURE_METADATA][
+                    'time_series_id_features'],
                 categorical_features=meta[Metadata.FEATURE_METADATA][
                     'categorical_features'],
                 dropped_features=meta[Metadata.FEATURE_METADATA][
