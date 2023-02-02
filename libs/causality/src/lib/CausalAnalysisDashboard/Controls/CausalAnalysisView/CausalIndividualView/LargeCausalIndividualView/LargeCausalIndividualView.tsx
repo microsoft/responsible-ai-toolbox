@@ -20,23 +20,23 @@ import { CausalIndividualStyles } from "../CausalIndividual.styles";
 
 import { LargeCausalIndividualChart } from "./LargeCausalIndividualChart";
 
-export interface ICausalIndividualViewProps {
+export interface ILargeCausalIndividualViewProps {
   causalId: string;
   localEffects: ICausalAnalysisSingleData[][];
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
-interface ICausalIndividualViewState {
+interface ILargeCausalIndividualViewState {
   selectedData?: ICausalAnalysisSingleData[];
 }
 
 export class LargeCausalIndividualView extends React.PureComponent<
-  ICausalIndividualViewProps,
-  ICausalIndividualViewState
+  ILargeCausalIndividualViewProps,
+  ILargeCausalIndividualViewState
 > {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
-  public constructor(props: ICausalIndividualViewProps) {
+  public constructor(props: ILargeCausalIndividualViewProps) {
     super(props);
     this.state = {
       selectedData: undefined
@@ -115,18 +115,21 @@ export class LargeCausalIndividualView extends React.PureComponent<
       </Stack>
     );
   }
-  private readonly handleOnClick = (dataIndex: number | undefined): void => {
+  private readonly handleOnClick = (
+    dataIndex: number | undefined | any
+  ): void => {
     this.setState({
-      selectedData: this.getDataFromIndex(dataIndex)
+      selectedData: dataIndex
     });
   };
-  private readonly getDataFromIndex = (
-    dataIndex: number | undefined
-  ): ICausalAnalysisSingleData[] | undefined => {
-    const causalLocal = this.context?.causalAnalysisData?.local_effects;
-    if (!(dataIndex !== undefined && dataIndex >= 0 && causalLocal)) {
-      return undefined;
-    }
-    return causalLocal[dataIndex].sort((d1, d2) => d2.point - d1.point);
-  };
+
+  //   private readonly getDataFromIndex = (
+  //     dataIndex: number | undefined
+  //   ): ICausalAnalysisSingleData[] | undefined => {
+  //     const causalLocal = this.context?.causalAnalysisData?.local_effects;
+  //     if (!(dataIndex !== undefined && dataIndex >= 0 && causalLocal)) {
+  //       return undefined;
+  //     }
+  //     return causalLocal[dataIndex].sort((d1, d2) => d2.point - d1.point);
+  //   };
 }

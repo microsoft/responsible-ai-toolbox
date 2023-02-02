@@ -47,7 +47,7 @@ import { getBubblePlotData } from "./largeCausalIndividualChartUtils";
 export interface ICausalIndividualChartProps {
   causalId: string;
   cohort: Cohort;
-  onDataClick: (data: number | undefined) => void;
+  onDataClick: (data: number | undefined | any) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
@@ -64,7 +64,7 @@ export interface ICausalIndividualChartState {
   isBubbleChartRendered: boolean;
   // isLocalCausalDataLoading: boolean;
   // localCausalErrorMessage?: string;
-  // localCausalData: any;
+  localCausalData: any;
 }
 
 export class LargeCausalIndividualChart extends React.PureComponent<
@@ -87,7 +87,8 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       // isLocalExplanationsDataLoading: false,
       plotData: undefined,
       xSeries: [],
-      ySeries: []
+      ySeries: [],
+      localCausalData: undefined
     };
   }
 
@@ -331,12 +332,14 @@ export class LargeCausalIndividualChart extends React.PureComponent<
     // );
     const absIn = data.customData[JointDataset.AbsoluteIndexLabel];
     if (absIn) {
-      const localExplanationsData = await getLocalExplanationsFromSDK(
+      const localCausalData = await getLocalExplanationsFromSDK(
         this.props.causalId,
         absIn,
         this.context.requestLocalCausalEffects
       );
-      console.log("!!localExplanationsData:", localExplanationsData);
+      console.log("!!localCausalData:", localCausalData);
+      this.setState({ localCausalData: localCausalData });
+      this.props.onDataClick(localCausalData);
     }
   };
 
