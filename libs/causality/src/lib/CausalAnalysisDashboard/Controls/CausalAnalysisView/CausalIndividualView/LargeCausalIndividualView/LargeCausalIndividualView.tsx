@@ -21,6 +21,7 @@ import { CausalIndividualStyles } from "../CausalIndividual.styles";
 import { LargeCausalIndividualChart } from "./LargeCausalIndividualChart";
 
 export interface ICausalIndividualViewProps {
+  causalId: string;
   localEffects: ICausalAnalysisSingleData[][];
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
@@ -57,6 +58,7 @@ export class LargeCausalIndividualView extends React.PureComponent<
         </Stack.Item>
         <Stack.Item className={styles.individualChart}>
           <LargeCausalIndividualChart
+            causalId={this.props.causalId}
             cohort={this.context.selectedErrorCohort.cohort}
             onDataClick={this.handleOnClick}
             telemetryHook={this.props.telemetryHook}

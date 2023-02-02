@@ -63,6 +63,7 @@ export class CausalAnalysisView extends React.PureComponent<
         {this.props.viewOption === CausalAnalysisOptions.Individual &&
           ifEnableLargeData(this.context.dataset) && (
             <LargeCausalIndividualView
+              causalId={this.props.data.id}
               localEffects={this.state.currentLocalCausalEffects}
               telemetryHook={this.props.telemetryHook}
             />

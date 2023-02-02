@@ -1,17 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ILocalExplanations } from "@responsible-ai/core-ui";
-
 export async function getLocalExplanationsFromSDK(
+  causalId: string,
   absoluteIndex: number,
-  requestLocalExplanations?: (
+  requestLocalCausalEffects?: (
+    causalId: string,
     absoluteIndex: number,
     abortSignal: AbortSignal
-  ) => Promise<ILocalExplanations>
+  ) => Promise<any>
 ): Promise<unknown> {
   try {
-    const result = await requestLocalExplanations?.(
+    const result = await requestLocalCausalEffects?.(
+      causalId,
       absoluteIndex,
       new AbortController().signal
     );

@@ -26,7 +26,8 @@ import {
   Cohort,
   IScatterPoint,
   IHighchartsConfig,
-  ChartTypes
+  ChartTypes,
+  JointDataset
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -40,9 +41,11 @@ import {
   getDataOptions
 } from "../generateChartProps";
 
+import { getLocalExplanationsFromSDK } from "./getOnScatterPlotPointClick";
 import { getBubblePlotData } from "./largeCausalIndividualChartUtils";
 
 export interface ICausalIndividualChartProps {
+  causalId: string;
   cohort: Cohort;
   onDataClick: (data: number | undefined) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
@@ -326,11 +329,15 @@ export class LargeCausalIndividualChart extends React.PureComponent<
     //   this.toggleSelectionOfPoint,
     //   this.props.telemetryHook
     // );
-    const localExplanationsData = await getLocalExplanationsFromSDK(
-      absoluteIndex,
-      this.context.requestLocalExplanations
-    );
-    console.log("!!localExplanationsData:", localExplanationsData);
+    const absIn = data.customData[JointDataset.AbsoluteIndexLabel];
+    if (absIn) {
+      const localExplanationsData = await getLocalExplanationsFromSDK(
+        this.props.causalId,
+        absIn,
+        this.context.requestLocalCausalEffects
+      );
+      console.log("!!localExplanationsData:", localExplanationsData);
+    }
   };
 
   // private setLocalCausalData = async (

@@ -76,6 +76,11 @@ export interface IModelAssessmentContext {
     absoluteIndex: number,
     abortSignal: AbortSignal
   ) => Promise<any>;
+  requestLocalCausalEffects?: (
+    causalId: string,
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   requestGlobalCausalEffects?: (
     id: string,
     filter: unknown[],
