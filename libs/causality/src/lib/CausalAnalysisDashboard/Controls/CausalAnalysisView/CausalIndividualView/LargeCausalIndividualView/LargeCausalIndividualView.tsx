@@ -119,7 +119,7 @@ export class LargeCausalIndividualView extends React.PureComponent<
     dataIndex: number | undefined | any
   ): void => {
     this.setState({
-      selectedData: dataIndex
+      selectedData: dataIndex.local_effects[0]
     });
   };
 
