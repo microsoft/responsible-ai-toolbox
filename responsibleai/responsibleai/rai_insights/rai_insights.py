@@ -168,7 +168,10 @@ class RAIInsights(RAIBaseInsights):
             `regression`, or `forecasting`.
         :type task_type: str
         :param categorical_features: The categorical feature names.
-        :type categorical_features: list[str]
+            categorical_features is deprecated. Please provide categorical
+            features via the feature_metadata argument instead.
+            This argument will be removed after version 0.25
+        :type categorical_features: Optional[List[str]]
         :param classes: The class labels in the training dataset
         :type classes: numpy.ndarray
         :param serializer: Picklable custom serializer with save and load
@@ -183,11 +186,10 @@ class RAIInsights(RAIBaseInsights):
         :param feature_metadata: Feature metadata for the train/test
                                  dataset to identify different kinds
                                  of features in the dataset.
-        :type feature_metadata: FeatureMetadata
+        :type feature_metadata: Optional[FeatureMetadata]
         """
-        self._feature_metadata = feature_metadata or FeatureMetadata()
-        self.categorical_features = categorical_features or []
-        self._consolidate_categorical_features()
+        self._consolidate_categorical_features(
+            categorical_features, feature_metadata)
 
         self._large_test = None
 
@@ -213,7 +215,8 @@ class RAIInsights(RAIBaseInsights):
         self._large_forecast_quantiles_output = None
 
         self._validate_rai_insights_input_parameters(
-            model=model, train=train,
+            model=model,
+            train=train,
             test=test,
             target_column=target_column,
             task_type=task_type,
@@ -235,7 +238,7 @@ class RAIInsights(RAIBaseInsights):
             test=test,
             categorical_features=self.categorical_features,
             feature_columns=self._feature_columns,
-            time_column_name=self._feature_metadata.time_column_name)
+            datetime_features=self._feature_metadata.datetime_features)
         self._categories, self._categorical_indexes, \
             self._category_dictionary, self._string_ind_data = \
             process_categoricals(
@@ -297,7 +300,10 @@ class RAIInsights(RAIBaseInsights):
                         columns=self._feature_metadata.dropped_features,
                         axis=1)
 
-    def _consolidate_categorical_features(self):
+    def _consolidate_categorical_features(
+            self,
+            categorical_features: Optional[List[str]],
+            feature_metadata: Optional[FeatureMetadata]):
         """Consolidates the categorical features.
 
         Originally, only the RAIInsights constructor accepted
@@ -306,31 +312,51 @@ class RAIInsights(RAIBaseInsights):
         This method consolidates them or raises an exception if it is not
         possible. The resulting categorical features should be set on the
         self._feature_metadata object. Eventually, the categorical_features
-        argument on the RAIInsights constructor will be deprecated.
+        argument on the RAIInsights constructor will be removed at which
+        point this method can be removed as well.
+
+        :param categorical_features: the categorical features from the
+            RAIInsights constructor
+        :type categorical_features: Optional[List[str]]
+        :param feature_metadata: the feature metadata specified which may
+            include information on categorical features
+        :type feature_metadata: Optional[FeatureMetadata]
         """
-        if self._feature_metadata.categorical_features is None:
-            if self.categorical_features is None:
-                return
+        consolidated_categorical_features = []
+        if categorical_features is not None:
+            warnings.warn("The categorical_features argument on the "
+                          "RAIInsights constructor is deprecated and will "
+                          "be removed after version 0.26. Please provide "
+                          "categorical features via the feature_metadata "
+                          "argument instead.")
+        if feature_metadata is None:
+            # initialize to avoid having to keep checking if it is None
+            feature_metadata = FeatureMetadata()
+        if feature_metadata.categorical_features is None:
+            if categorical_features is None:
+                consolidated_categorical_features = []
             else:
-                self._feature_metadata.categorical_features = \
-                    self.categorical_features
-                return
+                consolidated_categorical_features = categorical_features
         else:
-            if self.categorical_features is None:
-                self.categorical_features = \
-                    self._feature_metadata.categorical_features
-                return
+            if categorical_features is None:
+                consolidated_categorical_features = \
+                    feature_metadata.categorical_features
             else:
                 # Both are specified. Raise an exception if they don't match.
-                if (set(self.categorical_features) ==
-                        set(self._feature_metadata.categorical_features)):
-                    return
+                if (set(categorical_features) ==
+                        set(feature_metadata.categorical_features)):
+                    consolidated_categorical_features = categorical_features
                 else:
                     raise UserConfigValidationException(
                         'The categorical_features provided via the '
                         'RAIInsights constructor and the categorical_features '
                         'provided via the feature_metadata argument do not '
                         'match.')
+        # set the consolidated result on both fields uniformly
+        self.categorical_features = consolidated_categorical_features
+        self._feature_metadata = feature_metadata
+        self._feature_metadata.categorical_features = \
+            consolidated_categorical_features
 
     def _initialize_managers(self):
         """Initializes the managers.
@@ -565,12 +591,29 @@ class RAIInsights(RAIBaseInsights):
         if feature_metadata is not None:
             if not isinstance(feature_metadata, FeatureMetadata):
                 raise UserConfigValidationException(
-                    "Expecting type FeatureMetadata but got {0}".format(
-                        type(feature_metadata)))
+                    "Expecting type FeatureMetadata but got "
+                    f"{type(feature_metadata)}")
 
             feature_names = list(train.columns)
             feature_metadata.validate(feature_names)
-            if task_type == ModelTask.FORECASTING:
+
+            if task_type != ModelTask.FORECASTING:
+                if feature_metadata.time_series_id_features:
+                    raise UserConfigValidationException(
+                        "The specified metadata time_series_id_features "
+                        "is only supported for the forecasting task type.")
+
+                if feature_metadata.datetime_features:
+                    raise UserConfigValidationException(
+                        "The specified metadata datetime_features "
+                        "is only supported for the forecasting task type.")
+            else:
+                if (feature_metadata.datetime_features and
+                        len(feature_metadata.datetime_features) > 1):
+                    raise UserConfigValidationException(
+                        "Only a single datetime feature is supported at "
+                        "this point.")
+
                 self._ensure_time_column_available(
                     feature_metadata, feature_names, model)
 
@@ -1132,19 +1175,31 @@ class RAIInsights(RAIBaseInsights):
                 large=large)
 
     @staticmethod
-    def _get_feature_ranges(test, categorical_features, feature_columns,
-                            time_column_name):
-        """Get feature ranges like min, max and unique values
-        for all columns"""
+    def _get_feature_ranges(
+            test: pd.DataFrame,
+            categorical_features: List[str],
+            feature_columns: List[str],
+            datetime_features: Optional[List[str]] = None):
+        """Get feature ranges like min, max and unique values for all columns.
+        
+        :param test: the test dataset
+        :type test: pandas.DataFrame
+        :param categorical_features: list of categorical feature names
+        :type categorical_features: List[str]
+        :param feature_columns: list of feature names
+        :type feature_columns: List[str]
+        :param datetime_features: list of datetime feature names
+        :type datetime_features: Optional[List[str]]
+        
+        """
         result = []
         for col in feature_columns:
-            res_object = {}
-            res_object[_COLUMN_NAME] = col
-            if (col in categorical_features):
+            res_object = {_COLUMN_NAME: col}
+            if col in categorical_features:
                 unique_value = test[col].unique()
                 res_object[_RANGE_TYPE] = "categorical"
                 res_object[_UNIQUE_VALUES] = unique_value.tolist()
-            elif (col == time_column_name):
+            elif datetime_features is not None and col in datetime_features:
                 res_object[_RANGE_TYPE] = "datetime"
                 res_object[_MIN_VALUE] = test[col].min()
                 res_object[_MAX_VALUE] = test[col].max()
@@ -1193,14 +1248,15 @@ class RAIInsights(RAIBaseInsights):
             meta[Metadata.FEATURE_RANGES]
         if (Metadata.FEATURE_METADATA not in meta or
                 meta[Metadata.FEATURE_METADATA] is None):
-            inst.__dict__['_' + Metadata.FEATURE_METADATA] = \
-                FeatureMetadata()
+            inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata()
         else:
             inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata(
                 identity_feature_name=meta[Metadata.FEATURE_METADATA][
                     'identity_feature_name'],
-                time_column_name=meta[Metadata.FEATURE_METADATA][
-                    'time_column_name'],
+                datetime_features=meta[Metadata.FEATURE_METADATA][
+                    'datetime_features'],
+                time_series_id_column_names=meta[Metadata.FEATURE_METADATA][
+                    'time_series_id_column_names'],
                 categorical_features=meta[Metadata.FEATURE_METADATA][
                     'categorical_features'],
                 dropped_features=meta[Metadata.FEATURE_METADATA][
