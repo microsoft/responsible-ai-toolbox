@@ -9,7 +9,8 @@ import pytest
 # Defines common utilities for responsibleai tests
 from dice_ml.utils import helpers
 from sklearn.compose import ColumnTransformer
-from sklearn.datasets import fetch_california_housing, load_iris
+from sklearn.datasets import (fetch_california_housing, load_breast_cancer,
+                              load_iris)
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
@@ -56,6 +57,21 @@ def create_housing_data(create_small_dataset=True):
                                                             test_size=0.2,
                                                             random_state=7)
     return x_train, x_test, y_train, y_test, housing.feature_names
+
+
+def create_cancer_data():
+    breast_cancer_data = load_breast_cancer()
+    classes = breast_cancer_data.target_names.tolist()
+
+    # Split data into train and test
+    X_train, X_test, y_train, y_test = train_test_split(
+        breast_cancer_data.data, breast_cancer_data.target,
+        test_size=0.2, random_state=0)
+    feature_names = breast_cancer_data.feature_names
+    classes = breast_cancer_data.target_names.tolist()
+    X_train = pd.DataFrame(X_train, columns=feature_names)
+    X_test = pd.DataFrame(X_test, columns=feature_names)
+    return X_train, X_test, y_train, y_test, feature_names, classes
 
 
 class FetchDiceAdultCensusIncomeDataset(object):

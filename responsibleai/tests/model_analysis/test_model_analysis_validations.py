@@ -8,10 +8,11 @@ from unittest.mock import MagicMock
 
 import pandas as pd
 import pytest
-from tests.common_utils import create_housing_data, create_iris_data
+from tests.common_utils import (create_cancer_data, create_housing_data,
+                                create_iris_data)
 
-from rai_test_utils.datasets.tabular import (
-    create_binary_classification_dataset, create_cancer_data)
+from rai_test_utils.datasets.tabular import \
+    create_binary_classification_dataset
 from rai_test_utils.models.lightgbm import create_lightgbm_classifier
 from rai_test_utils.models.sklearn import \
     create_sklearn_random_forest_regressor

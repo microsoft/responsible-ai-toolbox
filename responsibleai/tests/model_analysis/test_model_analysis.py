@@ -13,6 +13,7 @@ import pandas as pd
 import pytest
 from tests.causal_manager_validator import validate_causal
 from tests.common_utils import (create_adult_income_dataset,
+                                create_cancer_data,
                                 create_complex_classification_pipeline,
                                 create_housing_data, create_iris_data)
 from tests.counterfactual_manager_validator import validate_counterfactual
@@ -21,8 +22,8 @@ from tests.error_analysis_validator import (setup_error_analysis,
 from tests.explainer_manager_validator import (setup_explainer,
                                                validate_explainer)
 
-from rai_test_utils.datasets.tabular import (
-    create_binary_classification_dataset, create_cancer_data)
+from rai_test_utils.datasets.tabular import \
+    create_binary_classification_dataset
 from rai_test_utils.models.model_utils import (create_models_classification,
                                                create_models_regression)
 from responsibleai import ModelAnalysis, ModelTask
