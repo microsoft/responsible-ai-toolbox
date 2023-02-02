@@ -115,7 +115,7 @@ class TestFeatureMetadata:
         assert feature_metadata.time_series_id_features == ['g1', 'g2']
         with pytest.raises(
                 UserConfigValidationException,
-                match='The given time series ID column g1 is not present '
+                match='The given time series ID feature g1 is not present '
                       'in the provided features: A, B, C, D, E, F, G.'):
             feature_metadata.validate(
                 feature_names=['A', 'B', 'C', 'D', 'E', 'F', 'G'])
