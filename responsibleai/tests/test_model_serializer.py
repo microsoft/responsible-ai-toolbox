@@ -3,10 +3,10 @@
 import pickle
 from pathlib import Path
 
+from rai_test_utils.datasets.tabular import create_cancer_data
+from rai_test_utils.models.lightgbm import create_lightgbm_classifier
 from responsibleai import RAIInsights
 from responsibleai._internal.constants import SerializationAttributes
-
-from .common_utils import create_cancer_data, create_lightgbm_classifier
 
 
 class PickleSerializer:
