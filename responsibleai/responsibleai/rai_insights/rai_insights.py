@@ -491,7 +491,7 @@ class RAIInsights(RAIBaseInsights):
                         'target (test data) do not match')
 
             self._validate_feature_metadata(
-                feature_metadata, train, task_type)            
+                feature_metadata, train, task_type)
 
             if model is not None:
                 # Pick one row from train and test data
