@@ -6,6 +6,12 @@ from typing import Any, Dict, List, Optional
 from responsibleai.exceptions import UserConfigValidationException
 
 
+_DROPPED_FEATURE_PURPOSE = 'dropped feature'
+_CATEGORICAL_FEATURE_PURPOSE = 'categorical feature'
+_IDENTITY_FEATURE_PURPOSE = 'identity feature name'
+_DATETIME_FEATURE_PURPOSE = 'datetime feature'
+_TIME_SERIES_ID_FEATURE_PURPOSE = 'time series ID feature'
+
 class FeatureMetadata:
     def __init__(self,
                  identity_feature_name: Optional[str] = None,
@@ -51,16 +57,16 @@ class FeatureMetadata:
         datetime_features = (self.datetime_features
                              if self.datetime_features else None)
         self._validate_columns(
-            'dropped feature', self.dropped_features, feature_names)
+            _DROPPED_FEATURE_PURPOSE, self.dropped_features, feature_names)
         self._validate_columns(
-            'categorical feature', self.categorical_features, feature_names)
+            _CATEGORICAL_FEATURE_PURPOSE,
+            self.categorical_features, feature_names)
         self._validate_columns(
-            'identity feature name', identity_feature, feature_names)
+            _IDENTITY_FEATURE_PURPOSE, identity_feature, feature_names)
         self._validate_columns(
-            'datetime feature', datetime_features, feature_names)
+            _DATETIME_FEATURE_PURPOSE, datetime_features, feature_names)
         self._validate_columns(
-            'time series ID feature',
-            self.time_series_id_features,
+            _TIME_SERIES_ID_FEATURE_PURPOSE, self.time_series_id_features,
             feature_names)
 
     def to_dict(self) -> Dict[str, Any]:
