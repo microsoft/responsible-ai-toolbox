@@ -1,6 +1,7 @@
 ![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)
 
-![Responsible AI Widgets Python Build](https://github.com/microsoft/responsible-ai-widgets/workflows/Responsible%20AI%20Widgets/badge.svg) ![CD](https://github.com/microsoft/responsible-ai-widgets/workflows/CD/badge.svg)
+![Responsible AI Widgets Python Build](https://img.shields.io/github/actions/workflow/status/microsoft/responsible-ai-toolbox/CI-raiwidgets-pytest.yml?branch=main&label=Responsible%20AI%20Widgets%20Python%20Build)
+![UI deployment to test environment](https://img.shields.io/github/actions/workflow/status/microsoft/responsible-ai-toolbox/CD.yml?branch=main&label=UI%20deployment%20to%20test%20environment)
 
 ![PyPI raiwidgets](https://img.shields.io/pypi/v/raiwidgets?label=PyPI%20raiwidgets)
 ![PyPI responsibleai](https://img.shields.io/pypi/v/responsibleai?label=PyPI%20responsibleai)
