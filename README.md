@@ -2,7 +2,10 @@
 
 ![Responsible AI Widgets Python Build](https://github.com/microsoft/responsible-ai-widgets/workflows/Responsible%20AI%20Widgets/badge.svg) ![CD](https://github.com/microsoft/responsible-ai-widgets/workflows/CD/badge.svg)
 
-![PyPI raiwidgets](https://img.shields.io/pypi/v/raiwidgets?label=PyPI%20raiwidgets) ![PyPI responsibleai](https://img.shields.io/pypi/v/responsibleai?label=PyPI%20responsibleai)
+![PyPI raiwidgets](https://img.shields.io/pypi/v/raiwidgets?label=PyPI%20raiwidgets)
+![PyPI responsibleai](https://img.shields.io/pypi/v/responsibleai?label=PyPI%20responsibleai)
+![PyPI erroranalysis](https://img.shields.io/pypi/v/erroranalysis?label=PyPI%20erroranalysis)
+![PyPI raiutils](https://img.shields.io/pypi/v/raiutils?label=PyPI%20raiutils)
 
 ![npm model-assessment](https://img.shields.io/npm/v/@responsible-ai/model-assessment?label=npm%20%40responsible-ai%2Fmodel-assessment)
 
