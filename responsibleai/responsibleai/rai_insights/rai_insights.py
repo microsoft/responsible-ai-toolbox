@@ -499,6 +499,23 @@ class RAIInsights(RAIBaseInsights):
                 feature_names = list(train.columns)
                 feature_metadata.validate(feature_names)
 
+                if task_type != ModelTask.FORECASTING:
+                    if feature_metadata.time_series_id_features:
+                        raise UserConfigValidationException(
+                            "The specified metadata time_series_id_features "
+                            "is only supported for the forecasting task type.")
+
+                    if feature_metadata.datetime_features:
+                        raise UserConfigValidationException(
+                            "The specified metadata datetime_features "
+                            "is only supported for the forecasting task type.")
+                else:
+                    if (feature_metadata.datetime_features and
+                            len(feature_metadata.datetime_features) > 1):
+                        raise UserConfigValidationException(
+                            "Only a single datetime feature is supported at "
+                            "this point.")
+
             if model is not None:
                 # Pick one row from train and test data
                 small_train_data = train[0:1]
@@ -951,8 +968,8 @@ class RAIInsights(RAIBaseInsights):
             inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata(
                 identity_feature_name=meta[Metadata.FEATURE_METADATA][
                     'identity_feature_name'],
-                time_column_name=meta[Metadata.FEATURE_METADATA][
-                    'time_column_name'],
+                datetime_features=meta[Metadata.FEATURE_METADATA][
+                    'datetime_features'],
                 time_series_id_column_names=meta[Metadata.FEATURE_METADATA][
                     'time_series_id_column_names'],
                 categorical_features=meta[Metadata.FEATURE_METADATA][

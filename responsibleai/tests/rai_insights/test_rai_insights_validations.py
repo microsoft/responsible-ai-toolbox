@@ -492,7 +492,6 @@ class TestRAIInsightsValidations:
 
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
-        from responsibleai.feature_metadata import FeatureMetadata
         feature_metadata = FeatureMetadata(identity_feature_name='id')
 
         err_msg = ('The given identity feature name id is not present'
@@ -544,7 +543,6 @@ class TestRAIInsightsValidations:
         model = create_lightgbm_classifier(X, y)
 
         X[TARGET] = y
-        from responsibleai.feature_metadata import FeatureMetadata
         feature_metadata = FeatureMetadata(
             categorical_features=categorical_features) \
             if no_feature_metadata else None
@@ -584,7 +582,6 @@ class TestRAIInsightsValidations:
         model = create_lightgbm_classifier(X, y)
 
         X[TARGET] = y
-        from responsibleai.feature_metadata import FeatureMetadata
         feature_metadata = FeatureMetadata(
             categorical_features=feature_metadata_categorical_features)
 
@@ -614,7 +611,6 @@ class TestRAIInsightsValidations:
         model = create_lightgbm_classifier(X, y)
 
         X[TARGET] = y
-        from responsibleai.feature_metadata import FeatureMetadata
         feature_metadata = FeatureMetadata(
             categorical_features=categorical_features)
 
@@ -625,6 +621,59 @@ class TestRAIInsightsValidations:
             target_column=TARGET,
             task_type='classification',
             feature_metadata=feature_metadata)
+
+    @pytest.mark.parametrize("feature_metadata", [
+        FeatureMetadata(datetime_features=['c1']),
+        FeatureMetadata(time_series_id_features=['c1'])
+    ])
+    def test_feature_metadata_unsupported_time_series_features(
+            self, feature_metadata):
+        X = pd.DataFrame(data=[[1, 1], [2, 3]],
+                         columns=['c1', 'c2'])
+        y = np.array([1, 0])
+        model = create_lightgbm_classifier(X, y)
+        X[TARGET] = y
+
+        changed_metadata_field = [
+            k for k in feature_metadata.__dict__.keys()
+            if feature_metadata.__dict__[k] is not None][0]
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match=f"The specified metadata {changed_metadata_field} is "
+                      "only supported for the forecasting task type."):
+            RAIInsights(
+                model=model,
+                train=X,
+                test=X,
+                target_column=TARGET,
+                task_type='classification',
+                feature_metadata=feature_metadata)
+
+    @pytest.skip(
+        "Skip forecasting validation test until forecasting is enabled.")
+    def test_feature_metadata_forecasting_multiple_datetime_features(self):
+        X = pd.DataFrame(data=[[1, 1], [2, 3]],
+                         columns=['c1', 'c2'])
+        y = np.array([1, 0])
+        model = MagicMock()
+        model.forecast.return_value = y
+        X[TARGET] = y
+        feature_metadata = FeatureMetadata(
+            datetime_features=['c1', 'c2']
+        )
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="Only a single datetime feature is supported at "
+                      "this point."):
+            RAIInsights(
+                model=model,
+                train=X,
+                test=X,
+                target_column=TARGET,
+                task_type='forecasting',
+                feature_metadata=feature_metadata)
 
 
 class TestCausalUserConfigValidations:

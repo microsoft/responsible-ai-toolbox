@@ -9,35 +9,35 @@ from responsibleai.exceptions import UserConfigValidationException
 class FeatureMetadata:
     def __init__(self,
                  identity_feature_name: Optional[str] = None,
-                 time_column_name: Optional[str] = None,
+                 datetime_features: Optional[List[str]] = None,
                  categorical_features: Optional[List[str]] = None,
                  dropped_features: Optional[List[str]] = None,
-                 time_series_id_column_names: Optional[List[str]] = None):
+                 time_series_id_features: Optional[List[str]] = None):
         """Placeholder class for feature metadata provided by the user.
 
         :param identity_feature_name: Name of the feature which helps to
                                       uniquely identify a row or instance
                                       in user input dataset.
         :type identity_feature_name: Optional[str]
-        :param time_column_name: name of datetime feature in the user input
-                                 dataset.
-        :type time_column_name: Optional[str]
+        :param datetime_features: names of datetime features in the user input
+                                  dataset.
+        :type datetime_features: Optional[List[str]]
         :param categorical_features: List of categorical features in the
                                      user input dataset.
         :type categorical_features: Optional[List[str]]
         :param dropped_features: List of features that were dropped by the
                                  the user during training of their model.
         :type dropped_features: Optional[List[str]]
-        :param time_series_id_column_names: List of features that are used
-                                            to uniquely identify a time
-                                            series in the user input dataset.
-        :type time_series_id_column_names: Optional[List[str]]
+        :param time_series_id_features: List of features that are used
+                                        to uniquely identify a time
+                                        series in the user input dataset.
+        :type time_series_id_features: Optional[List[str]]
         """
         self.identity_feature_name = identity_feature_name
-        self.time_column_name = time_column_name
+        self.datetime_features = datetime_features
         self.categorical_features = categorical_features
         self.dropped_features = dropped_features
-        self.time_series_id_column_names = time_series_id_column_names
+        self.time_series_id_features = time_series_id_features
 
     def validate(self, feature_names: List[str]):
         """Validate the user-provided feature metadata.
@@ -47,8 +47,8 @@ class FeatureMetadata:
         """
         identity_feature = ([self.identity_feature_name]
                             if self.identity_feature_name else None)
-        time_column = ([self.time_column_name]
-                       if self.time_column_name else None)
+        datetime_features = (self.datetime_features
+                             if self.datetime_features else None)
         self._validate_columns(
             'dropped feature', self.dropped_features, feature_names)
         self._validate_columns(
@@ -56,10 +56,10 @@ class FeatureMetadata:
         self._validate_columns(
             'identity feature name', identity_feature, feature_names)
         self._validate_columns(
-            'time column', time_column, feature_names)
+            'datetime feature', datetime_features, feature_names)
         self._validate_columns(
-            'time series ID column',
-            self.time_series_id_column_names,
+            'time series ID feature',
+            self.time_series_id_features,
             feature_names)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -70,10 +70,10 @@ class FeatureMetadata:
         """
         return {
             'identity_feature_name': self.identity_feature_name,
-            'time_column_name': self.time_column_name,
+            'datetime_features': self.datetime_features,
             'categorical_features': self.categorical_features,
             'dropped_features': self.dropped_features,
-            'time_series_id_column_names': self.time_series_id_column_names
+            'time_series_id_features': self.time_series_id_features
         }
 
     def __eq__(self, other_feature_metadata) -> bool:
@@ -87,14 +87,14 @@ class FeatureMetadata:
         """
         return self.identity_feature_name == \
             other_feature_metadata.identity_feature_name and \
-            self.time_column_name == \
-            other_feature_metadata.time_column_name and \
+            self.datetime_features == \
+            other_feature_metadata.datetime_features and \
             self.categorical_features == \
             other_feature_metadata.categorical_features and \
             self.dropped_features == \
             other_feature_metadata.dropped_features and \
-            self.time_series_id_column_names == \
-            other_feature_metadata.time_series_id_column_names
+            self.time_series_id_features == \
+            other_feature_metadata.time_series_id_features
 
     @staticmethod
     def _validate_columns(
