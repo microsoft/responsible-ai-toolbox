@@ -39,6 +39,11 @@ _RANGE_TYPE = 'range_type'
 _UNIQUE_VALUES = 'unique_values'
 _MIN_VALUE = 'min_value'
 _MAX_VALUE = 'max_value'
+_IDENTITY_FEATURE_NAME = 'identity_feature_name'
+_DATETIME_FEATURES = 'datetime_features'
+_TIME_SERIES_ID_FEATURES = 'time_series_id_features'
+_CATEGORICAL_FEATURES = 'categorical_features'
+_DROPPED_FEATURES = 'dropped_features'
 
 
 class RAIInsights(RAIBaseInsights):
@@ -971,15 +976,15 @@ class RAIInsights(RAIBaseInsights):
         else:
             inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata(
                 identity_feature_name=meta[Metadata.FEATURE_METADATA][
-                    'identity_feature_name'],
+                    _IDENTITY_FEATURE_NAME],
                 datetime_features=meta[Metadata.FEATURE_METADATA][
-                    'datetime_features'],
+                    _DATETIME_FEATURES],
                 time_series_id_features=meta[Metadata.FEATURE_METADATA][
-                    'time_series_id_features'],
+                    _TIME_SERIES_ID_FEATURES],
                 categorical_features=meta[Metadata.FEATURE_METADATA][
-                    'categorical_features'],
+                    _CATEGORICAL_FEATURES],
                 dropped_features=meta[Metadata.FEATURE_METADATA][
-                    'dropped_features'],)
+                    _DROPPED_FEATURES],)
 
         all_features_names = inst.__dict__['_' + Metadata.FEATURE_COLUMNS]
         categorical_features = inst.__dict__[Metadata.CATEGORICAL_FEATURES]
