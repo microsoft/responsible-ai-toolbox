@@ -149,15 +149,18 @@ export async function generateHighChartConfigOverride(
 export async function selectPointFromChartLargeData(
   data: IScatterPoint,
   setLocalCausalData: (absoluteIndex: number) => Promise<void>,
-  toggleSelectionOfPoint: (index?: number) => void,
+  toggleSelectionOfPoint: (index?: number) => number[] | undefined,
+  onDataClick: (data: any) => void,
   telemetryHook?: ((message: ITelemetryEvent) => void) | undefined
 ): Promise<void> {
   const index = data.customData[JointDataset.IndexLabel];
   const absoluteIndex = data.customData[JointDataset.AbsoluteIndexLabel];
-  if (absoluteIndex) {
+  const newSelections = toggleSelectionOfPoint(index);
+  if (absoluteIndex && newSelections && newSelections.length > 0) {
     setLocalCausalData(absoluteIndex);
+  } else {
+    onDataClick(undefined);
   }
-  toggleSelectionOfPoint(index);
   telemetryHook?.({
     level: TelemetryLevels.ButtonClick,
     type: TelemetryEventName.FeatureImportancesNewDatapointSelectedFromChart
@@ -195,6 +198,5 @@ export function getDataOptions(indexSeries: number[]): IComboBoxOption[] {
       text: `Index ${i}`
     };
   });
-  console.log("!!options: ", options);
   return options;
 }

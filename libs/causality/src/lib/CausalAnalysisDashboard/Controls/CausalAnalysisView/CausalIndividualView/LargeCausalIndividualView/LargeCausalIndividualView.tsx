@@ -117,7 +117,9 @@ export class LargeCausalIndividualView extends React.PureComponent<
   }
   private readonly handleOnClick = (localCausalData: any): void => {
     this.setState({
-      selectedData: localCausalData.local_effects[0]
+      selectedData: localCausalData
+        ? localCausalData?.local_effects[0]
+        : undefined
     });
   };
 

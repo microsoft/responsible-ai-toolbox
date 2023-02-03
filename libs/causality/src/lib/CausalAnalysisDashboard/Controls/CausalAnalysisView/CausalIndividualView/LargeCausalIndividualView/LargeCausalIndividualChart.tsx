@@ -176,11 +176,6 @@ export class LargeCausalIndividualChart extends React.PureComponent<
         </MissingParametersPlaceholder>
       );
     }
-    console.log(
-      "!!combo data:",
-      this.state.selectedPointsIndexes[0],
-      getDataOptions(this.state.indexSeries)
-    );
     const disableAxisButton =
       this.state.isBubbleChartDataLoading ||
       this.state.isLocalCausalDataLoading;
@@ -339,6 +334,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       xSeries: [],
       ySeries: []
     });
+    this.props.onDataClick(undefined);
     const datasetBarConfigOverride = await getBubblePlotData(
       chartProps,
       this.props.cohort,
@@ -416,6 +412,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       data,
       this.setLocalCausalData,
       this.toggleSelectionOfPoint,
+      this.props.onDataClick,
       this.props.telemetryHook
     );
   };
@@ -474,8 +471,12 @@ export class LargeCausalIndividualChart extends React.PureComponent<
     if (typeof item?.key === "string") {
       const index = Number.parseInt(item.key);
       this.setTemporaryPointToCopyOfDatasetPoint(index, item.data.index);
-      this.toggleSelectionOfPoint(index);
-      this.setLocalCausalData(item.data.index);
+      const newSelections = this.toggleSelectionOfPoint(index);
+      if (newSelections && newSelections.length > 0) {
+        this.setLocalCausalData(item.data.index);
+      } else {
+        this.props.onDataClick(undefined);
+      }
       this.props.telemetryHook?.({
         level: TelemetryLevels.ButtonClick,
         type: TelemetryEventName.IndividualCausalSelectedDatapointUpdatedFromDropdown
@@ -483,7 +484,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
     }
   };
 
-  private toggleSelectionOfPoint = (index?: number): void => {
+  private toggleSelectionOfPoint = (index?: number): number[] | undefined => {
     const newSelections = getNewSelections(
       this.state.selectedPointsIndexes,
       index
@@ -492,9 +493,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       this.setState({
         selectedPointsIndexes: newSelections
       });
-      if (newSelections.length === 0) {
-        this.props.onDataClick(undefined);
-      }
     }
+    return newSelections;
   };
 }
