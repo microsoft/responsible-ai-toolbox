@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export async function getLocalExplanationsFromSDK(
+export async function getLocalCausalFromSDK(
   causalId: string,
   absoluteIndex: number,
   requestLocalCausalEffects?: (
