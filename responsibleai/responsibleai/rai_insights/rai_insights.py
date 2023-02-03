@@ -44,6 +44,11 @@ _RANGE_TYPE = 'range_type'
 _UNIQUE_VALUES = 'unique_values'
 _MIN_VALUE = 'min_value'
 _MAX_VALUE = 'max_value'
+_IDENTITY_FEATURE_NAME = 'identity_feature_name'
+_DATETIME_FEATURES = 'datetime_features'
+_TIME_SERIES_ID_FEATURES = 'time_series_id_features'
+_CATEGORICAL_FEATURES = 'categorical_features'
+_DROPPED_FEATURES = 'dropped_features'
 
 
 _DATA_TO_FILE_MAPPING = {
@@ -198,13 +203,11 @@ class RAIInsights(RAIBaseInsights):
             categorical_features, feature_metadata)
 
         self._large_test = None
-
         if len(test) > maximum_rows_for_test:
-            warnings.warn(
-                f"The size of the test set {len(test)} is greater than the "
-                f"supported limit of {maximum_rows_for_test}. "
-                "Computing insights for the first "
-                f"{maximum_rows_for_test} samples of the test set")
+            warnings.warn(f"The size of test set {len(test)} is greater than "
+                          f"supported limit of {maximum_rows_for_test}. "
+                          "Computing insights for first "
+                          f"{maximum_rows_for_test} samples of test set")
             self._large_test = test.copy()
             test = test.copy()[0:maximum_rows_for_test]
 
@@ -507,8 +510,7 @@ class RAIInsights(RAIBaseInsights):
                 not isinstance(test, pd.DataFrame)):
             raise UserConfigValidationException(
                 "Unsupported data type for either train or test. "
-                "Expecting pandas DataFrame for train and test."
-            )
+                "Expecting pandas DataFrame for train and test.")
 
         if len(train) <= 0 or len(test) <= 0:
             raise UserConfigValidationException(
@@ -527,22 +529,20 @@ class RAIInsights(RAIBaseInsights):
             raise UserConfigValidationException(
                 f'Target name {target_column} not present in train/test data')
 
-        categorical_features = self.categorical_features
+        categorical_features = feature_metadata.categorical_features
         if (categorical_features is not None and
                 len(categorical_features) > 0):
             if target_column in categorical_features:
                 raise UserConfigValidationException(
-                    'Found target name {0} in '
-                    'categorical feature list'.format(
-                        target_column)
-                )
+                    f'Found target name {target_column} in '
+                    'categorical feature list')
 
             difference_set = set(categorical_features) - set(
                 train.drop(columns=[target_column]).columns)
             if len(difference_set) > 0:
                 message = ("Feature names in categorical_features "
-                           "do not exist in train data: "
-                           f"{list(difference_set)}")
+                            "do not exist in train data: "
+                            f"{list(difference_set)}")
                 raise UserConfigValidationException(message)
 
             for column in categorical_features:
@@ -550,8 +550,9 @@ class RAIInsights(RAIBaseInsights):
                     np.unique(train[column])
                 except Exception:
                     raise UserConfigValidationException(
-                        f"Error finding unique values in column {column}. "
-                        "Please check your train data.")
+                        f"Error finding unique values in column {column}."
+                        " Please check your train data."
+                    )
 
                 try:
                     np.unique(test[column])
@@ -597,46 +598,22 @@ class RAIInsights(RAIBaseInsights):
                     'The train labels and distinct values in '
                     'target (test data) do not match')
 
-        if feature_metadata is not None:
-            if not isinstance(feature_metadata, FeatureMetadata):
-                raise UserConfigValidationException(
-                    "Expecting type FeatureMetadata but got "
-                    f"{type(feature_metadata)}")
-
-            feature_names = list(train.columns)
-            feature_metadata.validate(feature_names)
-
-            if task_type != ModelTask.FORECASTING:
-                if feature_metadata.time_series_id_features:
-                    raise UserConfigValidationException(
-                        "The specified metadata time_series_id_features "
-                        "is only supported for the forecasting task type.")
-
-                if feature_metadata.datetime_features:
-                    raise UserConfigValidationException(
-                        "The specified metadata datetime_features "
-                        "is only supported for the forecasting task type.")
-            else:
-                if (feature_metadata.datetime_features and
-                        len(feature_metadata.datetime_features) > 1):
-                    raise UserConfigValidationException(
-                        "Only a single datetime feature is supported at "
-                        "this point.")
-
-                self._ensure_time_column_available(
-                    feature_metadata, feature_names, model)
+        self._validate_feature_metadata(
+            feature_metadata, train, task_type)
 
         if model is not None:
             # Pick one row from train and test data
             small_train_data = train[0:1]
             small_test_data = test[0:1]
             has_dropped_features = False
-            if len(feature_metadata.dropped_features or []) != 0:
-                has_dropped_features = True
-                small_train_data = small_train_data.drop(
-                    columns=feature_metadata.dropped_features, axis=1)
-                small_test_data = small_test_data.drop(
-                    columns=feature_metadata.dropped_features, axis=1)
+            if feature_metadata is not None:
+                if (feature_metadata.dropped_features is not None and
+                        len(feature_metadata.dropped_features) != 0):
+                    has_dropped_features = True
+                    small_train_data = small_train_data.drop(
+                        columns=feature_metadata.dropped_features, axis=1)
+                    small_test_data = small_test_data.drop(
+                        columns=feature_metadata.dropped_features, axis=1)
 
             small_train_data = small_train_data.drop(
                 columns=[target_column], axis=1)
@@ -666,8 +643,40 @@ class RAIInsights(RAIBaseInsights):
             if task_type == ModelTask.REGRESSION:
                 if hasattr(model, SKLearn.PREDICT_PROBA):
                     raise UserConfigValidationException(
-                        'The regression model provided has a predict_proba '
-                        'function. Please check the task_type.')
+                        'The regression model'
+                        'provided has a predict_proba function. '
+                        'Please check the task_type.')
+            
+    def _validate_feature_metadata(self, feature_metadata, train, task_type):
+        if feature_metadata is not None:
+            if not isinstance(feature_metadata, FeatureMetadata):
+                raise UserConfigValidationException(
+                    "Expecting type FeatureMetadata but got "
+                    f"{type(feature_metadata)}")
+
+            feature_names = list(train.columns)
+            feature_metadata.validate_feature_metadata_with_user_features(
+                feature_names)
+
+            if task_type != ModelTask.FORECASTING:
+                if feature_metadata.time_series_id_features:
+                    raise UserConfigValidationException(
+                        "The specified metadata time_series_id_features "
+                        "is only supported for the forecasting task type.")
+
+                if feature_metadata.datetime_features:
+                    raise UserConfigValidationException(
+                        "The specified metadata datetime_features "
+                        "is only supported for the forecasting task type.")
+            else:
+                if (feature_metadata.datetime_features and
+                        len(feature_metadata.datetime_features) > 1):
+                    raise UserConfigValidationException(
+                        "Only a single datetime feature is supported at "
+                        "this point.")
+
+                self._ensure_time_column_available(
+                    feature_metadata, feature_names, model)
 
     def _wrap_model_if_needed(self):
         """Wrap the model in a compatible format if needed."""
@@ -1265,15 +1274,15 @@ class RAIInsights(RAIBaseInsights):
         else:
             inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata(
                 identity_feature_name=meta[Metadata.FEATURE_METADATA][
-                    'identity_feature_name'],
+                    _IDENTITY_FEATURE_NAME],
                 datetime_features=meta[Metadata.FEATURE_METADATA][
-                    'datetime_features'],
+                    _DATETIME_FEATURES],
                 time_series_id_features=meta[Metadata.FEATURE_METADATA][
-                    'time_series_id_features'],
+                    _TIME_SERIES_ID_FEATURES],
                 categorical_features=meta[Metadata.FEATURE_METADATA][
-                    'categorical_features'],
+                    _CATEGORICAL_FEATURES],
                 dropped_features=meta[Metadata.FEATURE_METADATA][
-                    'dropped_features'],)
+                    _DROPPED_FEATURES],)
 
         all_features_names = inst.__dict__['_' + Metadata.FEATURE_COLUMNS]
         categorical_features = inst.__dict__[Metadata.CATEGORICAL_FEATURES]

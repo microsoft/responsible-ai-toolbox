@@ -5,6 +5,12 @@ from typing import Any, Dict, List, Optional
 
 from responsibleai.exceptions import UserConfigValidationException
 
+_DROPPED_FEATURE_PURPOSE = 'dropped feature'
+_CATEGORICAL_FEATURE_PURPOSE = 'categorical feature'
+_IDENTITY_FEATURE_PURPOSE = 'identity feature name'
+_DATETIME_FEATURE_PURPOSE = 'datetime feature'
+_TIME_SERIES_ID_FEATURE_PURPOSE = 'time series ID feature'
+
 
 class FeatureMetadata:
     def __init__(self,
@@ -16,21 +22,22 @@ class FeatureMetadata:
         """Placeholder class for feature metadata provided by the user.
 
         :param identity_feature_name: Name of the feature which helps to
-                                      uniquely identify a row or instance
-                                      in user input dataset.
+            uniquely identify a row or instance in user input dataset.
         :type identity_feature_name: Optional[str]
-        :param datetime_features: names of datetime features in the user input
-                                  dataset.
+        :param datetime_features: Names of datetime features in the user input
+            dataset.
         :type datetime_features: Optional[List[str]]
         :param categorical_features: List of categorical features in the
-                                     user input dataset.
+            user input dataset.
         :type categorical_features: Optional[List[str]]
         :param dropped_features: List of features that were dropped by the
-                                 the user during training of their model.
+            the user during training of their model.
         :type dropped_features: Optional[List[str]]
         :param time_series_id_features: List of features that are used
-                                        to uniquely identify a time
-                                        series in the user input dataset.
+            to uniquely identify a time series in the user input dataset.
+            Time series ID features are only relevant for forecasting, i.e.,
+            when the task is 'forecasting'. Specifying time series ID features
+            for other tasks will result in validation errors.
         :type time_series_id_features: Optional[List[str]]
         """
         self.identity_feature_name = identity_feature_name
@@ -39,7 +46,8 @@ class FeatureMetadata:
         self.dropped_features = dropped_features
         self.time_series_id_features = time_series_id_features
 
-    def validate(self, feature_names: List[str]):
+    def validate_feature_metadata_with_user_features(
+            self, feature_names: List[str]):
         """Validate the user-provided feature metadata.
 
         :param feature_names: list of features in the dataset.
@@ -47,19 +55,17 @@ class FeatureMetadata:
         """
         identity_feature = ([self.identity_feature_name]
                             if self.identity_feature_name else None)
-        datetime_features = (self.datetime_features
-                             if self.datetime_features else None)
         self._validate_columns(
-            'dropped feature', self.dropped_features, feature_names)
+            _DROPPED_FEATURE_PURPOSE, self.dropped_features, feature_names)
         self._validate_columns(
-            'categorical feature', self.categorical_features, feature_names)
+            _CATEGORICAL_FEATURE_PURPOSE,
+            self.categorical_features, feature_names)
         self._validate_columns(
-            'identity feature name', identity_feature, feature_names)
+            _IDENTITY_FEATURE_PURPOSE, identity_feature, feature_names)
         self._validate_columns(
-            'datetime feature', datetime_features, feature_names)
+            _DATETIME_FEATURE_PURPOSE, self.datetime_features, feature_names)
         self._validate_columns(
-            'time series ID feature',
-            self.time_series_id_features,
+            _TIME_SERIES_ID_FEATURE_PURPOSE, self.time_series_id_features,
             feature_names)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -107,14 +113,14 @@ class FeatureMetadata:
         :type column_purpose: str
         :param column_names: List of column names to validate.
         :type column_names: List[str]
-        :param self.identity_feature_name: List of features in the input
-            dataset.
-        :type self.identity_feature_name: List[str]
+        :param feature_names: List of features in the input dataset.
+        :type feature_names: List[str]
         """
         if column_names is None:
             return
+        feature_name_set = set(feature_names)
         for column_name in column_names:
-            if column_name not in feature_names:
+            if column_name not in feature_name_set:
                 raise UserConfigValidationException(
                     f'The given {column_purpose} {column_name} is not present '
                     f'in the provided features: {", ".join(feature_names)}.')
