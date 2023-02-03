@@ -47,6 +47,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       | "requestLocalExplanations"
       | "requestMetrics"
       | "requestLocalCausalEffects"
+      | "requestTestDataRow"
     > = {};
     if (this.props.config.baseUrl) {
       callBack.requestExp = async (data: number): Promise<any[]> => {
@@ -217,6 +218,17 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
           this.props.config,
           [causalId, absoluteIndex],
           "/local_causal_effects",
+          abortSignal
+        );
+      };
+      callBack.requestTestDataRow = async (
+        absoluteIndex: number,
+        abortSignal: AbortSignal
+      ): Promise<any> => {
+        return callFlaskService(
+          this.props.config,
+          [absoluteIndex],
+          "/test_data_row",
           abortSignal
         );
       };

@@ -17,7 +17,8 @@ import {
   ModelAssessmentContext,
   NoData,
   defaultModelAssessmentContext,
-  DatasetTaskType
+  DatasetTaskType,
+  ifEnableLargeData
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -28,6 +29,7 @@ import { Outcome } from "./Outcome";
 
 export interface ICausalWhatIfProps {
   selectedIndex: number | undefined;
+  absoluteIndex?: number;
   isLocalCausalDataLoading?: boolean;
 }
 interface ICausalWhatIfState {
@@ -41,6 +43,7 @@ interface ICausalWhatIfState {
   treatmentValueStep?: number;
   currentOutcome?: number;
   newOutcome?: ICausalWhatIfData;
+  testDataRow?: any;
 }
 
 export class CausalWhatIf extends React.Component<
@@ -168,10 +171,10 @@ export class CausalWhatIf extends React.Component<
     return `${this.state.newTreatmentRawValue}`;
   };
 
-  private readonly setTreatmentFeature = (
+  private readonly setTreatmentFeature = async (
     _?: React.FormEvent<IComboBox>,
     option?: IComboBoxOption | undefined
-  ): void => {
+  ): Promise<void> => {
     let featureName = this.state.treatmentFeature;
     if (typeof option?.key === "string") {
       featureName = option.key;
@@ -191,9 +194,16 @@ export class CausalWhatIf extends React.Component<
     const featureKey =
       JointDataset.DataLabelRoot +
       this.context.dataset.feature_names.indexOf(featureName);
-    const treatmentValue = this.context.selectedErrorCohort.cohort.getRow(
+    let treatmentValue = this.context.selectedErrorCohort.cohort.getRow(
       this.props.selectedIndex
     )[featureKey];
+
+    if (ifEnableLargeData(this.context.dataset)) {
+      const testDataRow = await this.getTestDataRow();
+      treatmentValue =
+        this.getLargeDataTreatmentValue(testDataRow, featureName) ?? 0;
+    }
+
     const meta =
       this.context.jointDataset.metaDict[
         JointDataset.DataLabelRoot +
@@ -235,6 +245,16 @@ export class CausalWhatIf extends React.Component<
     );
   };
 
+  private readonly getLargeDataTreatmentValue = (
+    testDataRow?: any,
+    featureName?: string
+  ): number | undefined => {
+    if (!testDataRow || !featureName) {
+      return;
+    }
+    return testDataRow[featureName];
+  };
+
   private readonly getWhatIf = async (): Promise<void> => {
     if (
       !this.context.causalAnalysisData ||
@@ -248,6 +268,35 @@ export class CausalWhatIf extends React.Component<
     this.setState({
       newOutcome: undefined
     });
+    const data = this.getFeaturesData();
+    const targetValue = ifEnableLargeData(this.context.dataset)
+      ? this.state.testDataRow[JointDataset.TrueYLabel]
+      : this.context.selectedErrorCohort.cohort.getRow(
+          this.props.selectedIndex
+        )[JointDataset.TrueYLabel];
+    if (this._getWhatIfController) {
+      this._getWhatIfController.abort();
+    }
+    this._getWhatIfController = new AbortController();
+    const result = await this.context.requestCausalWhatIf(
+      this.context.causalAnalysisData?.id,
+      [data],
+      this.state.treatmentFeature,
+      [this.state.newTreatmentRawValue],
+      [targetValue],
+      this._getWhatIfController.signal
+    );
+    this.setState({
+      newOutcome: result[0]
+    });
+  };
+
+  private readonly getFeaturesData = ():
+    | _.Dictionary<string | number | undefined>
+    | undefined => {
+    if (!this.props.selectedIndex) {
+      return;
+    }
     const data = _.chain(
       this.context.selectedErrorCohort.cohort.getRow(this.props.selectedIndex)
     )
@@ -259,24 +308,26 @@ export class CausalWhatIf extends React.Component<
       .mapValues(this.context.jointDataset.getRawValue)
       .mapKeys((_, k) => this.context.jointDataset.metaDict[k].label)
       .value();
-    if (this._getWhatIfController) {
-      this._getWhatIfController.abort();
+    return data;
+    // add for large data
+  };
+
+  private readonly getTestDataRow = async (): Promise<any> => {
+    if (!this.context.requestTestDataRow || !this.props.absoluteIndex) {
+      return;
     }
-    this._getWhatIfController = new AbortController();
-    const result = await this.context.requestCausalWhatIf(
-      this.context.causalAnalysisData?.id,
-      [data],
-      this.state.treatmentFeature,
-      [this.state.newTreatmentRawValue],
-      [
-        this.context.selectedErrorCohort.cohort.getRow(
-          this.props.selectedIndex
-        )[JointDataset.TrueYLabel]
-      ],
-      this._getWhatIfController.signal
-    );
     this.setState({
-      newOutcome: result[0]
+      testDataRow: undefined
     });
+    try {
+      const result = await this.context.requestTestDataRow?.(
+        this.props.absoluteIndex,
+        new AbortController().signal
+      );
+      this.setState({
+        testDataRow: result[0]
+      });
+      return result[0];
+    } catch (error) {}
   };
 }

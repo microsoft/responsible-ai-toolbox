@@ -133,6 +133,10 @@ export interface IModelAssessmentDashboardProps
     absoluteIndex: number,
     abortSignal: AbortSignal
   ) => Promise<any>;
+  requestTestDataRow?: (
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   localUrl?: string;
   requestForecast?: (
     request: any[],
