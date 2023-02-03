@@ -71,7 +71,7 @@ export function shouldUpdateHighchart(
   currentState: ICausalIndividualChartState,
   currentProps: ICausalIndividualChartProps,
   changedKeys: string[]
-): [boolean, boolean, boolean, boolean, boolean, boolean] {
+): [boolean, boolean, boolean, boolean, boolean, boolean, boolean] {
   const hasSelectedPointIndexesUpdated = !_.isEqual(
     currentState.selectedPointsIndexes,
     prevState.selectedPointsIndexes
@@ -80,9 +80,9 @@ export function shouldUpdateHighchart(
     currentState.isLocalCausalDataLoading,
     prevState.isLocalCausalDataLoading
   );
-  // const hasRevertToBubbleChartUpdated =
-  //   currentState.isRevertButtonClicked &&
-  //   prevState.isRevertButtonClicked !== currentState.isRevertButtonClicked;
+  const hasRevertToBubbleChartUpdated =
+    currentState.isRevertButtonClicked &&
+    prevState.isRevertButtonClicked !== currentState.isRevertButtonClicked;
   const hasCohortUpdated = currentProps.cohort.name !== prevProps.cohort.name;
   const hasChartPropsUpdated = !_.isEqual(
     currentState.chartProps,
@@ -95,7 +95,7 @@ export function shouldUpdateHighchart(
   );
 
   const shouldUpdate =
-    // hasRevertToBubbleChartUpdated ||
+    hasRevertToBubbleChartUpdated ||
     hasSelectedPointIndexesUpdated ||
     hasChartPropsUpdated ||
     hasIsLocalExplanationsDataLoadingUpdated ||
@@ -105,7 +105,7 @@ export function shouldUpdateHighchart(
     shouldUpdate,
     hasSelectedPointIndexesUpdated,
     hasIsLocalExplanationsDataLoadingUpdated,
-    // hasRevertToBubbleChartUpdated,
+    hasRevertToBubbleChartUpdated,
     hasCohortUpdated,
     hasChartPropsUpdated,
     hasAxisTypeChanged
@@ -116,7 +116,7 @@ export async function generateHighChartConfigOverride(
   chartProps: IGenericChartProps | undefined,
   hasSelectedPointIndexesUpdated: boolean,
   hasIsLocalExplanationsDataLoadingUpdated: boolean,
-  //hasRevertToBubbleChartUpdated: boolean,
+  hasRevertToBubbleChartUpdated: boolean,
   hasChartPropsUpdated: boolean,
   hasCohortUpdated: boolean,
   hasAxisTypeChanged: boolean,
@@ -124,7 +124,7 @@ export async function generateHighChartConfigOverride(
   updateScatterPlotData: (chartProps: IGenericChartProps) => void
 ): Promise<void> {
   if (chartProps) {
-    if (hasCohortUpdated) {
+    if (hasCohortUpdated || hasRevertToBubbleChartUpdated) {
       updateBubblePlotData(chartProps);
       return;
     }

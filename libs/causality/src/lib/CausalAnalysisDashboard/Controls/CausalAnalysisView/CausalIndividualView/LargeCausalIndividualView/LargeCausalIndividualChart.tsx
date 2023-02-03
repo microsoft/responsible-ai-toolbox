@@ -6,7 +6,8 @@ import {
   IComboBox,
   ComboBox,
   getTheme,
-  Stack
+  Stack,
+  DefaultButton
 } from "@fluentui/react";
 import {
   ColumnCategories,
@@ -70,6 +71,7 @@ export interface ICausalIndividualChartState {
   xSeries: number[];
   ySeries: number[];
   indexSeries: number[];
+  isRevertButtonClicked: boolean;
   isBubbleChartDataLoading: boolean;
   bubbleChartErrorMessage?: string;
   isBubbleChartRendered: boolean;
@@ -95,6 +97,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       bubbleChartErrorMessage: undefined,
       selectedPointsIndexes: [],
       indexSeries: [],
+      isRevertButtonClicked: false,
       isBubbleChartDataLoading: false,
       isBubbleChartRendered: true,
       isLocalCausalDataLoading: false,
@@ -125,7 +128,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       shouldUpdate,
       hasSelectedPointIndexesUpdated,
       hasIsLocalExplanationsDataLoadingUpdated,
-      //  hasRevertToBubbleChartUpdated,
+      hasRevertToBubbleChartUpdated,
       hasCohortUpdated,
       hasChartPropsUpdated,
       hasAxisTypeChanged
@@ -142,7 +145,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
             this.state.chartProps,
             hasSelectedPointIndexesUpdated,
             hasIsLocalExplanationsDataLoadingUpdated,
-            // hasRevertToBubbleChartUpdated,
+            hasRevertToBubbleChartUpdated,
             hasChartPropsUpdated,
             hasCohortUpdated,
             hasAxisTypeChanged,
@@ -302,11 +305,24 @@ export class LargeCausalIndividualChart extends React.PureComponent<
               selectedIndex={this.state.selectedPointsIndexes[0]}
               isLocalCausalDataLoading={this.state.isLocalCausalDataLoading}
             />
+            {!this.state.isBubbleChartRendered && (
+              <DefaultButton
+                className={classNames.buttonStyle}
+                onClick={this.onRevertButtonClick}
+                text={localization.Counterfactuals.revertToBubbleChart}
+                title={localization.Counterfactuals.revertToBubbleChart}
+                disabled={this.state.isLocalCausalDataLoading}
+              />
+            )}
           </Stack>
         )}
       </Stack>
     );
   }
+
+  private onRevertButtonClick = (): void => {
+    this.setState({ isRevertButtonClicked: true });
+  };
 
   private setTemporaryPointToCopyOfDatasetPoint(
     index: number,
@@ -370,8 +386,8 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       chartProps,
       plotData: datasetBarConfigOverride,
       isBubbleChartDataLoading: false,
-      isBubbleChartRendered: true
-      // isRevertButtonClicked: false
+      isBubbleChartRendered: true,
+      isRevertButtonClicked: false
     });
   };
 
@@ -392,8 +408,8 @@ export class LargeCausalIndividualChart extends React.PureComponent<
     this.setState({
       chartProps,
       plotData: datasetBarConfigOverride,
-      isBubbleChartRendered: false
-      //isRevertButtonClicked: false
+      isBubbleChartRendered: false,
+      isRevertButtonClicked: false
     });
   };
 
