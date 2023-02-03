@@ -39,6 +39,11 @@ _RANGE_TYPE = 'range_type'
 _UNIQUE_VALUES = 'unique_values'
 _MIN_VALUE = 'min_value'
 _MAX_VALUE = 'max_value'
+_IDENTITY_FEATURE_NAME = 'identity_feature_name'
+_DATETIME_FEATURES = 'datetime_features'
+_TIME_SERIES_ID_FEATURES = 'time_series_id_features'
+_CATEGORICAL_FEATURES = 'categorical_features'
+_DROPPED_FEATURES = 'dropped_features'
 
 
 class RAIInsights(RAIBaseInsights):
@@ -48,8 +53,12 @@ class RAIInsights(RAIBaseInsights):
     single API.
     """
 
-    def __init__(self, model: Optional[Any], train: pd.DataFrame,
-                 test: pd.DataFrame, target_column: str, task_type: str,
+    def __init__(self,
+                 model: Optional[Any],
+                 train: pd.DataFrame,
+                 test: pd.DataFrame,
+                 target_column: str,
+                 task_type: str,
                  categorical_features: Optional[List[str]] = None,
                  classes: Optional[np.ndarray] = None,
                  serializer: Optional[Any] = None,
@@ -70,7 +79,10 @@ class RAIInsights(RAIBaseInsights):
             `regression`.
         :type task_type: str
         :param categorical_features: The categorical feature names.
-        :type categorical_features: list[str]
+            categorical_features is deprecated. Please provide categorical
+            features via the feature_metadata argument instead.
+            This argument will be removed after version 0.25
+        :type categorical_features: Optional[List[str]]
         :param classes: The class labels in the training dataset
         :type classes: numpy.ndarray
         :param serializer: Picklable custom serializer with save and load
@@ -85,15 +97,16 @@ class RAIInsights(RAIBaseInsights):
         :param feature_metadata: Feature metadata for the train/test
                                  dataset to identify different kinds
                                  of features in the dataset.
-        :type feature_metadata: FeatureMetadata
+        :type feature_metadata: Optional[FeatureMetadata]
         """
-        categorical_features = categorical_features or []
+        self._consolidate_categorical_features(
+            categorical_features, feature_metadata)
+
         if len(test) > maximum_rows_for_test:
-            warnings.warn("The size of test set {0} is greater than "
-                          "supported limit of {1}. Computing insights"
-                          " for first {1} samples of "
-                          "test set".format(len(test),
-                                            maximum_rows_for_test))
+            warnings.warn(f"The size of test set {len(test)} is greater than "
+                          f"supported limit of {maximum_rows_for_test}. "
+                          "Computing insights for first "
+                          f"{maximum_rows_for_test} samples of test set")
             self._large_test = test.copy()
             test = test.copy()[0:maximum_rows_for_test]
 
@@ -117,11 +130,9 @@ class RAIInsights(RAIBaseInsights):
         self._validate_rai_insights_input_parameters(
             model=model, train=train, test=test,
             target_column=target_column, task_type=task_type,
-            categorical_features=categorical_features,
             classes=classes,
             serializer=serializer,
-            maximum_rows_for_test=maximum_rows_for_test,
-            feature_metadata=feature_metadata)
+            feature_metadata=self._feature_metadata)
         self._classes = RAIInsights._get_classes(
             task_type=task_type,
             train=train,
@@ -131,11 +142,9 @@ class RAIInsights(RAIBaseInsights):
         self._feature_columns = \
             test.drop(columns=[target_column]).columns.tolist()
         self._feature_ranges = RAIInsights._get_feature_ranges(
-            test=test, categorical_features=categorical_features,
+            test=test, categorical_features=self.categorical_features,
             feature_columns=self._feature_columns)
-        self._feature_metadata = feature_metadata
 
-        self.categorical_features = categorical_features
         self._categories, self._categorical_indexes, \
             self._category_dictionary, self._string_ind_data = \
             process_categoricals(
@@ -205,6 +214,64 @@ class RAIInsights(RAIBaseInsights):
                         columns=self._feature_metadata.dropped_features,
                         axis=1)
 
+    def _consolidate_categorical_features(
+            self,
+            categorical_features: Optional[List[str]],
+            feature_metadata: Optional[FeatureMetadata]):
+        """Consolidates the categorical features.
+
+        Originally, only the RAIInsights constructor accepted
+        categorical_features. Later on, feature_metadata was added as an
+        argument that also includes categorical_features.
+        This method consolidates them or raises an exception if it is not
+        possible. The resulting categorical features should be set on the
+        self._feature_metadata object. Eventually, the categorical_features
+        argument on the RAIInsights constructor will be removed at which
+        point this method can be removed as well.
+
+        :param categorical_features: the categorical features from the
+            RAIInsights constructor
+        :type categorical_features: Optional[List[str]]
+        :param feature_metadata: the feature metadata specified which may
+            include information on categorical features
+        :type feature_metadata: Optional[FeatureMetadata]
+        """
+        consolidated_categorical_features = []
+        if categorical_features is not None:
+            warnings.warn("The categorical_features argument on the "
+                          "RAIInsights constructor is deprecated and will "
+                          "be removed after version 0.26. Please provide "
+                          "categorical features via the feature_metadata "
+                          "argument instead.")
+        if feature_metadata is None:
+            # initialize to avoid having to keep checking if it is None
+            feature_metadata = FeatureMetadata()
+        if feature_metadata.categorical_features is None:
+            if categorical_features is None:
+                consolidated_categorical_features = []
+            else:
+                consolidated_categorical_features = categorical_features
+        else:
+            if categorical_features is None:
+                consolidated_categorical_features = \
+                    feature_metadata.categorical_features
+            else:
+                # Both are specified. Raise an exception if they don't match.
+                if (set(categorical_features) ==
+                        set(feature_metadata.categorical_features)):
+                    consolidated_categorical_features = categorical_features
+                else:
+                    raise UserConfigValidationException(
+                        'The categorical_features provided via the '
+                        'RAIInsights constructor and the categorical_features '
+                        'provided via the feature_metadata argument do not '
+                        'match.')
+        # set the consolidated result on both fields uniformly
+        self.categorical_features = consolidated_categorical_features
+        self._feature_metadata = feature_metadata
+        self._feature_metadata.categorical_features = \
+            consolidated_categorical_features
+
     def _initialize_managers(self):
         """Initializes the managers.
 
@@ -272,12 +339,15 @@ class RAIInsights(RAIBaseInsights):
                 cols_of_interest=self.categorical_features)
 
     def _validate_rai_insights_input_parameters(
-            self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
-            target_column: str, task_type: str,
-            categorical_features: List[str], classes: np.ndarray,
+            self,
+            model: Any,
+            train: pd.DataFrame,
+            test: pd.DataFrame,
+            target_column: str,
+            task_type: str,
+            classes: np.ndarray,
             serializer,
-            maximum_rows_for_test: int,
-            feature_metadata: Optional[FeatureMetadata] = None):
+            feature_metadata: FeatureMetadata):
         """Validate the inputs for the RAIInsights constructor.
 
         :param model: The model to compute RAI insights for.
@@ -293,8 +363,6 @@ class RAIInsights(RAIBaseInsights):
         :param task_type: The task to run, can be `classification` or
             `regression`.
         :type task_type: str
-        :param categorical_features: The categorical feature names.
-        :type categorical_features: list[str]
         :param classes: The class labels in the training dataset
         :type classes: numpy.ndarray
         :param serializer: Picklable custom serializer with save and load
@@ -302,9 +370,6 @@ class RAIInsights(RAIBaseInsights):
             method returns a dictionary state and load method returns the
             model.
         :type serializer: object
-        :param maximum_rows_for_test: Limit on size of test data
-            (for performance reasons)
-        :type maximum_rows_for_test: int
         :param feature_metadata: Feature metadata for the train/test
                                  dataset to identify different kinds
                                  of features in the dataset.
@@ -365,6 +430,7 @@ class RAIInsights(RAIBaseInsights):
                         target_column)
                 )
 
+            categorical_features = feature_metadata.categorical_features
             if (categorical_features is not None and
                     len(categorical_features) > 0):
                 if target_column in categorical_features:
@@ -387,8 +453,8 @@ class RAIInsights(RAIBaseInsights):
                         np.unique(train[column])
                     except Exception:
                         raise UserConfigValidationException(
-                            "Error finding unique values in column {0}. "
-                            "Please check your train data.".format(column)
+                            f"Error finding unique values in column {column}."
+                            " Please check your train data."
                         )
 
                     try:
@@ -404,12 +470,13 @@ class RAIInsights(RAIBaseInsights):
                 columns=[target_column]).select_dtypes(
                     include='number').columns.tolist()
             string_features_set = set(train_features) - set(numeric_features)
-            if len(string_features_set - set(categorical_features)) > 0:
+            non_categorical_string_columns = \
+                string_features_set - set(categorical_features)
+            if len(non_categorical_string_columns) > 0:
                 raise UserConfigValidationException(
                     "The following string features were not "
-                    "identified as categorical features: {0}".format(
-                        string_features_set - set(categorical_features))
-                )
+                    "identified as categorical features: "
+                    f"{non_categorical_string_columns}")
 
             if classes is not None and task_type == ModelTask.CLASSIFICATION:
                 if (len(set(train[target_column].unique()) -
@@ -428,14 +495,8 @@ class RAIInsights(RAIBaseInsights):
                         'The train labels and distinct values in '
                         'target (test data) do not match')
 
-            if feature_metadata is not None:
-                if not isinstance(feature_metadata, FeatureMetadata):
-                    raise UserConfigValidationException(
-                        "Expecting type FeatureMetadata but got {0}".format(
-                            type(feature_metadata)))
-
-                feature_metadata.validate_feature_metadata_with_user_features(
-                    list(train.columns))
+            self._validate_feature_metadata(
+                feature_metadata, train, task_type)
 
             if model is not None:
                 # Pick one row from train and test data
@@ -509,6 +570,33 @@ class RAIInsights(RAIBaseInsights):
                 "Unsupported data type for either train or test. "
                 "Expecting pandas DataFrame for train and test."
             )
+
+    def _validate_feature_metadata(self, feature_metadata, train, task_type):
+        if feature_metadata is not None:
+            if not isinstance(feature_metadata, FeatureMetadata):
+                raise UserConfigValidationException(
+                    "Expecting type FeatureMetadata but got "
+                    f"{type(feature_metadata)}")
+
+            feature_names = list(train.columns)
+            feature_metadata.validate_feature_metadata_with_user_features(
+                feature_names)
+
+            if task_type != ModelTask.FORECASTING:
+                if feature_metadata.time_series_id_features:
+                    raise UserConfigValidationException(
+                        "The specified metadata time_series_id_features "
+                        "is only supported for the forecasting task type.")
+
+                if feature_metadata.datetime_features:
+                    raise UserConfigValidationException(
+                        "The specified metadata datetime_features "
+                        "is only supported for the forecasting task type.")
+            elif (feature_metadata.datetime_features and
+                    len(feature_metadata.datetime_features) > 1):
+                raise UserConfigValidationException(
+                    "Only a single datetime feature is supported at "
+                    "this point.")
 
     def _validate_features_same(self, small_train_features_before,
                                 small_train_data, function):
@@ -834,16 +922,14 @@ class RAIInsights(RAIBaseInsights):
         for all columns"""
         result = []
         for col in feature_columns:
-            res_object = {}
-            if (col in categorical_features):
+            res_object = {_COLUMN_NAME: col}
+            if col in categorical_features:
                 unique_value = test[col].unique()
-                res_object[_COLUMN_NAME] = col
                 res_object[_RANGE_TYPE] = "categorical"
                 res_object[_UNIQUE_VALUES] = unique_value.tolist()
             else:
                 min_value = float(test[col].min())
                 max_value = float(test[col].max())
-                res_object[_COLUMN_NAME] = col
                 res_object[_RANGE_TYPE] = "integer"
                 res_object[_MIN_VALUE] = min_value
                 res_object[_MAX_VALUE] = max_value
@@ -886,17 +972,19 @@ class RAIInsights(RAIBaseInsights):
             meta[Metadata.FEATURE_RANGES]
         if (Metadata.FEATURE_METADATA not in meta or
                 meta[Metadata.FEATURE_METADATA] is None):
-            inst.__dict__['_' + Metadata.FEATURE_METADATA] = None
+            inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata()
         else:
             inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata(
                 identity_feature_name=meta[Metadata.FEATURE_METADATA][
-                    'identity_feature_name'],
+                    _IDENTITY_FEATURE_NAME],
                 datetime_features=meta[Metadata.FEATURE_METADATA][
-                    'datetime_features'],
+                    _DATETIME_FEATURES],
+                time_series_id_features=meta[Metadata.FEATURE_METADATA][
+                    _TIME_SERIES_ID_FEATURES],
                 categorical_features=meta[Metadata.FEATURE_METADATA][
-                    'categorical_features'],
+                    _CATEGORICAL_FEATURES],
                 dropped_features=meta[Metadata.FEATURE_METADATA][
-                    'dropped_features'],)
+                    _DROPPED_FEATURES],)
 
         all_features_names = inst.__dict__['_' + Metadata.FEATURE_COLUMNS]
         categorical_features = inst.__dict__[Metadata.CATEGORICAL_FEATURES]
