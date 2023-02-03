@@ -118,8 +118,8 @@ class FeatureMetadata:
         """
         if column_names is None:
             return
-        for column_name in column_names:
-            if column_name not in feature_names:
+        for column_name in set(column_names):
+            if column_name not in set(feature_names):
                 raise UserConfigValidationException(
                     f'The given {column_purpose} {column_name} is not present '
                     f'in the provided features: {", ".join(feature_names)}.')
