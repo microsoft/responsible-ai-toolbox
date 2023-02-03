@@ -48,6 +48,7 @@ import {
   getBubblePlotData,
   getDataOptions,
   getNewSelections,
+  indexKey,
   instanceOfLocalCausalData,
   selectPointFromChartLargeData,
   shouldUpdateHighchart
@@ -304,6 +305,11 @@ export class LargeCausalIndividualChart extends React.PureComponent<
             <CausalWhatIf
               selectedIndex={this.state.selectedPointsIndexes[0]}
               isLocalCausalDataLoading={this.state.isLocalCausalDataLoading}
+              absoluteIndex={
+                this.state.temporaryPoint
+                  ? this.state.temporaryPoint[absoluteIndexKey]
+                  : undefined
+              }
             />
             {!this.state.isBubbleChartRendered && (
               <DefaultButton
@@ -323,26 +329,6 @@ export class LargeCausalIndividualChart extends React.PureComponent<
   private onRevertButtonClick = (): void => {
     this.setState({ isRevertButtonClicked: true });
   };
-
-  private setTemporaryPointToCopyOfDatasetPoint(
-    index: number,
-    absoluteIndex: number
-  ): void {
-    this.setState({
-      temporaryPoint: {
-        ...this.context.jointDataset.getRow(index),
-        [CausalIndividualConstants.namePath]: localization.formatString(
-          localization.Interpret.WhatIf.defaultCustomRootName,
-          index
-        ),
-        [CausalIndividualConstants.colorPath]:
-          FluentUIStyles.fluentUIColorPalette[
-            CausalIndividualConstants.MAX_SELECTION
-          ],
-        [absoluteIndexKey]: absoluteIndex
-      }
-    });
-  }
 
   private updateBubblePlotData = async (
     chartProps: IGenericChartProps
@@ -436,6 +422,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       this.setLocalCausalData,
       this.toggleSelectionOfPoint,
       this.props.onDataClick,
+      this.setTemporaryPointToCopyOfDatasetPoint,
       this.props.telemetryHook
     );
   };
@@ -506,6 +493,27 @@ export class LargeCausalIndividualChart extends React.PureComponent<
         type: TelemetryEventName.IndividualCausalSelectedDatapointUpdatedFromDropdown
       });
     }
+  };
+
+  private setTemporaryPointToCopyOfDatasetPoint = (
+    index: number,
+    absoluteIndex: number
+  ): void => {
+    this.setState({
+      temporaryPoint: {
+        ...this.context.jointDataset.getRow(index),
+        [CausalIndividualConstants.namePath]: localization.formatString(
+          localization.Interpret.WhatIf.defaultCustomRootName,
+          index
+        ),
+        [CausalIndividualConstants.colorPath]:
+          FluentUIStyles.fluentUIColorPalette[
+            CausalIndividualConstants.MAX_SELECTION
+          ],
+        [absoluteIndexKey]: absoluteIndex,
+        [indexKey]: index
+      }
+    });
   };
 
   private toggleSelectionOfPoint = (index?: number): number[] | undefined => {

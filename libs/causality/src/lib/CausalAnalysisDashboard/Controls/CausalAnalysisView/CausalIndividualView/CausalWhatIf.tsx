@@ -77,6 +77,7 @@ export class CausalWhatIf extends React.Component<
       }));
 
     const classNames = causalWhatIfStyles();
+    console.log("!!values: ", this.context.dataset.target_column);
     return (
       <>
         <ComboBox
@@ -199,9 +200,8 @@ export class CausalWhatIf extends React.Component<
     )[featureKey];
 
     if (ifEnableLargeData(this.context.dataset)) {
-      const testDataRow = await this.getTestDataRow();
-      treatmentValue =
-        this.getLargeDataTreatmentValue(testDataRow, featureName) ?? 0;
+      await this.getTestDataRow();
+      treatmentValue = this.getLargeDataTreatmentValue(featureName) ?? 0;
     }
 
     const meta =
@@ -227,11 +227,16 @@ export class CausalWhatIf extends React.Component<
       treatmentValue,
       featureKey
     );
+    const targetColumn = this.getTargetColumn();
+    const currentOutcome =
+      ifEnableLargeData(this.context.dataset) && targetColumn
+        ? this.state.testDataRow[targetColumn]
+        : this.context.selectedErrorCohort.cohort.getRow(
+            this.props.selectedIndex
+          )[JointDataset.TrueYLabel];
     this.setState(
       {
-        currentOutcome: this.context.selectedErrorCohort.cohort.getRow(
-          this.props.selectedIndex
-        )[JointDataset.TrueYLabel],
+        currentOutcome: currentOutcome,
         currentTreatmentRawValue: rawValue,
         currentTreatmentValue: treatmentValue,
         newTreatmentRawValue: rawValue,
@@ -246,13 +251,19 @@ export class CausalWhatIf extends React.Component<
   };
 
   private readonly getLargeDataTreatmentValue = (
-    testDataRow?: any,
     featureName?: string
   ): number | undefined => {
-    if (!testDataRow || !featureName) {
+    if (!this.state.testDataRow || !featureName) {
       return;
     }
-    return testDataRow[featureName];
+    return this.state.testDataRow[featureName];
+  };
+
+  private readonly getTargetColumn = (): string | undefined => {
+    const targetColumn = Array.isArray(this.context.dataset.target_column)
+      ? this.context.dataset.target_column?.[0]
+      : this.context.dataset.target_column;
+    return targetColumn;
   };
 
   private readonly getWhatIf = async (): Promise<void> => {
@@ -269,11 +280,13 @@ export class CausalWhatIf extends React.Component<
       newOutcome: undefined
     });
     const data = this.getFeaturesData();
-    const targetValue = ifEnableLargeData(this.context.dataset)
-      ? this.state.testDataRow[JointDataset.TrueYLabel]
-      : this.context.selectedErrorCohort.cohort.getRow(
-          this.props.selectedIndex
-        )[JointDataset.TrueYLabel];
+    const targetColumn = this.getTargetColumn();
+    const targetValue =
+      ifEnableLargeData(this.context.dataset) && targetColumn
+        ? this.state.testDataRow[targetColumn]
+        : this.context.selectedErrorCohort.cohort.getRow(
+            this.props.selectedIndex
+          )[JointDataset.TrueYLabel];
     if (this._getWhatIfController) {
       this._getWhatIfController.abort();
     }
@@ -297,19 +310,28 @@ export class CausalWhatIf extends React.Component<
     if (!this.props.selectedIndex) {
       return;
     }
-    const data = _.chain(
-      this.context.selectedErrorCohort.cohort.getRow(this.props.selectedIndex)
-    )
-      .pickBy(
-        (_, k) =>
-          this.context.jointDataset.metaDict[k]?.category ===
-          ColumnCategories.Dataset
+    let data;
+    if (!ifEnableLargeData(this.context.dataset)) {
+      data = _.chain(
+        this.context.selectedErrorCohort.cohort.getRow(this.props.selectedIndex)
       )
-      .mapValues(this.context.jointDataset.getRawValue)
-      .mapKeys((_, k) => this.context.jointDataset.metaDict[k].label)
-      .value();
+        .pickBy(
+          (_, k) =>
+            this.context.jointDataset.metaDict[k]?.category ===
+            ColumnCategories.Dataset
+        )
+        .mapValues(this.context.jointDataset.getRawValue)
+        .mapKeys((_, k) => this.context.jointDataset.metaDict[k].label)
+        .value();
+    } else {
+      const tempTestDataRow = _.cloneDeep(this.state.testDataRow);
+      const targetColumn = this.getTargetColumn();
+      if (targetColumn && tempTestDataRow.hasOwnProperty(targetColumn)) {
+        delete tempTestDataRow[targetColumn];
+      }
+      data = tempTestDataRow;
+    }
     return data;
-    // add for large data
   };
 
   private readonly getTestDataRow = async (): Promise<any> => {
@@ -325,9 +347,8 @@ export class CausalWhatIf extends React.Component<
         new AbortController().signal
       );
       this.setState({
-        testDataRow: result[0]
+        testDataRow: JSON.parse(result)[0]
       });
-      return result[0];
     } catch (error) {}
   };
 }

@@ -25,6 +25,7 @@ import {
 } from "./LargeCausalIndividualChart";
 
 export const absoluteIndexKey = "AbsoluteIndex";
+export const indexKey = "Index";
 
 export async function getBubblePlotData(
   chartProps: IGenericChartProps,
@@ -151,10 +152,17 @@ export async function selectPointFromChartLargeData(
   setLocalCausalData: (absoluteIndex: number) => Promise<void>,
   toggleSelectionOfPoint: (index?: number) => number[] | undefined,
   onDataClick: (data: any, isLocalCausalDataLoading: boolean) => void,
+  setTemporaryPointToCopyOfDatasetPoint: (
+    index: number,
+    absoluteIndex: number
+  ) => void,
   telemetryHook?: ((message: ITelemetryEvent) => void) | undefined
 ): Promise<void> {
   const index = data.customData[JointDataset.IndexLabel];
   const absoluteIndex = data.customData[JointDataset.AbsoluteIndexLabel];
+  index &&
+    absoluteIndex &&
+    setTemporaryPointToCopyOfDatasetPoint(index, absoluteIndex);
   const newSelections = toggleSelectionOfPoint(index);
   if (absoluteIndex && newSelections && newSelections.length > 0) {
     setLocalCausalData(absoluteIndex);
