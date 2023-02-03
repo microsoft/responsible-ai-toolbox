@@ -303,6 +303,11 @@ def validate_rai_insights(
     if feature_columns is not None:
         assert rai_insights._feature_columns == (feature_columns or [])
     if feature_metadata is not None:
+        # mismatch between categorical_features passed in RAIInsights
+        # constructor and the categorical_features set on the feature_metadata
+        if (categorical_features is not None and
+                feature_metadata.categorical_features is None):
+            feature_metadata.categorical_features = categorical_features
         assert rai_insights._feature_metadata == feature_metadata
     assert target_column not in rai_insights._feature_columns
 
