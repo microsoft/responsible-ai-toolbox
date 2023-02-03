@@ -28,6 +28,7 @@ import { Outcome } from "./Outcome";
 
 export interface ICausalWhatIfProps {
   selectedIndex: number | undefined;
+  isLocalCausalDataLoading?: boolean;
 }
 interface ICausalWhatIfState {
   treatmentFeature?: string;
@@ -83,6 +84,7 @@ export class CausalWhatIf extends React.Component<
           styles={FluentUIStyles.smallDropdownStyle}
           selectedKey={this.state.treatmentFeature}
           onChange={this.setTreatmentFeature}
+          disabled={this.props.isLocalCausalDataLoading}
         />
         {this.state.currentTreatmentValue !== undefined && (
           <Text className={classNames.boldText}>

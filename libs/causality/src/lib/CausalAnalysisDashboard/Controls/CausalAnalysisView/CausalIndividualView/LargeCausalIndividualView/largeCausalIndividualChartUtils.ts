@@ -150,7 +150,7 @@ export async function selectPointFromChartLargeData(
   data: IScatterPoint,
   setLocalCausalData: (absoluteIndex: number) => Promise<void>,
   toggleSelectionOfPoint: (index?: number) => number[] | undefined,
-  onDataClick: (data: any) => void,
+  onDataClick: (data: any, isLocalCausalDataLoading: boolean) => void,
   telemetryHook?: ((message: ITelemetryEvent) => void) | undefined
 ): Promise<void> {
   const index = data.customData[JointDataset.IndexLabel];
@@ -159,7 +159,7 @@ export async function selectPointFromChartLargeData(
   if (absoluteIndex && newSelections && newSelections.length > 0) {
     setLocalCausalData(absoluteIndex);
   } else {
-    onDataClick(undefined);
+    onDataClick(undefined, false);
   }
   telemetryHook?.({
     level: TelemetryLevels.ButtonClick,

@@ -9,7 +9,8 @@
     "decreaseValue": "Decrease value",
     "increaseValue": "Increase value",
     "decreaseValueByOne": "Decrease value by 1",
-    "increaseValueByOne": "Increase value by 1"
+    "increaseValueByOne": "Increase value by 1",
+    "loading": "Loading..."
   },
   "ChartContextMenu": {
     "hideData": "Hide data table",

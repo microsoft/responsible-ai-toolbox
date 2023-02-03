@@ -55,7 +55,10 @@ import {
 export interface ICausalIndividualChartProps {
   causalId: string;
   cohort: Cohort;
-  onDataClick: (data: number | undefined | any) => void;
+  onDataClick: (
+    data: number | undefined | any,
+    isLocalCausalDataLoading: boolean
+  ) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
@@ -293,8 +296,12 @@ export class LargeCausalIndividualChart extends React.PureComponent<
               ariaLabel={"datapoint picker"}
               useComboBoxAsMenuWidth
               styles={FluentUIStyles.smallDropdownStyle}
+              disabled={this.state.isLocalCausalDataLoading}
             />
-            <CausalWhatIf selectedIndex={this.state.selectedPointsIndexes[0]} />
+            <CausalWhatIf
+              selectedIndex={this.state.selectedPointsIndexes[0]}
+              isLocalCausalDataLoading={this.state.isLocalCausalDataLoading}
+            />
           </Stack>
         )}
       </Stack>
@@ -334,7 +341,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       xSeries: [],
       ySeries: []
     });
-    this.props.onDataClick(undefined);
+    this.props.onDataClick(undefined, false);
     const datasetBarConfigOverride = await getBubblePlotData(
       chartProps,
       this.props.cohort,
@@ -422,6 +429,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       isLocalCausalDataLoading: true,
       localCausalErrorMessage: undefined
     });
+    this.props.onDataClick(undefined, true);
     const localCausalData = await getLocalCausalFromSDK(
       this.props.causalId,
       absoluteIndex,
@@ -443,7 +451,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       isLocalCausalDataLoading: false,
       localCausalData: localCausalData
     });
-    this.props.onDataClick(localCausalData);
+    this.props.onDataClick(localCausalData, false);
   };
 
   private onXSet = (value: ISelectorConfig): void => {
@@ -475,7 +483,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       if (newSelections && newSelections.length > 0) {
         this.setLocalCausalData(item.data.index);
       } else {
-        this.props.onDataClick(undefined);
+        this.props.onDataClick(undefined, false);
       }
       this.props.telemetryHook?.({
         level: TelemetryLevels.ButtonClick,

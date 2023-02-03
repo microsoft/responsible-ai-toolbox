@@ -7,6 +7,7 @@ import {
   ICausalAnalysisSingleData,
   ITelemetryEvent,
   LabelWithCallout,
+  LoadingSpinner,
   MissingParametersPlaceholder,
   ModelAssessmentContext,
   TelemetryEventName
@@ -27,6 +28,7 @@ export interface ILargeCausalIndividualViewProps {
 }
 interface ILargeCausalIndividualViewState {
   selectedData?: ICausalAnalysisSingleData[];
+  isLocalCausalDataLoading: boolean;
 }
 
 export class LargeCausalIndividualView extends React.PureComponent<
@@ -39,7 +41,8 @@ export class LargeCausalIndividualView extends React.PureComponent<
   public constructor(props: ILargeCausalIndividualViewProps) {
     super(props);
     this.state = {
-      selectedData: undefined
+      selectedData: undefined,
+      isLocalCausalDataLoading: false
     };
   }
 
@@ -98,28 +101,38 @@ export class LargeCausalIndividualView extends React.PureComponent<
             </Stack.Item>
           </Stack>
         </Stack.Item>
-        <Stack.Item className={styles.individualTable}>
-          {this.state.selectedData ? (
-            <CausalAggregateTable data={this.state.selectedData} />
-          ) : (
-            <MissingParametersPlaceholder>
-              {localization.CausalAnalysis.IndividualView.dataRequired}
-            </MissingParametersPlaceholder>
-          )}
-        </Stack.Item>
-        <Stack.Item className={styles.aggregateChart}>
-          {this.state.selectedData && (
-            <CausalAggregateChart data={this.state.selectedData} />
-          )}
-        </Stack.Item>
+        {this.state.isLocalCausalDataLoading ? (
+          <LoadingSpinner label={localization.Common.loading} />
+        ) : (
+          <Stack.Item>
+            <Stack.Item className={styles.individualTable}>
+              {this.state.selectedData ? (
+                <CausalAggregateTable data={this.state.selectedData} />
+              ) : (
+                <MissingParametersPlaceholder>
+                  {localization.CausalAnalysis.IndividualView.dataRequired}
+                </MissingParametersPlaceholder>
+              )}
+            </Stack.Item>
+            <Stack.Item className={styles.aggregateChart}>
+              {this.state.selectedData && (
+                <CausalAggregateChart data={this.state.selectedData} />
+              )}
+            </Stack.Item>
+          </Stack.Item>
+        )}
       </Stack>
     );
   }
-  private readonly handleOnClick = (localCausalData: any): void => {
+  private readonly handleOnClick = (
+    localCausalData: any,
+    isLocalCausalDataLoading: boolean
+  ): void => {
     this.setState({
       selectedData: localCausalData
         ? localCausalData?.local_effects[0]
-        : undefined
+        : undefined,
+      isLocalCausalDataLoading: isLocalCausalDataLoading
     });
   };
 
