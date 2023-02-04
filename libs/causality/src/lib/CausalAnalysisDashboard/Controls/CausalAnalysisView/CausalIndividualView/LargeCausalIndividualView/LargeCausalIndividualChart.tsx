@@ -96,16 +96,16 @@ export class LargeCausalIndividualChart extends React.PureComponent<
     super(props);
     this.state = {
       bubbleChartErrorMessage: undefined,
-      selectedPointsIndexes: [],
       indexSeries: [],
-      isRevertButtonClicked: false,
       isBubbleChartDataLoading: false,
       isBubbleChartRendered: true,
       isLocalCausalDataLoading: false,
+      isRevertButtonClicked: false,
+      localCausalData: undefined,
       plotData: undefined,
+      selectedPointsIndexes: [],
       xSeries: [],
-      ySeries: [],
-      localCausalData: undefined
+      ySeries: []
     };
   }
 
@@ -363,17 +363,17 @@ export class LargeCausalIndividualChart extends React.PureComponent<
           .toString()
           .split(":")
           .pop(),
-        plotData: undefined,
-        isBubbleChartDataLoading: false
+        isBubbleChartDataLoading: false,
+        plotData: undefined
       });
       return;
     }
     this.setState({
       chartProps,
-      plotData: datasetBarConfigOverride,
       isBubbleChartDataLoading: false,
       isBubbleChartRendered: true,
-      isRevertButtonClicked: false
+      isRevertButtonClicked: false,
+      plotData: datasetBarConfigOverride
     });
   };
 
@@ -393,9 +393,9 @@ export class LargeCausalIndividualChart extends React.PureComponent<
     );
     this.setState({
       chartProps,
-      plotData: datasetBarConfigOverride,
       isBubbleChartRendered: false,
-      isRevertButtonClicked: false
+      isRevertButtonClicked: false,
+      plotData: datasetBarConfigOverride
     });
   };
 
@@ -452,7 +452,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
     }
     this.setState({
       isLocalCausalDataLoading: false,
-      localCausalData: localCausalData
+      localCausalData
     });
     this.props.onDataClick(localCausalData, false);
   };

@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption } from "@fluentui/react";
 import {
   calculateBubblePlotDataFromErrorCohort,
   Cohort,
@@ -16,9 +17,8 @@ import {
   TelemetryEventName,
   TelemetryLevels
 } from "@responsible-ai/core-ui";
-
-import { IComboBoxOption } from "@fluentui/react";
 import _ from "lodash";
+
 import {
   ICausalIndividualChartProps,
   ICausalIndividualChartState

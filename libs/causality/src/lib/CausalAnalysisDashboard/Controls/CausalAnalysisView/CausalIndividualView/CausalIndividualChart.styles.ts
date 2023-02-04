@@ -21,6 +21,13 @@ export const causalIndividualChartStyles: () => IProcessedStyleSet<ICausalIndivi
   () => {
     const legendWidth = "400px";
     return mergeStyleSets<ICausalIndividualChartStyles>({
+      buttonStyle: {
+        marginBottom: "10px",
+        marginTop: "10px !important",
+        paddingBottom: "10px",
+        paddingTop: "10px",
+        width: "150px"
+      },
       chart: flexLgDown,
       chartWithAxes: {
         width: "80%",
@@ -61,13 +68,6 @@ export const causalIndividualChartStyles: () => IProcessedStyleSet<ICausalIndivi
         position: "relative",
         top: "0px",
         width: "67px"
-      },
-      buttonStyle: {
-        marginBottom: "10px",
-        marginTop: "10px !important",
-        paddingBottom: "10px",
-        paddingTop: "10px",
-        width: "150px"
       }
     });
   };

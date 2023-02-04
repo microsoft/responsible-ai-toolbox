@@ -41,8 +41,8 @@ export class LargeCausalIndividualView extends React.PureComponent<
   public constructor(props: ILargeCausalIndividualViewProps) {
     super(props);
     this.state = {
-      selectedData: undefined,
-      isLocalCausalDataLoading: false
+      isLocalCausalDataLoading: false,
+      selectedData: undefined
     };
   }
 
@@ -129,10 +129,10 @@ export class LargeCausalIndividualView extends React.PureComponent<
     isLocalCausalDataLoading: boolean
   ): void => {
     this.setState({
+      isLocalCausalDataLoading,
       selectedData: localCausalData
         ? localCausalData?.local_effects[0]
-        : undefined,
-      isLocalCausalDataLoading: isLocalCausalDataLoading
+        : undefined
     });
   };
 

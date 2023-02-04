@@ -77,7 +77,7 @@ export class CausalWhatIf extends React.Component<
       }));
 
     const classNames = causalWhatIfStyles();
-    console.log("!!values: ", this.context.dataset.target_column);
+    console.log("!!values:", this.context.dataset.target_column);
     return (
       <>
         <ComboBox
@@ -236,7 +236,7 @@ export class CausalWhatIf extends React.Component<
           )[JointDataset.TrueYLabel];
     this.setState(
       {
-        currentOutcome: currentOutcome,
+        currentOutcome,
         currentTreatmentRawValue: rawValue,
         currentTreatmentValue: treatmentValue,
         newTreatmentRawValue: rawValue,
@@ -326,7 +326,7 @@ export class CausalWhatIf extends React.Component<
     } else {
       const tempTestDataRow = _.cloneDeep(this.state.testDataRow);
       const targetColumn = this.getTargetColumn();
-      if (targetColumn && tempTestDataRow.hasOwnProperty(targetColumn)) {
+      if (targetColumn) {
         delete tempTestDataRow[targetColumn];
       }
       data = tempTestDataRow;
@@ -349,6 +349,6 @@ export class CausalWhatIf extends React.Component<
       this.setState({
         testDataRow: JSON.parse(result)[0]
       });
-    } catch (error) {}
+    } catch {}
   };
 }
