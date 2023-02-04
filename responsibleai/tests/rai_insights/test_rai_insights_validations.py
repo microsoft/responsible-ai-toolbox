@@ -47,13 +47,13 @@ class TestRAIInsightsValidations:
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
 
+        length = len(y_test)
         with pytest.warns(
                 UserWarning,
-                match="The size of test set {0} is greater than "
-                      "supported limit of {1}. Computing insights"
-                      " for first {1} samples "
-                      "of test set".format(len(y_test),
-                                           len(y_test) - 1)):
+                match=f"The size of test set {length} is greater than "
+                      f"supported limit of {length - 1}. Computing "
+                      f"insights for first {length - 1} samples "
+                      "of test set"):
             RAIInsights(
                 model=model,
                 train=X_train,
@@ -492,11 +492,10 @@ class TestRAIInsightsValidations:
 
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
-        from responsibleai.feature_metadata import FeatureMetadata
         feature_metadata = FeatureMetadata(identity_feature_name='id')
 
         err_msg = ('The given identity feature name id is not present'
-                   ' in user features.')
+                   f' in the provided features: {", ".join(X_train.columns)}.')
         with pytest.raises(UserConfigValidationException, match=err_msg):
             RAIInsights(
                 model=model,
@@ -531,6 +530,143 @@ class TestRAIInsightsValidations:
 
         assert "The following string features were not " + \
             "identified as categorical features: {\'c1\'}" in str(ucve.value)
+
+    @pytest.mark.parametrize(
+        'categorical_features',
+        [[], ["c1"], ["c2"], ["c1", "c2"]])
+    @pytest.mark.parametrize('no_feature_metadata', [True, False])
+    def test_feature_metadata_and_categorical_features_deprecation_warning(
+            self, categorical_features, no_feature_metadata):
+        X = pd.DataFrame(data=[[1, 1], [2, 3]], columns=['c1', 'c2'])
+        y = np.array([1, 0])
+        model = create_lightgbm_classifier(X, y)
+
+        X[TARGET] = y
+        feature_metadata = FeatureMetadata(
+            categorical_features=categorical_features) \
+            if no_feature_metadata else None
+
+        with pytest.warns(
+                UserWarning,
+                match="The categorical_features argument on the "
+                      "RAIInsights constructor is deprecated and will "
+                      "be removed after version 0.26. Please provide "
+                      "categorical features via the feature_metadata "
+                      "argument instead."):
+            RAIInsights(
+                model=model,
+                train=X,
+                test=X,
+                target_column=TARGET,
+                task_type='classification',
+                categorical_features=categorical_features,
+                feature_metadata=feature_metadata)
+
+    @pytest.mark.parametrize(
+        'categorical_features',
+        [([], ['c1']),
+         (['c1'], []),
+         (['c1'], ['c2']),
+         (['c1'], ['c1', 'c2']),
+         (['c1', 'c2'], ['c1']),
+         ([], ['c1', 'c2']),
+         (['c1', 'c2'], [])])
+    def test_feature_metadata_and_categorical_features_mismatch(
+            self, categorical_features):
+        arg_categorical_features, feature_metadata_categorical_features = \
+            categorical_features
+        X = pd.DataFrame(data=[[1, 1], [2, 3]], columns=['c1', 'c2'])
+        y = np.array([1, 0])
+        model = create_lightgbm_classifier(X, y)
+
+        X[TARGET] = y
+        feature_metadata = FeatureMetadata(
+            categorical_features=feature_metadata_categorical_features)
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match='The categorical_features provided via the '
+                      'RAIInsights constructor and the categorical_features '
+                      'provided via the feature_metadata argument do not '
+                      'match.'):
+            RAIInsights(
+                model=model,
+                train=X,
+                test=X,
+                target_column=TARGET,
+                task_type='classification',
+                categorical_features=arg_categorical_features,
+                feature_metadata=feature_metadata)
+
+    @pytest.mark.parametrize(
+        'categorical_features',
+        [None, ['c1'], ['c1', 'c2']])
+    def test_feature_metadata_categorical_features_only(
+            self, categorical_features):
+        X = pd.DataFrame(data=[[1, 1], [2, 3]], columns=['c1', 'c2'])
+        y = np.array([1, 0])
+        model = create_lightgbm_classifier(X, y)
+
+        X[TARGET] = y
+        feature_metadata = FeatureMetadata(
+            categorical_features=categorical_features)
+
+        RAIInsights(
+            model=model,
+            train=X,
+            test=X,
+            target_column=TARGET,
+            task_type='classification',
+            feature_metadata=feature_metadata)
+
+    @pytest.mark.parametrize("feature_metadata", [
+        FeatureMetadata(datetime_features=['c1']),
+        FeatureMetadata(time_series_id_features=['c1'])
+    ])
+    def test_feature_metadata_unsupported_time_series_features(
+            self, feature_metadata):
+        X = pd.DataFrame(data=[[1, 1], [2, 3]], columns=['c1', 'c2'])
+        y = np.array([1, 0])
+        model = create_lightgbm_classifier(X, y)
+        X[TARGET] = y
+
+        changed_metadata_field = [
+            k for k in feature_metadata.__dict__.keys()
+            if feature_metadata.__dict__[k] is not None][0]
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match=f"The specified metadata {changed_metadata_field} is "
+                      "only supported for the forecasting task type."):
+            RAIInsights(
+                model=model,
+                train=X,
+                test=X,
+                target_column=TARGET,
+                task_type='classification',
+                feature_metadata=feature_metadata)
+
+    @pytest.mark.skip(
+        "Skip forecasting validation test until forecasting is enabled.")
+    def test_feature_metadata_forecasting_multiple_datetime_features(self):
+        X = pd.DataFrame(data=[[1, 1], [2, 3]], columns=['c1', 'c2'])
+        y = np.array([1, 0])
+        model = MagicMock()
+        model.forecast.return_value = y
+        X[TARGET] = y
+        feature_metadata = FeatureMetadata(datetime_features=['c1', 'c2'])
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="Only a single datetime feature is supported at "
+                      "this point."):
+            RAIInsights(
+                model=model,
+                train=X,
+                test=X,
+                target_column=TARGET,
+                task_type='forecasting',
+                feature_metadata=feature_metadata)
 
 
 class TestCausalUserConfigValidations:
