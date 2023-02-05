@@ -50,10 +50,10 @@ class TestRAIInsightsValidations:
         length = len(y_test)
         with pytest.warns(
                 UserWarning,
-                match=f"The size of test set {length} is greater than "
-                      f"supported limit of {length - 1}. Computing "
-                      f"insights for first {length - 1} samples "
-                      "of test set"):
+                match=f"The size of the test set {length} is greater than "
+                      f"the supported limit of {length - 1}. Computing "
+                      f"insights for the first {length - 1} samples of the "
+                      "test set"):
             RAIInsights(
                 model=model,
                 train=X_train,
@@ -239,8 +239,8 @@ class TestRAIInsightsValidations:
                 target_column=TARGET,
                 task_type='classification')
 
-        assert 'The model passed cannot be used for getting predictions ' + \
-            'via predict()' in str(ucve.value)
+        assert 'The passed model cannot be used for getting predictions ' + \
+            'via predict' in str(ucve.value)
 
     def test_model_predictions_predict_proba(self):
         X_train, X_test, y_train, y_test, _, _ = \
@@ -261,8 +261,8 @@ class TestRAIInsightsValidations:
                 target_column=TARGET,
                 task_type='classification')
 
-        assert 'The model passed cannot be used for getting predictions ' + \
-            'via predict_proba()' in str(ucve.value)
+        assert 'The passed model cannot be used for getting predictions ' + \
+            'via predict_proba' in str(ucve.value)
 
     def test_incorrect_task_type(self):
         X_train, X_test, y_train, y_test, _, _ = \
@@ -272,9 +272,8 @@ class TestRAIInsightsValidations:
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
 
-        err_msg = ('The regression model'
-                   'provided has a predict_proba function. '
-                   'Please check the task_type.')
+        err_msg = ('The regression model provided has a predict_proba '
+                   'function. Please check the task_type.')
         with pytest.raises(UserConfigValidationException, match=err_msg):
             RAIInsights(
                 model=model,
@@ -1001,7 +1000,7 @@ class TestCounterfactualUserConfigValidations:
 
         message = ('Calling model predict_proba function modifies '
                    'input dataset features. Please check if '
-                   'predict function is defined correctly.')
+                   'predict_proba function is defined correctly.')
         with pytest.raises(
                 UserConfigValidationException, match=message):
             RAIInsights(
