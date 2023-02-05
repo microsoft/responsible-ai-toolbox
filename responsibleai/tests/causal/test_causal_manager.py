@@ -6,7 +6,7 @@ from unittest.mock import ANY, patch
 import numpy as np
 import pytest
 
-from responsibleai import RAIInsights, ModelTask
+from responsibleai import ModelTask, RAIInsights
 from responsibleai._interfaces import CausalData
 from responsibleai._internal.constants import FileFormats
 from responsibleai._tools.shared.state_directory_management import \

@@ -3,12 +3,12 @@
 
 """Defines the RAIInsights class."""
 
-from enum import Enum
 import inspect
 import json
 import pickle
 import sys
 import warnings
+from enum import Enum
 from pathlib import Path
 from typing import Any, List, Optional, Union
 
@@ -19,10 +19,10 @@ from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
 from raiutils.models import SKLearn
-from responsibleai.rai_insights import ModelTask
 from responsibleai._interfaces import Dataset, RAIInsightsData
-from responsibleai._internal.constants import (
-    FileFormats, ManagerNames, Metadata, SerializationAttributes)
+from responsibleai._internal.constants import (FileFormats, ManagerNames,
+                                               Metadata,
+                                               SerializationAttributes)
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.managers.causal_manager import CausalManager
@@ -30,6 +30,7 @@ from responsibleai.managers.counterfactual_manager import CounterfactualManager
 from responsibleai.managers.data_balance_manager import DataBalanceManager
 from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai.managers.explainer_manager import ExplainerManager
+from responsibleai.rai_insights import ModelTask
 from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
 
 _TRAIN_LABELS = 'train_labels'
