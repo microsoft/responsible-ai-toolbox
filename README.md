@@ -1,4 +1,14 @@
-![Responsible AI Widgets Python Build](https://github.com/microsoft/responsible-ai-widgets/workflows/Responsible%20AI%20Widgets/badge.svg) ![CD](https://github.com/microsoft/responsible-ai-widgets/workflows/CD/badge.svg) ![MIT license](https://img.shields.io/badge/License-MIT-blue.svg) ![PyPI raiwidgets](https://img.shields.io/pypi/v/raiwidgets?color=blue) ![PyPI rai_core_flask](https://img.shields.io/pypi/v/rai_core_flask?color=blue) ![npm fairness](https://img.shields.io/npm/v/@responsible-ai/fairness?label=npm%20%40responsible-ai%2Ffairness) ![npm interpret](https://img.shields.io/npm/v/@responsible-ai/interpret?label=npm%20%40responsible-ai%2Finterpret) ![npm mlchartlib](https://img.shields.io/npm/v/@responsible-ai/mlchartlib?label=npm%20%40responsible-ai%2Fmlchartlib) ![npm core-ui](https://img.shields.io/npm/v/@responsible-ai/core-ui?label=npm%20%40responsible-ai%2Fcore-ui) ![npm dataset-explorer](https://img.shields.io/npm/v/@responsible-ai/dataset-explorer?label=npm%20%40responsible-ai%2Fdataset-explorer) ![npm causality](https://img.shields.io/npm/v/@responsible-ai/causality?label=npm%20%40responsible-ai%2Fcausality) ![npm counterfactuals](https://img.shields.io/npm/v/@responsible-ai/counterfactuals?label=npm%20%40responsible-ai%2Fcounterfactuals)
+![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)
+
+![Responsible AI Widgets Python Build](https://img.shields.io/github/actions/workflow/status/microsoft/responsible-ai-toolbox/CI-raiwidgets-pytest.yml?branch=main&label=Responsible%20AI%20Widgets%20Python%20Build)
+![UI deployment to test environment](https://img.shields.io/github/actions/workflow/status/microsoft/responsible-ai-toolbox/CD.yml?branch=main&label=UI%20deployment%20to%20test%20environment)
+
+![PyPI raiwidgets](https://img.shields.io/pypi/v/raiwidgets?label=PyPI%20raiwidgets)
+![PyPI responsibleai](https://img.shields.io/pypi/v/responsibleai?label=PyPI%20responsibleai)
+![PyPI erroranalysis](https://img.shields.io/pypi/v/erroranalysis?label=PyPI%20erroranalysis)
+![PyPI raiutils](https://img.shields.io/pypi/v/raiutils?label=PyPI%20raiutils)
+
+![npm model-assessment](https://img.shields.io/npm/v/@responsible-ai/model-assessment?label=npm%20%40responsible-ai%2Fmodel-assessment)
 
 # Responsible AI Toolbox
 Responsible AI is an approach to assessing, developing, and deploying AI systems in a safe, trustworthy, and ethical manner, and take responsible decisions and actions.
