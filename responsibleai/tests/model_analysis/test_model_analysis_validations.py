@@ -28,7 +28,7 @@ class TestModelAnalysisValidations:
 
         message = ("Unsupported task type 'regre'. "
                    "Should be one of \\['classification', "
-                   "'regression', 'forecasting'\\]")
+                   "'regression'\\]")
         with pytest.raises(UserConfigValidationException, match=message):
             ModelAnalysis(
                 model=model,

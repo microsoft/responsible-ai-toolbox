@@ -98,7 +98,7 @@ class TestFeatureMetadata:
         feature_metadata_dict = feature_metadata.to_dict()
         expected_feature_metadata_dict = {
             'identity_feature_name': None,
-            'time_column_name': None,
+            'datetime_features': None,
             'categorical_features': None,
             'dropped_features': ['d1', 'd2'],
             'time_series_id_features': None

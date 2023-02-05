@@ -21,9 +21,8 @@ from raiutils.data_processing import convert_to_list
 from raiutils.models import SKLearn
 from responsibleai.rai_insights import ModelTask
 from responsibleai._interfaces import Dataset, RAIInsightsData
-from responsibleai._internal.constants import (FileFormats, ManagerNames,
-                                               Metadata,
-                                               SerializationAttributes)
+from responsibleai._internal.constants import (
+    FileFormats, ManagerNames, Metadata, SerializationAttributes)
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.managers.causal_manager import CausalManager
@@ -49,6 +48,7 @@ _DATETIME_FEATURES = 'datetime_features'
 _TIME_SERIES_ID_FEATURES = 'time_series_id_features'
 _CATEGORICAL_FEATURES = 'categorical_features'
 _DROPPED_FEATURES = 'dropped_features'
+_FORECASTING_RAI_INSIGHTS_ENABLED = "forecasting_enabled"
 
 
 _DATA_TO_FILE_MAPPING = {
@@ -163,7 +163,8 @@ class RAIInsights(RAIBaseInsights):
                  classes: Optional[np.ndarray] = None,
                  serializer: Optional[Any] = None,
                  maximum_rows_for_test: int = 5000,
-                 feature_metadata: Optional[FeatureMetadata] = None):
+                 feature_metadata: Optional[FeatureMetadata] = None,
+                 **kwargs):
         """Creates an RAIInsights object.
         :param model: The model to compute RAI insights for.
             A model that implements sklearn-style predict or predict_proba
@@ -204,10 +205,11 @@ class RAIInsights(RAIBaseInsights):
 
         self._large_test = None
         if len(test) > maximum_rows_for_test:
-            warnings.warn(f"The size of test set {len(test)} is greater than "
-                          f"supported limit of {maximum_rows_for_test}. "
-                          "Computing insights for first "
-                          f"{maximum_rows_for_test} samples of test set")
+            warnings.warn(f"The size of the test set {len(test)} is greater "
+                          "than the supported limit of "
+                          f"{maximum_rows_for_test}. Computing insights for "
+                          f"the first {maximum_rows_for_test} samples of "
+                          "the test set")
             self._large_test = test.copy()
             test = test.copy()[0:maximum_rows_for_test]
 
@@ -231,7 +233,8 @@ class RAIInsights(RAIBaseInsights):
             task_type=task_type,
             classes=classes,
             serializer=serializer,
-            feature_metadata=self._feature_metadata)
+            feature_metadata=self._feature_metadata,
+            **kwargs)
 
         self._classes = RAIInsights._get_classes(
             task_type=task_type,
@@ -443,7 +446,8 @@ class RAIInsights(RAIBaseInsights):
             task_type: str,
             classes: np.ndarray,
             serializer,
-            feature_metadata: FeatureMetadata):
+            feature_metadata: FeatureMetadata,
+            **kwargs):
         """Validate the inputs for the RAIInsights constructor.
 
         :param model: The model to compute RAI insights for.
@@ -470,12 +474,15 @@ class RAIInsights(RAIBaseInsights):
             dataset to identify various kinds of features in the dataset.
         :type feature_metadata: FeatureMetadata
         """
-
         valid_tasks = [
             ModelTask.CLASSIFICATION.value,
-            ModelTask.REGRESSION.value,
-            ModelTask.FORECASTING.value
+            ModelTask.REGRESSION.value
         ]
+        # Check if forecasting feature flag was passed as kwarg.
+        # We specifically do not advertise for this until we want people to
+        # use it.
+        if kwargs.get(_FORECASTING_RAI_INSIGHTS_ENABLED, False):
+            valid_tasks.append(ModelTask.FORECASTING.value)
         if task_type not in valid_tasks:
             message = (f"Unsupported task type '{task_type}'. "
                        f"Should be one of {valid_tasks}")
@@ -643,7 +650,7 @@ class RAIInsights(RAIBaseInsights):
             if task_type == ModelTask.REGRESSION:
                 if hasattr(model, SKLearn.PREDICT_PROBA):
                     raise UserConfigValidationException(
-                        'The regression model'
+                        'The regression model '
                         'provided has a predict_proba function. '
                         'Please check the task_type.')
             
