@@ -80,6 +80,10 @@ export interface IModelAssessmentContext {
     causalId: string,
     absoluteIndex: number,
     abortSignal: AbortSignal
+  ) => Promise<unknown>;
+  requestTestDataRow?: (
+    absoluteIndex: number,
+    abortSignal: AbortSignal
   ) => Promise<any>;
   requestGlobalCausalEffects?: (
     id: string,

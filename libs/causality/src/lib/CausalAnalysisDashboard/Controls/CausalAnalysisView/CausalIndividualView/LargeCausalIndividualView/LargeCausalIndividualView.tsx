@@ -7,6 +7,7 @@ import {
   ICausalAnalysisSingleData,
   ITelemetryEvent,
   LabelWithCallout,
+  LoadingSpinner,
   MissingParametersPlaceholder,
   ModelAssessmentContext,
   TelemetryEventName
@@ -20,25 +21,27 @@ import { CausalIndividualStyles } from "../CausalIndividual.styles";
 
 import { LargeCausalIndividualChart } from "./LargeCausalIndividualChart";
 
-export interface ICausalIndividualViewProps {
+export interface ILargeCausalIndividualViewProps {
   causalId: string;
   localEffects: ICausalAnalysisSingleData[][];
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
-interface ICausalIndividualViewState {
+interface ILargeCausalIndividualViewState {
   selectedData?: ICausalAnalysisSingleData[];
+  isLocalCausalDataLoading: boolean;
 }
 
 export class LargeCausalIndividualView extends React.PureComponent<
-  ICausalIndividualViewProps,
-  ICausalIndividualViewState
+  ILargeCausalIndividualViewProps,
+  ILargeCausalIndividualViewState
 > {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
-  public constructor(props: ICausalIndividualViewProps) {
+  public constructor(props: ILargeCausalIndividualViewProps) {
     super(props);
     this.state = {
+      isLocalCausalDataLoading: false,
       selectedData: undefined
     };
   }
@@ -98,35 +101,48 @@ export class LargeCausalIndividualView extends React.PureComponent<
             </Stack.Item>
           </Stack>
         </Stack.Item>
-        <Stack.Item className={styles.individualTable}>
-          {this.state.selectedData ? (
-            <CausalAggregateTable data={this.state.selectedData} />
-          ) : (
-            <MissingParametersPlaceholder>
-              {localization.CausalAnalysis.IndividualView.dataRequired}
-            </MissingParametersPlaceholder>
-          )}
-        </Stack.Item>
-        <Stack.Item className={styles.aggregateChart}>
-          {this.state.selectedData && (
-            <CausalAggregateChart data={this.state.selectedData} />
-          )}
-        </Stack.Item>
+        {this.state.isLocalCausalDataLoading ? (
+          <LoadingSpinner label={localization.Common.loading} />
+        ) : (
+          <Stack.Item>
+            <Stack.Item className={styles.individualTable}>
+              {this.state.selectedData ? (
+                <CausalAggregateTable data={this.state.selectedData} />
+              ) : (
+                <MissingParametersPlaceholder>
+                  {localization.CausalAnalysis.IndividualView.dataRequired}
+                </MissingParametersPlaceholder>
+              )}
+            </Stack.Item>
+            <Stack.Item className={styles.aggregateChart}>
+              {this.state.selectedData && (
+                <CausalAggregateChart data={this.state.selectedData} />
+              )}
+            </Stack.Item>
+          </Stack.Item>
+        )}
       </Stack>
     );
   }
-  private readonly handleOnClick = (dataIndex: number | undefined): void => {
+  private readonly handleOnClick = (
+    localCausalData: any,
+    isLocalCausalDataLoading: boolean
+  ): void => {
     this.setState({
-      selectedData: this.getDataFromIndex(dataIndex)
+      isLocalCausalDataLoading,
+      selectedData: localCausalData
+        ? localCausalData?.local_effects[0]
+        : undefined
     });
   };
-  private readonly getDataFromIndex = (
-    dataIndex: number | undefined
-  ): ICausalAnalysisSingleData[] | undefined => {
-    const causalLocal = this.context?.causalAnalysisData?.local_effects;
-    if (!(dataIndex !== undefined && dataIndex >= 0 && causalLocal)) {
-      return undefined;
-    }
-    return causalLocal[dataIndex].sort((d1, d2) => d2.point - d1.point);
-  };
+
+  //   private readonly getDataFromIndex = (
+  //     dataIndex: number | undefined
+  //   ): ICausalAnalysisSingleData[] | undefined => {
+  //     const causalLocal = this.context?.causalAnalysisData?.local_effects;
+  //     if (!(dataIndex !== undefined && dataIndex >= 0 && causalLocal)) {
+  //       return undefined;
+  //     }
+  //     return causalLocal[dataIndex].sort((d1, d2) => d2.point - d1.point);
+  //   };
 }
