@@ -276,8 +276,6 @@ export class TableView extends React.Component<
       () => false, // don't filter any items
       indices
     );
-    console.log("###filteredDataRows", filteredDataRows);
-    console.log("###rows", rows);
 
     const numCols: number = this.props.jointDataset.datasetFeatureCount;
     const featureNames: string[] = this.props.features;
