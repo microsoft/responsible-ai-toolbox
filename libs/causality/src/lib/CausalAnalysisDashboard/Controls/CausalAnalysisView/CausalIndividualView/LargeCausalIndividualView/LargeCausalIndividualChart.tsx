@@ -52,20 +52,18 @@ export class LargeCausalIndividualChart extends React.PureComponent<
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
   private changedKeys: string[] = [];
-  private readonly chartAndConfigsId = "CausalIndividualChart";
   public constructor(props: ILargeCausalIndividualChartProps) {
     super(props);
     this.state = getInitialSpec();
   }
 
   public componentDidMount(): void {
-    const chartProps = generateDefaultChartAxes(
-      this.context.jointDataset,
-      OtherChartTypes.Bubble
-    );
     if (!this.state.chartProps) {
       this.setState({
-        chartProps
+        chartProps: generateDefaultChartAxes(
+          this.context.jointDataset,
+          OtherChartTypes.Bubble
+        )
       });
     }
   }
@@ -110,35 +108,21 @@ export class LargeCausalIndividualChart extends React.PureComponent<
 
   public render(): React.ReactNode {
     const classNames = causalIndividualChartStyles();
-    if (!this.context.jointDataset.hasDataset) {
-      return (
-        <MissingParametersPlaceholder>
-          {localization.CausalAnalysis.IndividualView.dataRequired}
-        </MissingParametersPlaceholder>
-      );
-    }
-    if (this.state.chartProps === undefined) {
-      return <div />;
-    }
-    const cohortLength =
-      this.context.selectedErrorCohort.cohort.filteredData.length;
     const canRenderChart =
-      cohortLength < rowErrorSize ||
-      this.state.chartProps.chartType !== ChartTypes.Scatter;
-    if (!canRenderChart) {
+      this.context.selectedErrorCohort.cohort.filteredData.length <
+        rowErrorSize || this.state.chartProps?.chartType !== ChartTypes.Scatter;
+    if (!this.context.jointDataset.hasDataset || !canRenderChart) {
       return (
         <MissingParametersPlaceholder>
-          {localization.Interpret.ValidationErrors.datasizeError}
+          {!canRenderChart
+            ? localization.Interpret.ValidationErrors.datasizeError
+            : localization.CausalAnalysis.IndividualView.dataRequired}
         </MissingParametersPlaceholder>
       );
     }
 
     return (
-      <Stack
-        horizontal
-        id={this.chartAndConfigsId}
-        className={classNames.chart}
-      >
+      <Stack horizontal id="CausalIndividualChart" className={classNames.chart}>
         <LargeCausalIndividualChartArea
           chartProps={this.state.chartProps}
           plotData={this.state.plotData}

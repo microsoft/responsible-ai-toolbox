@@ -20,7 +20,7 @@ import React from "react";
 import { causalIndividualChartStyles } from "../CausalIndividualChart.styles";
 
 export interface ILargeCausalIndividualChartAreaProps {
-  chartProps: IGenericChartProps;
+  chartProps?: IGenericChartProps;
   plotData: any;
   isBubbleChartRendered?: boolean;
   bubbleChartErrorMessage?: string;
@@ -36,20 +36,28 @@ export class LargeCausalIndividualChartArea extends React.PureComponent<ILargeCa
     defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
+    const {
+      chartProps,
+      plotData,
+      isBubbleChartRendered,
+      bubbleChartErrorMessage,
+      isBubbleChartDataLoading,
+      isLocalCausalDataLoading,
+      onXSet,
+      onYSet
+    } = this.props;
     const classNames = causalIndividualChartStyles();
     const disableAxisButton =
-      this.props.isBubbleChartDataLoading ||
-      this.props.isLocalCausalDataLoading;
+      isBubbleChartDataLoading || isLocalCausalDataLoading;
     const orderedGroupTitles = [
       ColumnCategories.Index,
       ColumnCategories.Dataset,
       ColumnCategories.Outcome
     ];
     const isHistogramOrBoxChart =
-      this.props.chartProps?.chartType === ChartTypes.Histogram ||
-      this.props.chartProps?.chartType === ChartTypes.Box;
-    const isScatterChart =
-      this.props.chartProps?.chartType === ChartTypes.Scatter;
+      chartProps?.chartType === ChartTypes.Histogram ||
+      chartProps?.chartType === ChartTypes.Box;
+    const isScatterChart = chartProps?.chartType === ChartTypes.Scatter;
     return (
       <Stack.Item className={classNames.chartWithAxes}>
         <Stack horizontal={false}>
@@ -57,44 +65,46 @@ export class LargeCausalIndividualChartArea extends React.PureComponent<ILargeCa
             <Stack horizontal>
               <Stack.Item className={classNames.verticalAxis}>
                 <div className={classNames.rotatedVerticalBox}>
-                  <AxisConfig
-                    buttonText={
-                      this.context.jointDataset.metaDict[
-                        this.props.chartProps.yAxis.property
-                      ].abbridgedLabel
-                    }
-                    buttonTitle={
-                      this.context.jointDataset.metaDict[
-                        this.props.chartProps.yAxis.property
-                      ].label
-                    }
-                    allowTreatAsCategorical={isHistogramOrBoxChart}
-                    allowLogarithmicScaling={
-                      isHistogramOrBoxChart || !this.props.isBubbleChartRendered
-                    }
-                    orderedGroupTitles={orderedGroupTitles}
-                    selectedColumn={this.props.chartProps.yAxis}
-                    canBin={false}
-                    mustBin={false}
-                    canDither={isScatterChart}
-                    hideDroppedFeatures
-                    onAccept={this.props.onYSet}
-                    disabled={disableAxisButton}
-                  />
+                  {chartProps && (
+                    <AxisConfig
+                      buttonText={
+                        this.context.jointDataset.metaDict[
+                          chartProps.yAxis.property
+                        ].abbridgedLabel
+                      }
+                      buttonTitle={
+                        this.context.jointDataset.metaDict[
+                          chartProps.yAxis.property
+                        ].label
+                      }
+                      allowTreatAsCategorical={isHistogramOrBoxChart}
+                      allowLogarithmicScaling={
+                        isHistogramOrBoxChart || !isBubbleChartRendered
+                      }
+                      orderedGroupTitles={orderedGroupTitles}
+                      selectedColumn={chartProps.yAxis}
+                      canBin={false}
+                      mustBin={false}
+                      canDither={isScatterChart}
+                      hideDroppedFeatures
+                      onAccept={onYSet}
+                      disabled={disableAxisButton}
+                    />
+                  )}
                 </div>
               </Stack.Item>
               <Stack.Item className={classNames.individualChartContainer}>
-                {this.props.bubbleChartErrorMessage && (
+                {bubbleChartErrorMessage && (
                   <MissingParametersPlaceholder>
                     {localization.formatString(
                       localization.Counterfactuals.BubbleChartFetchError,
-                      this.props.bubbleChartErrorMessage
+                      bubbleChartErrorMessage
                     )}
                   </MissingParametersPlaceholder>
                 )}
-                {!this.props.isBubbleChartDataLoading ? (
+                {!isBubbleChartDataLoading ? (
                   <BasicHighChart
-                    configOverride={this.props.plotData}
+                    configOverride={plotData}
                     theme={getTheme()}
                     id="CausalAggregateChart"
                   />
@@ -108,30 +118,32 @@ export class LargeCausalIndividualChartArea extends React.PureComponent<ILargeCa
           </Stack.Item>
           <Stack className={classNames.horizontalAxisWithPadding}>
             <div className={classNames.horizontalAxis}>
-              <AxisConfig
-                buttonText={
-                  this.context.jointDataset.metaDict[
-                    this.props.chartProps.xAxis.property
-                  ].abbridgedLabel
-                }
-                buttonTitle={
-                  this.context.jointDataset.metaDict[
-                    this.props.chartProps.xAxis.property
-                  ].label
-                }
-                orderedGroupTitles={orderedGroupTitles}
-                selectedColumn={this.props.chartProps.xAxis}
-                canBin={isHistogramOrBoxChart}
-                mustBin={isHistogramOrBoxChart}
-                canDither={isScatterChart}
-                allowTreatAsCategorical={isHistogramOrBoxChart}
-                allowLogarithmicScaling={
-                  isHistogramOrBoxChart || !this.props.isBubbleChartRendered
-                }
-                hideDroppedFeatures
-                onAccept={this.props.onXSet}
-                disabled={disableAxisButton}
-              />
+              {chartProps && (
+                <AxisConfig
+                  buttonText={
+                    this.context.jointDataset.metaDict[
+                      chartProps.xAxis.property
+                    ].abbridgedLabel
+                  }
+                  buttonTitle={
+                    this.context.jointDataset.metaDict[
+                      chartProps.xAxis.property
+                    ].label
+                  }
+                  orderedGroupTitles={orderedGroupTitles}
+                  selectedColumn={chartProps.xAxis}
+                  canBin={isHistogramOrBoxChart}
+                  mustBin={isHistogramOrBoxChart}
+                  canDither={isScatterChart}
+                  allowTreatAsCategorical={isHistogramOrBoxChart}
+                  allowLogarithmicScaling={
+                    isHistogramOrBoxChart || !isBubbleChartRendered
+                  }
+                  hideDroppedFeatures
+                  onAccept={onXSet}
+                  disabled={disableAxisButton}
+                />
+              )}
             </div>
           </Stack>
         </Stack>
