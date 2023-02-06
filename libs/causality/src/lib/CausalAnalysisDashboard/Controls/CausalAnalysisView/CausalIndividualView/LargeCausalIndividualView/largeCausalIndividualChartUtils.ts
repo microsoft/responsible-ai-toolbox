@@ -5,6 +5,7 @@ import { IComboBoxOption } from "@fluentui/react";
 import {
   calculateBubblePlotDataFromErrorCohort,
   Cohort,
+  FluentUIStyles,
   hasAxisTypeUpdated,
   ICausalAnalysisSingleData,
   IDataset,
@@ -12,17 +13,21 @@ import {
   IHighchartBubbleSDKClusterData,
   IHighchartsConfig,
   IScatterPoint,
+  ISelectorConfig,
   ITelemetryEvent,
   JointDataset,
   TelemetryEventName,
   TelemetryLevels
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 
+import { CausalIndividualConstants } from "../CausalIndividualConstants";
+
 import {
-  ICausalIndividualChartProps,
-  ICausalIndividualChartState
-} from "./LargeCausalIndividualChart";
+  ILargeCausalIndividualChartProps,
+  ILargeCausalIndividualChartState
+} from "./ILargeCausalIndividualChartSpec";
 
 export const absoluteIndexKey = "AbsoluteIndex";
 export const indexKey = "Index";
@@ -67,10 +72,10 @@ export async function getBubblePlotData(
 }
 
 export function shouldUpdateHighchart(
-  prevState: ICausalIndividualChartState,
-  prevProps: ICausalIndividualChartProps,
-  currentState: ICausalIndividualChartState,
-  currentProps: ICausalIndividualChartProps,
+  prevState: ILargeCausalIndividualChartState,
+  prevProps: ILargeCausalIndividualChartProps,
+  currentState: ILargeCausalIndividualChartState,
+  currentProps: ILargeCausalIndividualChartProps,
   changedKeys: string[]
 ): [boolean, boolean, boolean, boolean, boolean, boolean, boolean] {
   const hasSelectedPointIndexesUpdated = !_.isEqual(
@@ -207,4 +212,42 @@ export function getDataOptions(indexSeries: number[]): IComboBoxOption[] {
     };
   });
   return options;
+}
+
+export function getErrorMessage(datasetBarConfigOverride: any): string {
+  return datasetBarConfigOverride.toString().split(":").pop();
+}
+
+export function getNewChartProps(
+  value: ISelectorConfig,
+  xSet: boolean,
+  chartProps: IGenericChartProps
+): IGenericChartProps {
+  const newProps = _.cloneDeep(chartProps);
+  if (xSet) {
+    newProps.xAxis = value;
+  } else {
+    newProps.yAxis = value;
+  }
+  return newProps;
+}
+
+export function getTemporaryPoint(
+  jointDataset: JointDataset,
+  index: number,
+  absoluteIndex: number
+): { [key: string]: any } {
+  return {
+    ...jointDataset.getRow(index),
+    [CausalIndividualConstants.namePath]: localization.formatString(
+      localization.Interpret.WhatIf.defaultCustomRootName,
+      index
+    ),
+    [CausalIndividualConstants.colorPath]:
+      FluentUIStyles.fluentUIColorPalette[
+        CausalIndividualConstants.MAX_SELECTION
+      ],
+    [absoluteIndexKey]: absoluteIndex,
+    [indexKey]: index
+  };
 }

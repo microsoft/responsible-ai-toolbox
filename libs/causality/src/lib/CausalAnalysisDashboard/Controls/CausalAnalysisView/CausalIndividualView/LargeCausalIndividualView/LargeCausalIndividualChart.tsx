@@ -1,112 +1,61 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption, IComboBox, Stack } from "@fluentui/react";
 import {
-  IComboBoxOption,
-  IComboBox,
-  ComboBox,
-  getTheme,
-  Stack,
-  DefaultButton
-} from "@fluentui/react";
-import {
-  ColumnCategories,
   IGenericChartProps,
   ISelectorConfig,
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  FluentUIStyles,
   rowErrorSize,
-  BasicHighChart,
-  ITelemetryEvent,
   TelemetryLevels,
   TelemetryEventName,
-  AxisConfig,
   OtherChartTypes,
-  Cohort,
   IScatterPoint,
   IHighchartsConfig,
   ChartTypes,
   instanceOfHighChart,
-  getScatterOption,
-  LoadingSpinner
+  getScatterOption
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
 import React from "react";
 
 import { causalIndividualChartStyles } from "../CausalIndividualChart.styles";
-import { CausalIndividualConstants } from "../CausalIndividualConstants";
-import { CausalWhatIf } from "../CausalWhatIf";
 import { generateDefaultChartAxes } from "../generateChartProps";
 
 import { getLocalCausalFromSDK } from "./getOnScatterPlotPointClick";
 import {
-  absoluteIndexKey,
+  getInitialSpec,
+  ILargeCausalIndividualChartProps,
+  ILargeCausalIndividualChartState
+} from "./ILargeCausalIndividualChartSpec";
+import { LargeCausalIndividualChartArea } from "./LargeCausalIndividualChartArea";
+import { LargeCausalIndividualChartLegend } from "./LargeCausalIndividualChartLegend";
+import {
   generateHighChartConfigOverride,
   getBubblePlotData,
-  getDataOptions,
+  getErrorMessage,
+  getNewChartProps,
   getNewSelections,
-  indexKey,
+  getTemporaryPoint,
   instanceOfLocalCausalData,
   selectPointFromChartLargeData,
   shouldUpdateHighchart
 } from "./largeCausalIndividualChartUtils";
 
-export interface ICausalIndividualChartProps {
-  causalId: string;
-  cohort: Cohort;
-  onDataClick: (
-    data: number | undefined | any,
-    isLocalCausalDataLoading: boolean
-  ) => void;
-  telemetryHook?: (message: ITelemetryEvent) => void;
-}
-
-export interface ICausalIndividualChartState {
-  chartProps?: IGenericChartProps;
-  selectedPointsIndexes: number[];
-  plotData: any;
-  temporaryPoint?: { [key: string]: any };
-  xSeries: number[];
-  ySeries: number[];
-  indexSeries: number[];
-  isRevertButtonClicked: boolean;
-  isBubbleChartDataLoading: boolean;
-  bubbleChartErrorMessage?: string;
-  isBubbleChartRendered: boolean;
-  isLocalCausalDataLoading: boolean;
-  localCausalErrorMessage?: string;
-  localCausalData: any;
-}
-
 export class LargeCausalIndividualChart extends React.PureComponent<
-  ICausalIndividualChartProps,
-  ICausalIndividualChartState
+  ILargeCausalIndividualChartProps,
+  ILargeCausalIndividualChartState
 > {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
   private changedKeys: string[] = [];
-
   private readonly chartAndConfigsId = "CausalIndividualChart";
-
-  public constructor(props: ICausalIndividualChartProps) {
+  public constructor(props: ILargeCausalIndividualChartProps) {
     super(props);
-    this.state = {
-      bubbleChartErrorMessage: undefined,
-      indexSeries: [],
-      isBubbleChartDataLoading: false,
-      isBubbleChartRendered: true,
-      isLocalCausalDataLoading: false,
-      isRevertButtonClicked: false,
-      localCausalData: undefined,
-      plotData: undefined,
-      selectedPointsIndexes: [],
-      xSeries: [],
-      ySeries: []
-    };
+    this.state = getInitialSpec();
   }
 
   public componentDidMount(): void {
@@ -122,8 +71,8 @@ export class LargeCausalIndividualChart extends React.PureComponent<
   }
 
   public componentDidUpdate(
-    prevProps: ICausalIndividualChartProps,
-    prevState: ICausalIndividualChartState
+    prevProps: ILargeCausalIndividualChartProps,
+    prevState: ILargeCausalIndividualChartState
   ): void {
     const [
       shouldUpdate,
@@ -183,145 +132,32 @@ export class LargeCausalIndividualChart extends React.PureComponent<
         </MissingParametersPlaceholder>
       );
     }
-    const disableAxisButton =
-      this.state.isBubbleChartDataLoading ||
-      this.state.isLocalCausalDataLoading;
-    const orderedGroupTitles = [
-      ColumnCategories.Index,
-      ColumnCategories.Dataset,
-      ColumnCategories.Outcome
-    ];
-    const isHistogramOrBoxChart =
-      this.state.chartProps?.chartType === ChartTypes.Histogram ||
-      this.state.chartProps?.chartType === ChartTypes.Box;
-    const isScatterChart =
-      this.state.chartProps?.chartType === ChartTypes.Scatter;
+
     return (
       <Stack
         horizontal
         id={this.chartAndConfigsId}
         className={classNames.chart}
       >
-        <Stack.Item className={classNames.chartWithAxes}>
-          <Stack horizontal={false}>
-            <Stack.Item className={classNames.chartWithVertical}>
-              <Stack horizontal>
-                <Stack.Item className={classNames.verticalAxis}>
-                  <div className={classNames.rotatedVerticalBox}>
-                    <AxisConfig
-                      buttonText={
-                        this.context.jointDataset.metaDict[
-                          this.state.chartProps.yAxis.property
-                        ].abbridgedLabel
-                      }
-                      buttonTitle={
-                        this.context.jointDataset.metaDict[
-                          this.state.chartProps.yAxis.property
-                        ].label
-                      }
-                      allowTreatAsCategorical={isHistogramOrBoxChart}
-                      allowLogarithmicScaling={
-                        isHistogramOrBoxChart ||
-                        !this.state.isBubbleChartRendered
-                      }
-                      orderedGroupTitles={orderedGroupTitles}
-                      selectedColumn={this.state.chartProps.yAxis}
-                      canBin={false}
-                      mustBin={false}
-                      canDither={isScatterChart}
-                      hideDroppedFeatures
-                      onAccept={this.onYSet}
-                      disabled={disableAxisButton}
-                    />
-                  </div>
-                </Stack.Item>
-                <Stack.Item className={classNames.individualChartContainer}>
-                  {this.state.bubbleChartErrorMessage && (
-                    <MissingParametersPlaceholder>
-                      {localization.formatString(
-                        localization.Counterfactuals.BubbleChartFetchError,
-                        this.state.bubbleChartErrorMessage
-                      )}
-                    </MissingParametersPlaceholder>
-                  )}
-                  {!this.state.isBubbleChartDataLoading ? (
-                    <BasicHighChart
-                      configOverride={this.state.plotData}
-                      theme={getTheme()}
-                      id="CausalAggregateChart"
-                    />
-                  ) : (
-                    <LoadingSpinner
-                      label={localization.Counterfactuals.loading}
-                    />
-                  )}
-                </Stack.Item>
-              </Stack>
-            </Stack.Item>
-            <Stack className={classNames.horizontalAxisWithPadding}>
-              <div className={classNames.horizontalAxis}>
-                <AxisConfig
-                  buttonText={
-                    this.context.jointDataset.metaDict[
-                      this.state.chartProps.xAxis.property
-                    ].abbridgedLabel
-                  }
-                  buttonTitle={
-                    this.context.jointDataset.metaDict[
-                      this.state.chartProps.xAxis.property
-                    ].label
-                  }
-                  orderedGroupTitles={orderedGroupTitles}
-                  selectedColumn={this.state.chartProps.xAxis}
-                  canBin={isHistogramOrBoxChart}
-                  mustBin={isHistogramOrBoxChart}
-                  canDither={isScatterChart}
-                  allowTreatAsCategorical={isHistogramOrBoxChart}
-                  allowLogarithmicScaling={
-                    isHistogramOrBoxChart || !this.state.isBubbleChartRendered
-                  }
-                  hideDroppedFeatures
-                  onAccept={this.onXSet}
-                  disabled={disableAxisButton}
-                />
-              </div>
-            </Stack>
-          </Stack>
-        </Stack.Item>
-        {this.state.indexSeries.length > 0 && (
-          <Stack className={classNames.legendAndText}>
-            <ComboBox
-              label={
-                localization.CausalAnalysis.IndividualView.selectedDatapoint
-              }
-              onChange={this.selectPointFromDropdown}
-              options={getDataOptions(this.state.indexSeries)}
-              selectedKey={`${this.state.selectedPointsIndexes[0]}`}
-              ariaLabel={"datapoint picker"}
-              useComboBoxAsMenuWidth
-              styles={FluentUIStyles.smallDropdownStyle}
-              disabled={this.state.isLocalCausalDataLoading}
-            />
-            <CausalWhatIf
-              selectedIndex={this.state.selectedPointsIndexes[0]}
-              isLocalCausalDataLoading={this.state.isLocalCausalDataLoading}
-              absoluteIndex={
-                this.state.temporaryPoint
-                  ? this.state.temporaryPoint[absoluteIndexKey]
-                  : undefined
-              }
-            />
-            {!this.state.isBubbleChartRendered && (
-              <DefaultButton
-                className={classNames.buttonStyle}
-                onClick={this.onRevertButtonClick}
-                text={localization.Counterfactuals.revertToBubbleChart}
-                title={localization.Counterfactuals.revertToBubbleChart}
-                disabled={this.state.isLocalCausalDataLoading}
-              />
-            )}
-          </Stack>
-        )}
+        <LargeCausalIndividualChartArea
+          chartProps={this.state.chartProps}
+          plotData={this.state.plotData}
+          isBubbleChartDataLoading={this.state.isBubbleChartDataLoading}
+          bubbleChartErrorMessage={this.state.bubbleChartErrorMessage}
+          isBubbleChartRendered={this.state.isBubbleChartRendered}
+          isLocalCausalDataLoading={this.state.isLocalCausalDataLoading}
+          onXSet={this.onXSet}
+          onYSet={this.onYSet}
+        />
+        <LargeCausalIndividualChartLegend
+          indexSeries={this.state.indexSeries}
+          selectedPointsIndexes={this.state.selectedPointsIndexes}
+          isLocalCausalDataLoading={this.state.isLocalCausalDataLoading}
+          temporaryPoint={this.state.temporaryPoint}
+          isBubbleChartRendered={this.state.isBubbleChartRendered}
+          onRevertButtonClick={this.onRevertButtonClick}
+          selectPointFromDropdown={this.selectPointFromDropdown}
+        />
       </Stack>
     );
   }
@@ -359,10 +195,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       !instanceOfHighChart(datasetBarConfigOverride)
     ) {
       this.setState({
-        bubbleChartErrorMessage: datasetBarConfigOverride
-          .toString()
-          .split(":")
-          .pop(),
+        bubbleChartErrorMessage: getErrorMessage(datasetBarConfigOverride),
         isBubbleChartDataLoading: false,
         plotData: undefined
       });
@@ -414,6 +247,20 @@ export class LargeCausalIndividualChart extends React.PureComponent<
     });
   };
 
+  private onXSet = (value: ISelectorConfig): void => {
+    if (this.state.chartProps) {
+      const newProps = getNewChartProps(value, true, this.state.chartProps);
+      this.setState({ chartProps: newProps });
+    }
+  };
+
+  private onYSet = (value: ISelectorConfig): void => {
+    if (this.state.chartProps) {
+      const newProps = getNewChartProps(value, false, this.state.chartProps);
+      this.setState({ chartProps: newProps });
+    }
+  };
+
   private selectPointFromChartLargeData = async (
     data: IScatterPoint
   ): Promise<void> => {
@@ -446,7 +293,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       this.setState({
         isLocalCausalDataLoading: false,
         localCausalData: undefined,
-        localCausalErrorMessage: localCausalData.toString().split(":").pop()
+        localCausalErrorMessage: getErrorMessage(localCausalData)
       });
       return;
     }
@@ -455,24 +302,6 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       localCausalData
     });
     this.props.onDataClick(localCausalData, false);
-  };
-
-  private onXSet = (value: ISelectorConfig): void => {
-    if (!this.state.chartProps) {
-      return;
-    }
-    const newProps = _.cloneDeep(this.state.chartProps);
-    newProps.xAxis = value;
-    this.setState({ chartProps: newProps });
-  };
-
-  private onYSet = (value: ISelectorConfig): void => {
-    if (!this.state.chartProps) {
-      return;
-    }
-    const newProps = _.cloneDeep(this.state.chartProps);
-    newProps.yAxis = value;
-    this.setState({ chartProps: newProps });
   };
 
   private selectPointFromDropdown = (
@@ -500,19 +329,11 @@ export class LargeCausalIndividualChart extends React.PureComponent<
     absoluteIndex: number
   ): void => {
     this.setState({
-      temporaryPoint: {
-        ...this.context.jointDataset.getRow(index),
-        [CausalIndividualConstants.namePath]: localization.formatString(
-          localization.Interpret.WhatIf.defaultCustomRootName,
-          index
-        ),
-        [CausalIndividualConstants.colorPath]:
-          FluentUIStyles.fluentUIColorPalette[
-            CausalIndividualConstants.MAX_SELECTION
-          ],
-        [absoluteIndexKey]: absoluteIndex,
-        [indexKey]: index
-      }
+      temporaryPoint: getTemporaryPoint(
+        this.context.jointDataset,
+        index,
+        absoluteIndex
+      )
     });
   };
 

@@ -5,14 +5,6 @@
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {}
-    },
-    {
-      "files": [
-        "**/LargeCausalIndividualChart.tsx"
-      ],
-      "rules": {
-        "max-lines": "off"
-      }
     }
   ]
 }
