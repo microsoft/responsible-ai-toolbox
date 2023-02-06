@@ -47,13 +47,12 @@ class TestModelAnalysisValidations:
         X_train['target'] = y_train
         X_test['target'] = y_test
 
+        length = len(y_test)
         with pytest.warns(
                 UserWarning,
-                match="The size of test set {0} is greater than "
-                      "supported limit of {1}. Computing insights"
-                      " for first {1} samples "
-                      "of test set".format(len(y_test),
-                                           len(y_test) - 1)):
+                match=f"The size of the test set {length} is greater than "
+                      f"the supported limit of {length-1}. Computing insights"
+                      f" for the first {length-1} samples of the test set"):
             ModelAnalysis(
                 model=model,
                 train=X_train,
@@ -205,8 +204,8 @@ class TestModelAnalysisValidations:
                 target_column='target',
                 task_type='classification')
 
-        assert 'The model passed cannot be used for getting predictions ' + \
-            'via predict()' in str(ucve.value)
+        assert 'The passed model cannot be used for getting predictions ' + \
+            'via predict' in str(ucve.value)
 
     def test_model_predictions_predict_proba(self):
         X_train, X_test, y_train, y_test, _, _ = \
@@ -227,8 +226,8 @@ class TestModelAnalysisValidations:
                 target_column='target',
                 task_type='classification')
 
-        assert 'The model passed cannot be used for getting predictions ' + \
-            'via predict_proba()' in str(ucve.value)
+        assert 'The passed model cannot be used for getting predictions ' + \
+            'via predict_proba' in str(ucve.value)
 
     def test_model_analysis_incorrect_task_type(self):
         X_train, X_test, y_train, y_test, _, _ = \
@@ -238,7 +237,7 @@ class TestModelAnalysisValidations:
         X_train['target'] = y_train
         X_test['target'] = y_test
 
-        err_msg = ('The regression model'
+        err_msg = ('The regression model '
                    'provided has a predict_proba function. '
                    'Please check the task_type.')
         with pytest.raises(UserConfigValidationException, match=err_msg):
