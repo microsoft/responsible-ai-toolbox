@@ -135,14 +135,4 @@ export class LargeCausalIndividualView extends React.PureComponent<
         : undefined
     });
   };
-
-  //   private readonly getDataFromIndex = (
-  //     dataIndex: number | undefined
-  //   ): ICausalAnalysisSingleData[] | undefined => {
-  //     const causalLocal = this.context?.causalAnalysisData?.local_effects;
-  //     if (!(dataIndex !== undefined && dataIndex >= 0 && causalLocal)) {
-  //       return undefined;
-  //     }
-  //     return causalLocal[dataIndex].sort((d1, d2) => d2.point - d1.point);
-  //   };
 }

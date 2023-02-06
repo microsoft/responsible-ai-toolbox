@@ -12,6 +12,7 @@ import {
   IHighchartBubbleSDKClusterData,
   IHighchartsConfig,
   IScatterPoint,
+  ISelectorConfig,
   ITelemetryEvent,
   JointDataset,
   TelemetryEventName,
@@ -20,9 +21,9 @@ import {
 import _ from "lodash";
 
 import {
-  ICausalIndividualChartProps,
-  ICausalIndividualChartState
-} from "./LargeCausalIndividualChart";
+  ILargeCausalIndividualChartProps,
+  ILargeCausalIndividualChartState
+} from "./ILargeCausalIndividualChartSpec";
 
 export const absoluteIndexKey = "AbsoluteIndex";
 export const indexKey = "Index";
@@ -67,10 +68,10 @@ export async function getBubblePlotData(
 }
 
 export function shouldUpdateHighchart(
-  prevState: ICausalIndividualChartState,
-  prevProps: ICausalIndividualChartProps,
-  currentState: ICausalIndividualChartState,
-  currentProps: ICausalIndividualChartProps,
+  prevState: ILargeCausalIndividualChartState,
+  prevProps: ILargeCausalIndividualChartProps,
+  currentState: ILargeCausalIndividualChartState,
+  currentProps: ILargeCausalIndividualChartProps,
   changedKeys: string[]
 ): [boolean, boolean, boolean, boolean, boolean, boolean, boolean] {
   const hasSelectedPointIndexesUpdated = !_.isEqual(
@@ -207,4 +208,22 @@ export function getDataOptions(indexSeries: number[]): IComboBoxOption[] {
     };
   });
   return options;
+}
+
+export function getErrorMessage(datasetBarConfigOverride: any): string {
+  return datasetBarConfigOverride.toString().split(":").pop();
+}
+
+export function getNewChartProps(
+  value: ISelectorConfig,
+  xSet: boolean,
+  chartProps: IGenericChartProps
+): IGenericChartProps {
+  const newProps = _.cloneDeep(chartProps);
+  if (xSet) {
+    newProps.xAxis = value;
+  } else {
+    newProps.yAxis = value;
+  }
+  return newProps;
 }
