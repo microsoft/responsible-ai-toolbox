@@ -13,6 +13,8 @@ import {
   JointDataset,
   Cohort,
   ChartTypes,
+  defaultModelAssessmentContext,
+  ModelAssessmentContext,
   IGenericChartProps,
   InteractiveLegend,
   FluentUIStyles,
@@ -50,6 +52,10 @@ export class SidePanel extends React.Component<
   ISidePanelProps,
   ISidePanelState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
+
   private readonly chartOptions: IChoiceGroupOption[] = [
     {
       key: ChartTypes.Histogram,
