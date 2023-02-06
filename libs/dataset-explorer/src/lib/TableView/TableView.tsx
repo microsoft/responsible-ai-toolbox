@@ -37,7 +37,7 @@ import { ITableViewProps } from "./TableViewProps";
 import { IITableViewState, ITableViewTableState } from "./TableViewState";
 
 // Constants related to table view height, which should change in mini-view with num rows
-const headerHeight = 80;
+const headerHeight = 180;
 const rowHeight = 44;
 const maxHeight = 500;
 
@@ -276,6 +276,8 @@ export class TableView extends React.Component<
       () => false, // don't filter any items
       indices
     );
+    console.log("###filteredDataRows", filteredDataRows);
+    console.log("###rows", rows);
 
     const numCols: number = this.props.jointDataset.datasetFeatureCount;
     const featureNames: string[] = this.props.features;
