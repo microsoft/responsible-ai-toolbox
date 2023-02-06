@@ -243,13 +243,8 @@ export class DatasetExplorerTab extends React.Component<
             <Stack.Item className={classNames.sidePanel}>
               <SidePanel
                 chartProps={this.state.chartProps}
-                cohorts={this.context.errorCohorts.map(
-                  (errorCohort) => errorCohort.cohort
-                )}
-                jointDataset={this.context.jointDataset}
                 selectedCohortIndex={this.state.selectedCohortIndex}
                 onChartPropChange={this.onChartPropsChange}
-                dataset={this.context.dataset}
               />
             </Stack.Item>
           </Stack>

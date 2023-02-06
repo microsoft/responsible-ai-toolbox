@@ -162,13 +162,8 @@ export class LargeDatasetExplorerTab extends React.Component<
             <Stack.Item className={classNames.sidePanel}>
               <SidePanel
                 chartProps={this.state.chartProps}
-                cohorts={this.context.errorCohorts.map(
-                  (errorCohort) => errorCohort.cohort
-                )}
-                jointDataset={this.context.jointDataset}
                 selectedCohortIndex={this.state.selectedCohortIndex}
                 onChartPropChange={this.onChartPropsChange}
-                dataset={this.context.dataset}
                 disabled={this.state.isBubbleChartDataLoading}
                 isBubbleChartRendered={this.state.isBubbleChartRendered}
                 setIsRevertButtonClicked={this.setIsRevertButtonClicked}

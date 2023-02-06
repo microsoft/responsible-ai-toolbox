@@ -10,8 +10,6 @@ import {
 } from "@fluentui/react";
 import {
   ColumnCategories,
-  JointDataset,
-  Cohort,
   ChartTypes,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
@@ -23,7 +21,6 @@ import {
   TelemetryLevels,
   TelemetryEventName,
   ifEnableLargeData,
-  IDataset,
   OtherChartTypes
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -35,10 +32,7 @@ import { generateDefaultYAxis } from "../utils/generateDefaultChartAxes";
 
 export interface ISidePanelProps {
   chartProps: IGenericChartProps;
-  jointDataset: JointDataset;
-  cohorts: Cohort[];
   selectedCohortIndex: number;
-  dataset: IDataset;
   disabled?: boolean;
   isBubbleChartRendered?: boolean;
   onChartPropChange: (p: IGenericChartProps) => void;
@@ -62,7 +56,7 @@ export class SidePanel extends React.Component<
       text: localization.Interpret.DatasetExplorer.aggregatePlots
     },
     {
-      key: ifEnableLargeData(this.props.dataset)
+      key: ifEnableLargeData(this.context.dataset)
         ? OtherChartTypes.Bubble
         : ChartTypes.Scatter,
       text: localization.Interpret.DatasetExplorer.individualDatapoints
@@ -114,13 +108,13 @@ export class SidePanel extends React.Component<
               onClick={this.setColorOpen}
               text={
                 this.props.chartProps.colorAxis &&
-                this.props.jointDataset.metaDict[
+                this.context.jointDataset.metaDict[
                   this.props.chartProps.colorAxis.property
                 ].abbridgedLabel
               }
               title={
                 this.props.chartProps.colorAxis &&
-                this.props.jointDataset.metaDict[
+                this.context.jointDataset.metaDict[
                   this.props.chartProps.colorAxis.property
                 ].label
               }
@@ -193,7 +187,7 @@ export class SidePanel extends React.Component<
     if (item?.key === undefined || !newProps) {
       return;
     }
-    newProps.chartType = ifEnableLargeData(this.props.dataset)
+    newProps.chartType = ifEnableLargeData(this.context.dataset)
       ? (item.key as OtherChartTypes)
       : (item.key as ChartTypes);
     if (newProps.yAxis.property === ColumnCategories.None) {
@@ -223,19 +217,20 @@ export class SidePanel extends React.Component<
       return;
     }
     let colorSeries: string[] = [];
+    const cohorts = this.context.errorCohorts.map(
+      (errorCohort) => errorCohort.cohort
+    );
     if (this.props.chartProps.chartType === ChartTypes.Scatter) {
       const colorAxis = this.props.chartProps.colorAxis;
       if (
         colorAxis &&
         (colorAxis.options.bin ||
-          this.props.jointDataset.metaDict[colorAxis.property]
+          this.context.jointDataset.metaDict[colorAxis.property]
             ?.treatAsCategorical)
       ) {
-        this.props.cohorts[this.props.selectedCohortIndex]?.sort(
-          colorAxis.property
-        );
+        cohorts[this.props.selectedCohortIndex]?.sort(colorAxis.property);
         colorSeries =
-          this.props.jointDataset.metaDict[colorAxis.property]
+          this.context.jointDataset.metaDict[colorAxis.property]
             .sortedCategoricalValues || [];
       } else {
         // continuous color, handled by plotly for now
@@ -244,23 +239,19 @@ export class SidePanel extends React.Component<
     } else {
       const colorAxis = this.props.chartProps.yAxis;
       if (
-        this.props.jointDataset.metaDict[colorAxis.property]
+        this.context.jointDataset.metaDict[colorAxis.property]
           ?.treatAsCategorical &&
         colorAxis.property !== ColumnCategories.None
       ) {
-        this.props.cohorts[this.props.selectedCohortIndex]?.sort(
-          colorAxis.property
-        );
+        cohorts[this.props.selectedCohortIndex]?.sort(colorAxis.property);
         const includedIndexes = _.uniq(
-          this.props.cohorts[this.props.selectedCohortIndex].unwrap(
-            colorAxis.property
-          )
+          cohorts[this.props.selectedCohortIndex].unwrap(colorAxis.property)
         );
-        colorSeries = this.props.jointDataset.metaDict[colorAxis.property]
+        colorSeries = this.context.jointDataset.metaDict[colorAxis.property]
           ?.treatAsCategorical
           ? includedIndexes.map(
               (category) =>
-                this.props.jointDataset.metaDict[colorAxis.property]
+                this.context.jointDataset.metaDict[colorAxis.property]
                   .sortedCategoricalValues?.[category]
             )
           : includedIndexes;
