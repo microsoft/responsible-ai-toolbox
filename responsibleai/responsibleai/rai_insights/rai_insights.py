@@ -103,10 +103,11 @@ class RAIInsights(RAIBaseInsights):
             categorical_features, feature_metadata)
 
         if len(test) > maximum_rows_for_test:
-            warnings.warn(f"The size of test set {len(test)} is greater than "
-                          f"supported limit of {maximum_rows_for_test}. "
-                          "Computing insights for first "
-                          f"{maximum_rows_for_test} samples of test set")
+            warnings.warn(f"The size of the test set {len(test)} is greater "
+                          "than the supported limit of "
+                          f"{maximum_rows_for_test}. Computing insights for "
+                          f"the first {maximum_rows_for_test} samples of "
+                          "the test set")
             self._large_test = test.copy()
             test = test.copy()[0:maximum_rows_for_test]
 
@@ -538,7 +539,7 @@ class RAIInsights(RAIBaseInsights):
                     model.predict(small_test_data)
                 except Exception:
                     raise UserConfigValidationException(
-                        'The model passed cannot be used for'
+                        'The passed model cannot be used for'
                         ' getting predictions via predict()'
                     )
                 self._validate_features_same(small_train_features_before,
@@ -552,7 +553,7 @@ class RAIInsights(RAIBaseInsights):
                         model.predict_proba(small_test_data)
                     except Exception:
                         raise UserConfigValidationException(
-                            'The model passed cannot be used for'
+                            'The passed model cannot be used for'
                             ' getting predictions via predict_proba()'
                         )
                 self._validate_features_same(small_train_features_before,
@@ -562,7 +563,7 @@ class RAIInsights(RAIBaseInsights):
                 if task_type == ModelTask.REGRESSION:
                     if hasattr(model, SKLearn.PREDICT_PROBA):
                         raise UserConfigValidationException(
-                            'The regression model'
+                            'The regression model '
                             'provided has a predict_proba function. '
                             'Please check the task_type.')
         else:
@@ -613,11 +614,11 @@ class RAIInsights(RAIBaseInsights):
         """
         small_train_features_after = list(small_train_data.columns)
         if small_train_features_before != small_train_features_after:
-            raise UserConfigValidationException(
-                ('Calling model {} function modifies '
-                 'input dataset features. Please check if '
-                 'predict function is defined correctly.').format(function)
-            )
+            exc_msg = (
+                f'Calling model {function} function modifies input dataset'
+                f' features. Please check if {function} function is '
+                'defined correctly.')
+            raise UserConfigValidationException(exc_msg)
 
     @property
     def causal(self) -> CausalManager:
