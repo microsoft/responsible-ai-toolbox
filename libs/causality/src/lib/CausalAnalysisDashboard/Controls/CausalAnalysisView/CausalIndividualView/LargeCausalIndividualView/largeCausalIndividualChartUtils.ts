@@ -5,6 +5,7 @@ import { IComboBoxOption } from "@fluentui/react";
 import {
   calculateBubblePlotDataFromErrorCohort,
   Cohort,
+  FluentUIStyles,
   hasAxisTypeUpdated,
   ICausalAnalysisSingleData,
   IDataset,
@@ -18,7 +19,10 @@ import {
   TelemetryEventName,
   TelemetryLevels
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
+
+import { CausalIndividualConstants } from "../CausalIndividualConstants";
 
 import {
   ILargeCausalIndividualChartProps,
@@ -226,4 +230,24 @@ export function getNewChartProps(
     newProps.yAxis = value;
   }
   return newProps;
+}
+
+export function getTemporaryPoint(
+  jointDataset: JointDataset,
+  index: number,
+  absoluteIndex: number
+): { [key: string]: any } {
+  return {
+    ...jointDataset.getRow(index),
+    [CausalIndividualConstants.namePath]: localization.formatString(
+      localization.Interpret.WhatIf.defaultCustomRootName,
+      index
+    ),
+    [CausalIndividualConstants.colorPath]:
+      FluentUIStyles.fluentUIColorPalette[
+        CausalIndividualConstants.MAX_SELECTION
+      ],
+    [absoluteIndexKey]: absoluteIndex,
+    [indexKey]: index
+  };
 }

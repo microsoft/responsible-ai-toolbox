@@ -8,7 +8,6 @@ import {
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  FluentUIStyles,
   rowErrorSize,
   TelemetryLevels,
   TelemetryEventName,
@@ -23,7 +22,6 @@ import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { causalIndividualChartStyles } from "../CausalIndividualChart.styles";
-import { CausalIndividualConstants } from "../CausalIndividualConstants";
 import { generateDefaultChartAxes } from "../generateChartProps";
 
 import { getLocalCausalFromSDK } from "./getOnScatterPlotPointClick";
@@ -35,13 +33,12 @@ import {
 import { LargeCausalIndividualChartArea } from "./LargeCausalIndividualChartArea";
 import { LargeCausalIndividualChartLegend } from "./LargeCausalIndividualChartLegend";
 import {
-  absoluteIndexKey,
   generateHighChartConfigOverride,
   getBubblePlotData,
   getErrorMessage,
   getNewChartProps,
   getNewSelections,
-  indexKey,
+  getTemporaryPoint,
   instanceOfLocalCausalData,
   selectPointFromChartLargeData,
   shouldUpdateHighchart
@@ -332,19 +329,11 @@ export class LargeCausalIndividualChart extends React.PureComponent<
     absoluteIndex: number
   ): void => {
     this.setState({
-      temporaryPoint: {
-        ...this.context.jointDataset.getRow(index),
-        [CausalIndividualConstants.namePath]: localization.formatString(
-          localization.Interpret.WhatIf.defaultCustomRootName,
-          index
-        ),
-        [CausalIndividualConstants.colorPath]:
-          FluentUIStyles.fluentUIColorPalette[
-            CausalIndividualConstants.MAX_SELECTION
-          ],
-        [absoluteIndexKey]: absoluteIndex,
-        [indexKey]: index
-      }
+      temporaryPoint: getTemporaryPoint(
+        this.context.jointDataset,
+        index,
+        absoluteIndex
+      )
     });
   };
 
