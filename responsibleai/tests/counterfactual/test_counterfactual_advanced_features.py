@@ -6,6 +6,7 @@ import os
 
 import pytest
 
+from rai_test_utils.models.lightgbm import create_lightgbm_classifier
 from responsibleai import RAIInsights
 from responsibleai._interfaces import CounterfactualData
 from responsibleai._internal.constants import FileFormats
@@ -13,7 +14,7 @@ from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.exceptions import UserConfigValidationException
 
-from ..common_utils import create_iris_data, create_lightgbm_classifier
+from ..common_utils import create_iris_data
 
 
 class TestCounterfactualAdvancedFeatures(object):
