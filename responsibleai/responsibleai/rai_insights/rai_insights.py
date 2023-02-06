@@ -618,8 +618,6 @@ class RAIInsights(RAIBaseInsights):
                 columns=[target_column], axis=1)
             small_test_data = small_test_data.drop(
                 columns=[target_column], axis=1)
-            # TODO The following error doesn't make sense for forecasting.
-            # Make sure to add a test case for this.
             if (len(small_train_data.columns) == 0 or
                     len(small_test_data.columns) == 0):
                 if has_dropped_features:
@@ -669,7 +667,7 @@ class RAIInsights(RAIBaseInsights):
                         "is only supported for the forecasting task type.")
             else:
                 if (feature_metadata.datetime_features and
-                        len(feature_metadata.datetime_features) > 1):
+                        len(feature_metadata.datetime_features) > 1)):
                     raise UserConfigValidationException(
                         "Only a single datetime feature is supported at "
                         "this point.")
