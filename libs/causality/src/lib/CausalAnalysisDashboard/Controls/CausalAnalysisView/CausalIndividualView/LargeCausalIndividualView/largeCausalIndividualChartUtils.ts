@@ -7,6 +7,7 @@ import {
   Cohort,
   FluentUIStyles,
   hasAxisTypeUpdated,
+  ICausalAnalysisData,
   ICausalAnalysisSingleData,
   IDataset,
   IGenericChartProps,
@@ -156,7 +157,10 @@ export async function selectPointFromChartLargeData(
   data: IScatterPoint,
   setLocalCausalData: (absoluteIndex: number) => Promise<void>,
   toggleSelectionOfPoint: (index?: number) => number[] | undefined,
-  onDataClick: (data: any, isLocalCausalDataLoading: boolean) => void,
+  onDataClick: (
+    isLocalCausalDataLoading: boolean,
+    data?: ICausalAnalysisData
+  ) => void,
   setTemporaryPointToCopyOfDatasetPoint: (
     index: number,
     absoluteIndex: number
@@ -172,7 +176,7 @@ export async function selectPointFromChartLargeData(
   if (absoluteIndex && newSelections && newSelections.length > 0) {
     setLocalCausalData(absoluteIndex);
   } else {
-    onDataClick(undefined, false);
+    onDataClick(false, undefined);
   }
   telemetryHook?.({
     level: TelemetryLevels.ButtonClick,
@@ -259,7 +263,10 @@ export function selectPointFromDropdownIntl(
   ) => void,
   toggleSelectionOfPoint: (index?: number) => number[] | undefined,
   setLocalCausalData: (absoluteIndex: number) => Promise<void>,
-  onDataClick: (data: any, isLocalCausalDataLoading: boolean) => void,
+  onDataClick: (
+    isLocalCausalDataLoading: boolean,
+    data?: ICausalAnalysisData
+  ) => void,
   item?: IComboBoxOption,
   telemetryHook?: ((message: ITelemetryEvent) => void) | undefined
 ): void {
@@ -270,7 +277,7 @@ export function selectPointFromDropdownIntl(
     if (newSelections && newSelections.length > 0) {
       setLocalCausalData(item.data.index);
     } else {
-      onDataClick(undefined, false);
+      onDataClick(false, undefined);
     }
     telemetryHook?.({
       level: TelemetryLevels.ButtonClick,

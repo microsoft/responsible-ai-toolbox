@@ -80,7 +80,7 @@ export interface IModelAssessmentContext {
     causalId: string,
     absoluteIndex: number,
     abortSignal: AbortSignal
-  ) => Promise<unknown>;
+  ) => Promise<ICausalAnalysisData>;
   requestTestDataRow?: (
     absoluteIndex: number,
     abortSignal: AbortSignal

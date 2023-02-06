@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ICausalAnalysisData } from "@responsible-ai/core-ui";
+
 export async function getLocalCausalFromSDK(
   causalId: string,
   absoluteIndex: number,
@@ -8,7 +10,7 @@ export async function getLocalCausalFromSDK(
     causalId: string,
     absoluteIndex: number,
     abortSignal: AbortSignal
-  ) => Promise<any>
+  ) => Promise<ICausalAnalysisData>
 ): Promise<unknown> {
   try {
     const result = await requestLocalCausalEffects?.(

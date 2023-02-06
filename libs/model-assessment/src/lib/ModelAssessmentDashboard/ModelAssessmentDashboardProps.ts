@@ -132,7 +132,7 @@ export interface IModelAssessmentDashboardProps
     causalId: string,
     absoluteIndex: number,
     abortSignal: AbortSignal
-  ) => Promise<any>;
+  ) => Promise<ICausalAnalysisData>;
   requestTestDataRow?: (
     absoluteIndex: number,
     abortSignal: AbortSignal

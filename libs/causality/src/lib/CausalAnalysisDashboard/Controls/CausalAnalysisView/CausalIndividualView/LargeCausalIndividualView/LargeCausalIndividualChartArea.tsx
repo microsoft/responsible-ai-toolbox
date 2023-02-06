@@ -12,7 +12,8 @@ import {
   BasicHighChart,
   AxisConfig,
   ChartTypes,
-  LoadingSpinner
+  LoadingSpinner,
+  IHighchartsConfig
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -21,7 +22,7 @@ import { causalIndividualChartStyles } from "../CausalIndividualChart.styles";
 
 export interface ILargeCausalIndividualChartAreaProps {
   chartProps?: IGenericChartProps;
-  plotData: any;
+  plotData?: IHighchartsConfig;
   isBubbleChartRendered?: boolean;
   bubbleChartErrorMessage?: string;
   isBubbleChartDataLoading?: boolean;

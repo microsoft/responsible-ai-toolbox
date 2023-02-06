@@ -213,7 +213,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
         causalId: string,
         absoluteIndex: number,
         abortSignal: AbortSignal
-      ): Promise<ILocalExplanations> => {
+      ): Promise<ICausalAnalysisData> => {
         return callFlaskService(
           this.props.config,
           [causalId, absoluteIndex],

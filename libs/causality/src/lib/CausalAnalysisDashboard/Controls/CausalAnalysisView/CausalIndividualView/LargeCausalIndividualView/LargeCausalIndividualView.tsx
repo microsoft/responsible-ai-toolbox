@@ -4,6 +4,7 @@
 import { Link, Stack, Text } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
+  ICausalAnalysisData,
   ICausalAnalysisSingleData,
   ITelemetryEvent,
   LabelWithCallout,
@@ -125,13 +126,13 @@ export class LargeCausalIndividualView extends React.PureComponent<
     );
   }
   private readonly handleOnClick = (
-    localCausalData: any,
-    isLocalCausalDataLoading: boolean
+    isLocalCausalDataLoading: boolean,
+    localCausalData?: ICausalAnalysisData
   ): void => {
     this.setState({
       isLocalCausalDataLoading,
       selectedData: localCausalData
-        ? localCausalData?.local_effects[0]
+        ? localCausalData?.local_effects?.[0]
         : undefined
     });
   };

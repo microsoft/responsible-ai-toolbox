@@ -3,7 +3,9 @@
 
 import {
   Cohort,
+  ICausalAnalysisData,
   IGenericChartProps,
+  IHighchartsConfig,
   ITelemetryEvent
 } from "@responsible-ai/core-ui";
 
@@ -11,8 +13,8 @@ export interface ILargeCausalIndividualChartProps {
   causalId: string;
   cohort: Cohort;
   onDataClick: (
-    data: number | undefined | any,
-    isLocalCausalDataLoading: boolean
+    isLocalCausalDataLoading: boolean,
+    data?: ICausalAnalysisData
   ) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
@@ -20,7 +22,7 @@ export interface ILargeCausalIndividualChartProps {
 export interface ILargeCausalIndividualChartState {
   chartProps?: IGenericChartProps;
   selectedPointsIndexes: number[];
-  plotData: any;
+  plotData?: IHighchartsConfig;
   temporaryPoint?: { [key: string]: any };
   xSeries: number[];
   ySeries: number[];
@@ -31,7 +33,7 @@ export interface ILargeCausalIndividualChartState {
   isBubbleChartRendered: boolean;
   isLocalCausalDataLoading: boolean;
   localCausalErrorMessage?: string;
-  localCausalData: any;
+  localCausalData?: ICausalAnalysisData;
 }
 
 export function getInitialSpec(): ILargeCausalIndividualChartState {

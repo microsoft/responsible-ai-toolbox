@@ -14,7 +14,8 @@ import {
   IHighchartsConfig,
   ChartTypes,
   instanceOfHighChart,
-  getScatterOption
+  getScatterOption,
+  ICausalAnalysisData
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -162,7 +163,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       xSeries: [],
       ySeries: []
     });
-    this.props.onDataClick(undefined, false);
+    this.props.onDataClick(false, undefined);
     const datasetBarConfigOverride = await getBubblePlotData(
       chartProps,
       this.props.cohort,
@@ -262,7 +263,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       isLocalCausalDataLoading: true,
       localCausalErrorMessage: undefined
     });
-    this.props.onDataClick(undefined, true);
+    this.props.onDataClick(true, undefined);
     const localCausalData = await getLocalCausalFromSDK(
       this.props.causalId,
       absoluteIndex,
@@ -278,9 +279,9 @@ export class LargeCausalIndividualChart extends React.PureComponent<
     }
     this.setState({
       isLocalCausalDataLoading: false,
-      localCausalData
+      localCausalData: localCausalData as ICausalAnalysisData
     });
-    this.props.onDataClick(localCausalData, false);
+    this.props.onDataClick(false, localCausalData as ICausalAnalysisData);
   };
 
   private selectPointFromDropdown = (
