@@ -23,7 +23,7 @@ import { LargeCausalIndividualChart } from "./LargeCausalIndividualChart";
 
 export interface ILargeCausalIndividualViewProps {
   causalId: string;
-  localEffects: ICausalAnalysisSingleData[][];
+  localEffects?: ICausalAnalysisSingleData[][];
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 interface ILargeCausalIndividualViewState {

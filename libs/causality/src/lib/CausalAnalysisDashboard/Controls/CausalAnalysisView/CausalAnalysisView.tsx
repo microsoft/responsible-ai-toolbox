@@ -29,8 +29,8 @@ export interface ICausalAnalysisViewProps {
 }
 
 interface ICausalAnalysisState {
-  currentGlobalCausalEffects: ICausalAnalysisSingleData[];
-  currentLocalCausalEffects: ICausalAnalysisSingleData[][];
+  currentGlobalCausalEffects?: ICausalAnalysisSingleData[];
+  currentLocalCausalEffects?: ICausalAnalysisSingleData[][];
   currentGlobalCausalPolicy: undefined | ICausalPolicy[];
 }
 
@@ -167,8 +167,8 @@ export class CausalAnalysisView extends React.PureComponent<
   };
 
   private sortGlobalCausalEffects(
-    globalCausalEffects: ICausalAnalysisSingleData[]
-  ): ICausalAnalysisSingleData[] {
-    return globalCausalEffects.sort((d1, d2) => d2.point - d1.point);
+    globalCausalEffects?: ICausalAnalysisSingleData[]
+  ): ICausalAnalysisSingleData[] | undefined {
+    return globalCausalEffects?.sort((d1, d2) => d2.point - d1.point);
   }
 }

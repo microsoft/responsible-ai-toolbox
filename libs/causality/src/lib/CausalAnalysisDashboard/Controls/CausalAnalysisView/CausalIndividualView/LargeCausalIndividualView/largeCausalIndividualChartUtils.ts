@@ -251,3 +251,30 @@ export function getTemporaryPoint(
     [indexKey]: index
   };
 }
+
+export function selectPointFromDropdownIntl(
+  setTemporaryPointToCopyOfDatasetPoint: (
+    index: number,
+    absoluteIndex: number
+  ) => void,
+  toggleSelectionOfPoint: (index?: number) => number[] | undefined,
+  setLocalCausalData: (absoluteIndex: number) => Promise<void>,
+  onDataClick: (data: any, isLocalCausalDataLoading: boolean) => void,
+  item?: IComboBoxOption,
+  telemetryHook?: ((message: ITelemetryEvent) => void) | undefined
+): void {
+  if (typeof item?.key === "string") {
+    const index = Number.parseInt(item.key);
+    setTemporaryPointToCopyOfDatasetPoint(index, item.data.index);
+    const newSelections = toggleSelectionOfPoint(index);
+    if (newSelections && newSelections.length > 0) {
+      setLocalCausalData(item.data.index);
+    } else {
+      onDataClick(undefined, false);
+    }
+    telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.IndividualCausalSelectedDatapointUpdatedFromDropdown
+    });
+  }
+}

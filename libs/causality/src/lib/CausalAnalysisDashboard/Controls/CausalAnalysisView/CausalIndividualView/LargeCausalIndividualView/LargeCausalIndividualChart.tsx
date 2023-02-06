@@ -9,8 +9,6 @@ import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
   rowErrorSize,
-  TelemetryLevels,
-  TelemetryEventName,
   OtherChartTypes,
   IScatterPoint,
   IHighchartsConfig,
@@ -41,6 +39,7 @@ import {
   getTemporaryPoint,
   instanceOfLocalCausalData,
   selectPointFromChartLargeData,
+  selectPointFromDropdownIntl,
   shouldUpdateHighchart
 } from "./largeCausalIndividualChartUtils";
 
@@ -269,11 +268,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       absoluteIndex,
       this.context.requestLocalCausalEffects
     );
-    if (
-      typeof localCausalData === "object" &&
-      localCausalData &&
-      !instanceOfLocalCausalData(localCausalData)
-    ) {
+    if (localCausalData && !instanceOfLocalCausalData(localCausalData)) {
       this.setState({
         isLocalCausalDataLoading: false,
         localCausalData: undefined,
@@ -292,20 +287,14 @@ export class LargeCausalIndividualChart extends React.PureComponent<
     _event: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    if (typeof item?.key === "string") {
-      const index = Number.parseInt(item.key);
-      this.setTemporaryPointToCopyOfDatasetPoint(index, item.data.index);
-      const newSelections = this.toggleSelectionOfPoint(index);
-      if (newSelections && newSelections.length > 0) {
-        this.setLocalCausalData(item.data.index);
-      } else {
-        this.props.onDataClick(undefined, false);
-      }
-      this.props.telemetryHook?.({
-        level: TelemetryLevels.ButtonClick,
-        type: TelemetryEventName.IndividualCausalSelectedDatapointUpdatedFromDropdown
-      });
-    }
+    selectPointFromDropdownIntl(
+      this.setTemporaryPointToCopyOfDatasetPoint,
+      this.toggleSelectionOfPoint,
+      this.setLocalCausalData,
+      this.props.onDataClick,
+      item,
+      this.props.telemetryHook
+    );
   };
 
   private setTemporaryPointToCopyOfDatasetPoint = (

@@ -121,7 +121,7 @@ export function getFeaturesData(
   testDataRow: any,
   selectedIndex?: number
 ): _.Dictionary<string | number | undefined> | undefined {
-  if (!selectedIndex) {
+  if (selectedIndex === undefined) {
     return;
   }
   let data;
