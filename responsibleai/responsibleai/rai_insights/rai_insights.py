@@ -68,7 +68,7 @@ _MODEL_METHOD_EXCEPTION_MESSAGE = (
 # e.g., "_predict_output".
 # The file names corresponding to field names are just the options with .json
 # appended, e.g., predict.json
-_OUTPUT_METHODS = [SKLearn.PREDICT, SKLearn.PREDICT_PROBA,,
+_OUTPUT_METHODS = [SKLearn.PREDICT, SKLearn.PREDICT_PROBA,
                    _Forecasting.FORECAST, _Forecasting.FORECAST_QUANTILES]
 _OUTPUT_OPTIONS = _OUTPUT_METHODS + ["large_" + o for o in _OUTPUT_METHODS]
 _OUTPUT_FIELDS = [f"_{o}_output" for o in _OUTPUT_OPTIONS]
@@ -127,11 +127,11 @@ MODEL_METHODS = {
     ],
     ModelTask.FORECASTING: [
         ModelMethod(
-            name=Forecasting.FORECAST,
+            name=_Forecasting.FORECAST,
             optional=False,
             purpose=MethodPurpose.FORECAST),
         ModelMethod(
-            name=Forecasting.FORECAST_QUANTILES,
+            name=_Forecasting.FORECAST_QUANTILES,
             optional=True,
             purpose=MethodPurpose.QUANTILES)
     ]
@@ -598,7 +598,7 @@ class RAIInsights(RAIBaseInsights):
                     'target (test data) do not match')
 
         self._validate_feature_metadata(
-            feature_metadata, train, task_type)
+            feature_metadata, train, task_type, model)
 
         if model is not None:
             # Pick one row from train and test data
@@ -634,7 +634,8 @@ class RAIInsights(RAIBaseInsights):
 
             # Ensure that the model has the required methods and that they
             # do not change the input data.
-            self._ensure_model_outputs(input_data=small_train_data)
+            if task_type != ModelTask.FORECASTING:
+                self._ensure_model_outputs(input_data=small_train_data)
             self._ensure_model_outputs(input_data=small_test_data)
 
             if task_type == ModelTask.REGRESSION:
@@ -644,7 +645,8 @@ class RAIInsights(RAIBaseInsights):
                         'provided has a predict_proba function. '
                         'Please check the task_type.')
             
-    def _validate_feature_metadata(self, feature_metadata, train, task_type):
+    def _validate_feature_metadata(
+            self, feature_metadata, train, task_type, model):
         if feature_metadata is not None:
             if not isinstance(feature_metadata, FeatureMetadata):
                 raise UserConfigValidationException(
@@ -667,7 +669,7 @@ class RAIInsights(RAIBaseInsights):
                         "is only supported for the forecasting task type.")
             else:
                 if (feature_metadata.datetime_features and
-                        len(feature_metadata.datetime_features) > 1)):
+                        len(feature_metadata.datetime_features) > 1):
                     raise UserConfigValidationException(
                         "Only a single datetime feature is supported at "
                         "this point.")
@@ -680,7 +682,7 @@ class RAIInsights(RAIBaseInsights):
         if self.task_type == ModelTask.FORECASTING:
             self.model = _wrap_model(
                 self.model, self.get_test_data(
-                    test_data=test).drop(columns=[target_column]))
+                    test_data=self.test).drop(columns=[self.target_column]))
 
     def _validate_features_same(self, features_before,
                                 train_data, function):
@@ -837,10 +839,14 @@ class RAIInsights(RAIBaseInsights):
         """
         data = RAIInsightsData()
         data.dataset = self._get_dataset()
-        data.modelExplanationData = self.explainer.get_data()
-        data.errorAnalysisData = self.error_analysis.get_data()
-        data.causalAnalysisData = self.causal.get_data()
-        data.counterfactualData = self.counterfactual.get_data()
+        if hasattr(self, ManagerNames.EXPLAINER):
+            data.modelExplanationData = self.explainer.get_data()
+        if hasattr(self, ManagerNames.ERROR_ANALYSIS):
+            data.errorAnalysisData = self.error_analysis.get_data()
+        if hasattr(self, ManagerNames.CAUSAL):
+            data.causalAnalysisData = self.causal.get_data()
+        if hasattr(self, ManagerNames.COUNTERFACTUAL):
+            data.counterfactualData = self.counterfactual.get_data()
         return data
 
     def _get_dataset(self):
@@ -859,8 +865,9 @@ class RAIInsights(RAIBaseInsights):
         else:
             dashboard_dataset.feature_metadata = None
 
-        dashboard_dataset.data_balance_measures = \
-            self._data_balance_manager.get_data()
+        if hasattr(self, ManagerNames.DATA_BALANCE):
+            dashboard_dataset.data_balance_measures = \
+                self._data_balance_manager.get_data()
 
         predicted_y = None
         feature_length = None

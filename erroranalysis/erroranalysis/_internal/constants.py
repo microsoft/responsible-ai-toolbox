@@ -53,6 +53,7 @@ class ModelTask(str, Enum):
     UNKNOWN = 'unknown'
     Classification = 'classification'
     Regression = 'regression'
+    FORECASTING = 'forecasting'
 
 
 class MatrixParams:

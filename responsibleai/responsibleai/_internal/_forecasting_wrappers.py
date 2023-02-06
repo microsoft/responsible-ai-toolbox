@@ -14,7 +14,7 @@ _SKTIME = "sktime"
 
 
 def _get_model_package(model):
-    module = inspect.getmodule(self.model)
+    module = inspect.getmodule(model)
     module_name = module.__name__.partition('.')[0]
     model_package = sys.modules[module_name].__package__
     return model_package
@@ -29,8 +29,8 @@ def _wrap_model(model, examples):
     quantile forecasting capabilities.
     """
     model_package = _get_model_package(model)
-    if (model_package == _SKTIME and hasattr(model, "predict_quantiles")) or
-            (hasattr(model, _Forecasting.FORECAST_QUANTILES)):
+    if ((model_package == _SKTIME and hasattr(model, "predict_quantiles")) or
+            hasattr(model, _Forecasting.FORECAST_QUANTILES)):
         return _WrappedQuantileForecastingModel(model, examples)
     else:
         return _WrappedForecastingModel(model, examples)
@@ -38,14 +38,14 @@ def _wrap_model(model, examples):
 
 class _WrappedForecastingModel(BaseWrappedModel):
     def __init__(self, model, examples):
-        super(WrappedClassificationModel, self).__init__(
+        super(_WrappedForecastingModel, self).__init__(
             model,
             eval_function=None,
             examples=examples,
-            task_type=ModelTask.FORECASTING)
+            model_task=ModelTask.FORECASTING)
         self._model_package = _get_model_package(model)
-        if not self._model_package in [_AZUREML, _SKTIME] and
-                not hasattr(model, _Forecasting.FORECAST):
+        if (not self._model_package in [_AZUREML, _SKTIME] and
+                not hasattr(model, _Forecasting.FORECAST)):
             raise ValueError(
                 "The passed model does not have a 'forecast' method. "
                 "'forecast' is required for the forecasting task_type. "
@@ -62,13 +62,13 @@ class _WrappedForecastingModel(BaseWrappedModel):
         return self._model.forecast(X)
 
 
-class _WrappedQuantileForecastingModel(WrappedForecastingModel):
+class _WrappedQuantileForecastingModel(_WrappedForecastingModel):
     def __init__(self, model, examples):
-        super(WrappedClassificationModel, self).__init__(
+        super(_WrappedQuantileForecastingModel, self).__init__(
             model,
             examples=examples)
-        if not self._model_package in [_AZUREML, _SKTIME] and
-                not hasattr(model, _Forecasting.FORECAST_QUANTILES):
+        if (not self._model_package in [_AZUREML, _SKTIME] and
+                not hasattr(model, _Forecasting.FORECAST_QUANTILES)):
             raise ValueError(
                 "The passed model does not have a 'forecast_quantiles' "
                 "method. 'forecast_quantiles' is optional for the "
@@ -76,7 +76,9 @@ class _WrappedQuantileForecastingModel(WrappedForecastingModel):
                 "WrappedQuantileForecastingModel. Alternatively, pass a "
                 "sktime forecasting model that supports predict_quantiles.")
 
-    def forecast_quantiles(self, X, quantiles):
+    def forecast_quantiles(self, X, quantiles=None):
+        if quantiles is None:
+            quantiles = [0.025, 0.975]
         if (type(quantiles) != list or
                 len(quantiles) == 0 or
                 any([type(q) != float or

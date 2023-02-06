@@ -49,8 +49,8 @@ class ResponsibleAIDashboardInput:
     def _generate_time_series_cohorts(self):
         """Generate time series cohorts based on time series ID columns."""
         cohort_list = []
-        ts_id_cols = self._analysis._feature_metadata.time_series_id_column_names
-        all_time_series = self.test[ts_id_cols].value_counts().index
+        ts_id_cols = self._analysis._feature_metadata.time_series_id_features
+        all_time_series = self._analysis.test[ts_id_cols].value_counts().index
         for time_series_id_values in all_time_series:
             column_value_combinations = zip(
                 ts_id_cols,
