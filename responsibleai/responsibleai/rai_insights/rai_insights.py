@@ -20,9 +20,10 @@ from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
 from raiutils.models import SKLearn
 from responsibleai._interfaces import Dataset, RAIInsightsData
-from responsibleai._internal.constants import (FileFormats, ManagerNames,
-                                               Metadata,
-                                               SerializationAttributes)
+from responsibleai._internal.constants import (
+    FileFormats, ManagerNames, Metadata, SerializationAttributes,
+    _Forecasting)
+from responsibleai._internal._forecasting_wrappers import _wrap_model
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.managers.causal_manager import CausalManager
@@ -51,23 +52,29 @@ _CATEGORICAL_FEATURES = 'categorical_features'
 _DROPPED_FEATURES = 'dropped_features'
 _FORECASTING_RAI_INSIGHTS_ENABLED = "forecasting_enabled"
 
-
-_DATA_TO_FILE_MAPPING = {
-    "_" + _PREDICT_OUTPUT: SerializationAttributes.PREDICT_JSON,
-    "_" + _FORECAST_OUTPUT: SerializationAttributes.FORECAST_JSON,
-    "_" + _PREDICT_PROBA_OUTPUT: SerializationAttributes.PREDICT_PROBA_JSON,
-    "_" + _FORECAST_QUANTILES_OUTPUT:
-        SerializationAttributes.FORECAST_QUANTILES_JSON,
-    "_large_" + _PREDICT_OUTPUT: SerializationAttributes.LARGE_PREDICT_JSON,
-    "_large_" + _FORECAST_OUTPUT: SerializationAttributes.LARGE_FORECAST_JSON,
-    "_large_" + _PREDICT_PROBA_OUTPUT:
-        SerializationAttributes.LARGE_PREDICT_PROBA_JSON,
-    "_large_" + _FORECAST_QUANTILES_OUTPUT:
-        SerializationAttributes.LARGE_FORECAST_QUANTILES_JSON,
-}
-
 _MODEL_METHOD_EXCEPTION_MESSAGE = (
     'The passed model cannot be used for getting predictions via {0}')
+
+# Due to a variety of possible model methods (predict, predict_proba, etc.)
+# for the various supported tasks as well as small/large datasets on which
+# to evaluate them there need to be lots of different fields on the
+# RAIInsights object to store the model method outputs. Similarly, when
+# serializing the RAIInsights object they need to mapped to file names.
+# _OUTPUT_METHODS contains the method names, e.g., predict
+# _OUTPUT_OPTIONS contains all the options including those for large datasets
+# which have "large_" preprended.
+# _OUTPUT_FIELDS contains the field names of RAIInsights. They are the options
+# with an underscore prepended and "_output" appended,
+# e.g., "_predict_output".
+# The file names corresponding to field names are just the options with .json
+# appended, e.g., predict.json
+_OUTPUT_METHODS = [SKLearn.PREDICT, SKLearn.PREDICT_PROBA,,
+                   _Forecasting.FORECAST, _Forecasting.FORECAST_QUANTILES]
+_OUTPUT_OPTIONS = _OUTPUT_METHODS + ["large_" + o for o in _OUTPUT_METHODS]
+_OUTPUT_FIELDS = [f"_{o}_output" for o in _OUTPUT_OPTIONS]
+_OUTPUT_FIELDS_AND_FILENAMES = zip(
+    _OUTPUT_FIELDS,
+    [f"_{o}{FileFormats.JSON}" for o in _OUTPUT_OPTIONS])
 
 # The purpose maps various model outputs to a single set of data structures
 # that are passed to the UI to render.
@@ -95,13 +102,6 @@ class ModelMethod:
         self.purpose = purpose
 
 
-class Forecasting(object):
-    """Provide forecasting related constants."""
-
-    FORECAST = "forecast"
-    FORECAST_QUANTILES = "forecast_quantiles"
-
-
 # Model methods by task type
 # Every task has one required method (optional=False) to make predictions,
 # forecasts etc. and can additionally have optional methods to calculate
@@ -114,6 +114,8 @@ MODEL_METHODS = {
             purpose=MethodPurpose.PREDICTION),
         ModelMethod(
             name=SKLearn.PREDICT_PROBA,
+            # TODO: so far assumption was that it's required
+            # but that excludes lots of classification models.
             optional=True,
             purpose=MethodPurpose.PROBABILITY)
     ],
@@ -134,17 +136,6 @@ MODEL_METHODS = {
             purpose=MethodPurpose.QUANTILES)
     ]
 }
-
-class ForecastingWrapper(object):
-    def __init__(self, forecast_method, forecast_quantiles_method=None):
-        self._forecast_method = forecast_method
-        self._forecast_quantiles_method = forecast_quantiles_method
-
-    def forecast(self, X):
-        return self._forecast_method(X)
-
-    def forecast_quantiles(self, X, quantiles):
-        return self._forecast_quantiles_method(X, quantiles)
 
 
 class RAIInsights(RAIBaseInsights):
@@ -689,44 +680,13 @@ class RAIInsights(RAIBaseInsights):
     def _wrap_model_if_needed(self):
         """Wrap the model in a compatible format if needed."""
         if self.task_type == ModelTask.FORECASTING:
-            # Wrap model to make forecasting API compatible.
-            # Detect if the model is from AzureML as a special case.
-            module = inspect.getmodule(self.model)
-            module_name = module.__name__.partition('.')[0]
-            model_package = sys.modules[module_name].__package__
-            if model_package == "azureml":
-
-                def forecast(forecasting_model, X):
-                    # AzureML forecasting models return a tuple of
-                    # (forecast, data) but we only want to return the actual
-                    # forecast.
-                    return forecasting_model.forecast(X)[0]
-
-                def forecast_quantiles(forecasting_model, X, quantiles=None):
-                    # AzureML forecasting models don't take quantiles as an
-                    # argument but instead need to have it set on the model
-                    # object.
-                    if quantiles is None:
-                        quantiles = [0.025, 0.975]
-                    if (type(quantiles) == list and len(quantiles) > 0 and
-                            all([type(q) == float and q > 0 and
-                                 q < 1 for q in quantiles])):
-                        forecasting_model.quantiles = quantiles
-                        return forecasting_model.forecast_quantiles(X)
-                    else:
-                        raise ValueError(
-                            "quantiles must be a list of floats between "
-                            "0 and 1.")
-                wrapper = ForecastingWrapper(
-                    lambda X: forecast(self.model, X),
-                    lambda X, quantiles:
-                        forecast_quantiles(self.model, X, quantiles))
-                self.model = wrapper
+            self.model = _wrap_model(
+                self.model, self.get_test_data(
+                    test_data=test).drop(columns=[target_column]))
 
     def _validate_features_same(self, features_before,
                                 train_data, function):
-        """
-        Validate the features are unmodified on the DataFrame.
+        """Validate the features are unmodified on the DataFrame.
 
         :param sfeatures_before: The features saved before
             an operation was performed.
@@ -1038,7 +998,7 @@ class RAIInsights(RAIBaseInsights):
         if self.model is None:
             return
 
-        for data_name, file_name in _DATA_TO_FILE_MAPPING.items():
+        for data_name, file_name in _OUTPUT_FIELDS_AND_FILENAMES:
             if (data_name in self.__dict__ and
                     self.__dict__[data_name] is not None):
                 self._write_to_file(
@@ -1315,7 +1275,7 @@ class RAIInsights(RAIBaseInsights):
         :type path: str
         """
         if inst.__dict__[_MODEL] is None:
-            for data_name in list(_DATA_TO_FILE_MAPPING.keys()):
+            for data_name in _OUTPUT_FIELDS:
                 inst.__dict__[data_name] = None
             return
 
@@ -1323,7 +1283,7 @@ class RAIInsights(RAIBaseInsights):
             Path(path) /
             SerializationAttributes.PREDICTIONS_DIRECTORY)
 
-        for data_name, file_name in _DATA_TO_FILE_MAPPING.items():
+        for data_name, file_name in _OUTPUT_FIELDS_AND_FILENAMES:
             file_path = prediction_output_path / file_name
             if file_path.exists():
                 with open(file_path, 'r') as file:

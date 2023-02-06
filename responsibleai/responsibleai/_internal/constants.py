@@ -135,3 +135,10 @@ class FileFormats:
     JSON = '.json'
     PKL = '.pkl'
     TXT = '.txt'
+
+
+class _Forecasting(object):
+    """Provide forecasting related constants."""
+
+    FORECAST = "forecast"
+    FORECAST_QUANTILES = "forecast_quantiles"
