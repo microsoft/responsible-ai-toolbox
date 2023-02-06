@@ -46,7 +46,11 @@ export async function getBarOrBoxChartConfig(
     jointDataset.metaDict[yAxisProperty].isCategorical ||
     jointDataset.metaDict[yAxisProperty]?.treatAsCategorical;
 
-  let numberOfBins = jointDataset?.binDict?.Index.length ?? 5;
+  let numberOfBins = 5;
+  if (jointDataset?.binDict?.Index) {
+    numberOfBins = jointDataset.binDict.Index.length;
+  }
+
   if (treatYAsCategorical) {
     const treatXAsCategorical =
       (jointDataset.metaDict[xAxisProperty].isCategorical ||
