@@ -234,7 +234,6 @@ class RAIInsights(RAIBaseInsights):
             target_column=target_column,
             classes=classes
         )
-        self._wrap_model_if_needed()
 
         self._feature_columns = \
             test.drop(columns=[target_column]).columns.tolist()
@@ -632,6 +631,8 @@ class RAIInsights(RAIBaseInsights):
                         'one feature.'
                     )
 
+            self._wrap_model_if_needed(model)
+
             # Ensure that the model has the required methods and that they
             # do not change the input data.
             if task_type != ModelTask.FORECASTING:
@@ -677,12 +678,15 @@ class RAIInsights(RAIBaseInsights):
                 self._ensure_time_column_available(
                     feature_metadata, feature_names, model)
 
-    def _wrap_model_if_needed(self):
+    def _wrap_model_if_needed(self, model):
         """Wrap the model in a compatible format if needed."""
         if self.task_type == ModelTask.FORECASTING:
             self.model = _wrap_model(
-                self.model, self.get_test_data(
-                    test_data=self.test).drop(columns=[self.target_column]))
+                model,
+                self.get_test_data(
+                    test_data=self.test).drop(columns=[self.target_column]),
+                self._feature_metadata.datetime_features[0],
+                self._feature_metadata.time_series_id_features)
 
     def _validate_features_same(self, features_before,
                                 train_data, function):
