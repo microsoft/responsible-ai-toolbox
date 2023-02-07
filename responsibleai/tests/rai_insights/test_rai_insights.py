@@ -367,14 +367,14 @@ def validate_rai_insights(
         assert len(ind_data) == expected_length
 
     if rai_insights.model is None:
-        assert rai_insights.predict_output is None
-        assert rai_insights.predict_proba_output is None
+        assert rai_insights._predict_output is None
+        assert rai_insights._predict_proba_output is None
     else:
-        assert rai_insights.predict_output is not None
+        assert rai_insights._predict_output is not None
         if task_type == ModelTask.CLASSIFICATION:
-            assert rai_insights.predict_proba_output is not None
-            assert isinstance(rai_insights.predict_proba_output, np.ndarray)
-            assert len(rai_insights.predict_proba_output.tolist()[0]) == \
+            assert rai_insights._predict_proba_output is not None
+            assert isinstance(rai_insights._predict_proba_output, np.ndarray)
+            assert len(rai_insights._predict_proba_output.tolist()[0]) == \
                 len(rai_insights._classes)
 
     if task_type == ModelTask.CLASSIFICATION:
