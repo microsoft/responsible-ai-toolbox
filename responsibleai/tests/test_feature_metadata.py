@@ -115,31 +115,6 @@ class TestFeatureMetadata:
         assert feature_metadata.time_series_id_features == ['g1', 'g2']
         with pytest.raises(
                 UserConfigValidationException,
-                match='The given time series ID column g1 is not present '
-                      'in the provided features: A, B, C, D, E, F, G.'):
-            feature_metadata.validate(
-                feature_names=['A', 'B', 'C', 'D', 'E', 'F', 'G'])
-
-        feature_metadata_dict = feature_metadata.to_dict()
-        expected_feature_metadata_dict = {
-            'identity_feature_name': None,
-            'datetime_features': None,
-            'categorical_features': None,
-            'dropped_features': ['d1', 'd2'],
-            'time_series_id_features': None
-        }
-        assert feature_metadata_dict == expected_feature_metadata_dict
-
-    def test_feature_metadata_with_time_series_id_features(self):
-        feature_metadata = FeatureMetadata(
-            time_series_id_features=['g1', 'g2'])
-        assert feature_metadata.identity_feature_name is None
-        assert feature_metadata.datetime_features is None
-        assert feature_metadata.categorical_features is None
-        assert feature_metadata.dropped_features is None
-        assert feature_metadata.time_series_id_features == ['g1', 'g2']
-        with pytest.raises(
-                UserConfigValidationException,
                 match='The given time series ID feature g1 is not present '
                       'in the provided features: A, B, C, D, E, F, G.'):
             feature_metadata.validate_feature_metadata_with_user_features(
