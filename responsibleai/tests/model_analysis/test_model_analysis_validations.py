@@ -8,11 +8,14 @@ from unittest.mock import MagicMock
 
 import pandas as pd
 import pytest
-from tests.common_utils import (create_binary_classification_dataset,
-                                create_cancer_data, create_housing_data,
-                                create_iris_data, create_lightgbm_classifier,
-                                create_sklearn_random_forest_regressor)
+from tests.common_utils import (create_cancer_data, create_housing_data,
+                                create_iris_data)
 
+from rai_test_utils.datasets.tabular import \
+    create_binary_classification_dataset
+from rai_test_utils.models.lightgbm import create_lightgbm_classifier
+from rai_test_utils.models.sklearn import \
+    create_sklearn_random_forest_regressor
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.modelanalysis.model_analysis import ModelAnalysis
 
@@ -44,12 +47,12 @@ class TestModelAnalysisValidations:
         X_train['target'] = y_train
         X_test['target'] = y_test
 
+        length = len(y_test)
         with pytest.warns(
                 UserWarning,
-                match="The size of the test set {0} is greater than the "
-                      "supported limit of {1}. Computing insights"
-                      " for the first {1} samples of "
-                      "the test set".format(len(y_test), len(y_test) - 1)):
+                match=f"The size of the test set {length} is greater than "
+                      f"the supported limit of {length-1}. Computing insights"
+                      f" for the first {length-1} samples of the test set"):
             ModelAnalysis(
                 model=model,
                 train=X_train,

@@ -9,10 +9,12 @@ import numpy as np
 import pandas as pd
 import pytest
 from tests.common_utils import (create_adult_income_dataset,
-                                create_binary_classification_dataset,
                                 create_complex_classification_pipeline,
-                                create_iris_data, create_lightgbm_classifier)
+                                create_iris_data)
 
+from rai_test_utils.datasets.tabular import \
+    create_binary_classification_dataset
+from rai_test_utils.models.lightgbm import create_lightgbm_classifier
 from responsibleai import ModelTask, RAIInsights
 from responsibleai._internal.constants import (ManagerNames,
                                                SerializationAttributes)
