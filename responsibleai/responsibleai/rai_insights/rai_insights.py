@@ -18,10 +18,11 @@ from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
 from raiutils.models import SKLearn
 from responsibleai._interfaces import Dataset, RAIInsightsData
-from responsibleai._internal.constants import (
-    FileFormats, ManagerNames, Metadata, SerializationAttributes,
-    _Forecasting)
 from responsibleai._internal._forecasting_wrappers import _wrap_model
+from responsibleai._internal.constants import (FileFormats, ManagerNames,
+                                               Metadata,
+                                               SerializationAttributes,
+                                               _Forecasting)
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.managers.causal_manager import CausalManager
