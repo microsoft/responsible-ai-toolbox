@@ -37,7 +37,7 @@ import { ITableViewProps } from "./TableViewProps";
 import { IITableViewState, ITableViewTableState } from "./TableViewState";
 
 // Constants related to table view height, which should change in mini-view with num rows
-const headerHeight = 80;
+const headerHeight = 180;
 const rowHeight = 44;
 const maxHeight = 500;
 
