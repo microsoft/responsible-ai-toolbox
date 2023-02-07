@@ -17,12 +17,19 @@ export interface IErrorAnalysisStyles {
   errorAnalysisWrapper: IStyle;
   separator: IStyle;
   tabs: IStyle;
+  pivotLabelWrapper: IStyle;
 }
 
 export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles> =
   () => {
     const theme = getTheme();
     return mergeStyleSets<IErrorAnalysisStyles>({
+      pivotLabelWrapper: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "start",
+        padding: "0px 15px 15px"
+      },
       cohortInfo: {
         overflow: "auto",
         width: "40%",
@@ -37,7 +44,6 @@ export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles>
       errorAnalysisView: flexLgDown,
       errorAnalysisWrapper: {
         marginTop: "10px",
-        paddingLeft: "15px",
         selectors: {
           "@media screen and (max-width: 479px)": {
             flexWrap: "wrap"
@@ -45,7 +51,12 @@ export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles>
         }
       },
       featureList: {
-        padding: "16px 0 10px 0"
+        padding: "16px 0 10px 0",
+        selectors: {
+          "@media screen and (max-width: 479px)": {
+            paddingLeft: "15px"
+          }
+        }
       },
       separator: hideLgDown,
       tabs: {
