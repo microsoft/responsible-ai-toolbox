@@ -148,7 +148,9 @@ function convertSDKObjectToBubbleData(
       xSeries: d.x_series,
       y: d.y,
       ySeries: d.y_series,
-      z: d.size
+      z: d.size,
+      xMap: d.x_map,
+      yMap: d.y_map
     };
   });
   return bubData;

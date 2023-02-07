@@ -98,6 +98,7 @@ export class LargeDatasetExplorerChartArea extends React.PureComponent<ILargeDat
                     ].label
                   }
                   disabled={isBubbleChartDataLoading}
+                  removeCount={!isHistogramOrBoxChart}
                 />
               </Stack.Item>
             </Stack.Item>
@@ -148,6 +149,7 @@ export class LargeDatasetExplorerChartArea extends React.PureComponent<ILargeDat
                 .label
             }
             disabled={isBubbleChartDataLoading}
+            removeCount={!isHistogramOrBoxChart}
           />
         </Stack.Item>
       </Stack.Item>

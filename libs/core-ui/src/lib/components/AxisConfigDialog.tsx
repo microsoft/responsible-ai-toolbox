@@ -42,6 +42,7 @@ export interface IAxisConfigDialogProps {
   allowTreatAsCategorical: boolean;
   allowLogarithmicScaling?: boolean;
   hideDroppedFeatures?: boolean;
+  removeCount?: boolean;
   onAccept: (newConfig: ISelectorConfig) => void;
   onCancel: () => void;
 }
