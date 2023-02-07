@@ -23,12 +23,6 @@ export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles>
   () => {
     const theme = getTheme();
     return mergeStyleSets<IErrorAnalysisStyles>({
-      pivotLabelWrapper: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "start",
-        padding: "0px 15px 15px"
-      },
       cohortInfo: {
         overflow: "auto",
         width: "40%",
@@ -56,6 +50,12 @@ export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles>
             paddingLeft: "15px"
           }
         }
+      },
+      pivotLabelWrapper: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "start",
+        padding: "0px 15px 15px"
       },
       separator: hideLgDown
     });
