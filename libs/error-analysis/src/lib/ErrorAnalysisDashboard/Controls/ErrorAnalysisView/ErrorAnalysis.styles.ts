@@ -16,7 +16,6 @@ export interface IErrorAnalysisStyles {
   featureList: IStyle;
   errorAnalysisWrapper: IStyle;
   separator: IStyle;
-  tabs: IStyle;
   pivotLabelWrapper: IStyle;
 }
 
@@ -58,17 +57,6 @@ export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles>
           }
         }
       },
-      separator: hideLgDown,
-      tabs: {
-        selectors: {
-          "[role='tablist'].ms-Pivot": {
-            display: "flex",
-            flexWrap: "wrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap"
-          }
-        }
-      }
+      separator: hideLgDown
     });
   };
