@@ -297,7 +297,7 @@ export class JointDataset {
     const result = new Array(length);
     for (let i = 0; i < length; i++) {
       const key = JointDataset.DataLabelRoot + i.toString();
-      if (metaDict[key].isCategorical) {
+      if (metaDict[key].isCategorical || metaDict[key].treatAsCategorical) {
         result[i] = metaDict[key].sortedCategoricalValues?.[row[key]];
       } else {
         result[i] = row[key];
