@@ -133,22 +133,15 @@ export async function generateHighChartConfigOverride(
   if (chartProps) {
     if (hasCohortUpdated || hasRevertToBubbleChartUpdated) {
       updateBubblePlotData(chartProps);
-      return;
-    }
-    if (hasAxisTypeChanged) {
+    } else if (hasAxisTypeChanged) {
       updateScatterPlotData(chartProps);
-      return;
-    }
-    if (hasChartPropsUpdated) {
+    } else if (hasChartPropsUpdated) {
       updateBubblePlotData(chartProps);
-      return;
-    }
-    if (
+    } else if (
       hasSelectedPointIndexesUpdated ||
       hasIsLocalExplanationsDataLoadingUpdated
     ) {
       updateScatterPlotData(chartProps);
-      return;
     }
   }
 }
