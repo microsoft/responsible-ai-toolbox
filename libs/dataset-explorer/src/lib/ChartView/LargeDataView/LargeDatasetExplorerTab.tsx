@@ -397,10 +397,10 @@ export class LargeDatasetExplorerTab extends React.Component<
       highChartConfigOverride: scatterPlotData,
       indexSeries,
       isBubbleChartRendered: false,
-      xSeries,
-      ySeries,
       xMap,
-      yMap
+      xSeries,
+      yMap,
+      ySeries
     });
   };
 

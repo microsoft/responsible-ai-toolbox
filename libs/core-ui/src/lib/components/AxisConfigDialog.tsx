@@ -30,7 +30,9 @@ import { AxisConfigBinOptions } from "./AxisConfigBinOptions";
 import { AxisConfigChoiceGroup } from "./AxisConfigChoiceGroup";
 import {
   extractSelectionKey,
-  getBinCountForProperty
+  getBinCountForProperty,
+  getClassArray,
+  getDataArray
 } from "./AxisConfigDialogUtils";
 
 export interface IAxisConfigDialogProps {
@@ -77,30 +79,16 @@ export class AxisConfigDialog extends React.PureComponent<
         this.props.canBin,
         AxisConfigDialog.DEFAULT_BIN_COUNT
       ),
-      classArray: new Array(this.context.jointDataset.predictionClassCount)
-        .fill(0)
-        .map((_, index) => {
-          const key = JointDataset.ProbabilityYRoot + index.toString();
-          return {
-            key,
-            text: this.context.jointDataset.metaDict[key].abbridgedLabel
-          };
-        }),
-      dataArray: new Array(this.context.jointDataset.datasetFeatureCount)
-        .fill(0)
-        .map((_, index) => {
-          const key = JointDataset.DataLabelRoot + index.toString();
-          return {
-            key,
-            text: this.context.jointDataset.metaDict[key].abbridgedLabel
-          };
-        })
-        .filter((item) => {
-          if (this.props.hideDroppedFeatures) {
-            return !droppedFeatureSet.has(item.text);
-          }
-          return true;
-        }),
+      classArray: getClassArray(
+        this.context.jointDataset.predictionClassCount,
+        this.context.jointDataset.metaDict
+      ),
+      dataArray: getDataArray(
+        droppedFeatureSet,
+        this.context.jointDataset.datasetFeatureCount,
+        this.context.jointDataset.metaDict,
+        this.props.hideDroppedFeatures
+      ),
       selectedColumn: _.cloneDeep(this.props.selectedColumn),
       selectedFilterGroup: extractSelectionKey(
         this.props.selectedColumn.property

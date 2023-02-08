@@ -151,12 +151,12 @@ function convertSDKObjectToBubbleData(
       name: undefined,
       testData: d.test_data,
       x: d.x,
+      xMap: d.x_map,
       xSeries: d.x_series,
       y: d.y,
+      yMap: d.y_map,
       ySeries: d.y_series,
-      z: d.size,
-      xMap: d.x_map,
-      yMap: d.y_map
+      z: d.size
     };
   });
   return bubData;

@@ -353,10 +353,10 @@ export class LargeCounterfactualChart extends React.PureComponent<
       indexSeries,
       isBubbleChartRendered: false,
       plotData: scatterPlotData,
-      xSeries,
-      ySeries,
       xMap,
-      yMap
+      xSeries,
+      yMap,
+      ySeries
     });
   };
 

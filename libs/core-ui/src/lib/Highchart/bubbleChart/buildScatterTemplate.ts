@@ -28,18 +28,8 @@ export function buildScatterTemplate(
   const customData: ICustomData = {};
   const xName = jointData.metaDict[chartProps.xAxis.property].label;
   const yName = jointData.metaDict[chartProps.yAxis.property].label;
-  console.log(
-    "!!xy: ",
-    xName,
-    yName,
-    chartProps.xAxis.property,
-    chartProps.yAxis.property,
-    xMap,
-    yMap
-  );
   const xValue = getAxisValueMapping(chartProps.xAxis.property, x, xMap);
   const yValue = getAxisValueMapping(chartProps.yAxis.property, y, yMap);
-  console.log("!!xyNew: ", x, y, xValue, yValue);
   if (chartProps.xAxis) {
     hovertemplate += `${xName}: ${xValue}<br>`;
   }
