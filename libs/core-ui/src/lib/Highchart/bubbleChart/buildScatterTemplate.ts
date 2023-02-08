@@ -16,21 +16,35 @@ export interface ICustomData {
 export function buildScatterTemplate(
   jointData: JointDataset,
   chartProps: IGenericChartProps,
-  x: any,
-  y: any,
+  x: number,
+  y: number,
   index: number,
   absoluteIndex: number,
-  showColorAxis?: boolean
+  showColorAxis?: boolean,
+  xMap?: { [key: number]: string },
+  yMap?: { [key: number]: string }
 ): ICustomData {
   let hovertemplate = "";
   const customData: ICustomData = {};
   const xName = jointData.metaDict[chartProps.xAxis.property].label;
   const yName = jointData.metaDict[chartProps.yAxis.property].label;
+  console.log(
+    "!!xy: ",
+    xName,
+    yName,
+    chartProps.xAxis.property,
+    chartProps.yAxis.property,
+    xMap,
+    yMap
+  );
+  const xValue = getAxisValueMapping(chartProps.xAxis.property, x, xMap);
+  const yValue = getAxisValueMapping(chartProps.yAxis.property, y, yMap);
+  console.log("!!xyNew: ", x, y, xValue, yValue);
   if (chartProps.xAxis) {
-    hovertemplate += `${xName}: ${x}<br>`;
+    hovertemplate += `${xName}: ${xValue}<br>`;
   }
   if (chartProps.yAxis) {
-    hovertemplate += `${yName}: ${y}<br>`;
+    hovertemplate += `${yName}: ${yValue}<br>`;
   }
   if (showColorAxis && chartProps.colorAxis) {
     hovertemplate += `${
@@ -43,4 +57,22 @@ export function buildScatterTemplate(
   customData.AbsoluteIndex = absoluteIndex;
   customData.Index = index;
   return customData;
+}
+
+function getAxisValueMapping(
+  axisProperty: string,
+  axisValue: number,
+  axisMap?: { [key: number]: string }
+): string | number {
+  if (axisMap && axisProperty === JointDataset.ClassificationError) {
+    const nearestValue = getNearestValue(axisValue, Object.keys(axisMap));
+    return axisMap[nearestValue];
+  }
+  return axisValue;
+}
+
+function getNearestValue(axisValue: number, axisMapKeys: any[]): number {
+  return axisMapKeys.reduce((prev, curr) =>
+    Math.abs(curr - axisValue) < Math.abs(prev - axisValue) ? curr : prev
+  );
 }

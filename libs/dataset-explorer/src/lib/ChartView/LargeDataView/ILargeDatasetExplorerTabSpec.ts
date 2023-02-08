@@ -18,6 +18,8 @@ export interface IDatasetExplorerTabState {
   isBubbleChartDataLoading: boolean;
   bubbleChartErrorMessage?: string;
   isRevertButtonClicked?: boolean;
+  xMap?: { [key: number]: string };
+  yMap?: { [key: number]: string };
 }
 
 export function getInitialState(): IDatasetExplorerTabState {
@@ -29,6 +31,8 @@ export function getInitialState(): IDatasetExplorerTabState {
     isRevertButtonClicked: false,
     selectedCohortIndex: 0,
     xSeries: [],
-    ySeries: []
+    ySeries: [],
+    xMap: undefined,
+    yMap: undefined
   };
 }

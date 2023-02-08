@@ -35,7 +35,9 @@ export async function calculateBubblePlotDataFromErrorCohort(
     scatterPlotData: IHighchartsConfig,
     xSeries: number[],
     ySeries: number[],
-    indexSeries: number[]
+    indexSeries: number[],
+    xMap?: { [key: number]: string },
+    yMap?: { [key: number]: string }
   ) => void,
   onIndexSeriesUpdated?: (indexSeries: number[]) => void
 ): Promise<IHighchartsConfig | IHighchartBubbleSDKClusterData | undefined> {

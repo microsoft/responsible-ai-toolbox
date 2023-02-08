@@ -29,7 +29,9 @@ export function getBubbleChartOptions(
     scatterPlotData: IHighchartsConfig,
     xSeries: number[],
     ySeries: number[],
-    indexSeries: number[]
+    indexSeries: number[],
+    xMap?: { [key: number]: string },
+    yMap?: { [key: number]: string }
   ) => void,
   selectPointFromChartLargeData?: (data: IScatterPoint) => void,
   onIndexSeriesUpdated?: (indexSeries: number[]) => void
@@ -69,6 +71,8 @@ export function getBubbleChartOptions(
                 isScatterPlotDataLoading,
                 showColorAxis,
                 useDifferentColorForScatterPoints,
+                this["xMap"],
+                this["yMap"],
                 selectPointFromChartLargeData
               );
               onBubbleClick &&
@@ -76,7 +80,9 @@ export function getBubbleChartOptions(
                   scatterPlotData,
                   this["xSeries"],
                   this["ySeries"],
-                  this["indexSeries"]
+                  this["indexSeries"],
+                  this["xMap"],
+                  this["yMap"]
                 );
               onIndexSeriesUpdated && onIndexSeriesUpdated(this["indexSeries"]);
             }

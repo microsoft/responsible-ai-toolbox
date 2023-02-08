@@ -357,6 +357,8 @@ export class LargeDatasetExplorerTab extends React.Component<
       false,
       false,
       true,
+      this.state.xMap,
+      this.state.yMap,
       undefined
     );
   };
@@ -387,14 +389,18 @@ export class LargeDatasetExplorerTab extends React.Component<
     scatterPlotData: IHighchartsConfig,
     xSeries: number[],
     ySeries: number[],
-    indexSeries: number[]
+    indexSeries: number[],
+    xMap?: { [key: number]: string },
+    yMap?: { [key: number]: string }
   ): void => {
     this.setState({
       highChartConfigOverride: scatterPlotData,
       indexSeries,
       isBubbleChartRendered: false,
       xSeries,
-      ySeries
+      ySeries,
+      xMap,
+      yMap
     });
   };
 

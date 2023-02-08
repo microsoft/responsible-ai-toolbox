@@ -27,7 +27,9 @@ export function getScatterPlot(
   chartProps?: IGenericChartProps,
   customPoints?: Array<{ [key: string]: any }>,
   showColorAxis?: boolean,
-  useDifferentColorForScatterPoints?: boolean
+  useDifferentColorForScatterPoints?: boolean,
+  xMap?: { [key: number]: string },
+  yMap?: { [key: number]: string }
 ): any[] {
   const dataSeries: any = [];
   const result = [];
@@ -48,7 +50,9 @@ export function getScatterPlot(
             data,
             index,
             indexSeries[index],
-            showColorAxis
+            showColorAxis,
+            xMap,
+            yMap
           ),
         marker: getMarker(selectedPointsIndexes, index, color),
         x: xSeries?.[index],

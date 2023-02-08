@@ -11,8 +11,8 @@ export interface IHighchartBubbleSDKData {
   x_series: any[];
   y_series: any[];
   test_data: any[];
-  x_map: any[];
-  y_map: any[];
+  x_map: { [key: number]: string };
+  y_map: { [key: number]: string };
 }
 
 export interface IHighchartBubbleSDKClusterData {
@@ -31,6 +31,6 @@ export interface IHighchartBubbleData {
   xSeries: any[];
   ySeries: any[];
   testData: any[];
-  xMap: any[];
-  yMap: any[];
+  xMap: { [key: number]: string };
+  yMap: { [key: number]: string };
 }

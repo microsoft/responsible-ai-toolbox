@@ -25,6 +25,8 @@ export function getScatterOption(
   isScatterPlotDataLoading?: boolean,
   showColorAxis?: boolean,
   useDifferentColorForScatterPoints?: boolean,
+  xMap?: { [key: number]: string },
+  yMap?: { [key: number]: string },
   selectPointFromChartLargeData?: (data: IScatterPoint) => void
 ): IHighchartsConfig {
   const dataSeries = getScatterPlot(
@@ -36,7 +38,9 @@ export function getScatterOption(
     chartProps,
     customPoints,
     showColorAxis,
-    useDifferentColorForScatterPoints
+    useDifferentColorForScatterPoints,
+    xMap,
+    yMap
   );
 
   return {
