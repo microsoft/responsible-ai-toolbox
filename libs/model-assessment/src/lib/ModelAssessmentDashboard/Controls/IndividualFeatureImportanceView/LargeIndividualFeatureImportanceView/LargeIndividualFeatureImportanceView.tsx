@@ -199,6 +199,8 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       this.state.isLocalExplanationsDataLoading,
       true,
       false,
+      this.state.xMap,
+      this.state.yMap,
       this.selectPointFromChartLargeData
     );
     this.setState({
@@ -213,14 +215,18 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     scatterPlotData: IHighchartsConfig,
     xSeries: number[],
     ySeries: number[],
-    indexSeries: number[]
+    indexSeries: number[],
+    xMap?: { [key: number]: string },
+    yMap?: { [key: number]: string }
   ): void => {
     this.setState({
       highChartConfigOverride: scatterPlotData,
       indexSeries,
       isBubbleChartRendered: false,
       xSeries,
-      ySeries
+      ySeries,
+      xMap,
+      yMap
     });
   };
 

@@ -29,6 +29,8 @@ export interface ILargeIndividualFeatureImportanceViewState {
   xSeries: number[];
   ySeries: number[];
   indexSeries: number[];
+  xMap?: { [key: number]: string };
+  yMap?: { [key: number]: string };
   isBubbleChartDataLoading: boolean;
   bubbleChartErrorMessage?: string;
   isRevertButtonClicked: boolean;

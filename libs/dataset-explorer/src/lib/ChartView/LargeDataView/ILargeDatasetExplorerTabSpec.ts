@@ -31,8 +31,6 @@ export function getInitialState(): IDatasetExplorerTabState {
     isRevertButtonClicked: false,
     selectedCohortIndex: 0,
     xSeries: [],
-    ySeries: [],
-    xMap: undefined,
-    yMap: undefined
+    ySeries: []
   };
 }

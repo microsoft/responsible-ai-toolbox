@@ -56,6 +56,8 @@ export interface ICounterfactualChartState {
   isBubbleChartDataLoading: boolean;
   bubbleChartErrorMessage?: string;
   isBubbleChartRendered: boolean;
+  xMap?: { [key: number]: string };
+  yMap?: { [key: number]: string };
 }
 
 export class LargeCounterfactualChart extends React.PureComponent<
@@ -143,7 +145,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
             mustBin={bin}
             allowTreatAsCategorical={!ifEnableLargeData(this.context.dataset)}
             allowLogarithmicScaling={!this.state.isBubbleChartRendered}
-            canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
+            canDither={false}
             hideDroppedFeatures
             onAccept={this.onYSet}
             onCancel={this.setYDialogOpen}
@@ -155,7 +157,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
             selectedColumn={this.props.chartProps.xAxis}
             canBin={bin}
             mustBin={bin}
-            canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
+            canDither={false}
             allowTreatAsCategorical={!ifEnableLargeData(this.context.dataset)}
             allowLogarithmicScaling={!this.state.isBubbleChartRendered}
             hideDroppedFeatures
@@ -311,6 +313,8 @@ export class LargeCounterfactualChart extends React.PureComponent<
       this.props.isCounterfactualsDataLoading,
       true,
       false,
+      this.state.xMap,
+      this.state.yMap,
       this.selectPointFromChartLargeData
     );
     this.setState({
@@ -341,14 +345,18 @@ export class LargeCounterfactualChart extends React.PureComponent<
     scatterPlotData: IHighchartsConfig,
     xSeries: number[],
     ySeries: number[],
-    indexSeries: number[]
+    indexSeries: number[],
+    xMap?: { [key: number]: string },
+    yMap?: { [key: number]: string }
   ): void => {
     this.setState({
       indexSeries,
       isBubbleChartRendered: false,
       plotData: scatterPlotData,
       xSeries,
-      ySeries
+      ySeries,
+      xMap,
+      yMap
     });
   };
 
