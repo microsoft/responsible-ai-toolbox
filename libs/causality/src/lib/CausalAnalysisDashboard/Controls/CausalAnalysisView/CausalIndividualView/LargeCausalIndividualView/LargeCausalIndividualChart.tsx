@@ -206,6 +206,8 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       this.state.isLocalCausalDataLoading,
       true,
       false,
+      this.state.xMap,
+      this.state.yMap,
       this.selectPointFromChartLargeData
     );
     this.setState({
@@ -220,13 +222,17 @@ export class LargeCausalIndividualChart extends React.PureComponent<
     scatterPlotData: IHighchartsConfig,
     xSeries: number[],
     ySeries: number[],
-    indexSeries: number[]
+    indexSeries: number[],
+    xMap?: { [key: number]: string },
+    yMap?: { [key: number]: string }
   ): void => {
     this.setState({
       indexSeries,
       isBubbleChartRendered: false,
       plotData: scatterPlotData,
+      xMap,
       xSeries,
+      yMap,
       ySeries
     });
   };

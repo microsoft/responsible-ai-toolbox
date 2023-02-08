@@ -28,8 +28,24 @@ export function buildScatterTemplate(
   const customData: ICustomData = {};
   const xName = jointData.metaDict[chartProps.xAxis.property].label;
   const yName = jointData.metaDict[chartProps.yAxis.property].label;
-  const xValue = getAxisValueMapping(chartProps.xAxis.property, x, xMap);
-  const yValue = getAxisValueMapping(chartProps.yAxis.property, y, yMap);
+  const isXCategorical =
+    jointData.metaDict[chartProps.xAxis.property].isCategorical ||
+    jointData.metaDict[chartProps.xAxis.property].treatAsCategorical;
+  const isYCategorical =
+    jointData.metaDict[chartProps.yAxis.property].isCategorical ||
+    jointData.metaDict[chartProps.yAxis.property].treatAsCategorical;
+  const xValue = getAxisValueMapping(
+    chartProps.xAxis.property,
+    x,
+    isXCategorical,
+    xMap
+  );
+  const yValue = getAxisValueMapping(
+    chartProps.yAxis.property,
+    y,
+    isYCategorical,
+    yMap
+  );
   if (chartProps.xAxis) {
     hovertemplate += `${xName}: ${xValue}<br>`;
   }
@@ -52,9 +68,13 @@ export function buildScatterTemplate(
 function getAxisValueMapping(
   axisProperty: string,
   axisValue: number,
+  axisIsCategorical?: boolean,
   axisMap?: { [key: number]: string }
 ): string | number {
-  if (axisMap && axisProperty === JointDataset.ClassificationError) {
+  if (
+    axisMap &&
+    (axisProperty === JointDataset.ClassificationError || axisIsCategorical)
+  ) {
     const nearestValue = getNearestValue(axisValue, Object.keys(axisMap));
     return axisMap[nearestValue];
   }

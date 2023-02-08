@@ -34,6 +34,8 @@ export interface ILargeCausalIndividualChartState {
   isLocalCausalDataLoading: boolean;
   localCausalErrorMessage?: string;
   localCausalData?: ICausalAnalysisData;
+  xMap?: { [key: number]: string };
+  yMap?: { [key: number]: string };
 }
 
 export function getInitialSpec(): ILargeCausalIndividualChartState {

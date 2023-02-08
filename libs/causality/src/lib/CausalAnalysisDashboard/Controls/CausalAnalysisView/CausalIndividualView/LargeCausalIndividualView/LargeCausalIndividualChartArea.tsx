@@ -58,7 +58,6 @@ export class LargeCausalIndividualChartArea extends React.PureComponent<ILargeCa
     const isHistogramOrBoxChart =
       chartProps?.chartType === ChartTypes.Histogram ||
       chartProps?.chartType === ChartTypes.Box;
-    const isScatterChart = chartProps?.chartType === ChartTypes.Scatter;
     return (
       <Stack.Item className={classNames.chartWithAxes}>
         <Stack horizontal={false}>
@@ -86,7 +85,7 @@ export class LargeCausalIndividualChartArea extends React.PureComponent<ILargeCa
                       selectedColumn={chartProps.yAxis}
                       canBin={false}
                       mustBin={false}
-                      canDither={isScatterChart}
+                      canDither={false}
                       hideDroppedFeatures
                       onAccept={onYSet}
                       disabled={disableAxisButton}
@@ -135,7 +134,7 @@ export class LargeCausalIndividualChartArea extends React.PureComponent<ILargeCa
                   selectedColumn={chartProps.xAxis}
                   canBin={isHistogramOrBoxChart}
                   mustBin={isHistogramOrBoxChart}
-                  canDither={isScatterChart}
+                  canDither={false}
                   allowTreatAsCategorical={isHistogramOrBoxChart}
                   allowLogarithmicScaling={
                     isHistogramOrBoxChart || !isBubbleChartRendered
