@@ -19,7 +19,7 @@ import { CausalAggregateChart } from "./CausalAggregateChart";
 import { CausalAggregateTable } from "./CausalAggregateTable";
 
 export interface ICausalAggregateViewProps {
-  globalEffects: ICausalAnalysisSingleData[];
+  globalEffects?: ICausalAnalysisSingleData[];
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 

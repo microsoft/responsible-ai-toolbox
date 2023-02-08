@@ -14,7 +14,7 @@ import React from "react";
 import { getErrorBarChartOptions } from "./getErrorBarChartOptions";
 
 export interface ICausalAggregateChartProps {
-  data: ICausalAnalysisSingleData[];
+  data?: ICausalAnalysisSingleData[];
 }
 
 export class CausalAggregateChart extends React.PureComponent<ICausalAggregateChartProps> {
@@ -25,7 +25,7 @@ export class CausalAggregateChart extends React.PureComponent<ICausalAggregateCh
   public render(): React.ReactNode {
     return (
       <BasicHighChart
-        configOverride={getErrorBarChartOptions(this.props.data, getTheme())}
+        configOverride={getErrorBarChartOptions(getTheme(), this.props.data)}
         theme={getTheme()}
         id="CausalAggregateChart"
       />
