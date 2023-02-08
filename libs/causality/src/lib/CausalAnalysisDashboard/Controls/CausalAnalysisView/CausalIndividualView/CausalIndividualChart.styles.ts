@@ -26,7 +26,7 @@ export const causalIndividualChartStyles: () => IProcessedStyleSet<ICausalIndivi
         marginTop: "10px !important",
         paddingBottom: "10px",
         paddingTop: "10px",
-        width: "150px"
+        width: "200px"
       },
       chart: flexLgDown,
       chartWithAxes: {
