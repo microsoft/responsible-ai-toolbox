@@ -46,6 +46,11 @@ export async function getBarOrBoxChartConfig(
     jointDataset.metaDict[yAxisProperty].isCategorical ||
     jointDataset.metaDict[yAxisProperty]?.treatAsCategorical;
 
+  let numberOfBins = 5;
+  if (jointDataset?.binDict?.Index) {
+    numberOfBins = jointDataset.binDict.Index.length;
+  }
+
   if (treatYAsCategorical) {
     const treatXAsCategorical =
       (jointDataset.metaDict[xAxisProperty].isCategorical ||
@@ -59,7 +64,7 @@ export async function getBarOrBoxChartConfig(
       treatXAsCategorical,
       jointDataset.metaDict[yAxisProperty].label,
       treatYAsCategorical,
-      5,
+      numberOfBins,
       new AbortController().signal
     );
     const datasetBarConfigOverride = {
@@ -78,7 +83,7 @@ export async function getBarOrBoxChartConfig(
     compositeFiltersRelabeled,
     jointDataset.metaDict[xAxisProperty].label,
     jointDataset.metaDict[yAxisProperty].label,
-    5,
+    numberOfBins,
     new AbortController().signal
   );
 
