@@ -133,6 +133,10 @@ export interface IModelAssessmentDashboardProps
     request: any[],
     abortSignal: AbortSignal
   ) => Promise<any[]>;
+  requestSplinePlotDistribution?: (
+    request: any,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   telemetryHook?: (message: ITelemetryEvent) => void;
 
   // TODO figure out how to persist starting tab for fairness
