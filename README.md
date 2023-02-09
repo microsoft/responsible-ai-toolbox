@@ -7,6 +7,7 @@
 ![PyPI responsibleai](https://img.shields.io/pypi/v/responsibleai?label=PyPI%20responsibleai)
 ![PyPI erroranalysis](https://img.shields.io/pypi/v/erroranalysis?label=PyPI%20erroranalysis)
 ![PyPI raiutils](https://img.shields.io/pypi/v/raiutils?label=PyPI%20raiutils)
+![PyPI rai_test_utils](https://img.shields.io/pypi/v/rai_test_utils?label=PyPI%20rai_test_utils)
 
 ![npm model-assessment](https://img.shields.io/npm/v/@responsible-ai/model-assessment?label=npm%20%40responsible-ai%2Fmodel-assessment)
 
