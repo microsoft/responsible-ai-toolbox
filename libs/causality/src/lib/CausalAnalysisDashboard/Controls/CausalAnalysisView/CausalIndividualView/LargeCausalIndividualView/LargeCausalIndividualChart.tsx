@@ -267,7 +267,8 @@ export class LargeCausalIndividualChart extends React.PureComponent<
     const localCausalData = await getLocalCausalFromSDK(
       this.props.causalId,
       absoluteIndex,
-      this.context.requestLocalCausalEffects
+      this.context.requestLocalCausalEffects,
+      this.props.telemetryHook
     );
     if (localCausalData && !instanceOfLocalCausalData(localCausalData)) {
       this.setState({
