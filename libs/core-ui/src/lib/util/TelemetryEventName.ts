@@ -59,5 +59,6 @@ export enum TelemetryEventName {
   IndividualCausalSelectedDatapointUpdatedFromChart = "RAI_IndividualCausalSelectedDatapointUpdatedFromChart",
   IndividualCausalSelectedDatapointUpdatedFromDropdown = "RAI_IndividualCausalSelectedDatapointUpdatedFromDropdown",
   CausalTreatmentPolicyTabClick = "RAI_CausalTreatmentPolicyTabClick",
-  CausalTreatmentPolicyNewTreatmentFeatureSelected = "RAI_CausalTreatmentPolicyNewTreatmentFeatureSelected"
+  CausalTreatmentPolicyNewTreatmentFeatureSelected = "RAI_CausalTreatmentPolicyNewTreatmentFeatureSelected",
+  LocalCausalEffectsFetchError = "LocalCausalEffectsFetchError"
 }

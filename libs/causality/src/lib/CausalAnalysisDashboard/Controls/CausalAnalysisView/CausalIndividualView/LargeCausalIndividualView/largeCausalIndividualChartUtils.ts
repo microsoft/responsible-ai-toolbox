@@ -89,8 +89,14 @@ export function shouldUpdateHighchart(
   );
   const hasRevertToBubbleChartUpdated =
     currentState.isRevertButtonClicked &&
-    prevState.isRevertButtonClicked !== currentState.isRevertButtonClicked;
-  const hasCohortUpdated = currentProps.cohort.name !== prevProps.cohort.name;
+    !_.isEqual(
+      prevState.isRevertButtonClicked,
+      currentState.isRevertButtonClicked
+    );
+  const hasCohortUpdated = !_.isEqual(
+    currentProps.cohort.name,
+    prevProps.cohort.name
+  );
   const hasChartPropsUpdated = !_.isEqual(
     currentState.chartProps,
     prevState.chartProps
