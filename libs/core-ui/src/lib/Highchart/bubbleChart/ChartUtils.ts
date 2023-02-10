@@ -9,6 +9,16 @@ enum FieldChangeUpdate {
   Type = "type"
 }
 
+export interface IClusterData {
+  x?: number;
+  y?: number;
+  indexSeries: number[];
+  xSeries: number[];
+  ySeries: number[];
+  xMap?: { [key: number]: string };
+  yMap?: { [key: number]: string };
+}
+
 export function hasAxisTypeChanged(changedKeys: string[]): boolean {
   // return true only if type of the axis has changed in panel
   const changedKeysTemp = removeParentKeys(changedKeys);

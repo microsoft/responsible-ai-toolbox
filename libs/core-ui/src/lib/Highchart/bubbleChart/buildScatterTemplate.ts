@@ -22,7 +22,9 @@ export function buildScatterTemplate(
   absoluteIndex: number,
   showColorAxis?: boolean,
   xMap?: { [key: number]: string },
-  yMap?: { [key: number]: string }
+  yMap?: { [key: number]: string },
+  xOfCluster?: number,
+  yOfCluster?: number
 ): ICustomData {
   let hovertemplate = "";
   const customData: ICustomData = {};
@@ -38,13 +40,15 @@ export function buildScatterTemplate(
     chartProps.xAxis.property,
     x,
     isXCategorical,
-    xMap
+    xMap,
+    xOfCluster
   );
   const yValue = getAxisValueMapping(
     chartProps.yAxis.property,
     y,
     isYCategorical,
-    yMap
+    yMap,
+    yOfCluster
   );
   if (chartProps.xAxis) {
     hovertemplate += `${xName}: ${xValue}<br>`;
@@ -69,20 +73,14 @@ function getAxisValueMapping(
   axisProperty: string,
   axisValue: number,
   axisIsCategorical?: boolean,
-  axisMap?: { [key: number]: string }
+  axisMap?: { [key: number]: string },
+  axisOfCluster?: number
 ): string | number {
   if (
     axisMap &&
     (axisProperty === JointDataset.ClassificationError || axisIsCategorical)
   ) {
-    const nearestValue = getNearestValue(axisValue, Object.keys(axisMap));
-    return axisMap[nearestValue];
+    return axisOfCluster !== undefined ? axisMap[axisOfCluster] : axisValue;
   }
   return axisValue;
-}
-
-function getNearestValue(axisValue: number, axisMapKeys: any[]): number {
-  return axisMapKeys.reduce((prev, curr) =>
-    Math.abs(curr - axisValue) < Math.abs(prev - axisValue) ? curr : prev
-  );
 }

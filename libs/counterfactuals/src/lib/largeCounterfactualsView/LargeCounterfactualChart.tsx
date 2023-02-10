@@ -18,10 +18,11 @@ import {
   IHighchartsConfig,
   IHighchartBubbleSDKClusterData,
   ICounterfactualData,
-  calculateBubblePlotDataFromErrorCohort,
   instanceOfHighChart,
-  getScatterOption,
-  IScatterPoint
+  IScatterPoint,
+  IClusterData,
+  calculateBubblePlotDataFromErrorCohortNew,
+  getScatterOptionNew
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import React from "react";
@@ -50,14 +51,10 @@ export interface ICounterfactualChartState {
   xDialogOpen: boolean;
   yDialogOpen: boolean;
   plotData: any;
-  xSeries: number[];
-  ySeries: number[];
-  indexSeries: number[];
+  clusterData: IClusterData;
   isBubbleChartDataLoading: boolean;
   bubbleChartErrorMessage?: string;
   isBubbleChartRendered: boolean;
-  xMap?: { [key: number]: string };
-  yMap?: { [key: number]: string };
 }
 
 export class LargeCounterfactualChart extends React.PureComponent<
@@ -71,17 +68,21 @@ export class LargeCounterfactualChart extends React.PureComponent<
 
   public constructor(props: ILargeCounterfactualChartProps) {
     super(props);
-
+    const clusterData: IClusterData = {
+      x: undefined,
+      y: undefined,
+      indexSeries: [],
+      xSeries: [],
+      ySeries: []
+    };
     this.state = {
       bubbleChartErrorMessage: undefined,
-      indexSeries: [],
+      clusterData: clusterData,
       isBubbleChartDataLoading: false,
       isBubbleChartRendered: true,
       plotData: undefined,
       xDialogOpen: false,
-      xSeries: [],
-      yDialogOpen: false,
-      ySeries: []
+      yDialogOpen: false
     };
   }
 
@@ -227,10 +228,15 @@ export class LargeCounterfactualChart extends React.PureComponent<
       !_.isEqual(this.props.chartProps, newProps) &&
       !hasAxisTypeChanged(this.changedKeys);
     if (shouldResetIndexes) {
-      this.setState({
+      const clusterData: IClusterData = {
+        x: undefined,
+        y: undefined,
         indexSeries: [],
         xSeries: [],
         ySeries: []
+      };
+      this.setState({
+        clusterData: clusterData
       });
     }
   };
@@ -302,10 +308,8 @@ export class LargeCounterfactualChart extends React.PureComponent<
   }
 
   private updateScatterPlot(): void {
-    const pData = getScatterOption(
-      this.state.xSeries,
-      this.state.ySeries,
-      this.state.indexSeries,
+    const pData = getScatterOptionNew(
+      this.state.clusterData,
       this.props.chartProps,
       this.context.jointDataset,
       this.props.selectedPointsIndexes,
@@ -313,8 +317,6 @@ export class LargeCounterfactualChart extends React.PureComponent<
       this.props.isCounterfactualsDataLoading,
       true,
       false,
-      this.state.xMap,
-      this.state.yMap,
       this.selectPointFromChartLargeData
     );
     this.setState({
@@ -325,7 +327,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
   private async getBubblePlotData(): Promise<
     IHighchartsConfig | IHighchartBubbleSDKClusterData | undefined
   > {
-    return await calculateBubblePlotDataFromErrorCohort(
+    return await calculateBubblePlotDataFromErrorCohortNew(
       this.props.cohort,
       this.props.chartProps,
       this.props.customPoints,
@@ -343,20 +345,12 @@ export class LargeCounterfactualChart extends React.PureComponent<
 
   private readonly onBubbleClick = (
     scatterPlotData: IHighchartsConfig,
-    xSeries: number[],
-    ySeries: number[],
-    indexSeries: number[],
-    xMap?: { [key: number]: string },
-    yMap?: { [key: number]: string }
+    clusterData: IClusterData
   ): void => {
     this.setState({
-      indexSeries,
+      clusterData,
       isBubbleChartRendered: false,
-      plotData: scatterPlotData,
-      xMap,
-      xSeries,
-      yMap,
-      ySeries
+      plotData: scatterPlotData
     });
   };
 

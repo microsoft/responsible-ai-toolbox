@@ -9,6 +9,7 @@ import { IGenericChartProps } from "../../util/IGenericChartProps";
 import { JointDataset } from "../../util/JointDataset";
 
 import { buildScatterTemplate } from "./buildScatterTemplate";
+import { IClusterData } from "./ChartUtils";
 
 interface IMarker {
   fillColor: string;
@@ -53,6 +54,92 @@ export function getScatterPlot(
             showColorAxis,
             xMap,
             yMap
+          ),
+        marker: getMarker(selectedPointsIndexes, index, color),
+        x: xSeries?.[index],
+        y: data
+      });
+    });
+  }
+
+  dataSeries.map(
+    (d: {
+      customData: { Index: number };
+      marker: { fillColor: string; radius: number; symbol: string };
+    }) => {
+      const marker = getMarker(
+        selectedPointsIndexes,
+        d.customData.Index,
+        color
+      );
+      return (d.marker = marker);
+    }
+  );
+
+  if (customPoints) {
+    const customPointsCustomData = getCustomPointCustomData(
+      customPoints,
+      jointDataset,
+      chartProps
+    );
+    customPoints.forEach((_cp, index) => {
+      dataSeries.push({
+        customData: customPointsCustomData[index],
+        marker: getCustomPointMarker(customPoints, index),
+        x: customPointsCustomData[index].rawXValue,
+        y: customPointsCustomData[index].rawYValue
+      });
+    });
+  }
+
+  result.push({
+    data: dataSeries
+  });
+  return result;
+}
+
+export function getScatterPlotNew(
+  clusterData: IClusterData,
+  jointDataset: JointDataset,
+  selectedPointsIndexes: number[],
+  chartProps?: IGenericChartProps,
+  customPoints?: Array<{ [key: string]: any }>,
+  showColorAxis?: boolean,
+  useDifferentColorForScatterPoints?: boolean
+): any[] {
+  const {
+    xSeries,
+    ySeries,
+    x: xOfCluster,
+    y: yOfCluster,
+    indexSeries,
+    xMap,
+    yMap
+  } = clusterData;
+  const dataSeries: any = [];
+  const result = [];
+
+  const color = useDifferentColorForScatterPoints
+    ? FluentUIStyles.scatterFluentUIColorPalette[5]
+    : undefined;
+
+  if (ySeries) {
+    ySeries.forEach((data, index) => {
+      dataSeries.push({
+        customData:
+          chartProps &&
+          buildScatterTemplate(
+            jointDataset,
+            chartProps,
+            xSeries?.[index],
+            data,
+            index,
+            indexSeries[index],
+            showColorAxis,
+            xMap,
+            yMap,
+            xOfCluster,
+            yOfCluster
           ),
         marker: getMarker(selectedPointsIndexes, index, color),
         x: xSeries?.[index],

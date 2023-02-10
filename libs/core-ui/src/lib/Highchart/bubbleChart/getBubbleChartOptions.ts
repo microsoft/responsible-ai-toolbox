@@ -11,8 +11,13 @@ import {
 import { IGenericChartProps } from "../../util/IGenericChartProps";
 import { JointDataset } from "../../util/JointDataset";
 import { IHighchartsConfig } from "../IHighchartsConfig";
+import { IClusterData } from "./ChartUtils";
 
-import { getScatterOption, IScatterPoint } from "./getScatterOption";
+import {
+  getScatterOption,
+  getScatterOptionNew,
+  IScatterPoint
+} from "./getScatterOption";
 
 export function getBubbleChartOptions(
   data: IHighchartBubbleSDKData[],
@@ -84,6 +89,126 @@ export function getBubbleChartOptions(
                   this["xMap"],
                   this["yMap"]
                 );
+              onIndexSeriesUpdated && onIndexSeriesUpdated(this["indexSeries"]);
+            }
+          }
+        }
+      }
+    },
+    series: [
+      {
+        data: bubbleData,
+        type: "bubble"
+      }
+    ],
+    tooltip: {
+      followPointer: true,
+      footerFormat: "</table>",
+      headerFormat: "<table>",
+      pointFormat:
+        `${xAxisLabel}: {point.x}<br>` +
+        `${yAxisLabel}: {point.y}<br>` +
+        `${localization.Counterfactuals.Size}: {point.z}<br>`,
+      useHTML: true
+    },
+    xAxis: {
+      gridLineWidth: 1,
+      labels: {
+        format: "{value}"
+      },
+      plotLines: [
+        {
+          color: theme.palette.black,
+          dashStyle: "Dot",
+          value: 65,
+          width: 2,
+          zIndex: 3
+        }
+      ]
+    },
+    yAxis: {
+      endOnTick: false,
+      labels: {
+        format: "{value}"
+      },
+      maxPadding: 0.2,
+      plotLines: [
+        {
+          color: theme.palette.black,
+          dashStyle: "Dot",
+          value: 50,
+          width: 2,
+          zIndex: 3
+        }
+      ],
+      startOnTick: false
+    }
+  };
+}
+export function getBubbleChartOptionsNew(
+  data: IHighchartBubbleSDKData[],
+  xAxisLabel: string,
+  yAxisLabel: string,
+  chartProps: IGenericChartProps,
+  jointData: JointDataset,
+  selectedPointsIndexes: number[],
+  customPoints?: Array<{ [key: string]: any }>,
+  isScatterPlotDataLoading?: boolean,
+  showColorAxis?: boolean,
+  useDifferentColorForScatterPoints?: boolean,
+  onBubbleClick?: (
+    scatterPlotData: IHighchartsConfig,
+    clusterData: IClusterData
+  ) => void,
+  selectPointFromChartLargeData?: (data: IScatterPoint) => void,
+  onIndexSeriesUpdated?: (indexSeries: number[]) => void
+): IHighchartsConfig {
+  const bubbleData = convertSDKObjectToBubbleData(data);
+  const theme = getTheme();
+  return {
+    chart: {
+      plotBorderWidth: 1,
+      type: "bubble",
+      zoomType: "xy"
+    },
+    custom: {
+      disableUpdate: true
+    },
+    legend: {
+      enabled: false
+    },
+    plotOptions: {
+      series: {
+        cursor: "pointer",
+        dataLabels: {
+          enabled: true,
+          format: "{point.name}"
+        },
+        point: {
+          events: {
+            click(): void {
+              const clusterData: IClusterData = {
+                x: this["x"],
+                y: this["y"],
+                indexSeries: this["indexSeries"],
+                xSeries: this["xSeries"],
+                ySeries: this["ySeries"],
+                xMap: this["xMap"],
+                yMap: this["yMap"]
+              };
+              const scatterPlotData = getScatterOptionNew(
+                clusterData,
+                chartProps,
+                jointData,
+                selectedPointsIndexes,
+                customPoints,
+                isScatterPlotDataLoading,
+                showColorAxis,
+                useDifferentColorForScatterPoints,
+                selectPointFromChartLargeData
+              );
+
+              onBubbleClick && onBubbleClick(scatterPlotData, clusterData);
               onIndexSeriesUpdated && onIndexSeriesUpdated(this["indexSeries"]);
             }
           }
