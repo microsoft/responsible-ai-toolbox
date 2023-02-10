@@ -19,6 +19,16 @@ export interface IClusterData {
   yMap?: { [key: number]: string };
 }
 
+export function getInitialClusterState(): IClusterData {
+  return {
+    x: undefined,
+    y: undefined,
+    indexSeries: [],
+    xSeries: [],
+    ySeries: []
+  };
+}
+
 export function hasAxisTypeChanged(changedKeys: string[]): boolean {
   // return true only if type of the axis has changed in panel
   const changedKeysTemp = removeParentKeys(changedKeys);

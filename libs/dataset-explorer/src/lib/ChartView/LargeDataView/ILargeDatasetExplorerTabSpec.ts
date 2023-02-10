@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import {
+  getInitialClusterState,
   IClusterData,
   IGenericChartProps,
   ITelemetryEvent
@@ -30,15 +31,5 @@ export function getInitialState(): IDatasetExplorerTabState {
     isBubbleChartRendered: false,
     isRevertButtonClicked: false,
     selectedCohortIndex: 0
-  };
-}
-
-export function getInitialClusterState(): IClusterData {
-  return {
-    x: undefined,
-    y: undefined,
-    indexSeries: [],
-    xSeries: [],
-    ySeries: []
   };
 }

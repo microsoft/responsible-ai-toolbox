@@ -22,7 +22,8 @@ import {
   IScatterPoint,
   IClusterData,
   calculateBubblePlotDataFromErrorCohortNew,
-  getScatterOptionNew
+  getScatterOptionNew,
+  getInitialClusterState
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import React from "react";
@@ -68,16 +69,9 @@ export class LargeCounterfactualChart extends React.PureComponent<
 
   public constructor(props: ILargeCounterfactualChartProps) {
     super(props);
-    const clusterData: IClusterData = {
-      x: undefined,
-      y: undefined,
-      indexSeries: [],
-      xSeries: [],
-      ySeries: []
-    };
     this.state = {
       bubbleChartErrorMessage: undefined,
-      clusterData: clusterData,
+      clusterData: getInitialClusterState(),
       isBubbleChartDataLoading: false,
       isBubbleChartRendered: true,
       plotData: undefined,
@@ -228,15 +222,8 @@ export class LargeCounterfactualChart extends React.PureComponent<
       !_.isEqual(this.props.chartProps, newProps) &&
       !hasAxisTypeChanged(this.changedKeys);
     if (shouldResetIndexes) {
-      const clusterData: IClusterData = {
-        x: undefined,
-        y: undefined,
-        indexSeries: [],
-        xSeries: [],
-        ySeries: []
-      };
       this.setState({
-        clusterData: clusterData
+        clusterData: getInitialClusterState()
       });
     }
   };

@@ -21,7 +21,8 @@ import {
   IHighchartBubbleSDKClusterData,
   IClusterData,
   getScatterOptionNew,
-  calculateBubblePlotDataFromErrorCohortNew
+  calculateBubblePlotDataFromErrorCohortNew,
+  getInitialClusterState
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -33,7 +34,6 @@ import { generateDefaultChartAxes } from "../utils/generateDefaultChartAxes";
 
 import { getBarOrBoxChartConfig } from "./getBarOrBoxChartConfig";
 import {
-  getInitialClusterState,
   getInitialState,
   IDatasetExplorerTabProps,
   IDatasetExplorerTabState
