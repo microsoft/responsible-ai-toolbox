@@ -1,7 +1,8 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from raiutils.exceptions import (UserConfigValidationException,
+from raiutils.exceptions import (SystemErrorException,
+                                 UserConfigValidationException,
                                  UserErrorException)
 
 TEST_MESSAGE = "Test message"
@@ -24,3 +25,9 @@ class TestExceptions:
         self._verify_exception_hierarchy(
             uee, UserErrorException(),
             'User Error', TEST_MESSAGE)
+
+    def test_system_exceptions(self):
+        se = SystemErrorException(TEST_MESSAGE)
+        self._verify_exception_hierarchy(
+            se, SystemErrorException(),
+            'System Error', TEST_MESSAGE)
