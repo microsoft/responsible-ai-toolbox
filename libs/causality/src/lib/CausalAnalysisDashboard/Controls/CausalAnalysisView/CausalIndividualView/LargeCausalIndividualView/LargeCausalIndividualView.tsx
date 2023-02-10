@@ -4,9 +4,11 @@
 import { Link, Stack, Text } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
+  ICausalAnalysisData,
   ICausalAnalysisSingleData,
   ITelemetryEvent,
   LabelWithCallout,
+  LoadingSpinner,
   MissingParametersPlaceholder,
   ModelAssessmentContext,
   TelemetryEventName
@@ -14,30 +16,33 @@ import {
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-import { CausalAggregateChart } from "../CausalAggregateView/CausalAggregateChart";
-import { CausalAggregateTable } from "../CausalAggregateView/CausalAggregateTable";
+import { CausalAggregateChart } from "../../CausalAggregateView/CausalAggregateChart";
+import { CausalAggregateTable } from "../../CausalAggregateView/CausalAggregateTable";
+import { CausalIndividualStyles } from "../CausalIndividual.styles";
 
-import { CausalIndividualStyles } from "./CausalIndividual.styles";
-import { CausalIndividualChart } from "./CausalIndividualChart";
+import { LargeCausalIndividualChart } from "./LargeCausalIndividualChart";
 
-export interface ICausalIndividualViewProps {
+export interface ILargeCausalIndividualViewProps {
+  causalId: string;
   localEffects?: ICausalAnalysisSingleData[][];
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
-interface ICausalIndividualViewState {
+interface ILargeCausalIndividualViewState {
   selectedData?: ICausalAnalysisSingleData[];
+  isLocalCausalDataLoading: boolean;
 }
 
-export class CausalIndividualView extends React.PureComponent<
-  ICausalIndividualViewProps,
-  ICausalIndividualViewState
+export class LargeCausalIndividualView extends React.PureComponent<
+  ILargeCausalIndividualViewProps,
+  ILargeCausalIndividualViewState
 > {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
-  public constructor(props: ICausalIndividualViewProps) {
+  public constructor(props: ILargeCausalIndividualViewProps) {
     super(props);
     this.state = {
+      isLocalCausalDataLoading: false,
       selectedData: undefined
     };
   }
@@ -46,7 +51,7 @@ export class CausalIndividualView extends React.PureComponent<
     const styles = CausalIndividualStyles();
     return (
       <Stack
-        id="causalIndividualView"
+        id="largeCausalIndividualView"
         grow
         tokens={{ childrenGap: "l1", padding: "8px" }}
       >
@@ -56,7 +61,9 @@ export class CausalIndividualView extends React.PureComponent<
           </Text>
         </Stack.Item>
         <Stack.Item className={styles.individualChart}>
-          <CausalIndividualChart
+          <LargeCausalIndividualChart
+            causalId={this.props.causalId}
+            cohort={this.context.selectedErrorCohort.cohort}
             onDataClick={this.handleOnClick}
             telemetryHook={this.props.telemetryHook}
           />
@@ -95,35 +102,38 @@ export class CausalIndividualView extends React.PureComponent<
             </Stack.Item>
           </Stack>
         </Stack.Item>
-        <Stack.Item className={styles.individualTable}>
-          {this.state.selectedData ? (
-            <CausalAggregateTable data={this.state.selectedData} />
-          ) : (
-            <MissingParametersPlaceholder>
-              {localization.CausalAnalysis.IndividualView.dataRequired}
-            </MissingParametersPlaceholder>
-          )}
-        </Stack.Item>
-        <Stack.Item className={styles.aggregateChart}>
-          {this.state.selectedData && (
-            <CausalAggregateChart data={this.state.selectedData} />
-          )}
-        </Stack.Item>
+        {this.state.isLocalCausalDataLoading ? (
+          <LoadingSpinner label={localization.Common.loading} />
+        ) : (
+          <Stack.Item>
+            <Stack.Item className={styles.individualTable}>
+              {this.state.selectedData ? (
+                <CausalAggregateTable data={this.state.selectedData} />
+              ) : (
+                <MissingParametersPlaceholder>
+                  {localization.CausalAnalysis.IndividualView.dataRequired}
+                </MissingParametersPlaceholder>
+              )}
+            </Stack.Item>
+            <Stack.Item className={styles.aggregateChart}>
+              {this.state.selectedData && (
+                <CausalAggregateChart data={this.state.selectedData} />
+              )}
+            </Stack.Item>
+          </Stack.Item>
+        )}
       </Stack>
     );
   }
-  private readonly handleOnClick = (dataIndex: number | undefined): void => {
+  private readonly handleOnClick = (
+    isLocalCausalDataLoading: boolean,
+    localCausalData?: ICausalAnalysisData
+  ): void => {
     this.setState({
-      selectedData: this.getDataFromIndex(dataIndex)
+      isLocalCausalDataLoading,
+      selectedData: localCausalData
+        ? localCausalData?.local_effects?.[0]
+        : undefined
     });
-  };
-  private readonly getDataFromIndex = (
-    dataIndex: number | undefined
-  ): ICausalAnalysisSingleData[] | undefined => {
-    const causalLocal = this.context?.causalAnalysisData?.local_effects;
-    if (!(dataIndex !== undefined && dataIndex >= 0 && causalLocal)) {
-      return undefined;
-    }
-    return causalLocal[dataIndex].sort((d1, d2) => d2.point - d1.point);
   };
 }
