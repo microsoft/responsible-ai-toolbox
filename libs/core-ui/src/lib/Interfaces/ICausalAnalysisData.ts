@@ -6,9 +6,10 @@ import { ComparisonTypes } from "./ComparisonTypes";
 export interface ICausalAnalysisData {
   id: string;
   config?: ICausalConfig;
-  global_effects: ICausalAnalysisSingleData[];
-  local_effects: ICausalAnalysisSingleData[][];
+  global_effects?: ICausalAnalysisSingleData[];
+  local_effects?: ICausalAnalysisSingleData[][];
   policies?: ICausalPolicy[];
+  version?: string;
 }
 
 export interface ICausalConfig {
@@ -53,7 +54,9 @@ export interface ICausalAnalysisSingleData {
   ci_upper: number;
   feature: string;
   feature_value?: string;
+  outcome?: string;
   p_value: number;
+  sample?: number;
   point: number;
   stderr: number;
   zstat: number;
