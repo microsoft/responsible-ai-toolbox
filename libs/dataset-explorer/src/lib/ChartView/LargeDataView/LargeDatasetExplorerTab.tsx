@@ -14,13 +14,14 @@ import {
   TelemetryLevels,
   TelemetryEventName,
   OtherChartTypes,
-  calculateBubblePlotDataFromErrorCohort,
   IHighchartsConfig,
   ifEnableLargeData,
   hasAxisTypeChanged,
-  getScatterOption,
   instanceOfHighChart,
-  IHighchartBubbleSDKClusterData
+  IHighchartBubbleSDKClusterData,
+  IClusterData,
+  getScatterOptionNew,
+  calculateBubblePlotDataFromErrorCohortNew
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -32,6 +33,7 @@ import { generateDefaultChartAxes } from "../utils/generateDefaultChartAxes";
 
 import { getBarOrBoxChartConfig } from "./getBarOrBoxChartConfig";
 import {
+  getInitialClusterState,
   getInitialState,
   IDatasetExplorerTabProps,
   IDatasetExplorerTabState
@@ -52,7 +54,6 @@ export class LargeDatasetExplorerTab extends React.Component<
 
   public constructor(props: IDatasetExplorerTabProps) {
     super(props);
-
     this.state = getInitialState();
   }
 
@@ -189,10 +190,8 @@ export class LargeDatasetExplorerTab extends React.Component<
 
   private setIsRevertButtonClicked = (status: boolean): void => {
     this.setState({
-      indexSeries: [],
-      isRevertButtonClicked: status,
-      xSeries: [],
-      ySeries: []
+      clusterData: getInitialClusterState(),
+      isRevertButtonClicked: status
     });
   };
 
@@ -327,7 +326,7 @@ export class LargeDatasetExplorerTab extends React.Component<
   ): Promise<
     IHighchartBubbleSDKClusterData | IHighchartsConfig | undefined
   > => {
-    return await calculateBubblePlotDataFromErrorCohort(
+    return await calculateBubblePlotDataFromErrorCohortNew(
       this.context.errorCohorts[cohortIndex].cohort,
       chartProps,
       [],
@@ -346,10 +345,8 @@ export class LargeDatasetExplorerTab extends React.Component<
   private getScatterPlotData = (
     chartProps: IGenericChartProps
   ): IHighchartsConfig => {
-    return getScatterOption(
-      this.state.xSeries,
-      this.state.ySeries,
-      this.state.indexSeries,
+    return getScatterOptionNew(
+      this.state.clusterData,
       chartProps,
       this.context.jointDataset,
       [],
@@ -357,8 +354,6 @@ export class LargeDatasetExplorerTab extends React.Component<
       false,
       false,
       true,
-      this.state.xMap,
-      this.state.yMap,
       undefined
     );
   };
@@ -387,20 +382,13 @@ export class LargeDatasetExplorerTab extends React.Component<
 
   private onBubbleClick = (
     scatterPlotData: IHighchartsConfig,
-    xSeries: number[],
-    ySeries: number[],
-    indexSeries: number[],
-    xMap?: { [key: number]: string },
-    yMap?: { [key: number]: string }
+    clusterData: IClusterData
   ): void => {
+    clusterData;
     this.setState({
+      clusterData,
       highChartConfigOverride: scatterPlotData,
-      indexSeries,
-      isBubbleChartRendered: false,
-      xMap,
-      xSeries,
-      yMap,
-      ySeries
+      isBubbleChartRendered: false
     });
   };
 
@@ -439,10 +427,8 @@ export class LargeDatasetExplorerTab extends React.Component<
         !hasAxisTypeChanged(this.changedKeys);
       if (shouldResetIndexes) {
         this.setState({
-          indexSeries: [],
-          isRevertButtonClicked: false,
-          xSeries: [],
-          ySeries: []
+          clusterData: getInitialClusterState(),
+          isRevertButtonClicked: false
         });
       }
     }
