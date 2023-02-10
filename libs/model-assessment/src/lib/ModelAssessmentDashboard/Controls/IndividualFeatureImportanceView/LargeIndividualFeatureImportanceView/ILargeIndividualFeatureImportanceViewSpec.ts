@@ -40,8 +40,8 @@ export interface ILargeIndividualFeatureImportanceViewState {
 
 export function getInitialSpec(): ILargeIndividualFeatureImportanceViewState {
   return {
-    clusterData: getInitialClusterState(),
     bubbleChartErrorMessage: undefined,
+    clusterData: getInitialClusterState(),
     isBubbleChartDataLoading: false,
     isBubbleChartRendered: true,
     isLocalExplanationsDataLoading: false,

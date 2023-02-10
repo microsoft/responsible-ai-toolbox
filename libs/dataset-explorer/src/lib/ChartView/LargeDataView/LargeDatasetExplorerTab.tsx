@@ -384,7 +384,6 @@ export class LargeDatasetExplorerTab extends React.Component<
     scatterPlotData: IHighchartsConfig,
     clusterData: IClusterData
   ): void => {
-    clusterData;
     this.setState({
       clusterData,
       highChartConfigOverride: scatterPlotData,

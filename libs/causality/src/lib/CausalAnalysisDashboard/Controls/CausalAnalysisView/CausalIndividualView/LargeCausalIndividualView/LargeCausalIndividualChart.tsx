@@ -14,8 +14,10 @@ import {
   IHighchartsConfig,
   ChartTypes,
   instanceOfHighChart,
-  getScatterOption,
-  ICausalAnalysisData
+  ICausalAnalysisData,
+  getInitialClusterState,
+  getScatterOptionNew,
+  IClusterData
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -134,7 +136,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
           onYSet={this.onYSet}
         />
         <LargeCausalIndividualChartLegend
-          indexSeries={this.state.indexSeries}
+          indexSeries={this.state.clusterData.indexSeries}
           selectedPointsIndexes={this.state.selectedPointsIndexes}
           isLocalCausalDataLoading={this.state.isLocalCausalDataLoading}
           temporaryPoint={this.state.temporaryPoint}
@@ -154,14 +156,12 @@ export class LargeCausalIndividualChart extends React.PureComponent<
     chartProps: IGenericChartProps
   ): Promise<void> => {
     this.setState({
-      indexSeries: [],
+      clusterData: getInitialClusterState(),
       isBubbleChartDataLoading: true,
       isLocalCausalDataLoading: false,
       localCausalData: undefined,
       localCausalErrorMessage: undefined,
-      selectedPointsIndexes: [],
-      xSeries: [],
-      ySeries: []
+      selectedPointsIndexes: []
     });
     this.props.onDataClick(false, undefined);
     const datasetBarConfigOverride = await getBubblePlotData(
@@ -195,10 +195,8 @@ export class LargeCausalIndividualChart extends React.PureComponent<
   };
 
   private updateScatterPlotData = (chartProps: IGenericChartProps): void => {
-    const datasetBarConfigOverride = getScatterOption(
-      this.state.xSeries,
-      this.state.ySeries,
-      this.state.indexSeries,
+    const datasetBarConfigOverride = getScatterOptionNew(
+      this.state.clusterData,
       chartProps,
       this.context.jointDataset,
       this.state.selectedPointsIndexes,
@@ -206,8 +204,6 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       this.state.isLocalCausalDataLoading,
       true,
       false,
-      this.state.xMap,
-      this.state.yMap,
       this.selectPointFromChartLargeData
     );
     this.setState({
@@ -220,20 +216,12 @@ export class LargeCausalIndividualChart extends React.PureComponent<
 
   private onBubbleClick = (
     scatterPlotData: IHighchartsConfig,
-    xSeries: number[],
-    ySeries: number[],
-    indexSeries: number[],
-    xMap?: { [key: number]: string },
-    yMap?: { [key: number]: string }
+    clusterData: IClusterData
   ): void => {
     this.setState({
-      indexSeries,
+      clusterData,
       isBubbleChartRendered: false,
-      plotData: scatterPlotData,
-      xMap,
-      xSeries,
-      yMap,
-      ySeries
+      plotData: scatterPlotData
     });
   };
 

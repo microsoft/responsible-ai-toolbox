@@ -21,10 +21,10 @@ export interface IClusterData {
 
 export function getInitialClusterState(): IClusterData {
   return {
-    x: undefined,
-    y: undefined,
     indexSeries: [],
+    x: undefined,
     xSeries: [],
+    y: undefined,
     ySeries: []
   };
 }

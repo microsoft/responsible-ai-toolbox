@@ -3,12 +3,13 @@
 
 import { IComboBoxOption } from "@fluentui/react";
 import {
-  calculateBubblePlotDataFromErrorCohort,
+  calculateBubblePlotDataFromErrorCohortNew,
   Cohort,
   FluentUIStyles,
   hasAxisTypeUpdated,
   ICausalAnalysisData,
   ICausalAnalysisSingleData,
+  IClusterData,
   IDataset,
   IGenericChartProps,
   IHighchartBubbleSDKClusterData,
@@ -51,12 +52,10 @@ export async function getBubblePlotData(
   selectPointFromChartLargeData?: (data: IScatterPoint) => Promise<void>,
   onBubbleClick?: (
     scatterPlotData: IHighchartsConfig,
-    xSeries: number[],
-    ySeries: number[],
-    indexSeries: number[]
+    clusterData: IClusterData
   ) => void
 ): Promise<IHighchartBubbleSDKClusterData | IHighchartsConfig | undefined> {
-  return await calculateBubblePlotDataFromErrorCohort(
+  return await calculateBubblePlotDataFromErrorCohortNew(
     cohort,
     chartProps,
     [],

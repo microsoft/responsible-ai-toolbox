@@ -212,8 +212,8 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     clusterData: IClusterData
   ): void => {
     this.setState({
-      highChartConfigOverride: scatterPlotData,
       clusterData,
+      highChartConfigOverride: scatterPlotData,
       isBubbleChartRendered: false
     });
   };
