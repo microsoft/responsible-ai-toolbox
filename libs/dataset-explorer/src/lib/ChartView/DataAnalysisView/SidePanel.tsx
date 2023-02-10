@@ -198,7 +198,7 @@ export class SidePanel extends React.Component<
           colorAxis.property
         );
         const includedIndexes = _.uniq(
-          this.props.cohorts[this.props.selectedCohortIndex].unwrap(
+          this.props.cohorts[this.props.selectedCohortIndex]?.unwrap(
             colorAxis.property
           )
         );
