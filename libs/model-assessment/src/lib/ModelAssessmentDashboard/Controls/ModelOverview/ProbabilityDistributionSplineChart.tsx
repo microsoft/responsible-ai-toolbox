@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getTheme, IChoiceGroupOption } from "@fluentui/react";
+import { getTheme, IChoiceGroupOption, Spinner } from "@fluentui/react";
 import {
   BasicHighChart,
   calculateSplinePlotDataFromErrorCohort,
@@ -9,10 +9,11 @@ import {
   ErrorCohort,
   ModelAssessmentContext,
   ifEnableLargeData,
+  IProbabilityBinCount,
   Cohort
 } from "@responsible-ai/core-ui";
-import _ from "lodash";
 import { localization } from "@responsible-ai/localization";
+import _ from "lodash";
 import React from "react";
 
 interface IProbabilityDistributionSplineChartProps {
@@ -21,7 +22,7 @@ interface IProbabilityDistributionSplineChartProps {
 }
 
 interface IProbabilityDistributionSplineChartState {
-  probabilityBinCountArray?: any[];
+  probabilityBinCountArray?: Array<IProbabilityBinCount[] | undefined>;
   selectedCohorts: ErrorCohort[];
 }
 
@@ -51,9 +52,9 @@ export class ProbabilityDistributionSplineChart extends React.Component<
     this.calculateSplineDataIfNeeded(prevProps);
   }
 
-  public calculateSplineDataIfNeeded(
+  public async calculateSplineDataIfNeeded(
     prevProps?: IProbabilityDistributionSplineChartProps
-  ): void {
+  ): Promise<void> {
     if (
       prevProps === undefined ||
       !_.isEqual(prevProps.selectedCohorts, this.props.selectedCohorts) ||
@@ -97,8 +98,9 @@ export class ProbabilityDistributionSplineChart extends React.Component<
           ); // TODO: handle undefined case
         });
       }
+      const data = await Promise.all(splinePlotData);
       this.setState({
-        probabilityBinCountArray: splinePlotData,
+        probabilityBinCountArray: data,
         selectedCohorts: this.props.selectedCohorts
       });
     }
@@ -108,28 +110,10 @@ export class ProbabilityDistributionSplineChart extends React.Component<
     const theme = getTheme();
     if (
       this.state.probabilityBinCountArray === undefined ||
-      this.state.probabilityBinCountArray.length == 0
+      this.state.probabilityBinCountArray.length === 0
     ) {
-      return React.Fragment;
+      return <Spinner />;
     }
-
-    // if (this.context.requestSplinePlotDistribution) {
-    //   this.props.selectedCohorts.map((cohort: ErrorCohort, index: number) => {
-    //     const key = this.props.probabilityOption!.key.toString();
-    //     const data = cohort.cohort.filteredData.map((dict) => dict[key]);
-    //     console.log(
-    //       "okok prob spline plot:",
-    //       this.context.requestSplinePlotDistribution,
-    //       this.context,
-    //       index
-    //     );
-    //     const result = this.context.requestSplinePlotDistribution?.(
-    //       data,
-    //       new AbortController().signal
-    //     );
-    //     console.log("okok result:", result);
-    //   });
-    // }
 
     return (
       <BasicHighChart

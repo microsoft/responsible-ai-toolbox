@@ -77,7 +77,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
             : undefined,
           modelMetadata: this.state.modelMetadata,
           requestBoxPlotDistribution: this.props.requestBoxPlotDistribution,
-          requestSplinePlotDistribution: this.props.requestSplinePlotDistribution,
           requestBubblePlotData: this.props.requestBubblePlotData,
           requestCausalWhatIf: this.props.requestCausalWhatIf,
           requestDatasetAnalysisBarChart:
@@ -95,6 +94,8 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
             this.props.requestLocalFeatureExplanations,
           requestMetrics: this.props.requestMetrics,
           requestPredictions: this.props.requestPredictions,
+          requestSplinePlotDistribution:
+            this.props.requestSplinePlotDistribution,
           selectedErrorCohort: this.state.selectedCohort,
           shiftErrorCohort: this.shiftErrorCohort,
           telemetryHook:
