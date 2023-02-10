@@ -923,6 +923,8 @@
       "falsePositive": "False positive",
       "none": "Count",
       "predictedProbabilities": "Prediction probabilities",
+      "predictedLabels": "Predicted labels",
+      "trueLabels": "True labels",
       "regressionError": "Regression error",
       "trueNegative": "True negative",
       "truePositive": "True positive",
