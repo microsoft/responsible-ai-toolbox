@@ -9,13 +9,13 @@ import { IHighchartsConfig } from "../IHighchartsConfig";
 
 import { ICustomData } from "./buildScatterTemplate";
 import { IClusterData } from "./ChartUtils";
-import { getScatterPlotNew } from "./getScatterPlot";
+import { getScatterPlot } from "./getScatterPlot";
 
 export interface IScatterPoint extends Point {
   customData: ICustomData;
 }
 
-export function getScatterOptionNew(
+export function getScatterOption(
   clusterData: IClusterData,
   chartProps: IGenericChartProps,
   jointData: JointDataset,
@@ -26,7 +26,7 @@ export function getScatterOptionNew(
   useDifferentColorForScatterPoints?: boolean,
   selectPointFromChartLargeData?: (data: IScatterPoint) => void
 ): IHighchartsConfig {
-  const dataSeries = getScatterPlotNew(
+  const dataSeries = getScatterPlot(
     clusterData,
     jointData,
     selectedPointsIndexes,

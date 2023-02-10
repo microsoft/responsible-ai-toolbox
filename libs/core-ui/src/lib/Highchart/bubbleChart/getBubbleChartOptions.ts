@@ -13,9 +13,9 @@ import { JointDataset } from "../../util/JointDataset";
 import { IHighchartsConfig } from "../IHighchartsConfig";
 
 import { IClusterData } from "./ChartUtils";
-import { getScatterOptionNew, IScatterPoint } from "./getScatterOption";
+import { getScatterOption, IScatterPoint } from "./getScatterOption";
 
-export function getBubbleChartOptionsNew(
+export function getBubbleChartOptions(
   data: IHighchartBubbleSDKData[],
   xAxisLabel: string,
   yAxisLabel: string,
@@ -66,7 +66,7 @@ export function getBubbleChartOptionsNew(
                 yMap: this["yMap"],
                 ySeries: this["ySeries"]
               };
-              const scatterPlotData = getScatterOptionNew(
+              const scatterPlotData = getScatterOption(
                 clusterData,
                 chartProps,
                 jointData,

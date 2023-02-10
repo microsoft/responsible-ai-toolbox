@@ -20,8 +20,8 @@ import {
   instanceOfHighChart,
   IHighchartBubbleSDKClusterData,
   IClusterData,
-  getScatterOptionNew,
-  calculateBubblePlotDataFromErrorCohortNew,
+  getScatterOption,
+  calculateBubblePlotDataFromErrorCohort,
   getInitialClusterState
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -326,7 +326,7 @@ export class LargeDatasetExplorerTab extends React.Component<
   ): Promise<
     IHighchartBubbleSDKClusterData | IHighchartsConfig | undefined
   > => {
-    return await calculateBubblePlotDataFromErrorCohortNew(
+    return await calculateBubblePlotDataFromErrorCohort(
       this.context.errorCohorts[cohortIndex].cohort,
       chartProps,
       [],
@@ -345,7 +345,7 @@ export class LargeDatasetExplorerTab extends React.Component<
   private getScatterPlotData = (
     chartProps: IGenericChartProps
   ): IHighchartsConfig => {
-    return getScatterOptionNew(
+    return getScatterOption(
       this.state.clusterData,
       chartProps,
       this.context.jointDataset,

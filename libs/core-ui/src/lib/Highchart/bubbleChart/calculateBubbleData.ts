@@ -10,10 +10,10 @@ import { JointDataset } from "../../util/JointDataset";
 import { IHighchartsConfig } from "../IHighchartsConfig";
 
 import { IClusterData } from "./ChartUtils";
-import { getBubbleChartOptionsNew } from "./getBubbleChartOptions";
+import { getBubbleChartOptions } from "./getBubbleChartOptions";
 import { IScatterPoint } from "./getScatterOption";
 
-export async function calculateBubblePlotDataFromErrorCohortNew(
+export async function calculateBubblePlotDataFromErrorCohort(
   errorCohort: Cohort,
   chartProps: IGenericChartProps,
   customPoints: Array<{
@@ -48,7 +48,7 @@ export async function calculateBubblePlotDataFromErrorCohortNew(
         jointDataset.metaDict[chartProps?.xAxis.property].label,
         jointDataset.metaDict[chartProps?.yAxis.property].label
       );
-      return getBubbleChartOptionsNew(
+      return getBubbleChartOptions(
         bubbleChartData.clusters,
         jointDataset.metaDict[chartProps?.xAxis.property].label,
         jointDataset.metaDict[chartProps?.yAxis.property].label,

@@ -19,7 +19,7 @@ interface IMarker {
 
 const maxSelection = 2;
 
-export function getScatterPlotNew(
+export function getScatterPlot(
   clusterData: IClusterData,
   jointDataset: JointDataset,
   selectedPointsIndexes: number[],

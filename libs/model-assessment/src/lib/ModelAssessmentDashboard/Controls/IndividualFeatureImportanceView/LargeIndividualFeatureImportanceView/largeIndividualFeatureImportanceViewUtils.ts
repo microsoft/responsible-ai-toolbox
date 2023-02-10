@@ -16,7 +16,7 @@ import {
   TelemetryLevels,
   hasAxisTypeChanged,
   IClusterData,
-  calculateBubblePlotDataFromErrorCohortNew
+  calculateBubblePlotDataFromErrorCohort
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 
@@ -168,7 +168,7 @@ export async function getBubblePlotData(
     clusterData: IClusterData
   ) => void
 ): Promise<IHighchartBubbleSDKClusterData | IHighchartsConfig | undefined> {
-  return await calculateBubblePlotDataFromErrorCohortNew(
+  return await calculateBubblePlotDataFromErrorCohort(
     cohort,
     chartProps,
     [],

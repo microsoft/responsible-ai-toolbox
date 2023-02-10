@@ -16,7 +16,7 @@ import {
   instanceOfHighChart,
   ICausalAnalysisData,
   getInitialClusterState,
-  getScatterOptionNew,
+  getScatterOption,
   IClusterData
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -195,7 +195,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
   };
 
   private updateScatterPlotData = (chartProps: IGenericChartProps): void => {
-    const datasetBarConfigOverride = getScatterOptionNew(
+    const datasetBarConfigOverride = getScatterOption(
       this.state.clusterData,
       chartProps,
       this.context.jointDataset,

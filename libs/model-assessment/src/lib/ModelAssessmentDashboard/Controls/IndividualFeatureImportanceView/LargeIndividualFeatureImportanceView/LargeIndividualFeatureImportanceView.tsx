@@ -6,7 +6,7 @@ import {
   defaultModelAssessmentContext,
   generateDefaultChartAxes,
   getInitialClusterState,
-  getScatterOptionNew,
+  getScatterOption,
   IClusterData,
   IGenericChartProps,
   IHighchartsConfig,
@@ -188,7 +188,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
   };
 
   private updateScatterPlotData = (chartProps: IGenericChartProps): void => {
-    const datasetBarConfigOverride = getScatterOptionNew(
+    const datasetBarConfigOverride = getScatterOption(
       this.state.clusterData,
       chartProps,
       this.context.jointDataset,

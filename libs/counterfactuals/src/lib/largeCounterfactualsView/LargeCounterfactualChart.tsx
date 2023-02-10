@@ -21,8 +21,8 @@ import {
   instanceOfHighChart,
   IScatterPoint,
   IClusterData,
-  calculateBubblePlotDataFromErrorCohortNew,
-  getScatterOptionNew,
+  calculateBubblePlotDataFromErrorCohort,
+  getScatterOption,
   getInitialClusterState
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
@@ -295,7 +295,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
   }
 
   private updateScatterPlot(): void {
-    const pData = getScatterOptionNew(
+    const pData = getScatterOption(
       this.state.clusterData,
       this.props.chartProps,
       this.context.jointDataset,
@@ -314,7 +314,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
   private async getBubblePlotData(): Promise<
     IHighchartsConfig | IHighchartBubbleSDKClusterData | undefined
   > {
-    return await calculateBubblePlotDataFromErrorCohortNew(
+    return await calculateBubblePlotDataFromErrorCohort(
       this.props.cohort,
       this.props.chartProps,
       this.props.customPoints,
