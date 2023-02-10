@@ -3,6 +3,8 @@
 
 import {
   Cohort,
+  getInitialClusterState,
+  IClusterData,
   IGenericChartProps,
   IHighchartsConfig,
   ILocalExplanations,
@@ -24,13 +26,9 @@ export interface ILargeIndividualFeatureImportanceViewProps {
 
 export interface ILargeIndividualFeatureImportanceViewState {
   chartProps?: IGenericChartProps;
+  clusterData: IClusterData;
   highChartConfigOverride?: IHighchartsConfig;
   isBubbleChartRendered?: boolean;
-  xSeries: number[];
-  ySeries: number[];
-  indexSeries: number[];
-  xMap?: { [key: number]: string };
-  yMap?: { [key: number]: string };
   isBubbleChartDataLoading: boolean;
   bubbleChartErrorMessage?: string;
   isRevertButtonClicked: boolean;
@@ -42,16 +40,14 @@ export interface ILargeIndividualFeatureImportanceViewState {
 
 export function getInitialSpec(): ILargeIndividualFeatureImportanceViewState {
   return {
+    clusterData: getInitialClusterState(),
     bubbleChartErrorMessage: undefined,
-    indexSeries: [],
     isBubbleChartDataLoading: false,
     isBubbleChartRendered: true,
     isLocalExplanationsDataLoading: false,
     isRevertButtonClicked: false,
     localExplanationsData: undefined,
     localExplanationsErrorMessage: undefined,
-    selectedPointsIndexes: [],
-    xSeries: [],
-    ySeries: []
+    selectedPointsIndexes: []
   };
 }

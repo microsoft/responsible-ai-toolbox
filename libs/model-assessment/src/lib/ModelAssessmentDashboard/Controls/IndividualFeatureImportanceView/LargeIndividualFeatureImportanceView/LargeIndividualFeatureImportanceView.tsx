@@ -5,7 +5,9 @@ import { Stack } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   generateDefaultChartAxes,
-  getScatterOption,
+  getInitialClusterState,
+  getScatterOptionNew,
+  IClusterData,
   IGenericChartProps,
   IHighchartsConfig,
   ILocalExplanations,
@@ -148,14 +150,12 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     chartProps: IGenericChartProps
   ): Promise<void> => {
     this.setState({
-      indexSeries: [],
+      clusterData: getInitialClusterState(),
       isBubbleChartDataLoading: true,
       isLocalExplanationsDataLoading: false,
       localExplanationsData: undefined,
       localExplanationsErrorMessage: undefined,
-      selectedPointsIndexes: [],
-      xSeries: [],
-      ySeries: []
+      selectedPointsIndexes: []
     });
     const datasetBarConfigOverride = await getBubblePlotData(
       chartProps,
@@ -188,10 +188,8 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
   };
 
   private updateScatterPlotData = (chartProps: IGenericChartProps): void => {
-    const datasetBarConfigOverride = getScatterOption(
-      this.state.xSeries,
-      this.state.ySeries,
-      this.state.indexSeries,
+    const datasetBarConfigOverride = getScatterOptionNew(
+      this.state.clusterData,
       chartProps,
       this.context.jointDataset,
       this.state.selectedPointsIndexes,
@@ -199,8 +197,6 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       this.state.isLocalExplanationsDataLoading,
       true,
       false,
-      this.state.xMap,
-      this.state.yMap,
       this.selectPointFromChartLargeData
     );
     this.setState({
@@ -213,20 +209,12 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
 
   private onBubbleClick = (
     scatterPlotData: IHighchartsConfig,
-    xSeries: number[],
-    ySeries: number[],
-    indexSeries: number[],
-    xMap?: { [key: number]: string },
-    yMap?: { [key: number]: string }
+    clusterData: IClusterData
   ): void => {
     this.setState({
       highChartConfigOverride: scatterPlotData,
-      indexSeries,
-      isBubbleChartRendered: false,
-      xMap,
-      xSeries,
-      yMap,
-      ySeries
+      clusterData,
+      isBubbleChartRendered: false
     });
   };
 
