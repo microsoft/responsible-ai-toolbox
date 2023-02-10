@@ -33,7 +33,7 @@
     "lintfix": "nx workspace-lint && cross-env NODE_OPTIONS=--max_old_space_size=4096 nx run-many --target=lint --all --fix && yarn prettier . --write",
     "nx": "nx",
     "start": "nx serve",
-    "start-widget": "cross-env NX_based_url=http://localhost:5000 nx serve widget",
+    "start-widget": "cross-env NX_based_url=http://localhost:5004 nx serve widget",
     "startprod": "serve ./dist/apps/dashboard -s",
     "test": "nx test",
     "test-unit": "nx run dashboard:test",
