@@ -172,9 +172,9 @@ function getModelTypeFromProps(
 function buildModelMetadata(
   props: IModelAssessmentDashboardProps
 ): IExplanationModelMetadata {
-  let classNames = props.dataset.class_names;
+  let classNames = props.dataset?.class_names;
   const modelType = getModelTypeFromProps(props, classNames);
-  let featureNames = props.dataset.feature_names;
+  let featureNames = props.dataset?.feature_names;
   let featureNamesAbridged: string[];
   const maxLength = 18;
   if (featureNames !== undefined) {
@@ -186,7 +186,7 @@ function buildModelMetadata(
     });
   } else {
     let featureLength = 0;
-    if (props.dataset.features && props.dataset.features[0] !== undefined) {
+    if (props.dataset?.features && props.dataset.features[0] !== undefined) {
       featureLength = props.dataset.features[0].length;
     } else if (
       props.modelExplanationData?.[0]?.precomputedExplanations &&
@@ -233,7 +233,7 @@ function buildModelMetadata(
   if (modelType !== ModelTypes.ImageMulticlass) {
     const classLength = getClassLength(
       props.modelExplanationData?.[0]?.precomputedExplanations,
-      props.dataset.probability_y
+      props.dataset?.probability_y
     );
     if (!classNames || classNames.length !== classLength) {
       classNames = buildIndexedNames(
@@ -248,17 +248,17 @@ function buildModelMetadata(
   }
   const featureIsCategorical = ModelMetadata.buildIsCategorical(
     featureNames.length,
-    props.dataset.features
+    props.dataset?.features
   ).map(
     (v, i) =>
       v ||
-      props.dataset.categorical_features.includes(
-        props.dataset.feature_names[i]
+      props.dataset?.categorical_features.includes(
+        props.dataset?.feature_names[i]
       )
   );
   const featureRanges =
     ModelMetadata.buildFeatureRanges(
-      props.dataset.features,
+      props.dataset?.features,
       featureIsCategorical
     ) || [];
   return {
