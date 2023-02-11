@@ -50,14 +50,14 @@ export function buildInitialModelAssessmentContext(
         .localFeatureImportance;
   }
   const jointDataset = new JointDataset({
-    dataset: props.dataset.features,
-    featureMetaData: props.dataset.feature_metadata,
+    dataset: props.dataset?.features,
+    featureMetaData: props.dataset?.feature_metadata,
     localExplanations,
     metadata: modelMetadata,
-    predictedProbabilities: props.dataset.probability_y,
-    predictedY: props.dataset.predicted_y,
-    targetColumn: props.dataset.target_column,
-    trueY: props.dataset.true_y
+    predictedProbabilities: props.dataset?.probability_y,
+    predictedY: props.dataset?.predicted_y,
+    targetColumn: props.dataset?.target_column,
+    trueY: props.dataset?.true_y
   });
   const globalProps = buildGlobalProperties(
     props.modelExplanationData?.[0]?.precomputedExplanations
@@ -130,21 +130,21 @@ function getModelTypeFromProps(
   classNames: string[] | undefined
 ): ModelTypes {
   let modelType: ModelTypes = ModelTypes.Multiclass;
-  if (props.dataset.task_type === DatasetTaskType.Regression) {
+  if (props.dataset?.task_type === DatasetTaskType.Regression) {
     modelType = ModelTypes.Regression;
-  } else if (props.dataset.task_type === DatasetTaskType.Classification) {
+  } else if (props.dataset?.task_type === DatasetTaskType.Classification) {
     modelType = getModelTypeFromExplanation(
       props.modelExplanationData?.[0]?.precomputedExplanations,
-      props.dataset.probability_y
+      props.dataset?.probability_y
     );
   }
-  if (props.dataset.task_type === DatasetTaskType.ImageClassification) {
+  if (props.dataset?.task_type === DatasetTaskType.ImageClassification) {
     if (classNames && classNames.length === 2) {
       modelType = ModelTypes.ImageBinary;
     } else {
       modelType = ModelTypes.ImageMulticlass;
     }
-  } else if (props.dataset.task_type === DatasetTaskType.TextClassification) {
+  } else if (props.dataset?.task_type === DatasetTaskType.TextClassification) {
     if (classNames) {
       if (classNames.length === 2) {
         modelType = ModelTypes.TextBinary;
@@ -154,15 +154,15 @@ function getModelTypeFromProps(
     } else {
       getModelTypeFromTextExplanation(
         props.modelExplanationData?.[0]?.precomputedExplanations,
-        props.dataset.probability_y
+        props.dataset?.probability_y
       );
     }
   } else if (
-    props.dataset.task_type === DatasetTaskType.MultilabelImageClassification
+    props.dataset?.task_type === DatasetTaskType.MultilabelImageClassification
   ) {
     modelType = ModelTypes.ImageMultilabel;
   } else if (
-    props.dataset.task_type === DatasetTaskType.MultilabelTextClassification
+    props.dataset?.task_type === DatasetTaskType.MultilabelTextClassification
   ) {
     modelType = ModelTypes.TextMultilabel;
   }
