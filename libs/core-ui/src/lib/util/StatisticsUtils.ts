@@ -98,7 +98,7 @@ const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
     {
       key: BinaryClassificationMetrics.SelectionRate,
       label: localization.Interpret.Statistics.selectionRate,
-      stat: (falseNegCount + truePosCount) / total
+      stat: (falsePosCount + truePosCount) / total
     }
   ];
 };
