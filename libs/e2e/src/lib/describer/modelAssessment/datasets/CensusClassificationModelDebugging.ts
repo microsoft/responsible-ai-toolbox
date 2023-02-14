@@ -73,7 +73,7 @@ export const CensusClassificationModelDebugging = {
           accuracy: "0.856",
           falseNegativeRate: "0.35",
           falsePositiveRate: "0.077",
-          selectionRate: "0.246"
+          selectionRate: "0.218"
         },
         name: "All data",
         sampleSize: "500"
@@ -83,7 +83,7 @@ export const CensusClassificationModelDebugging = {
           accuracy: "0.753",
           falseNegativeRate: "0.313",
           falsePositiveRate: "0.195",
-          selectionRate: "0.438"
+          selectionRate: "0.411"
         },
         name: "Cohort Age and Hours-Per-Week",
         sampleSize: "146"
@@ -93,7 +93,7 @@ export const CensusClassificationModelDebugging = {
           accuracy: "0.927",
           falseNegativeRate: "0.722",
           falsePositiveRate: "0.019",
-          selectionRate: "0.077"
+          selectionRate: "0.039"
         },
         name: "Cohort Marital-Status",
         sampleSize: "233"
@@ -103,7 +103,7 @@ export const CensusClassificationModelDebugging = {
           accuracy: "0.75",
           falseNegativeRate: "0.667",
           falsePositiveRate: "0.071",
-          selectionRate: "0.3"
+          selectionRate: "0.15"
         },
         name: "Cohort Index",
         sampleSize: "20"
@@ -113,7 +113,7 @@ export const CensusClassificationModelDebugging = {
           accuracy: "0.734",
           falseNegativeRate: "0",
           falsePositiveRate: "1",
-          selectionRate: "0.734"
+          selectionRate: "1"
         },
         name: "Cohort Predicted Y",
         sampleSize: "109"
@@ -123,7 +123,7 @@ export const CensusClassificationModelDebugging = {
           accuracy: "0.65",
           falseNegativeRate: "0.35",
           falsePositiveRate: "N/A",
-          selectionRate: "1"
+          selectionRate: "0.65"
         },
         name: "Cohort True Y",
         sampleSize: "123"
@@ -134,7 +134,7 @@ export const CensusClassificationModelDebugging = {
         accuracy: "0.858",
         falseNegativeRate: "0.344",
         falsePositiveRate: "0.077",
-        selectionRate: "0.244"
+        selectionRate: "0.218"
       },
       name: "CohortCreateE2E-census",
       sampleSize: "499"
