@@ -348,8 +348,10 @@ export class LargeCounterfactualChart extends React.PureComponent<
     const absoluteIndex = data.customData[JointDataset.AbsoluteIndexLabel];
     index &&
       this.props.setTemporaryPointToCopyOfDatasetPoint(index, absoluteIndex);
-    this.props.setCounterfactualData(absoluteIndex);
-    this.props.toggleSelectionOfPoint(index);
+    const newSelections = this.props.toggleSelectionOfPoint(index);
+    if (newSelections.length > 0) {
+      this.props.setCounterfactualData(absoluteIndex);
+    }
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
       type: TelemetryEventName.CounterfactualNewDatapointSelectedFromChart

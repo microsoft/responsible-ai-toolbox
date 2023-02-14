@@ -8,11 +8,11 @@ import numpy as np
 import pandas as pd
 import pytest
 from lightgbm import LGBMClassifier
-from tests.common_utils import (create_cancer_data, create_housing_data,
-                                create_iris_data)
+from tests.common_utils import create_iris_data
 
-from rai_test_utils.datasets.tabular import \
-    create_binary_classification_dataset
+from rai_test_utils.datasets.tabular import (
+    create_binary_classification_dataset, create_cancer_data,
+    create_housing_data)
 from rai_test_utils.models.lightgbm import create_lightgbm_classifier
 from rai_test_utils.models.sklearn import \
     create_sklearn_random_forest_regressor
@@ -157,7 +157,7 @@ class TestRAIInsightsValidations:
 
     def test_validate_serializer(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train
@@ -227,7 +227,7 @@ class TestRAIInsightsValidations:
 
     def test_model_predictions_predict(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
 
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
@@ -247,7 +247,7 @@ class TestRAIInsightsValidations:
 
     def test_model_predictions_predict_proba(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
 
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
@@ -269,7 +269,7 @@ class TestRAIInsightsValidations:
 
     def test_incorrect_task_type(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train
@@ -287,7 +287,7 @@ class TestRAIInsightsValidations:
 
     def test_mismatch_train_test_features(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train
@@ -344,7 +344,7 @@ class TestRAIInsightsValidations:
 
     def test_unsupported_train_test_types(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train
@@ -363,7 +363,7 @@ class TestRAIInsightsValidations:
 
     def test_classes_exceptions(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train
@@ -414,7 +414,7 @@ class TestRAIInsightsValidations:
 
     def test_dataset_exception(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
         X_train_feature_names = X_train.columns.tolist()
 
@@ -453,7 +453,7 @@ class TestRAIInsightsValidations:
 
     def test_classes_passes(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train
@@ -471,7 +471,7 @@ class TestRAIInsightsValidations:
 
     def test_no_model_but_serializer_provided(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
 
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
@@ -489,7 +489,7 @@ class TestRAIInsightsValidations:
 
     def test_feature_metadata(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train

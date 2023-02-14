@@ -243,7 +243,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     );
   };
 
-  private toggleSelectionOfPoint = (index?: number): void => {
+  private toggleSelectionOfPoint = (index?: number): number[] => {
     const newSelections = getNewSelections(
       this.state.selectedPointsIndexes,
       index
@@ -253,6 +253,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
         selectedPointsIndexes: newSelections
       });
     }
+    return newSelections ?? [];
   };
 
   private setLocalExplanationsData = async (
