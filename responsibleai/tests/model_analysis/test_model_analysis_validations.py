@@ -195,7 +195,7 @@ class TestModelAnalysisValidations:
         X_test['target'] = y_test
 
         model = MagicMock()
-        model.predict.side_effect = Exception()
+        model.predict.side_effect = Exception("Inner exception message")
         with pytest.raises(UserConfigValidationException) as ucve:
             ModelAnalysis(
                 model=model,
@@ -207,6 +207,8 @@ class TestModelAnalysisValidations:
         assert 'The passed model cannot be used for getting predictions ' + \
             'via predict' in str(ucve.value)
 
+        assert 'Inner exception message' in str(ucve.value.__cause__)
+
     def test_model_predictions_predict_proba(self):
         X_train, X_test, y_train, y_test, _, _ = \
             create_cancer_data(return_dataframe=True)
@@ -216,7 +218,7 @@ class TestModelAnalysisValidations:
 
         model = MagicMock()
         model.predict.return_value = [0]
-        model.predict_proba.side_effect = Exception()
+        model.predict_proba.side_effect = Exception("Inner exception message")
 
         with pytest.raises(UserConfigValidationException) as ucve:
             ModelAnalysis(
@@ -228,6 +230,7 @@ class TestModelAnalysisValidations:
 
         assert 'The passed model cannot be used for getting predictions ' + \
             'via predict_proba' in str(ucve.value)
+        assert 'Inner exception message' in str(ucve.value.__cause__)
 
     def test_model_analysis_incorrect_task_type(self):
         X_train, X_test, y_train, y_test, _, _ = \

@@ -537,11 +537,11 @@ class RAIInsights(RAIBaseInsights):
                 try:
                     model.predict(small_train_data)
                     model.predict(small_test_data)
-                except Exception:
+                except Exception as ex:
                     raise UserConfigValidationException(
                         'The passed model cannot be used for'
                         ' getting predictions via predict()'
-                    )
+                    ) from ex
                 self._validate_features_same(small_train_features_before,
                                              small_train_data,
                                              SKLearn.PREDICT)
@@ -551,11 +551,11 @@ class RAIInsights(RAIBaseInsights):
                     try:
                         model.predict_proba(small_train_data)
                         model.predict_proba(small_test_data)
-                    except Exception:
+                    except Exception as ex:
                         raise UserConfigValidationException(
                             'The passed model cannot be used for'
                             ' getting predictions via predict_proba()'
-                        )
+                        ) from ex
                 self._validate_features_same(small_train_features_before,
                                              small_train_data,
                                              SKLearn.PREDICT_PROBA)
