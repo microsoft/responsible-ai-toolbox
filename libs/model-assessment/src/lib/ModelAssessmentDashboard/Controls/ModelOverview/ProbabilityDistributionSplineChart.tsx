@@ -22,7 +22,7 @@ interface IProbabilityDistributionSplineChartProps {
 }
 
 interface IProbabilityDistributionSplineChartState {
-  probabilityBinCountArray?: Array<IProbabilityBinCount[] | undefined>;
+  probabilityBinCountArray: Array<IProbabilityBinCount[] | undefined>;
   selectedCohorts: ErrorCohort[];
 }
 
@@ -65,7 +65,6 @@ export class ProbabilityDistributionSplineChart extends React.Component<
     ) {
       let splinePlotData = undefined;
       if (
-        this.context &&
         this.context.requestSplinePlotDistribution &&
         ifEnableLargeData(this.context.dataset)
       ) {
