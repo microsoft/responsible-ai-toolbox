@@ -7,6 +7,7 @@ import {
   ICompositeFilter,
   Operations
 } from "../Interfaces/IFilter";
+import { getColumnName } from "../util/CohortUtils";
 import { compare } from "../util/compare";
 import { JointDataset } from "../util/JointDataset";
 import { ModelExplanationUtils } from "../util/ModelExplanationUtils";
@@ -49,7 +50,11 @@ export class Cohort {
     const filtersRelabeled = filters
       .filter((item) => item)
       .map((filter: IFilter): IFilter => {
-        const label = jointDataset.metaDict[filter.column].label;
+        const columnName = getColumnName(filter.column);
+        const label =
+          columnName.length > 0
+            ? columnName
+            : jointDataset.metaDict[filter.column].label;
         return {
           arg: filter.arg,
           column: label,
