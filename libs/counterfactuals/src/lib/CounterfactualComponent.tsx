@@ -210,6 +210,7 @@ export class CounterfactualComponent extends React.PureComponent<
     this.temporaryPoint = getCopyOfDatasetPoint(
       index,
       this.context.jointDataset,
+      this.context.dataset,
       this.state.customPointLength,
       absoluteIndex
     );

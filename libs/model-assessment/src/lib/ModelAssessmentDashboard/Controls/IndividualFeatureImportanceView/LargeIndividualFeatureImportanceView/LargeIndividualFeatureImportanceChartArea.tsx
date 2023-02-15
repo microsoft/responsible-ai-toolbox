@@ -61,7 +61,6 @@ export class LargeIndividualFeatureImportanceChartArea extends React.PureCompone
     const isHistogramOrBoxChart =
       chartProps?.chartType === ChartTypes.Histogram ||
       chartProps?.chartType === ChartTypes.Box;
-    const isScatterChart = chartProps?.chartType === ChartTypes.Scatter;
 
     return (
       <Stack horizontal grow tokens={{ childrenGap: "l1" }}>
@@ -76,7 +75,7 @@ export class LargeIndividualFeatureImportanceChartArea extends React.PureCompone
                       selectedColumn={chartProps.yAxis}
                       canBin={false}
                       mustBin={false}
-                      canDither={isScatterChart}
+                      canDither={false}
                       allowTreatAsCategorical={isHistogramOrBoxChart}
                       allowLogarithmicScaling={
                         isHistogramOrBoxChart || !isBubbleChartRendered
@@ -137,7 +136,7 @@ export class LargeIndividualFeatureImportanceChartArea extends React.PureCompone
                 allowLogarithmicScaling={
                   isHistogramOrBoxChart || !isBubbleChartRendered
                 }
-                canDither={isScatterChart}
+                canDither={false}
                 onAccept={onXSet}
                 buttonText={
                   this.context.jointDataset.metaDict[chartProps.xAxis.property]
