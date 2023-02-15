@@ -18,10 +18,12 @@ import {
   IHighchartsConfig,
   IHighchartBubbleSDKClusterData,
   ICounterfactualData,
-  calculateBubblePlotDataFromErrorCohort,
   instanceOfHighChart,
+  IScatterPoint,
+  IClusterData,
+  calculateBubblePlotDataFromErrorCohort,
   getScatterOption,
-  IScatterPoint
+  getInitialClusterState
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import React from "react";
@@ -50,9 +52,7 @@ export interface ICounterfactualChartState {
   xDialogOpen: boolean;
   yDialogOpen: boolean;
   plotData: any;
-  xSeries: number[];
-  ySeries: number[];
-  indexSeries: number[];
+  clusterData: IClusterData;
   isBubbleChartDataLoading: boolean;
   bubbleChartErrorMessage?: string;
   isBubbleChartRendered: boolean;
@@ -69,17 +69,14 @@ export class LargeCounterfactualChart extends React.PureComponent<
 
   public constructor(props: ILargeCounterfactualChartProps) {
     super(props);
-
     this.state = {
       bubbleChartErrorMessage: undefined,
-      indexSeries: [],
+      clusterData: getInitialClusterState(),
       isBubbleChartDataLoading: false,
       isBubbleChartRendered: true,
       plotData: undefined,
       xDialogOpen: false,
-      xSeries: [],
-      yDialogOpen: false,
-      ySeries: []
+      yDialogOpen: false
     };
   }
 
@@ -143,7 +140,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
             mustBin={bin}
             allowTreatAsCategorical={!ifEnableLargeData(this.context.dataset)}
             allowLogarithmicScaling={!this.state.isBubbleChartRendered}
-            canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
+            canDither={false}
             hideDroppedFeatures
             onAccept={this.onYSet}
             onCancel={this.setYDialogOpen}
@@ -155,7 +152,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
             selectedColumn={this.props.chartProps.xAxis}
             canBin={bin}
             mustBin={bin}
-            canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
+            canDither={false}
             allowTreatAsCategorical={!ifEnableLargeData(this.context.dataset)}
             allowLogarithmicScaling={!this.state.isBubbleChartRendered}
             hideDroppedFeatures
@@ -226,9 +223,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
       !hasAxisTypeChanged(this.changedKeys);
     if (shouldResetIndexes) {
       this.setState({
-        indexSeries: [],
-        xSeries: [],
-        ySeries: []
+        clusterData: getInitialClusterState()
       });
     }
   };
@@ -301,9 +296,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
 
   private updateScatterPlot(): void {
     const pData = getScatterOption(
-      this.state.xSeries,
-      this.state.ySeries,
-      this.state.indexSeries,
+      this.state.clusterData,
       this.props.chartProps,
       this.context.jointDataset,
       this.props.selectedPointsIndexes,
@@ -339,16 +332,12 @@ export class LargeCounterfactualChart extends React.PureComponent<
 
   private readonly onBubbleClick = (
     scatterPlotData: IHighchartsConfig,
-    xSeries: number[],
-    ySeries: number[],
-    indexSeries: number[]
+    clusterData: IClusterData
   ): void => {
     this.setState({
-      indexSeries,
+      clusterData,
       isBubbleChartRendered: false,
-      plotData: scatterPlotData,
-      xSeries,
-      ySeries
+      plotData: scatterPlotData
     });
   };
 

@@ -137,7 +137,9 @@
           "zero_one_loss",
           "index_series",
           "x_series",
-          "y_series"
+          "y_series",
+          "x_map",
+          "y_map"
         ]
       }
     ],

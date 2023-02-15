@@ -81,3 +81,45 @@ export function getBinCountForProperty(
   }
   return binCount;
 }
+
+export function getClassArray(
+  predictionClassCount: number,
+  metaDict: { [key: string]: IJointMeta }
+): Array<{
+  key: string;
+  text: string;
+}> {
+  return new Array(predictionClassCount).fill(0).map((_, index) => {
+    const key = JointDataset.ProbabilityYRoot + index.toString();
+    return {
+      key,
+      text: metaDict[key].abbridgedLabel
+    };
+  });
+}
+
+export function getDataArray(
+  droppedFeatureSet: Set<string>,
+  datasetFeatureCount: number,
+  metaDict: { [key: string]: IJointMeta },
+  hideDroppedFeatures?: boolean
+): Array<{
+  key: string;
+  text: string;
+}> {
+  return new Array(datasetFeatureCount)
+    .fill(0)
+    .map((_, index) => {
+      const key = JointDataset.DataLabelRoot + index.toString();
+      return {
+        key,
+        text: metaDict[key].abbridgedLabel
+      };
+    })
+    .filter((item) => {
+      if (hideDroppedFeatures) {
+        return !droppedFeatureSet.has(item.text);
+      }
+      return true;
+    });
+}

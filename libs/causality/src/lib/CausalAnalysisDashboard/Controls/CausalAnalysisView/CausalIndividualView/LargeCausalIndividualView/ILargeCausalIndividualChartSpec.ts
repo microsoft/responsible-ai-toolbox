@@ -3,7 +3,9 @@
 
 import {
   Cohort,
+  getInitialClusterState,
   ICausalAnalysisData,
+  IClusterData,
   IGenericChartProps,
   IHighchartsConfig,
   ITelemetryEvent
@@ -21,12 +23,10 @@ export interface ILargeCausalIndividualChartProps {
 
 export interface ILargeCausalIndividualChartState {
   chartProps?: IGenericChartProps;
+  clusterData: IClusterData;
   selectedPointsIndexes: number[];
   plotData?: IHighchartsConfig;
   temporaryPoint?: { [key: string]: any };
-  xSeries: number[];
-  ySeries: number[];
-  indexSeries: number[];
   isRevertButtonClicked: boolean;
   isBubbleChartDataLoading: boolean;
   bubbleChartErrorMessage?: string;
@@ -39,15 +39,13 @@ export interface ILargeCausalIndividualChartState {
 export function getInitialSpec(): ILargeCausalIndividualChartState {
   return {
     bubbleChartErrorMessage: undefined,
-    indexSeries: [],
+    clusterData: getInitialClusterState(),
     isBubbleChartDataLoading: false,
     isBubbleChartRendered: true,
     isLocalCausalDataLoading: false,
     isRevertButtonClicked: false,
     localCausalData: undefined,
     plotData: undefined,
-    selectedPointsIndexes: [],
-    xSeries: [],
-    ySeries: []
+    selectedPointsIndexes: []
   };
 }

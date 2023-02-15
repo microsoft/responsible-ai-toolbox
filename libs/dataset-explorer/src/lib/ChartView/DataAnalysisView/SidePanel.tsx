@@ -148,6 +148,7 @@ export class SidePanel extends React.Component<
               onClick={this.onRevertButtonClick}
               text={localization.Counterfactuals.revertToBubbleChart}
               title={localization.Counterfactuals.revertToBubbleChart}
+              disabled={this.props.disabled}
             />
           </Stack.Item>
         )}

@@ -12,6 +12,7 @@ import { IGenericChartProps } from "../../util/IGenericChartProps";
 import { JointDataset } from "../../util/JointDataset";
 import { IHighchartsConfig } from "../IHighchartsConfig";
 
+import { IClusterData } from "./ChartUtils";
 import { getScatterOption, IScatterPoint } from "./getScatterOption";
 
 export function getBubbleChartOptions(
@@ -27,9 +28,7 @@ export function getBubbleChartOptions(
   useDifferentColorForScatterPoints?: boolean,
   onBubbleClick?: (
     scatterPlotData: IHighchartsConfig,
-    xSeries: number[],
-    ySeries: number[],
-    indexSeries: number[]
+    clusterData: IClusterData
   ) => void,
   selectPointFromChartLargeData?: (data: IScatterPoint) => void,
   onIndexSeriesUpdated?: (indexSeries: number[]) => void
@@ -58,10 +57,17 @@ export function getBubbleChartOptions(
         point: {
           events: {
             click(): void {
+              const clusterData: IClusterData = {
+                indexSeries: this["indexSeries"],
+                x: this["x"],
+                xMap: this["xMap"],
+                xSeries: this["xSeries"],
+                y: this["y"],
+                yMap: this["yMap"],
+                ySeries: this["ySeries"]
+              };
               const scatterPlotData = getScatterOption(
-                this["xSeries"],
-                this["ySeries"],
-                this["indexSeries"],
+                clusterData,
                 chartProps,
                 jointData,
                 selectedPointsIndexes,
@@ -71,13 +77,8 @@ export function getBubbleChartOptions(
                 useDifferentColorForScatterPoints,
                 selectPointFromChartLargeData
               );
-              onBubbleClick &&
-                onBubbleClick(
-                  scatterPlotData,
-                  this["xSeries"],
-                  this["ySeries"],
-                  this["indexSeries"]
-                );
+
+              onBubbleClick && onBubbleClick(scatterPlotData, clusterData);
               onIndexSeriesUpdated && onIndexSeriesUpdated(this["indexSeries"]);
             }
           }
@@ -145,8 +146,10 @@ function convertSDKObjectToBubbleData(
       name: undefined,
       testData: d.test_data,
       x: d.x,
+      xMap: d.x_map,
       xSeries: d.x_series,
       y: d.y,
+      yMap: d.y_map,
       ySeries: d.y_series,
       z: d.size
     };

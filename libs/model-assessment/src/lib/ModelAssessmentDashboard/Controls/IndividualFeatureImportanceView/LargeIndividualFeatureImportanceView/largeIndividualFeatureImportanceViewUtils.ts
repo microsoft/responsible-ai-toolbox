@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  calculateBubblePlotDataFromErrorCohort,
   Cohort,
   IDataset,
   IGenericChartProps,
@@ -15,7 +14,9 @@ import {
   JointDataset,
   TelemetryEventName,
   TelemetryLevels,
-  hasAxisTypeChanged
+  hasAxisTypeChanged,
+  IClusterData,
+  calculateBubblePlotDataFromErrorCohort
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 
@@ -164,9 +165,7 @@ export async function getBubblePlotData(
   selectPointFromChartLargeData?: (data: IScatterPoint) => Promise<void>,
   onBubbleClick?: (
     scatterPlotData: IHighchartsConfig,
-    xSeries: number[],
-    ySeries: number[],
-    indexSeries: number[]
+    clusterData: IClusterData
   ) => void
 ): Promise<IHighchartBubbleSDKClusterData | IHighchartsConfig | undefined> {
   return await calculateBubblePlotDataFromErrorCohort(
