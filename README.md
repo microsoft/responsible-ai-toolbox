@@ -26,7 +26,7 @@ The Toolbox consists of three repositories:
  
 | Repository| Tools Covered  |
 |--|--|
-| [Responsible-AI-Toolbox Repository](https://github.com/microsoft/responsible-ai-toolbox) (Here) |This repository contains four visualization widgets for model assessment and decision making:<br>1. [Responsible AI dashboard](https://github.com/microsoft/responsible-ai-toolbox#introducing-responsible-ai-dashboard), a single pane of glass bringing together several mature Responsible AI tools from the toolbox for a holistic responsible assessment and debugging of models and making informed business decisions. With this dashboard, you can identify model errors, diagnose why those errors are happening, and mitigate them. Moreover, the causal decision-making capabilities provide actionable insights to your stakeholders and customers.<br>2. [Error Analysis dashboard](https://github.com/microsoft/responsible-ai-widgets/blob/main/docs/erroranalysis-dashboard-README.md), for identifying model errors and discovering cohorts of data for which the model underperforms. 	<br>3. [Interpretability dashboard](https://github.com/microsoft/responsible-ai-widgets/blob/main/docs/explanation-dashboard-README.md), for understanding model predictions. This dashboard is powered by InterpretML.<br>4. [Fairness dashboard](https://github.com/microsoft/responsible-ai-widgets/blob/main/docs/fairness-dashboard-README.md), for understanding model’s fairness issues using various group-fairness metrics across sensitive features and cohorts. This dashboard is powered by Fairlearn. 
+| [Responsible-AI-Toolbox Repository](https://github.com/microsoft/responsible-ai-toolbox) (Here) |This repository contains four visualization widgets for model assessment and decision making:<br>1. [Responsible AI dashboard](https://github.com/microsoft/responsible-ai-toolbox#introducing-responsible-ai-dashboard), a single pane of glass bringing together several mature Responsible AI tools from the toolbox for a holistic responsible assessment and debugging of models and making informed business decisions. With this dashboard, you can identify model errors, diagnose why those errors are happening, and mitigate them. Moreover, the causal decision-making capabilities provide actionable insights to your stakeholders and customers.<br>2. [Error Analysis dashboard](https://github.com/microsoft/responsible-ai-toolbox/blob/main/docs/erroranalysis-dashboard-README.md), for identifying model errors and discovering cohorts of data for which the model underperforms. 	<br>3. [Interpretability dashboard](https://github.com/microsoft/responsible-ai-toolbox/blob/main/docs/explanation-dashboard-README.md), for understanding model predictions. This dashboard is powered by InterpretML.<br>4. [Fairness dashboard](https://github.com/microsoft/responsible-ai-toolbox/blob/main/docs/fairness-dashboard-README.md), for understanding model’s fairness issues using various group-fairness metrics across sensitive features and cohorts. This dashboard is powered by Fairlearn. 
 | [Responsible-AI-Toolbox-Mitigations Repository](https://github.com/microsoft/responsible-ai-toolbox-mitigations) | The Responsible AI Mitigations Library helps AI practitioners explore different measurements and mitigation steps that may be most appropriate when the model underperforms for a given data cohort. The library currently has two modules: <br>1. DataProcessing, which offers mitigation techniques for improving model performance for specific cohorts. <br>2. DataBalanceAnalysis, which provides metrics for diagnosing errors that originate from data imbalance either on class labels or feature values.| 
  [Responsible-AI-Toolbox-GenBit Repository](https://github.com/microsoft/responsible-ai-toolbox-genbit) | The Responsible AI Gender Bias (GenBit) Library helps AI practitioners measure gender bias in Natural Language Processing (NLP) datasets. The main goal of GenBit is to analyze your text corpora and compute metrics that give insights into the gender bias present in a corpus.|
 
@@ -35,7 +35,7 @@ The Toolbox consists of three repositories:
 
 ## Introducing Responsible AI dashboard
 
-[Responsible AI dashboard](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/responsibleaidashboard/tour.ipynb) is a single pane of glass, enabling you to easily flow through different stages of model debugging and decision-making. This customizable experience can be taken in a multitude of directions, from analyzing the model or data holistically, to conducting a deep dive or comparison on cohorts of interest, to explaining and perturbing model predictions for individual instances, and to informing users on business decisions and actions.
+[Responsible AI dashboard](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/tour.ipynb) is a single pane of glass, enabling you to easily flow through different stages of model debugging and decision-making. This customizable experience can be taken in a multitude of directions, from analyzing the model or data holistically, to conducting a deep dive or comparison on cohorts of interest, to explaining and perturbing model predictions for individual instances, and to informing users on business decisions and actions.
 
 
 <p align="center">
@@ -57,7 +57,7 @@ In order to achieve these capabilities, the dashboard integrates together ideas 
 
 - <b>Causal Analysis</b> powered by [EconML](https://github.com/microsoft/EconML), which focuses on answering What If-style questions to apply data-driven decision-making – how would revenue be affected if a corporation pursues a new pricing strategy? Would a new medication improve a patient’s condition, all else equal?
 
-- <b>Data Balance</b> powered by [Responsible AI](https://github.com/microsoft/responsible-ai-widgets/blob/main/docs/databalance-README.md), which helps users gain an overall understanding of their data, identify features receiving the positive outcome more than others, and visualize feature distributions.
+- <b>Data Balance</b> powered by [Responsible AI](https://github.com/microsoft/responsible-ai-toolbox/blob/main/docs/databalance-README.md), which helps users gain an overall understanding of their data, identify features receiving the positive outcome more than others, and visualize feature distributions.
 
 Responsible AI dashboard is designed to achieve the following goals:
 
@@ -65,7 +65,7 @@ Responsible AI dashboard is designed to achieve the following goals:
 - To help model developers create end to end and fluid debugging experiences and navigate seamlessly through error identification and diagnosis by using interactive visualizations that identify errors, inspect the data, generate global and local explanations models, and potentially inspect problematic examples.
 - To help business stakeholders explore causal relationships in the data and take informed decisions in the real world.
 
-This repository contains the Jupyter notebooks with examples to showcase how to use this widget. Get started [here](https://github.com/microsoft/responsible-ai-widgets/blob/main/notebooks/responsibleaidashboard/getting-started.ipynb).
+This repository contains the Jupyter notebooks with examples to showcase how to use this widget. Get started [here](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/getting-started.ipynb).
 
 
 ### Installation
@@ -100,8 +100,8 @@ Please note that model overview (including fairness analysis) and data explorer 
 
 ### Useful Links
 
-- [Take a tour of Responsible AI Dashboard](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/responsibleaidashboard/tour.ipynb)
-- [Get started](https://github.com/microsoft/responsible-ai-widgets/blob/main/notebooks/responsibleaidashboard/getting-started.ipynb)
+- [Take a tour of Responsible AI Dashboard](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/tour.ipynb)
+- [Get started](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/getting-started.ipynb)
 
 Model Debugging Examples:
 - [Try the tool: model debugging of a census income prediction model (classification)](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-census-classification-model-debugging.ipynb)
@@ -126,8 +126,8 @@ If a pipeline script is provided, the explanation function assumes that the runn
 
 Tools within the Responsible AI Toolbox can also be used with AI models offered as APIs by providers such as [Azure Cognitive Services](https://azure.microsoft.com/en-us/services/cognitive-services/). To see example use cases, see the folders below:
 
-- [Cognitive Services Speech to Text Fairness testing](https://github.com/microsoft/responsible-ai-widgets/tree/main/notebooks/cognitive-services-examples/speech-to-text)
-- [Cognitive Services Face Verification Fairness testing](https://github.com/microsoft/responsible-ai-widgets/tree/main/notebooks/cognitive-services-examples/face-verification)
+- [Cognitive Services Speech to Text Fairness testing](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/cognitive-services-examples/speech-to-text)
+- [Cognitive Services Face Verification Fairness testing](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/cognitive-services-examples/face-verification)
 
 ## Maintainers
 

@@ -29,7 +29,7 @@ In summary, Data Balance, when used as a step for building ML models, has the fo
 
 ## Examples
 
-Within the [Responsible AI Dashboard](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/responsibleaidashboard/tour.ipynb), data balance measures are automatically computed for the dataset if the following criteria is met:
+Within the [Responsible AI Dashboard](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/tour.ipynb), data balance measures are automatically computed for the dataset if the following criteria is met:
 
 - The task type is `classification`.
 - A non-empty list of categorical features is specified.
