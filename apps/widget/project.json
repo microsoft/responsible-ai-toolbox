@@ -1,0 +1,96 @@
+{
+  "name": "widget",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/widget/src",
+  "projectType": "application",
+  "generators": {},
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:build",
+      "options": {
+        "baseHref": "/widget/",
+        "outputPath": "raiwidgets/raiwidgets/widget",
+        "index": "apps/widget/src/index.html",
+        "main": "apps/widget/src/main.tsx",
+        "polyfills": "apps/widget/src/polyfills.ts",
+        "tsConfig": "apps/widget/tsconfig.app.json",
+        "progress": false,
+        "memoryLimit": 4096,
+        "globals": [
+          {
+            "moduleId": "plotly.js",
+            "global": "Plotly"
+          }
+        ],
+        "assets": ["apps/widget/src/favicon.ico", "apps/widget/src/assets"],
+        "styles": [],
+        "scripts": [],
+        "webpackConfig": "./webpack.config.js"
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/widget/src/environments/environment.ts",
+              "with": "apps/widget/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "extractCss": true,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "20mb",
+              "maximumError": "50mb"
+            }
+          ]
+        }
+      },
+      "outputs": ["{options.outputPath}"]
+    },
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "options": {
+        "buildTarget": "widget:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "widget:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/widget/**/*.js",
+          "apps/widget/**/*.jsx",
+          "apps/widget/**/*.ts",
+          "apps/widget/**/*.tsx",
+          "apps/widget/**/*.test.ts",
+          "apps/widget/**/*.test.tsx",
+          "apps/widget/**/*.test.js",
+          "apps/widget/**/*.test.jsx",
+          "apps/widget/**/*.spec.ts",
+          "apps/widget/**/*.spec.tsx",
+          "apps/widget/**/*.spec.js",
+          "apps/widget/**/*.spec.jsx",
+          "apps/widget/**/*.d.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "apps/widget/jest.config.js",
+        "passWithNoTests": true
+      },
+      "outputs": ["coverage/apps/widget"]
+    }
+  }
+}

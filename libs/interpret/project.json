@@ -1,0 +1,70 @@
+{
+  "name": "interpret",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/interpret/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/interpret/**/*.js",
+          "libs/interpret/**/*.jsx",
+          "libs/interpret/**/*.ts",
+          "libs/interpret/**/*.tsx",
+          "libs/interpret/**/*.test.ts",
+          "libs/interpret/**/*.test.tsx",
+          "libs/interpret/**/*.test.js",
+          "libs/interpret/**/*.test.jsx",
+          "libs/interpret/**/*.spec.ts",
+          "libs/interpret/**/*.spec.tsx",
+          "libs/interpret/**/*.spec.js",
+          "libs/interpret/**/*.spec.jsx",
+          "libs/interpret/**/*.d.ts"
+        ]
+      }
+    },
+    "build": {
+      "executor": "@nrwl/web:package",
+      "options": {
+        "outputPath": "dist/libs/interpret",
+        "tsConfig": "libs/interpret/tsconfig.lib.json",
+        "project": "libs/interpret/package.json",
+        "entryFile": "libs/interpret/src/index.ts",
+        "external": [
+          "@fluentui/react",
+          "highcharts",
+          "jmespath",
+          "localized-strings",
+          "lodash",
+          "memoize-one",
+          "moment",
+          "plotly.js",
+          "react-plotly.js",
+          "react",
+          "react-dom",
+          "uuid"
+        ],
+        "rollupConfig": "./rollup.config.js",
+        "assets": [
+          {
+            "glob": "README.md",
+            "input": ".",
+            "output": "."
+          }
+        ],
+        "buildableProjectDepsInPackageJsonType": "dependencies"
+      },
+      "outputs": ["{options.outputPath}"]
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "libs/interpret/jest.config.js",
+        "passWithNoTests": true
+      },
+      "outputs": ["coverage/libs/interpret"]
+    }
+  }
+}

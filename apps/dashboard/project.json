@@ -1,0 +1,99 @@
+{
+  "name": "dashboard",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/dashboard/src",
+  "projectType": "application",
+  "generators": {},
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:build",
+      "options": {
+        "baseHref": ".",
+        "outputPath": "dist/apps/dashboard",
+        "index": "apps/dashboard/src/index.html",
+        "main": "apps/dashboard/src/main.tsx",
+        "polyfills": "apps/dashboard/src/polyfills.ts",
+        "tsConfig": "apps/dashboard/tsconfig.app.json",
+        "progress": false,
+        "memoryLimit": 4096,
+        "globals": [
+          {
+            "moduleId": "plotly.js",
+            "global": "Plotly"
+          }
+        ],
+        "assets": [
+          "apps/dashboard/src/favicon.ico",
+          "apps/dashboard/src/assets"
+        ],
+        "styles": [],
+        "scripts": [],
+        "webpackConfig": "./webpack.config.js"
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/dashboard/src/environments/environment.ts",
+              "with": "apps/dashboard/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "extractCss": true,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "20mb",
+              "maximumError": "50mb"
+            }
+          ]
+        }
+      },
+      "outputs": ["{options.outputPath}"]
+    },
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "options": {
+        "buildTarget": "dashboard:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "dashboard:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/dashboard/**/*.js",
+          "apps/dashboard/**/*.jsx",
+          "apps/dashboard/**/*.ts",
+          "apps/dashboard/**/*.tsx",
+          "apps/dashboard/**/*.test.ts",
+          "apps/dashboard/**/*.test.tsx",
+          "apps/dashboard/**/*.test.js",
+          "apps/dashboard/**/*.test.jsx",
+          "apps/dashboard/**/*.spec.ts",
+          "apps/dashboard/**/*.spec.tsx",
+          "apps/dashboard/**/*.spec.js",
+          "apps/dashboard/**/*.spec.jsx",
+          "apps/dashboard/**/*.d.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "apps/dashboard/jest.config.js",
+        "passWithNoTests": true
+      },
+      "outputs": ["coverage/apps/dashboard"]
+    }
+  }
+}
