@@ -47,6 +47,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       | "requestLocalExplanations"
       | "requestMetrics"
       | "requestLocalCausalEffects"
+      | "requestSplinePlotDistribution"
       | "requestTestDataRow"
     > = {};
     if (this.props.config.baseUrl) {
@@ -243,6 +244,15 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
           [filter, compositeFilter, metric],
           "/model_overview_metrics",
           abortSignal
+        );
+      };
+      callBack.requestSplinePlotDistribution = async (
+        data: any
+      ): Promise<any> => {
+        return callFlaskService(
+          this.props.config,
+          data,
+          "/model_overview_spline_distribution"
         );
       };
     }

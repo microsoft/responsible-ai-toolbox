@@ -129,6 +129,10 @@ export interface IModelAssessmentContext {
   requestExp?:
     | ((index: number, abortSignal: AbortSignal) => Promise<any[]>)
     | undefined;
+  requestSplinePlotDistribution?: (
+    request: any,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   requestForecast?: (
     request: any[],
     abortSignal: AbortSignal
