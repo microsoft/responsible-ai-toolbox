@@ -8,6 +8,8 @@ on:
 
 jobs:
   ci-notebook:
+    env:
+      node-version: 16.x
     strategy:
       matrix:
         operatingSystem: [ubuntu-latest, windows-latest]
@@ -23,11 +25,21 @@ jobs:
           auto-update-conda: true
           python-version: ${{ matrix.pythonVersion }}
 
-      - name: build typescript
+      - name: Use Node.js ${{ env.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node-version }}
+
+      - name: Install yarn
+        run: npm install yarn -g
+
+      - name: Install yarn dependencies
         run: |
           yarn config set network-timeout 300000
-          yarn install
-          yarn buildall
+          yarn install --frozen-lock-file
+
+      - name: Build Typescript
+        run: yarn buildall
 
       - if: ${{ matrix.operatingSystem != 'macos-latest' }}
         name: Install pytorch on non-MacOS
