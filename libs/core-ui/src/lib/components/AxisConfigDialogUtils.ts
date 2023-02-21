@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 
 import { JointDataset } from "../util/JointDataset";
@@ -82,38 +83,32 @@ export function getBinCountForProperty(
   return binCount;
 }
 
-export function getClassArray(
-  predictionClassCount: number,
-  metaDict: { [key: string]: IJointMeta }
-): Array<{
-  key: string;
-  text: string;
-}> {
-  return new Array(predictionClassCount).fill(0).map((_, index) => {
-    const key = JointDataset.ProbabilityYRoot + index.toString();
-    return {
-      key,
-      text: metaDict[key].abbridgedLabel
-    };
-  });
+export function constructClassArray(
+  jointDataset: JointDataset
+): IComboBoxOption[] {
+  return new Array(jointDataset.predictionClassCount)
+    .fill(0)
+    .map((_, index) => {
+      const key = JointDataset.ProbabilityYRoot + index.toString();
+      return {
+        key,
+        text: jointDataset.metaDict[key].abbridgedLabel
+      };
+    });
 }
 
-export function getDataArray(
-  droppedFeatureSet: Set<string>,
-  datasetFeatureCount: number,
-  metaDict: { [key: string]: IJointMeta },
-  hideDroppedFeatures?: boolean
-): Array<{
-  key: string;
-  text: string;
-}> {
-  return new Array(datasetFeatureCount)
+export function constructDataArray(
+  jointDataset: JointDataset,
+  hideDroppedFeatures: boolean | undefined,
+  droppedFeatureSet: Set<string>
+): IComboBoxOption[] {
+  return new Array(jointDataset.datasetFeatureCount)
     .fill(0)
     .map((_, index) => {
       const key = JointDataset.DataLabelRoot + index.toString();
       return {
         key,
-        text: metaDict[key].abbridgedLabel
+        text: jointDataset.metaDict[key].abbridgedLabel
       };
     })
     .filter((item) => {
@@ -122,4 +117,23 @@ export function getDataArray(
       }
       return true;
     });
+}
+
+export function constructMultilabelArray(
+  jointDataset: JointDataset,
+  label: string
+): IComboBoxOption[] {
+  const multilabelPredictedYArray = [];
+  if (jointDataset.numLabels > 1) {
+    multilabelPredictedYArray.push(
+      ...new Array(jointDataset.numLabels).fill(0).map((_, index) => {
+        const key = label + index.toString();
+        return {
+          key,
+          text: jointDataset.metaDict[key].abbridgedLabel
+        };
+      })
+    );
+  }
+  return multilabelPredictedYArray;
 }

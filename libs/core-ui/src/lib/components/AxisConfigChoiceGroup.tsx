@@ -50,7 +50,11 @@ function getLeftItems(removeCount?: boolean): string[] {
 export class AxisConfigChoiceGroup extends React.PureComponent<IAxisConfigChoiceGroupProps> {
   private readonly leftItems = getLeftItems(this.props.removeCount).reduce(
     (
-      previousValue: Array<{ key: string; title: string; ariaLabel?: string }>,
+      previousValue: Array<{
+        key: string;
+        title: string;
+        ariaLabel?: string;
+      }>,
       key
     ) => {
       const metaVal = this.props.jointDataset.metaDict[key];
@@ -83,6 +87,26 @@ export class AxisConfigChoiceGroup extends React.PureComponent<IAxisConfigChoice
         previousValue.push({
           key,
           title: localization.Interpret.Columns.predictedProbabilities
+        });
+        return previousValue;
+      }
+      if (
+        key === JointDataset.PredictedYLabel &&
+        this.props.jointDataset.numLabels > 1
+      ) {
+        previousValue.push({
+          key,
+          title: localization.Interpret.Columns.predictedLabels
+        });
+        return previousValue;
+      }
+      if (
+        key === JointDataset.TrueYLabel &&
+        this.props.jointDataset.numLabels > 1
+      ) {
+        previousValue.push({
+          key,
+          title: localization.Interpret.Columns.trueLabels
         });
         return previousValue;
       }
@@ -155,7 +179,10 @@ export class AxisConfigChoiceGroup extends React.PureComponent<IAxisConfigChoice
     }
     if (
       property === JointDataset.DataLabelRoot ||
-      property === JointDataset.ProbabilityYRoot
+      property === JointDataset.ProbabilityYRoot ||
+      (this.props.jointDataset.numLabels > 1 &&
+        (property === JointDataset.TrueYLabel ||
+          property === JointDataset.PredictedYLabel))
     ) {
       property += "0";
     }

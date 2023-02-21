@@ -12,7 +12,6 @@ import {
   DefaultButton
 } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
 import React from "react";
 
 import { cohortKey } from "../cohortKey";
@@ -28,34 +27,12 @@ import { TelemetryEventName } from "../util/TelemetryEventName";
 
 import { AxisConfigBinOptions } from "./AxisConfigBinOptions";
 import { AxisConfigChoiceGroup } from "./AxisConfigChoiceGroup";
+import { IAxisConfigDialogProps } from "./AxisConfigDialogProps";
 import {
-  extractSelectionKey,
-  getBinCountForProperty,
-  getClassArray,
-  getDataArray
-} from "./AxisConfigDialogUtils";
-
-export interface IAxisConfigDialogProps {
-  orderedGroupTitles: ColumnCategories[];
-  selectedColumn: ISelectorConfig;
-  canBin: boolean;
-  mustBin: boolean;
-  canDither: boolean;
-  allowTreatAsCategorical: boolean;
-  allowLogarithmicScaling?: boolean;
-  hideDroppedFeatures?: boolean;
-  removeCount?: boolean;
-  onAccept: (newConfig: ISelectorConfig) => void;
-  onCancel: () => void;
-}
-
-export interface IAxisConfigDialogState {
-  selectedColumn: ISelectorConfig;
-  binCount?: number;
-  selectedFilterGroup?: string;
-  dataArray: IComboBoxOption[];
-  classArray: IComboBoxOption[];
-}
+  buildAxisConfigDialogState,
+  IAxisConfigDialogState
+} from "./AxisConfigDialogState";
+import { getBinCountForProperty } from "./AxisConfigDialogUtils";
 
 export class AxisConfigDialog extends React.PureComponent<
   IAxisConfigDialogProps,
@@ -73,27 +50,14 @@ export class AxisConfigDialog extends React.PureComponent<
     const droppedFeatureSet = new Set(
       this.context.jointDataset.datasetMetaData?.featureMetaData?.dropped_features
     );
-    this.setState({
-      binCount: getBinCountForProperty(
-        this.context.jointDataset.metaDict[this.props.selectedColumn.property],
-        this.props.canBin,
-        AxisConfigDialog.DEFAULT_BIN_COUNT
-      ),
-      classArray: getClassArray(
-        this.context.jointDataset.predictionClassCount,
-        this.context.jointDataset.metaDict
-      ),
-      dataArray: getDataArray(
-        droppedFeatureSet,
-        this.context.jointDataset.datasetFeatureCount,
-        this.context.jointDataset.metaDict,
-        this.props.hideDroppedFeatures
-      ),
-      selectedColumn: _.cloneDeep(this.props.selectedColumn),
-      selectedFilterGroup: extractSelectionKey(
-        this.props.selectedColumn.property
+    this.setState(
+      buildAxisConfigDialogState(
+        this.context.jointDataset,
+        this.props,
+        AxisConfigDialog.DEFAULT_BIN_COUNT,
+        droppedFeatureSet
       )
-    });
+    );
   }
 
   public render(): React.ReactNode {
@@ -106,7 +70,13 @@ export class AxisConfigDialog extends React.PureComponent<
     const isProbabilityColumn = this.state.selectedColumn.property.includes(
       JointDataset.ProbabilityYRoot
     );
-
+    const isMultilabel = this.context.jointDataset.numLabels > 1;
+    const isMultilablePredictedYColumn =
+      isMultilabel &&
+      this.state.selectedColumn.property.includes(JointDataset.PredictedYLabel);
+    const isMultilableTrueYColumn =
+      isMultilabel &&
+      this.state.selectedColumn.property.includes(JointDataset.TrueYLabel);
     return (
       <Panel
         id="AxisConfigPanel"
@@ -146,24 +116,19 @@ export class AxisConfigDialog extends React.PureComponent<
           {this.state.selectedColumn.property !== cohortKey &&
             this.state.selectedColumn.property !== ColumnCategories.None && (
               <Stack>
-                {isDataColumn && (
-                  <ComboBox
-                    options={this.state.dataArray}
-                    onChange={this.setSelectedProperty}
-                    label={
-                      localization.Interpret.AxisConfigDialog.selectFeature
-                    }
-                    selectedKey={this.state.selectedColumn.property}
-                  />
-                )}
-                {isProbabilityColumn && (
-                  <ComboBox
-                    options={this.state.classArray}
-                    onChange={this.setSelectedProperty}
-                    label={localization.Interpret.AxisConfigDialog.selectClass}
-                    selectedKey={this.state.selectedColumn.property}
-                  />
-                )}
+                {isDataColumn &&
+                  this.renderComboBox(
+                    this.state.dataArray,
+                    localization.Interpret.AxisConfigDialog.selectFeature
+                  )}
+                {isProbabilityColumn &&
+                  this.renderClassComboBox(this.state.classArray)}
+                {isMultilablePredictedYColumn &&
+                  this.renderClassComboBox(
+                    this.state.multilabelPredictedYArray
+                  )}
+                {isMultilableTrueYColumn &&
+                  this.renderClassComboBox(this.state.multilabelTrueYArray)}
                 <AxisConfigBinOptions
                   {...this.props}
                   jointDataset={this.context.jointDataset}
@@ -194,6 +159,27 @@ export class AxisConfigDialog extends React.PureComponent<
           {localization.Interpret.CohortEditor.cancel}
         </DefaultButton>
       </Stack>
+    );
+  };
+
+  private renderComboBox = (
+    options: IComboBoxOption[],
+    label: string
+  ): JSX.Element => {
+    return (
+      <ComboBox
+        options={options}
+        onChange={this.setSelectedProperty}
+        label={label}
+        selectedKey={this.state.selectedColumn.property}
+      />
+    );
+  };
+
+  private renderClassComboBox = (options: IComboBoxOption[]): JSX.Element => {
+    return this.renderComboBox(
+      options,
+      localization.Interpret.AxisConfigDialog.selectClass
     );
   };
 
