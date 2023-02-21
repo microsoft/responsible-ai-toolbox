@@ -1,4 +1,4 @@
-datasets
+datasets>=2.9.0
 negspacy>=1.0.0
 numpy>=1.17.2
 sentencepiece
