@@ -175,3 +175,15 @@ def expected_feature_balance_measures_gender():
         "TTest": -0.1855414423,
         "TTestPValue": 0.4349585786,
     }
+
+
+@pytest.fixture(scope="session")
+def singular_valued_col_data():
+    return pd.DataFrame(
+        {
+            # Note that the col only has 1 unique value
+            "col1": [1, 1, 1, 1, 1],
+            "col2": [1, 2, 3, 4, 5],
+            "target": [0, 1, 0, 1, 0],
+        }
+    )
