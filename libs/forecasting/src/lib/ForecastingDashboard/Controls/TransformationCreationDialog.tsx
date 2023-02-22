@@ -42,6 +42,7 @@ export interface ITransformationCreationDialogState {
 }
 
 const transformationDefaultValue = 2;
+const transformationNameMaxLength = 50;
 
 export class TransformationCreationDialog extends React.Component<
   ITransformationCreationDialogProps,
@@ -71,20 +72,6 @@ export class TransformationCreationDialog extends React.Component<
 
   public render(): React.ReactNode {
     const classNames = forecastingDashboardStyles();
-
-    let transformationNameErrorMessage = undefined;
-    if (!this.state.transformationName) {
-      transformationNameErrorMessage =
-        localization.Forecasting.TransformationCreation
-          .scenarioNamingInstructions;
-    } else if (
-      this.state.transformationName &&
-      this.props.transformations.has(this.state.transformationName)
-    ) {
-      transformationNameErrorMessage =
-        localization.Forecasting.TransformationCreation
-          .scenarioNamingCollisionMessage;
-    }
 
     const transformationValueErrorMessage =
       this.getTransformationValueErrorMessage();
@@ -137,7 +124,8 @@ export class TransformationCreationDialog extends React.Component<
               value={this.state.transformationName}
               onChange={this.onChangeTransformationName}
               className={classNames.smallTextField}
-              errorMessage={transformationNameErrorMessage}
+              onGetErrorMessage={this.getTransformationNameErrorMessage}
+              validateOnLoad={false}
             />
           </Stack.Item>
           <Stack.Item>
@@ -166,7 +154,9 @@ export class TransformationCreationDialog extends React.Component<
           <PrimaryButton
             disabled={
               transformationCombinationErrorMessage !== undefined ||
-              transformationNameErrorMessage !== undefined ||
+              this.getTransformationNameErrorMessage(
+                this.state.transformationName ?? ""
+              ) !== "" ||
               transformationValueErrorMessage !== undefined ||
               this.state.transformationOperation === undefined ||
               this.state.transformationFeature === undefined
@@ -216,11 +206,32 @@ export class TransformationCreationDialog extends React.Component<
     return undefined;
   }
 
+  private getTransformationNameErrorMessage = (value: string): string => {
+    if (value.length === 0) {
+      return localization.Forecasting.TransformationCreation
+        .scenarioNamingInstructions;
+    }
+    if (this.props.transformations.has(value)) {
+      return localization.Forecasting.TransformationCreation
+        .scenarioNamingCollisionMessage;
+    }
+    if (value.length > transformationNameMaxLength) {
+      return localization.formatString(
+        localization.Forecasting.TransformationCreation
+          .scenarioNamingLengthMessage,
+        value.length
+      );
+    }
+    return "";
+  };
+
   private onChangeTransformationName = (
     _event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string
   ): void => {
-    this.setState({ transformationName: newValue || "" });
+    if (this.state.transformationName !== newValue) {
+      this.setState({ transformationName: newValue || "" });
+    }
   };
 
   private onChangeTransformationValue = (newValue: number): void => {
