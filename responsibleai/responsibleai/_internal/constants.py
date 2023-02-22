@@ -32,6 +32,7 @@ class Metadata(object):
     CATEGORY_DICTIONARY = 'category_dictionary'
     CATEGORICAL_INDEXES = 'categorical_indexes'
     STRING_IND_DATA = 'string_ind_data'
+    NUMBER_LARGE_TEST_SAMPLES = 'number_large_test_samples'
 
 
 class ListProperties(object):
