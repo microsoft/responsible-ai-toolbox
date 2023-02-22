@@ -1850,7 +1850,7 @@
     "forecastHeader": "Forecast analysis",
     "whatIfForecastingDescription": "What-if allows you to perturb features for your entire time series and observe how the model's forecast changes.",
     "whatIfForecastingChooseTimeSeries": "To start, choose a time series from the options below.",
-    "forecastDescription": "Forecast analysis compares your model's forecast to the actual values of your time series. To enable what-if analysis, please provide a dataset with features.",
+    "forecastDescription": "Forecast analysis compares your model's forecast to the actual values of your time series. To enable what-if analysis, provide a dataset with features.",
     "timeSeries": "Time series",
     "selectTimeSeries": "Select a time series.",
     "singleTimeSeries": "The dataset contains only a single time series '{0}' which has been selected by default.",
