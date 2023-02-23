@@ -258,7 +258,7 @@ export class TransformationCreationDialog extends React.Component<
         transformationOperation: {
           displayName: localization.Forecasting.Transformations.change,
           excludedValues: [],
-          key: "change",
+          key: "change"
         } as Operation
       });
       return;

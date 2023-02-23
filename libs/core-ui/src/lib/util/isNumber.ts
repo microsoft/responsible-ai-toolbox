@@ -7,7 +7,7 @@ export function isNumber(value: string): boolean {
   // [0-9]* - any number of digits
   // ([0-9]\.?|\.?[0-9]) - either a digit followed by an optional decimal or a decimal followed by a digit
   // [0-9]*$ - any number of digits
-  return new RegExp("^\-?[0-9]*([0-9]\.?|\.?[0-9])[0-9]*$").test(value);
+  return new RegExp("^-?\\d*(\\d.?|.?\\d)\\d*$").test(value);
 }
 
 export function mayBecomeNumber(value: string): boolean {
@@ -18,5 +18,5 @@ export function mayBecomeNumber(value: string): boolean {
   // [0-9]*$ - any number of digits
   // This is a more lenient version of the above regex to allow for partially written numbers
   // such as "." or "-." or ""
-  return new RegExp("^\-?[0-9]*\.?[0-9]*$").test(value);
+  return new RegExp("^-?\\d*.?\\d*$").test(value);
 }
