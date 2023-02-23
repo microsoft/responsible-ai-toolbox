@@ -4,7 +4,7 @@ For running unit tests for `erroranalysis` locally with your changes, you would 
 pip install -e erroranalysis
 ```
 
-If you are in the `erroranalysis` directory, then the folllowing command will install an editable version of `errornalaysis`:-
+If you are in the `erroranalysis` directory, then the folllowing command will install an editable version of `erroranalysis`:-
 
 ```
 pip install -e .
