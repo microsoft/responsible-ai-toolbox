@@ -13,6 +13,8 @@ import {
 } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
+  isNumber,
+  mayBecomeNumber,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -38,10 +40,10 @@ export interface ITransformationCreationDialogState {
   transformationName?: string;
   transformationOperation?: Operation;
   transformationFeature?: Feature;
-  transformationValue: number;
+  transformationValue: string;
 }
 
-const transformationDefaultValue = 2;
+const transformationDefaultValue = "0";
 
 export class TransformationCreationDialog extends React.Component<
   ITransformationCreationDialogProps,
@@ -182,7 +184,12 @@ export class TransformationCreationDialog extends React.Component<
     );
   }
 
-  private getTransformationValueErrorMessage(): string | undefined {
+  private getTransformationValueErrorMessage(
+    value?: string
+  ): string | undefined {
+    if (!value) {
+      value = this.state.transformationValue;
+    }
     if (
       this.state.transformationOperation &&
       this.state.transformationFeature &&
@@ -195,20 +202,23 @@ export class TransformationCreationDialog extends React.Component<
       if (featureMeta.isCategorical || featureMeta.treatAsCategorical) {
         return undefined;
       }
-      if (
-        this.state.transformationValue <
-          this.state.transformationOperation.minValue ||
-        this.state.transformationValue >
-          this.state.transformationOperation.maxValue ||
-        this.state.transformationOperation.excludedValues.includes(
-          this.state.transformationValue
-        )
-      ) {
+
+      let valueIsNotANumber = false;
+      let valueExcluded = false;
+      if (isNumber(value)) {
+        const transformationValue = Number(value);
+        valueExcluded =
+          this.state.transformationOperation.excludedValues.includes(
+            transformationValue
+          );
+      } else {
+        valueIsNotANumber = true;
+      }
+
+      if (valueIsNotANumber || valueExcluded) {
         return localization.formatString(
           localization.Forecasting.TransformationCreation.valueErrorMessage,
           this.state.transformationOperation.displayName,
-          this.state.transformationOperation.minValue,
-          this.state.transformationOperation.maxValue,
           this.state.transformationOperation.excludedValues.toString()
         );
       }
@@ -223,8 +233,13 @@ export class TransformationCreationDialog extends React.Component<
     this.setState({ transformationName: newValue || "" });
   };
 
-  private onChangeTransformationValue = (newValue: number): void => {
-    this.setState({ transformationValue: newValue });
+  private onChangeTransformationValue = (newValue: string): void => {
+    if (
+      this.getTransformationValueErrorMessage(newValue) === undefined ||
+      mayBecomeNumber(newValue)
+    ) {
+      this.setState({ transformationValue: newValue });
+    }
   };
 
   private onChangeTransformationOperation = (operation: Operation): void => {
@@ -244,8 +259,6 @@ export class TransformationCreationDialog extends React.Component<
           displayName: localization.Forecasting.Transformations.change,
           excludedValues: [],
           key: "change",
-          maxValue: 0,
-          minValue: 0
         } as Operation
       });
       return;
@@ -270,13 +283,14 @@ export class TransformationCreationDialog extends React.Component<
   private createTransformation(): Transformation | undefined {
     if (
       this.state.transformationFeature &&
-      this.state.transformationOperation
+      this.state.transformationOperation &&
+      isNumber(this.state.transformationValue)
     ) {
       return new Transformation(
         this.context.baseErrorCohort,
         this.state.transformationOperation,
         this.state.transformationFeature,
-        this.state.transformationValue
+        Number(this.state.transformationValue)
       );
     }
     return undefined;
