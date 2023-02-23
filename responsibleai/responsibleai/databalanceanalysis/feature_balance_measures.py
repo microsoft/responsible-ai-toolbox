@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import itertools
+import warnings
 from typing import Callable, Dict, List, Tuple
 
 import numpy as np
@@ -328,6 +329,14 @@ class FeatureBalanceMeasures(BalanceMeasures):
         :rtype: pd.DataFrame
         """
         unique_vals = df[col_of_interest].unique()
+
+        if unique_vals.size < 2:
+            warnings.warn((f"Column '{col_of_interest}' has less than 2"
+                           " unique values, so feature balance measures for"
+                           f" {label_col}=={pos_label} are not being computed"
+                           " for this column."))
+            return pd.DataFrame()
+
         # create list of tuples of the pairings of classes
         pairs = list(itertools.combinations(unique_vals, 2))
         gap_df = pd.DataFrame(
