@@ -24,8 +24,8 @@ import {
   Operation,
   Feature
 } from "../Interfaces/Transformation";
-import { isValidTransformationName } from "./isValidTransformationName";
 
+import { isValidTransformationName } from "./isValidTransformationName";
 import { TransformationCreation } from "./TransformationCreation";
 
 export interface ITransformationCreationDialogProps {
