@@ -1458,6 +1458,7 @@
     },
     "CohortInformation": {
       "ShiftCohort": "Switch cohort",
+      "SwitchTimeSeries": "Switch time series",
       "NewCohort": "New cohort",
       "DataPoints": "Number of datapoints",
       "DefaultCohort": " (default)",
