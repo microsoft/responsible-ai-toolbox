@@ -205,7 +205,8 @@ export class TabsView extends React.PureComponent<
                 </>
               )}
               {t.key === GlobalTabKeys.ErrorAnalysisTab &&
-                this.context.dataset.task_type !== DatasetTaskType.Forecasting &&
+                this.context.dataset.task_type !==
+                  DatasetTaskType.Forecasting &&
                 this.props.errorAnalysisData?.[0] && (
                   <>
                     <Stack
