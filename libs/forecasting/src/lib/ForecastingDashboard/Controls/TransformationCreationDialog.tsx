@@ -155,8 +155,8 @@ export class TransformationCreationDialog extends React.Component<
             disabled={
               transformationCombinationErrorMessage !== undefined ||
               this.getTransformationNameErrorMessage(
-                this.state.transformationName ?? ""
-              ) !== "" ||
+                this.state.transformationName
+              ) !== undefined ||
               transformationValueErrorMessage !== undefined ||
               this.state.transformationOperation === undefined ||
               this.state.transformationFeature === undefined
@@ -206,7 +206,10 @@ export class TransformationCreationDialog extends React.Component<
     return undefined;
   }
 
-  private getTransformationNameErrorMessage = (value: string): string => {
+  private getTransformationNameErrorMessage = (
+    value?: string
+  ): string | undefined => {
+    value = value ?? "";
     if (value.length === 0) {
       return localization.Forecasting.TransformationCreation
         .scenarioNamingInstructions;
@@ -222,7 +225,7 @@ export class TransformationCreationDialog extends React.Component<
         value.length
       );
     }
-    return "";
+    return undefined;
   };
 
   private onChangeTransformationName = (
