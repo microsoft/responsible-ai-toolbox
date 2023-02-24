@@ -37,7 +37,9 @@ describe("test is valid transformation name", () => {
     expect(isValidTransformationName("-M")).toBe(false);
     expect(isValidTransformationName("*")).toBe(false);
     expect(isValidTransformationName("abcde*fg")).toBe(false);
-    expect(isValidTransformationName("This is a name, but it won't pass.")).toBe(false);
+    expect(
+      isValidTransformationName("This is a name, but it won't pass.")
+    ).toBe(false);
     expect(isValidTransformationName("ABCDE&FG")).toBe(false);
     expect(isValidTransformationName("a<b")).toBe(false);
     expect(isValidTransformationName("c>d")).toBe(false);
@@ -47,5 +49,5 @@ describe("test is valid transformation name", () => {
     expect(isValidTransformationName("k@l")).toBe(false);
     expect(isValidTransformationName("m/n")).toBe(false);
     expect(isValidTransformationName("o\\p")).toBe(false);
-  });  
+  });
 });
