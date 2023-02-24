@@ -15,4 +15,4 @@ semver~=2.13.0
 networkx<=2.5
 ipykernel<=6.6.0
 markupsafe<2.1.0
-raiutils>=0.3.0
+raiutils>=0.4.0
