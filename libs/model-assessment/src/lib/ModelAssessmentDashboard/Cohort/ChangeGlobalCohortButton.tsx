@@ -3,6 +3,7 @@
 
 import { DefaultButton } from "@fluentui/react";
 import {
+  DatasetTaskType,
   defaultModelAssessmentContext,
   IModelAssessmentContext,
   ModelAssessmentContext
@@ -31,10 +32,14 @@ export class ChangeGlobalCohortButton extends React.Component<
     this.state = { shiftCohortVisible: false };
   }
   public render(): React.ReactNode {
+    const buttonText =
+      this.context.dataset.task_type === DatasetTaskType.Forecasting
+        ? localization.ModelAssessment.CohortInformation.SwitchTimeSeries
+        : localization.ModelAssessment.CohortInformation.ShiftCohort;
     return (
       <>
         <DefaultButton
-          text={localization.ModelAssessment.CohortInformation.ShiftCohort}
+          text={buttonText}
           onClick={this.toggleShiftCohortVisibility}
         />
         <ChangeGlobalCohort
