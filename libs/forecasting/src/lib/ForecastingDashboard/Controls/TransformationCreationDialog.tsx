@@ -24,6 +24,7 @@ import {
   Operation,
   Feature
 } from "../Interfaces/Transformation";
+import { isValidTransformationName } from "./isValidTransformationName";
 
 import { TransformationCreation } from "./TransformationCreation";
 
@@ -225,6 +226,11 @@ export class TransformationCreationDialog extends React.Component<
         value.length
       );
     }
+    if (!isValidTransformationName(value)) {
+      return localization.Forecasting.TransformationCreation
+        .scenarioNamingInvalidCharactersMessage;
+    }
+
     return undefined;
   };
 
