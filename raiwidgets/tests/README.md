@@ -16,6 +16,12 @@ You would also need to install the test dependencies defined in file `raiwidgets
 pip install -r requirements-dev.txt
 ```
 
+You need to compile and build the javascript/typescript code to create widgets binary. You can do this using the following commands:-
+```
+yarn install
+yarn buildall
+```  
+
 For running the unit tests, you may do the following:-
 
 ```
