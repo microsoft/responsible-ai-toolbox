@@ -1009,8 +1009,6 @@ class RAIInsights(RAIBaseInsights):
             return
 
         for data_name, file_name in _OUTPUT_FIELDS_AND_FILENAMES:
-            print(data_name)
-            print(file_name)
             if (data_name in self.__dict__ and
                     self.__dict__[data_name] is not None):
                 self._write_to_file(
@@ -1301,16 +1299,12 @@ class RAIInsights(RAIBaseInsights):
             SerializationAttributes.PREDICTIONS_DIRECTORY)
 
         for data_name, file_name in _OUTPUT_FIELDS_AND_FILENAMES:
-            print("meh")
             file_path = prediction_output_path / file_name
-            print(file_path)
-            print(file_path.exists())
             if file_path.exists():
                 with open(file_path, 'r') as file:
                     inst.__dict__[data_name] = np.array(json.load(file))
             else:
                 inst.__dict__[data_name] = None
-        print("wait what?")
 
     @staticmethod
     def _load_large_data(inst, path):
