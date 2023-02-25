@@ -1458,6 +1458,7 @@
     },
     "CohortInformation": {
       "ShiftCohort": "Switch cohort",
+      "SwitchTimeSeries": "Switch time series",
       "NewCohort": "New cohort",
       "DataPoints": "Number of datapoints",
       "DefaultCohort": " (default)",
@@ -1877,7 +1878,8 @@
       "scenarioNamingInstructionsPlaceholder": "Enter a unique name",
       "scenarioNamingInstructions": "Enter a name for your what-if scenario.",
       "scenarioNamingCollisionMessage": "This name exists already. Please enter a unique name.",
-      "valueErrorMessage": "For operation {0} please select a value between {1} and {2} other than {3}.",
+      "scenarioNamingLengthMessage": "The name must be between 1 and 50 characters. The actual length is {0}.",
+      "valueErrorMessage": "For operation {0} please select a value other than {1}.",
       "invalidCombinationErrorMessage": "This is identical to an existing what-if scenario. Please change the feature, operation, or value.",
       "addTransformationButton": "Add Transformation",
       "divisionAndMultiplicationBy": "by"

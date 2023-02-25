@@ -7,8 +7,6 @@ import { localization } from "@responsible-ai/localization";
 export type Operation = {
   key: string;
   displayName: string;
-  minValue: number;
-  maxValue: number;
   excludedValues: number[];
 };
 
@@ -19,31 +17,23 @@ export function isMultiplicationOrDivision(operation: Operation): boolean {
 export const transformationOperations: Operation[] = [
   {
     displayName: localization.Forecasting.Transformations.multiply,
-    excludedValues: [0, 1],
-    key: "multiply",
-    maxValue: 1000,
-    minValue: -1000
+    excludedValues: [1],
+    key: "multiply"
   },
   {
     displayName: localization.Forecasting.Transformations.divide,
     excludedValues: [0, 1],
-    key: "divide",
-    maxValue: 1000,
-    minValue: -1000
+    key: "divide"
   },
   {
     displayName: localization.Forecasting.Transformations.add,
     excludedValues: [0],
-    key: "add",
-    maxValue: 1000,
-    minValue: -1000
+    key: "add"
   },
   {
     displayName: localization.Forecasting.Transformations.subtract,
     excludedValues: [0],
-    key: "subtract",
-    maxValue: 1000,
-    minValue: -1000
+    key: "subtract"
   }
 ];
 
