@@ -644,7 +644,7 @@ class CounterfactualManager(BaseManager):
         return self._get_counterfactual(query_cf_config, counterfactual_obj)
 
     def get(self, failed_to_compute=False):
-        """Return the computed counterfactual examples objects or failure reason.
+        """Return computed counterfactual examples objects or failure reason.
 
         :param failed_to_compute: Get the failure reasons if counterfactual
                                   examples failed to compute.

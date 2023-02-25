@@ -102,7 +102,7 @@ class MetadataRemovalClassificationModelWrapper():
 
     def __init__(self, model: any,
                  dropped_features: Optional[List[str]] = None):
-        """If needed, wraps the classification model to ignore the dropped features.
+        """If needed, wraps classification model to ignore dropped features.
 
         :param model: The model or function to evaluate on the examples.
         :type model: function or model with a predict or predict_proba function
