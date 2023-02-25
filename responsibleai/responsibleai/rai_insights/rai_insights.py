@@ -1045,6 +1045,10 @@ class RAIInsights(RAIBaseInsights):
         feature_metadata_dict = None
         if self._feature_metadata is not None:
             feature_metadata_dict = self._feature_metadata.to_dict()
+        if self._large_test is not None:
+            number_large_test_samples = len(self._large_test)
+        else:
+            number_large_test_samples = len(self.test)
         meta = {
             Metadata.TARGET_COLUMN: self.target_column,
             Metadata.TASK_TYPE: self.task_type,
@@ -1052,7 +1056,8 @@ class RAIInsights(RAIBaseInsights):
             Metadata.CLASSES: classes,
             Metadata.FEATURE_COLUMNS: self._feature_columns,
             Metadata.FEATURE_RANGES: self._feature_ranges,
-            Metadata.FEATURE_METADATA: feature_metadata_dict
+            Metadata.FEATURE_METADATA: feature_metadata_dict,
+            Metadata.NUMBER_LARGE_TEST_SAMPLES: number_large_test_samples
         }
         with open(top_dir / Metadata.META_JSON, 'w') as file:
             json.dump(meta, file)

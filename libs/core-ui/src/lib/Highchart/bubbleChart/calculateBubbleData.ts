@@ -9,6 +9,7 @@ import { IGenericChartProps } from "../../util/IGenericChartProps";
 import { JointDataset } from "../../util/JointDataset";
 import { IHighchartsConfig } from "../IHighchartsConfig";
 
+import { IClusterData } from "./ChartUtils";
 import { getBubbleChartOptions } from "./getBubbleChartOptions";
 import { IScatterPoint } from "./getScatterOption";
 
@@ -33,9 +34,7 @@ export async function calculateBubblePlotDataFromErrorCohort(
   selectPointFromChartLargeData?: (data: IScatterPoint) => void,
   onBubbleClick?: (
     scatterPlotData: IHighchartsConfig,
-    xSeries: number[],
-    ySeries: number[],
-    indexSeries: number[]
+    clusterData: IClusterData
   ) => void,
   onIndexSeriesUpdated?: (indexSeries: number[]) => void
 ): Promise<IHighchartsConfig | IHighchartBubbleSDKClusterData | undefined> {

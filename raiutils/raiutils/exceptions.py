@@ -2,6 +2,16 @@
 # Licensed under the MIT License.
 
 
+class SystemErrorException(Exception):
+    """Exception raised when there is an system error condition
+    which is outside the control of the user.
+
+    :param exception_message: A message describing the error.
+    :type exception_message: str
+    """
+    _error_code = "System Error"
+
+
 class UserErrorException(Exception):
     """Exception raised when the user has made an error like
     configuration error.

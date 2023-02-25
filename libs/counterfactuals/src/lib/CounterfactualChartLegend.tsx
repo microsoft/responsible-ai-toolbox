@@ -49,7 +49,7 @@ export interface ICounterfactualChartLegendProps {
   telemetryHook?: (message: ITelemetryEvent) => void;
   toggleCustomActivation: (index: number) => void;
   togglePanel: () => void;
-  toggleSelectionOfPoint: (index?: number) => void;
+  toggleSelectionOfPoint: (index?: number) => number[];
   setIsRevertButtonClicked: (status: boolean) => void;
 }
 
@@ -154,10 +154,11 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
     if (typeof item?.key === "string") {
       const index = Number.parseInt(item.key);
       this.props.setTemporaryPointToCopyOfDatasetPoint(index, item.data.index);
-      this.props.toggleSelectionOfPoint(index);
+      const newSelections = this.props.toggleSelectionOfPoint(index);
       if (
         ifEnableLargeData(this.context.dataset) &&
-        this.props.setCounterfactualData
+        this.props.setCounterfactualData &&
+        newSelections.length > 0
       ) {
         this.props.setCounterfactualData(item.data.index);
       }

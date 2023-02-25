@@ -9,6 +9,7 @@ import { IGenericChartProps } from "../../util/IGenericChartProps";
 import { JointDataset } from "../../util/JointDataset";
 
 import { buildScatterTemplate } from "./buildScatterTemplate";
+import { IClusterData } from "./ChartUtils";
 
 interface IMarker {
   fillColor: string;
@@ -19,9 +20,7 @@ interface IMarker {
 const maxSelection = 2;
 
 export function getScatterPlot(
-  xSeries: number[],
-  ySeries: number[],
-  indexSeries: number[],
+  clusterData: IClusterData,
   jointDataset: JointDataset,
   selectedPointsIndexes: number[],
   chartProps?: IGenericChartProps,
@@ -29,6 +28,15 @@ export function getScatterPlot(
   showColorAxis?: boolean,
   useDifferentColorForScatterPoints?: boolean
 ): any[] {
+  const {
+    xSeries,
+    ySeries,
+    x: xOfCluster,
+    y: yOfCluster,
+    indexSeries,
+    xMap,
+    yMap
+  } = clusterData;
   const dataSeries: any = [];
   const result = [];
 
@@ -48,7 +56,11 @@ export function getScatterPlot(
             data,
             index,
             indexSeries[index],
-            showColorAxis
+            showColorAxis,
+            xMap,
+            yMap,
+            xOfCluster,
+            yOfCluster
           ),
         marker: getMarker(selectedPointsIndexes, index, color),
         x: xSeries?.[index],

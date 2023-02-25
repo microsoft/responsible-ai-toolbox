@@ -8,7 +8,9 @@ import pandas as pd
 import pytest
 import shap
 from sklearn.model_selection import train_test_split
-from tests.common_utils import create_adult_income_dataset, create_housing_data
+from tests.common_utils import create_adult_income_dataset
+
+from rai_test_utils.datasets.tabular import create_housing_data
 
 
 @pytest.fixture(scope='session')

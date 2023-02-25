@@ -47,7 +47,7 @@ export const DiabetesRegressionModelDebugging = {
     initialCohorts: [
       {
         metrics: {
-          meanAbsoluteError: "3 859.27",
+          meanAbsoluteError: "43.363",
           meanPrediction: "154.102",
           meanSquaredError: "2 981.101"
         },
@@ -57,7 +57,7 @@ export const DiabetesRegressionModelDebugging = {
     ],
     newCohort: {
       metrics: {
-        meanAbsoluteError: "3 858.02",
+        meanAbsoluteError: "43.841",
         meanPrediction: "153.958",
         meanSquaredError: "3 014.96"
       },

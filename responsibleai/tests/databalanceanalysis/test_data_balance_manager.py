@@ -177,6 +177,39 @@ class TestDataBalanceManager:
         manager.compute()
         assert manager._data_balance_measures is not None
 
+    def test_compute_with_col_less_than_two_unique_values(
+        self, singular_valued_col_data
+    ):
+        # col1 has only one unique value, so we should get a warning per class
+        # that feature balance measures weren't computed for this col
+        cols_of_interest = ["col1", "col2"]
+        target = "target"
+        classes = [0, 1]
+
+        manager = DataBalanceManager(
+            train=singular_valued_col_data[:3],
+            test=singular_valued_col_data[3:],
+            target_column=target,
+            classes=classes,
+            task_type=TaskType.CLASSIFICATION,
+        )
+        manager.add(cols_of_interest=cols_of_interest)
+
+        with pytest.warns(UserWarning) as warninfo:
+            manager.compute()
+
+        warns = {(warn.category, warn.message.args[0]) for warn in warninfo}
+
+        warn_text = (f"Column '{cols_of_interest[0]}' has less than 2 unique"
+                     f" values, so feature balance measures for {target}=="
+                     "{pos_label} are not being computed for this column.")
+        expected = {
+            (UserWarning, warn_text.format(pos_label=classes[0])),
+            (UserWarning, warn_text.format(pos_label=classes[1])),
+        }
+        for expected_warning in expected:
+            assert expected_warning in warns
+
     def test_sets_data_balance_measures(
         self,
         adult_data_feature_balance_measures,

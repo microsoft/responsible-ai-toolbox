@@ -21,6 +21,7 @@ export interface IAxisConfigProps {
   hideDroppedFeatures?: boolean;
   allowLogarithmicScaling?: boolean;
   disabled?: boolean;
+  removeCount?: boolean;
   onAccept: (newConfig: ISelectorConfig) => void;
 }
 
@@ -54,6 +55,7 @@ export class AxisConfig extends React.PureComponent<
             selectedColumn={this.props.selectedColumn}
             canBin={this.props.canBin}
             mustBin={this.props.mustBin}
+            removeCount={this.props.removeCount}
             allowTreatAsCategorical={this.props.allowTreatAsCategorical}
             allowLogarithmicScaling={this.props.allowLogarithmicScaling}
             canDither={this.props.canDither}
