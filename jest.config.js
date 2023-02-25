@@ -13,6 +13,7 @@ module.exports = {
     "<rootDir>/apps/dashboard",
     "<rootDir>/libs/localization",
     "<rootDir>/libs/error-analysis",
+    "<rootDir>/libs/forecasting",
     "<rootDir>/apps/widget"
   ]
 };
