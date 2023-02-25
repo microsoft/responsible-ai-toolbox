@@ -16,6 +16,7 @@ from dice_ml import Dice
 from dice_ml.counterfactual_explanations import CounterfactualExplanations
 from dice_ml.explainer_interfaces.explainer_base import ExplainerBase
 
+from raiutils.models import ModelTask
 from responsibleai._config.base_config import BaseConfig
 from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._interfaces import CounterfactualData
@@ -28,7 +29,6 @@ from responsibleai.exceptions import (DuplicateManagerConfigException,
                                       SchemaErrorException,
                                       UserConfigValidationException)
 from responsibleai.managers.base_manager import BaseManager
-from raiutils.models import ModelTask
 
 
 class CounterfactualConstants:

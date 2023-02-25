@@ -26,8 +26,8 @@ from rai_test_utils.models.model_utils import (create_models_classification,
                                                create_models_regression)
 from rai_test_utils.models.sklearn import \
     create_complex_classification_pipeline
-from responsibleai import ModelAnalysis
 from raiutils.models import ModelTask
+from responsibleai import ModelAnalysis
 from responsibleai._internal.constants import ManagerNames
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
