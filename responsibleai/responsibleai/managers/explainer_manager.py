@@ -10,7 +10,7 @@ from typing import Any, List, Optional
 
 import numpy as np
 import pandas as pd
-from interpret_community.common.constants import ModelTask
+from raiutils.models import ModelTask
 from interpret_community.explanation.explanation import (
     FeatureImportanceExplanation, load_explanation, save_explanation)
 from interpret_community.mimic.mimic_explainer import MimicExplainer

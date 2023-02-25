@@ -9,7 +9,7 @@ import sys
 import pandas as pd
 from ml_wrappers.model.base_wrapped_model import BaseWrappedModel
 
-from responsibleai.rai_insights.constants import ModelTask
+from raiutils.models import ModelTask
 
 from .constants import _Forecasting
 

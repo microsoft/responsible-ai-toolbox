@@ -6,8 +6,8 @@ import pandas as pd
 import pytest
 from tests.common_utils import create_iris_data
 
-from erroranalysis._internal.constants import (PRED_Y, ROW_INDEX, TRUE_Y,
-                                               ModelTask)
+from erroranalysis._internal.constants import PRED_Y, ROW_INDEX, TRUE_Y
+from raiutils.models import ModelTask
 from rai_test_utils.datasets.tabular import (create_housing_data,
                                              create_simple_titanic_data)
 from rai_test_utils.models.sklearn import (

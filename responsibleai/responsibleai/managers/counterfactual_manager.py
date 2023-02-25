@@ -28,7 +28,7 @@ from responsibleai.exceptions import (DuplicateManagerConfigException,
                                       SchemaErrorException,
                                       UserConfigValidationException)
 from responsibleai.managers.base_manager import BaseManager
-from responsibleai.rai_insights.constants import ModelTask
+from raiutils.models import ModelTask
 
 
 class CounterfactualConstants:

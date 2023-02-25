@@ -30,7 +30,7 @@ from responsibleai.managers.counterfactual_manager import CounterfactualManager
 from responsibleai.managers.data_balance_manager import DataBalanceManager
 from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai.managers.explainer_manager import ExplainerManager
-from responsibleai.rai_insights import ModelTask
+from raiutils.models import ModelTask
 from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
 
 _TRAIN_LABELS = 'train_labels'

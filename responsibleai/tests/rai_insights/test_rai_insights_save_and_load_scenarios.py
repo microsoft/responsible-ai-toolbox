@@ -15,7 +15,8 @@ from rai_test_utils.datasets.tabular import \
 from rai_test_utils.models.lightgbm import create_lightgbm_classifier
 from rai_test_utils.models.sklearn import \
     create_complex_classification_pipeline
-from responsibleai import ModelTask, RAIInsights
+from raiutils.models import ModelTask
+from responsibleai import RAIInsights
 from responsibleai._internal.constants import (ManagerNames,
                                                SerializationAttributes)
 from responsibleai.feature_metadata import FeatureMetadata
