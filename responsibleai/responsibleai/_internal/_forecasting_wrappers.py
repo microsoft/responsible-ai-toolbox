@@ -9,9 +9,7 @@ import sys
 import pandas as pd
 from ml_wrappers.model.base_wrapped_model import BaseWrappedModel
 
-from raiutils.models import ModelTask
-
-from raiutils.models import Forecasting
+from raiutils.models import Forecasting, ModelTask
 
 _AZUREML = "azureml"
 _SKTIME = "sktime"
