@@ -16,13 +16,12 @@ import pandas as pd
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
-from raiutils.models import ModelTask, SKLearn
+from raiutils.models import ModelTask, SKLearn, Forecasting
 from responsibleai._interfaces import Dataset, RAIInsightsData
 from responsibleai._internal._forecasting_wrappers import _wrap_model
 from responsibleai._internal.constants import (FileFormats, ManagerNames,
                                                Metadata,
-                                               SerializationAttributes,
-                                               _Forecasting)
+                                               SerializationAttributes)
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.managers.causal_manager import CausalManager
@@ -67,7 +66,7 @@ _MODEL_METHOD_EXCEPTION_MESSAGE = (
 # The file names corresponding to field names are just the options with .json
 # appended, e.g., predict.json
 _OUTPUT_METHODS = [SKLearn.PREDICT, SKLearn.PREDICT_PROBA,
-                   _Forecasting.FORECAST, _Forecasting.FORECAST_QUANTILES]
+                   Forecasting.FORECAST, Forecasting.FORECAST_QUANTILES]
 _OUTPUT_OPTIONS = _OUTPUT_METHODS + ["large_" + o for o in _OUTPUT_METHODS]
 _OUTPUT_FIELDS = [f"_{o}_output" for o in _OUTPUT_OPTIONS]
 _OUTPUT_FIELDS_AND_FILENAMES = list(zip(
@@ -126,11 +125,11 @@ MODEL_METHODS = {
     ],
     ModelTask.FORECASTING: [
         ModelMethod(
-            name=_Forecasting.FORECAST,
+            name=Forecasting.FORECAST,
             optional=False,
             purpose=MethodPurpose.FORECAST),
         ModelMethod(
-            name=_Forecasting.FORECAST_QUANTILES,
+            name=Forecasting.FORECAST_QUANTILES,
             optional=True,
             purpose=MethodPurpose.QUANTILES)
     ]

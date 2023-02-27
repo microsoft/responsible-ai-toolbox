@@ -11,7 +11,7 @@ from ml_wrappers.model.base_wrapped_model import BaseWrappedModel
 
 from raiutils.models import ModelTask
 
-from .constants import _Forecasting
+from raiutils.models import Forecasting
 
 _AZUREML = "azureml"
 _SKTIME = "sktime"
@@ -34,7 +34,7 @@ def _wrap_model(model, examples, time_feature, time_series_id_features):
     """
     model_package = _get_model_package(model)
     if ((model_package == _SKTIME and hasattr(model, "predict_quantiles")) or
-            hasattr(model, _Forecasting.FORECAST_QUANTILES)):
+            hasattr(model, Forecasting.FORECAST_QUANTILES)):
         return _WrappedQuantileForecastingModel(
             model, examples, time_feature, time_series_id_features)
     else:
@@ -52,7 +52,7 @@ class _WrappedForecastingModel(BaseWrappedModel):
             model_task=ModelTask.FORECASTING)
         self._model_package = _get_model_package(model)
         if (self._model_package not in [_AZUREML, _SKTIME] and
-                not hasattr(model, _Forecasting.FORECAST)):
+                not hasattr(model, Forecasting.FORECAST)):
             raise ValueError(
                 "The passed model does not have a 'forecast' method. "
                 "'forecast' is required for the forecasting task_type. "
@@ -110,7 +110,7 @@ class _WrappedQuantileForecastingModel(_WrappedForecastingModel):
             time_feature=time_feature,
             time_series_id_features=time_series_id_features)
         if (self._model_package not in [_AZUREML, _SKTIME] and
-                not hasattr(model, _Forecasting.FORECAST_QUANTILES)):
+                not hasattr(model, Forecasting.FORECAST_QUANTILES)):
             raise ValueError(
                 "The passed model does not have a 'forecast_quantiles' "
                 "method. 'forecast_quantiles' is optional for the "
