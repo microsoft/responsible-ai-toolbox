@@ -1,7 +1,7 @@
 dice-ml>=0.9,<0.10
 econml>=0.14.0
 jsonschema
-erroranalysis>=0.4.0
+erroranalysis>=0.4.1
 interpret-community>=0.28.0
 lightgbm>=2.0.11
 numpy>=1.17.2,<1.24.0
@@ -16,4 +16,4 @@ ml_wrappers
 networkx<=2.5
 ipykernel<=6.6.0
 markupsafe<2.1.0
-raiutils>=0.3.0
+raiutils>=0.4.0

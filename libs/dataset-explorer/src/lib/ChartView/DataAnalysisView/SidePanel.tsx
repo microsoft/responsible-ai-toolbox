@@ -148,6 +148,7 @@ export class SidePanel extends React.Component<
               onClick={this.onRevertButtonClick}
               text={localization.Counterfactuals.revertToBubbleChart}
               title={localization.Counterfactuals.revertToBubbleChart}
+              disabled={this.props.disabled}
             />
           </Stack.Item>
         )}
@@ -252,7 +253,7 @@ export class SidePanel extends React.Component<
           colorAxis.property
         );
         const includedIndexes = _.uniq(
-          this.props.cohorts[this.props.selectedCohortIndex].unwrap(
+          this.props.cohorts[this.props.selectedCohortIndex]?.unwrap(
             colorAxis.property
           )
         );

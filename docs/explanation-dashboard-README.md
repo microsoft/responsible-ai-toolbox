@@ -17,14 +17,14 @@ For instance, you can use the explanation dashboard to understand which factors 
 
 ## Example Notebooks
 
-- [Interpretability for binary classification (employee attrition)](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/individual-dashboards/explanation-dashboard/explanation-dashboard-employee-attrition.ipynb)
+- [Interpretability for binary classification (employee attrition)](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/individual-dashboards/explanation-dashboard/explanation-dashboard-employee-attrition.ipynb)
 - [Joint Example: Interpretability and fairness assessment on adult census data to predict income](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/individual-dashboards/fairness-interpretability-dashboard-income-prediction.ipynb) (Please see the [Fairness dashbaord](./fairness-dashboard-README.md) guide)
 
 <a name="interpretability dashboard"></a>
 
 ## Interpretability Dashboard
 
-Please refer to [Interpret-Community](https://github.com/interpretml/interpret-community)'s README and [sample notebooks](https://github.com/interpretml/interpret-community/tree/master/notebooks) to learn how you can train and generate model explanations. Once your model is trained and your explanation object is generated, load the interpretability visualization dashboard in your notebook to understand and interpret your model:
+Please refer to [Interpret-Community](https://github.com/interpretml/interpret-community)'s README and [sample notebooks](https://github.com/interpretml/interpret-community/tree/main/notebooks) to learn how you can train and generate model explanations. Once your model is trained and your explanation object is generated, load the interpretability visualization dashboard in your notebook to understand and interpret your model:
 
 ```python
 from raiwidgets import ExplanationDashboard
@@ -47,7 +47,7 @@ Click on "Open in a new tab" on the top left corner to get a better view of the 
 
 ---
 
-You can further create custom cohorts (subgroups of your dataset) to explore the insights across different subgroups (e.g., women vs. men). The created cohorts can contain more than one filter (e.g., age < 30 and sex = female) and will be visible from all of the four tabs. The following sections demonstrate the visualization dashboard capabilities on a [classification model trained on employee attrition dataset](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/interpretability-dashboard-employee-attrition.ipynb). Besides the default cohort (including the whole dataset), there are two additional cohorts created: employees with Age <= 35 and employees with Age > 35.
+You can further create custom cohorts (subgroups of your dataset) to explore the insights across different subgroups (e.g., women vs. men). The created cohorts can contain more than one filter (e.g., age < 30 and sex = female) and will be visible from all of the four tabs. The following sections demonstrate the visualization dashboard capabilities on a [classification model trained on employee attrition dataset](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/individual-dashboards/explanation-dashboard/explanation-dashboard-employee-attrition.ipynb). Besides the default cohort (including the whole dataset), there are two additional cohorts created: employees with Age <= 35 and employees with Age > 35.
 
 <p align="center">
 <img src="./img/Interpretability-Cohorts.png" alt="Visualization Dashboard Cohorts" width="100"/>

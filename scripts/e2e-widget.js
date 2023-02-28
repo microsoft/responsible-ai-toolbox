@@ -277,7 +277,7 @@ async function main() {
     .option("--skipgen", "Skip notebook generation")
     .option(
       "--host [host]",
-      "Skip notebook running and use host provided to run e2e: use full url 'http://localhost:500' or port number"
+      "Skip notebook running and use host provided to run e2e: use full url 'http://localhost:5000' or port number"
     )
     .option("-n, --notebook [notebook]", "Run specific notebook")
     .option(

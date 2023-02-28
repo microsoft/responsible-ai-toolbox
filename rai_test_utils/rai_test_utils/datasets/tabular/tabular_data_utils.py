@@ -61,7 +61,7 @@ def create_adult_census_data(string_labels=False):
     return X_train, X_test, y_train, y_test, categorical_features
 
 
-def create_cancer_data():
+def create_cancer_data(return_dataframe=False):
     breast_cancer_data = load_breast_cancer()
     classes = breast_cancer_data.target_names.tolist()
 
@@ -71,6 +71,11 @@ def create_cancer_data():
         test_size=0.2, random_state=0)
     feature_names = breast_cancer_data.feature_names
     classes = breast_cancer_data.target_names.tolist()
+
+    if return_dataframe:
+        X_train = pd.DataFrame(X_train, columns=feature_names)
+        X_test = pd.DataFrame(X_test, columns=feature_names)
+
     return X_train, X_test, y_train, y_test, feature_names, classes
 
 
@@ -119,12 +124,19 @@ def create_simple_titanic_data():
     return X_train, X_test, y_train, y_test, num_features, cat_features
 
 
-def create_housing_data(test_size=0.2):
+def create_housing_data(create_small_dataset=True):
     # Import California housing dataset
     housing = fetch_california_housing()
     # Split data into train and test
-    x_train, x_test, y_train, y_test = train_test_split(housing.data,
-                                                        housing.target,
-                                                        test_size=test_size,
-                                                        random_state=7)
+    if create_small_dataset:
+        x_train, x_test, y_train, y_test = train_test_split(housing.data,
+                                                            housing.target,
+                                                            train_size=500,
+                                                            test_size=50,
+                                                            random_state=7)
+    else:
+        x_train, x_test, y_train, y_test = train_test_split(housing.data,
+                                                            housing.target,
+                                                            test_size=0.2,
+                                                            random_state=7)
     return x_train, x_test, y_train, y_test, housing.feature_names

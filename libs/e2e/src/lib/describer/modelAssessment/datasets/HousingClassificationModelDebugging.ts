@@ -91,7 +91,7 @@ export const HousingClassificationModelDebugging = {
           accuracy: "0.91",
           falseNegativeRate: "0.093",
           falsePositiveRate: "0.087",
-          selectionRate: "0.499"
+          selectionRate: "0.496"
         },
         name: "All data",
         sampleSize: "730"
@@ -102,7 +102,7 @@ export const HousingClassificationModelDebugging = {
         accuracy: "0.911",
         falseNegativeRate: "0.093",
         falsePositiveRate: "0.085",
-        selectionRate: "0.499"
+        selectionRate: "0.495"
       },
       name: "CohortCreateE2E-housing",
       sampleSize: "729"

@@ -18,12 +18,12 @@ import pandas as pd
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
-from raiutils.models import SKLearn
+from raiutils.models import Forecasting, ModelTask, SKLearn
 from responsibleai._interfaces import Dataset, RAIInsightsData
-from responsibleai._internal.constants import (
-    FileFormats, ManagerNames, Metadata, SerializationAttributes,
-    _Forecasting)
 from responsibleai._internal._forecasting_wrappers import _wrap_model
+from responsibleai._internal.constants import (FileFormats, ManagerNames,
+                                               Metadata,
+                                               SerializationAttributes)
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.managers.causal_manager import CausalManager
@@ -31,7 +31,6 @@ from responsibleai.managers.counterfactual_manager import CounterfactualManager
 from responsibleai.managers.data_balance_manager import DataBalanceManager
 from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai.managers.explainer_manager import ExplainerManager
-from responsibleai.rai_insights import ModelTask
 from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
 
 _TRAIN_LABELS = 'train_labels'
@@ -69,12 +68,13 @@ _MODEL_METHOD_EXCEPTION_MESSAGE = (
 # The file names corresponding to field names are just the options with .json
 # appended, e.g., predict.json
 _OUTPUT_METHODS = [SKLearn.PREDICT, SKLearn.PREDICT_PROBA,
-                   _Forecasting.FORECAST, _Forecasting.FORECAST_QUANTILES]
+                   Forecasting.FORECAST, Forecasting.FORECAST_QUANTILES]
 _OUTPUT_OPTIONS = _OUTPUT_METHODS + ["large_" + o for o in _OUTPUT_METHODS]
 _OUTPUT_FIELDS = [f"_{o}_output" for o in _OUTPUT_OPTIONS]
-_OUTPUT_FIELDS_AND_FILENAMES = zip(
+_OUTPUT_FIELDS_AND_FILENAMES = list(zip(
     _OUTPUT_FIELDS,
-    [f"_{o}{FileFormats.JSON}" for o in _OUTPUT_OPTIONS])
+    [f"{o}{FileFormats.JSON}" for o in _OUTPUT_OPTIONS]))
+
 
 # The purpose maps various model outputs to a single set of data structures
 # that are passed to the UI to render.
@@ -127,11 +127,11 @@ MODEL_METHODS = {
     ],
     ModelTask.FORECASTING: [
         ModelMethod(
-            name=_Forecasting.FORECAST,
+            name=Forecasting.FORECAST,
             optional=False,
             purpose=MethodPurpose.FORECAST),
         ModelMethod(
-            name=_Forecasting.FORECAST_QUANTILES,
+            name=Forecasting.FORECAST_QUANTILES,
             optional=True,
             purpose=MethodPurpose.QUANTILES)
     ]
@@ -539,8 +539,8 @@ class RAIInsights(RAIBaseInsights):
                 train.drop(columns=[target_column]).columns)
             if len(difference_set) > 0:
                 message = ("Feature names in categorical_features "
-                            "do not exist in train data: "
-                            f"{list(difference_set)}")
+                           "do not exist in train data: "
+                           f"{list(difference_set)}")
                 raise UserConfigValidationException(message)
 
             for column in categorical_features:
@@ -645,7 +645,6 @@ class RAIInsights(RAIBaseInsights):
                         'The regression model '
                         'provided has a predict_proba function. '
                         'Please check the task_type.')
-            
     def _validate_feature_metadata(
             self, feature_metadata, train, task_type, model):
         if feature_metadata is not None:
@@ -938,7 +937,8 @@ class RAIInsights(RAIBaseInsights):
                 if (self._feature_metadata and
                         self._feature_metadata.datetime_features and
                         len(self._feature_metadata.datetime_features) >= 1):
-                    time_column_name = self._feature_metadata.datetime_features[0]
+                    time_column_name = \
+                        self._feature_metadata.datetime_features[0]
                     dashboard_dataset.index = convert_to_list(
                         pd.to_datetime(self.test[time_column_name])
                         .apply(lambda dt: dt.strftime("%Y-%m-%dT%H:%M:%SZ")))
@@ -1042,6 +1042,10 @@ class RAIInsights(RAIBaseInsights):
         feature_metadata_dict = None
         if self._feature_metadata is not None:
             feature_metadata_dict = self._feature_metadata.to_dict()
+        if self._large_test is not None:
+            number_large_test_samples = len(self._large_test)
+        else:
+            number_large_test_samples = len(self.test)
         meta = {
             Metadata.TARGET_COLUMN: self.target_column,
             Metadata.TASK_TYPE: self.task_type,
@@ -1049,7 +1053,8 @@ class RAIInsights(RAIBaseInsights):
             Metadata.CLASSES: classes,
             Metadata.FEATURE_COLUMNS: self._feature_columns,
             Metadata.FEATURE_RANGES: self._feature_ranges,
-            Metadata.FEATURE_METADATA: feature_metadata_dict
+            Metadata.FEATURE_METADATA: feature_metadata_dict,
+            Metadata.NUMBER_LARGE_TEST_SAMPLES: number_large_test_samples
         }
         with open(top_dir / Metadata.META_JSON, 'w') as file:
             json.dump(meta, file)
@@ -1180,7 +1185,6 @@ class RAIInsights(RAIBaseInsights):
             feature_columns: List[str],
             datetime_features: Optional[List[str]] = None):
         """Get feature ranges like min, max and unique values for all columns.
-        
         :param test: the test dataset
         :type test: pandas.DataFrame
         :param categorical_features: list of categorical feature names
@@ -1189,7 +1193,6 @@ class RAIInsights(RAIBaseInsights):
         :type feature_columns: List[str]
         :param datetime_features: list of datetime feature names
         :type datetime_features: Optional[List[str]]
-        
         """
         result = []
         for col in feature_columns:

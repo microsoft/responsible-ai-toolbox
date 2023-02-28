@@ -4,11 +4,12 @@
 # All wrappers in this file will be migrated to ml-wrappers.
 
 import inspect
-import pandas as pd
 import sys
+
+import pandas as pd
 from ml_wrappers.model.base_wrapped_model import BaseWrappedModel
-from responsibleai.rai_insights.constants import ModelTask
-from .constants import _Forecasting
+
+from raiutils.models import Forecasting, ModelTask
 
 _AZUREML = "azureml"
 _SKTIME = "sktime"
@@ -31,7 +32,7 @@ def _wrap_model(model, examples, time_feature, time_series_id_features):
     """
     model_package = _get_model_package(model)
     if ((model_package == _SKTIME and hasattr(model, "predict_quantiles")) or
-            hasattr(model, _Forecasting.FORECAST_QUANTILES)):
+            hasattr(model, Forecasting.FORECAST_QUANTILES)):
         return _WrappedQuantileForecastingModel(
             model, examples, time_feature, time_series_id_features)
     else:
@@ -48,14 +49,13 @@ class _WrappedForecastingModel(BaseWrappedModel):
             examples=examples,
             model_task=ModelTask.FORECASTING)
         self._model_package = _get_model_package(model)
-        if (not self._model_package in [_AZUREML, _SKTIME] and
-                not hasattr(model, _Forecasting.FORECAST)):
+        if (self._model_package not in [_AZUREML, _SKTIME] and
+                not hasattr(model, Forecasting.FORECAST)):
             raise ValueError(
                 "The passed model does not have a 'forecast' method. "
                 "'forecast' is required for the forecasting task_type. "
                 "Alternatively, pass a sktime forecasting model.")
         self._validate_time_features(time_feature, time_series_id_features)
-        
     def _validate_time_features(self, time_feature, time_series_id_features):
         if time_feature not in self._examples.columns:
             raise ValueError(
@@ -79,10 +79,40 @@ class _WrappedForecastingModel(BaseWrappedModel):
             # sktime expects the time series Id features and time feature
             # in the index rather than as a regular column.
             X_temp = X.copy()
-            X_temp.set_index(self._time_series_id_features + [self._time_feature],
-                             inplace=True, drop=True)
-            print(X_temp.head(50))
-            return self._model.predict(X=X_temp, fh=fh)
+            X_temp.set_index(
+                self._time_series_id_features + [self._time_feature],
+                inplace=True, drop=True)
+            if len(self._time_series_id_features) == 0:
+                return self._model.predict(X=X_temp, fh=fh)
+            
+            # If there are potentially multiple time series in the data
+            # we need to ensure that sktime receives data for all of them.
+            # This is currently an issue in sktime:
+            # https://github.com/sktime/sktime/issues/4209
+            # When this is supported in sktime we can remove the code in this
+            # if-branch. 
+
+            # Determine which time series are missing from the data.
+            # All index levels except for the last one are time series ID features.
+            # The last level is the datetime feature.
+            existing_time_series = X_temp.index.droplevel(level=-1).unique().to_list()
+            all_time_series = self._model.forecasters_.index.to_list()
+            missing_time_series = list(set(all_time_series) - set(existing_time_series))
+            # Add the missing time series to the data.
+            for time_series in missing_time_series:
+                X_add = X_temp.loc[existing_time_series[0]].copy()
+                id_feature_value_mapping = dict(zip(self._time_series_id_features, time_series))
+                for id_feature, value in id_feature_value_mapping.items():
+                    X_add[id_feature] = value
+                X_add[self._time_feature] = X_add.index.get_level_values(level=-1)
+                X_add.set_index(self._time_series_id_features, drop=True, inplace=True)
+                X_temp = pd.concat(X_temp, X_add)
+            
+            preds = self._model.predict(X=X_temp, fh=fh)
+            # Remove the predictions that weren't requested.
+            return preds.head(len(X))
+
+        # default case
         return self._model.forecast(X)
 
     def _get_forecast_horizon(self, X):
@@ -105,8 +135,8 @@ class _WrappedQuantileForecastingModel(_WrappedForecastingModel):
             examples=examples,
             time_feature=time_feature,
             time_series_id_features=time_series_id_features)
-        if (not self._model_package in [_AZUREML, _SKTIME] and
-                not hasattr(model, _Forecasting.FORECAST_QUANTILES)):
+        if (self._model_package not in [_AZUREML, _SKTIME] and
+                not hasattr(model, Forecasting.FORECAST_QUANTILES)):
             raise ValueError(
                 "The passed model does not have a 'forecast_quantiles' "
                 "method. 'forecast_quantiles' is optional for the "
@@ -133,5 +163,4 @@ class _WrappedQuantileForecastingModel(_WrappedForecastingModel):
         if self._model_package == _SKTIME:
             fh = self._get_forecast_horizon(X)
             return self._model.predict_quantiles(X=X, fh=fh, alpha=quantiles)
-                
         return self._model.forecast_quantiles(X, quantiles)
