@@ -83,8 +83,37 @@ class _WrappedForecastingModel(BaseWrappedModel):
             X_temp.set_index(
                 self._time_series_id_features + [self._time_feature],
                 inplace=True, drop=True)
-            print(X_temp.head(50))
-            return self._model.predict(X=X_temp, fh=fh)
+            if len(self._time_series_id_features) == 0:
+                return self._model.predict(X=X_temp, fh=fh)
+            
+            # If there are potentially multiple time series in the data
+            # we need to ensure that sktime receives data for all of them.
+            # This is currently an issue in sktime:
+            # https://github.com/sktime/sktime/issues/4209
+            # When this is supported in sktime we can remove the code in this
+            # if-branch. 
+
+            # Determine which time series are missing from the data.
+            # All index levels except for the last one are time series ID features.
+            # The last level is the datetime feature.
+            existing_time_series = X_temp.index.droplevel(level=-1).unique().to_list()
+            all_time_series = self._model.forecasters_.index.to_list()
+            missing_time_series = list(set(all_time_series) - set(existing_time_series))
+            # Add the missing time series to the data.
+            for time_series in missing_time_series:
+                X_add = X_temp.loc[existing_time_series[0]].copy()
+                id_feature_value_mapping = dict(zip(self._time_series_id_features, time_series))
+                for id_feature, value in id_feature_value_mapping.items():
+                    X_add[id_feature] = value
+                X_add[self._time_feature] = X_add.index.get_level_values(level=-1)
+                X_add.set_index(self._time_series_id_features, drop=True, inplace=True)
+                X_temp = pd.concat(X_temp, X_add)
+            
+            preds = self._model.predict(X=X_temp, fh=fh)
+            # Remove the predictions that weren't requested.
+            return preds.head(len(X))
+
+        # default case
         return self._model.forecast(X)
 
     def _get_forecast_horizon(self, X):
