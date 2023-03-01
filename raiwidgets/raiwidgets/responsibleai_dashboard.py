@@ -11,7 +11,7 @@ from raiwidgets.dashboard import Dashboard
 from raiwidgets.responsibleai_dashboard_input import \
     ResponsibleAIDashboardInput
 from responsibleai import RAIInsights
-from erroranalysis._internal.constants import ModelTask
+from raiutils.models import ModelTask
 
 
 class ResponsibleAIDashboard(Dashboard):

@@ -75,42 +75,7 @@ class _WrappedForecastingModel(BaseWrappedModel):
             # but we only want to return the actual forecast.
             return self._model.forecast(X)[0]
         if self._model_package == _SKTIME:
-            fh = self._get_forecast_horizon(X)
-            # sktime expects the time series Id features and time feature
-            # in the index rather than as a regular column.
-            X_temp = X.copy()
-            X_temp.set_index(
-                self._time_series_id_features + [self._time_feature],
-                inplace=True, drop=True)
-            if len(self._time_series_id_features) == 0:
-                return self._model.predict(X=X_temp, fh=fh)
-            
-            # If there are potentially multiple time series in the data
-            # we need to ensure that sktime receives data for all of them.
-            # This is currently an issue in sktime:
-            # https://github.com/sktime/sktime/issues/4209
-            # When this is supported in sktime we can remove the code in this
-            # if-branch. 
-
-            # Determine which time series are missing from the data.
-            # All index levels except for the last one are time series ID features.
-            # The last level is the datetime feature.
-            existing_time_series = X_temp.index.droplevel(level=-1).unique().to_list()
-            all_time_series = self._model.forecasters_.index.to_list()
-            missing_time_series = list(set(all_time_series) - set(existing_time_series))
-            # Add the missing time series to the data.
-            for time_series in missing_time_series:
-                X_add = X_temp.loc[existing_time_series[0]].copy()
-                id_feature_value_mapping = dict(zip(self._time_series_id_features, time_series))
-                for id_feature, value in id_feature_value_mapping.items():
-                    X_add[id_feature] = value
-                X_add[self._time_feature] = X_add.index.get_level_values(level=-1)
-                X_add.set_index(self._time_series_id_features, drop=True, inplace=True)
-                X_temp = pd.concat(X_temp, X_add)
-            
-            preds = self._model.predict(X=X_temp, fh=fh)
-            # Remove the predictions that weren't requested.
-            return preds.head(len(X))
+            return self._apply_sktime_method(self._model.predict, X)
 
         # default case
         return self._model.forecast(X)
@@ -125,6 +90,50 @@ class _WrappedForecastingModel(BaseWrappedModel):
         return ForecastingHorizon(
             pd.to_datetime(X[self._time_feature].unique()).sort_values(),
             is_relative=False)
+
+    def _apply_sktime_method(self, method, X):
+        fh = self._get_forecast_horizon(X)
+        # sktime expects the time series ID features and time feature
+        # in the index rather than as a regular column.
+        X_temp = X.copy()
+        X_temp.set_index(
+            self._time_series_id_features + [self._time_feature],
+            inplace=True, drop=True)
+        if len(self._time_series_id_features) == 0:
+            return method(X=X_temp, fh=fh)
+        
+        # If there are potentially multiple time series in the data
+        # we need to ensure that sktime receives data for all of them.
+        # This is currently an issue in sktime:
+        # https://github.com/sktime/sktime/issues/4209
+        # When this is supported in sktime we can remove the code in this
+        # if-branch. 
+
+        # Check that all input time series have all required rows.
+        time_series_counts = X_temp.groupby(level=[0,1]).size().to_list()
+        if not all(count == time_series_counts[0] for count in time_series_counts):
+            raise ValueError(
+                "Not all time series have the same number of rows.")
+        # Determine which time series are missing from the data.
+        # All index levels except for the last one are time series ID features.
+        # The last level is the datetime feature.
+        existing_time_series = X_temp.index.droplevel(level=-1).unique().to_list()
+        all_time_series = self._model.forecasters_.index.to_list()
+        missing_time_series = list(set(all_time_series) - set(existing_time_series))
+        # Add the missing time series to the data by duplicating the first time series.
+        n_rows = int(len(X_temp) / len(existing_time_series))
+        for time_series in missing_time_series:
+            X_add = X_temp.iloc[:n_rows].copy()
+            id_feature_value_mapping = dict(zip(self._time_series_id_features, time_series))
+            for id_feature, value in id_feature_value_mapping.items():
+                X_add[id_feature] = value
+            X_add[self._time_feature] = X_add.index.get_level_values(level=-1)
+            X_add.set_index(self._time_series_id_features + [self._time_feature], drop=True, inplace=True)
+            X_temp = pd.concat((X_temp, X_add))
+        
+        preds = method(X=X_temp, fh=fh)
+        # Remove the predictions that weren't requested.
+        return preds.head(len(X))
 
 
 class _WrappedQuantileForecastingModel(_WrappedForecastingModel):
@@ -161,6 +170,7 @@ class _WrappedQuantileForecastingModel(_WrappedForecastingModel):
             self._model.quantiles = quantiles
             return self._model.forecast_quantiles(X)
         if self._model_package == _SKTIME:
-            fh = self._get_forecast_horizon(X)
-            return self._model.predict_quantiles(X=X, fh=fh, alpha=quantiles)
+            def forecast_quantiles_method(X, fh):
+                return self._model.predict_quantiles(X=X, fh=fh, alpha=quantiles)
+            return self._apply_sktime_method(forecast_quantiles_method, X)
         return self._model.forecast_quantiles(X, quantiles)

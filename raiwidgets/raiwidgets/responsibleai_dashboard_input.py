@@ -7,9 +7,10 @@ from typing import List, Optional, Union
 import numpy as np
 import pandas as pd
 
-from erroranalysis._internal.constants import ModelTask, display_name_to_metric
+
+from erroranalysis._internal.constants import display_name_to_metric
 from raiutils.data_processing import convert_to_list, serialize_json_safe
-from raiutils.models import is_classifier
+from raiutils.models import is_classifier, ModelTask
 from raiwidgets.cohort import Cohort, CohortFilter, CohortFilterMethods
 from raiwidgets.constants import ErrorMessages
 from raiwidgets.error_handling import _format_exception
