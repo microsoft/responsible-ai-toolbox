@@ -3,10 +3,8 @@
 
 """Defines the RAIInsights class."""
 
-import inspect
 import json
 import pickle
-import sys
 import warnings
 from enum import Enum
 from pathlib import Path
@@ -645,6 +643,7 @@ class RAIInsights(RAIBaseInsights):
                         'The regression model '
                         'provided has a predict_proba function. '
                         'Please check the task_type.')
+
     def _validate_feature_metadata(
             self, feature_metadata, train, task_type, model):
         if feature_metadata is not None:

@@ -56,6 +56,7 @@ class _WrappedForecastingModel(BaseWrappedModel):
                 "'forecast' is required for the forecasting task_type. "
                 "Alternatively, pass a sktime forecasting model.")
         self._validate_time_features(time_feature, time_series_id_features)
+
     def _validate_time_features(self, time_feature, time_series_id_features):
         if time_feature not in self._examples.columns:
             raise ValueError(
@@ -101,36 +102,47 @@ class _WrappedForecastingModel(BaseWrappedModel):
             inplace=True, drop=True)
         if len(self._time_series_id_features) == 0:
             return method(X=X_temp, fh=fh)
-        
+
         # If there are potentially multiple time series in the data
         # we need to ensure that sktime receives data for all of them.
         # This is currently an issue in sktime:
         # https://github.com/sktime/sktime/issues/4209
         # When this is supported in sktime we can remove the code in this
-        # if-branch. 
+        # if-branch.
 
         # Check that all input time series have all required rows.
-        time_series_counts = X_temp.groupby(level=[0,1]).size().to_list()
-        if not all(count == time_series_counts[0] for count in time_series_counts):
+        time_series_id_features_index_levels = \
+            list(range(len(self._time_series_id_features)))
+        time_series_counts = X_temp.groupby(
+            level=time_series_id_features_index_levels).size().to_list()
+        all_time_series_have_same_number_of_rows = \
+            all(count == time_series_counts[0] for count in time_series_counts)
+        if not all_time_series_have_same_number_of_rows:
             raise ValueError(
                 "Not all time series have the same number of rows.")
         # Determine which time series are missing from the data.
         # All index levels except for the last one are time series ID features.
         # The last level is the datetime feature.
-        existing_time_series = X_temp.index.droplevel(level=-1).unique().to_list()
+        existing_time_series = \
+            X_temp.index.droplevel(level=-1).unique().to_list()
         all_time_series = self._model.forecasters_.index.to_list()
-        missing_time_series = list(set(all_time_series) - set(existing_time_series))
-        # Add the missing time series to the data by duplicating the first time series.
+        missing_time_series = \
+            list(set(all_time_series) - set(existing_time_series))
+        # Add the missing time series to the data by duplicating
+        # the first time series.
         n_rows = int(len(X_temp) / len(existing_time_series))
         for time_series in missing_time_series:
             X_add = X_temp.iloc[:n_rows].copy()
-            id_feature_value_mapping = dict(zip(self._time_series_id_features, time_series))
+            id_feature_value_mapping = \
+                dict(zip(self._time_series_id_features, time_series))
             for id_feature, value in id_feature_value_mapping.items():
                 X_add[id_feature] = value
             X_add[self._time_feature] = X_add.index.get_level_values(level=-1)
-            X_add.set_index(self._time_series_id_features + [self._time_feature], drop=True, inplace=True)
+            X_add.set_index(
+                self._time_series_id_features + [self._time_feature],
+                drop=True, inplace=True)
             X_temp = pd.concat((X_temp, X_add))
-        
+
         preds = method(X=X_temp, fh=fh)
         # Remove the predictions that weren't requested.
         return preds.head(len(X))
@@ -171,6 +183,7 @@ class _WrappedQuantileForecastingModel(_WrappedForecastingModel):
             return self._model.forecast_quantiles(X)
         if self._model_package == _SKTIME:
             def forecast_quantiles_method(X, fh):
-                return self._model.predict_quantiles(X=X, fh=fh, alpha=quantiles)
+                return self._model.predict_quantiles(
+                    X=X, fh=fh, alpha=quantiles)
             return self._apply_sktime_method(forecast_quantiles_method, X)
         return self._model.forecast_quantiles(X, quantiles)
