@@ -15,7 +15,7 @@ const timeSeriesIDColumnNames = ["restaurant", "city"];
 mockForecastingDataNoFeatures.feature_names = timeSeriesIDColumnNames;
 mockForecastingDataNoFeatures.feature_metadata = {
   categorical_features: timeSeriesIDColumnNames,
-  time_series_id_column_names: timeSeriesIDColumnNames
+  time_series_id_features: timeSeriesIDColumnNames
 };
 
 mockForecastingDataNoFeatures.features = mockForecastingData.features.map(

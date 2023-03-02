@@ -17,7 +17,8 @@ import {
   getModelTypeFromTextExplanation,
   MetricCohortStats,
   DatasetTaskType,
-  ModelTypes
+  ModelTypes,
+  IDataset
 } from "@responsible-ai/core-ui";
 import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
@@ -49,6 +50,7 @@ export function buildInitialModelAssessmentContext(
       props.modelExplanationData[0].precomputedExplanations
         .localFeatureImportance;
   }
+  validateForecastingSpecificMetadata(props.dataset);
   const jointDataset = new JointDataset({
     dataset: props.dataset.features,
     featureMetaData: props.dataset.feature_metadata,
@@ -269,4 +271,18 @@ function buildModelMetadata(
     featureRanges,
     modelType
   };
+}
+
+function validateForecastingSpecificMetadata(dataset: IDataset){
+  if (dataset.task_type === DatasetTaskType.Forecasting) {
+    if (!dataset.feature_metadata){
+      throw new Error("feature_metadata is required for forecasting.");
+    }
+    if (dataset.feature_metadata.datetime_features === undefined){
+      throw new Error("datetime_features within feature_metadata are required for forecasting.");
+    }
+    if(dataset.feature_metadata.datetime_features.length !== 1){
+      throw new Error("Currently, only a single datetime feature is supported for forecasting.");
+    }
+  }
 }
