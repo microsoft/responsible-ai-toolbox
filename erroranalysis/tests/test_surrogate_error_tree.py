@@ -20,8 +20,9 @@ from erroranalysis._internal.constants import (ARG, COLUMN, COMPOSITE_FILTERS,
 from erroranalysis._internal.error_analyzer import (ModelAnalyzer,
                                                     PredictionsAnalyzer)
 from erroranalysis._internal.surrogate_error_tree import (
-    TreeSide, cache_subtree_features, create_surrogate_model,
-    get_categorical_info, get_max_split_index, traverse)
+    TreeSide, cache_subtree_features, compute_error_tree,
+    create_surrogate_model, get_categorical_info, get_max_split_index,
+    traverse)
 from rai_test_utils.datasets.tabular import (
     create_adult_census_data, create_binary_classification_dataset,
     create_cancer_data, create_diabetes_data, create_iris_data,
@@ -318,6 +319,14 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
         if not isinstance(X_test, pd.DataFrame):
             validation_data = validation_data.values
     validate_error_tree(tree, len(validation_data), min_child_samples)
+
+    # validate wrapper method compute_error_tree() output
+    new_tree = compute_error_tree(
+        error_analyzer, tree_features, filters, composite_filters,
+        max_depth=max_depth, num_leaves=num_leaves,
+        min_child_samples=min_child_samples)
+    validate_error_tree(new_tree, len(validation_data),
+                        min_child_samples)
 
     # Validate compute_error_tree_on_dataset() output
     if len(validation_data) > 0:
