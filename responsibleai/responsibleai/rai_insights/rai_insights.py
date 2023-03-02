@@ -112,9 +112,7 @@ MODEL_METHODS = {
             purpose=MethodPurpose.PREDICTION),
         ModelMethod(
             name=SKLearn.PREDICT_PROBA,
-            # TODO: so far assumption was that it's required
-            # but that excludes lots of classification models.
-            optional=True,
+            optional=False,
             purpose=MethodPurpose.PROBABILITY)
     ],
     ModelTask.REGRESSION: [
