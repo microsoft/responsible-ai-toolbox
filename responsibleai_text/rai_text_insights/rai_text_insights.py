@@ -15,9 +15,10 @@ import pandas as pd
 from raiutils.data_processing import convert_to_list, serialize_json_safe
 from raiutils.models import is_classifier, SKLearn
 from responsibleai.exceptions import UserConfigValidationException
-from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights, _DATA
+from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
 from responsibleai._interfaces import Dataset, RAIInsightsData
-from responsibleai._internal.constants import ManagerNames, Metadata
+from responsibleai._internal.constants import (
+    ManagerNames, Metadata, SerializationAttributes)
 from responsibleai.rai_insights.constants import ModelTask as RAIModelTask
 from ml_wrappers import wrap_model
 
@@ -389,7 +390,7 @@ class RAITextInsights(RAIBaseInsights):
         :param path: The directory path to save the RAIBaseInsights to.
         :type path: str
         """
-        data_directory = Path(path) / _DATA
+        data_directory = Path(path) / SerializationAttributes.DATA_DIRECTORY
         ext_path = data_directory / (_EXT_TEST + _JSON_EXTENSION)
         ext_features_path = data_directory / (_EXT_FEATURES + _JSON_EXTENSION)
         self._save_list_data(ext_path, self._ext_test)
@@ -604,12 +605,12 @@ class RAITextInsights(RAIBaseInsights):
         :type path: str
         """
         top_dir = Path(path)
-        with open(top_dir / _DATA / (_EXT_TEST + _JSON_EXTENSION), 'r') as \
-                file:
+        data_path = top_dir / SerializationAttributes.DATA_DIRECTORY
+        json_test_path = data_path / (_EXT_TEST + _JSON_EXTENSION)
+        with open(json_test_path, 'r') as file:
             inst._ext_test = json.loads(file.read())
-        with open(
-                top_dir / _DATA / (_EXT_FEATURES + _JSON_EXTENSION), 'r') as \
-                file:
+        json_features_path = data_path / (_EXT_FEATURES + _JSON_EXTENSION)
+        with open(json_features_path, 'r') as file:
             inst._ext_features = json.loads(file.read())
         inst._ext_test_df = pd.DataFrame(
             inst._ext_test, columns=inst._ext_features)
