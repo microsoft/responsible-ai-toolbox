@@ -6,6 +6,12 @@ import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { ConfirmationDialog } from "../../components/ConfirmationDialog";
+import {
+  defaultModelAssessmentContext,
+  ModelAssessmentContext
+} from "../../Context/ModelAssessmentContext";
+import { DatasetCohort } from "../../DatasetCohort";
+import { isFlightActive, removeJointDatasetFlight } from "../../FeatureFlights";
 import { ICompositeFilter, IFilter } from "../../Interfaces/IFilter";
 import { JointDataset } from "../../util/JointDataset";
 import { Cohort } from "../Cohort";
@@ -21,7 +27,7 @@ export interface ICohortEditorProps {
   deleteIsDisabled: boolean;
   disableEditName?: boolean;
   existingCohortNames?: string[];
-  onSave: (newCohort: Cohort, switchNew?: boolean) => void;
+  onSave: (newCohort: Cohort | DatasetCohort, switchNew?: boolean) => void;
   closeCohortEditor: () => void;
   closeCohortEditorPanel: () => void;
   filterList?: IFilter[];
@@ -41,6 +47,9 @@ export class CohortEditor extends React.PureComponent<
   ICohortEditorProps,
   ICohortEditorState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
   public constructor(props: ICohortEditorProps) {
     super(props);
     this.state = {
@@ -75,6 +84,10 @@ export class CohortEditor extends React.PureComponent<
             onCohortNameUpdated={this.onCohortNameUpdated}
             onCompositeFiltersUpdated={this.onCompositeFiltersUpdated}
             onFiltersUpdated={this.onFilterUpdated}
+            dataset={this.context.dataset}
+            activeFlights={this.context.featureFlights}
+            datasetFeatureRanges={this.context.datasetFeatureRanges}
+            modelType={this.context.modelType}
           />
         </Panel>
         {this.renderCancelDialog()}
@@ -184,16 +197,33 @@ export class CohortEditor extends React.PureComponent<
 
   private saveCohort = (switchNew?: boolean): void => {
     if (this.state.cohortName?.length) {
-      const newCohort = new Cohort(
-        this.state.cohortName,
-        this.props.jointDataset,
-        this.state.filters,
-        this.state.compositeFilters
-      );
-      if (newCohort.filteredData.length === 0) {
-        this.setState({ showEmptyCohortError: true });
+      if (
+        isFlightActive(removeJointDatasetFlight, this.context.featureFlights)
+      ) {
+        const newDatasetCohort = new DatasetCohort(
+          this.state.cohortName,
+          this.context.dataset,
+          this.state.filters,
+          this.context.modelType,
+          this.context.datasetFeatureRanges
+        );
+        if (newDatasetCohort.selectedIndexes.length === 0) {
+          this.setState({ showEmptyCohortError: true });
+        } else {
+          this.props.onSave(newDatasetCohort, switchNew);
+        }
       } else {
-        this.props.onSave(newCohort, switchNew);
+        const newCohort = new Cohort(
+          this.state.cohortName,
+          this.props.jointDataset,
+          this.state.filters,
+          this.state.compositeFilters
+        );
+        if (newCohort.filteredData.length === 0) {
+          this.setState({ showEmptyCohortError: true });
+        } else {
+          this.props.onSave(newCohort, switchNew);
+        }
       }
     }
   };

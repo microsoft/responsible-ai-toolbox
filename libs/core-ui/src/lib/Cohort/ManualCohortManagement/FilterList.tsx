@@ -3,15 +3,24 @@
 
 import { IconButton, TooltipHost, TooltipOverflowMode } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { roundDecimal } from "@responsible-ai/mlchartlib";
+import {
+  ICategoricalRange,
+  INumericRange,
+  RangeTypes,
+  roundDecimal
+} from "@responsible-ai/mlchartlib";
 import React from "react";
 
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
 import { JointDataset } from "../../util/JointDataset";
 
+import { getFilterLabel } from "./CohortEditorPanelContentUtils";
+
 export interface IFilterListProps {
   filters: IFilter[];
   jointDataset: JointDataset;
+  datasetFeatureRanges?: { [key: string]: INumericRange | ICategoricalRange };
+  isRemoveJointDatasetFlightOn?: boolean;
   editFilter?(index: number): void;
   removeFilter?(index: number): void;
 }
@@ -60,17 +69,34 @@ export class FilterList extends React.Component<IFilterListProps> {
 
   private setFilterLabel(filter: IFilter): React.ReactNode {
     const selectedFilter = this.props.jointDataset.metaDict[filter.column];
+    let abbridgedLabel = "";
+    let isCategorical;
+    let sortedCategoricalValues: string[] | undefined;
+    if (this.props.isRemoveJointDatasetFlightOn) {
+      abbridgedLabel = getFilterLabel(filter.column);
+      const range = this.props.datasetFeatureRanges
+        ? this.props.datasetFeatureRanges[filter.column]
+        : undefined;
+      if (range?.rangeType === RangeTypes.Categorical) {
+        isCategorical = true;
+        sortedCategoricalValues = range.uniqueValues;
+      }
+    } else {
+      isCategorical = selectedFilter.isCategorical;
+      sortedCategoricalValues = selectedFilter.sortedCategoricalValues;
+      abbridgedLabel = selectedFilter.abbridgedLabel;
+    }
     let stringArgs;
     let label = "";
 
     if (
-      selectedFilter.isCategorical ||
+      isCategorical ||
       this.props.jointDataset.metaDict[filter.column]?.treatAsCategorical
     ) {
       const selectedValues: string[] = [];
       const filterArgs = filter.arg;
       filterArgs.forEach((element) => {
-        const value = selectedFilter.sortedCategoricalValues?.[element];
+        const value = sortedCategoricalValues?.[element];
         if (value) {
           selectedValues.push(value);
         }
@@ -94,13 +120,13 @@ export class FilterList extends React.Component<IFilterListProps> {
 
     if (filter.method === FilterMethods.InTheRangeOf) {
       // example: Age [30,40]
-      label = `${selectedFilter.abbridgedLabel} ${localization.formatString(
+      label = `${abbridgedLabel} ${localization.formatString(
         localization.Interpret.FilterOperations.inTheRangeOf,
         stringArgs
       )}`;
     } else {
       // example: Age < 30
-      label = `${selectedFilter.abbridgedLabel} ${localization.formatString(
+      label = `${abbridgedLabel} ${localization.formatString(
         this.filterMethodLabels[filter.method],
         stringArgs
       )}`;

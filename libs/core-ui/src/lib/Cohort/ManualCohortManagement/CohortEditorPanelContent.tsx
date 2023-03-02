@@ -9,10 +9,19 @@ import {
   IChoiceGroupOption
 } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
+import {
+  ICategoricalRange,
+  INumericRange,
+  RangeTypes
+} from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import React, { FormEvent } from "react";
 
 import { Announce } from "../../components/Announce";
+import { DatasetCohort } from "../../DatasetCohort";
+import { isFlightActive, removeJointDatasetFlight } from "../../FeatureFlights";
+import { IDataset } from "../../Interfaces/IDataset";
+import { ModelTypes } from "../../Interfaces/IExplanationContext";
 import {
   FilterMethods,
   ICompositeFilter,
@@ -23,8 +32,20 @@ import { JointDataset } from "../../util/JointDataset";
 import { cohortEditorStyles } from "./CohortEditor.styles";
 import { CohortEditorFilterList } from "./CohortEditorFilterList";
 import { CohortEditorFilterSection } from "./CohortEditorFilterSection";
+import {
+  filterArgRetainableList,
+  filterArgRetainableList2,
+  getChoices,
+  getChoices2
+} from "./CohortEditorPanelContentUtils";
 
 export interface ICohortEditorPanelContentProps {
+  activeFlights?: string[];
+  dataset: IDataset;
+  datasetFeatureRanges?: {
+    [key: string]: INumericRange | ICategoricalRange;
+  };
+  modelType?: ModelTypes;
   cohortName?: string;
   compositeFilters: ICompositeFilter[];
   disableEditName?: boolean;
@@ -45,38 +66,17 @@ export interface ICohortEditorPanelContentState {
   filtersMessage?: string;
 }
 
-export const filterArgRetainableList = [
-  JointDataset.PredictedYLabel,
-  JointDataset.TrueYLabel,
-  JointDataset.ClassificationError
-];
-
 export class CohortEditorPanelContent extends React.PureComponent<
   ICohortEditorPanelContentProps,
   ICohortEditorPanelContentState
 > {
-  private readonly leftItems: IChoiceGroupOption[] = [
-    JointDataset.IndexLabel,
-    JointDataset.DataLabelRoot,
-    JointDataset.PredictedYLabel,
-    JointDataset.TrueYLabel,
-    JointDataset.ClassificationError,
-    JointDataset.RegressionError
-  ].reduce((previousValue: IChoiceGroupOption[], key: string) => {
-    const metaVal = this.props.jointDataset.metaDict[key];
-    if (
-      key === JointDataset.DataLabelRoot &&
-      this.props.jointDataset.hasDataset
-    ) {
-      previousValue.push({ key, text: "Dataset" });
-      return previousValue;
-    }
-    if (metaVal === undefined) {
-      return previousValue;
-    }
-    previousValue.push({ key, text: metaVal.abbridgedLabel });
-    return previousValue;
-  }, []);
+  private isFlightOn = isFlightActive(
+    removeJointDatasetFlight,
+    this.props.activeFlights
+  );
+  private readonly leftItems: IChoiceGroupOption[] = this.isFlightOn
+    ? getChoices2(this.props.datasetFeatureRanges)
+    : getChoices(this.props.jointDataset);
   private _isInitialized = false;
 
   public constructor(props: ICohortEditorPanelContentProps) {
@@ -84,9 +84,9 @@ export class CohortEditorPanelContent extends React.PureComponent<
     this.state = {
       filterIndex: this.props.filterList?.length || 0,
       filtersMessage: "",
-      openedFilter: this.getFilterValue(
-        this.leftItems[0] && this.leftItems[0].key
-      ),
+      openedFilter: this.isFlightOn
+        ? this.getFilterValue2(this.leftItems[0] && this.leftItems[0].key)
+        : this.getFilterValue(this.leftItems[0] && this.leftItems[0].key),
       selectedFilterCategory: this.leftItems[0] && this.leftItems[0].key
     };
     this._isInitialized = true;
@@ -120,12 +120,16 @@ export class CohortEditorPanelContent extends React.PureComponent<
           {...this.props}
           filterIndex={this.state.filterIndex}
           openedFilter={this.state.openedFilter}
+          isRemoveJointDatasetFlightOn={this.isFlightOn}
           onOpenedFilterUpdated={this.onOpenedFilterUpdated}
           onSelectedFilterCategoryUpdated={this.onSelectedFilterCategoryUpdated}
           setFilterMessage={this.setFilterMessage}
+          datasetFeatureRanges={this.props.datasetFeatureRanges}
         />
         <Stack.Item>
           <CohortEditorFilterList
+            datasetFeatureRanges={this.props.datasetFeatureRanges}
+            isRemoveJointDatasetFlightOn={this.isFlightOn}
             compositeFilters={this.props.compositeFilters}
             editFilter={this.editFilter}
             removeCompositeFilter={this.removeCompositeFilter}
@@ -196,14 +200,21 @@ export class CohortEditorPanelContent extends React.PureComponent<
     if (!this._isInitialized) {
       return;
     }
-    if (property === JointDataset.DataLabelRoot) {
+    if (this.isFlightOn) {
+      if (property === DatasetCohort.Dataset) {
+        this.setDefaultStateForKey(this.props.dataset.feature_names[0]);
+        return;
+      }
+    } else if (property === JointDataset.DataLabelRoot) {
       property += "0";
     }
     this.setDefaultStateForKey(property);
   };
 
   private setDefaultStateForKey(key: string): void {
-    const filter = this.getFilterValue(key);
+    const filter = this.isFlightOn
+      ? this.getFilterValue2(key)
+      : this.getFilterValue(key);
     this.setState({
       openedFilter: filter
     });
@@ -224,13 +235,31 @@ export class CohortEditorPanelContent extends React.PureComponent<
     }
     return filter;
   }
+  private getFilterValue2(key: string): IFilter {
+    const filter: IFilter = { column: key } as IFilter;
+    const range = this.props.datasetFeatureRanges
+      ? this.props.datasetFeatureRanges[key]
+      : ({} as INumericRange);
+    if (range?.rangeType === RangeTypes.Categorical) {
+      const arg = this.getPreviousFilterArgValue(key);
+      filter.method = FilterMethods.Includes;
+      filter.arg = arg ?? [...new Array(range.uniqueValues.length).keys()];
+    } else {
+      filter.method = FilterMethods.LessThan;
+      filter.arg = [range?.max || Number.MAX_SAFE_INTEGER];
+    }
+    return filter;
+  }
 
   private getPreviousFilterArgValue(key: string): number[] | undefined {
     let arg;
     // only execute this if in edit mode
     // On duplication retained arg is shown only for filters in filterArgRetainableList
     this.props.disableEditName &&
-      filterArgRetainableList.includes(key) &&
+      (this.isFlightOn
+        ? filterArgRetainableList2
+        : filterArgRetainableList
+      ).includes(key) &&
       this.props.filterList?.forEach((filter) => {
         if (filter.column === key) {
           arg = filter.arg;
@@ -252,10 +281,9 @@ export class CohortEditorPanelContent extends React.PureComponent<
   };
 
   private editFilter = (index: number): void => {
-    const editFilter = this.props.filters[index];
     this.setState({
       filterIndex: index,
-      openedFilter: _.cloneDeep(editFilter)
+      openedFilter: _.cloneDeep(this.props.filters[index])
     });
   };
 

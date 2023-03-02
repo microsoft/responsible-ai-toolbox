@@ -4,9 +4,12 @@
 import {
   Cohort,
   CohortEditor,
+  DatasetCohort,
   defaultModelAssessmentContext,
   IModelAssessmentContext,
-  ModelAssessmentContext
+  isFlightActive,
+  ModelAssessmentContext,
+  removeJointDatasetFlight
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -20,14 +23,23 @@ export class CreateGlobalCohort extends React.Component<ICreateGlobalCohortProps
   public static contextType = ModelAssessmentContext;
   public context: IModelAssessmentContext = defaultModelAssessmentContext;
   public render(): React.ReactNode {
+    const isRemoveJointDatasetFlightOn = isFlightActive(
+      removeJointDatasetFlight,
+      this.context.featureFlights
+    );
+    const cohortsLength =
+      isRemoveJointDatasetFlightOn && this.context.datasetCohorts
+        ? this.context.datasetCohorts.length + 1
+        : this.context.errorCohorts.length + 1;
+
     return (
       this.props.visible && (
         <CohortEditor
           jointDataset={this.context.jointDataset}
           filterList={this.context.baseErrorCohort.cohort.filters}
-          cohortName={`${localization.Interpret.Cohort.cohort} ${(
-            this.context.errorCohorts.length + 1
-          ).toString()}`}
+          cohortName={`${
+            localization.Interpret.Cohort.cohort
+          } ${cohortsLength?.toString()}`}
           existingCohortNames={this.getExistingCohortName()}
           onSave={this.addCohort}
           isNewCohort
@@ -39,7 +51,10 @@ export class CreateGlobalCohort extends React.Component<ICreateGlobalCohortProps
     );
   }
 
-  private addCohort = (cohort: Cohort, switchNew?: boolean): void => {
+  private addCohort = (
+    cohort: Cohort | DatasetCohort,
+    switchNew?: boolean
+  ): void => {
     this.context.addCohort(cohort, switchNew);
     this.props.onDismiss();
   };

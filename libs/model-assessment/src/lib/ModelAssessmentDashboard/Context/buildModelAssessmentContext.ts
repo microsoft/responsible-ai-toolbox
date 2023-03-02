@@ -17,7 +17,9 @@ import {
   getModelTypeFromTextExplanation,
   MetricCohortStats,
   DatasetTaskType,
-  ModelTypes
+  ModelTypes,
+  DatasetCohort,
+  getFeatureRanges
 } from "@responsible-ai/core-ui";
 import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
@@ -30,12 +32,15 @@ import {
   IModelAssessmentDashboardState,
   IModelAssessmentDashboardTab
 } from "../ModelAssessmentDashboardState";
+import { getModelType } from "../ModelAssessmentDashboardUtils";
 import { GlobalTabKeys } from "../ModelAssessmentEnums";
 
 export function buildInitialModelAssessmentContext(
   props: IModelAssessmentDashboardProps
 ): IModelAssessmentDashboardState {
   const modelMetadata = buildModelMetadata(props);
+  const modelType = getModelType(props.dataset, props.modelExplanationData);
+  const datasetFeatureRanges = getFeatureRanges(props.dataset, modelType);
 
   let localExplanations:
     | IMultiClassLocalFeatureImportance
@@ -91,6 +96,16 @@ export function buildInitialModelAssessmentContext(
   errorCohortList = errorCohortList.concat(preBuiltErrorCohortList);
   const cohorts = errorCohortList;
 
+  // TODO(Ruby): need to handle pre built cohort
+  const defaultDatasetCohort = new DatasetCohort(
+    localization.ErrorAnalysis.Cohort.defaultLabel,
+    props.dataset,
+    [],
+    modelType,
+    datasetFeatureRanges
+  );
+  const datasetCohorts = [defaultDatasetCohort];
+
   // only include tabs for which we have the required data
   const activeGlobalTabs: IModelAssessmentDashboardTab[] = getAvailableTabs(
     props,
@@ -105,9 +120,12 @@ export function buildInitialModelAssessmentContext(
   return {
     activeGlobalTabs,
     baseCohort: cohorts[0],
+    baseDatasetCohort: datasetCohorts[0],
     cohorts,
     customPoints: [],
     dataChartConfig: undefined,
+    datasetCohorts,
+    datasetFeatureRanges,
     dependenceProps: undefined,
     errorAnalysisOption: ErrorAnalysisOptions.TreeMap,
     globalImportance: globalProps.globalImportance,
@@ -117,9 +135,11 @@ export function buildInitialModelAssessmentContext(
     jointDataset,
     modelChartConfig: undefined,
     modelMetadata,
+    modelType,
     onAddMessage: "",
     saveCohortVisible: false,
     selectedCohort: cohorts[0],
+    selectedDatasetCohort: datasetCohorts[0],
     selectedWhatIfIndex: undefined,
     sortVector: undefined
   };

@@ -48,6 +48,7 @@ export class CounterfactualsTab extends React.PureComponent<
 
   public render(): React.ReactNode {
     const classNames = counterfactualsTabStyles();
+    const featureFlights = this.context.featureFlights;
     return (
       <Stack grow tokens={{ padding: "l1" }} className={classNames.container}>
         <Stack.Item className={classNames.infoWithText}>
@@ -59,6 +60,7 @@ export class CounterfactualsTab extends React.PureComponent<
           <CounterfactualComponent
             invokeModel={this.context.requestPredictions}
             data={this.props.data}
+            featureFlights={featureFlights}
             selectedWeightVector={this.state.selectedWeightVector}
             weightOptions={this.state.weightVectorOptions}
             weightLabels={this.state.weightVectorLabels}

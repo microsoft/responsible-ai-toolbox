@@ -3,6 +3,7 @@
 
 import { Label, Text } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
+import { ICategoricalRange, INumericRange } from "@responsible-ai/mlchartlib";
 import React from "react";
 
 import { ICompositeFilter, IFilter } from "../../Interfaces/IFilter";
@@ -16,6 +17,8 @@ export interface ICohortEditorFilterList {
   filters: IFilter[];
   compositeFilters: ICompositeFilter[];
   jointDataset: JointDataset;
+  datasetFeatureRanges?: { [key: string]: INumericRange | ICategoricalRange };
+  isRemoveJointDatasetFlightOn?: boolean;
   editFilter?(index: number): void;
   removeFilter?(index: number): void;
   removeCompositeFilter?(index: number): void;
@@ -33,6 +36,8 @@ export class CohortEditorFilterList extends React.Component<ICohortEditorFilterL
         <FilterList
           filters={this.props.filters}
           jointDataset={this.props.jointDataset}
+          isRemoveJointDatasetFlightOn={this.props.isRemoveJointDatasetFlightOn}
+          datasetFeatureRanges={this.props.datasetFeatureRanges}
           editFilter={this.props.editFilter}
           removeFilter={this.props.removeFilter}
         />

@@ -12,23 +12,31 @@ import {
   Text
 } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { RangeTypes, roundDecimal } from "@responsible-ai/mlchartlib";
+import {
+  ICategoricalRange,
+  INumericRange,
+  RangeTypes,
+  roundDecimal
+} from "@responsible-ai/mlchartlib";
 import React from "react";
 
+import { IDataset } from "../../Interfaces/IDataset";
 import { IFilter } from "../../Interfaces/IFilter";
 import { FluentUIStyles } from "../../util/FluentUIStyles";
 import { JointDataset } from "../../util/JointDataset";
-import { IJointMeta } from "../../util/JointDatasetUtils";
 
 import { NoneCategoricalFilterOptions } from "./NoneCategoricalFilterOptions";
 
 export interface ICohortEditorFilterProps {
   openedFilter: IFilter;
   jointDataset: JointDataset;
+  dataset: IDataset;
+  datasetFeatureRanges?: { [key: string]: INumericRange | ICategoricalRange };
   filterIndex?: number;
   filters: IFilter[];
   showInvalidMinMaxValueError: boolean;
   showInvalidValueError: boolean;
+  isRemoveJointDatasetFlightOn: boolean;
   setFilterMessage: (filtersMessage: string) => void;
   setSelectedProperty(
     ev: React.FormEvent<IComboBox>,
@@ -42,48 +50,79 @@ export interface ICohortEditorFilterProps {
   setComparison(ev?: React.FormEvent<IComboBox>, item?: IComboBoxOption): void;
   setNumericValue(
     delta: number,
-    column: IJointMeta,
     index: number,
-    stringVal: string
+    stringVal: string,
+    range?: INumericRange
   ): string | void;
   saveState(index?: number): void;
   cancelFilter(): void;
 }
 export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps> {
-  private readonly dataArray: IComboBoxOption[] = new Array(
-    this.props.jointDataset.datasetFeatureCount
-  )
-    .fill(0)
-    .map((_, index) => {
-      const key = JointDataset.DataLabelRoot + index.toString();
-      return {
-        key,
-        text: this.props.jointDataset.metaDict[key].abbridgedLabel
-      };
-    });
+  private readonly dataArray: IComboBoxOption[] = this.props
+    .isRemoveJointDatasetFlightOn
+    ? this.props.dataset.feature_names.map((featureName) => {
+        return {
+          key: featureName,
+          text: featureName
+        };
+      })
+    : new Array(this.props.jointDataset.datasetFeatureCount)
+        .fill(0)
+        .map((_, index) => {
+          const key = JointDataset.DataLabelRoot + index.toString();
+          return {
+            key,
+            text: this.props.jointDataset.metaDict[key].abbridgedLabel
+          };
+        });
   public render(): React.ReactNode {
     const selectedMeta =
       this.props.jointDataset.metaDict[this.props.openedFilter.column];
-    const isDataColumn = this.props.openedFilter.column.includes(
-      JointDataset.DataLabelRoot
-    );
+    const isDataColumn = this.props.isRemoveJointDatasetFlightOn
+      ? this.props.dataset.feature_names.includes(
+          this.props.openedFilter.column
+        )
+      : this.props.openedFilter.column.includes(JointDataset.DataLabelRoot);
     let categoricalOptions: IComboBoxOption[] | undefined;
     // filterIndex is set when the filter is editing openedFilter and reset to filters.length otherwise
     const isEditingFilter =
       this.props.filterIndex !== this.props.filters.length;
     let minVal, maxVal;
-    if (selectedMeta?.treatAsCategorical || !selectedMeta.featureRange) {
-      // Numerical values treated as categorical are stored with the values in the column,
-      // true categorical values store indexes to the string values
-      categoricalOptions = selectedMeta.sortedCategoricalValues?.map(
-        (label, index) => {
+    let featureRange;
+    let isCategorical;
+    let categoricalValuesLength;
+    if (this.props.isRemoveJointDatasetFlightOn) {
+      featureRange = this.props.datasetFeatureRanges
+        ? this.props.datasetFeatureRanges[this.props.openedFilter.column]
+        : ({} as INumericRange);
+      isCategorical = featureRange?.rangeType === RangeTypes.Categorical;
+      if (featureRange?.rangeType === RangeTypes.Categorical) {
+        categoricalOptions = featureRange?.uniqueValues.map((label, index) => {
           return { key: index, text: label };
-        }
-      );
+        });
+        categoricalValuesLength = categoricalOptions.length;
+      } else {
+        minVal = roundDecimal(featureRange?.min);
+        maxVal = roundDecimal(featureRange?.max);
+      }
     } else {
-      minVal = roundDecimal(selectedMeta.featureRange.min);
-      maxVal = roundDecimal(selectedMeta.featureRange.max);
+      featureRange = selectedMeta.featureRange;
+      isCategorical = selectedMeta.treatAsCategorical;
+      categoricalValuesLength = selectedMeta.sortedCategoricalValues?.length;
+      if (selectedMeta?.treatAsCategorical || !selectedMeta.featureRange) {
+        // Numerical values treated as categorical are stored with the values in the column,
+        // true categorical values store indexes to the string values
+        categoricalOptions = selectedMeta.sortedCategoricalValues?.map(
+          (label, index) => {
+            return { key: index, text: label };
+          }
+        );
+      } else {
+        minVal = roundDecimal(selectedMeta.featureRange.min);
+        maxVal = roundDecimal(selectedMeta.featureRange.max);
+      }
     }
+
     return (
       <Stack tokens={{ childrenGap: "l1" }}>
         {isDataColumn && (
@@ -96,21 +135,20 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
             calloutProps={FluentUIStyles.calloutProps}
           />
         )}
-        {selectedMeta.featureRange &&
-          selectedMeta.featureRange.rangeType === RangeTypes.Integer && (
-            <Checkbox
-              key={this.props.openedFilter.column}
-              label={localization.Interpret.CohortEditor.TreatAsCategorical}
-              checked={selectedMeta?.treatAsCategorical}
-              onChange={this.props.setAsCategorical}
-            />
-          )}
-        {selectedMeta?.treatAsCategorical ? (
+        {featureRange && featureRange.rangeType === RangeTypes.Integer && (
+          <Checkbox
+            key={this.props.openedFilter.column}
+            label={localization.Interpret.CohortEditor.TreatAsCategorical}
+            checked={isCategorical}
+            onChange={this.props.setAsCategorical}
+          />
+        )}
+        {isCategorical ? (
           <>
             <Text variant={"small"}>
               {`${localization.formatString(
                 localization.Interpret.Filters.uniqueValues,
-                selectedMeta.sortedCategoricalValues?.length
+                categoricalValuesLength
               )}`}
             </Text>
             <ComboBox
@@ -127,6 +165,7 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
           </>
         ) : (
           <NoneCategoricalFilterOptions
+            featureRange={featureRange as INumericRange}
             selectedMeta={selectedMeta}
             openedFilter={this.props.openedFilter}
             showInvalidMinMaxValueError={this.props.showInvalidMinMaxValueError}
@@ -135,6 +174,9 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
             maxVal={maxVal}
             setComparison={this.props.setComparison}
             setNumericValue={this.props.setNumericValue}
+            isRemoveJointDatasetFlightOn={
+              this.props.isRemoveJointDatasetFlightOn
+            }
           />
         )}
         <Stack horizontal tokens={{ childrenGap: "l1" }}>

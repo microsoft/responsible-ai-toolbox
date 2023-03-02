@@ -14,7 +14,9 @@ import {
   BasicHighChart,
   ITelemetryEvent,
   TelemetryLevels,
-  TelemetryEventName
+  TelemetryEventName,
+  isFlightActive,
+  removeJointDatasetFlight
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import React from "react";
@@ -28,6 +30,7 @@ import { CounterfactualPanel } from "./CounterfactualPanel";
 export interface ICounterfactualChartProps {
   chartProps: IGenericChartProps;
   customPoints: Array<{ [key: string]: any }>;
+  featureFlights?: string[];
   isPanelOpen: boolean;
   originalData?: { [key: string]: string | number };
   selectedPointsIndexes: number[];
@@ -76,6 +79,10 @@ export class CounterfactualChart extends React.PureComponent<
     };
   }
   public render(): React.ReactNode {
+    const isFlightOn = isFlightActive(
+      removeJointDatasetFlight,
+      this.props.featureFlights
+    );
     const classNames = counterfactualChartStyles();
 
     const plotlyProps = generatePlotlyProps(
@@ -83,8 +90,27 @@ export class CounterfactualChart extends React.PureComponent<
       this.props.chartProps,
       this.context.selectedErrorCohort.cohort,
       this.props.selectedPointsIndexes,
-      this.props.customPoints
+      this.props.customPoints,
+      this.context.selectedDatasetCohort,
+      this.context.featureFlights
     );
+    //TODO(Ruby): localize && abbridge?
+    const horizontalAxisText = isFlightOn
+      ? this.props.chartProps.xAxis.property
+      : this.context.jointDataset.metaDict[this.props.chartProps.xAxis.property]
+          .abbridgedLabel;
+    const horizontalAxisTitle = isFlightOn
+      ? this.props.chartProps.xAxis.property
+      : this.context.jointDataset.metaDict[this.props.chartProps.xAxis.property]
+          .label;
+    const verticalAxisText = isFlightOn
+      ? this.props.chartProps.yAxis.property
+      : this.context.jointDataset.metaDict[this.props.chartProps.yAxis.property]
+          .abbridgedLabel;
+    const verticalAxisTitle = isFlightOn
+      ? this.props.chartProps.yAxis.property
+      : this.context.jointDataset.metaDict[this.props.chartProps.yAxis.property]
+          .label;
 
     return (
       <Stack.Item className={classNames.chartWithAxes}>
@@ -151,16 +177,8 @@ export class CounterfactualChart extends React.PureComponent<
                 <div className={classNames.rotatedVerticalBox}>
                   <DefaultButton
                     onClick={this.setYOpen}
-                    text={
-                      this.context.jointDataset.metaDict[
-                        this.props.chartProps.yAxis.property
-                      ].abbridgedLabel
-                    }
-                    title={
-                      this.context.jointDataset.metaDict[
-                        this.props.chartProps.yAxis.property
-                      ].label
-                    }
+                    text={verticalAxisText}
+                    title={verticalAxisTitle}
                   />
                 </div>
               </Stack.Item>
@@ -181,16 +199,8 @@ export class CounterfactualChart extends React.PureComponent<
             <div className={classNames.horizontalAxis}>
               <DefaultButton
                 onClick={this.setXOpen}
-                text={
-                  this.context.jointDataset.metaDict[
-                    this.props.chartProps.xAxis.property
-                  ].abbridgedLabel
-                }
-                title={
-                  this.context.jointDataset.metaDict[
-                    this.props.chartProps.xAxis.property
-                  ].label
-                }
+                text={horizontalAxisText}
+                title={horizontalAxisTitle}
               />
             </div>
           </Stack>

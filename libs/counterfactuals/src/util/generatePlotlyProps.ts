@@ -4,14 +4,26 @@
 import {
   ChartTypes,
   Cohort,
+  DatasetCohort,
   FluentUIStyles,
   IGenericChartProps,
-  JointDataset
+  isFlightActive,
+  JointDataset,
+  removeJointDatasetFlight
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
-import { IData, IPlotlyProperty, PlotlyMode } from "@responsible-ai/mlchartlib";
+import {
+  ICategoricalRange,
+  IData,
+  INumericRange,
+  IPlotlyProperty,
+  PlotlyMode,
+  RangeTypes
+} from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
+
+import { generateDataTraceFromDatasetCohort } from "./generateDataTraceFromDatasetCohort";
 
 export function generatePlotlyProps(
   jointData: JointDataset,
@@ -20,11 +32,18 @@ export function generatePlotlyProps(
   selectedPointsIndexes: number[],
   customPoints: Array<{
     [key: string]: any;
-  }>
+  }>,
+  datasetCohort?: DatasetCohort,
+  featureFlights?: string[],
+  datasetFeatureRanges?: { [key: string]: INumericRange | ICategoricalRange }
 ): IPlotlyProperty {
   const plotlyProps = _.cloneDeep(WhatIfConstants.basePlotlyProperties);
   plotlyProps.data[0].hoverinfo = "all";
-  const indexes = cohort.unwrap(JointDataset.IndexLabel);
+  const isFlightOn = isFlightActive(removeJointDatasetFlight, featureFlights);
+  const indexes =
+    isFlightOn && datasetCohort
+      ? datasetCohort?.selectedIndexes
+      : cohort.unwrap(JointDataset.IndexLabel);
   plotlyProps.data[0].type = chartProps.chartType as ChartTypes;
   plotlyProps.data[0].mode = PlotlyMode.Markers;
   plotlyProps.data[0].marker = {
@@ -77,31 +96,69 @@ export function generatePlotlyProps(
   };
 
   if (chartProps.xAxis) {
-    if (jointData.metaDict[chartProps.xAxis.property]?.treatAsCategorical) {
-      const xLabels =
+    let xLabels;
+    if (isFlightOn) {
+      if (
+        datasetFeatureRanges &&
+        datasetFeatureRanges[chartProps.xAxis.property]?.rangeType ===
+          RangeTypes.Categorical
+      ) {
+        const range = datasetFeatureRanges[
+          chartProps.xAxis.property
+        ] as ICategoricalRange;
+        xLabels = range.uniqueValues;
+      }
+    } else if (
+      jointData.metaDict[chartProps.xAxis.property]?.treatAsCategorical
+    ) {
+      xLabels =
         jointData.metaDict[chartProps.xAxis.property].sortedCategoricalValues;
-      const xLabelIndexes = xLabels?.map((_, index) => index);
-      _.set(plotlyProps, "layout.xaxis.ticktext", xLabels);
-      _.set(plotlyProps, "layout.xaxis.tickvals", xLabelIndexes);
     }
-  }
-  if (chartProps.yAxis) {
-    if (jointData.metaDict[chartProps.yAxis.property]?.treatAsCategorical) {
-      const yLabels =
-        jointData.metaDict[chartProps.yAxis.property].sortedCategoricalValues;
-      const yLabelIndexes = yLabels?.map((_, index) => index);
-      _.set(plotlyProps, "layout.yaxis.ticktext", yLabels);
-      _.set(plotlyProps, "layout.yaxis.tickvals", yLabelIndexes);
-    }
+
+    const xLabelIndexes = xLabels?.map((_, index) => index);
+    _.set(plotlyProps, "layout.xaxis.ticktext", xLabels);
+    _.set(plotlyProps, "layout.xaxis.tickvals", xLabelIndexes);
   }
 
-  generateDataTrace(
-    cohort.filteredData,
-    chartProps,
-    plotlyProps.data[0],
-    jointData
-  );
-  generateDataTrace(customPoints, chartProps, plotlyProps.data[1], jointData);
+  if (chartProps.yAxis) {
+    let yLabels;
+    if (isFlightOn) {
+      if (
+        datasetFeatureRanges &&
+        datasetFeatureRanges[chartProps.yAxis.property]?.rangeType ===
+          RangeTypes.Categorical
+      ) {
+        const range = datasetFeatureRanges[
+          chartProps.yAxis.property
+        ] as ICategoricalRange;
+        yLabels = range.uniqueValues;
+      }
+    } else if (
+      jointData.metaDict[chartProps.yAxis.property]?.treatAsCategorical
+    ) {
+      yLabels =
+        jointData.metaDict[chartProps.yAxis.property].sortedCategoricalValues;
+    }
+    const yLabelIndexes = yLabels?.map((_, index) => index);
+    _.set(plotlyProps, "layout.yaxis.ticktext", yLabels);
+    _.set(plotlyProps, "layout.yaxis.tickvals", yLabelIndexes);
+  }
+  if (isFlightOn) {
+    generateDataTraceFromDatasetCohort(
+      chartProps,
+      plotlyProps.data[0],
+      datasetCohort
+    );
+    // TODO(Ruby): get plotlyProps for customPoints
+  } else {
+    generateDataTrace(
+      cohort.filteredData,
+      chartProps,
+      plotlyProps.data[0],
+      jointData
+    );
+    generateDataTrace(customPoints, chartProps, plotlyProps.data[1], jointData);
+  }
   return plotlyProps;
 }
 

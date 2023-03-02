@@ -3,20 +3,27 @@
 
 import { IComboBoxOption, IComboBox, Text, Stack } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { RangeTypes } from "@responsible-ai/mlchartlib";
+import {
+  ICategoricalRange,
+  INumericRange,
+  RangeTypes
+} from "@responsible-ai/mlchartlib";
 import React from "react";
 
+import { IDataset } from "../../Interfaces/IDataset";
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
 import { JointDataset } from "../../util/JointDataset";
-import { IJointMeta } from "../../util/JointDatasetUtils";
 
 import { CohortEditorFilter } from "./CohortEditorFilter";
 
 export interface ICohortEditorFilterSectionProps {
   filterIndex?: number;
   filters: IFilter[];
+  dataset: IDataset;
+  datasetFeatureRanges?: { [key: string]: INumericRange | ICategoricalRange };
   jointDataset: JointDataset;
   openedFilter?: IFilter;
+  isRemoveJointDatasetFlightOn: boolean;
   onFiltersUpdated: (filters: IFilter[]) => void;
   onOpenedFilterUpdated: (openedFilter?: IFilter) => void;
   onSelectedFilterCategoryUpdated: (selectedFilterCategory?: string) => void;
@@ -49,10 +56,15 @@ export class CohortEditorFilterSection extends React.PureComponent<
           </Text>
         ) : (
           <CohortEditorFilter
+            dataset={this.props.dataset}
+            datasetFeatureRanges={this.props.datasetFeatureRanges}
             cancelFilter={this.cancelFilter}
             filters={this.props.filters}
             jointDataset={this.props.jointDataset}
             openedFilter={this.props.openedFilter}
+            isRemoveJointDatasetFlightOn={
+              this.props.isRemoveJointDatasetFlightOn
+            }
             saveState={this.saveState}
             setAsCategorical={this.setAsCategorical}
             setCategoricalValues={this.setCategoricalValues}
@@ -146,17 +158,26 @@ export class CohortEditorFilterSection extends React.PureComponent<
     const openedFilter = this.props.openedFilter;
     if ((item.key as FilterMethods) === FilterMethods.InTheRangeOf) {
       //default values for in the range operation
-      const meta =
-        this.props.jointDataset.metaDict[openedFilter.column].featureRange;
-      if (meta?.min === undefined) {
+      let range;
+      if (this.props.isRemoveJointDatasetFlightOn) {
+        range =
+          this.props.datasetFeatureRanges &&
+          (this.props.datasetFeatureRanges[
+            this.props.openedFilter.column
+          ] as INumericRange);
+      } else {
+        range =
+          this.props.jointDataset.metaDict[openedFilter.column].featureRange;
+      }
+      if (range?.min === undefined) {
         openedFilter.arg[0] = Number.MIN_SAFE_INTEGER;
       } else {
-        openedFilter.arg[0] = meta.min;
+        openedFilter.arg[0] = range.min;
       }
-      if (meta?.max === undefined) {
+      if (range?.max === undefined) {
         openedFilter.arg[1] = Number.MAX_SAFE_INTEGER;
       } else {
-        openedFilter.arg[1] = meta.max;
+        openedFilter.arg[1] = range.max;
       }
     } else {
       //handle switch from in the range to less than, equals etc
@@ -171,21 +192,21 @@ export class CohortEditorFilterSection extends React.PureComponent<
 
   private readonly setNumericValue = (
     delta: number,
-    column: IJointMeta,
     index: number,
-    stringVal: string
+    stringVal: string,
+    range?: INumericRange
   ): string | void => {
     if (!this.props.openedFilter) {
       return;
     }
     const openArg = this.props.openedFilter.arg;
-    const max = column.featureRange?.max || Number.MAX_SAFE_INTEGER;
-    const min = column.featureRange?.min || Number.MIN_SAFE_INTEGER;
+    const max = range?.max || Number.MAX_SAFE_INTEGER;
+    const min = range?.min || Number.MIN_SAFE_INTEGER;
     if (delta === 0) {
       const numberVal = +stringVal;
       if (
         (!Number.isInteger(numberVal) &&
-          column.featureRange?.rangeType === RangeTypes.Integer) ||
+          range?.rangeType === RangeTypes.Integer) ||
         numberVal > max ||
         numberVal < min
       ) {
@@ -230,7 +251,9 @@ export class CohortEditorFilterSection extends React.PureComponent<
   };
 
   private setDefaultStateForKey(key: string): void {
-    const filter = this.getFilterValue(key);
+    const filter = this.props.isRemoveJointDatasetFlightOn
+      ? this.getFilterValue2(key)
+      : this.getFilterValue(key);
     this.props.onOpenedFilterUpdated(filter);
   }
 
@@ -243,6 +266,21 @@ export class CohortEditorFilterSection extends React.PureComponent<
     } else {
       filter.method = FilterMethods.LessThan;
       filter.arg = [meta.featureRange?.max || Number.MAX_SAFE_INTEGER];
+    }
+    return filter;
+  }
+
+  private getFilterValue2(key: string): IFilter {
+    const filter: IFilter = { column: key } as IFilter;
+    const range = this.props.datasetFeatureRanges
+      ? this.props.datasetFeatureRanges[key]
+      : ({} as INumericRange);
+    if (range.rangeType === RangeTypes.Categorical) {
+      filter.method = FilterMethods.Includes;
+      filter.arg = [...new Array(range.uniqueValues.length).keys()];
+    } else {
+      filter.method = FilterMethods.LessThan;
+      filter.arg = [range.max || Number.MAX_SAFE_INTEGER];
     }
     return filter;
   }

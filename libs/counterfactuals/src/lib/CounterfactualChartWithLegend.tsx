@@ -113,6 +113,7 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
             <CounterfactualChart
               chartProps={this.props.chartProps}
               customPoints={this.state.customPoints}
+              featureFlights={this.context.featureFlights}
               isPanelOpen={this.state.isPanelOpen}
               originalData={this.state.originalData}
               selectedPointsIndexes={this.props.selectedPointsIndexes}

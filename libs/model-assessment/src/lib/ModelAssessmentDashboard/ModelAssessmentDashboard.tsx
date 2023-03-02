@@ -12,7 +12,10 @@ import {
   defaultTheme,
   TelemetryLevels,
   TelemetryEventName,
-  Announce
+  Announce,
+  DatasetCohort,
+  isFlightActive,
+  removeJointDatasetFlight
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -58,10 +61,13 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       <ModelAssessmentContext.Provider
         value={{
           addCohort: this.addCohort,
+          baseDatasetCohort: this.state.baseDatasetCohort,
           baseErrorCohort: this.state.baseCohort,
           causalAnalysisData: this.props.causalAnalysisData?.[0],
           counterfactualData: this.props.counterfactualData?.[0],
           dataset: this.props.dataset,
+          datasetCohorts: this.state.datasetCohorts,
+          datasetFeatureRanges: this.state.datasetFeatureRanges,
           deleteCohort: this.deleteCohort,
           editCohort: this.editCohort,
           errorAnalysisData: this.props.errorAnalysisData?.[0],
@@ -76,6 +82,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               }
             : undefined,
           modelMetadata: this.state.modelMetadata,
+          modelType: this.state.modelType,
           requestBoxPlotDistribution: this.props.requestBoxPlotDistribution,
           requestBubblePlotData: this.props.requestBubblePlotData,
           requestCausalWhatIf: this.props.requestCausalWhatIf,
@@ -94,6 +101,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
             this.props.requestLocalFeatureExplanations,
           requestMetrics: this.props.requestMetrics,
           requestPredictions: this.props.requestPredictions,
+          selectedDatasetCohort: this.state.selectedDatasetCohort,
           selectedErrorCohort: this.state.selectedCohort,
           shiftErrorCohort: this.shiftErrorCohort,
           telemetryHook:
@@ -237,59 +245,112 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
   };
 
   private addCohort = (
-    manuallyCreatedCohort: Cohort,
+    manuallyCreatedCohort: Cohort | DatasetCohort,
     switchNew?: boolean
   ): void => {
-    if (
-      this.state.cohorts.some(
-        (c) => c.cohort.name === manuallyCreatedCohort.name
-      )
-    ) {
-      return;
+    if (isFlightActive(removeJointDatasetFlight, this.props.featureFlights)) {
+      if (
+        this.state.datasetCohorts === undefined ||
+        this.state.datasetCohorts.some(
+          (c) => c.name === manuallyCreatedCohort.name
+        )
+      ) {
+        return;
+      }
+      const newDatasetCohorts = [
+        ...this.state.datasetCohorts,
+        manuallyCreatedCohort
+      ] as DatasetCohort[];
+      // TODO(Ruby): filter out temporary cohorts
+      this.setState((prevState) => ({
+        baseDatasetCohort: switchNew
+          ? (manuallyCreatedCohort as DatasetCohort)
+          : prevState.baseDatasetCohort,
+        datasetCohorts: newDatasetCohorts,
+        selectedDatasetCohort: switchNew
+          ? (manuallyCreatedCohort as DatasetCohort)
+          : prevState.selectedDatasetCohort
+      }));
+    } else {
+      if (
+        this.state.cohorts.some(
+          (c) => c.cohort.name === manuallyCreatedCohort.name
+        )
+      ) {
+        return;
+      }
+      const newErrorCohort = new ErrorCohort(
+        manuallyCreatedCohort as Cohort,
+        this.state.jointDataset,
+        0,
+        CohortSource.ManuallyCreated
+      );
+      let newCohorts = [...this.state.cohorts, newErrorCohort];
+      newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
+      this.setState((prevState) => ({
+        baseCohort: switchNew ? newErrorCohort : prevState.baseCohort,
+        cohorts: newCohorts,
+        selectedCohort: switchNew ? newErrorCohort : prevState.selectedCohort
+      }));
+      console.log("##newErrorCohort", newErrorCohort);
     }
-    const newErrorCohort = new ErrorCohort(
-      manuallyCreatedCohort,
-      this.state.jointDataset,
-      0,
-      CohortSource.ManuallyCreated
-    );
-    let newCohorts = [...this.state.cohorts, newErrorCohort];
-    newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
-    this.setState((prevState) => ({
-      baseCohort: switchNew ? newErrorCohort : prevState.baseCohort,
-      cohorts: newCohorts,
-      selectedCohort: switchNew ? newErrorCohort : prevState.selectedCohort
-    }));
+
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
       type: TelemetryEventName.NewCohortAdded
     });
   };
 
-  private editCohort = (editCohort: Cohort, switchNew?: boolean): void => {
-    const editIndex = this.state.cohorts.findIndex(
-      (c) => c.cohort.name === editCohort.name
-    );
-    if (editIndex === -1) {
-      return;
-    }
-    const newErrorCohort = new ErrorCohort(
-      editCohort,
-      this.state.jointDataset,
-      0,
-      CohortSource.ManuallyCreated
-    );
-    let newCohorts = [...this.state.cohorts];
-    newCohorts[editIndex] = newErrorCohort;
-    newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
-
-    if (switchNew) {
-      this.setState({
-        cohorts: newCohorts,
-        selectedCohort: newCohorts[editIndex]
-      });
+  private editCohort = (
+    editCohort: Cohort | DatasetCohort,
+    switchNew?: boolean
+  ): void => {
+    if (isFlightActive(removeJointDatasetFlight, this.props.featureFlights)) {
+      if (this.state.datasetCohorts === undefined) {
+        return;
+      }
+      const editIndex = this.state.datasetCohorts.findIndex(
+        (c) => c.name === editCohort.name
+      );
+      if (editIndex === -1) {
+        return;
+      }
+      const newDatasetCohorts = [...this.state.datasetCohorts];
+      newDatasetCohorts[editIndex] = editCohort as DatasetCohort;
+      // TODO filter temporary
+      if (switchNew) {
+        this.setState({
+          datasetCohorts: newDatasetCohorts,
+          selectedDatasetCohort: newDatasetCohorts[editIndex]
+        });
+      } else {
+        this.setState({ datasetCohorts: newDatasetCohorts });
+      }
     } else {
-      this.setState({ cohorts: newCohorts });
+      const editIndex = this.state.cohorts.findIndex(
+        (c) => c.cohort.name === editCohort.name
+      );
+      if (editIndex === -1) {
+        return;
+      }
+      const newErrorCohort = new ErrorCohort(
+        editCohort as Cohort,
+        this.state.jointDataset,
+        0,
+        CohortSource.ManuallyCreated
+      );
+      let newCohorts = [...this.state.cohorts];
+      newCohorts[editIndex] = newErrorCohort;
+      newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
+
+      if (switchNew) {
+        this.setState({
+          cohorts: newCohorts,
+          selectedCohort: newCohorts[editIndex]
+        });
+      } else {
+        this.setState({ cohorts: newCohorts });
+      }
     }
   };
 

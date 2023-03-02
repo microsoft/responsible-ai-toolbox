@@ -4,6 +4,7 @@
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { DatasetCohort } from "../DatasetCohort";
 import { IDataset } from "../Interfaces/IDataset";
 import { IFilter, ICompositeFilter } from "../Interfaces/IFilter";
 import { JointDataset } from "../util/JointDataset";
@@ -21,6 +22,9 @@ export interface ICohortBasedComponentState {
   cohorts: ErrorCohort[];
   selectedCohort: ErrorCohort;
   jointDataset: JointDataset;
+  datasetCohorts?: DatasetCohort[];
+  baseDatasetCohort?: DatasetCohort;
+  selectedDatasetCohort?: DatasetCohort;
 }
 
 export abstract class CohortBasedComponent<

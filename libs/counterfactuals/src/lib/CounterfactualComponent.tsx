@@ -13,14 +13,19 @@ import {
   rowErrorSize,
   ICounterfactualData,
   ITelemetryEvent,
-  ifEnableLargeData
+  ifEnableLargeData,
+  isFlightActive,
+  removeJointDatasetFlight
 } from "@responsible-ai/core-ui";
 import { IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import React from "react";
 
-import { generateDefaultChartAxes } from "../util/generateDefaultChartAxes";
+import {
+  generateDefaultChartAxes,
+  generateDefaultChartAxesWithDatasetCohort
+} from "../util/generateDefaultChartAxes";
 import { getCopyOfDatasetPoint } from "../util/getCopyOfDatasetPoint";
 import { getDefaultSelectedPointIndexes } from "../util/getDefaultSelectedPointIndexes";
 import { getFetchPredictionPromise } from "../util/getFetchPredictionPromise";
@@ -37,6 +42,7 @@ export interface ICounterfactualComponentProps {
   selectedWeightVector: WeightVectorOption;
   weightOptions: WeightVectorOption[];
   weightLabels: any;
+  featureFlights?: string[];
   invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
   onWeightChange: (option: WeightVectorOption) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
@@ -91,9 +97,20 @@ export class CounterfactualComponent extends React.PureComponent<
     this.createCopyOfFirstRow();
     this.buildRowOptions(0);
     this.fetchData = _.debounce(this.fetchData, 400);
+    const isFlightOn = isFlightActive(
+      removeJointDatasetFlight,
+      this.props.featureFlights
+    );
     this.setState({
-      chartProps: generateDefaultChartAxes(this.context.jointDataset)
+      chartProps: isFlightOn
+        ? generateDefaultChartAxesWithDatasetCohort(
+            this.context.selectedDatasetCohort
+          )
+        : generateDefaultChartAxes(this.context.jointDataset)
     });
+    // this.setState({
+    //   chartProps: generateDefaultChartAxes(this.context.jointDataset)
+    // });
   }
 
   public componentDidUpdate(

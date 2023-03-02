@@ -894,6 +894,14 @@
       "cancelNo": "No",
       "cancelTitle": "Cancel cohort",
       "cancelYes": "Yes",
+      "choiceGroup": {
+        "index": "Index",
+        "dataset": "Dataset",
+        "predictedY": "Predicted Y",
+        "trueY": "True Y",
+        "classificationOutcome": "Classification outcome",
+        "regressionError": "Error"
+      },
       "cohortNameError": "Missing cohort name",
       "cohortNameDupError": "Cohort with same name already exists",
       "cohortNameLabel": "Dataset cohort name",

@@ -10,7 +10,7 @@ import {
   Text
 } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { RangeTypes } from "@responsible-ai/mlchartlib";
+import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
 import React from "react";
 
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
@@ -21,6 +21,8 @@ import { cohortEditorStyles } from "./CohortEditor.styles";
 import { comparisonOptions } from "./CohortEditorFilterUtils";
 
 export interface INoneCategoricalFilterOptionsProps {
+  featureRange: INumericRange;
+  isRemoveJointDatasetFlightOn: boolean;
   selectedMeta: IJointMeta;
   openedFilter: IFilter;
   showInvalidMinMaxValueError: boolean;
@@ -30,9 +32,9 @@ export interface INoneCategoricalFilterOptionsProps {
   setComparison(ev?: React.FormEvent<IComboBox>, item?: IComboBoxOption): void;
   setNumericValue(
     delta: number,
-    column: IJointMeta,
     index: number,
-    stringVal: string
+    stringVal: string,
+    featureRange?: INumericRange
   ): string | void;
 }
 
@@ -47,12 +49,24 @@ export class NoneCategoricalFilterOptions extends React.Component<INoneCategoric
       minVal,
       maxVal
     } = this.props;
-    const numericDelta =
-      selectedMeta?.treatAsCategorical ||
-      selectedMeta.featureRange?.rangeType === RangeTypes.Integer ||
-      !selectedMeta.featureRange
-        ? 1
-        : (selectedMeta.featureRange.max - selectedMeta.featureRange.min) / 10;
+    let numericDelta: number;
+    let featureRange: INumericRange | undefined;
+    if (this.props.isRemoveJointDatasetFlightOn) {
+      featureRange = this.props.featureRange;
+      numericDelta =
+        featureRange?.rangeType === RangeTypes.Integer
+          ? 1
+          : (featureRange?.max - featureRange?.min) / 10;
+    } else {
+      featureRange = selectedMeta.featureRange;
+      numericDelta =
+        selectedMeta?.treatAsCategorical ||
+        selectedMeta.featureRange?.rangeType === RangeTypes.Integer ||
+        !selectedMeta.featureRange
+          ? 1
+          : (selectedMeta.featureRange.max - selectedMeta.featureRange.min) /
+            10;
+    }
     const styles = cohortEditorStyles();
     return (
       <>
@@ -73,7 +87,7 @@ export class NoneCategoricalFilterOptions extends React.Component<INoneCategoric
           useComboBoxAsMenuWidth
           calloutProps={FluentUIStyles.calloutProps}
         />
-        {selectedMeta.featureRange &&
+        {featureRange &&
           (openedFilter.method === FilterMethods.InTheRangeOf ? (
             <>
               <SpinButton
@@ -81,16 +95,16 @@ export class NoneCategoricalFilterOptions extends React.Component<INoneCategoric
                 labelPosition={Position.top}
                 value={openedFilter.arg[0].toString()}
                 label={localization.Interpret.Filters.minimum}
-                min={selectedMeta.featureRange.min}
-                max={selectedMeta.featureRange.max}
+                min={featureRange.min}
+                max={featureRange.max}
                 onIncrement={(value): void => {
-                  setNumericValue(numericDelta, selectedMeta, 0, value);
+                  setNumericValue(numericDelta, 0, value, featureRange);
                 }}
                 onDecrement={(value): void => {
-                  setNumericValue(-numericDelta, selectedMeta, 0, value);
+                  setNumericValue(-numericDelta, 0, value, featureRange);
                 }}
                 onValidate={(value): void => {
-                  setNumericValue(0, selectedMeta, 0, value);
+                  setNumericValue(0, 0, value, featureRange);
                 }}
                 incrementButtonAriaLabel={localization.Common.increaseValue}
                 decrementButtonAriaLabel={localization.Common.decreaseValue}
@@ -100,59 +114,58 @@ export class NoneCategoricalFilterOptions extends React.Component<INoneCategoric
                 labelPosition={Position.top}
                 value={openedFilter.arg[1].toString()}
                 label={localization.Interpret.Filters.maximum}
-                min={selectedMeta.featureRange.min}
-                max={selectedMeta.featureRange.max}
+                min={featureRange.min}
+                max={featureRange.max}
                 onIncrement={(value): void => {
-                  setNumericValue(numericDelta, selectedMeta, 1, value);
+                  setNumericValue(numericDelta, 1, value, featureRange);
                 }}
                 onDecrement={(value): void => {
-                  setNumericValue(-numericDelta, selectedMeta, 1, value);
+                  setNumericValue(-numericDelta, 1, value, featureRange);
                 }}
                 onValidate={(value): void => {
-                  setNumericValue(0, selectedMeta, 1, value);
+                  setNumericValue(0, 1, value, featureRange);
                 }}
                 incrementButtonAriaLabel={localization.Common.increaseValue}
                 decrementButtonAriaLabel={localization.Common.decreaseValue}
               />
-              {this.props.showInvalidMinMaxValueError &&
-                selectedMeta.featureRange && (
-                  <p className={styles.invalidValueError}>
-                    {localization.formatString(
-                      localization.Interpret.CohortEditor
-                        .minimumGreaterThanMaximum,
-                      selectedMeta.featureRange.min,
-                      selectedMeta.featureRange.max
-                    )}
-                  </p>
-                )}
+              {this.props.showInvalidMinMaxValueError && featureRange && (
+                <p className={styles.invalidValueError}>
+                  {localization.formatString(
+                    localization.Interpret.CohortEditor
+                      .minimumGreaterThanMaximum,
+                    featureRange.min,
+                    featureRange.max
+                  )}
+                </p>
+              )}
             </>
           ) : (
             <SpinButton
               ariaLabel={localization.Common.spinButton}
               labelPosition={Position.top}
               label={localization.Interpret.Filters.numericValue}
-              min={selectedMeta.featureRange.min}
-              max={selectedMeta.featureRange.max}
+              min={featureRange.min}
+              max={featureRange.max}
               value={openedFilter.arg[0].toString()}
               onIncrement={(value): void => {
-                setNumericValue(numericDelta, selectedMeta, 0, value);
+                setNumericValue(numericDelta, 0, value, featureRange);
               }}
               onDecrement={(value): void => {
-                setNumericValue(-numericDelta, selectedMeta, 0, value);
+                setNumericValue(-numericDelta, 0, value, featureRange);
               }}
               onValidate={(value): void => {
-                setNumericValue(0, selectedMeta, 0, value);
+                setNumericValue(0, 0, value, featureRange);
               }}
               incrementButtonAriaLabel={localization.Common.increaseValue}
               decrementButtonAriaLabel={localization.Common.decreaseValue}
             />
           ))}
-        {this.props.showInvalidValueError && selectedMeta.featureRange && (
+        {this.props.showInvalidValueError && featureRange && (
           <p className={styles.invalidValueError}>
             {localization.formatString(
               localization.Interpret.CohortEditor.invalidValueError,
-              selectedMeta.featureRange.min,
-              selectedMeta.featureRange.max
+              featureRange.min,
+              featureRange.max
             )}
           </p>
         )}
