@@ -83,9 +83,9 @@ function getJointDatasetRegression(addFeatureMetaData: boolean): JointDataset {
 
   const featureMetaData = {
     categorical_features: ["c1", "c2"],
+    datetime_features: ["d1"],
     dropped_features: ["d3", "d4"],
-    identity_feature_name: "INDUS",
-    datetime_features[0]: ["d1"]
+    identity_feature_name: "INDUS"
   } as IFeatureMetaData;
 
   if (addFeatureMetaData) {

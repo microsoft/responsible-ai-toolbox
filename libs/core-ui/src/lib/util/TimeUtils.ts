@@ -31,8 +31,7 @@ export function isTimeOrTimeSeriesIDColumn(
     const isDatetimeFeature =
       featureMetaData.datetime_features[0] === featureName;
     const isTimeSeriesIdColumn =
-      featureMetaData.time_series_id_features?.includes(featureName) ??
-      false;
+      featureMetaData.time_series_id_features?.includes(featureName) ?? false;
     return isDatetimeFeature || isTimeSeriesIdColumn;
   }
   // If we don't have feature metadata then we can assume that there are no

@@ -273,16 +273,20 @@ function buildModelMetadata(
   };
 }
 
-function validateForecastingSpecificMetadata(dataset: IDataset){
+function validateForecastingSpecificMetadata(dataset: IDataset): void {
   if (dataset.task_type === DatasetTaskType.Forecasting) {
-    if (!dataset.feature_metadata){
+    if (!dataset.feature_metadata) {
       throw new Error("feature_metadata is required for forecasting.");
     }
-    if (dataset.feature_metadata.datetime_features === undefined){
-      throw new Error("datetime_features within feature_metadata are required for forecasting.");
+    if (dataset.feature_metadata.datetime_features === undefined) {
+      throw new Error(
+        "datetime_features within feature_metadata are required for forecasting."
+      );
     }
-    if(dataset.feature_metadata.datetime_features.length !== 1){
-      throw new Error("Currently, only a single datetime feature is supported for forecasting.");
+    if (dataset.feature_metadata.datetime_features.length !== 1) {
+      throw new Error(
+        "Currently, only a single datetime feature is supported for forecasting."
+      );
     }
   }
 }
