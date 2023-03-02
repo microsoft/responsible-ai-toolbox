@@ -16,6 +16,7 @@ _SKTIME = "sktime"
 
 
 def _get_model_package(model):
+    """Return the package name of the passed model."""
     module = inspect.getmodule(model)
     module_name = module.__name__.partition('.')[0]
     model_package = sys.modules[module_name].__package__
@@ -41,6 +42,14 @@ def _wrap_model(model, examples, time_feature, time_series_id_features):
 
 
 class _WrappedForecastingModel(BaseWrappedModel):
+    """Wrapper for forecasting models.
+
+    This provides a unified API for the forecast method.
+    Additionally, this wrapper knows how to work with models from
+    certain packages such as AzureML and sktime.
+    Other models are expected to have a forecast method that takes
+    a DataFrame with the time series ID features and time feature.
+    """
     def __init__(self, model, examples, time_feature,
                  time_series_id_features):
         super(_WrappedForecastingModel, self).__init__(
@@ -58,6 +67,7 @@ class _WrappedForecastingModel(BaseWrappedModel):
         self._validate_time_features(time_feature, time_series_id_features)
 
     def _validate_time_features(self, time_feature, time_series_id_features):
+        """Ensures that time and time series ID features are present."""
         if time_feature not in self._examples.columns:
             raise ValueError(
                 "The passed time_feature is not in the examples DataFrame.")
@@ -71,6 +81,7 @@ class _WrappedForecastingModel(BaseWrappedModel):
         self._time_series_id_features = time_series_id_features
 
     def forecast(self, X):
+        """Returns the forecast for the passed data."""
         if self._model_package == _AZUREML:
             # AzureML forecasting models return a tuple of (forecast, data)
             # but we only want to return the actual forecast.
@@ -82,6 +93,7 @@ class _WrappedForecastingModel(BaseWrappedModel):
         return self._model.forecast(X)
 
     def _get_forecast_horizon(self, X):
+        """Returns the forecast horizon for the passed data."""
         # This method is only called if the model is from the sktime package
         # so we can assume that sktime is installed.
         # For non-sktime or more generally non-forecasting scenarios sktime
@@ -93,6 +105,10 @@ class _WrappedForecastingModel(BaseWrappedModel):
             is_relative=False)
 
     def _apply_sktime_method(self, method, X):
+        """Applies the passed sktime forecasting method.
+
+        This method is just a helper for sktime models.
+        """
         fh = self._get_forecast_horizon(X)
         # sktime expects the time series ID features and time feature
         # in the index rather than as a regular column.
@@ -149,6 +165,15 @@ class _WrappedForecastingModel(BaseWrappedModel):
 
 
 class _WrappedQuantileForecastingModel(_WrappedForecastingModel):
+    """Wrapper for quantile forecasting models.
+
+    This provides a unified API for the forecast_quantile method
+    in addition to the forecast method provided by the base class.
+    Additionally, this wrapper knows how to work with models from
+    certain packages such as AzureML and sktime.
+    Other models are expected to have a forecast method that takes
+    a DataFrame with the time series ID features and time feature.
+    """
     def __init__(self, model, examples, time_feature,
                  time_series_id_features):
         super(_WrappedQuantileForecastingModel, self).__init__(
@@ -166,6 +191,11 @@ class _WrappedQuantileForecastingModel(_WrappedForecastingModel):
                 "sktime forecasting model that supports predict_quantiles.")
 
     def forecast_quantiles(self, X, quantiles=None):
+        """Returns the forecast for the given quantiles.
+
+        If no quantiles are passed, the default quantiles 0.025 and 0.975
+        are used.
+        """
         if quantiles is None:
             quantiles = [0.025, 0.975]
         if (type(quantiles) != list or

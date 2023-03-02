@@ -644,6 +644,7 @@ class RAIInsights(RAIBaseInsights):
 
     def _validate_feature_metadata(
             self, feature_metadata, train, task_type, model):
+        """Validates the feature metadata."""
         if feature_metadata is not None:
             if not isinstance(feature_metadata, FeatureMetadata):
                 raise UserConfigValidationException(
