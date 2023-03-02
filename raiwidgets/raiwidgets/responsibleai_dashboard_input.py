@@ -374,9 +374,12 @@ class ResponsibleAIDashboardInput:
 
                 filtered_data_df[feature] = filtered_data_df[feature].map(transformation_func)
 
-            prediction = convert_to_list(self._analysis.model.forecast(filtered_data_df), EXP_VIZ_ERR_MSG)
+            predictions = convert_to_list(self._analysis.model.forecast(filtered_data_df), EXP_VIZ_ERR_MSG)
+            # forecast should return a flat list of predictions
+            if all([len(p) == 1 for p in predictions]):
+                predictions = [p[0] for p in predictions]
             return {
-                WidgetRequestResponseConstants.data: prediction
+                WidgetRequestResponseConstants.data: predictions
             }
         except Exception as e:
             print(e)
