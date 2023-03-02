@@ -252,9 +252,9 @@ def compute_error_tree(analyzer,
         analyzer,
         features,
         filtered_df,
-        max_depth=DEFAULT_MAX_DEPTH,
-        num_leaves=DEFAULT_NUM_LEAVES,
-        min_child_samples=DEFAULT_MIN_CHILD_SAMPLES
+        max_depth=max_depth,
+        num_leaves=num_leaves,
+        min_child_samples=min_child_samples
     )
 
 
