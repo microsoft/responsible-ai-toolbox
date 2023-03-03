@@ -292,7 +292,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
         cohorts: newCohorts,
         selectedCohort: switchNew ? newErrorCohort : prevState.selectedCohort
       }));
-      console.log("##newErrorCohort", newErrorCohort);
     }
 
     this.props.telemetryHook?.({

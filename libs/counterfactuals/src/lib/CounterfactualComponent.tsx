@@ -108,9 +108,6 @@ export class CounterfactualComponent extends React.PureComponent<
           )
         : generateDefaultChartAxes(this.context.jointDataset)
     });
-    // this.setState({
-    //   chartProps: generateDefaultChartAxes(this.context.jointDataset)
-    // });
   }
 
   public componentDidUpdate(

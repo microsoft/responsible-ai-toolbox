@@ -32,8 +32,8 @@ import {
   IModelAssessmentDashboardState,
   IModelAssessmentDashboardTab
 } from "../ModelAssessmentDashboardState";
-import { getModelType } from "../ModelAssessmentDashboardUtils";
 import { GlobalTabKeys } from "../ModelAssessmentEnums";
+import { getModelType } from "../utils/getModelType";
 
 export function buildInitialModelAssessmentContext(
   props: IModelAssessmentDashboardProps
