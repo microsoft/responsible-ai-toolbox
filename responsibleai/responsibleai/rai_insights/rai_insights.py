@@ -772,6 +772,14 @@ class RAIInsights(RAIBaseInsights):
         return self._counterfactual_manager
 
     @property
+    def data_balance(self) -> DataBalanceManager:
+        """Get the data balance manager.
+        :return: The data balance manager.
+        :rtype: DataBalanceManager
+        """
+        return self._data_balance_manager
+
+    @property
     def error_analysis(self) -> ErrorAnalysisManager:
         """Get the error analysis manager.
         :return: The error analysis manager.
