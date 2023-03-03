@@ -11,11 +11,11 @@ export const mockForecastingDataNoFeatures: IDataset = JSON.parse(
   JSON.stringify(mockForecastingData)
 );
 
-const timeSeriesIDColumnNames = ["restaurant", "city"];
-mockForecastingDataNoFeatures.feature_names = timeSeriesIDColumnNames;
+const timeSeriesIDFeatures = ["restaurant", "city"];
+mockForecastingDataNoFeatures.feature_names = timeSeriesIDFeatures;
 mockForecastingDataNoFeatures.feature_metadata = {
-  categorical_features: timeSeriesIDColumnNames,
-  time_series_id_column_names: timeSeriesIDColumnNames
+  categorical_features: timeSeriesIDFeatures,
+  time_series_id_features: timeSeriesIDFeatures
 };
 
 mockForecastingDataNoFeatures.features = mockForecastingData.features.map(
