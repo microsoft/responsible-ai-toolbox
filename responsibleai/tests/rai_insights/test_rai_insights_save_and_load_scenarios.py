@@ -15,7 +15,8 @@ from rai_test_utils.datasets.tabular import \
 from rai_test_utils.models.lightgbm import create_lightgbm_classifier
 from rai_test_utils.models.sklearn import \
     create_complex_classification_pipeline
-from responsibleai import ModelTask, RAIInsights
+from raiutils.models import ModelTask
+from responsibleai import RAIInsights
 from responsibleai._internal.constants import (ManagerNames,
                                                SerializationAttributes)
 from responsibleai.feature_metadata import FeatureMetadata
@@ -312,14 +313,14 @@ def validate_rai_insights(
     assert target_column not in rai_insights._feature_columns
 
     if rai_insights.model is None:
-        assert rai_insights.predict_output is None
-        assert rai_insights.predict_proba_output is None
+        assert rai_insights._predict_output is None
+        assert rai_insights._predict_proba_output is None
     else:
-        assert rai_insights.predict_output is not None
+        assert rai_insights._predict_output is not None
         if task_type == ModelTask.CLASSIFICATION:
-            assert rai_insights.predict_proba_output is not None
-            assert isinstance(rai_insights.predict_proba_output, np.ndarray)
-            assert len(rai_insights.predict_proba_output.tolist()[0]) == \
+            assert rai_insights._predict_proba_output is not None
+            assert isinstance(rai_insights._predict_proba_output, np.ndarray)
+            assert len(rai_insights._predict_proba_output.tolist()[0]) == \
                 len(rai_insights._classes)
 
     if task_type == ModelTask.CLASSIFICATION:

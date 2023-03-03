@@ -237,9 +237,8 @@ class TestModelAnalysisValidations:
         X_train['target'] = y_train
         X_test['target'] = y_test
 
-        err_msg = ('The regression model '
-                   'provided has a predict_proba function. '
-                   'Please check the task_type.')
+        err_msg = ('The regression model provided has a predict_proba '
+                   'function. Please check the task_type.')
         with pytest.raises(UserConfigValidationException, match=err_msg):
             ModelAnalysis(
                 model=model,

@@ -10,7 +10,6 @@ from typing import Any, List, Optional
 
 import numpy as np
 import pandas as pd
-from interpret_community.common.constants import ModelTask
 from interpret_community.explanation.explanation import (
     FeatureImportanceExplanation, load_explanation, save_explanation)
 from interpret_community.mimic.mimic_explainer import MimicExplainer
@@ -21,6 +20,7 @@ from interpret_community.mimic.models.linear_model import \
 from scipy.sparse import issparse
 
 from raiutils.data_processing import convert_to_list
+from raiutils.models import ModelTask
 from responsibleai._interfaces import (EBMGlobalExplanation, FeatureImportance,
                                        ModelExplanationData,
                                        PrecomputedExplanations)
