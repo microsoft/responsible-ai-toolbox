@@ -684,6 +684,8 @@ class RAIInsights(RAIBaseInsights):
                     test_data=self.test).drop(columns=[self.target_column]),
                 self._feature_metadata.datetime_features[0],
                 self._feature_metadata.time_series_id_features)
+        else:
+            self.model = model
 
     def _validate_features_same(self, features_before,
                                 train_data, function):
@@ -893,8 +895,9 @@ class RAIInsights(RAIBaseInsights):
                         len(metadata.dropped_features) != 0):
                     predict_dataset = predict_dataset.drop(
                         metadata.dropped_features, axis=1)
-                    predicted_y = self._get_model_output(
-                        predict_dataset, purpose=MethodPurpose.PREDICTION)
+                predicted_y = self._get_model_output(
+                    input_data=predict_dataset,
+                    purpose=MethodPurpose.PREDICTION)
             except Exception as ex:
                 model_method = self._get_model_method(
                     purpose=MethodPurpose.PREDICTION)
@@ -1094,7 +1097,7 @@ class RAIInsights(RAIBaseInsights):
         :return: the model output if a suitable method exists, otherwise None
         :rtype: Union[None, np.array]
         """
-        model_method = self._get_model_method(purpose)
+        model_method = self._get_model_method(purpose=purpose)
         if model_method:
             return model_method(input_data)
         return None
