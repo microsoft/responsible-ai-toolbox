@@ -24,9 +24,8 @@ export function isTimeOrTimeSeriesIDColumn(
   // for forecasting and validated upon building the model assessment context.
   // The if statement exists merely to satisfy the compiler.
   if (
-    featureMetaData &&
-    featureMetaData.datetime_features &&
-    featureMetaData.datetime_features?.length > 0
+    featureMetaData?.datetime_features &&
+    featureMetaData.datetime_features.length > 0
   ) {
     const isDatetimeFeature =
       featureMetaData.datetime_features[0] === featureName;
