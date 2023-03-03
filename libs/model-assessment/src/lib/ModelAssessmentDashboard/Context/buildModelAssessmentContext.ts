@@ -279,9 +279,7 @@ function validateForecastingSpecificMetadata(dataset: IDataset): void {
       throw new Error("feature_metadata is required for forecasting.");
     }
     if (dataset.index === undefined) {
-      throw new Error(
-        "A datetime index is required for forecasting."
-      );
+      throw new Error("A datetime index is required for forecasting.");
     }
   }
 }
