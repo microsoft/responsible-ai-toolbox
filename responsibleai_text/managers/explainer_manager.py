@@ -112,7 +112,13 @@ class ExplainerManager(BaseManager):
         if self._is_run:
             return
         if self._is_classification_task:
-            explainer = shap.Explainer(self._model)
+            if hasattr(self._model, 'predict_proba'):
+                # use model-agnostic simple tokenizer
+                masker = shap.maskers.Text()
+                explainer = shap.Explainer(self._model.predict_proba,
+                                           masker)
+            else:
+                explainer = shap.Explainer(self._model)
             eval_examples = self._evaluation_examples.iloc[:, 0].tolist()
             self._explanation = explainer(eval_examples)
         elif self._task_type == ModelTask.QUESTION_ANSWERING:
