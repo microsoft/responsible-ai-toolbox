@@ -49,6 +49,7 @@
           "comparison_value",
           "control_treatment",
           "data_balance_measures",
+          "datetime_features",
           "demographic_parity_difference",
           "demographic_parity_ratio",
           "desired_class",
