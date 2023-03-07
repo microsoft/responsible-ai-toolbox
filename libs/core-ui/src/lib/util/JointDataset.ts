@@ -69,7 +69,7 @@ export class JointDataset {
 
   // these properties should only be accessed by Cohort class,
   // which enables independent filtered views of this data
-  public dataDict: Array<{ [key: string]: number | number[] }> | undefined;
+  public dataDict: Array<{ [key: string]: number }> | undefined;
   public binDict: { [key: string]: number[] | undefined } = {};
 
   private readonly _modelMeta: IExplanationModelMetadata;

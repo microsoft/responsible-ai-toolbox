@@ -210,7 +210,7 @@ export class Cohort {
   }
 
   private filterRow(
-    row: { [key: string]: number | number[] },
+    row: { [key: string]: number },
     filters: IFilter[]
   ): boolean {
     return filters
@@ -241,7 +241,7 @@ export class Cohort {
   }
 
   private filterRecursively(
-    row: { [key: string]: number | number[] },
+    row: { [key: string]: number },
     compositeFilter: ICompositeFilter
   ): boolean {
     if (compositeFilter.method) {
@@ -255,7 +255,7 @@ export class Cohort {
   }
 
   private filterComposite(
-    row: { [key: string]: number | number[] },
+    row: { [key: string]: number },
     compositeFilters: ICompositeFilter[],
     operation: Operations
   ): boolean {
@@ -269,7 +269,7 @@ export class Cohort {
     );
   }
 
-  private applyFilters(): Array<{ [key: string]: number | number[] }> {
+  private applyFilters(): Array<{ [key: string]: number }> {
     this.clearCachedImportances();
     let filteredData = this.jointDataset.dataDict;
     if (!filteredData) {
