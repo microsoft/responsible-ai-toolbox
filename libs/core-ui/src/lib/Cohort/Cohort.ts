@@ -103,7 +103,7 @@ export class Cohort {
     this.filteredData = this.applyFilters();
   }
 
-  public getRow(index: number): { [key: string]: number } {
+  public getRow(index: number): { [key: string]: number | number[] } {
     return { ...this.jointDataset.dataDict?.[index] };
   }
 
