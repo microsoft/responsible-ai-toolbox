@@ -6,8 +6,9 @@
 import json
 import pickle
 import warnings
+from enum import Enum
 from pathlib import Path
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -15,8 +16,9 @@ import pandas as pd
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
-from raiutils.models import SKLearn, is_classifier
+from raiutils.models import Forecasting, ModelTask, SKLearn
 from responsibleai._interfaces import Dataset, RAIInsightsData
+from responsibleai._internal._forecasting_wrappers import _wrap_model
 from responsibleai._internal.constants import (FileFormats, ManagerNames,
                                                Metadata,
                                                SerializationAttributes)
@@ -27,13 +29,14 @@ from responsibleai.managers.counterfactual_manager import CounterfactualManager
 from responsibleai.managers.data_balance_manager import DataBalanceManager
 from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai.managers.explainer_manager import ExplainerManager
-from responsibleai.rai_insights.constants import ModelTask
 from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
 
 _TRAIN_LABELS = 'train_labels'
 _MODEL = "model"
 _PREDICT_OUTPUT = 'predict_output'
+_FORECAST_OUTPUT = 'forecast_output'
 _PREDICT_PROBA_OUTPUT = 'predict_proba_output'
+_FORECAST_QUANTILES_OUTPUT = 'forecast_quantiles_output'
 _COLUMN_NAME = 'column_name'
 _RANGE_TYPE = 'range_type'
 _UNIQUE_VALUES = 'unique_values'
@@ -44,6 +47,91 @@ _DATETIME_FEATURES = 'datetime_features'
 _TIME_SERIES_ID_FEATURES = 'time_series_id_features'
 _CATEGORICAL_FEATURES = 'categorical_features'
 _DROPPED_FEATURES = 'dropped_features'
+_FORECASTING_RAI_INSIGHTS_ENABLED = "forecasting_enabled"
+
+_MODEL_METHOD_EXCEPTION_MESSAGE = (
+    'The passed model cannot be used for getting predictions via {0}')
+
+# Due to a variety of possible model methods (predict, predict_proba, etc.)
+# for the various supported tasks as well as small/large datasets on which
+# to evaluate them there need to be lots of different fields on the
+# RAIInsights object to store the model method outputs. Similarly, when
+# serializing the RAIInsights object they need to mapped to file names.
+# _OUTPUT_METHODS contains the method names, e.g., predict
+# _OUTPUT_OPTIONS contains all the options including those for large datasets
+# which have "large_" preprended.
+# _OUTPUT_FIELDS contains the field names of RAIInsights. They are the options
+# with an underscore prepended and "_output" appended,
+# e.g., "_predict_output".
+# The file names corresponding to field names are just the options with .json
+# appended, e.g., predict.json
+_OUTPUT_METHODS = [SKLearn.PREDICT, SKLearn.PREDICT_PROBA,
+                   Forecasting.FORECAST, Forecasting.FORECAST_QUANTILES]
+_OUTPUT_OPTIONS = _OUTPUT_METHODS + ["large_" + o for o in _OUTPUT_METHODS]
+_OUTPUT_FIELDS = [f"_{o}_output" for o in _OUTPUT_OPTIONS]
+_OUTPUT_FIELDS_AND_FILENAMES = list(zip(
+    _OUTPUT_FIELDS,
+    [f"{o}{FileFormats.JSON}" for o in _OUTPUT_OPTIONS]))
+
+
+# The purpose maps various model outputs to a single set of data structures
+# that are passed to the UI to render.
+# Internally we can treat forecasts as predictions and quantiles as
+# probabilities since we only need to forward them to the UI.
+# Depending on task type they get interpreted as either one and
+# we don't need to duplicate a lot of code.
+class MethodPurpose(Enum):
+    PREDICTION = "prediction"
+    FORECAST = PREDICTION
+    PROBABILITY = "probability"
+    QUANTILES = PROBABILITY
+
+
+# ModelMethod represents methods to call on a model.
+# Examples include predict, forecast, etc.
+# The optional argument indicates whether a method is required or optional.
+# For example, not every classifier has a predict_proba method, but they
+# all need a predict method.
+
+class ModelMethod:
+    def __init__(self, *, name, optional, purpose):
+        self.name = name
+        self.optional = optional
+        self.purpose = purpose
+
+
+# Model methods by task type
+# Every task has one required method (optional=False) to make predictions,
+# forecasts etc. and can additionally have optional methods to calculate
+# probabilities, quantiles, etc.
+MODEL_METHODS = {
+    ModelTask.CLASSIFICATION: [
+        ModelMethod(
+            name=SKLearn.PREDICT,
+            optional=False,
+            purpose=MethodPurpose.PREDICTION),
+        ModelMethod(
+            name=SKLearn.PREDICT_PROBA,
+            optional=False,
+            purpose=MethodPurpose.PROBABILITY)
+    ],
+    ModelTask.REGRESSION: [
+        ModelMethod(
+            name=SKLearn.PREDICT,
+            optional=False,
+            purpose=MethodPurpose.PREDICTION)
+    ],
+    ModelTask.FORECASTING: [
+        ModelMethod(
+            name=Forecasting.FORECAST,
+            optional=False,
+            purpose=MethodPurpose.FORECAST),
+        ModelMethod(
+            name=Forecasting.FORECAST_QUANTILES,
+            optional=True,
+            purpose=MethodPurpose.QUANTILES)
+    ]
+}
 
 
 class RAIInsights(RAIBaseInsights):
@@ -63,11 +151,12 @@ class RAIInsights(RAIBaseInsights):
                  classes: Optional[np.ndarray] = None,
                  serializer: Optional[Any] = None,
                  maximum_rows_for_test: int = 5000,
-                 feature_metadata: Optional[FeatureMetadata] = None):
+                 feature_metadata: Optional[FeatureMetadata] = None,
+                 **kwargs):
         """Creates an RAIInsights object.
         :param model: The model to compute RAI insights for.
-            A model that implements sklearn.predict or sklearn.predict_proba
-            or function that accepts a 2d ndarray.
+            A model that implements sklearn-style predict or predict_proba
+            or a function that accepts a 2d ndarray.
         :type model: object
         :param train: The training dataset including the label column.
         :type train: pandas.DataFrame
@@ -75,8 +164,8 @@ class RAIInsights(RAIBaseInsights):
         :type test: pandas.DataFrame
         :param target_column: The name of the label column.
         :type target_column: str
-        :param task_type: The task to run, can be `classification` or
-            `regression`.
+        :param task_type: The task to run, can be `classification`,
+            `regression`, or `forecasting`.
         :type task_type: str
         :param categorical_features: The categorical feature names.
             categorical_features is deprecated. Please provide categorical
@@ -102,6 +191,7 @@ class RAIInsights(RAIBaseInsights):
         self._consolidate_categorical_features(
             categorical_features, feature_metadata)
 
+        self._large_test = None
         if len(test) > maximum_rows_for_test:
             warnings.warn(f"The size of the test set {len(test)} is greater "
                           "than the supported limit of "
@@ -111,41 +201,43 @@ class RAIInsights(RAIBaseInsights):
             self._large_test = test.copy()
             test = test.copy()[0:maximum_rows_for_test]
 
-            if model is not None:
-                # Cache predictions of the model
-                self._large_predict_output = model.predict(
-                    self._large_test.drop(columns=[target_column]))
-                if hasattr(model, SKLearn.PREDICT_PROBA):
-                    self._large_predict_proba_output = model.predict_proba(
-                        self._large_test.drop(columns=[target_column]))
-                else:
-                    self._large_predict_proba_output = None
-            else:
-                self._large_predict_output = None
-                self._large_predict_proba_output = None
-        else:
-            self._large_test = None
-            self._large_predict_output = None
-            self._large_predict_proba_output = None
+        super(RAIInsights, self).__init__(
+            model, train, test, target_column, task_type, serializer)
+
+        self._predict_output = None
+        self._forecast_output = None
+        self._predict_proba_output = None
+        self._forecast_quantiles_output = None
+        self._large_predict_output = None
+        self._large_forecast_output = None
+        self._large_predict_proba_output = None
+        self._large_forecast_quantiles_output = None
 
         self._validate_rai_insights_input_parameters(
-            model=model, train=train, test=test,
-            target_column=target_column, task_type=task_type,
+            model=model,
+            train=train,
+            test=test,
+            target_column=target_column,
+            task_type=task_type,
             classes=classes,
             serializer=serializer,
-            feature_metadata=self._feature_metadata)
+            feature_metadata=self._feature_metadata,
+            **kwargs)
+
         self._classes = RAIInsights._get_classes(
             task_type=task_type,
             train=train,
             target_column=target_column,
             classes=classes
         )
+
         self._feature_columns = \
             test.drop(columns=[target_column]).columns.tolist()
         self._feature_ranges = RAIInsights._get_feature_ranges(
-            test=test, categorical_features=self.categorical_features,
-            feature_columns=self._feature_columns)
-
+            test=test,
+            categorical_features=self.categorical_features,
+            feature_columns=self._feature_columns,
+            datetime_features=self._feature_metadata.datetime_features)
         self._categories, self._categorical_indexes, \
             self._category_dictionary, self._string_ind_data = \
             process_categoricals(
@@ -153,26 +245,18 @@ class RAIInsights(RAIBaseInsights):
                 categorical_features=self.categorical_features,
                 dataset=test.drop(columns=[target_column]))
 
-        super(RAIInsights, self).__init__(
-            model, train, test, target_column, task_type,
-            serializer)
-
-        self._try_add_data_balance()
-
         if model is not None:
             # Cache predictions of the model
-            self.predict_output = model.predict(
-                self.get_test_data(
-                    test_data=test).drop(columns=[target_column]))
-            if hasattr(model, SKLearn.PREDICT_PROBA):
-                self.predict_proba_output = model.predict_proba(
-                    self.get_test_data(
-                        test_data=test).drop(columns=[target_column]))
-            else:
-                self.predict_proba_output = None
-        else:
-            self.predict_output = None
-            self.predict_proba_output = None
+            self._set_model_outputs(input_data=self.get_test_data(
+                test_data=test).drop(columns=[target_column]), large=False)
+
+            if self._large_test is not None:
+                self._set_model_outputs(
+                    input_data=self._large_test.drop(columns=[target_column]),
+                    large=True)
+        # keep managers at the end since they rely on everything above
+        self._initialize_managers()
+        self._try_add_data_balance()
 
     def get_train_data(self):
         """Returns the training dataset after dropping
@@ -279,10 +363,11 @@ class RAIInsights(RAIBaseInsights):
         Initialized the causal, counterfactual, error analysis
         and explainer managers.
         """
-        if self._feature_metadata is not None:
-            dropped_features = self._feature_metadata.dropped_features
-        else:
-            dropped_features = None
+        if self.task_type == ModelTask.FORECASTING:
+            self._managers = []
+            return
+
+        dropped_features = self._feature_metadata.dropped_features
         self._causal_manager = CausalManager(
             self.get_train_data(), self.get_test_data(), self.target_column,
             self.task_type, self.categorical_features, self._feature_metadata)
@@ -300,8 +385,8 @@ class RAIInsights(RAIBaseInsights):
         self._error_analysis_manager = ErrorAnalysisManager(
             self.model, self.test, self.target_column,
             self._classes,
-            self.categorical_features,
-            dropped_features)
+            categorical_features=self.categorical_features,
+            dropped_features=dropped_features)
 
         self._explainer_manager = ExplainerManager(
             self.model, self.get_train_data(), self.get_test_data(),
@@ -348,12 +433,13 @@ class RAIInsights(RAIBaseInsights):
             task_type: str,
             classes: np.ndarray,
             serializer,
-            feature_metadata: FeatureMetadata):
+            feature_metadata: FeatureMetadata,
+            **kwargs):
         """Validate the inputs for the RAIInsights constructor.
 
         :param model: The model to compute RAI insights for.
-            A model that implements sklearn.predict or sklearn.predict_proba
-            or function that accepts a 2d ndarray.
+            A model that implements sklearn-style predict or predict_proba
+            or a function that accepts a 2d ndarray.
         :type model: object
         :param train: The training dataset including the label column.
         :type train: pandas.DataFrame
@@ -372,15 +458,18 @@ class RAIInsights(RAIBaseInsights):
             model.
         :type serializer: object
         :param feature_metadata: Feature metadata for the train/test
-                                 dataset to identify different kinds
-                                 of features in the dataset.
+            dataset to identify various kinds of features in the dataset.
         :type feature_metadata: FeatureMetadata
         """
-
         valid_tasks = [
             ModelTask.CLASSIFICATION.value,
             ModelTask.REGRESSION.value
         ]
+        # Check if forecasting feature flag was passed as kwarg.
+        # We specifically do not advertise for this until we want people to
+        # use it.
+        if kwargs.get(_FORECASTING_RAI_INSIGHTS_ENABLED, False):
+            valid_tasks.append(ModelTask.FORECASTING.value)
         if task_type not in valid_tasks:
             message = (f"Unsupported task type '{task_type}'. "
                        f"Should be one of {valid_tasks}")
@@ -411,168 +500,151 @@ class RAIInsights(RAIBaseInsights):
                 raise UserConfigValidationException(
                     'The serializer should be serializable via pickle')
 
-        if isinstance(train, pd.DataFrame) and isinstance(test, pd.DataFrame):
-            if len(train) <= 0 or len(test) <= 0:
-                raise UserConfigValidationException(
-                    'Either of the train/test are empty. '
-                    'Please provide non-empty dataframes for train '
-                    'and test sets.'
-                )
-
-            if (len(set(train.columns) - set(test.columns)) != 0 or
-                    len(set(test.columns) - set(train.columns)) != 0):
-                raise UserConfigValidationException(
-                    'The features in train and test data do not match')
-
-            if (target_column not in list(train.columns) or
-                    target_column not in list(test.columns)):
-                raise UserConfigValidationException(
-                    'Target name {0} not present in train/test data'.format(
-                        target_column)
-                )
-
-            categorical_features = feature_metadata.categorical_features
-            if (categorical_features is not None and
-                    len(categorical_features) > 0):
-                if target_column in categorical_features:
-                    raise UserConfigValidationException(
-                        'Found target name {0} in '
-                        'categorical feature list'.format(
-                            target_column)
-                    )
-
-                difference_set = set(categorical_features) - set(
-                    train.drop(columns=[target_column]).columns)
-                if len(difference_set) > 0:
-                    message = ("Feature names in categorical_features "
-                               "do not exist in train data: "
-                               f"{list(difference_set)}")
-                    raise UserConfigValidationException(message)
-
-                for column in categorical_features:
-                    try:
-                        np.unique(train[column])
-                    except Exception:
-                        raise UserConfigValidationException(
-                            f"Error finding unique values in column {column}."
-                            " Please check your train data."
-                        )
-
-                    try:
-                        np.unique(test[column])
-                    except Exception:
-                        raise UserConfigValidationException(
-                            "Error finding unique values in column {0}. "
-                            "Please check your test data.".format(column)
-                        )
-
-            train_features = train.drop(columns=[target_column]).columns
-            numeric_features = train.drop(
-                columns=[target_column]).select_dtypes(
-                    include='number').columns.tolist()
-            string_features_set = set(train_features) - set(numeric_features)
-            non_categorical_string_columns = \
-                string_features_set - set(categorical_features)
-            if len(non_categorical_string_columns) > 0:
-                raise UserConfigValidationException(
-                    "The following string features were not "
-                    "identified as categorical features: "
-                    f"{non_categorical_string_columns}")
-
-            if classes is not None and task_type == ModelTask.CLASSIFICATION:
-                if (len(set(train[target_column].unique()) -
-                        set(classes)) != 0 or
-                        len(set(classes) -
-                            set(train[target_column].unique())) != 0):
-                    raise UserConfigValidationException(
-                        'The train labels and distinct values in '
-                        'target (train data) do not match')
-
-                if (len(set(test[target_column].unique()) -
-                        set(classes)) != 0 or
-                        len(set(classes) -
-                            set(test[target_column].unique())) != 0):
-                    raise UserConfigValidationException(
-                        'The train labels and distinct values in '
-                        'target (test data) do not match')
-
-            self._validate_feature_metadata(
-                feature_metadata, train, task_type)
-
-            if model is not None:
-                # Pick one row from train and test data
-                small_train_data = train[0:1]
-                small_test_data = test[0:1]
-                has_dropped_features = False
-                if feature_metadata is not None:
-                    if (feature_metadata.dropped_features is not None and
-                            len(feature_metadata.dropped_features) != 0):
-                        has_dropped_features = True
-                        small_train_data = small_train_data.drop(
-                            columns=feature_metadata.dropped_features, axis=1)
-                        small_test_data = small_test_data.drop(
-                            columns=feature_metadata.dropped_features, axis=1)
-
-                small_train_data = small_train_data.drop(
-                    columns=[target_column], axis=1)
-                small_test_data = small_test_data.drop(
-                    columns=[target_column], axis=1)
-                if (len(small_train_data.columns) == 0 or
-                        len(small_test_data.columns) == 0):
-                    if has_dropped_features:
-                        raise UserConfigValidationException(
-                            'All features have been dropped from the dataset.'
-                            ' Please do not drop all the features.'
-                        )
-                    else:
-                        raise UserConfigValidationException(
-                            'There is no feature in the dataset. Please make '
-                            'sure that your dataset contains at least '
-                            'one feature.'
-                        )
-
-                small_train_features_before = list(small_train_data.columns)
-
-                # Run predict() of the model
-                try:
-                    model.predict(small_train_data)
-                    model.predict(small_test_data)
-                except Exception:
-                    raise UserConfigValidationException(
-                        'The passed model cannot be used for'
-                        ' getting predictions via predict()'
-                    )
-                self._validate_features_same(small_train_features_before,
-                                             small_train_data,
-                                             SKLearn.PREDICT)
-
-                # Run predict_proba() of the model
-                if task_type == ModelTask.CLASSIFICATION:
-                    try:
-                        model.predict_proba(small_train_data)
-                        model.predict_proba(small_test_data)
-                    except Exception:
-                        raise UserConfigValidationException(
-                            'The passed model cannot be used for'
-                            ' getting predictions via predict_proba()'
-                        )
-                self._validate_features_same(small_train_features_before,
-                                             small_train_data,
-                                             SKLearn.PREDICT_PROBA)
-
-                if task_type == ModelTask.REGRESSION:
-                    if hasattr(model, SKLearn.PREDICT_PROBA):
-                        raise UserConfigValidationException(
-                            'The regression model '
-                            'provided has a predict_proba function. '
-                            'Please check the task_type.')
-        else:
+        if (not isinstance(train, pd.DataFrame) or
+                not isinstance(test, pd.DataFrame)):
             raise UserConfigValidationException(
                 "Unsupported data type for either train or test. "
-                "Expecting pandas DataFrame for train and test."
+                "Expecting pandas DataFrame for train and test.")
+
+        if len(train) <= 0 or len(test) <= 0:
+            raise UserConfigValidationException(
+                'Either of the train/test are empty. '
+                'Please provide non-empty dataframes for train '
+                'and test sets.'
             )
 
-    def _validate_feature_metadata(self, feature_metadata, train, task_type):
+        if (len(set(train.columns) - set(test.columns)) != 0 or
+                len(set(test.columns) - set(train.columns)) != 0):
+            raise UserConfigValidationException(
+                'The features in train and test data do not match')
+
+        if (target_column not in list(train.columns) or
+                target_column not in list(test.columns)):
+            raise UserConfigValidationException(
+                f'Target name {target_column} not present in train/test data')
+
+        categorical_features = feature_metadata.categorical_features
+        if (categorical_features is not None and
+                len(categorical_features) > 0):
+            if target_column in categorical_features:
+                raise UserConfigValidationException(
+                    f'Found target name {target_column} in '
+                    'categorical feature list')
+
+            difference_set = set(categorical_features) - set(
+                train.drop(columns=[target_column]).columns)
+            if len(difference_set) > 0:
+                message = ("Feature names in categorical_features "
+                           "do not exist in train data: "
+                           f"{list(difference_set)}")
+                raise UserConfigValidationException(message)
+
+            for column in categorical_features:
+                try:
+                    np.unique(train[column])
+                except Exception:
+                    raise UserConfigValidationException(
+                        f"Error finding unique values in column {column}."
+                        " Please check your train data."
+                    )
+
+                try:
+                    np.unique(test[column])
+                except Exception:
+                    raise UserConfigValidationException(
+                        f"Error finding unique values in column {column}. "
+                        "Please check your test data.")
+
+        # Check if any features exist that are not numeric, datetime, or
+        # categorical.
+        train_features = train.drop(columns=[target_column]).columns
+        numeric_features = train.drop(
+            columns=[target_column]).select_dtypes(
+                include='number').columns.tolist()
+        string_features_set = set(train_features) - set(numeric_features)
+        if (task_type == ModelTask.FORECASTING and
+                feature_metadata is not None and
+                feature_metadata.datetime_features is not None):
+            string_features_set = \
+                string_features_set - set(feature_metadata.datetime_features)
+        non_categorical_or_time_string_columns = \
+            string_features_set - set(categorical_features)
+        if len(non_categorical_or_time_string_columns) > 0:
+            raise UserConfigValidationException(
+                "The following string features were not "
+                "identified as categorical features: "
+                f"{non_categorical_or_time_string_columns}")
+
+        if classes is not None and task_type == ModelTask.CLASSIFICATION:
+            if (len(set(train[target_column].unique()) -
+                    set(classes)) != 0 or
+                    len(set(classes) -
+                        set(train[target_column].unique())) != 0):
+                raise UserConfigValidationException(
+                    'The train labels and distinct values in '
+                    'target (train data) do not match')
+
+            if (len(set(test[target_column].unique()) -
+                    set(classes)) != 0 or
+                    len(set(classes) -
+                        set(test[target_column].unique())) != 0):
+                raise UserConfigValidationException(
+                    'The train labels and distinct values in '
+                    'target (test data) do not match')
+
+        self._validate_feature_metadata(
+            feature_metadata, train, task_type, model)
+
+        if model is not None:
+            # Pick one row from train and test data
+            small_train_data = train[0:1]
+            small_test_data = test[0:1]
+            has_dropped_features = False
+            if feature_metadata is not None:
+                if (feature_metadata.dropped_features is not None and
+                        len(feature_metadata.dropped_features) != 0):
+                    has_dropped_features = True
+                    small_train_data = small_train_data.drop(
+                        columns=feature_metadata.dropped_features, axis=1)
+                    small_test_data = small_test_data.drop(
+                        columns=feature_metadata.dropped_features, axis=1)
+
+            small_train_data = small_train_data.drop(
+                columns=[target_column], axis=1)
+            small_test_data = small_test_data.drop(
+                columns=[target_column], axis=1)
+            if (len(small_train_data.columns) == 0 or
+                    len(small_test_data.columns) == 0):
+                if has_dropped_features:
+                    raise UserConfigValidationException(
+                        'All features have been dropped from the dataset.'
+                        ' Please do not drop all the features.'
+                    )
+                else:
+                    raise UserConfigValidationException(
+                        'There is no feature in the dataset. Please make '
+                        'sure that your dataset contains at least '
+                        'one feature.'
+                    )
+
+            self._wrap_model_if_needed(model)
+
+            # Ensure that the model has the required methods and that they
+            # do not change the input data.
+            if task_type != ModelTask.FORECASTING:
+                self._ensure_model_outputs(input_data=small_train_data)
+            self._ensure_model_outputs(input_data=small_test_data)
+
+            if task_type == ModelTask.REGRESSION:
+                if hasattr(model, SKLearn.PREDICT_PROBA):
+                    raise UserConfigValidationException(
+                        'The regression model '
+                        'provided has a predict_proba function. '
+                        'Please check the task_type.')
+
+    def _validate_feature_metadata(
+            self, feature_metadata, train, task_type, model):
+        """Validates the feature metadata."""
         if feature_metadata is not None:
             if not isinstance(feature_metadata, FeatureMetadata):
                 raise UserConfigValidationException(
@@ -593,32 +665,95 @@ class RAIInsights(RAIBaseInsights):
                     raise UserConfigValidationException(
                         "The specified metadata datetime_features "
                         "is only supported for the forecasting task type.")
-            elif (feature_metadata.datetime_features and
-                    len(feature_metadata.datetime_features) > 1):
-                raise UserConfigValidationException(
-                    "Only a single datetime feature is supported at "
-                    "this point.")
+            else:
+                if (feature_metadata.datetime_features and
+                        len(feature_metadata.datetime_features) > 1):
+                    raise UserConfigValidationException(
+                        "Only a single datetime feature is supported at "
+                        "this point.")
 
-    def _validate_features_same(self, small_train_features_before,
-                                small_train_data, function):
-        """
-        Validate the features are unmodified on the DataFrame.
+                self._ensure_time_column_available(
+                    feature_metadata, feature_names, model)
 
-        :param small_train_features_before: The features saved before
+    def _wrap_model_if_needed(self, model):
+        """Wrap the model in a compatible format if needed."""
+        if self.task_type == ModelTask.FORECASTING:
+            self.model = _wrap_model(
+                model,
+                self.get_test_data(
+                    test_data=self.test).drop(columns=[self.target_column]),
+                self._feature_metadata.datetime_features[0],
+                self._feature_metadata.time_series_id_features)
+        else:
+            self.model = model
+
+    def _validate_features_same(self, features_before,
+                                train_data, function):
+        """Validate the features are unmodified on the DataFrame.
+
+        :param sfeatures_before: The features saved before
             an operation was performed.
-        :type small_train_features_before: list[str]
-        :param small_train_data: The DataFrame after the operation.
-        :type small_train_data: pandas.DataFrame
+        :type features_before: list[str]
+        :param train_data: The DataFrame after the operation.
+        :type train_data: pandas.DataFrame
         :param function: The name of the operation performed.
         :type function: str
         """
-        small_train_features_after = list(small_train_data.columns)
-        if small_train_features_before != small_train_features_after:
-            exc_msg = (
-                f'Calling model {function} function modifies input dataset'
-                f' features. Please check if {function} function is '
-                'defined correctly.')
+        exc_msg = (f'Calling model {function} function modifies input dataset'
+                   f' features. Please check if {function} function is '
+                   'defined correctly.')
+        features_after = list(train_data.columns)
+        if (len(features_before) != len(features_after) or
+                (features_before != features_after).any()):
             raise UserConfigValidationException(exc_msg)
+
+    def _ensure_time_column_available(
+            self,
+            feature_metadata: FeatureMetadata,
+            feature_names: List[str],
+            model: Optional[Any]):
+        """Ensure that a time column is available from metadata or model.
+
+        Some models have the time column name stored as an attribute
+        in which case we can extract it directly without requiring users
+        to explicitly specify the time column.
+
+        :param feature_metadata: the feature metadata object
+        :type feature_metadata: FeatureMetadata
+        :param feature_names: the names of all features of the dataset
+        :type feature_names: List[str]
+        :param model: the model
+        :type model: object
+        """
+        fm_time_columns = feature_metadata.datetime_features
+        model_time_column = getattr(model, "time_column_name", None)
+
+        # goal: set time column in feature metadata
+        if model_time_column is None:
+            if fm_time_columns is not None:
+                return
+            else:
+                raise UserConfigValidationException(
+                    'There was no time column name in feature metadata. '
+                    'A time column is required for forecasting.')
+        else:
+            if fm_time_columns is None:
+                if model_time_column in feature_names:
+                    feature_metadata.datetime_features = [model_time_column]
+                    self._feature_metadata = feature_metadata
+                    return
+                else:
+                    raise UserConfigValidationException(
+                        'The provided model expects a time column named '
+                        f'{model_time_column} that is not present in the '
+                        'provided dataset.')
+            else:
+                # both time columns were provided, ensure that they match
+                if model_time_column not in fm_time_columns:
+                    raise UserConfigValidationException(
+                        f'The provided datetime features {fm_time_columns} '
+                        "do not include the model's expected time column "
+                        f'name {model_time_column}.')
 
     @property
     def causal(self) -> CausalManager:
@@ -635,6 +770,14 @@ class RAIInsights(RAIBaseInsights):
         :rtype: CounterfactualManager
         """
         return self._counterfactual_manager
+
+    @property
+    def data_balance(self) -> DataBalanceManager:
+        """Get the data balance manager.
+        :return: The data balance manager.
+        :rtype: DataBalanceManager
+        """
+        return self._data_balance_manager
 
     @property
     def error_analysis(self) -> ErrorAnalysisManager:
@@ -670,24 +813,23 @@ class RAIInsights(RAIBaseInsights):
         :return: The filtered test data.
         :rtype: pandas.DataFrame
         """
-        if not use_entire_test_data:
-            test_data = self.test
-            pred_y = self.predict_output
-            true_y = self.test[self.target_column]
+        large = use_entire_test_data and self._large_test is not None
+        pred_y = getattr(
+            self,
+            self._get_model_output_name(purpose=MethodPurpose.PREDICTION,
+                                        large=large))
+        if large:
+            test_data = self._large_test
+            true_y = self._large_test[self.target_column]
         else:
-            if self._large_test is not None:
-                test_data = self._large_test
-                pred_y = self._large_predict_output
-                true_y = self._large_test[self.target_column]
-            else:
-                test_data = self.test
-                pred_y = self.predict_output
-                true_y = self.test[self.target_column]
+            test_data = self.test
+            true_y = self.test[self.target_column]
 
+        X_test = test_data.drop(columns=[self.target_column])
         filter_data_with_cohort = FilterDataWithCohortFilters(
             model=self.model,
-            dataset=test_data.drop(columns=[self.target_column]),
-            features=test_data.drop(columns=[self.target_column]).columns,
+            dataset=X_test,
+            features=X_test.columns,
             categorical_features=self.categorical_features,
             categories=self._categories,
             true_y=true_y,
@@ -708,10 +850,14 @@ class RAIInsights(RAIBaseInsights):
         """
         data = RAIInsightsData()
         data.dataset = self._get_dataset()
-        data.modelExplanationData = self.explainer.get_data()
-        data.errorAnalysisData = self.error_analysis.get_data()
-        data.causalAnalysisData = self.causal.get_data()
-        data.counterfactualData = self.counterfactual.get_data()
+        if hasattr(self, ManagerNames.EXPLAINER):
+            data.modelExplanationData = self.explainer.get_data()
+        if hasattr(self, ManagerNames.ERROR_ANALYSIS):
+            data.errorAnalysisData = self.error_analysis.get_data()
+        if hasattr(self, ManagerNames.CAUSAL):
+            data.causalAnalysisData = self.causal.get_data()
+        if hasattr(self, ManagerNames.COUNTERFACTUAL):
+            data.counterfactualData = self.counterfactual.get_data()
         return data
 
     def _get_dataset(self):
@@ -730,8 +876,9 @@ class RAIInsights(RAIBaseInsights):
         else:
             dashboard_dataset.feature_metadata = None
 
-        dashboard_dataset.data_balance_measures = \
-            self._data_balance_manager.get_data()
+        if hasattr(self, ManagerNames.DATA_BALANCE):
+            dashboard_dataset.data_balance_measures = \
+                self._data_balance_manager.get_data()
 
         predicted_y = None
         feature_length = None
@@ -744,8 +891,7 @@ class RAIInsights(RAIBaseInsights):
         try:
             list_dataset = convert_to_list(dataset)
         except Exception as ex:
-            raise ValueError(
-                "Unsupported dataset type") from ex
+            raise ValueError("Unsupported dataset type") from ex
         if dataset is not None and self.model is not None:
             try:
                 predict_dataset = dataset
@@ -757,24 +903,28 @@ class RAIInsights(RAIBaseInsights):
                         len(metadata.dropped_features) != 0):
                     predict_dataset = predict_dataset.drop(
                         metadata.dropped_features, axis=1)
-                predicted_y = self.model.predict(predict_dataset)
+                predicted_y = self._get_model_output(
+                    input_data=predict_dataset,
+                    purpose=MethodPurpose.PREDICTION)
             except Exception as ex:
-                msg = "Model does not support predict method for given"
-                "dataset type"
-                raise ValueError(msg) from ex
+                model_method = self._get_model_method(
+                    purpose=MethodPurpose.PREDICTION)
+                raise ValueError(
+                    f"Model does not support {model_method.__name__} method "
+                    "for the given dataset type,") from ex
             try:
                 predicted_y = convert_to_list(predicted_y)
             except Exception as ex:
                 raise ValueError(
                     "Model prediction output of unsupported type,") from ex
         if predicted_y is not None:
-            if (self.task_type == "classification" and
+            if (self.task_type == ModelTask.CLASSIFICATION and
                     dashboard_dataset.class_names is not None):
                 predicted_y = [dashboard_dataset.class_names.index(
                     y) for y in predicted_y]
             dashboard_dataset.predicted_y = predicted_y
-        row_length = 0
 
+        row_length = 0
         if list_dataset is not None:
             row_length, feature_length = np.shape(list_dataset)
             if row_length > 100000:
@@ -790,6 +940,21 @@ class RAIInsights(RAIBaseInsights):
             dashboard_dataset.features = list_dataset
 
         true_y = self.test[self.target_column]
+        if self.task_type == ModelTask.FORECASTING:
+            try:
+                # This assumes that there is only 1 datetime feature.
+                if (self._feature_metadata and
+                        self._feature_metadata.datetime_features and
+                        len(self._feature_metadata.datetime_features) >= 1):
+                    time_column_name = \
+                        self._feature_metadata.datetime_features[0]
+                    dashboard_dataset.index = convert_to_list(
+                        pd.to_datetime(self.test[time_column_name])
+                        .apply(lambda dt: dt.strftime("%Y-%m-%dT%H:%M:%SZ")))
+            except Exception as ex:
+                raise ValueError(
+                    "The datetime feature should be parseable by "
+                    "pandas.to_datetime, ideally in ISO format,") from ex
 
         if true_y is not None and len(true_y) == row_length:
             if (self.task_type == "classification" and
@@ -808,7 +973,10 @@ class RAIInsights(RAIBaseInsights):
                                  " from local explanations dimension")
             dashboard_dataset.feature_names = features
         dashboard_dataset.target_column = self.target_column
-        if is_classifier(self.model) and dataset is not None:
+
+        model_method = self._get_model_method(
+            purpose=MethodPurpose.PROBABILITY)
+        if model_method is not None and dataset is not None:
             try:
                 predict_dataset = dataset
                 metadata = self._feature_metadata
@@ -819,21 +987,23 @@ class RAIInsights(RAIBaseInsights):
                         len(metadata.dropped_features) != 0):
                     predict_dataset = predict_dataset.drop(
                         metadata.dropped_features, axis=1)
-                probability_y = self.model.predict_proba(predict_dataset)
+                probability_y = model_method(predict_dataset)
             except Exception as ex:
-                raise ValueError("Model does not support predict_proba method"
-                                 " for given dataset type,") from ex
+                raise ValueError(
+                    f"Model does not support {model_method.__name__} method"
+                    " for given dataset type,") from ex
             try:
                 probability_y = convert_to_list(probability_y)
             except Exception as ex:
                 raise ValueError(
-                    "Model predict_proba output of unsupported type,") from ex
+                    f"Model {model_method.__name__} "
+                    "output of unsupported type,") from ex
             dashboard_dataset.probability_y = probability_y
 
         return dashboard_dataset
 
     def _save_predictions(self, path):
-        """Save the predict() and predict_proba() output.
+        """Save the predictions to files.
 
         :param path: The directory path to save the RAIInsights to.
         :type path: str
@@ -846,27 +1016,12 @@ class RAIInsights(RAIBaseInsights):
         if self.model is None:
             return
 
-        self._write_to_file(
-            prediction_output_path / SerializationAttributes.PREDICT_JSON,
-            json.dumps(self.predict_output.tolist()))
-
-        if self.predict_proba_output is not None:
-            self._write_to_file(
-                prediction_output_path /
-                SerializationAttributes.PREDICT_PROBA_JSON,
-                json.dumps(self.predict_proba_output.tolist()))
-
-        if self._large_test is not None:
-            self._write_to_file(
-                prediction_output_path /
-                SerializationAttributes.LARGE_PREDICT_JSON,
-                json.dumps(self._large_predict_output.tolist()))
-
-            if self._large_predict_proba_output is not None:
+        for data_name, file_name in _OUTPUT_FIELDS_AND_FILENAMES:
+            if (data_name in self.__dict__ and
+                    self.__dict__[data_name] is not None):
                 self._write_to_file(
-                    prediction_output_path /
-                    SerializationAttributes.LARGE_PREDICT_PROBA_JSON,
-                    json.dumps(self._large_predict_proba_output.tolist()))
+                    prediction_output_path / file_name,
+                    json.dumps(self.__dict__[data_name].tolist()))
 
     def _save_large_data(self, path):
         """Save the large data.
@@ -896,6 +1051,10 @@ class RAIInsights(RAIBaseInsights):
         feature_metadata_dict = None
         if self._feature_metadata is not None:
             feature_metadata_dict = self._feature_metadata.to_dict()
+        if self._large_test is not None:
+            number_large_test_samples = len(self._large_test)
+        else:
+            number_large_test_samples = len(self.test)
         meta = {
             Metadata.TARGET_COLUMN: self.target_column,
             Metadata.TASK_TYPE: self.task_type,
@@ -903,7 +1062,8 @@ class RAIInsights(RAIBaseInsights):
             Metadata.CLASSES: classes,
             Metadata.FEATURE_COLUMNS: self._feature_columns,
             Metadata.FEATURE_RANGES: self._feature_ranges,
-            Metadata.FEATURE_METADATA: feature_metadata_dict
+            Metadata.FEATURE_METADATA: feature_metadata_dict,
+            Metadata.NUMBER_LARGE_TEST_SAMPLES: number_large_test_samples
         }
         with open(top_dir / Metadata.META_JSON, 'w') as file:
             json.dump(meta, file)
@@ -917,10 +1077,132 @@ class RAIInsights(RAIBaseInsights):
         super(RAIInsights, self).save(path)
         self._save_large_data(path)
 
+    def _get_model_method(self, *, purpose: MethodPurpose):
+        """Get the model's method for the indicated purpose.
+
+        :param purpose: the purpose to identify suitable model methods
+        :type purpose: MethodPurpose
+        :return: the model's first method with the corresponding purpose
+            if any, otherwise None
+        :rtype: Union[None, Any]
+        """
+        methods = [m for m in MODEL_METHODS[self.task_type]
+                   if m.purpose == purpose]
+        if len(methods) == 0:
+            return None
+        return getattr(self.model, methods[0].name)
+
+    def _get_model_output(self, *, input_data: Union[None, np.array],
+                          purpose: MethodPurpose):
+        """Get the output from a model method.
+
+        The model method is chosen based on the specified purpose
+
+        :param input_data: the data to pass to the model
+        :type input_data: Union[pd.DataFrame, np.array]
+        :param purpose: the purpose to identify suitable model methods
+        :type purpose: MethodPurpose
+        :return: the model output if a suitable method exists, otherwise None
+        :rtype: Union[None, np.array]
+        """
+        model_method = self._get_model_method(purpose=purpose)
+        if model_method:
+            return model_method(input_data)
+        return None
+
+    def _ensure_model_outputs(self, *, input_data):
+        """Ensure that the model outputs are as expected.
+
+        Raises an UserConfigValidationException if the model does not have the
+        expected required methods, fails while calling any of its methods, or
+        changes the input features.
+
+        :param input_data: the data to pass to the model
+        :type input_data: Union[pd.DataFrame, np.array]
+        """
+        input_features = input_data.columns
+        for method in MODEL_METHODS[self.task_type]:
+            if not hasattr(self.model, method.name) and not method.optional:
+                raise UserConfigValidationException(
+                    _MODEL_METHOD_EXCEPTION_MESSAGE.format(method.name))
+            try:
+                model_method = getattr(self.model, method.name)
+                model_method(input_data)
+            except Exception:
+                raise UserConfigValidationException(
+                    _MODEL_METHOD_EXCEPTION_MESSAGE.format(method.name))
+            self._validate_features_same(input_features, input_data,
+                                         method.name)
+
+    def _get_model_output_name(self, *, purpose, large=False):
+        """Get the name of the attribute representing the model's output.
+
+        :param purpose: the purpose to identify suitable model methods
+        :type purpose: MethodPurpose
+        :param large: whether or not the output is based on a large (full)
+            dataset
+        :type large: boolean
+        :return: the attribute's name
+        :rtype: str
+        """
+        model_method = self._get_model_method(purpose=purpose)
+        return f"_{'large_' if large else ''}{model_method.__name__}_output"
+
+    def _set_model_output(self, *, model_method, input_data, large=False):
+        """Store the model output on a suitable field.
+
+        :param model_method: the method to use to produce the model output
+        :type model_method: ModelMethod
+        :param input_data: the data to pass to the model
+        :type input_data: Union[pd.DataFrame, np.array]
+        :param large: whether or not the output is based on a large (full)
+            dataset
+        :type large: boolean
+        """
+        field_name = f"_{'large_' if large else ''}{model_method.name}_output"
+        try:
+            method = getattr(self.model, model_method.name)
+        except AttributeError as err:
+            if model_method.optional:
+                setattr(self, field_name, None)
+                return
+            else:
+                raise ValueError(
+                    f"The model is expected to have a {model_method.name} "
+                    "method,") from err
+        setattr(self, field_name, method(input_data))
+
+    def _set_model_outputs(self, *, input_data, large=False):
+        """Store all model outputs on suitable fields.
+
+        :param input_data: the data to pass to the model
+        :type input_data: Union[pd.DataFrame, np.array]
+        :param large: whether or not the output is based on a large (full)
+            dataset
+        :type large: boolean
+        """
+        for model_method in MODEL_METHODS[self.task_type]:
+            self._set_model_output(
+                model_method=model_method,
+                input_data=input_data,
+                large=large)
+
     @staticmethod
-    def _get_feature_ranges(test, categorical_features, feature_columns):
-        """Get feature ranges like min, max and unique values
-        for all columns"""
+    def _get_feature_ranges(
+            test: pd.DataFrame,
+            categorical_features: List[str],
+            feature_columns: List[str],
+            datetime_features: Optional[List[str]] = None):
+        """Get feature ranges like min, max and unique values for all columns.
+        :param test: the test dataset
+        :type test: pandas.DataFrame
+        :param categorical_features: list of categorical feature names
+        :type categorical_features: List[str]
+        :param feature_columns: list of feature names
+        :type feature_columns: List[str]
+        :param datetime_features: list of datetime feature names
+        :type datetime_features: Optional[List[str]]
+        """
         result = []
         for col in feature_columns:
             res_object = {_COLUMN_NAME: col}
@@ -928,6 +1210,10 @@ class RAIInsights(RAIBaseInsights):
                 unique_value = test[col].unique()
                 res_object[_RANGE_TYPE] = "categorical"
                 res_object[_UNIQUE_VALUES] = unique_value.tolist()
+            elif datetime_features is not None and col in datetime_features:
+                res_object[_RANGE_TYPE] = "datetime"
+                res_object[_MIN_VALUE] = test[col].min()
+                res_object[_MAX_VALUE] = test[col].max()
             else:
                 min_value = float(test[col].min())
                 max_value = float(test[col].max())
@@ -1002,7 +1288,7 @@ class RAIInsights(RAIBaseInsights):
 
     @staticmethod
     def _load_predictions(inst, path):
-        """Load the predict() and predict_proba() output.
+        """Load the predictions.
 
         :param inst: RAIInsights object instance.
         :type inst: RAIInsights
@@ -1010,47 +1296,21 @@ class RAIInsights(RAIBaseInsights):
         :type path: str
         """
         if inst.__dict__[_MODEL] is None:
-            inst.__dict__[_PREDICT_OUTPUT] = None
-            inst.__dict__[_PREDICT_PROBA_OUTPUT] = None
+            for data_name in _OUTPUT_FIELDS:
+                inst.__dict__[data_name] = None
             return
 
         prediction_output_path = (
             Path(path) /
             SerializationAttributes.PREDICTIONS_DIRECTORY)
 
-        with open(prediction_output_path / (
-                SerializationAttributes.PREDICT_JSON), 'r') as file:
-            predict_output = json.load(file)
-        inst.__dict__[_PREDICT_OUTPUT] = np.array(predict_output)
-
-        if inst.__dict__[Metadata.TASK_TYPE] == ModelTask.CLASSIFICATION:
-            with open(prediction_output_path / (
-                    SerializationAttributes.PREDICT_PROBA_JSON), 'r') as file:
-                predict_proba_output = json.load(file)
-            inst.__dict__[_PREDICT_PROBA_OUTPUT] = np.array(
-                predict_proba_output)
-        else:
-            inst.__dict__[_PREDICT_PROBA_OUTPUT] = None
-
-        large_predict_output_path = prediction_output_path / (
-            SerializationAttributes.LARGE_PREDICT_JSON)
-        if large_predict_output_path.exists():
-            with open(large_predict_output_path, 'r') as file:
-                large_predict_output = json.load(file)
-            inst.__dict__["_large_predict_output"] = np.array(
-                large_predict_output)
-        else:
-            inst.__dict__["_large_predict_output"] = None
-
-        large_predict_proba_output_path = prediction_output_path / (
-            SerializationAttributes.LARGE_PREDICT_PROBA_JSON)
-        if large_predict_proba_output_path.exists():
-            with open(large_predict_proba_output_path, 'r') as file:
-                large_predict_proba_output = json.load(file)
-            inst.__dict__["_large_predict_proba_output"] = np.array(
-                large_predict_proba_output)
-        else:
-            inst.__dict__["_large_predict_proba_output"] = None
+        for data_name, file_name in _OUTPUT_FIELDS_AND_FILENAMES:
+            file_path = prediction_output_path / file_name
+            if file_path.exists():
+                with open(file_path, 'r') as file:
+                    inst.__dict__[data_name] = np.array(json.load(file))
+            else:
+                inst.__dict__[data_name] = None
 
     @staticmethod
     def _load_large_data(inst, path):

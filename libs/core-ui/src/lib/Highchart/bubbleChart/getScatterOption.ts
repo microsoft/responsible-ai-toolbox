@@ -8,6 +8,7 @@ import { JointDataset } from "../../util/JointDataset";
 import { IHighchartsConfig } from "../IHighchartsConfig";
 
 import { ICustomData } from "./buildScatterTemplate";
+import { IClusterData } from "./ChartUtils";
 import { getScatterPlot } from "./getScatterPlot";
 
 export interface IScatterPoint extends Point {
@@ -15,9 +16,7 @@ export interface IScatterPoint extends Point {
 }
 
 export function getScatterOption(
-  xSeries: number[],
-  ySeries: number[],
-  indexSeries: number[],
+  clusterData: IClusterData,
   chartProps: IGenericChartProps,
   jointData: JointDataset,
   selectedPointsIndexes: number[],
@@ -28,9 +27,7 @@ export function getScatterOption(
   selectPointFromChartLargeData?: (data: IScatterPoint) => void
 ): IHighchartsConfig {
   const dataSeries = getScatterPlot(
-    xSeries,
-    ySeries,
-    indexSeries,
+    clusterData,
     jointData,
     selectedPointsIndexes,
     chartProps,

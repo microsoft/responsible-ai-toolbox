@@ -128,11 +128,24 @@ export interface IModelAssessmentDashboardProps
     absoluteIndex: number,
     abortSignal: AbortSignal
   ) => Promise<ILocalExplanations>;
+  requestLocalCausalEffects?: (
+    causalId: string,
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<ICausalAnalysisData>;
+  requestTestDataRow?: (
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   localUrl?: string;
   requestForecast?: (
     request: any[],
     abortSignal: AbortSignal
   ) => Promise<any[]>;
+  requestSplinePlotDistribution?: (
+    request: any,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   telemetryHook?: (message: ITelemetryEvent) => void;
 
   // TODO figure out how to persist starting tab for fairness

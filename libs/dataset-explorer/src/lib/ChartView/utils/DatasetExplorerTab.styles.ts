@@ -58,7 +58,7 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       },
       chart: {
         marginBottom: "40px",
-        width: "100%"
+        width: "85%"
       },
       chartAndType: flexLgDown,
       chartContainer: {

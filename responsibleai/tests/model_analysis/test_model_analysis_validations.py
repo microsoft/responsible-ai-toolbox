@@ -8,11 +8,11 @@ from unittest.mock import MagicMock
 
 import pandas as pd
 import pytest
-from tests.common_utils import (create_cancer_data, create_housing_data,
-                                create_iris_data)
+from tests.common_utils import create_iris_data
 
-from rai_test_utils.datasets.tabular import \
-    create_binary_classification_dataset
+from rai_test_utils.datasets.tabular import (
+    create_binary_classification_dataset, create_cancer_data,
+    create_housing_data)
 from rai_test_utils.models.lightgbm import create_lightgbm_classifier
 from rai_test_utils.models.sklearn import \
     create_sklearn_random_forest_regressor
@@ -119,7 +119,7 @@ class TestModelAnalysisValidations:
 
     def test_validate_serializer(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train['target'] = y_train
@@ -189,7 +189,7 @@ class TestModelAnalysisValidations:
 
     def test_model_predictions_predict(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
 
         X_train['target'] = y_train
         X_test['target'] = y_test
@@ -209,7 +209,7 @@ class TestModelAnalysisValidations:
 
     def test_model_predictions_predict_proba(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
 
         X_train['target'] = y_train
         X_test['target'] = y_test
@@ -231,15 +231,14 @@ class TestModelAnalysisValidations:
 
     def test_model_analysis_incorrect_task_type(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train['target'] = y_train
         X_test['target'] = y_test
 
-        err_msg = ('The regression model '
-                   'provided has a predict_proba function. '
-                   'Please check the task_type.')
+        err_msg = ('The regression model provided has a predict_proba '
+                   'function. Please check the task_type.')
         with pytest.raises(UserConfigValidationException, match=err_msg):
             ModelAnalysis(
                 model=model,
@@ -250,7 +249,7 @@ class TestModelAnalysisValidations:
 
     def test_mismatch_train_test_features(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train['target'] = y_train
@@ -268,7 +267,7 @@ class TestModelAnalysisValidations:
 
     def test_unsupported_train_test_types(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train['target'] = y_train
@@ -286,7 +285,7 @@ class TestModelAnalysisValidations:
 
     def test_train_labels(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train['target'] = y_train

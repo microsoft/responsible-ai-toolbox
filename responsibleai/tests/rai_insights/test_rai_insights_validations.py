@@ -8,11 +8,11 @@ import numpy as np
 import pandas as pd
 import pytest
 from lightgbm import LGBMClassifier
-from tests.common_utils import (create_cancer_data, create_housing_data,
-                                create_iris_data)
+from tests.common_utils import create_iris_data
 
-from rai_test_utils.datasets.tabular import \
-    create_binary_classification_dataset
+from rai_test_utils.datasets.tabular import (
+    create_binary_classification_dataset, create_cancer_data,
+    create_housing_data)
 from rai_test_utils.models.lightgbm import create_lightgbm_classifier
 from rai_test_utils.models.sklearn import \
     create_sklearn_random_forest_regressor
@@ -24,7 +24,8 @@ TARGET = 'target'
 
 
 class TestRAIInsightsValidations:
-    def test_validate_unsupported_task_type(self):
+    @pytest.mark.parametrize("forecasting_enabled", [True, False])
+    def test_validate_unsupported_task_type(self, forecasting_enabled):
         X_train, X_test, y_train, y_test, _, _ = \
             create_iris_data()
 
@@ -32,15 +33,19 @@ class TestRAIInsightsValidations:
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
 
+        forecasting_extension = \
+            ", 'forecasting'" if forecasting_enabled else ""
         message = ("Unsupported task type 'regre'. "
-                   "Should be one of \\['classification', 'regression'\\]")
+                   "Should be one of \\['classification', 'regression'"
+                   f"{forecasting_extension}\\]")
         with pytest.raises(UserConfigValidationException, match=message):
             RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
                 target_column=TARGET,
-                task_type='regre')
+                task_type='regre',
+                forecasting_enabled=forecasting_enabled)
 
     def test_validate_test_data_size(self):
         X_train, X_test, y_train, y_test, _, _ = \
@@ -49,7 +54,6 @@ class TestRAIInsightsValidations:
         model = create_lightgbm_classifier(X_train, y_train)
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
-
         length = len(y_test)
         with pytest.warns(
                 UserWarning,
@@ -157,7 +161,7 @@ class TestRAIInsightsValidations:
 
     def test_validate_serializer(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train
@@ -227,7 +231,7 @@ class TestRAIInsightsValidations:
 
     def test_model_predictions_predict(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
 
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
@@ -247,7 +251,7 @@ class TestRAIInsightsValidations:
 
     def test_model_predictions_predict_proba(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
 
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
@@ -269,7 +273,7 @@ class TestRAIInsightsValidations:
 
     def test_incorrect_task_type(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train
@@ -287,7 +291,7 @@ class TestRAIInsightsValidations:
 
     def test_mismatch_train_test_features(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train
@@ -344,7 +348,7 @@ class TestRAIInsightsValidations:
 
     def test_unsupported_train_test_types(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train
@@ -363,7 +367,7 @@ class TestRAIInsightsValidations:
 
     def test_classes_exceptions(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train
@@ -414,7 +418,7 @@ class TestRAIInsightsValidations:
 
     def test_dataset_exception(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
         X_train_feature_names = X_train.columns.tolist()
 
@@ -453,7 +457,7 @@ class TestRAIInsightsValidations:
 
     def test_classes_passes(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train
@@ -471,7 +475,7 @@ class TestRAIInsightsValidations:
 
     def test_no_model_but_serializer_provided(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
 
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
@@ -489,15 +493,16 @@ class TestRAIInsightsValidations:
 
     def test_feature_metadata(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
         feature_metadata = FeatureMetadata(identity_feature_name='id')
 
-        err_msg = ('The given identity feature name id is not present'
-                   f' in the provided features: {", ".join(X_train.columns)}.')
+        err_msg = (
+            'The given identity feature name id is not present '
+            f'in the provided features: {", ".join(X_train.columns)}.')
         with pytest.raises(UserConfigValidationException, match=err_msg):
             RAIInsights(
                 model=model,
@@ -648,10 +653,9 @@ class TestRAIInsightsValidations:
                 task_type='classification',
                 feature_metadata=feature_metadata)
 
-    @pytest.mark.skip(
-        "Skip forecasting validation test until forecasting is enabled.")
     def test_feature_metadata_forecasting_multiple_datetime_features(self):
-        X = pd.DataFrame(data=[[1, 1], [2, 3]], columns=['c1', 'c2'])
+        X = pd.DataFrame(data=[[1, 1], [2, 3]],
+                         columns=['c1', 'c2'])
         y = np.array([1, 0])
         model = MagicMock()
         model.forecast.return_value = y
@@ -668,7 +672,8 @@ class TestRAIInsightsValidations:
                 test=X,
                 target_column=TARGET,
                 task_type='forecasting',
-                feature_metadata=feature_metadata)
+                feature_metadata=feature_metadata,
+                forecasting_enabled=True)
 
 
 class TestCausalUserConfigValidations:

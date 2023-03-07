@@ -9,8 +9,7 @@ import {
   ITelemetryEvent,
   ModelAssessmentContext,
   TelemetryEventName,
-  TelemetryLevels,
-  ifEnableLargeData
+  TelemetryLevels
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -65,12 +64,10 @@ export class CausalInsightsTab extends React.PureComponent<
                 itemKey={CausalAnalysisOptions.Aggregate}
                 headerText={localization.CausalAnalysis.MainMenu.aggregate}
               />
-              {!ifEnableLargeData(this.context.dataset) && (
-                <PivotItem
-                  itemKey={CausalAnalysisOptions.Individual}
-                  headerText={localization.CausalAnalysis.MainMenu.individual}
-                />
-              )}
+              <PivotItem
+                itemKey={CausalAnalysisOptions.Individual}
+                headerText={localization.CausalAnalysis.MainMenu.individual}
+              />
               <PivotItem
                 itemKey={CausalAnalysisOptions.Treatment}
                 headerText={localization.CausalAnalysis.MainMenu.treatment}

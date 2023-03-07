@@ -19,7 +19,8 @@ from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
                                                error_metrics, f1_metrics,
                                                metric_to_display_name,
                                                precision_metrics,
-                                               recall_metrics)
+                                               recall_metrics,
+                                               regression_metrics)
 from erroranalysis._internal.metrics import get_ordered_classes, metric_to_func
 from erroranalysis._internal.process_categoricals import process_categoricals
 from erroranalysis._internal.utils import is_spark
@@ -252,9 +253,9 @@ def compute_error_tree(analyzer,
         analyzer,
         features,
         filtered_df,
-        max_depth=DEFAULT_MAX_DEPTH,
-        num_leaves=DEFAULT_NUM_LEAVES,
-        min_child_samples=DEFAULT_MIN_CHILD_SAMPLES
+        max_depth=max_depth,
+        num_leaves=num_leaves,
+        min_child_samples=min_child_samples
     )
 
 
@@ -792,10 +793,12 @@ def node_to_dict(df, tree, nodeid, categories, json,
         node_name = str(feature_names[tree[SPLIT_FEATURE]])
     else:
         node_name = None
+    is_regression_metric = metric in regression_metrics
     json.append(get_json_node(arg, condition, error, nodeid, method,
                               node_name, parentid, p_node_name,
                               total, success, metric_name,
-                              metric_value, is_error_metric))
+                              metric_value, is_error_metric,
+                              is_regression_metric))
     return json, df
 
 
@@ -906,14 +909,17 @@ def create_empty_node(metric):
     :rtype: dict
     """
     metric_name = metric_to_display_name[metric]
+    is_regression_metric = metric in regression_metrics
     is_error_metric = metric in error_metrics
     return [get_json_node(None, None, 0, 0, None, None, None,
-                          None, 0, 0, metric_name, 0, is_error_metric)]
+                          None, 0, 0, metric_name, 0, is_error_metric,
+                          is_regression_metric)]
 
 
 def get_json_node(arg, condition, error, nodeid, method, node_name,
                   parentid, p_node_name, total, success, metric_name,
-                  metric_value, is_error_metric):
+                  metric_value, is_error_metric,
+                  is_regression_metric):
     """Get the JSON node for the tree.
 
     :param arg: The arg for the node.
@@ -921,7 +927,8 @@ def get_json_node(arg, condition, error, nodeid, method, node_name,
     :param condition: The condition for the node.
     :type condition: str
     :param error: The error for the node.
-    :type error: int
+        Can be int for classification or float for regression.
+    :type error: int or float
     :param nodeid: The node id for the node.
     :type nodeid: int
     :param method: The method for the node.
@@ -942,14 +949,20 @@ def get_json_node(arg, condition, error, nodeid, method, node_name,
     :type metric_value: float
     :param is_error_metric: Whether the metric is an error metric.
     :type is_error_metric: bool
+    :param is_regression_metric: Whether the metric is a regression metric.
+    :type is_regression_metric: bool
     :return: The JSON node.
     :rtype: dict
     """
+    if is_regression_metric:
+        error = float(error)
+    else:
+        error = int(error)
     return {
         "arg": arg,
         "badFeaturesRowCount": 0,  # Note: remove this eventually
         "condition": condition,
-        "error": float(error),
+        "error": error,
         "id": int(nodeid),
         METHOD: method,
         "nodeIndex": int(nodeid),

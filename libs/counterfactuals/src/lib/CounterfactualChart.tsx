@@ -53,7 +53,7 @@ export interface ICounterfactualChartProps {
   ) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
   togglePanel: () => void;
-  toggleSelectionOfPoint: (index?: number) => void;
+  toggleSelectionOfPoint: (index?: number) => number[];
 }
 
 export interface ICounterfactualChartState {
