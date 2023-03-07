@@ -663,12 +663,12 @@ export class JointDataset {
   }
 
   private updateMetaDataDict(
-    values: number[] | number[][],
+    values: number[] | number[][] | number[][][],
     metadata: IExplanationModelMetadata,
     labelColName: string,
     abbridgedLabel: string,
     label: string,
-    targetColumn?: string | string[]
+    targetColumn?: string | string[] | string[][]
   ): void {
     this.initializeDataDictIfNeeded(values);
     values.forEach((val, index) => {
