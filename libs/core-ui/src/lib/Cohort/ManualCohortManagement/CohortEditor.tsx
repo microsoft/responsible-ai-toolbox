@@ -11,10 +11,11 @@ import {
   ModelAssessmentContext
 } from "../../Context/ModelAssessmentContext";
 import { DatasetCohort } from "../../DatasetCohort";
-import { isFlightActive, removeJointDatasetFlight } from "../../FeatureFlights";
+import { isFlightActive, RefactorFlight } from "../../FeatureFlights";
 import { ICompositeFilter, IFilter } from "../../Interfaces/IFilter";
 import { JointDataset } from "../../util/JointDataset";
 import { Cohort } from "../Cohort";
+import { CohortSource } from "../Constants";
 
 import { cohortEditorStyles } from "./CohortEditor.styles";
 import { CohortEditorPanelContent } from "./CohortEditorPanelContent";
@@ -197,15 +198,14 @@ export class CohortEditor extends React.PureComponent<
 
   private saveCohort = (switchNew?: boolean): void => {
     if (this.state.cohortName?.length) {
-      if (
-        isFlightActive(removeJointDatasetFlight, this.context.featureFlights)
-      ) {
+      if (isFlightActive(RefactorFlight, this.context.featureFlights)) {
         const newDatasetCohort = new DatasetCohort(
           this.state.cohortName,
           this.context.dataset,
           this.state.filters,
           this.context.modelType,
-          this.context.datasetFeatureRanges
+          this.context.datasetFeatureRanges,
+          CohortSource.ManuallyCreated
         );
         if (newDatasetCohort.selectedIndexes.length === 0) {
           this.setState({ showEmptyCohortError: true });

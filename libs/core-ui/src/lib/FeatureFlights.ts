@@ -1,15 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export const removeJointDatasetFlight = "removeJointDataset";
+export const RefactorFlight = "refactor";
 export const dataBalanceExperienceFlight = "dataBalanceExperience";
 export const featureFlightSeparator = "&";
 
 // add more entries for new feature flights
-export const featureFlights = [
-  removeJointDatasetFlight,
-  dataBalanceExperienceFlight
-];
+export const featureFlights = [RefactorFlight, dataBalanceExperienceFlight];
 
 export function parseFeatureFlights(featureFlights?: string): string[] {
   if (featureFlights) {

@@ -9,7 +9,7 @@ import {
   IModelAssessmentContext,
   isFlightActive,
   ModelAssessmentContext,
-  removeJointDatasetFlight
+  RefactorFlight
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -23,12 +23,12 @@ export class CreateGlobalCohort extends React.Component<ICreateGlobalCohortProps
   public static contextType = ModelAssessmentContext;
   public context: IModelAssessmentContext = defaultModelAssessmentContext;
   public render(): React.ReactNode {
-    const isRemoveJointDatasetFlightOn = isFlightActive(
-      removeJointDatasetFlight,
+    const isRefactorFlightOn = isFlightActive(
+      RefactorFlight,
       this.context.featureFlights
     );
     const cohortsLength =
-      isRemoveJointDatasetFlightOn && this.context.datasetCohorts
+      isRefactorFlightOn && this.context.datasetCohorts
         ? this.context.datasetCohorts.length + 1
         : this.context.errorCohorts.length + 1;
 

@@ -15,7 +15,7 @@ import {
   ITelemetryEvent,
   ifEnableLargeData,
   isFlightActive,
-  removeJointDatasetFlight
+  RefactorFlight
 } from "@responsible-ai/core-ui";
 import { IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -97,12 +97,12 @@ export class CounterfactualComponent extends React.PureComponent<
     this.createCopyOfFirstRow();
     this.buildRowOptions(0);
     this.fetchData = _.debounce(this.fetchData, 400);
-    const isFlightOn = isFlightActive(
-      removeJointDatasetFlight,
+    const isRefactorFlightOn = isFlightActive(
+      RefactorFlight,
       this.props.featureFlights
     );
     this.setState({
-      chartProps: isFlightOn
+      chartProps: isRefactorFlightOn
         ? generateDefaultChartAxesWithDatasetCohort(
             this.context.selectedDatasetCohort
           )

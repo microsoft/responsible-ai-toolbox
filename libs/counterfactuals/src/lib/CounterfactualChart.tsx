@@ -16,7 +16,7 @@ import {
   TelemetryLevels,
   TelemetryEventName,
   isFlightActive,
-  removeJointDatasetFlight
+  RefactorFlight
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import React from "react";
@@ -79,8 +79,8 @@ export class CounterfactualChart extends React.PureComponent<
     };
   }
   public render(): React.ReactNode {
-    const isFlightOn = isFlightActive(
-      removeJointDatasetFlight,
+    const isRefactorFlightOn = isFlightActive(
+      RefactorFlight,
       this.props.featureFlights
     );
     const classNames = counterfactualChartStyles();
@@ -95,19 +95,19 @@ export class CounterfactualChart extends React.PureComponent<
       this.context.featureFlights
     );
     //TODO(Ruby): localize && abbridge?
-    const horizontalAxisText = isFlightOn
+    const horizontalAxisText = isRefactorFlightOn
       ? this.props.chartProps.xAxis.property
       : this.context.jointDataset.metaDict[this.props.chartProps.xAxis.property]
           .abbridgedLabel;
-    const horizontalAxisTitle = isFlightOn
+    const horizontalAxisTitle = isRefactorFlightOn
       ? this.props.chartProps.xAxis.property
       : this.context.jointDataset.metaDict[this.props.chartProps.xAxis.property]
           .label;
-    const verticalAxisText = isFlightOn
+    const verticalAxisText = isRefactorFlightOn
       ? this.props.chartProps.yAxis.property
       : this.context.jointDataset.metaDict[this.props.chartProps.yAxis.property]
           .abbridgedLabel;
-    const verticalAxisTitle = isFlightOn
+    const verticalAxisTitle = isRefactorFlightOn
       ? this.props.chartProps.yAxis.property
       : this.context.jointDataset.metaDict[this.props.chartProps.yAxis.property]
           .label;

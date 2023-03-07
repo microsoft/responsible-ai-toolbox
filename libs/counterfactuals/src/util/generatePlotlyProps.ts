@@ -9,7 +9,7 @@ import {
   IGenericChartProps,
   isFlightActive,
   JointDataset,
-  removeJointDatasetFlight
+  RefactorFlight
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -39,9 +39,9 @@ export function generatePlotlyProps(
 ): IPlotlyProperty {
   const plotlyProps = _.cloneDeep(WhatIfConstants.basePlotlyProperties);
   plotlyProps.data[0].hoverinfo = "all";
-  const isFlightOn = isFlightActive(removeJointDatasetFlight, featureFlights);
+  const isRefactorFlightOn = isFlightActive(RefactorFlight, featureFlights);
   const indexes =
-    isFlightOn && datasetCohort
+    isRefactorFlightOn && datasetCohort
       ? datasetCohort?.selectedIndexes
       : cohort.unwrap(JointDataset.IndexLabel);
   plotlyProps.data[0].type = chartProps.chartType as ChartTypes;
@@ -97,7 +97,7 @@ export function generatePlotlyProps(
 
   if (chartProps.xAxis) {
     let xLabels;
-    if (isFlightOn) {
+    if (isRefactorFlightOn) {
       if (
         datasetFeatureRanges &&
         datasetFeatureRanges[chartProps.xAxis.property]?.rangeType ===
@@ -122,7 +122,7 @@ export function generatePlotlyProps(
 
   if (chartProps.yAxis) {
     let yLabels;
-    if (isFlightOn) {
+    if (isRefactorFlightOn) {
       if (
         datasetFeatureRanges &&
         datasetFeatureRanges[chartProps.yAxis.property]?.rangeType ===
@@ -143,7 +143,7 @@ export function generatePlotlyProps(
     _.set(plotlyProps, "layout.yaxis.ticktext", yLabels);
     _.set(plotlyProps, "layout.yaxis.tickvals", yLabelIndexes);
   }
-  if (isFlightOn) {
+  if (isRefactorFlightOn) {
     generateDataTraceFromDatasetCohort(
       chartProps,
       plotlyProps.data[0],

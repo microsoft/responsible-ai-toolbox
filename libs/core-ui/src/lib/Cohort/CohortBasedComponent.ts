@@ -9,8 +9,9 @@ import { IDataset } from "../Interfaces/IDataset";
 import { IFilter, ICompositeFilter } from "../Interfaces/IFilter";
 import { JointDataset } from "../util/JointDataset";
 
-import { Cohort, CohortSource } from "./Cohort";
+import { Cohort } from "./Cohort";
 import { MetricCohortStats } from "./CohortStats";
+import { CohortSource } from "./Constants";
 import { ErrorCohort } from "./ErrorCohort";
 
 export interface ICohortBasedComponentProps {

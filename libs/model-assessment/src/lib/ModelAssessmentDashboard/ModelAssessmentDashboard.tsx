@@ -15,7 +15,7 @@ import {
   Announce,
   DatasetCohort,
   isFlightActive,
-  removeJointDatasetFlight
+  RefactorFlight
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -248,7 +248,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     manuallyCreatedCohort: Cohort | DatasetCohort,
     switchNew?: boolean
   ): void => {
-    if (isFlightActive(removeJointDatasetFlight, this.props.featureFlights)) {
+    if (isFlightActive(RefactorFlight, this.props.featureFlights)) {
       if (
         this.state.datasetCohorts === undefined ||
         this.state.datasetCohorts.some(
@@ -257,11 +257,13 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       ) {
         return;
       }
-      const newDatasetCohorts = [
+      let newDatasetCohorts = [
         ...this.state.datasetCohorts,
         manuallyCreatedCohort
       ] as DatasetCohort[];
-      // TODO(Ruby): filter out temporary cohorts
+      newDatasetCohorts = newDatasetCohorts.filter(
+        (cohort) => !cohort.isTemporary
+      );
       this.setState((prevState) => ({
         baseDatasetCohort: switchNew
           ? (manuallyCreatedCohort as DatasetCohort)
@@ -304,7 +306,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     editCohort: Cohort | DatasetCohort,
     switchNew?: boolean
   ): void => {
-    if (isFlightActive(removeJointDatasetFlight, this.props.featureFlights)) {
+    if (isFlightActive(RefactorFlight, this.props.featureFlights)) {
       if (this.state.datasetCohorts === undefined) {
         return;
       }
@@ -314,9 +316,11 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       if (editIndex === -1) {
         return;
       }
-      const newDatasetCohorts = [...this.state.datasetCohorts];
+      let newDatasetCohorts = [...this.state.datasetCohorts];
       newDatasetCohorts[editIndex] = editCohort as DatasetCohort;
-      // TODO filter temporary
+      newDatasetCohorts = newDatasetCohorts.filter(
+        (cohort) => !cohort.isTemporary
+      );
       if (switchNew) {
         this.setState({
           datasetCohorts: newDatasetCohorts,

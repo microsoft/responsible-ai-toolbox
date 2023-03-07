@@ -27,6 +27,7 @@ import { ModelMetadata } from "@responsible-ai/mlchartlib";
 
 import { getAvailableTabs } from "../AvailableTabs";
 import { processPreBuiltCohort } from "../Cohort/ProcessPreBuiltCohort";
+import { processPreBuiltDatasetCohort } from "../Cohort/ProcessPreBuiltDatasetCohort";
 import { IModelAssessmentDashboardProps } from "../ModelAssessmentDashboardProps";
 import {
   IModelAssessmentDashboardState,
@@ -96,15 +97,24 @@ export function buildInitialModelAssessmentContext(
   errorCohortList = errorCohortList.concat(preBuiltErrorCohortList);
   const cohorts = errorCohortList;
 
-  // TODO(Ruby): need to handle pre built cohort
+  const preBuiltDatasetCohortList = processPreBuiltDatasetCohort(
+    props,
+    modelType,
+    datasetFeatureRanges
+  );
   const defaultDatasetCohort = new DatasetCohort(
     localization.ErrorAnalysis.Cohort.defaultLabel,
     props.dataset,
     [],
     modelType,
-    datasetFeatureRanges
+    datasetFeatureRanges,
+    CohortSource.None,
+    false,
+    metricStats
   );
-  const datasetCohorts = [defaultDatasetCohort];
+  const datasetCohorts = [defaultDatasetCohort].concat(
+    preBuiltDatasetCohortList
+  );
 
   // only include tabs for which we have the required data
   const activeGlobalTabs: IModelAssessmentDashboardTab[] = getAvailableTabs(

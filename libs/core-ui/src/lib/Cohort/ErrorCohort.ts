@@ -6,9 +6,9 @@ import { getBasicFilterString } from "../util/getBasicFilterString";
 import { getCompositeFilterString } from "../util/getCompositeFilterString";
 import { JointDataset } from "../util/JointDataset";
 
-import { Cohort, CohortSource } from "./Cohort";
+import { Cohort } from "./Cohort";
 import { MetricCohortStats, ErrorCohortStats } from "./CohortStats";
-import { Metrics } from "./Constants";
+import { CohortSource, Metrics } from "./Constants";
 
 export class ErrorCohort {
   public cohortStats: MetricCohortStats;

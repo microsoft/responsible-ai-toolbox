@@ -19,7 +19,7 @@ import React, { FormEvent } from "react";
 
 import { Announce } from "../../components/Announce";
 import { DatasetCohort } from "../../DatasetCohort";
-import { isFlightActive, removeJointDatasetFlight } from "../../FeatureFlights";
+import { isFlightActive, RefactorFlight } from "../../FeatureFlights";
 import { IDataset } from "../../Interfaces/IDataset";
 import { ModelTypes } from "../../Interfaces/IExplanationContext";
 import {
@@ -70,11 +70,11 @@ export class CohortEditorPanelContent extends React.PureComponent<
   ICohortEditorPanelContentProps,
   ICohortEditorPanelContentState
 > {
-  private isFlightOn = isFlightActive(
-    removeJointDatasetFlight,
+  private isRefactorFlightOn = isFlightActive(
+    RefactorFlight,
     this.props.activeFlights
   );
-  private readonly leftItems: IChoiceGroupOption[] = this.isFlightOn
+  private readonly leftItems: IChoiceGroupOption[] = this.isRefactorFlightOn
     ? getChoices2(this.props.datasetFeatureRanges)
     : getChoices(this.props.jointDataset);
   private _isInitialized = false;
@@ -84,7 +84,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
     this.state = {
       filterIndex: this.props.filterList?.length || 0,
       filtersMessage: "",
-      openedFilter: this.isFlightOn
+      openedFilter: this.isRefactorFlightOn
         ? this.getFilterValue2(this.leftItems[0] && this.leftItems[0].key)
         : this.getFilterValue(this.leftItems[0] && this.leftItems[0].key),
       selectedFilterCategory: this.leftItems[0] && this.leftItems[0].key
@@ -120,7 +120,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
           {...this.props}
           filterIndex={this.state.filterIndex}
           openedFilter={this.state.openedFilter}
-          isRemoveJointDatasetFlightOn={this.isFlightOn}
+          isRemoveJointDatasetFlightOn={this.isRefactorFlightOn}
           onOpenedFilterUpdated={this.onOpenedFilterUpdated}
           onSelectedFilterCategoryUpdated={this.onSelectedFilterCategoryUpdated}
           setFilterMessage={this.setFilterMessage}
@@ -129,7 +129,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
         <Stack.Item>
           <CohortEditorFilterList
             datasetFeatureRanges={this.props.datasetFeatureRanges}
-            isRemoveJointDatasetFlightOn={this.isFlightOn}
+            isRemoveJointDatasetFlightOn={this.isRefactorFlightOn}
             compositeFilters={this.props.compositeFilters}
             editFilter={this.editFilter}
             removeCompositeFilter={this.removeCompositeFilter}
@@ -200,7 +200,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
     if (!this._isInitialized) {
       return;
     }
-    if (this.isFlightOn) {
+    if (this.isRefactorFlightOn) {
       if (property === DatasetCohort.Dataset) {
         this.setDefaultStateForKey(this.props.dataset.feature_names[0]);
         return;
@@ -212,7 +212,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
   };
 
   private setDefaultStateForKey(key: string): void {
-    const filter = this.isFlightOn
+    const filter = this.isRefactorFlightOn
       ? this.getFilterValue2(key)
       : this.getFilterValue(key);
     this.setState({
@@ -256,7 +256,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
     // only execute this if in edit mode
     // On duplication retained arg is shown only for filters in filterArgRetainableList
     this.props.disableEditName &&
-      (this.isFlightOn
+      (this.isRefactorFlightOn
         ? filterArgRetainableList2
         : filterArgRetainableList
       ).includes(key) &&
