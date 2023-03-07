@@ -69,13 +69,13 @@ export class JointDataset {
 
   // these properties should only be accessed by Cohort class,
   // which enables independent filtered views of this data
-  public dataDict: Array<{ [key: string]: number }> | undefined;
+  public dataDict: Array<{ [key: string]: number | number[] }> | undefined;
   public binDict: { [key: string]: number[] | undefined } = {};
 
   private readonly _modelMeta: IExplanationModelMetadata;
   // private readonly _localExplanationIndexesComputed: boolean[];
   // The user elected to treat numeric columns as categorical. Store the unaltered values here in case they toggle back.
-  private numericValuedColumnsCache: Array<{ [key: string]: number }> = [];
+  private numericValuedColumnsCache: Array<{ [key: string]: number | number[] }> = [];
 
   // Can add method to set dither scale in future, update charts on change.
   private readonly ditherScale = 0.1;
@@ -687,7 +687,7 @@ export class JointDataset {
       let labelColNameKey = labelColName;
       let abbridgedLabelValue = abbridgedLabel;
       let labelValue = label;
-      let singleLabelValues: number[] = [];
+      let singleLabelValues: number[] | number[][] = [];
       if (this.numLabels > 1) {
         const labelIdxStr = i.toString();
         labelColNameKey += labelIdxStr;
