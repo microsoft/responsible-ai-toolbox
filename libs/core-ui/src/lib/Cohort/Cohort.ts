@@ -22,7 +22,7 @@ export enum CohortSource {
 export class Cohort {
   private static _cohortIndex = 0;
 
-  public filteredData: Array<{ [key: string]: number }>;
+  public filteredData: Array<{ [key: string]: number | number[] }>;
   private readonly cohortIndex: number;
   private cachedAverageImportance: number[] | undefined;
   private cachedTransposedLocalFeatureImportances: number[][] | undefined;
@@ -210,7 +210,7 @@ export class Cohort {
   }
 
   private filterRow(
-    row: { [key: string]: number },
+    row: { [key: string]: number | number[] },
     filters: IFilter[]
   ): boolean {
     return filters
@@ -241,7 +241,7 @@ export class Cohort {
   }
 
   private filterRecursively(
-    row: { [key: string]: number },
+    row: { [key: string]: number | number[] },
     compositeFilter: ICompositeFilter
   ): boolean {
     if (compositeFilter.method) {
@@ -255,7 +255,7 @@ export class Cohort {
   }
 
   private filterComposite(
-    row: { [key: string]: number },
+    row: { [key: string]: number | number[] },
     compositeFilters: ICompositeFilter[],
     operation: Operations
   ): boolean {
@@ -269,7 +269,7 @@ export class Cohort {
     );
   }
 
-  private applyFilters(): Array<{ [key: string]: number }> {
+  private applyFilters(): Array<{ [key: string]: number | number[] }> {
     this.clearCachedImportances();
     let filteredData = this.jointDataset.dataDict;
     if (!filteredData) {
