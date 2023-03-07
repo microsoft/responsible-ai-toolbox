@@ -23,6 +23,7 @@ import {
   JointDataset,
   ModelTypes,
   MultilabelMetrics,
+  ObjectDetectionMetrics,
   FluentUIStyles,
   MulticlassClassificationMetrics,
   ErrorCohort,
@@ -135,6 +136,13 @@ export class ModelOverview extends React.Component<
     ) {
       defaultSelectedMetrics = [
         MultilabelMetrics.ExactMatchRatio,
+        MultilabelMetrics.HammingScore
+      ];
+    } else if (
+      this.context.dataset.task_type === DatasetTaskType.ObjectDetection
+      ) {
+      defaultSelectedMetrics = [
+        MultilabelMetrics.Mean,
         MultilabelMetrics.HammingScore
       ];
     } else {

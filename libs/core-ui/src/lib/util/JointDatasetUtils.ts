@@ -14,15 +14,15 @@ import { AxisTypes } from "./IGenericChartProps";
 
 export interface IJointDatasetArgs {
   dataset?: any[][];
-  predictedY?: number[] | number[][];
+  predictedY?: number[] | number[][] | number[][][];
   predictedProbabilities?: number[][];
-  trueY?: number[] | number[][];
+  trueY?: number[] | number[][] | number[][][];
   localExplanations?:
     | IMultiClassLocalFeatureImportance
     | ISingleClassLocalFeatureImportance;
   metadata: IExplanationModelMetadata;
   featureMetaData?: IFeatureMetaData;
-  targetColumn?: string | string[];
+  targetColumn?: string | string[] | string[][];
 }
 
 export enum ColumnCategories {
