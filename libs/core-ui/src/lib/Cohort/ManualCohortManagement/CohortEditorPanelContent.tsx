@@ -18,7 +18,7 @@ import _ from "lodash";
 import React, { FormEvent } from "react";
 
 import { Announce } from "../../components/Announce";
-import { DatasetCohort } from "../../DatasetCohort";
+import { DatasetCohortColumns } from "../../DatasetCohortColumns";
 import { isFlightActive, RefactorFlight } from "../../FeatureFlights";
 import { IDataset } from "../../Interfaces/IDataset";
 import { ModelTypes } from "../../Interfaces/IExplanationContext";
@@ -201,7 +201,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
       return;
     }
     if (this.isRefactorFlightOn) {
-      if (property === DatasetCohort.Dataset) {
+      if (property === DatasetCohortColumns.Dataset) {
         this.setDefaultStateForKey(this.props.dataset.feature_names[0]);
         return;
       }

@@ -3,6 +3,7 @@
 
 import {
   DatasetCohort,
+  DatasetCohortColumns,
   getPropertyValues,
   IGenericChartProps
 } from "@responsible-ai/core-ui";
@@ -21,7 +22,7 @@ export function generateDataTraceFromDatasetCohort(
   const indexes = datasetCohort.selectedIndexes;
   const customdata = indexes.map((val) => {
     const dict: Dictionary<unknown> = {};
-    dict[DatasetCohort.Index] = val;
+    dict[DatasetCohortColumns.Index] = val;
     return dict;
   });
   let hovertemplate = "{point.customdata.Index}<br>";

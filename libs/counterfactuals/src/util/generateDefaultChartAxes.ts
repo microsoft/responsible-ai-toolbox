@@ -4,6 +4,7 @@
 import {
   ChartTypes,
   DatasetCohort,
+  DatasetCohortColumns,
   IGenericChartProps,
   JointDataset
 } from "@responsible-ai/core-ui";
@@ -55,8 +56,8 @@ export function generateDefaultChartAxesWithDatasetCohort(
     xAxis: {
       options: {},
       property: datasetCohort.dataset.probability_y
-        ? DatasetCohort.ProbabilityY + defaultClass
-        : DatasetCohort.Index
+        ? DatasetCohortColumns.ProbabilityY + defaultClass
+        : DatasetCohortColumns.Index
     },
     yAxis: {
       options: {

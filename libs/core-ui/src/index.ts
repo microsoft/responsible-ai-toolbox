@@ -22,6 +22,7 @@ export * from "./lib/Cohort/PredictionPath/PredictionPath";
 export * from "./lib/Cohort/SaveCohort/SaveCohort";
 export * from "./lib/Cohort/ShiftCohort/ShiftCohort";
 export * from "./lib/Context/ModelAssessmentContext";
+export * from "./lib/DatasetCohortColumns";
 export * from "./lib/util/array";
 export * from "./lib/util/datasetUtils/getPropertyValues";
 export * from "./lib/util/datasetUtils/getFeatureRanges";

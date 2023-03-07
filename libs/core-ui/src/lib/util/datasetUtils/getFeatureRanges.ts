@@ -9,7 +9,7 @@ import {
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 
-import { DatasetCohort } from "../../DatasetCohort";
+import { DatasetCohortColumns } from "../../DatasetCohortColumns";
 import { IDataset } from "../../Interfaces/IDataset";
 import { ModelTypes } from "../../Interfaces/IExplanationContext";
 import { IsBinary, IsMulticlass } from "../ExplanationUtils";
@@ -28,32 +28,39 @@ export function getFeatureRanges(
     ranges[feature] = range;
   });
   const indexRange = getIndexFeatureRange(dataset);
-  ranges[DatasetCohort.Index] = indexRange;
+  ranges[DatasetCohortColumns.Index] = indexRange;
 
   // get regression error and classification error ranges
   if (dataset.predicted_y && dataset.true_y) {
     const classificationErrorRange =
       getClassificationErrorFeatureRange(modelType);
     if (classificationErrorRange) {
-      ranges[DatasetCohort.ClassificationError] = classificationErrorRange;
+      ranges[DatasetCohortColumns.ClassificationError] =
+        classificationErrorRange;
     }
     const regressionErrorRange = getRegressionErrorFeatureRange(
       dataset,
       modelType
     );
     if (regressionErrorRange) {
-      ranges[DatasetCohort.RegressionError] = regressionErrorRange;
+      ranges[DatasetCohortColumns.RegressionError] = regressionErrorRange;
     }
     // get feature ranges for predicted Y
     getRange(
       dataset,
       modelType,
       dataset.predicted_y,
-      DatasetCohort.PredictedY,
+      DatasetCohortColumns.PredictedY,
       ranges
     );
     // get feature ranges for true Y
-    getRange(dataset, modelType, dataset.true_y, DatasetCohort.TrueY, ranges);
+    getRange(
+      dataset,
+      modelType,
+      dataset.true_y,
+      DatasetCohortColumns.TrueY,
+      ranges
+    );
   }
   return ranges;
 }

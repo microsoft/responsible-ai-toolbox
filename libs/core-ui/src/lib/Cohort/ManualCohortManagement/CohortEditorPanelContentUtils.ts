@@ -5,7 +5,7 @@ import { IChoiceGroupOption } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import { ICategoricalRange, INumericRange } from "@responsible-ai/mlchartlib";
 
-import { DatasetCohort } from "../../DatasetCohort";
+import { DatasetCohortColumns } from "../../DatasetCohortColumns";
 import { JointDataset } from "../../util/JointDataset";
 
 export function getChoices2(datasetFeatureRanges?: {
@@ -13,38 +13,38 @@ export function getChoices2(datasetFeatureRanges?: {
 }): IChoiceGroupOption[] {
   const choices = [
     {
-      key: DatasetCohort.Index,
+      key: DatasetCohortColumns.Index,
       text: localization.Interpret.CohortEditor.choiceGroup.index
     },
     {
-      key: DatasetCohort.Dataset,
+      key: DatasetCohortColumns.Dataset,
       text: localization.Interpret.CohortEditor.choiceGroup.dataset
     },
     {
-      key: DatasetCohort.PredictedY,
+      key: DatasetCohortColumns.PredictedY,
       text: localization.Interpret.CohortEditor.choiceGroup.predictedY
     },
     {
-      key: DatasetCohort.TrueY,
+      key: DatasetCohortColumns.TrueY,
       text: localization.Interpret.CohortEditor.choiceGroup.trueY
     }
   ];
   if (
     datasetFeatureRanges &&
-    datasetFeatureRanges[DatasetCohort.ClassificationError]
+    datasetFeatureRanges[DatasetCohortColumns.ClassificationError]
   ) {
     choices.push({
-      key: DatasetCohort.ClassificationError,
+      key: DatasetCohortColumns.ClassificationError,
       text: localization.Interpret.CohortEditor.choiceGroup
         .classificationOutcome
     });
   }
   if (
     datasetFeatureRanges &&
-    datasetFeatureRanges[DatasetCohort.RegressionError]
+    datasetFeatureRanges[DatasetCohortColumns.RegressionError]
   ) {
     choices.push({
-      key: DatasetCohort.RegressionError,
+      key: DatasetCohortColumns.RegressionError,
       text: localization.Interpret.CohortEditor.choiceGroup.regressionError
     });
   }
@@ -91,7 +91,7 @@ export const filterArgRetainableList = [
 ];
 
 export const filterArgRetainableList2 = [
-  DatasetCohort.PredictedY,
-  DatasetCohort.TrueY,
-  DatasetCohort.ClassificationError
+  DatasetCohortColumns.PredictedY,
+  DatasetCohortColumns.TrueY,
+  DatasetCohortColumns.ClassificationError
 ];

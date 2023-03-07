@@ -10,6 +10,7 @@ import _ from "lodash";
 
 import { ErrorCohortStats, MetricCohortStats } from "./Cohort/CohortStats";
 import { CohortSource, Metrics } from "./Cohort/Constants";
+import { DatasetCohortColumns } from "./DatasetCohortColumns";
 import { IDataset } from "./Interfaces/IDataset";
 import { ModelTypes } from "./Interfaces/IExplanationContext";
 import { FilterMethods, IFilter } from "./Interfaces/IFilter";
@@ -18,14 +19,6 @@ import { IsBinary, IsMulticlass } from "./util/ExplanationUtils";
 import { MulticlassClassificationEnum } from "./util/JointDatasetUtils";
 
 export class DatasetCohort {
-  public static readonly Index = "Index";
-  public static readonly Dataset = "Dataset";
-  public static readonly PredictedY = "Predicted Y";
-  public static readonly TrueY = "True Y";
-  public static readonly ClassificationError = "Classification outcome";
-  public static readonly RegressionError = "Regression error";
-  public static readonly ProbabilityY = "Probability Y";
-
   public selectedIndexes: number[] = [];
   public cohortStats: MetricCohortStats;
   public constructor(
@@ -66,7 +59,7 @@ export class DatasetCohort {
     const dataDict = Array.from({ length: this.dataset.features.length }).map(
       (_, index) => {
         const dict = {};
-        dict[DatasetCohort.Index] = index;
+        dict[DatasetCohortColumns.Index] = index;
         return dict;
       }
     );
@@ -79,28 +72,30 @@ export class DatasetCohort {
     this.dataset.true_y.forEach((val, index) => {
       if (Array.isArray(val)) {
         val.forEach((subVal, subIndex) => {
-          dataDict[index][DatasetCohort.TrueY + subIndex.toString()] = subVal;
+          dataDict[index][DatasetCohortColumns.TrueY + subIndex.toString()] =
+            subVal;
         });
       } else {
-        dataDict[index][DatasetCohort.TrueY] = val;
+        dataDict[index][DatasetCohortColumns.TrueY] = val;
       }
     });
     this.dataset.predicted_y?.forEach((val, index) => {
       if (Array.isArray(val)) {
         val.forEach((subVal, subIndex) => {
-          dataDict[index][DatasetCohort.PredictedY + subIndex.toString()] =
-            subVal;
+          dataDict[index][
+            DatasetCohortColumns.PredictedY + subIndex.toString()
+          ] = subVal;
         });
       } else {
-        dataDict[index][DatasetCohort.PredictedY] = val;
+        dataDict[index][DatasetCohortColumns.PredictedY] = val;
       }
     });
     // set up errors
     console.log(modelType);
     if (modelType === ModelTypes.Regression) {
       for (const [index, row] of dataDict.entries()) {
-        dataDict[index][DatasetCohort.RegressionError] = Math.abs(
-          row[DatasetCohort.TrueY] - row[DatasetCohort.PredictedY]
+        dataDict[index][DatasetCohortColumns.RegressionError] = Math.abs(
+          row[DatasetCohortColumns.TrueY] - row[DatasetCohortColumns.PredictedY]
         );
       }
     } else if (modelType && IsBinary(modelType)) {
@@ -110,13 +105,15 @@ export class DatasetCohort {
       // 2: FN
       // 3: TP
       for (const [index, row] of dataDict.entries()) {
-        dataDict[index][DatasetCohort.ClassificationError] =
-          2 * row[DatasetCohort.TrueY] + row[DatasetCohort.PredictedY];
+        dataDict[index][DatasetCohortColumns.ClassificationError] =
+          2 * row[DatasetCohortColumns.TrueY] +
+          row[DatasetCohortColumns.PredictedY];
       }
     } else if (modelType && IsMulticlass(modelType)) {
       for (const [index, row] of dataDict.entries()) {
-        dataDict[index][DatasetCohort.ClassificationError] =
-          row[DatasetCohort.TrueY] !== row[DatasetCohort.PredictedY]
+        dataDict[index][DatasetCohortColumns.ClassificationError] =
+          row[DatasetCohortColumns.TrueY] !==
+          row[DatasetCohortColumns.PredictedY]
             ? MulticlassClassificationEnum.Misclassified
             : MulticlassClassificationEnum.Correct;
       }
@@ -163,9 +160,9 @@ export class DatasetCohort {
       this.featureRanges[filter.column]?.rangeType === RangeTypes.Categorical
     ) {
       if (
-        filter.column === DatasetCohort.PredictedY ||
-        filter.column === DatasetCohort.TrueY ||
-        filter.column === DatasetCohort.ClassificationError
+        filter.column === DatasetCohortColumns.PredictedY ||
+        filter.column === DatasetCohortColumns.TrueY ||
+        filter.column === DatasetCohortColumns.ClassificationError
       ) {
         return filter.arg.includes(val as number);
       }
@@ -189,23 +186,23 @@ export class DatasetCohort {
 
     const trueYsCohort = getPropertyValues(
       this.selectedIndexes,
-      DatasetCohort.TrueY,
+      DatasetCohortColumns.TrueY,
       this.dataset
     );
     const predYsCohort = getPropertyValues(
       this.selectedIndexes,
-      DatasetCohort.PredictedY,
+      DatasetCohortColumns.PredictedY,
       this.dataset
     );
     const indexes = [...new Array(this.dataset.features.length).keys()];
     const trueYs = getPropertyValues(
       indexes,
-      DatasetCohort.TrueY,
+      DatasetCohortColumns.TrueY,
       this.dataset
     );
     const predYs = getPropertyValues(
       indexes,
-      DatasetCohort.PredictedY,
+      DatasetCohortColumns.PredictedY,
       this.dataset
     );
 

@@ -4,6 +4,7 @@
 import {
   CohortSource,
   DatasetCohort,
+  DatasetCohortColumns,
   FilterMethods,
   IDataset,
   IFilter,
@@ -37,7 +38,7 @@ export function processPreBuiltDatasetCohort(
           case CohortColumnNames.Index: {
             const filter: IFilter = {
               arg: preBuiltCohortFilter.arg,
-              column: DatasetCohort.Index,
+              column: DatasetCohortColumns.Index,
               method: preBuiltCohortFilter.method
             };
             filterList.push(filter);
@@ -46,7 +47,7 @@ export function processPreBuiltDatasetCohort(
           case CohortColumnNames.RegressionError: {
             const filter: IFilter = {
               arg: preBuiltCohortFilter.arg,
-              column: DatasetCohort.RegressionError,
+              column: DatasetCohortColumns.RegressionError,
               method: preBuiltCohortFilter.method
             };
             filterList.push(filter);
@@ -114,8 +115,8 @@ function translateCohortFilterForTarget(
 ): IFilter {
   const filterColumn =
     cohortColumn === CohortColumnNames.TrueY
-      ? DatasetCohort.TrueY
-      : DatasetCohort.PredictedY;
+      ? DatasetCohortColumns.TrueY
+      : DatasetCohortColumns.PredictedY;
   if (IsClassifier(modelType)) {
     const modelClasses = dataset.class_names;
     if (modelClasses) {
@@ -146,7 +147,7 @@ function translateCohortFilterForClassificationOutcome(
   }
 ): IFilter {
   let index: number[] = [];
-  const featureRange = featureRanges[DatasetCohort.ClassificationError];
+  const featureRange = featureRanges[DatasetCohortColumns.ClassificationError];
   if (featureRange) {
     const allowedClassificationErrorValues = (featureRange as ICategoricalRange)
       .uniqueValues;
@@ -159,7 +160,7 @@ function translateCohortFilterForClassificationOutcome(
   index.sort((a, b) => a - b);
   const filter: IFilter = {
     arg: index,
-    column: DatasetCohort.ClassificationError,
+    column: DatasetCohortColumns.ClassificationError,
     method: preBuiltCohortFilter.method
   };
   return filter;

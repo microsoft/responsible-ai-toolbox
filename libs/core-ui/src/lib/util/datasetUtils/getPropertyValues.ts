@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DatasetCohort } from "../../DatasetCohort";
+import { DatasetCohortColumns } from "../../DatasetCohortColumns";
 import { IDataset } from "../../Interfaces/IDataset";
 import { ModelTypes } from "../../Interfaces/IExplanationContext";
 import { IsBinary, IsMulticlass } from "../ExplanationUtils";
@@ -14,10 +14,10 @@ export function getPropertyValues(
   dataset: IDataset,
   modelType?: ModelTypes
 ): any[] {
-  if (property === DatasetCohort.Index) {
+  if (property === DatasetCohortColumns.Index) {
     return indexes;
   }
-  if (property === DatasetCohort.PredictedY) {
+  if (property === DatasetCohortColumns.PredictedY) {
     const predictedYs = dataset.predicted_y;
     if (predictedYs) {
       return indexes.map((index) => {
@@ -26,7 +26,10 @@ export function getPropertyValues(
     }
   }
   const classNames = dataset.class_names;
-  if (classNames && property === DatasetCohort.ProbabilityY + classNames[0]) {
+  if (
+    classNames &&
+    property === DatasetCohortColumns.ProbabilityY + classNames[0]
+  ) {
     const probYs = dataset.probability_y;
     if (probYs) {
       return indexes.map((index) => {
@@ -34,7 +37,10 @@ export function getPropertyValues(
       });
     }
   }
-  if (classNames && property === DatasetCohort.ProbabilityY + classNames[1]) {
+  if (
+    classNames &&
+    property === DatasetCohortColumns.ProbabilityY + classNames[1]
+  ) {
     const probYs = dataset.probability_y;
     if (probYs) {
       return indexes.map((index) => {
@@ -50,7 +56,7 @@ export function getPropertyValues(
       return dataset.features[index][featureIndex];
     });
   }
-  if (property === DatasetCohort.TrueY) {
+  if (property === DatasetCohortColumns.TrueY) {
     return indexes.map((index) => {
       return dataset.true_y[index];
     });
@@ -80,14 +86,14 @@ function getErrors(
     }
     if (
       modelType === ModelTypes.Regression &&
-      property === DatasetCohort.RegressionError
+      property === DatasetCohortColumns.RegressionError
     ) {
       return indexes.map((index) => {
         return Math.abs(trueY[index] - predictedY[index]);
       });
     }
     if (
-      property === DatasetCohort.ClassificationError &&
+      property === DatasetCohortColumns.ClassificationError &&
       modelType &&
       IsBinary(modelType)
     ) {
@@ -96,7 +102,7 @@ function getErrors(
       });
     }
     if (
-      property === DatasetCohort.ClassificationError &&
+      property === DatasetCohortColumns.ClassificationError &&
       modelType &&
       IsMulticlass(modelType)
     ) {
