@@ -142,8 +142,9 @@ export class ModelOverview extends React.Component<
       this.context.dataset.task_type === DatasetTaskType.ObjectDetection
       ) {
       defaultSelectedMetrics = [
-        MultilabelMetrics.Mean,
-        MultilabelMetrics.HammingScore
+        ObjectDetectionMetrics.MeanAveragePrecision,
+        ObjectDetectionMetrics.AveragePrecision,
+        ObjectDetectionMetrics.AverageRecall
       ];
     } else {
       // task_type === "regression"

@@ -26,12 +26,19 @@ export const generateObjectDetectionStats: (
     const numLabels = jointDataset.numLabels;
     return selectionIndexes.map((selectionArray) => {
 
+        const count = selectionArray.length;
+
         // TODO: replace placeholder values with flask endpoint calls to python backend.
         let meanAveragePrecision = 42;
         let averagePrecision = 42;
         let averageRecall = 42;
 
         return [
+            {
+                key: TotalCohortSamples,
+                label: localization.Interpret.Statistics.samples,
+                stat: count
+              },
             {
               key: ObjectDetectionMetrics.MeanAveragePrecision,
               label: localization.Interpret.Statistics.meanAveragePrecision,
