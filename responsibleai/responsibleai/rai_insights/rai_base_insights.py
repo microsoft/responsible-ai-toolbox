@@ -60,7 +60,6 @@ class RAIBaseInsights(ABC):
         self.target_column = target_column
         self.task_type = task_type
         self._serializer = serializer
-        self._initialize_managers()
 
     @abstractmethod
     def _initialize_managers(self):

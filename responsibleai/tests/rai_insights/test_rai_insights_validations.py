@@ -24,7 +24,8 @@ TARGET = 'target'
 
 
 class TestRAIInsightsValidations:
-    def test_validate_unsupported_task_type(self):
+    @pytest.mark.parametrize("forecasting_enabled", [True, False])
+    def test_validate_unsupported_task_type(self, forecasting_enabled):
         X_train, X_test, y_train, y_test, _, _ = \
             create_iris_data()
 
@@ -32,15 +33,19 @@ class TestRAIInsightsValidations:
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
 
+        forecasting_extension = \
+            ", 'forecasting'" if forecasting_enabled else ""
         message = ("Unsupported task type 'regre'. "
-                   "Should be one of \\['classification', 'regression'\\]")
+                   "Should be one of \\['classification', 'regression'"
+                   f"{forecasting_extension}\\]")
         with pytest.raises(UserConfigValidationException, match=message):
             RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
                 target_column=TARGET,
-                task_type='regre')
+                task_type='regre',
+                forecasting_enabled=forecasting_enabled)
 
     def test_validate_test_data_size(self):
         X_train, X_test, y_train, y_test, _, _ = \
@@ -49,7 +54,6 @@ class TestRAIInsightsValidations:
         model = create_lightgbm_classifier(X_train, y_train)
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
-
         length = len(y_test)
         with pytest.warns(
                 UserWarning,
@@ -496,8 +500,9 @@ class TestRAIInsightsValidations:
         X_test[TARGET] = y_test
         feature_metadata = FeatureMetadata(identity_feature_name='id')
 
-        err_msg = ('The given identity feature name id is not present'
-                   f' in the provided features: {", ".join(X_train.columns)}.')
+        err_msg = (
+            'The given identity feature name id is not present '
+            f'in the provided features: {", ".join(X_train.columns)}.')
         with pytest.raises(UserConfigValidationException, match=err_msg):
             RAIInsights(
                 model=model,
@@ -648,10 +653,9 @@ class TestRAIInsightsValidations:
                 task_type='classification',
                 feature_metadata=feature_metadata)
 
-    @pytest.mark.skip(
-        "Skip forecasting validation test until forecasting is enabled.")
     def test_feature_metadata_forecasting_multiple_datetime_features(self):
-        X = pd.DataFrame(data=[[1, 1], [2, 3]], columns=['c1', 'c2'])
+        X = pd.DataFrame(data=[[1, 1], [2, 3]],
+                         columns=['c1', 'c2'])
         y = np.array([1, 0])
         model = MagicMock()
         model.forecast.return_value = y
@@ -668,7 +672,8 @@ class TestRAIInsightsValidations:
                 test=X,
                 target_column=TARGET,
                 task_type='forecasting',
-                feature_metadata=feature_metadata)
+                feature_metadata=feature_metadata,
+                forecasting_enabled=True)
 
 
 class TestCausalUserConfigValidations:

@@ -20,11 +20,17 @@ export function isTimeOrTimeSeriesIDColumn(
   featureName: string,
   featureMetaData?: IFeatureMetaData
 ): boolean {
-  if (featureMetaData) {
-    const isDatetimeFeature = featureMetaData.time_column_name === featureName;
+  // The if-condition below should always be true since these are all required
+  // for forecasting and validated upon building the model assessment context.
+  // The if statement exists merely to satisfy the compiler.
+  if (
+    featureMetaData?.datetime_features &&
+    featureMetaData.datetime_features.length > 0
+  ) {
+    const isDatetimeFeature =
+      featureMetaData.datetime_features[0] === featureName;
     const isTimeSeriesIdColumn =
-      featureMetaData.time_series_id_column_names?.includes(featureName) ??
-      false;
+      featureMetaData.time_series_id_features?.includes(featureName) ?? false;
     return isDatetimeFeature || isTimeSeriesIdColumn;
   }
   // If we don't have feature metadata then we can assume that there are no

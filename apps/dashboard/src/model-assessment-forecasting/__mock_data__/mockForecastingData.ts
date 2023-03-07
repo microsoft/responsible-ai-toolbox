@@ -69,7 +69,7 @@ export const mockForecastingData: IDataset = {
   categorical_features: categoricalFeatures,
   feature_metadata: {
     categorical_features: categoricalFeatures,
-    time_series_id_column_names: ["restaurant", "city"]
+    time_series_id_features: ["restaurant", "city"]
   },
   feature_names: [
     "ads",
