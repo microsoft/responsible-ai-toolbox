@@ -118,6 +118,7 @@ class _WrappedForecastingModel(BaseWrappedModel):
             inplace=True, drop=True)
         if len(self._time_series_id_features) == 0:
             return method(X=X_temp, fh=fh)
+
         # If there are potentially multiple time series in the data
         # we need to ensure that sktime receives data for all of them.
         # This is currently an issue in sktime:

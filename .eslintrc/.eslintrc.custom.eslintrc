@@ -123,7 +123,6 @@
           "target_column",
           "task_type",
           "test_data",
-          "datetime_features",
           "time_series_id_features",
           "treatment_feature",
           "treatment_gains",
