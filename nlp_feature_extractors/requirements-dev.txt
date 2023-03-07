@@ -1,4 +1,5 @@
 azure-storage-blob
 jupyter
+sktime
 transformers>=4.17.0
 torch

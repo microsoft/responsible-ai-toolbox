@@ -258,6 +258,15 @@ def test_responsibleaidashboard_multiclass_dnn_model_debugging():
 
 
 @pytest.mark.notebooks
+def test_responsibleaidashboard_orange_juice_forecasting():
+    nb_path = RESPONSIBLEAIDASHBOARD
+    nb_name = "responsibleaidashboard-orange-juice-forecasting"
+
+    test_values = {}
+    assay_one_notebook(nb_path, nb_name, test_values)
+
+
+@pytest.mark.notebooks
 def test_responsibleaidashboard_getting_started():
     nb_path = RESPONSIBLEAIDASHBOARD
     nb_name = "getting-started"

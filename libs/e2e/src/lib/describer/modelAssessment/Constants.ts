@@ -176,5 +176,16 @@ export enum Locators {
   AggregateBalanceMeasuresHeader = "#aggregateBalanceMeasures #aggregateBalanceMeasuresHeader",
   AggregateBalanceMeasuresTable = "#aggregateBalanceMeasures .ms-DetailsList",
   AggregateBalanceMeasuresTableColumns = "#aggregateBalanceMeasures .ms-DetailsList-headerWrapper div[aria-label]",
-  AggregateBalanceMeasuresTableRows = "#aggregateBalanceMeasures .ms-DetailsRow"
+  AggregateBalanceMeasuresTableRows = "#aggregateBalanceMeasures .ms-DetailsRow",
+  ForecastingDashboard = "#ModelAssessmentDashboard #ForecastingDashboard",
+  ForecastingTimeSeriesDropdown = "#ForecastingDashboard #ForecastingTimeSeriesDropdown",
+  ForecastingTimeSeriesDropdownOptions = "#ForecastingDashboard button[role='option']",
+  ForecastingTransformationCreationButton = "ForecastingWhatIfTransformationCreationButton",
+  ForecastingTransformationsTable = "#ForecastingDashboard #ForecastingWhatIfTransformationsTable",
+  ForecastingTransformationValueField = "#ForecastingWhatIfTransformationValueField",
+  ForecastingTransformationNameField = "#ForecastingWhatIfTransformationNameField",
+  ForecastingTransformationAddButton = "#ForecastingWhatIfAddTransformationButton",
+  ForecastingTransformationFeatureDropdown = "#ForecastingWhatIfTransformationFeatureDropdown",
+  ForecastingTransformationOperationDropdown = "#ForecastingWhatIfTransformationOperationDropdown",
+  ForecastingScenarioChart = "#ForecastingDashboard #ForecastScenarioChart"
 }

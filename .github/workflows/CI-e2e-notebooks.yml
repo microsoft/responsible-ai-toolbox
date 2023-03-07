@@ -49,7 +49,12 @@ jobs:
         operatingSystem: [ubuntu-latest, windows-latest]
         pythonVersion: [3.6, 3.7, 3.8, 3.9]
         flights: ["", "dataBalanceExperience"]
-        notebookGroup: ["nb_group_1", "nb_group_2"]
+        notebookGroup: ["nb_group_1", "nb_group_2", "nb_group_3"]
+        exclude:
+          # nb_group_3 includes only forecasting which doesn't change
+          # with the data balance experience flight
+          - notebookGroup: "nb_group_3"
+            flights: "dataBalanceExperience"
 
     runs-on: ${{ matrix.operatingSystem }}
 
@@ -126,6 +131,12 @@ jobs:
           yarn e2e-widget -n "responsibleaidashboard-housing-classification-model-debugging" -f ${{ matrix.flights }}
           yarn e2e-widget -n "responsibleaidashboard-diabetes-decision-making" -f ${{ matrix.flights }}
           yarn e2e-widget -n "responsibleaidashboard-multiclass-dnn-model-debugging" -f ${{ matrix.flights }}
+      
+      - if: ${{ matrix.notebookGroup == 'nb_group_3'}}
+        name: Run widget tests
+        shell: bash -l {0}
+        run: |
+          yarn e2e-widget -n "responsibleaidashboard-orange-juice-forecasting" -f ${{ matrix.flights }}
 
       - name: Upload e2e test screen shot
         if: always()

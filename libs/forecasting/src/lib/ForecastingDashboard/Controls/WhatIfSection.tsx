@@ -35,6 +35,7 @@ export class WhatIfSection extends React.Component<IWhatIfSectionProps> {
       <>
         <Stack.Item>
           <PrimaryButton
+            id="ForecastingWhatIfTransformationCreationButton"
             disabled={false}
             onClick={this.props.onClickWhatIfButton}
             text={localization.Forecasting.TransformationCreation.title}
@@ -42,7 +43,7 @@ export class WhatIfSection extends React.Component<IWhatIfSectionProps> {
         </Stack.Item>
 
         {this.props.transformations.size > 0 && (
-          <Stack.Item>
+          <Stack.Item id="ForecastingWhatIfTransformationsTable">
             <TransformationsTable
               transformations={this.props.transformations}
               jointDataset={this.context.jointDataset}

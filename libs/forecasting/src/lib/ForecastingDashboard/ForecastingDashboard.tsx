@@ -117,6 +117,7 @@ export class ForecastingDashboard extends React.Component<
               </Text>
             ) : (
               <Dropdown
+                id="ForecastingTimeSeriesDropdown"
                 label={localization.Forecasting.timeSeries}
                 className={classNames.dropdown}
                 options={this.state.timeSeriesOptions}
