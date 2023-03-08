@@ -11,6 +11,7 @@ import {
   PivotItem,
   ActionButton,
   MessageBar,
+  Slider,
   Toggle
 } from "@fluentui/react";
 import {
@@ -212,6 +213,15 @@ export class ModelOverview extends React.Component<
       IsMulticlass(this.context.jointDataset.getModelType())
     );
 
+    const selectableAggregateMethods : IComboBoxOption[] = [
+      { key: localization.ModelAssessment.ModelOverview.metricTypes.macro,
+        text: localization.ModelAssessment.ModelOverview.metricTypes.macro },
+      { key: localization.ModelAssessment.ModelOverview.metricTypes.micro,
+        text: localization.ModelAssessment.ModelOverview.metricTypes.micro }
+    ];
+
+    const iouSliderValueFormat = (value: number) => `IoU=${value}%`;
+
     const columns: string[] = [
       localization.ModelAssessment.ModelOverview.countColumnHeader
     ];
@@ -318,6 +328,21 @@ export class ModelOverview extends React.Component<
                   .helpMeChooseMetricsButton
               }
             </ActionButton>
+            <ComboBox
+              id="modelOverviewAggregateMethod"
+              label={localization.ModelAssessment.ModelOverview.metricsTypeDropdown}
+              selectedKey={localization.ModelAssessment.ModelOverview.metricTypes.macro}
+              options={selectableAggregateMethods}
+              className={classNames.dropdown}
+              styles={FluentUIStyles.limitedSizeMenuDropdown}
+            />
+            <Slider
+              id="iouThreshold"
+              label={localization.ModelAssessment.ModelOverview.iouThresholdDropdown}
+              max={100}
+              valueFormat={iouSliderValueFormat}
+              showValue
+            />
           </Stack>
           {!this.state.datasetCohortViewIsVisible && (
             <Stack
