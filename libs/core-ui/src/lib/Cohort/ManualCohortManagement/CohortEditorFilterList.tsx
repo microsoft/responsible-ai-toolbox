@@ -18,7 +18,7 @@ export interface ICohortEditorFilterList {
   compositeFilters: ICompositeFilter[];
   jointDataset: JointDataset;
   datasetFeatureRanges?: { [key: string]: INumericRange | ICategoricalRange };
-  isRemoveJointDatasetFlightOn?: boolean;
+  isRefactorFlightOn?: boolean;
   editFilter?(index: number): void;
   removeFilter?(index: number): void;
   removeCompositeFilter?(index: number): void;
@@ -36,7 +36,7 @@ export class CohortEditorFilterList extends React.Component<ICohortEditorFilterL
         <FilterList
           filters={this.props.filters}
           jointDataset={this.props.jointDataset}
-          isRemoveJointDatasetFlightOn={this.props.isRemoveJointDatasetFlightOn}
+          isRefactorFlightOn={this.props.isRefactorFlightOn}
           datasetFeatureRanges={this.props.datasetFeatureRanges}
           editFilter={this.props.editFilter}
           removeFilter={this.props.removeFilter}

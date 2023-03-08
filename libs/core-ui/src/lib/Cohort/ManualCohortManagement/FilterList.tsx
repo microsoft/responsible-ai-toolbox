@@ -20,7 +20,7 @@ export interface IFilterListProps {
   filters: IFilter[];
   jointDataset: JointDataset;
   datasetFeatureRanges?: { [key: string]: INumericRange | ICategoricalRange };
-  isRemoveJointDatasetFlightOn?: boolean;
+  isRefactorFlightOn?: boolean;
   editFilter?(index: number): void;
   removeFilter?(index: number): void;
 }
@@ -72,7 +72,7 @@ export class FilterList extends React.Component<IFilterListProps> {
     let abbridgedLabel = "";
     let isCategorical;
     let sortedCategoricalValues: string[] | undefined;
-    if (this.props.isRemoveJointDatasetFlightOn) {
+    if (this.props.isRefactorFlightOn) {
       abbridgedLabel = getFilterLabel(filter.column);
       const range = this.props.datasetFeatureRanges
         ? this.props.datasetFeatureRanges[filter.column]

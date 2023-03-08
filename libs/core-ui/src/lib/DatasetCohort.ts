@@ -6,7 +6,6 @@ import {
   INumericRange,
   RangeTypes
 } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
 
 import { ErrorCohortStats, MetricCohortStats } from "./Cohort/CohortStats";
 import { CohortSource, Metrics } from "./Cohort/Constants";

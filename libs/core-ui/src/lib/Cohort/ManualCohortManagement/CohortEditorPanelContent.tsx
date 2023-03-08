@@ -129,7 +129,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
         <Stack.Item>
           <CohortEditorFilterList
             datasetFeatureRanges={this.props.datasetFeatureRanges}
-            isRemoveJointDatasetFlightOn={this.isRefactorFlightOn}
+            isRefactorFlightOn={this.isRefactorFlightOn}
             compositeFilters={this.props.compositeFilters}
             editFilter={this.editFilter}
             removeCompositeFilter={this.removeCompositeFilter}
