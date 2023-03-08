@@ -336,6 +336,17 @@ export class ModelOverview extends React.Component<
               className={classNames.dropdown}
               styles={FluentUIStyles.limitedSizeMenuDropdown}
             />
+            <ComboBox
+              id="modelOverviewClassSelection"
+              placeholder={
+                localization.ModelAssessment.ModelOverview
+                .classSelectionDropdownPlaceholder
+              }
+              label={localization.ModelAssessment.ModelOverview.classSelectionDropdown}
+              options={this.context.dataset.class_names}
+              className={classNames.dropdown}
+              styles={FluentUIStyles.limitedSizeMenuDropdown}
+            />
             <Slider
               id="iouThreshold"
               label={localization.ModelAssessment.ModelOverview.iouThresholdDropdown}

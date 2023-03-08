@@ -1746,6 +1746,7 @@
         "macro": "Macro",
         "micro": "Micro"
       },
+      "classSelectionDropdown": "Select class(es)",
       "iouThresholdDropdown": "IoU Threshold",
       "notAvailable": "N/A",
       "countColumnHeader": "Sample size",
@@ -1759,6 +1760,7 @@
       "probabilityForClassSelectionHeader": "Probability for class",
       "targetSelectionHeader": "Target",
       "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
+      "classSelectionDropdownPlaceholder": "None selected",
       "featureSelectionDropdownPlaceholder": "Select features to use for a feature-based analysis.",
       "probabilityDistributionPivotItem": "Probability distribution",
       "regressionDistributionPivotItem": "Target distribution",
