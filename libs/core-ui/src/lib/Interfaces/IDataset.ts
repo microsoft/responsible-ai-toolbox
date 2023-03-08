@@ -26,7 +26,7 @@ export interface IDataset {
   is_large_data_scenario?: boolean;
   use_entire_test_data?: boolean;
   class_names?: string[];
-  target_column?: string | string[] | string[][];
+  target_column?: string | string[];
   data_balance_measures?: IDataBalanceMeasures;
   feature_metadata?: IFeatureMetaData;
   images?: string[];
