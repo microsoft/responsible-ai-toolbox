@@ -220,6 +220,16 @@ export class ModelOverview extends React.Component<
         text: localization.ModelAssessment.ModelOverview.metricTypes.micro }
     ];
 
+    const selectableClassNames : IComboBoxOption[] = []
+    if (this.context.dataset.class_names) {
+      for (var class_name of this.context.dataset.class_names) {
+        selectableClassNames.push({
+          key: class_name,
+          text: class_name
+        })
+      }
+    }
+
     const iouSliderValueFormat = (value: number) => `IoU=${value}%`;
 
     const columns: string[] = [
@@ -343,7 +353,7 @@ export class ModelOverview extends React.Component<
                 .classSelectionDropdownPlaceholder
               }
               label={localization.ModelAssessment.ModelOverview.classSelectionDropdown}
-              options={this.context.dataset.class_names}
+              options={selectableClassNames}
               className={classNames.dropdown}
               styles={FluentUIStyles.limitedSizeMenuDropdown}
             />
