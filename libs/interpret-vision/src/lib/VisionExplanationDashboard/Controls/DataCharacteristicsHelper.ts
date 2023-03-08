@@ -6,6 +6,7 @@ import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 
 import { ISearchable } from "../Interfaces/ISearchable";
+import { getJoinedLabelString } from "../utils/labelUtils";
 
 export interface IDataCharacteristicsProps extends ISearchable {
   items: IVisionListItem[];
@@ -70,8 +71,16 @@ function generateItems(type: string, examples: IVisionListItem[]): IItemsData {
   const labelVisibilities: Map<string, boolean> = new Map();
   const selectedKeys: string[] = [];
   examples.forEach((example) => {
-    const label = example[type].toString();
-    if (!label || !items) {
+    let label = "";
+    if (type === labelTypes.predictedY) {
+      label = getJoinedLabelString(example.predictedY);
+    } else if (type === labelTypes.trueY) {
+      label = getJoinedLabelString(example.trueY);
+    } else {
+      label = example[type].toString();
+    }
+
+    if (!items) {
       return;
     }
     if (!selectedKeys.includes(label)) {

@@ -309,7 +309,7 @@ class TestMatrixFilter(object):
         # Test quantile binning on CRIM feature in california housing dataset,
         # which errored out due to first category not fitting into bins
         (X_train, X_test, y_train, y_test,
-            feature_names) = create_housing_data(test_size=0.5)
+            feature_names) = create_housing_data()
 
         model_task = ModelTask.REGRESSION
         matrix_features = ['Population']

@@ -68,7 +68,6 @@ export class LargeDatasetExplorerChartArea extends React.PureComponent<ILargeDat
     const isHistogramOrBoxChart =
       chartProps.chartType === ChartTypes.Histogram ||
       chartProps.chartType === ChartTypes.Box;
-    const isScatterChart = chartProps.chartType === ChartTypes.Scatter;
 
     return (
       <Stack.Item className={classNames.chart}>
@@ -81,7 +80,7 @@ export class LargeDatasetExplorerChartArea extends React.PureComponent<ILargeDat
                   selectedColumn={chartProps.yAxis}
                   canBin={false}
                   mustBin={false}
-                  canDither={isScatterChart}
+                  canDither={false}
                   allowTreatAsCategorical={isHistogramOrBoxChart}
                   allowLogarithmicScaling={
                     isHistogramOrBoxChart || !isBubbleChartRendered
@@ -98,6 +97,7 @@ export class LargeDatasetExplorerChartArea extends React.PureComponent<ILargeDat
                     ].label
                   }
                   disabled={isBubbleChartDataLoading}
+                  removeCount={!isHistogramOrBoxChart}
                 />
               </Stack.Item>
             </Stack.Item>
@@ -137,7 +137,7 @@ export class LargeDatasetExplorerChartArea extends React.PureComponent<ILargeDat
             allowLogarithmicScaling={
               isHistogramOrBoxChart || !isBubbleChartRendered
             }
-            canDither={isScatterChart}
+            canDither={false}
             onAccept={onXSet}
             buttonText={
               this.context.jointDataset.metaDict[chartProps.xAxis.property]
@@ -148,6 +148,7 @@ export class LargeDatasetExplorerChartArea extends React.PureComponent<ILargeDat
                 .label
             }
             disabled={isBubbleChartDataLoading}
+            removeCount={!isHistogramOrBoxChart}
           />
         </Stack.Item>
       </Stack.Item>

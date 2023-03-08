@@ -80,3 +80,25 @@ def create_titanic_pipeline(X_train, y_train):
                            LogisticRegression(solver='lbfgs'))])
     clf.fit(X_train, y_train)
     return clf
+
+
+def create_complex_classification_pipeline(
+        X_train, y_train, continuous_features, categorical_features):
+    # We create the preprocessing pipelines for both
+    # numeric and categorical data.
+    numeric_transformer = Pipeline(steps=[
+        ('scaler', StandardScaler())])
+
+    categorical_transformer = Pipeline(steps=[
+        ('onehot', OneHotEncoder(handle_unknown='ignore'))])
+
+    transformations = ColumnTransformer(
+        transformers=[
+            ('num', numeric_transformer, continuous_features),
+            ('cat', categorical_transformer, categorical_features)])
+
+    # Append classifier to preprocessing pipeline.
+    # Now we have a full prediction pipeline.
+    pipeline = Pipeline(steps=[('preprocessor', transformations),
+                               ('classifier', RandomForestClassifier())])
+    return pipeline.fit(X_train, y_train)

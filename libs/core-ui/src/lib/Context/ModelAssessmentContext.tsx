@@ -76,6 +76,15 @@ export interface IModelAssessmentContext {
     absoluteIndex: number,
     abortSignal: AbortSignal
   ) => Promise<any>;
+  requestLocalCausalEffects?: (
+    causalId: string,
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<ICausalAnalysisData>;
+  requestTestDataRow?: (
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   requestGlobalCausalEffects?: (
     id: string,
     filter: unknown[],
@@ -120,6 +129,10 @@ export interface IModelAssessmentContext {
   requestExp?:
     | ((index: number, abortSignal: AbortSignal) => Promise<any[]>)
     | undefined;
+  requestSplinePlotDistribution?: (
+    request: any,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   requestForecast?: (
     request: any[],
     abortSignal: AbortSignal

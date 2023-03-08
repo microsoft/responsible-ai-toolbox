@@ -44,7 +44,7 @@ export const DiabetesDecisionMaking = {
     initialCohorts: [
       {
         metrics: {
-          meanAbsoluteError: "3 859.27",
+          meanAbsoluteError: "43.363",
           meanPrediction: "154.102",
           meanSquaredError: "2 981.101"
         },
@@ -53,7 +53,7 @@ export const DiabetesDecisionMaking = {
       },
       {
         metrics: {
-          meanAbsoluteError: "1 961.23",
+          meanAbsoluteError: "51.611",
           meanPrediction: "196.629",
           meanSquaredError: "4 014.697"
         },
@@ -62,7 +62,7 @@ export const DiabetesDecisionMaking = {
       },
       {
         metrics: {
-          meanAbsoluteError: "983.52",
+          meanAbsoluteError: "49.176",
           meanPrediction: "142.495",
           meanSquaredError: "3 829.201"
         },
@@ -71,7 +71,7 @@ export const DiabetesDecisionMaking = {
       },
       {
         metrics: {
-          meanAbsoluteError: "2 084.21",
+          meanAbsoluteError: "40.867",
           meanPrediction: "115.086",
           meanSquaredError: "2 416.75"
         },
@@ -80,7 +80,7 @@ export const DiabetesDecisionMaking = {
       },
       {
         metrics: {
-          meanAbsoluteError: "3 744.86",
+          meanAbsoluteError: "43.044",
           meanPrediction: "155.306",
           meanSquaredError: "2 972.126"
         },
@@ -89,7 +89,7 @@ export const DiabetesDecisionMaking = {
       },
       {
         metrics: {
-          meanAbsoluteError: "3 597.63",
+          meanAbsoluteError: "57.105",
           meanPrediction: "157.301",
           meanSquaredError: "4 154.723"
         },
@@ -99,7 +99,7 @@ export const DiabetesDecisionMaking = {
     ],
     newCohort: {
       metrics: {
-        meanAbsoluteError: "3 858.02",
+        meanAbsoluteError: "43.841",
         meanPrediction: "153.958",
         meanSquaredError: "3 014.96"
       },

@@ -8,7 +8,7 @@ import {
   ComboBox,
   IComboBox,
   IComboBoxOption,
-  SpinButton
+  TextField
 } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
@@ -28,9 +28,9 @@ import {
 export interface ITransformationCreationContinuousProps {
   transformationOperation?: Operation;
   transformationFeature?: Feature;
-  transformationValue: number;
+  transformationValue: string;
   transformationValueErrorMessage?: string;
-  onChangeTransformationValue: (newValue: number) => void;
+  onChangeTransformationValue: (newValue: string) => void;
   onChangeTransformationOperation: (operation: Operation) => void;
 }
 
@@ -89,9 +89,8 @@ export class TransformationCreationContinuous extends React.Component<ITransform
                     .valueSpinButtonHeader
                 }
               </Label>
-              <SpinButton
-                min={this.props.transformationOperation.minValue}
-                max={this.props.transformationOperation.maxValue}
+              <TextField
+                type="number"
                 step={this.transformationValueStep}
                 value={this.props.transformationValue.toString()}
                 className={classNames.smallDropdown}
@@ -122,8 +121,8 @@ export class TransformationCreationContinuous extends React.Component<ITransform
     _event: React.SyntheticEvent<HTMLElement>,
     newValue?: string
   ): void => {
-    if (newValue) {
-      this.props.onChangeTransformationValue(Number(newValue));
+    if (newValue !== undefined) {
+      this.props.onChangeTransformationValue(newValue);
     }
   };
 

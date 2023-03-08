@@ -21,7 +21,7 @@ import { CausalIndividualStyles } from "./CausalIndividual.styles";
 import { CausalIndividualChart } from "./CausalIndividualChart";
 
 export interface ICausalIndividualViewProps {
-  localEffects: ICausalAnalysisSingleData[][];
+  localEffects?: ICausalAnalysisSingleData[][];
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 interface ICausalIndividualViewState {

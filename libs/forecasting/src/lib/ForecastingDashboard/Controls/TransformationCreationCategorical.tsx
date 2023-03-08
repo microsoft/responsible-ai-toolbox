@@ -22,9 +22,8 @@ import { Operation, Feature } from "../Interfaces/Transformation";
 export interface ITransformationCreationCategoricalProps {
   transformationOperation?: Operation;
   transformationFeature?: Feature;
-  transformationValue: number;
   transformationValueErrorMessage?: string;
-  onChangeTransformationValue: (newValue: number) => void;
+  onChangeTransformationValue: (newValue: string) => void;
 }
 
 export class TransformationCreationCategorical extends React.Component<ITransformationCreationCategoricalProps> {
@@ -72,6 +71,7 @@ export class TransformationCreationCategorical extends React.Component<ITransfor
           {options && options.length === 1 && <Text>{options[0]}</Text>}
           {options && options.length > 1 && (
             <ComboBox
+              defaultSelectedKey={options[0].key.toString()}
               options={options}
               onChange={this.onChangeTransformationValue}
             />
@@ -100,7 +100,7 @@ export class TransformationCreationCategorical extends React.Component<ITransfor
     option?: IComboBoxOption | undefined
   ): void => {
     if (option) {
-      this.props.onChangeTransformationValue(Number(option.key));
+      this.props.onChangeTransformationValue(option.key.toString());
     }
   };
 }
