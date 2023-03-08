@@ -19,8 +19,6 @@ import {
   ModelAssessmentContext,
   BinaryClassificationMetrics,
   RegressionMetrics,
-  generateMetrics,
-  JointDataset,
   ModelTypes,
   MultilabelMetrics,
   FluentUIStyles,
@@ -44,6 +42,7 @@ import { DisaggregatedAnalysisTable } from "./DisaggregatedAnalysisTable";
 import { generateOverlappingFeatureBasedCohorts } from "./DisaggregatedAnalysisUtils";
 import { FeatureConfigurationFlyout } from "./FeatureConfigurationFlyout";
 import { MetricConfigurationFlyout } from "./MetricConfigurationFlyout";
+import { generateMetricsCohortsCombined } from "./Metrics";
 import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewChartPivot } from "./ModelOverviewChartPivot";
 import { getSelectableMetrics } from "./StatsTableUtils";
@@ -62,6 +61,7 @@ interface IModelOverviewState {
   datasetCohortViewIsVisible: boolean;
   datasetCohortChartIsVisible: boolean;
   featureConfigurationIsVisible: boolean;
+  isDatasetCohortMetricCalcaulationInProgress: boolean;
   metricConfigurationIsVisible: boolean;
   showHeatmapColors: boolean;
   datasetCohortLabeledStatistics: ILabeledStatistic[][];
@@ -93,6 +93,7 @@ export class ModelOverview extends React.Component<
       featureBasedCohortLabeledStatistics: [],
       featureBasedCohorts: [],
       featureConfigurationIsVisible: false,
+      isDatasetCohortMetricCalcaulationInProgress: false,
       metricConfigurationIsVisible: false,
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
@@ -168,30 +169,36 @@ export class ModelOverview extends React.Component<
         return errorCohort.cohort.getCohortID();
       }
     );
-    if (!this.ifCohortIndexesEquals(newDatasetCohortIDs, oldDatasetCohortIDs)) {
-      const addCohortIDs = newDatasetCohortIDs.filter(
-        (x) => !oldDatasetCohortIDs.includes(x)
-      );
-      const deleteCohortIDs = oldDatasetCohortIDs.filter(
-        (x) => !newDatasetCohortIDs.includes(x)
-      );
-      if (addCohortIDs.length > 0) {
-        this.setState(
-          {
-            selectedDatasetCohorts:
-              this.state.selectedDatasetCohorts?.concat(addCohortIDs)
-          },
-          () => this.updateDatasetCohortStats()
+    if (!this.state.isDatasetCohortMetricCalcaulationInProgress) {
+      if (
+        !this.ifCohortIndexesEquals(newDatasetCohortIDs, oldDatasetCohortIDs)
+      ) {
+        const addCohortIDs = newDatasetCohortIDs.filter(
+          (x) => !oldDatasetCohortIDs.includes(x)
         );
-      } else if (deleteCohortIDs.length > 0) {
-        this.setState(
-          {
-            selectedDatasetCohorts: this.state.selectedDatasetCohorts?.filter(
-              (x) => !deleteCohortIDs.includes(x)
-            )
-          },
-          () => this.updateDatasetCohortStats()
+        const deleteCohortIDs = oldDatasetCohortIDs.filter(
+          (x) => !newDatasetCohortIDs.includes(x)
         );
+        if (addCohortIDs.length > 0) {
+          this.setState(
+            {
+              isDatasetCohortMetricCalcaulationInProgress: true,
+              selectedDatasetCohorts:
+                this.state.selectedDatasetCohorts?.concat(addCohortIDs)
+            },
+            () => this.updateDatasetCohortStats()
+          );
+        } else if (deleteCohortIDs.length > 0) {
+          this.setState(
+            {
+              isDatasetCohortMetricCalcaulationInProgress: true,
+              selectedDatasetCohorts: this.state.selectedDatasetCohorts?.filter(
+                (x) => !deleteCohortIDs.includes(x)
+              )
+            },
+            () => this.updateDatasetCohortStats()
+          );
+        }
       }
     }
   }
@@ -201,6 +208,17 @@ export class ModelOverview extends React.Component<
       return (
         <MissingParametersPlaceholder>
           {localization.Interpret.ModelPerformance.missingParameters}
+        </MissingParametersPlaceholder>
+      );
+    }
+
+    if (this.state.datasetCohortLabeledStatistics.length === 0) {
+      return (
+        <MissingParametersPlaceholder>
+          {
+            localization.Interpret.ModelPerformance
+              .missingDatasetCohortStatistics
+          }
         </MissingParametersPlaceholder>
       );
     }
@@ -495,18 +513,16 @@ export class ModelOverview extends React.Component<
     );
   }
 
-  private updateDatasetCohortStats(): void {
-    const datasetCohortMetricStats = generateMetrics(
-      this.context.jointDataset,
-      this.context.errorCohorts.map((errorCohort) =>
-        errorCohort.cohort.unwrap(JointDataset.IndexLabel)
-      ),
-      this.context.modelMetadata.modelType
+  private async updateDatasetCohortStats(): Promise<void> {
+    const datasetCohortMetricStats = await generateMetricsCohortsCombined(
+      this.context,
+      this.context.errorCohorts
     );
 
     this.setState({
       datasetBasedCohorts: this.context.errorCohorts,
-      datasetCohortLabeledStatistics: datasetCohortMetricStats
+      datasetCohortLabeledStatistics: datasetCohortMetricStats,
+      isDatasetCohortMetricCalcaulationInProgress: false
     });
   }
 
@@ -520,12 +536,9 @@ export class ModelOverview extends React.Component<
       this.state.selectedFeaturesContinuousFeatureBins
     );
 
-    const featureCohortMetricStats = generateMetrics(
-      this.context.jointDataset,
-      featureBasedCohorts.map((errorCohort) =>
-        errorCohort.cohort.unwrap(JointDataset.IndexLabel)
-      ),
-      this.context.modelMetadata.modelType
+    const featureCohortMetricStats = await generateMetricsCohortsCombined(
+      this.context,
+      featureBasedCohorts
     );
 
     this.setState({
