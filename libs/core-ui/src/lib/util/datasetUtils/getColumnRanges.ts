@@ -134,7 +134,11 @@ function getRegressionErrorFeatureRange(
       if (Array.isArray(trueY) || Array.isArray(predictedY)) {
         return;
       }
-      regressionErrors.push(Math.abs(trueY - predictedY));
+      if (typeof trueY !== "string" && typeof predictedY !== "string") {
+        regressionErrors.push(Math.abs(trueY - predictedY));
+      } else {
+        regressionErrors.push(0);
+      }
     }
     return {
       max: _.max(regressionErrors) || 0,
@@ -151,7 +155,7 @@ function getRegressionErrorFeatureRange(
 function getRange(
   dataset: IDataset,
   modelType: ModelTypes,
-  values: number[] | number[][],
+  values: number[] | number[][] | string[],
   property: string,
   ranges: { [key: string]: IColumnRange }
 ): void {
@@ -163,7 +167,11 @@ function getRange(
       // this for loop is only to let it make sure values is a 1D array, so it can be used with _.max and _.min
       values.forEach((value) => {
         if (!Array.isArray(value)) {
-          numbers.push(value);
+          if (typeof value !== "string") {
+            numbers.push(value);
+          } else {
+            numbers.push(0);
+          }
         }
       });
       ranges[property] = {

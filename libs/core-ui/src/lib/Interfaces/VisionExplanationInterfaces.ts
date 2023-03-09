@@ -4,8 +4,8 @@
 import { DatasetTaskType } from "./IDataset";
 export interface IVisionExplanationDashboardData {
   task_type: DatasetTaskType;
-  true_y: number[] | number[][];
-  predicted_y: number[] | number[][];
+  true_y: number[] | number[][] | string[];
+  predicted_y: number[] | number[][] | string[];
   features?: unknown[][];
   feature_names?: string[];
   class_names: string[];

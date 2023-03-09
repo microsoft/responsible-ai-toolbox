@@ -32,6 +32,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       | "requestExp"
       | "requestObjectDetectionMetrics"
       | "requestPredictions"
+      | "requestQuestionAnsweringMetrics"
       | "requestDebugML"
       | "requestMatrix"
       | "requestImportances"
@@ -71,6 +72,19 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       };
       callBack.requestPredictions = async (data: any[]): Promise<any[]> => {
         return callFlaskService(this.props.config, data, "/predict");
+      };
+      callBack.requestQuestionAnsweringMetrics = async (
+        trueY: number[][][],
+        predictedY: number[][][],
+        aggregateMethod: string,
+        className: string,
+        iouThresh: number
+      ): Promise<any[]> => {
+        return callFlaskService(
+          this.props.config,
+          [trueY, predictedY, aggregateMethod, className, iouThresh],
+          "/get_question_answering_metrics"
+        );
       };
       callBack.requestMatrix = async (
         data: any[]
