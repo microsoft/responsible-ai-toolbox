@@ -69,13 +69,13 @@ export class JointDataset {
 
   // these properties should only be accessed by Cohort class,
   // which enables independent filtered views of this data
-  public dataDict: Array<{ [key: string]: number | number[] }> | undefined;
+  public dataDict: Array<{ [key: string]: number }> | undefined;
   public binDict: { [key: string]: number[] | undefined } = {};
 
   private readonly _modelMeta: IExplanationModelMetadata;
   // private readonly _localExplanationIndexesComputed: boolean[];
   // The user elected to treat numeric columns as categorical. Store the unaltered values here in case they toggle back.
-  private numericValuedColumnsCache: Array<{ [key: string]: number | number[] }> = [];
+  private numericValuedColumnsCache: Array<{ [key: string]: number }> = [];
 
   // Can add method to set dither scale in future, update charts on change.
   private readonly ditherScale = 0.1;
@@ -668,7 +668,7 @@ export class JointDataset {
     labelColName: string,
     abbridgedLabel: string,
     label: string,
-    targetColumn?: string | string[] | string[][]
+    targetColumn?: string | string[]
   ): void {
     this.initializeDataDictIfNeeded(values);
     values.forEach((val, index) => {
@@ -696,7 +696,16 @@ export class JointDataset {
         // check if values is a 2d array
         const indexedValues = values[i];
         if (Array.isArray(indexedValues)) {
-          singleLabelValues = indexedValues;
+          // checking for object detection scenario
+          if (Array.isArray(indexedValues[0])) {
+            for (var object_arr of indexedValues) {
+              // pushing object labels for the image
+              singleLabelValues.push(object_arr[0])
+            }
+          }
+          else {
+            singleLabelValues = indexedValues;
+          }
         }
       } else if (!Array.isArray(values)) {
         singleLabelValues = values;

@@ -22,7 +22,7 @@ export interface IJointDatasetArgs {
     | ISingleClassLocalFeatureImportance;
   metadata: IExplanationModelMetadata;
   featureMetaData?: IFeatureMetaData;
-  targetColumn?: string | string[] | string[][];
+  targetColumn?: string | string[];
 }
 
 export enum ColumnCategories {
