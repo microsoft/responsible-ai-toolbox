@@ -4,8 +4,8 @@
 import { fridge } from "../model-assessment-vision/__mock_data__/fridge";
 import { fridgeBinary } from "../model-assessment-vision/__mock_data__/fridgeBinary";
 import { fridgeMultilabel } from "../model-assessment-vision/__mock_data__/fridgeMultilabel";
-import { imagenet } from "../model-assessment-vision/__mock_data__/imagenet";
 import { fridgeObjectDetection } from "../model-assessment-vision/__mock_data__/fridgeObjectDetection";
+import { imagenet } from "../model-assessment-vision/__mock_data__/imagenet";
 
 import {
   IDataSet,

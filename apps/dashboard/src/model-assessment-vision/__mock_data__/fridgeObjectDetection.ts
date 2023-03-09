@@ -9,7 +9,8 @@ export const fridgeObjectDetection: IDataset = {
   categorical_features: [],
   class_names: ["can", "carton", "milk_bottle", "water_bottle"],
   feature_names: ["mean_pixel_value"],
-  features: [[100.65330159819138],
+  features: [
+    [100.65330159819138],
     [96.88715067773184],
     [98.36011562664869],
     [100.53961576807268],
@@ -136,7 +137,8 @@ export const fridgeObjectDetection: IDataset = {
     [96.268384617082],
     [100.52475220711693],
     [97.42437928910874],
-    [99.57597176334652]],
+    [99.57597176334652]
+  ],
   images: fridgeObjectDetectionImages,
   predicted_y: [
     [0, 1, 0, 0],
@@ -266,10 +268,12 @@ export const fridgeObjectDetection: IDataset = {
     [0, 1, 0, 0],
     [0, 1, 0, 0],
     [0, 1, 0, 0],
-    [1, 0, 0, 0]],
+    [1, 0, 0, 0]
+  ],
   target_column: "label",
   task_type: DatasetTaskType.ObjectDetection,
-  true_y: [[0, 1, 0, 0],
+  true_y: [
+    [0, 1, 0, 0],
     [0, 1, 1, 0],
     [1, 0, 0, 0],
     [0, 0, 0, 1],
@@ -396,5 +400,6 @@ export const fridgeObjectDetection: IDataset = {
     [0, 1, 0, 0],
     [0, 1, 0, 0],
     [0, 1, 0, 0],
-    [1, 0, 0, 0]]
+    [1, 0, 0, 0]
+  ]
 };
