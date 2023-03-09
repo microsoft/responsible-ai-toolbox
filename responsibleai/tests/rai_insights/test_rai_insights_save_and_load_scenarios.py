@@ -8,12 +8,15 @@ from tempfile import TemporaryDirectory
 import numpy as np
 import pandas as pd
 import pytest
-from tests.common_utils import (create_adult_income_dataset,
-                                create_binary_classification_dataset,
-                                create_complex_classification_pipeline,
-                                create_iris_data, create_lightgbm_classifier)
+from tests.common_utils import create_adult_income_dataset, create_iris_data
 
-from responsibleai import ModelTask, RAIInsights
+from rai_test_utils.datasets.tabular import \
+    create_binary_classification_dataset
+from rai_test_utils.models.lightgbm import create_lightgbm_classifier
+from rai_test_utils.models.sklearn import \
+    create_complex_classification_pipeline
+from raiutils.models import ModelTask
+from responsibleai import RAIInsights
 from responsibleai._internal.constants import (ManagerNames,
                                                SerializationAttributes)
 from responsibleai.feature_metadata import FeatureMetadata
@@ -301,18 +304,23 @@ def validate_rai_insights(
     if feature_columns is not None:
         assert rai_insights._feature_columns == (feature_columns or [])
     if feature_metadata is not None:
+        # mismatch between categorical_features passed in RAIInsights
+        # constructor and the categorical_features set on the feature_metadata
+        if (categorical_features is not None and
+                feature_metadata.categorical_features is None):
+            feature_metadata.categorical_features = categorical_features
         assert rai_insights._feature_metadata == feature_metadata
     assert target_column not in rai_insights._feature_columns
 
     if rai_insights.model is None:
-        assert rai_insights.predict_output is None
-        assert rai_insights.predict_proba_output is None
+        assert rai_insights._predict_output is None
+        assert rai_insights._predict_proba_output is None
     else:
-        assert rai_insights.predict_output is not None
+        assert rai_insights._predict_output is not None
         if task_type == ModelTask.CLASSIFICATION:
-            assert rai_insights.predict_proba_output is not None
-            assert isinstance(rai_insights.predict_proba_output, np.ndarray)
-            assert len(rai_insights.predict_proba_output.tolist()[0]) == \
+            assert rai_insights._predict_proba_output is not None
+            assert isinstance(rai_insights._predict_proba_output, np.ndarray)
+            assert len(rai_insights._predict_proba_output.tolist()[0]) == \
                 len(rai_insights._classes)
 
     if task_type == ModelTask.CLASSIFICATION:

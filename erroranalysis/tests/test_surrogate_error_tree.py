@@ -16,12 +16,13 @@ from erroranalysis._internal.constants import (ARG, COLUMN, COMPOSITE_FILTERS,
                                                SPLIT_FEATURE, SPLIT_INDEX,
                                                TRUE_Y, CohortFilterMethods,
                                                CohortFilterOps, Metrics,
-                                               ModelTask)
+                                               ModelTask, regression_metrics)
 from erroranalysis._internal.error_analyzer import (ModelAnalyzer,
                                                     PredictionsAnalyzer)
 from erroranalysis._internal.surrogate_error_tree import (
-    TreeSide, cache_subtree_features, create_surrogate_model,
-    get_categorical_info, get_max_split_index, traverse)
+    TreeSide, cache_subtree_features, compute_error_tree,
+    create_surrogate_model, get_categorical_info, get_max_split_index,
+    traverse)
 from rai_test_utils.datasets.tabular import (
     create_adult_census_data, create_binary_classification_dataset,
     create_cancer_data, create_diabetes_data, create_iris_data,
@@ -317,7 +318,21 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
         validation_data = validation_data.drop(columns=[TRUE_Y, ROW_INDEX])
         if not isinstance(X_test, pd.DataFrame):
             validation_data = validation_data.values
-    validate_error_tree(tree, len(validation_data), min_child_samples)
+    is_regression_task = error_analyzer.model_task == ModelTask.REGRESSION
+    model_task_na = error_analyzer.model_task is None
+    is_regression_metric = error_analyzer.metric in regression_metrics
+    is_regression_metric = model_task_na and is_regression_metric
+    is_regression = is_regression_task or is_regression_metric
+    validate_error_tree(tree, len(validation_data), min_child_samples,
+                        is_regression)
+
+    # validate wrapper method compute_error_tree() output
+    new_tree = compute_error_tree(
+        error_analyzer, tree_features, filters, composite_filters,
+        max_depth=max_depth, num_leaves=num_leaves,
+        min_child_samples=min_child_samples)
+    validate_error_tree(new_tree, len(validation_data),
+                        min_child_samples, is_regression)
 
     # Validate compute_error_tree_on_dataset() output
     if len(validation_data) > 0:
@@ -348,10 +363,11 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
         min_child_samples=min_child_samples)
 
     validate_error_tree(new_tree, len(pd.concat([dataset, dataset])),
-                        min_child_samples)
+                        min_child_samples, is_regression)
 
 
-def validate_error_tree(tree, validation_data_len, min_child_samples):
+def validate_error_tree(tree, validation_data_len, min_child_samples,
+                        is_regression):
     assert tree is not None
     assert len(tree) > 0
     assert ERROR in tree[0]
@@ -362,6 +378,8 @@ def validate_error_tree(tree, validation_data_len, min_child_samples):
     assert tree[0][SIZE] == validation_data_len
     for node in tree:
         assert node[SIZE] >= min(min_child_samples, validation_data_len)
+        if not is_regression:
+            assert isinstance(node[ERROR], int)
 
 
 def validate_traversed_tree(tree, tree_dict, max_split_index,

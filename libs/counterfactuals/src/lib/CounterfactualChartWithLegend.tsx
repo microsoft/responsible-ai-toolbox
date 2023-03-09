@@ -155,9 +155,9 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
     );
   }
 
-  private toggleSelectionOfPoint = (index?: number): void => {
+  private toggleSelectionOfPoint = (index?: number): number[] => {
     if (index === undefined) {
-      return;
+      return [];
     }
     const indexOf = this.props.selectedPointsIndexes.indexOf(index);
     let newSelections = [...this.props.selectedPointsIndexes];
@@ -181,6 +181,7 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
       pointIsActive
     });
     this.props.onSelectedPointsIndexesUpdated(newSelections);
+    return newSelections;
   };
 
   private toggleCustomActivation = (index: number): void => {

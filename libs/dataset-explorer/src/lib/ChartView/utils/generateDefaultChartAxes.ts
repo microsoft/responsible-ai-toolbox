@@ -14,13 +14,19 @@ export function generateDefaultChartAxes(
   if (!jointDataset.hasDataset) {
     return;
   }
+  let colorAxisProperty = JointDataset.IndexLabel;
+  if (jointDataset.hasPredictedY) {
+    if (jointDataset.numLabels > 1) {
+      colorAxisProperty = `${JointDataset.PredictedYLabel}0`;
+    } else {
+      colorAxisProperty = JointDataset.PredictedYLabel;
+    }
+  }
   const chartProps: IGenericChartProps = {
     chartType: ChartTypes.Histogram,
     colorAxis: {
       options: {},
-      property: jointDataset.hasPredictedY
-        ? JointDataset.PredictedYLabel
-        : JointDataset.IndexLabel
+      property: colorAxisProperty
     },
     xAxis: {
       options: {},

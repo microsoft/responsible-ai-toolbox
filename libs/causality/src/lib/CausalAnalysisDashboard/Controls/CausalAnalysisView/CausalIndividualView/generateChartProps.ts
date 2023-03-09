@@ -8,7 +8,8 @@ import {
   FluentUIStyles,
   getPrimaryChartColor,
   IGenericChartProps,
-  JointDataset
+  JointDataset,
+  OtherChartTypes
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IData, IPlotlyProperty, PlotlyMode } from "@responsible-ai/mlchartlib";
@@ -202,12 +203,13 @@ function generateDataTrace(
 }
 
 export function generateDefaultChartAxes(
-  jointDataset: JointDataset
+  jointDataset: JointDataset,
+  chartType?: ChartTypes | OtherChartTypes
 ): IGenericChartProps | undefined {
   const yKey = `${JointDataset.DataLabelRoot}0`;
   const yIsDithered = jointDataset.metaDict[yKey]?.treatAsCategorical;
   const chartProps: IGenericChartProps = {
-    chartType: ChartTypes.Scatter,
+    chartType: chartType ?? ChartTypes.Scatter,
     xAxis: {
       options: {},
       property: jointDataset.hasPredictedProbabilities

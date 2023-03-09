@@ -26,10 +26,10 @@ export interface ITransformationCreationProps {
   transformationName?: string;
   transformationOperation?: Operation;
   transformationFeature?: Feature;
-  transformationValue: number;
+  transformationValue: string;
   transformationValueErrorMessage?: string;
   onChangeTransformationFeature: (item: IComboBoxOption) => void;
-  onChangeTransformationValue: (newValue: number) => void;
+  onChangeTransformationValue: (newValue: string) => void;
   onChangeTransformationOperation: (operation: Operation) => void;
 }
 
@@ -105,7 +105,6 @@ export class TransformationCreation extends React.Component<
         {this.isFeatureSelected() && this.isCategoricalFeature() && (
           <TransformationCreationCategorical
             transformationFeature={this.props.transformationFeature}
-            transformationValue={this.props.transformationValue}
             onChangeTransformationValue={this.props.onChangeTransformationValue}
             transformationValueErrorMessage={
               this.props.transformationValueErrorMessage

@@ -4,14 +4,15 @@
 import numpy as np
 import pandas as pd
 import pytest
-from tests.common_utils import (create_housing_data, create_iris_data,
-                                create_simple_titanic_data,
-                                create_sklearn_random_forest_regressor,
-                                create_sklearn_svm_classifier,
-                                create_titanic_pipeline)
+from tests.common_utils import create_iris_data
 
-from erroranalysis._internal.constants import (PRED_Y, ROW_INDEX, TRUE_Y,
-                                               ModelTask)
+from erroranalysis._internal.constants import PRED_Y, ROW_INDEX, TRUE_Y
+from rai_test_utils.datasets.tabular import (create_housing_data,
+                                             create_simple_titanic_data)
+from rai_test_utils.models.sklearn import (
+    create_sklearn_random_forest_regressor, create_sklearn_svm_classifier,
+    create_titanic_pipeline)
+from raiutils.models import ModelTask
 from responsibleai.rai_insights import RAIInsights
 
 TOL = 1e-10

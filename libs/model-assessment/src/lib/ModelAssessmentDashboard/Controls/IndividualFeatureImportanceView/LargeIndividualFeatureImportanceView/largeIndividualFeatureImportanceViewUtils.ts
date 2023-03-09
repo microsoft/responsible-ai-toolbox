@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  calculateBubblePlotDataFromErrorCohort,
   Cohort,
   IDataset,
   IGenericChartProps,
@@ -15,7 +14,9 @@ import {
   JointDataset,
   TelemetryEventName,
   TelemetryLevels,
-  hasAxisTypeChanged
+  hasAxisTypeChanged,
+  IClusterData,
+  calculateBubblePlotDataFromErrorCohort
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 
@@ -131,15 +132,15 @@ export function getNewSelections(
 export async function selectPointFromChartLargeData(
   data: IScatterPoint,
   setLocalExplanationsData: (absoluteIndex: number) => Promise<void>,
-  toggleSelectionOfPoint: (index?: number) => void,
+  toggleSelectionOfPoint: (index?: number) => number[] | undefined,
   telemetryHook?: ((message: ITelemetryEvent) => void) | undefined
 ): Promise<void> {
   const index = data.customData[JointDataset.IndexLabel];
   const absoluteIndex = data.customData[JointDataset.AbsoluteIndexLabel];
-  if (absoluteIndex) {
+  const newSelections = toggleSelectionOfPoint(index);
+  if (absoluteIndex && newSelections && newSelections?.length > 0) {
     setLocalExplanationsData(absoluteIndex);
   }
-  toggleSelectionOfPoint(index);
   telemetryHook?.({
     level: TelemetryLevels.ButtonClick,
     type: TelemetryEventName.FeatureImportancesNewDatapointSelectedFromChart
@@ -164,9 +165,7 @@ export async function getBubblePlotData(
   selectPointFromChartLargeData?: (data: IScatterPoint) => Promise<void>,
   onBubbleClick?: (
     scatterPlotData: IHighchartsConfig,
-    xSeries: number[],
-    ySeries: number[],
-    indexSeries: number[]
+    clusterData: IClusterData
   ) => void
 ): Promise<IHighchartBubbleSDKClusterData | IHighchartsConfig | undefined> {
   return await calculateBubblePlotDataFromErrorCohort(
