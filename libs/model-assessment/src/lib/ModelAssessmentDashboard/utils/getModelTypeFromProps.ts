@@ -11,7 +11,8 @@ import {
 import { IModelAssessmentDashboardProps } from "../ModelAssessmentDashboardProps";
 
 export function getModelTypeFromProps(
-  props: IModelAssessmentDashboardProps
+  props: IModelAssessmentDashboardProps,
+  classNames: string[] | undefined
 ): ModelTypes {
   const modelType: ModelTypes = ModelTypes.Multiclass;
   const classNames = props.dataset.class_names;
@@ -49,6 +50,9 @@ export function getModelTypeFromProps(
   }
   if (taskType === DatasetTaskType.ObjectDetection) {
     return ModelTypes.ObjectDetection;
+  }
+  if (taskType === DatasetTaskType.QuestionAnswering) {
+    return ModelTypes.QuestionAnswering;
   }
   return modelType;
 }

@@ -51,9 +51,17 @@ export interface ITabsViewProps {
     iouThresh: number,
     abortSignal: AbortSignal
   ) => Promise<any[]>;
+
   requestPredictions?: (
     request: any[],
     abortSignal: AbortSignal
+  ) => Promise<any[]>;
+  requestQuestionAnsweringMetrics?: (
+    trueY: number[][][],
+    predictedY: number[][][],
+    aggregateMethod: string,
+    className: string,
+    iouThresh: number
   ) => Promise<any[]>;
   requestDebugML?: (
     request: any[],

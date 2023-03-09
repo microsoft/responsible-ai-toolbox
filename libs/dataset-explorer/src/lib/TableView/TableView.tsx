@@ -265,9 +265,11 @@ export class TableView extends React.Component<
     filteredDataRows = this.props.selectedCohort.cohort.filteredData;
 
     const numRows: number = filteredDataRows.length;
-    const indices = filteredDataRows.map((row: { [key: string]: number }) => {
-      return row[JointDataset.IndexLabel] as number;
-    });
+    const indices = filteredDataRows.map(
+      (row: { [key: string]: string | number }) => {
+        return row[JointDataset.IndexLabel] as number;
+      }
+    );
 
     const rows = constructRows(
       filteredDataRows,

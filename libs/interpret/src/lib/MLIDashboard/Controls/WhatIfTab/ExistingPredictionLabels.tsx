@@ -45,8 +45,8 @@ export class ExistingPredictionLabels extends React.Component<IExistingPredictio
               .sortedCategoricalValues?.[predictedClass]
           : undefined;
       if (this.props.jointDataset.hasPredictedProbabilities) {
-        let predictedProb: number;
-        let tempPredictedProb: number | undefined = undefined;
+        let predictedProb: number | string;
+        let tempPredictedProb: number | undefined | string = undefined;
         if (
           this.props.jointDataset.metaDict[JointDataset.PredictedYLabel]
             ?.treatAsCategorical

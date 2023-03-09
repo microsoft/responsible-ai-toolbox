@@ -73,6 +73,7 @@ export class JointDataset {
   // these properties should only be accessed by Cohort class,
   // which enables independent filtered views of this data
   public dataDict: Array<{ [key: string]: number }> | undefined;
+  public strDataDict: Array<{ [key: string]: string }> | undefined;
   public binDict: { [key: string]: number[] | undefined } = {};
 
   private readonly _modelMeta: IExplanationModelMetadata;
@@ -666,7 +667,8 @@ export class JointDataset {
   }
 
   private updateMetaDataDict(
-    values: number[] | number[][],
+    values: number[] | number[][] | string[],
+    values: number[] | number[][] | string[],
     metadata: IExplanationModelMetadata,
     labelColName: string,
     abbridgedLabel: string,
@@ -683,7 +685,11 @@ export class JointDataset {
           }
         });
       } else if (this.dataDict) {
-        this.dataDict[index][labelColName] = val;
+        if (typeof val !== "string") {
+          this.dataDict[index][labelColName] = val;
+        } else if (this.strDataDict) {
+          this.strDataDict[index][labelColName] = val;
+        }
       }
     });
     for (let i = 0; i < this.numLabels; i++) {
@@ -732,6 +738,13 @@ export class JointDataset {
   private initializeDataDictIfNeeded(arr: any[]): void {
     if (arr === undefined) {
       return;
+    }
+    if (this.strDataDict === undefined) {
+      this.strDataDict = Array.from({ length: arr.length }).map((_, index) => {
+        const dict = {};
+        dict[JointDataset.IndexLabel] = index;
+        return dict;
+      });
     }
     if (this.dataDict !== undefined) {
       if (this.dataDict.length !== arr.length) {
