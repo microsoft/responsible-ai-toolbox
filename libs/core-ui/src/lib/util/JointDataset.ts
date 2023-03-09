@@ -409,7 +409,7 @@ export class JointDataset {
     return this._modelMeta.classNames;
   }
 
-  public getRow(index: number): { [key: string]: number | number[] } {
+  public getRow(index: number): { [key: string]: number } {
     return { ...this.dataDict?.[index] };
   }
 
