@@ -18,7 +18,7 @@ export class Cohort {
   private readonly cohortIndex: number;
   private cachedAverageImportance: number[] | undefined;
   private cachedTransposedLocalFeatureImportances: number[][] | undefined;
-  private currentSortKey: string | undefined;
+  private currentSortKey: undefined | string;
   private currentSortReversed = false;
 
   public constructor(
@@ -96,7 +96,14 @@ export class Cohort {
   }
 
   public getRow(index: number): { [key: string]: number } {
-    return { ...this.jointDataset.dataDict?.[index] };
+    const dataDict = this.jointDataset.dataDict?.[index];
+    const convertedDataDict: { [key: string]: number } = {};
+    if (dataDict) {
+      for (const key in dataDict) {
+        convertedDataDict[key] = Number(dataDict[key]);
+      }
+    }
+    return convertedDataDict;
   }
 
   public sort(
@@ -202,7 +209,7 @@ export class Cohort {
   }
 
   private filterRow(
-    row: { [key: string]: number },
+    row: { [key: string]: number | string },
     filters: IFilter[]
   ): boolean {
     return filters
@@ -221,9 +228,9 @@ export class Cohort {
           case FilterMethods.LessThanEqualTo:
             return rowVal <= filter.arg[0];
           case FilterMethods.Includes:
-            return (filter.arg as number[]).includes(rowVal);
+            return (filter.arg as number[]).includes(Number(rowVal));
           case FilterMethods.Excludes:
-            return !(filter.arg as number[]).includes(rowVal);
+            return !(filter.arg as number[]).includes(Number(rowVal));
           case FilterMethods.InTheRangeOf:
             return rowVal >= filter.arg[0] && rowVal <= filter.arg[1];
           default:

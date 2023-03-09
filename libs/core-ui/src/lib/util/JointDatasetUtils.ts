@@ -14,9 +14,9 @@ import { AxisTypes } from "./IGenericChartProps";
 
 export interface IJointDatasetArgs {
   dataset?: any[][];
-  predictedY?: number[] | number[][];
+  predictedY?: number[] | number[][] | string[];
   predictedProbabilities?: number[][];
-  trueY?: number[] | number[][];
+  trueY?: number[] | number[][] | string[];
   localExplanations?:
     | IMultiClassLocalFeatureImportance
     | ISingleClassLocalFeatureImportance;

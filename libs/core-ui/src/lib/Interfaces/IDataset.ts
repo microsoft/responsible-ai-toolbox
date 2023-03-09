@@ -12,13 +12,14 @@ export enum DatasetTaskType {
   MultilabelTextClassification = "multilabel_text_classification",
   MultilabelImageClassification = "multilabel_image_classification",
   Forecasting = "forecasting",
-  ObjectDetection = "object_detection"
+  ObjectDetection = "object_detection",
+  QuestionAnswering = "question_answering"
 }
 
 export interface IDataset {
   task_type: DatasetTaskType;
-  true_y: number[] | number[][];
-  predicted_y?: number[] | number[][];
+  true_y: number[] | number[][] | string[];
+  predicted_y?: number[] | number[][] | string[];
   probability_y?: number[][];
   features: unknown[][];
   feature_names: string[];

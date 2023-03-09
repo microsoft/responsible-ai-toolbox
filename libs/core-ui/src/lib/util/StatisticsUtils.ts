@@ -21,6 +21,7 @@ import {
 } from "./JointDatasetUtils";
 import { generateMultilabelStats } from "./MultilabelStatisticsUtils";
 import { generateObjectDetectionStats } from "./ObjectDetectionStatisticsUtils";
+import { generateQuestionAnsweringStats } from "./QuestionAnsweringStatisticsUtils";
 
 export enum BinaryClassificationMetrics {
   Accuracy = "accuracy",
@@ -259,6 +260,9 @@ export const generateMetrics: (
     modelType === ModelTypes.TextMultilabel
   ) {
     return generateMultilabelStats(jointDataset, selectionIndexes);
+  }
+  if (modelType === ModelTypes.QuestionAnswering) {
+    return generateQuestionAnsweringStats(jointDataset, selectionIndexes);
   }
   const trueYs = jointDataset.unwrap(JointDataset.TrueYLabel);
   const predYs = jointDataset.unwrap(JointDataset.PredictedYLabel);

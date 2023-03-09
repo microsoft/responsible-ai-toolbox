@@ -59,6 +59,7 @@ export * from "./lib/util/calculateConfusionMatrixData";
 export * from "./lib/util/calculateLineData";
 export * from "./lib/util/MultilabelStatisticsUtils";
 export * from "./lib/util/ObjectDetectionStatisticsUtils";
+export * from "./lib/util/QuestionAnsweringStatisticsUtils";
 export * from "./lib/util/StatisticsUtils";
 export * from "./lib/util/string";
 export * from "./lib/util/toScientific";

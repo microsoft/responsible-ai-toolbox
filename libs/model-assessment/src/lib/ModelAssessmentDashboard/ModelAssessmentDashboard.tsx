@@ -98,6 +98,8 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           requestObjectDetectionMetrics:
             this.props.requestObjectDetectionMetrics,
           requestPredictions: this.props.requestPredictions,
+          requestQuestionAnsweringMetrics:
+            this.props.requestQuestionAnsweringMetrics,
           requestSplinePlotDistribution:
             this.props.requestSplinePlotDistribution,
           requestTestDataRow: this.props.requestTestDataRow,
@@ -137,6 +139,9 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                 this.props.requestObjectDetectionMetrics
               }
               requestPredictions={this.props.requestPredictions}
+              requestQuestionAnsweringMetrics={
+                this.props.requestQuestionAnsweringMetrics
+              }
               requestDebugML={this.props.requestDebugML}
               requestImportances={this.props.requestImportances}
               requestMatrix={this.props.requestMatrix}
