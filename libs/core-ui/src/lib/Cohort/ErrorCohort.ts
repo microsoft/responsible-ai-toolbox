@@ -10,6 +10,7 @@ import { Cohort } from "./Cohort";
 import { MetricCohortStats, ErrorCohortStats } from "./CohortStats";
 import { CohortSource, Metrics } from "./Constants";
 
+//TODO(Ruby): add deprecated file rule
 export class ErrorCohort {
   public cohortStats: MetricCohortStats;
   public metricValue: number;

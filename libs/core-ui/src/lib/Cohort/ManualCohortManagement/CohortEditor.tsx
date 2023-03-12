@@ -92,8 +92,7 @@ export class CohortEditor extends React.PureComponent<
             onCohortNameUpdated={this.onCohortNameUpdated}
             onCompositeFiltersUpdated={this.onCompositeFiltersUpdated}
             onFiltersUpdated={this.onFilterUpdated}
-            dataset={this.context.dataset}
-            activeFlights={this.context.featureFlights}
+            isRefactorFlightOn={this.context.isRefactorFlightOn}
             columnRanges={this.context.columnRanges}
             modelType={this.context.modelType}
           />

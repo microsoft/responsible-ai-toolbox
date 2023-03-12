@@ -12,6 +12,7 @@ import { IFeatureMetaData } from "../Interfaces/IMetaData";
 
 import { AxisTypes } from "./IGenericChartProps";
 
+//TODO(Ruby): add deprecated file rule
 export interface IJointDatasetArgs {
   dataset?: any[][];
   predictedY?: number[] | number[][];

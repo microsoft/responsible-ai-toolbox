@@ -3,14 +3,13 @@
 
 import { IComboBoxOption, IComboBox, Text, Stack } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import {
-  ICategoricalRange,
-  INumericRange,
-  RangeTypes
-} from "@responsible-ai/mlchartlib";
+import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
 import React from "react";
 
-import { IDataset } from "../../Interfaces/IDataset";
+import {
+  defaultModelAssessmentContext,
+  ModelAssessmentContext
+} from "../../Context/ModelAssessmentContext";
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
 import { JointDataset } from "../../util/JointDataset";
 
@@ -20,12 +19,9 @@ export interface ICohortEditorFilterSectionProps {
   filterIndex?: number;
   legacyFilters: IFilter[];
   filters: IFilter[];
-  dataset: IDataset;
-  columnRanges?: { [key: string]: INumericRange | ICategoricalRange };
   jointDataset: JointDataset;
   openedLegacyFilter?: IFilter;
   openedFilter?: IFilter;
-  isRefactorFlightOn: boolean;
   onFiltersUpdated: (filters: IFilter[], isLegacy: boolean) => void;
   onOpenedFilterUpdated: (isLegacy: boolean, openedFilter?: IFilter) => void;
   onSelectedFilterCategoryUpdated: (selectedFilterCategory?: string) => void;
@@ -41,6 +37,9 @@ export class CohortEditorFilterSection extends React.PureComponent<
   ICohortEditorFilterSectionProps,
   ICohortEditorFilterSectionState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
   public constructor(props: ICohortEditorFilterSectionProps) {
     super(props);
     this.state = {
@@ -50,7 +49,7 @@ export class CohortEditorFilterSection extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
-    const openedFilter = this.props.isRefactorFlightOn
+    const openedFilter = this.context.isRefactorFlightOn
       ? this.props.openedFilter
       : this.props.openedLegacyFilter;
     return (
@@ -61,11 +60,11 @@ export class CohortEditorFilterSection extends React.PureComponent<
           </Text>
         ) : (
           <CohortEditorFilter
-            dataset={this.props.dataset}
-            columnRanges={this.props.columnRanges}
+            dataset={this.context.dataset}
+            columnRanges={this.context.columnRanges}
             cancelFilter={this.cancelFilter}
             filters={
-              this.props.isRefactorFlightOn
+              this.context.isRefactorFlightOn
                 ? this.props.filters
                 : this.props.legacyFilters
             }
@@ -74,7 +73,7 @@ export class CohortEditorFilterSection extends React.PureComponent<
               this.props.openedLegacyFilter || ({} as IFilter)
             }
             openedFilter={this.props.openedFilter || ({} as IFilter)}
-            isRefactorFlightOn={this.props.isRefactorFlightOn}
+            isRefactorFlightOn={this.context.isRefactorFlightOn || false}
             saveState={this.saveState}
             setAsCategorical={this.setAsCategorical}
             setCategoricalValues={this.setCategoricalValues}
@@ -125,7 +124,7 @@ export class CohortEditorFilterSection extends React.PureComponent<
     if (item?.index !== undefined) {
       const legacyFilterKey =
         JointDataset.DataLabelRoot + item.index.toString();
-      const filterKey = this.props.dataset.feature_names[item.index];
+      const filterKey = this.context.dataset.feature_names[item.index];
       const filter = this.getFilterValue(filterKey);
       this.props.onOpenedFilterUpdated(false, filter);
       const legacyFilter = this.getLegacyFilterValue(legacyFilterKey);
@@ -134,7 +133,7 @@ export class CohortEditorFilterSection extends React.PureComponent<
   };
 
   private saveState = (index?: number): void => {
-    const openedFilter = this.props.isRefactorFlightOn
+    const openedFilter = this.context.isRefactorFlightOn
       ? this.props.openedFilter
       : this.props.openedLegacyFilter;
     if (!openedFilter || index === undefined) {
@@ -153,7 +152,7 @@ export class CohortEditorFilterSection extends React.PureComponent<
     _ev?: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    const openedFilter = this.props.isRefactorFlightOn
+    const openedFilter = this.context.isRefactorFlightOn
       ? this.props.openedFilter
       : this.props.openedLegacyFilter;
     if (!openedFilter || (!item?.key && item?.key !== 0)) {
@@ -187,7 +186,7 @@ export class CohortEditorFilterSection extends React.PureComponent<
     _ev?: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    const openedFilter = this.props.isRefactorFlightOn
+    const openedFilter = this.context.isRefactorFlightOn
       ? this.props.openedFilter
       : this.props.openedLegacyFilter;
     if (!openedFilter || !item) {
@@ -196,14 +195,14 @@ export class CohortEditorFilterSection extends React.PureComponent<
     if ((item.key as FilterMethods) === FilterMethods.InTheRangeOf) {
       //default values for in the range operation
       let range;
-      if (this.props.isRefactorFlightOn && this.props.openedFilter) {
+      if (this.context.isRefactorFlightOn && this.props.openedFilter) {
         range =
-          this.props.columnRanges &&
-          (this.props.columnRanges[
+          this.context.columnRanges &&
+          (this.context.columnRanges[
             this.props.openedFilter.column
           ] as INumericRange);
       } else if (
-        !this.props.isRefactorFlightOn &&
+        !this.context.isRefactorFlightOn &&
         this.props.openedLegacyFilter
       ) {
         range =
@@ -247,7 +246,7 @@ export class CohortEditorFilterSection extends React.PureComponent<
     stringVal: string,
     range?: INumericRange
   ): string | void => {
-    const openedFilter = this.props.isRefactorFlightOn
+    const openedFilter = this.context.isRefactorFlightOn
       ? this.props.openedFilter
       : this.props.openedLegacyFilter;
     if (!openedFilter) {
@@ -327,8 +326,8 @@ export class CohortEditorFilterSection extends React.PureComponent<
 
   private getFilterValue(key: string): IFilter {
     const filter: IFilter = { column: key } as IFilter;
-    const range = this.props.columnRanges
-      ? this.props.columnRanges[key]
+    const range = this.context.columnRanges
+      ? this.context.columnRanges[key]
       : ({} as INumericRange);
     if (range.rangeType === RangeTypes.Categorical) {
       filter.method = FilterMethods.Includes;

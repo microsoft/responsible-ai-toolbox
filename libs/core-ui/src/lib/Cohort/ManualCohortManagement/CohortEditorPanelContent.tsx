@@ -22,8 +22,6 @@ import {
   defaultModelAssessmentContext,
   ModelAssessmentContext
 } from "../../Context/ModelAssessmentContext";
-import { isFlightActive, RefactorFlight } from "../../FeatureFlights";
-import { IDataset } from "../../Interfaces/IDataset";
 import { ModelTypes } from "../../Interfaces/IExplanationContext";
 import {
   FilterMethods,
@@ -43,8 +41,7 @@ import {
 } from "./CohortEditorPanelContentUtils";
 
 export interface ICohortEditorPanelContentProps {
-  activeFlights?: string[];
-  dataset: IDataset;
+  isRefactorFlightOn?: boolean;
   columnRanges?: {
     [key: string]: INumericRange | ICategoricalRange;
   };
@@ -78,13 +75,10 @@ export class CohortEditorPanelContent extends React.PureComponent<
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
-  private isRefactorFlightOn = isFlightActive(
-    RefactorFlight,
-    this.props.activeFlights
-  );
   private readonly choices = getChoices(this.props.columnRanges);
   private readonly legacyChoices = getLegacyChoices(this.props.jointDataset);
-  private readonly leftItems: IChoiceGroupOption[] = this.isRefactorFlightOn
+  private readonly leftItems: IChoiceGroupOption[] = this.props
+    .isRefactorFlightOn
     ? this.choices
     : this.legacyChoices;
   private _isInitialized = false;
@@ -134,16 +128,14 @@ export class CohortEditorPanelContent extends React.PureComponent<
           filterIndex={this.state.filterIndex}
           openedLegacyFilter={this.state.openedLegacyFilter}
           openedFilter={this.state.openedFilter}
-          isRefactorFlightOn={this.isRefactorFlightOn}
           onOpenedFilterUpdated={this.onOpenedFilterUpdated}
           onSelectedFilterCategoryUpdated={this.onSelectedFilterCategoryUpdated}
           setFilterMessage={this.setFilterMessage}
-          columnRanges={this.props.columnRanges}
         />
         <Stack.Item>
           <CohortEditorFilterList
             columnRanges={this.props.columnRanges}
-            isRefactorFlightOn={this.isRefactorFlightOn}
+            isRefactorFlightOn={this.props.isRefactorFlightOn || false}
             compositeFilters={this.props.compositeFilters}
             editFilter={this.editFilter}
             removeCompositeFilter={this.removeCompositeFilter}
@@ -198,7 +190,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
     option?: IChoiceGroupOption | undefined
   ): void => {
     if (typeof option?.key === "string") {
-      const filters = this.isRefactorFlightOn
+      const filters = this.props.isRefactorFlightOn
         ? this.props.filters
         : this.props.legacyFilters;
       this.setState({
@@ -223,7 +215,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
     let column = this.choices[Number(id)].key;
     let legacyColumn = this.legacyChoices[Number(id)].key;
     if (id === "1") {
-      column = this.props.dataset.feature_names[0];
+      column = this.context.dataset.feature_names[0];
       legacyColumn = `${this.legacyChoices[1].key}0`;
     }
     const filter = this.getFilterValue(column);

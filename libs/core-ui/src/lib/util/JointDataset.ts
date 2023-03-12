@@ -35,6 +35,8 @@ import {
 // Filtering will create a copy of the underlying dataset and sorting should be in place on this copy.
 // projection should create a copy of values.
 //
+
+//TODO(Ruby): add deprecated file rule
 export class JointDataset {
   public static readonly IndexLabel = "Index";
   public static readonly AbsoluteIndexLabel = "AbsoluteIndex";

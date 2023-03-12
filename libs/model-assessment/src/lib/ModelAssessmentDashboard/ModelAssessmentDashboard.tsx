@@ -315,8 +315,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       level: TelemetryLevels.ButtonClick,
       type: TelemetryEventName.NewCohortAdded
     });
-    console.log("datasetCohort", datasetCohort);
-    console.log("cohort", cohort);
   };
 
   private editCohort = (
