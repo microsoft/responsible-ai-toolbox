@@ -14,9 +14,7 @@ import {
   BasicHighChart,
   ITelemetryEvent,
   TelemetryLevels,
-  TelemetryEventName,
-  isFlightActive,
-  RefactorFlight
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import React from "react";
@@ -30,7 +28,6 @@ import { CounterfactualPanel } from "./CounterfactualPanel";
 export interface ICounterfactualChartProps {
   chartProps: IGenericChartProps;
   customPoints: Array<{ [key: string]: any }>;
-  featureFlights?: string[];
   isPanelOpen: boolean;
   originalData?: { [key: string]: string | number };
   selectedPointsIndexes: number[];
@@ -79,10 +76,7 @@ export class CounterfactualChart extends React.PureComponent<
     };
   }
   public render(): React.ReactNode {
-    const isRefactorFlightOn = isFlightActive(
-      RefactorFlight,
-      this.props.featureFlights
-    );
+    const isRefactorFlightOn = this.context.isRefactorFlightOn;
     const classNames = counterfactualChartStyles();
 
     const plotlyProps = generatePlotlyProps(
@@ -92,7 +86,7 @@ export class CounterfactualChart extends React.PureComponent<
       this.props.selectedPointsIndexes,
       this.props.customPoints,
       this.context.selectedDatasetCohort,
-      this.context.featureFlights
+      this.context.isRefactorFlightOn
     );
     //TODO(Ruby): localize && abbridge?
     const horizontalAxisText = isRefactorFlightOn

@@ -15,7 +15,7 @@ import { ModelTypes } from "../../Interfaces/IExplanationContext";
 import { IsBinary, IsMulticlass } from "../ExplanationUtils";
 
 // TODO: the feature ranges should come from backend, it does not make sense to calculate at FE for big data
-export function getFeatureRanges(
+export function getColumnRanges(
   dataset: IDataset,
   modelType: ModelTypes
 ): {

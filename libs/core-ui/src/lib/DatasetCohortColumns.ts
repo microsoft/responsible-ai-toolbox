@@ -3,7 +3,7 @@
 
 export enum DatasetCohortColumns {
   Index = "Index",
-  Dataset = "Dataset",
+  Dataset = "Data",
   PredictedY = "Predicted Y",
   TrueY = "True Y",
   ClassificationError = "Classification outcome",

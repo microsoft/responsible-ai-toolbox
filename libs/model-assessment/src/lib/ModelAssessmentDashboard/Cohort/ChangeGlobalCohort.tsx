@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import {
+  DatasetCohort,
   defaultModelAssessmentContext,
   ErrorCohort,
   IModelAssessmentContext,
@@ -23,15 +24,18 @@ export class ChangeGlobalCohort extends React.Component<IChangeGlobalCohortProps
       this.props.visible && (
         <ShiftCohort
           onDismiss={this.props.onDismiss}
-          onApply={this.shiftErrorCohort}
-          defaultCohort={this.context.baseErrorCohort}
+          onApply={this.shiftCohort}
           showAllDataCohort={this.props.showAllDataCohort}
         />
       )
     );
   }
-  private shiftErrorCohort = (cohort: ErrorCohort): void => {
-    this.context.shiftErrorCohort(cohort);
+  private shiftCohort = (
+    cohort: ErrorCohort,
+    datasetCohort: DatasetCohort
+  ): void => {
+    this.context.shiftErrorCohort(cohort, datasetCohort);
+
     this.props.onDismiss();
   };
 }

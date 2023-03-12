@@ -28,15 +28,16 @@ import { JointDataset } from "../../util/JointDataset";
 import { NoneCategoricalFilterOptions } from "./NoneCategoricalFilterOptions";
 
 export interface ICohortEditorFilterProps {
+  openedLegacyFilter: IFilter;
   openedFilter: IFilter;
   jointDataset: JointDataset;
   dataset: IDataset;
-  datasetFeatureRanges?: { [key: string]: INumericRange | ICategoricalRange };
+  columnRanges?: { [key: string]: INumericRange | ICategoricalRange };
   filterIndex?: number;
   filters: IFilter[];
   showInvalidMinMaxValueError: boolean;
   showInvalidValueError: boolean;
-  isRemoveJointDatasetFlightOn: boolean;
+  isRefactorFlightOn: boolean;
   setFilterMessage: (filtersMessage: string) => void;
   setSelectedProperty(
     ev: React.FormEvent<IComboBox>,
@@ -57,13 +58,17 @@ export interface ICohortEditorFilterProps {
   saveState(index?: number): void;
   cancelFilter(): void;
 }
+const maxLength = 18;
 export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps> {
-  private readonly dataArray: IComboBoxOption[] = this.props
-    .isRemoveJointDatasetFlightOn
-    ? this.props.dataset.feature_names.map((featureName) => {
+  private readonly dataArray: IComboBoxOption[] = this.props.isRefactorFlightOn
+    ? this.props.dataset.feature_names.map((featureName, index) => {
         return {
+          index,
           key: featureName,
-          text: featureName
+          text:
+            featureName.length <= maxLength
+              ? featureName
+              : `${featureName.slice(0, maxLength)}...`
         };
       })
     : new Array(this.props.jointDataset.datasetFeatureCount)
@@ -71,29 +76,31 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
         .map((_, index) => {
           const key = JointDataset.DataLabelRoot + index.toString();
           return {
+            index,
             key,
             text: this.props.jointDataset.metaDict[key].abbridgedLabel
           };
         });
+
   public render(): React.ReactNode {
     const selectedMeta =
-      this.props.jointDataset.metaDict[this.props.openedFilter.column];
-    const isDataColumn = this.props.isRemoveJointDatasetFlightOn
+      this.props.jointDataset.metaDict[this.props.openedLegacyFilter.column];
+    const isDataColumn = this.props.isRefactorFlightOn
       ? this.props.dataset.feature_names.includes(
           this.props.openedFilter.column
         )
-      : this.props.openedFilter.column.includes(JointDataset.DataLabelRoot);
-    let categoricalOptions: IComboBoxOption[] | undefined;
+      : this.props.openedLegacyFilter.column.includes(
+          JointDataset.DataLabelRoot
+        );
     // filterIndex is set when the filter is editing openedFilter and reset to filters.length otherwise
     const isEditingFilter =
       this.props.filterIndex !== this.props.filters.length;
-    let minVal, maxVal;
-    let featureRange;
-    let isCategorical;
-    let categoricalValuesLength;
-    if (this.props.isRemoveJointDatasetFlightOn) {
-      featureRange = this.props.datasetFeatureRanges
-        ? this.props.datasetFeatureRanges[this.props.openedFilter.column]
+
+    let categoricalOptions: IComboBoxOption[] | undefined;
+    let minVal, maxVal, featureRange, isCategorical, categoricalValuesLength;
+    if (this.props.isRefactorFlightOn) {
+      featureRange = this.props.columnRanges
+        ? this.props.columnRanges[this.props.openedFilter.column]
         : ({} as INumericRange);
       isCategorical = featureRange?.rangeType === RangeTypes.Categorical;
       if (featureRange?.rangeType === RangeTypes.Categorical) {
@@ -122,7 +129,6 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
         maxVal = roundDecimal(selectedMeta.featureRange.max);
       }
     }
-
     return (
       <Stack tokens={{ childrenGap: "l1" }}>
         {isDataColumn && (
@@ -131,18 +137,24 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
             options={this.dataArray}
             onChange={this.props.setSelectedProperty}
             label={localization.Interpret.CohortEditor.selectFilter}
-            selectedKey={this.props.openedFilter.column}
+            selectedKey={
+              this.props.isRefactorFlightOn
+                ? this.props.openedFilter.column
+                : this.props.openedLegacyFilter.column
+            }
             calloutProps={FluentUIStyles.calloutProps}
           />
         )}
-        {featureRange && featureRange.rangeType === RangeTypes.Integer && (
-          <Checkbox
-            key={this.props.openedFilter.column}
-            label={localization.Interpret.CohortEditor.TreatAsCategorical}
-            checked={isCategorical}
-            onChange={this.props.setAsCategorical}
-          />
-        )}
+        {!this.props.isRefactorFlightOn &&
+          featureRange &&
+          featureRange.rangeType === RangeTypes.Integer && (
+            <Checkbox
+              key={this.props.openedLegacyFilter.column}
+              label={localization.Interpret.CohortEditor.TreatAsCategorical}
+              checked={isCategorical}
+              onChange={this.props.setAsCategorical}
+            />
+          )}
         {isCategorical ? (
           <>
             <Text variant={"small"}>
@@ -152,10 +164,18 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
               )}`}
             </Text>
             <ComboBox
-              key={this.props.openedFilter.column}
+              key={
+                this.props.isRefactorFlightOn
+                  ? this.props.openedFilter.column
+                  : this.props.openedLegacyFilter.column
+              }
               multiSelect
               label={localization.Interpret.Filters.categoricalIncludeValues}
-              selectedKey={this.props.openedFilter.arg}
+              selectedKey={
+                this.props.isRefactorFlightOn
+                  ? this.props.openedFilter.arg
+                  : this.props.openedLegacyFilter.arg
+              }
               onChange={this.props.setCategoricalValues}
               options={categoricalOptions || []}
               useComboBoxAsMenuWidth
@@ -167,16 +187,18 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
           <NoneCategoricalFilterOptions
             featureRange={featureRange as INumericRange}
             selectedMeta={selectedMeta}
-            openedFilter={this.props.openedFilter}
+            openedFilter={
+              this.props.isRefactorFlightOn
+                ? this.props.openedFilter
+                : this.props.openedLegacyFilter
+            }
             showInvalidMinMaxValueError={this.props.showInvalidMinMaxValueError}
             showInvalidValueError={this.props.showInvalidMinMaxValueError}
             minVal={minVal}
             maxVal={maxVal}
             setComparison={this.props.setComparison}
             setNumericValue={this.props.setNumericValue}
-            isRemoveJointDatasetFlightOn={
-              this.props.isRemoveJointDatasetFlightOn
-            }
+            isRefactorFlightOn={this.props.isRefactorFlightOn}
           />
         )}
         <Stack horizontal tokens={{ childrenGap: "l1" }}>

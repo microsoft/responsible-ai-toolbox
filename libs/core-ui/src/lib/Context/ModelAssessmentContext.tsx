@@ -30,12 +30,13 @@ export interface IModelAssessmentContext {
   counterfactualData?: ICounterfactualData;
   dataset: IDataset;
   // TODO: the dataset feature ranges should come from backend
-  datasetFeatureRanges?: { [key: string]: INumericRange | ICategoricalRange };
+  columnRanges?: { [key: string]: INumericRange | ICategoricalRange };
   modelType?: ModelTypes;
   modelExplanationData?: IModelExplanationData;
   errorAnalysisData?: IErrorAnalysisData;
   theme?: ITheme;
   featureFlights?: string[];
+  isRefactorFlightOn?: boolean;
   errorCohorts: ErrorCohort[];
   datasetCohorts?: DatasetCohort[];
   readonly baseErrorCohort: ErrorCohort;
@@ -148,21 +149,33 @@ export interface IModelAssessmentContext {
     request: any[],
     abortSignal: AbortSignal
   ) => Promise<number[]>;
-  shiftErrorCohort(cohort: ErrorCohort): void;
-  addCohort(cohort: Cohort | DatasetCohort, switchNew?: boolean): void;
-  editCohort(cohort: Cohort | DatasetCohort, switchNew?: boolean): void;
-  deleteCohort(cohort: ErrorCohort): void;
+  shiftErrorCohort(cohort: ErrorCohort, datasetCohort?: DatasetCohort): void;
+  addCohort(
+    cohort: Cohort,
+    switchNew?: boolean,
+    datasetCohort?: DatasetCohort
+  ): void;
+  editCohort(
+    cohort: Cohort,
+    switchNew?: boolean,
+    datasetCohort?: DatasetCohort
+  ): void;
+  deleteCohort(
+    cohort: ErrorCohort | DatasetCohort,
+    isErrorCohort: boolean
+  ): void;
 }
 
 export const defaultModelAssessmentContext: IModelAssessmentContext = {
   addCohort: () => undefined,
   baseErrorCohort: {} as ErrorCohort,
+  columnRanges: {},
   dataset: {} as IDataset,
   datasetCohorts: [],
-  datasetFeatureRanges: {},
   deleteCohort: () => undefined,
   editCohort: () => undefined,
   errorCohorts: [],
+  isRefactorFlightOn: undefined,
   jointDataset: {} as JointDataset,
   modelExplanationData: undefined,
   modelMetadata: {} as IExplanationModelMetadata,

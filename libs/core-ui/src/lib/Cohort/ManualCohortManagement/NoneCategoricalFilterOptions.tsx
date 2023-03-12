@@ -22,7 +22,7 @@ import { comparisonOptions } from "./CohortEditorFilterUtils";
 
 export interface INoneCategoricalFilterOptionsProps {
   featureRange: INumericRange;
-  isRemoveJointDatasetFlightOn: boolean;
+  isRefactorFlightOn: boolean;
   selectedMeta: IJointMeta;
   openedFilter: IFilter;
   showInvalidMinMaxValueError: boolean;
@@ -51,7 +51,7 @@ export class NoneCategoricalFilterOptions extends React.Component<INoneCategoric
     } = this.props;
     let numericDelta: number;
     let featureRange: INumericRange | undefined;
-    if (this.props.isRemoveJointDatasetFlightOn) {
+    if (this.props.isRefactorFlightOn) {
       featureRange = this.props.featureRange;
       numericDelta =
         featureRange?.rangeType === RangeTypes.Integer

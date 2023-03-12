@@ -7,9 +7,7 @@ import {
   DatasetCohort,
   FluentUIStyles,
   IGenericChartProps,
-  isFlightActive,
-  JointDataset,
-  RefactorFlight
+  JointDataset
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -34,12 +32,11 @@ export function generatePlotlyProps(
     [key: string]: any;
   }>,
   datasetCohort?: DatasetCohort,
-  featureFlights?: string[],
-  datasetFeatureRanges?: { [key: string]: INumericRange | ICategoricalRange }
+  isRefactorFlightOn?: boolean,
+  columnRanges?: { [key: string]: INumericRange | ICategoricalRange }
 ): IPlotlyProperty {
   const plotlyProps = _.cloneDeep(WhatIfConstants.basePlotlyProperties);
   plotlyProps.data[0].hoverinfo = "all";
-  const isRefactorFlightOn = isFlightActive(RefactorFlight, featureFlights);
   const indexes =
     isRefactorFlightOn && datasetCohort
       ? datasetCohort?.selectedIndexes
@@ -99,11 +96,11 @@ export function generatePlotlyProps(
     let xLabels;
     if (isRefactorFlightOn) {
       if (
-        datasetFeatureRanges &&
-        datasetFeatureRanges[chartProps.xAxis.property]?.rangeType ===
+        columnRanges &&
+        columnRanges[chartProps.xAxis.property]?.rangeType ===
           RangeTypes.Categorical
       ) {
-        const range = datasetFeatureRanges[
+        const range = columnRanges[
           chartProps.xAxis.property
         ] as ICategoricalRange;
         xLabels = range.uniqueValues;
@@ -124,11 +121,11 @@ export function generatePlotlyProps(
     let yLabels;
     if (isRefactorFlightOn) {
       if (
-        datasetFeatureRanges &&
-        datasetFeatureRanges[chartProps.yAxis.property]?.rangeType ===
+        columnRanges &&
+        columnRanges[chartProps.yAxis.property]?.rangeType ===
           RangeTypes.Categorical
       ) {
-        const range = datasetFeatureRanges[
+        const range = columnRanges[
           chartProps.yAxis.property
         ] as ICategoricalRange;
         yLabels = range.uniqueValues;

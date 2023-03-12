@@ -14,10 +14,11 @@ import { CompositeFilterList } from "./CompositeFilterList";
 import { FilterList } from "./FilterList";
 
 export interface ICohortEditorFilterList {
+  legacyFilters: IFilter[];
   filters: IFilter[];
   compositeFilters: ICompositeFilter[];
   jointDataset: JointDataset;
-  datasetFeatureRanges?: { [key: string]: INumericRange | ICategoricalRange };
+  columnRanges?: { [key: string]: INumericRange | ICategoricalRange };
   isRefactorFlightOn?: boolean;
   editFilter?(index: number): void;
   removeFilter?(index: number): void;
@@ -30,14 +31,18 @@ export class CohortEditorFilterList extends React.Component<ICohortEditorFilterL
       this.props.compositeFilters,
       this.props.jointDataset
     );
+    const filters = this.props.isRefactorFlightOn
+      ? this.props.filters
+      : this.props.legacyFilters;
     return (
       <>
         <Label>{localization.Interpret.CohortEditor.addedFilters}</Label>
         <FilterList
+          legacyFilters={this.props.legacyFilters}
           filters={this.props.filters}
           jointDataset={this.props.jointDataset}
           isRefactorFlightOn={this.props.isRefactorFlightOn}
-          datasetFeatureRanges={this.props.datasetFeatureRanges}
+          columnRanges={this.props.columnRanges}
           editFilter={this.props.editFilter}
           removeFilter={this.props.removeFilter}
         />
@@ -46,8 +51,7 @@ export class CohortEditorFilterList extends React.Component<ICohortEditorFilterL
           jointDataset={this.props.jointDataset}
           removeFilter={this.props.removeCompositeFilter}
         />
-        {this.props.filters.length + this.props.compositeFilters.length ===
-          0 && (
+        {filters.length + this.props.compositeFilters.length === 0 && (
           <div>
             <Text variant={"smallPlus"}>
               {localization.Interpret.CohortEditor.noAddedFilters}

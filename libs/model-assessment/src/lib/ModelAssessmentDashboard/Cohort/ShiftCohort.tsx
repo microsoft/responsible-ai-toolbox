@@ -13,6 +13,7 @@ import {
 } from "@fluentui/react";
 import {
   CohortEditorFilterList,
+  DatasetCohort,
   DatasetTaskType,
   defaultModelAssessmentContext,
   ErrorCohort,
@@ -24,8 +25,7 @@ import React from "react";
 
 export interface IShiftCohortProps {
   onDismiss: () => void;
-  onApply: (selectedCohort: ErrorCohort) => void;
-  defaultCohort?: ErrorCohort;
+  onApply: (selectedCohort: ErrorCohort, datasetCohort: DatasetCohort) => void;
   showAllDataCohort: boolean;
 }
 
@@ -33,6 +33,7 @@ export interface IShiftCohortState {
   options: IDropdownOption[];
   selectedCohort: number;
   savedCohorts: ErrorCohort[];
+  savedDatasetCohorts: DatasetCohort[];
 }
 
 export class ShiftCohort extends React.Component<
@@ -44,30 +45,48 @@ export class ShiftCohort extends React.Component<
     defaultModelAssessmentContext;
 
   public componentDidMount(): void {
-    const savedCohorts = this.context.errorCohorts.filter(
+    let savedDatasetCohorts: DatasetCohort[] = [];
+    let savedCohorts: ErrorCohort[] = [];
+    //TODO(Ruby): filter out all data cohort
+    savedDatasetCohorts =
+      this.context.datasetCohorts?.filter(
+        (datasetCohort) => !datasetCohort.isTemporary
+      ) || [];
+
+    savedCohorts = this.context.errorCohorts.filter(
       (errorCohort) =>
         !errorCohort.isTemporary &&
         (this.props.showAllDataCohort ||
           !isAllDataErrorCohort(errorCohort, true))
     );
-    const options: IDropdownOption[] = savedCohorts.map(
-      (savedCohort: ErrorCohort, index: number) => {
-        return { key: index, text: savedCohort.cohort.name };
-      }
-    );
+
+    const options: IDropdownOption[] = this.context.isRefactorFlightOn
+      ? savedDatasetCohorts?.map(
+          (savedDatasetCohort: DatasetCohort, index: number) => {
+            return { key: index, text: savedDatasetCohort.name };
+          }
+        ) || []
+      : savedCohorts.map((savedCohort: ErrorCohort, index: number) => {
+          return { key: index, text: savedCohort.cohort.name };
+        });
     let defaultCohort = 0;
-    if (this.props.defaultCohort) {
-      const defaultCohortName = this.props.defaultCohort.cohort.name;
-      const index = savedCohorts.findIndex((errorCohort) => {
-        return errorCohort.cohort.name === defaultCohortName;
-      });
-      if (index !== -1) {
-        defaultCohort = index;
-      }
+    const defaultCohortName = this.context.isRefactorFlightOn
+      ? this.context.baseDatasetCohort?.name
+      : this.context.baseErrorCohort.cohort.name;
+    const index = this.context.isRefactorFlightOn
+      ? savedDatasetCohorts?.findIndex((datasetCohort) => {
+          return datasetCohort.name === defaultCohortName;
+        }) || -1
+      : savedCohorts.findIndex((errorCohort) => {
+          return errorCohort.cohort.name === defaultCohortName;
+        });
+    if (index !== -1) {
+      defaultCohort = index;
     }
     this.setState({
       options,
       savedCohorts,
+      savedDatasetCohorts,
       selectedCohort: defaultCohort
     });
   }
@@ -77,6 +96,8 @@ export class ShiftCohort extends React.Component<
       return React.Fragment;
     }
     const filters =
+      this.state.savedCohorts[this.state.selectedCohort].cohort.filters;
+    const legacyFilters =
       this.state.savedCohorts[this.state.selectedCohort].cohort.filters;
     let localizationBase;
     if (
@@ -119,6 +140,7 @@ export class ShiftCohort extends React.Component<
             this.state.savedCohorts[this.state.selectedCohort].cohort
               .compositeFilters
           }
+          legacyFilters={legacyFilters}
           filters={filters}
           jointDataset={this.context.jointDataset}
         />
@@ -146,6 +168,9 @@ export class ShiftCohort extends React.Component<
   };
 
   private shiftCohort = (): void => {
-    this.props.onApply(this.state.savedCohorts[this.state.selectedCohort]);
+    this.props.onApply(
+      this.state.savedCohorts[this.state.selectedCohort],
+      this.state.savedDatasetCohorts[this.state.selectedCohort]
+    );
   };
 }

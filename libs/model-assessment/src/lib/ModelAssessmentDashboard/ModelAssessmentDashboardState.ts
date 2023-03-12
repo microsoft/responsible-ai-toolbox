@@ -16,7 +16,7 @@ export interface IModelAssessmentDashboardState
   extends ICohortBasedComponentState {
   activeGlobalTabs: IModelAssessmentDashboardTab[];
   customPoints: Array<{ [key: string]: any }>;
-  datasetFeatureRanges?: {
+  columnRanges?: {
     [key: string]: INumericRange | ICategoricalRange;
   };
   modelMetadata: IExplanationModelMetadata;

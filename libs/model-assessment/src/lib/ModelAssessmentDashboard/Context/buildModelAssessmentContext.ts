@@ -17,7 +17,7 @@ import {
   DatasetTaskType,
   ModelTypes,
   DatasetCohort,
-  getFeatureRanges,
+  getColumnRanges,
   IDataset
 } from "@responsible-ai/core-ui";
 import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
@@ -40,7 +40,7 @@ export function buildInitialModelAssessmentContext(
 ): IModelAssessmentDashboardState {
   const modelMetadata = buildModelMetadata(props);
   const modelType = getModelTypeFromProps(props);
-  const datasetFeatureRanges = getFeatureRanges(props.dataset, modelType);
+  const columnRanges = getColumnRanges(props.dataset, modelType);
 
   let localExplanations:
     | IMultiClassLocalFeatureImportance
@@ -100,14 +100,14 @@ export function buildInitialModelAssessmentContext(
   const preBuiltDatasetCohortList = processPreBuiltDatasetCohort(
     props,
     modelType,
-    datasetFeatureRanges
+    columnRanges
   );
   const defaultDatasetCohort = new DatasetCohort(
     localization.ErrorAnalysis.Cohort.defaultLabel,
     props.dataset,
     [],
     modelType,
-    datasetFeatureRanges,
+    columnRanges,
     CohortSource.None,
     false,
     metricStats
@@ -132,10 +132,10 @@ export function buildInitialModelAssessmentContext(
     baseCohort: cohorts[0],
     baseDatasetCohort: datasetCohorts[0],
     cohorts,
+    columnRanges,
     customPoints: [],
     dataChartConfig: undefined,
     datasetCohorts,
-    datasetFeatureRanges,
     dependenceProps: undefined,
     errorAnalysisOption: ErrorAnalysisOptions.TreeMap,
     globalImportance: globalProps.globalImportance,

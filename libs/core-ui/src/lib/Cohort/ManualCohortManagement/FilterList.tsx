@@ -17,9 +17,10 @@ import { JointDataset } from "../../util/JointDataset";
 import { getFilterLabel } from "./CohortEditorPanelContentUtils";
 
 export interface IFilterListProps {
+  legacyFilters: IFilter[];
   filters: IFilter[];
   jointDataset: JointDataset;
-  datasetFeatureRanges?: { [key: string]: INumericRange | ICategoricalRange };
+  columnRanges?: { [key: string]: INumericRange | ICategoricalRange };
   isRefactorFlightOn?: boolean;
   editFilter?(index: number): void;
   removeFilter?(index: number): void;
@@ -40,7 +41,10 @@ export class FilterList extends React.Component<IFilterListProps> {
       localization.Interpret.FilterOperations.inTheRangeOf
   };
   public render(): React.ReactNode {
-    return this.props.filters
+    const filters = this.props.isRefactorFlightOn
+      ? this.props.filters
+      : this.props.legacyFilters;
+    return filters
       .filter((item) => item)
       .map((filter, index) => {
         return (
@@ -74,8 +78,8 @@ export class FilterList extends React.Component<IFilterListProps> {
     let sortedCategoricalValues: string[] | undefined;
     if (this.props.isRefactorFlightOn) {
       abbridgedLabel = getFilterLabel(filter.column);
-      const range = this.props.datasetFeatureRanges
-        ? this.props.datasetFeatureRanges[filter.column]
+      const range = this.props.columnRanges
+        ? this.props.columnRanges[filter.column]
         : undefined;
       if (range?.rangeType === RangeTypes.Categorical) {
         isCategorical = true;

@@ -26,7 +26,7 @@
         "CohortList.tsx"
       ],
       "rules": {
-        "max-lines": "warn"
+        "max-lines": "off"
       }
     }
   ]

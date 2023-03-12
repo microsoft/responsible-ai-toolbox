@@ -90,7 +90,6 @@ export class DatasetCohort {
       }
     });
     // set up errors
-    console.log(modelType);
     if (modelType === ModelTypes.Regression) {
       for (const [index, row] of dataDict.entries()) {
         dataDict[index][DatasetCohortColumns.RegressionError] = Math.abs(

@@ -12,7 +12,6 @@ import {
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-import { DatasetCohort } from "../../DatasetCohort";
 import { ICohort } from "../../Interfaces/ICohort";
 import { IExplanationModelMetadata } from "../../Interfaces/IExplanationContext";
 import { JointDataset } from "../../util/JointDataset";
@@ -92,7 +91,7 @@ export class CohortBar extends React.Component<
           (cohortForEdit ? (
             <CohortEditor
               jointDataset={this.props.jointDataset}
-              filterList={cohortForEdit.filterList}
+              legacyFilterList={cohortForEdit.filterList}
               cohortName={cohortForEdit.cohortName}
               onSave={this.onCohortChange}
               closeCohortEditor={this.closeCohortEditor}
@@ -128,11 +127,11 @@ export class CohortBar extends React.Component<
     });
   };
 
-  private onCohortChange = (newCohort: Cohort | DatasetCohort): void => {
+  private onCohortChange = (newCohort: Cohort): void => {
     if (this.state.editingCohortIndex !== undefined) {
       const isNew = this.state.editingCohortIndex === this.props.cohorts.length;
       const prevCohorts = [...this.props.cohorts];
-      prevCohorts[this.state.editingCohortIndex] = newCohort as Cohort;
+      prevCohorts[this.state.editingCohortIndex] = newCohort;
       this.props.onCohortsChange(prevCohorts);
       this.setState({ editingCohortIndex: undefined, showEditPanel: !isNew });
     }

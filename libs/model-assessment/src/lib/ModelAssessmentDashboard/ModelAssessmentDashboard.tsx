@@ -36,6 +36,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
   IModelAssessmentDashboardState
 > {
   private addTabDropdownOptions: IDropdownOption[];
+  private isRefactorFlightOn = isFlightActive(
+    RefactorFlight,
+    this.props.featureFlights
+  );
 
   public constructor(props: IModelAssessmentDashboardProps) {
     super(props);
@@ -64,15 +68,16 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           baseDatasetCohort: this.state.baseDatasetCohort,
           baseErrorCohort: this.state.baseCohort,
           causalAnalysisData: this.props.causalAnalysisData?.[0],
+          columnRanges: this.state.columnRanges,
           counterfactualData: this.props.counterfactualData?.[0],
           dataset: this.props.dataset,
           datasetCohorts: this.state.datasetCohorts,
-          datasetFeatureRanges: this.state.datasetFeatureRanges,
           deleteCohort: this.deleteCohort,
           editCohort: this.editCohort,
           errorAnalysisData: this.props.errorAnalysisData?.[0],
           errorCohorts: this.state.cohorts,
           featureFlights: this.props.featureFlights,
+          isRefactorFlightOn: this.isRefactorFlightOn,
           jointDataset: this.state.jointDataset,
           modelExplanationData: this.props.modelExplanationData?.[0]
             ? {
@@ -199,11 +204,20 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     this.setState({ activeGlobalTabs: tabs });
   };
 
-  private shiftErrorCohort = (cohort: ErrorCohort): void => {
+  private shiftErrorCohort = (
+    cohort: ErrorCohort,
+    datasetCohort?: DatasetCohort
+  ): void => {
     this.setState({
       baseCohort: cohort,
       selectedCohort: cohort
     });
+    if (datasetCohort) {
+      this.setState({
+        baseDatasetCohort: datasetCohort,
+        selectedDatasetCohort: datasetCohort
+      });
+    }
   };
 
   private setSelectedCohort = (cohort: ErrorCohort): void => {
@@ -249,54 +263,51 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
   };
 
   private addCohort = (
-    manuallyCreatedCohort: Cohort | DatasetCohort,
-    switchNew?: boolean
+    cohort: Cohort,
+    switchNew?: boolean,
+    datasetCohort?: DatasetCohort
   ): void => {
-    if (isFlightActive(RefactorFlight, this.props.featureFlights)) {
-      if (
-        this.state.datasetCohorts === undefined ||
-        this.state.datasetCohorts.some(
-          (c) => c.name === manuallyCreatedCohort.name
-        )
-      ) {
-        return;
-      }
-      let newDatasetCohorts = [
-        ...this.state.datasetCohorts,
-        manuallyCreatedCohort
-      ] as DatasetCohort[];
+    if (
+      !this.isRefactorFlightOn &&
+      this.state.cohorts.some((c) => c.cohort.name === cohort.name)
+    ) {
+      return;
+    }
+    if (
+      this.isRefactorFlightOn &&
+      (this.state.datasetCohorts === undefined ||
+        this.state.datasetCohorts.some((c) => c.name === cohort.name))
+    ) {
+      return;
+    }
+    // update errorCohorts
+    const newErrorCohort = new ErrorCohort(
+      cohort as Cohort,
+      this.state.jointDataset,
+      0,
+      CohortSource.ManuallyCreated
+    );
+    let newCohorts = [...this.state.cohorts, newErrorCohort];
+    newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
+    this.setState((prevState) => ({
+      baseCohort: switchNew ? newErrorCohort : prevState.baseCohort,
+      cohorts: newCohorts,
+      selectedCohort: switchNew ? newErrorCohort : prevState.selectedCohort
+    }));
+    // update datasetCohorts
+    if (datasetCohort && this.state.datasetCohorts) {
+      let newDatasetCohorts = [...this.state.datasetCohorts, datasetCohort];
       newDatasetCohorts = newDatasetCohorts.filter(
-        (cohort) => !cohort.isTemporary
+        (datasetCohort) => !datasetCohort.isTemporary
       );
       this.setState((prevState) => ({
         baseDatasetCohort: switchNew
-          ? (manuallyCreatedCohort as DatasetCohort)
+          ? datasetCohort
           : prevState.baseDatasetCohort,
         datasetCohorts: newDatasetCohorts,
         selectedDatasetCohort: switchNew
-          ? (manuallyCreatedCohort as DatasetCohort)
+          ? datasetCohort
           : prevState.selectedDatasetCohort
-      }));
-    } else {
-      if (
-        this.state.cohorts.some(
-          (c) => c.cohort.name === manuallyCreatedCohort.name
-        )
-      ) {
-        return;
-      }
-      const newErrorCohort = new ErrorCohort(
-        manuallyCreatedCohort as Cohort,
-        this.state.jointDataset,
-        0,
-        CohortSource.ManuallyCreated
-      );
-      let newCohorts = [...this.state.cohorts, newErrorCohort];
-      newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
-      this.setState((prevState) => ({
-        baseCohort: switchNew ? newErrorCohort : prevState.baseCohort,
-        cohorts: newCohorts,
-        selectedCohort: switchNew ? newErrorCohort : prevState.selectedCohort
       }));
     }
 
@@ -304,75 +315,98 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       level: TelemetryLevels.ButtonClick,
       type: TelemetryEventName.NewCohortAdded
     });
+    console.log("datasetCohort", datasetCohort);
+    console.log("cohort", cohort);
   };
 
   private editCohort = (
-    editCohort: Cohort | DatasetCohort,
-    switchNew?: boolean
+    editCohort: Cohort,
+    switchNew?: boolean,
+    editDatasetCohort?: DatasetCohort
   ): void => {
-    if (isFlightActive(RefactorFlight, this.props.featureFlights)) {
-      if (this.state.datasetCohorts === undefined) {
-        return;
-      }
-      const editIndex = this.state.datasetCohorts.findIndex(
-        (c) => c.name === editCohort.name
-      );
-      if (editIndex === -1) {
-        return;
-      }
-      let newDatasetCohorts = [...this.state.datasetCohorts];
-      newDatasetCohorts[editIndex] = editCohort as DatasetCohort;
-      newDatasetCohorts = newDatasetCohorts.filter(
-        (cohort) => !cohort.isTemporary
-      );
-      if (switchNew) {
-        this.setState({
-          datasetCohorts: newDatasetCohorts,
-          selectedDatasetCohort: newDatasetCohorts[editIndex]
-        });
-      } else {
-        this.setState({ datasetCohorts: newDatasetCohorts });
-      }
-    } else {
-      const editIndex = this.state.cohorts.findIndex(
-        (c) => c.cohort.name === editCohort.name
-      );
-      if (editIndex === -1) {
-        return;
-      }
-      const newErrorCohort = new ErrorCohort(
-        editCohort as Cohort,
-        this.state.jointDataset,
-        0,
-        CohortSource.ManuallyCreated
-      );
-      let newCohorts = [...this.state.cohorts];
-      newCohorts[editIndex] = newErrorCohort;
-      newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
-
-      if (switchNew) {
-        this.setState({
-          cohorts: newCohorts,
-          selectedCohort: newCohorts[editIndex]
-        });
-      } else {
-        this.setState({ cohorts: newCohorts });
-      }
+    const editIndex = this.isRefactorFlightOn
+      ? this.state.datasetCohorts?.findIndex(
+          (c) => c.name === editCohort.name
+        ) || -1
+      : this.state.cohorts.findIndex((c) => c.cohort.name === editCohort.name);
+    if (editIndex === -1) {
+      return;
     }
-  };
+    // edit errorCohort
+    const newErrorCohort = new ErrorCohort(
+      editCohort,
+      this.state.jointDataset,
+      0,
+      CohortSource.ManuallyCreated
+    );
+    let newCohorts = [...this.state.cohorts];
+    newCohorts[editIndex] = newErrorCohort;
+    newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
 
-  private deleteCohort = (cohort: ErrorCohort): void => {
+    if (switchNew) {
+      this.setState({
+        cohorts: newCohorts,
+        selectedCohort: newCohorts[editIndex]
+      });
+    } else {
+      this.setState({ cohorts: newCohorts });
+    }
+
     if (
-      this.state.baseCohort.cohort.name === cohort.cohort.name ||
-      this.state.selectedCohort.cohort.name === cohort.cohort.name
+      this.state.datasetCohorts === undefined ||
+      editDatasetCohort === undefined
     ) {
       return;
     }
-    const newCohorts = [...this.state.cohorts].filter(
-      (t) => t.cohort.name !== cohort.cohort.name
+    let newDatasetCohorts = [...this.state.datasetCohorts];
+    newDatasetCohorts[editIndex] = editDatasetCohort;
+    newDatasetCohorts = newDatasetCohorts.filter(
+      (cohort) => !cohort.isTemporary
     );
-    this.setState({
-      cohorts: newCohorts
-    });
+    if (switchNew) {
+      this.setState({
+        datasetCohorts: newDatasetCohorts,
+        selectedDatasetCohort: newDatasetCohorts[editIndex]
+      });
+    } else {
+      this.setState({ datasetCohorts: newDatasetCohorts });
+    }
+  };
+
+  private deleteCohort = (
+    cohort: ErrorCohort | DatasetCohort,
+    isErrorCohort?: boolean
+  ): void => {
+    if (isErrorCohort) {
+      if (
+        this.state.baseCohort.cohort.name ===
+          (cohort as ErrorCohort).cohort.name ||
+        this.state.selectedCohort.cohort.name ===
+          (cohort as ErrorCohort).cohort.name
+      ) {
+        return;
+      }
+      const newCohorts = [...this.state.cohorts].filter(
+        (t) => t.cohort.name !== (cohort as ErrorCohort).cohort.name
+      );
+      this.setState({
+        cohorts: newCohorts
+      });
+    } else {
+      if (
+        this.state.baseDatasetCohort?.name === (cohort as DatasetCohort).name ||
+        this.state.selectedDatasetCohort?.name ===
+          (cohort as DatasetCohort).name
+      ) {
+        return;
+      }
+
+      const newDatasetCohorts = this.state.datasetCohorts?.filter(
+        (item) => item.name !== (cohort as DatasetCohort).name
+      );
+      this.setState({
+        datasetCohorts: newDatasetCohorts
+      });
+    }
   };
 }

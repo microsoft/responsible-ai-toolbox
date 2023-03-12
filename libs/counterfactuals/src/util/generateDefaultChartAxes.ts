@@ -40,14 +40,14 @@ export function generateDefaultChartAxes(
 
 export function generateDefaultChartAxesWithDatasetCohort(
   datasetCohort?: DatasetCohort,
-  datasetFeatureRanges?: { [key: string]: INumericRange | ICategoricalRange }
+  columnRanges?: { [key: string]: INumericRange | ICategoricalRange }
 ): IGenericChartProps | undefined {
   if (!datasetCohort) {
     return;
   }
   const yKey = datasetCohort.dataset.feature_names[0];
-  const yIsDithered = datasetFeatureRanges
-    ? datasetFeatureRanges[yKey].rangeType === RangeTypes.Categorical
+  const yIsDithered = columnRanges
+    ? columnRanges[yKey].rangeType === RangeTypes.Categorical
     : false;
   const defaultClass =
     datasetCohort.dataset.class_names && datasetCohort.dataset.class_names[0];

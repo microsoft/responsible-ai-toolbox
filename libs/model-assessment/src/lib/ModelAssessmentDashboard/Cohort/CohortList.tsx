@@ -17,13 +17,16 @@ import {
   DatasetCohort,
   defaultModelAssessmentContext,
   ErrorCohort,
-  getCohortFilterCount,
   IModelAssessmentContext,
-  isAllDataErrorCohort,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
+
+import {
+  getDatasetCohortListItems,
+  getErrorCohortListItems
+} from "../utils/getCohortListItems";
 
 import { CohortDeleteDialog } from "./CohortDeleteDialog";
 import { cohortListStyles } from "./CohortList.styles";
@@ -47,6 +50,7 @@ export interface ICohortListItem {
 
 interface ICohortListState {
   currentEditCohort?: ErrorCohort;
+  currentEditDatasetCohort?: DatasetCohort;
   currentDeleteIndex?: number;
   currentDeleteCohortName?: string;
 }
@@ -59,7 +63,10 @@ export class CohortList extends React.Component<
   public context: IModelAssessmentContext = defaultModelAssessmentContext;
   public constructor(props: ICohortListProps) {
     super(props);
-    this.state = { currentEditCohort: undefined };
+    this.state = {
+      currentEditCohort: undefined,
+      currentEditDatasetCohort: undefined
+    };
   }
   public render(): React.ReactNode {
     const columns = [
@@ -81,6 +88,12 @@ export class CohortList extends React.Component<
       }
     ];
     const items = this.getCohortListItems();
+    const cohortName = this.context.isRefactorFlightOn
+      ? this.state.currentEditDatasetCohort?.name
+      : this.state.currentEditCohort?.cohort.name;
+    const isEditing = this.context.isRefactorFlightOn
+      ? this.state.currentEditDatasetCohort
+      : this.state.currentEditCohort;
     return (
       <>
         <DetailsList
@@ -92,14 +105,15 @@ export class CohortList extends React.Component<
           checkboxVisibility={CheckboxVisibility.hidden}
           onRenderItemColumn={this.renderItemColumn}
         />
-        {this.state.currentEditCohort && (
+        {isEditing && (
           <CohortEditor
             jointDataset={this.context.jointDataset}
-            filterList={this.state.currentEditCohort.cohort.filters}
+            legacyFilterList={this.state.currentEditCohort?.cohort.filters}
+            filterList={this.state.currentEditDatasetCohort?.filters}
             compositeFilters={
-              this.state.currentEditCohort.cohort.compositeFilters
+              this.state.currentEditCohort?.cohort.compositeFilters
             }
-            cohortName={this.state.currentEditCohort.cohort.name}
+            cohortName={cohortName || ""}
             onSave={this.saveEditedCohort}
             isNewCohort={false}
             disableEditName
@@ -219,15 +233,35 @@ export class CohortList extends React.Component<
     );
   }
 
+  private getAllDatasetCohorts(): DatasetCohort[] {
+    return (
+      this.context.datasetCohorts?.filter(
+        (datasetCohort) => !datasetCohort.isTemporary
+      ) || []
+    );
+  }
+
   private onDuplicateCohortClick = (index: number): void => {
-    const all = this.getAllCohort();
+    const allCohorts = this.getAllCohort();
+    const allDatasetCohorts = this.getAllDatasetCohorts();
+    const all = this.context.isRefactorFlightOn
+      ? allDatasetCohorts
+      : allCohorts;
     if (index >= 0 && index < all.length) {
-      const originCohort = all[index];
+      const originCohort = allCohorts[index];
+      const originDatasetCohort = allDatasetCohorts[index];
+      const cohortName = this.context.isRefactorFlightOn
+        ? originDatasetCohort.name
+        : originCohort.cohort.name;
       const duplicatedCohortNameStub =
-        originCohort.cohort.name + localization.Interpret.CohortBanner.copy;
+        cohortName + localization.Interpret.CohortBanner.copy;
       let duplicatedCohortName = duplicatedCohortNameStub;
       let cohortCopyIndex = 0;
-      while (this.existsCohort(all, duplicatedCohortName)) {
+      while (
+        this.context.isRefactorFlightOn
+          ? this.existsDatasetCohort(allDatasetCohorts, duplicatedCohortName)
+          : this.existsCohort(allCohorts, duplicatedCohortName)
+      ) {
         cohortCopyIndex++;
         duplicatedCohortName = `${duplicatedCohortNameStub}(${cohortCopyIndex})`;
       }
@@ -236,7 +270,15 @@ export class CohortList extends React.Component<
         this.context.jointDataset,
         originCohort.cohort.filters
       );
-      this.context.addCohort(newCohort);
+      const newDatasetCohort = new DatasetCohort(
+        duplicatedCohortName,
+        this.context.dataset,
+        originDatasetCohort.filters,
+        this.context.modelType,
+        this.context.columnRanges
+      );
+
+      this.context.addCohort(newCohort, false, newDatasetCohort);
     }
   };
 
@@ -246,31 +288,63 @@ export class CohortList extends React.Component<
     });
   }
 
+  private existsDatasetCohort(
+    datasetCohorts: DatasetCohort[],
+    name: string
+  ): boolean {
+    return datasetCohorts.some((datasetCohorts) => {
+      return datasetCohorts.name === name;
+    });
+  }
+
   private onEditCohortClick = (index: number): void => {
-    const all = this.getAllCohort();
-    const cohort = index >= 0 && index < all.length && all[index];
+    const allCohorts = this.getAllCohort();
+    const cohort = index >= 0 && index < allCohorts.length && allCohorts[index];
     if (cohort) {
       this.setState({ currentEditCohort: cohort });
+    }
+    const allDatasetCohorts = this.getAllDatasetCohorts();
+    const datasetCohort =
+      index >= 0 &&
+      index < allDatasetCohorts.length &&
+      allDatasetCohorts[index];
+    if (datasetCohort) {
+      this.setState({ currentEditDatasetCohort: datasetCohort });
     }
   };
 
   private isActiveCohort(index: number): boolean {
-    const all = this.getAllCohort();
-    if (index >= 0 && index < all.length) {
-      const targetCohort = all[index];
-      return !!(
-        targetCohort.cohort.name === this.context.baseErrorCohort.cohort.name ||
-        targetCohort.cohort.name ===
-          this.context.selectedErrorCohort.cohort.name
-      );
+    if (this.context.isRefactorFlightOn) {
+      const all = this.getAllCohort();
+      if (index >= 0 && index < all.length) {
+        const targetCohort = all[index];
+        return !!(
+          targetCohort.cohort.name ===
+            this.context.baseErrorCohort.cohort.name ||
+          targetCohort.cohort.name ===
+            this.context.selectedErrorCohort.cohort.name
+        );
+      }
+    } else {
+      const allDatasetCohorts = this.getAllDatasetCohorts();
+      if (index >= 0 && index < allDatasetCohorts.length) {
+        const target = allDatasetCohorts[index];
+        return !!(
+          target.name === this.context.baseDatasetCohort?.name ||
+          target.name === this.context.selectedDatasetCohort?.name
+        );
+      }
     }
     return false;
   }
 
   private onDeleteCohortClick = (index: number): void => {
-    const all = this.getAllCohort();
+    const allCohorts = this.getAllCohort();
+    const allDatasetCohorts = this.getAllDatasetCohorts();
     this.setState({
-      currentDeleteCohortName: all[index].cohort.name,
+      currentDeleteCohortName: this.context.isRefactorFlightOn
+        ? allDatasetCohorts[index].name
+        : allCohorts[index].cohort.name,
       currentDeleteIndex: index
     });
   };
@@ -282,55 +356,49 @@ export class CohortList extends React.Component<
   private onDeleteCohort = (): void => {
     if (this.state.currentDeleteIndex !== undefined) {
       const index = this.state.currentDeleteIndex;
-      const all = this.getAllCohort();
-      const cohort = index >= 0 && index < all.length && all[index];
+      const allCohorts = this.getAllCohort();
+      const cohort =
+        index >= 0 && index < allCohorts.length && allCohorts[index];
+      const allDatasetCohorts = this.getAllDatasetCohorts();
+      const datasetCohort =
+        index >= 0 &&
+        index < allDatasetCohorts.length &&
+        allDatasetCohorts[index];
       if (cohort) {
-        this.context.deleteCohort(cohort);
+        this.context.deleteCohort(cohort, true);
+      }
+      if (datasetCohort) {
+        this.context.deleteCohort(datasetCohort, false);
       }
       this.setState({ currentDeleteIndex: undefined });
     }
   };
 
   private getCohortListItems(): ICohortListItem[] {
-    const allItems = this.context.errorCohorts
-      .filter(
-        (errorCohort: ErrorCohort) =>
-          this.props.showAllDataCohort ||
-          !isAllDataErrorCohort(errorCohort, true)
-      )
-      .filter((errorCohort: ErrorCohort) => !errorCohort.isTemporary)
-      .map((errorCohort: ErrorCohort, index: number) => {
-        const details = [
-          localization.formatString(
-            localization.Interpret.CohortBanner.datapoints,
-            errorCohort.cohort.filteredData.length
-          ),
-          localization.formatString(
-            localization.Interpret.CohortBanner.filters,
-            getCohortFilterCount(errorCohort.cohort)
-          )
-        ];
-        return {
-          coverage: errorCohort.cohortStats.errorCoverage.toFixed(2),
-          details,
-          key: index,
-          metricName: errorCohort.cohortStats.metricName,
-          metricValue: errorCohort.cohortStats.metricValue.toFixed(2),
-          name: errorCohort.cohort.name
-        };
-      });
-    return allItems;
+    if (this.context.isRefactorFlightOn) {
+      return this.context.datasetCohorts
+        ? getDatasetCohortListItems(this.context.datasetCohorts)
+        : [];
+    }
+    return getErrorCohortListItems(
+      this.context.errorCohorts,
+      this.props.showAllDataCohort
+    );
   }
 
   private saveEditedCohort = (
-    cohort: Cohort | DatasetCohort,
+    cohort: Cohort,
+    datasetCohort?: DatasetCohort,
     switchNew?: boolean
   ): void => {
-    this.context.editCohort(cohort, switchNew);
+    this.context.editCohort(cohort, switchNew, datasetCohort);
     this.toggleEditPanel();
   };
 
   private toggleEditPanel = (): void => {
-    this.setState({ currentEditCohort: undefined });
+    this.setState({
+      currentEditCohort: undefined,
+      currentEditDatasetCohort: undefined
+    });
   };
 }

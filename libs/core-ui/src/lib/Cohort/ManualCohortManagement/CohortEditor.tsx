@@ -11,7 +11,6 @@ import {
   ModelAssessmentContext
 } from "../../Context/ModelAssessmentContext";
 import { DatasetCohort } from "../../DatasetCohort";
-import { isFlightActive, RefactorFlight } from "../../FeatureFlights";
 import { ICompositeFilter, IFilter } from "../../Interfaces/IFilter";
 import { JointDataset } from "../../util/JointDataset";
 import { Cohort } from "../Cohort";
@@ -28,15 +27,21 @@ export interface ICohortEditorProps {
   deleteIsDisabled: boolean;
   disableEditName?: boolean;
   existingCohortNames?: string[];
-  onSave: (newCohort: Cohort | DatasetCohort, switchNew?: boolean) => void;
+  onSave: (
+    newCohort: Cohort,
+    newDatasetCohort?: DatasetCohort,
+    switchNew?: boolean
+  ) => void;
   closeCohortEditor: () => void;
   closeCohortEditorPanel: () => void;
+  legacyFilterList?: IFilter[];
   filterList?: IFilter[];
   compositeFilters?: ICompositeFilter[];
   onDelete?: () => void;
 }
 
 export interface ICohortEditorState {
+  legacyFilters: IFilter[];
   filters: IFilter[];
   compositeFilters: ICompositeFilter[];
   cohortName?: string;
@@ -57,6 +62,7 @@ export class CohortEditor extends React.PureComponent<
       cohortName: this.props.cohortName,
       compositeFilters: this.props.compositeFilters || [],
       filters: this.props.filterList || [],
+      legacyFilters: this.props.legacyFilterList || [],
       showConfirmation: false,
       showEmptyCohortError: false
     };
@@ -81,13 +87,14 @@ export class CohortEditor extends React.PureComponent<
             {...this.props}
             cohortName={this.state.cohortName}
             compositeFilters={this.state.compositeFilters}
+            legacyFilters={this.state.legacyFilters}
             filters={this.state.filters}
             onCohortNameUpdated={this.onCohortNameUpdated}
             onCompositeFiltersUpdated={this.onCompositeFiltersUpdated}
             onFiltersUpdated={this.onFilterUpdated}
             dataset={this.context.dataset}
             activeFlights={this.context.featureFlights}
-            datasetFeatureRanges={this.context.datasetFeatureRanges}
+            columnRanges={this.context.columnRanges}
             modelType={this.context.modelType}
           />
         </Panel>
@@ -156,9 +163,12 @@ export class CohortEditor extends React.PureComponent<
   };
 
   private isSaveDisabled = (): boolean => {
+    const filters = this.context.isRefactorFlightOn
+      ? this.state.filters
+      : this.state.legacyFilters;
     return (
       this.isDuplicate() ||
-      (!this.state.compositeFilters?.length && !this.state.filters?.length)
+      (!this.state.compositeFilters?.length && !filters?.length)
     );
   };
 
@@ -198,32 +208,27 @@ export class CohortEditor extends React.PureComponent<
 
   private saveCohort = (switchNew?: boolean): void => {
     if (this.state.cohortName?.length) {
-      if (isFlightActive(RefactorFlight, this.context.featureFlights)) {
-        const newDatasetCohort = new DatasetCohort(
-          this.state.cohortName,
-          this.context.dataset,
-          this.state.filters,
-          this.context.modelType,
-          this.context.datasetFeatureRanges,
-          CohortSource.ManuallyCreated
-        );
-        if (newDatasetCohort.selectedIndexes.length === 0) {
-          this.setState({ showEmptyCohortError: true });
-        } else {
-          this.props.onSave(newDatasetCohort, switchNew);
-        }
+      const newDatasetCohort = new DatasetCohort(
+        this.state.cohortName,
+        this.context.dataset,
+        this.state.filters,
+        this.context.modelType,
+        this.context.columnRanges,
+        CohortSource.ManuallyCreated
+      );
+      const newCohort = new Cohort(
+        this.state.cohortName,
+        this.props.jointDataset,
+        this.state.legacyFilters,
+        this.state.compositeFilters
+      );
+      const filteredResultsLength = this.context.isRefactorFlightOn
+        ? newDatasetCohort.selectedIndexes.length
+        : newCohort.filteredData.length;
+      if (filteredResultsLength === 0) {
+        this.setState({ showEmptyCohortError: true });
       } else {
-        const newCohort = new Cohort(
-          this.state.cohortName,
-          this.props.jointDataset,
-          this.state.filters,
-          this.state.compositeFilters
-        );
-        if (newCohort.filteredData.length === 0) {
-          this.setState({ showEmptyCohortError: true });
-        } else {
-          this.props.onSave(newCohort, switchNew);
-        }
+        this.props.onSave(newCohort, newDatasetCohort, switchNew);
       }
     }
   };
@@ -238,7 +243,9 @@ export class CohortEditor extends React.PureComponent<
     this.setState({ compositeFilters });
   };
 
-  private onFilterUpdated = (filters: IFilter[]): void => {
-    this.setState({ filters });
+  private onFilterUpdated = (filters: IFilter[], isLegacy: boolean): void => {
+    isLegacy
+      ? this.setState({ legacyFilters: filters })
+      : this.setState({ filters });
   };
 }
