@@ -112,6 +112,13 @@ export interface IModelAssessmentDashboardProps
     abortSignal: AbortSignal
   ) => Promise<any>;
   requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
+  requestObjectDetectionMetrics?: (
+    trueY: number[][][],
+    predictedY: number[][][],
+    aggregate_method: string,
+    class_name: string,
+    iou_thresh: number
+  ) => Promise<any[]>;
   requestBubblePlotData?: (
     filter: unknown[],
     compositeFilter: unknown[],

@@ -181,6 +181,7 @@ export class TabsView extends React.PureComponent<
                         true_y: this.props.dataset.true_y
                       }}
                       requestExp={this.props.requestExp}
+                      requestObjectDetectionMetrics={this.props.requestObjectDetectionMetrics}
                       cohorts={this.props.cohorts}
                       setSelectedCohort={this.props.setSelectedCohort}
                       selectedCohort={this.props.selectedCohort}

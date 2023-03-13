@@ -129,6 +129,15 @@ export interface IModelAssessmentContext {
   requestExp?:
     | ((index: number, abortSignal: AbortSignal) => Promise<any[]>)
     | undefined;
+  requestObjectDetectionMetrics?:
+    | ((
+        trueY: number[][][],
+        predictedY: number[][][],
+        aggregate_method: string,
+        class_name: string,
+        iou_thresh: number
+        ) => Promise<any[]>)
+    | undefined;
   requestSplinePlotDistribution?: (
     request: any,
     abortSignal: AbortSignal

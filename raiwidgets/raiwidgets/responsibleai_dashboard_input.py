@@ -309,3 +309,25 @@ class ResponsibleAIDashboardInput:
                     "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }
+
+    def get_object_detection_metrics(self, post_data):
+        try:
+            true_y = post_data[0]
+            predicted_y = post_data[1]
+            aggregate_method = post_data[2]
+            class_name = post_data[3]
+            iou_thresh = post_data[4]
+            exp = self._analysis.compute_object_detection_metrics(true_y, predicted_y, aggregate_method, class_name, iou_thresh)
+            return {
+                WidgetRequestResponseConstants.data: exp
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to get OD MO metrics,"
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }

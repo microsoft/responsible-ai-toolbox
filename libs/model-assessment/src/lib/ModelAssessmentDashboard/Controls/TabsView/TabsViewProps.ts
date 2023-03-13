@@ -41,6 +41,13 @@ export interface ITabsViewProps {
   dataset: IDataset;
   onClearCohortSelectionClick: () => void;
   requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
+  requestObjectDetectionMetrics?: (
+    trueY: number[][][],
+    predictedY: number[][][],
+    aggregate_method: string,
+    class_name: string,
+    iou_thresh: number
+  ) => Promise<any[]>;
   requestPredictions?: (
     request: any[],
     abortSignal: AbortSignal
