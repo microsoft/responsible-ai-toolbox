@@ -76,6 +76,7 @@ export * from "./lib/components/MissingParametersPlaceholder";
 export * from "./lib/components/LabelWithCallout";
 export * from "./lib/components/NoData";
 export * from "./lib/components/SVGToolTip";
+export * from "./lib/FeatureFlights";
 export * from "./lib/Interfaces/ComparisonTypes";
 export * from "./lib/Interfaces/ExplanationInterfaces";
 export * from "./lib/Interfaces/IExplanationContext";
