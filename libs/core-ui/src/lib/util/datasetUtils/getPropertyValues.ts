@@ -26,25 +26,12 @@ export function getPropertyValues(
     }
   }
   const classNames = dataset.class_names;
-  if (
-    classNames &&
-    property === DatasetCohortColumns.ProbabilityY + classNames[0]
-  ) {
+  if (classNames && property.startsWith(DatasetCohortColumns.ProbabilityY)) {
     const probYs = dataset.probability_y;
-    if (probYs) {
+    const i = Number(property.slice(DatasetCohortColumns.ProbabilityY.length));
+    if (probYs && i < classNames.length) {
       return indexes.map((index) => {
-        return probYs[index][0];
-      });
-    }
-  }
-  if (
-    classNames &&
-    property === DatasetCohortColumns.ProbabilityY + classNames[1]
-  ) {
-    const probYs = dataset.probability_y;
-    if (probYs) {
-      return indexes.map((index) => {
-        return probYs[index][1];
+        return probYs[index][i];
       });
     }
   }
