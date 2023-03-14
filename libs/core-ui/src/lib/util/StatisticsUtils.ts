@@ -278,7 +278,7 @@ export const generateMetrics: (
       return generateImageStats(trueYSubset, predYSubset);
     });
   }
-  if (modelType == ModelTypes.ObjectDetection) {
+  if (modelType === ModelTypes.ObjectDetection) {
     return generateObjectDetectionStats(jointDataset, selectionIndexes);
   }
   const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
