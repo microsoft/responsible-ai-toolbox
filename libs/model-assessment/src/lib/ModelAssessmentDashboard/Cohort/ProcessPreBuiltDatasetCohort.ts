@@ -53,22 +53,13 @@ export function processPreBuiltDatasetCohort(
             filterList.push(filter);
             break;
           }
+          case CohortColumnNames.TrueY:
           case CohortColumnNames.PredictedY: {
             const filter = translateCohortFilterForTarget(
               preBuiltCohortFilter,
               props.dataset,
               modelType,
-              CohortColumnNames.PredictedY
-            );
-            filterList.push(filter);
-            break;
-          }
-          case CohortColumnNames.TrueY: {
-            const filter = translateCohortFilterForTarget(
-              preBuiltCohortFilter,
-              props.dataset,
-              modelType,
-              CohortColumnNames.TrueY
+              preBuiltCohortFilter.column
             );
             filterList.push(filter);
             break;
