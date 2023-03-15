@@ -133,9 +133,9 @@ export interface IModelAssessmentContext {
     | ((
         trueY: number[][][],
         predictedY: number[][][],
-        aggregate_method: string,
-        class_name: string,
-        iou_thresh: number
+        aggregateMethod: string,
+        className: string,
+        iouThresh: number
         ) => Promise<any[]>)
     | undefined;
   requestSplinePlotDistribution?: (
