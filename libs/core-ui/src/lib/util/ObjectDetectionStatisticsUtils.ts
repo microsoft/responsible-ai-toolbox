@@ -24,7 +24,7 @@ export const generateObjectDetectionStats: (
     selectionIndexes: number[][]
   ): ILabeledStatistic[][] => {
     let numLabels = jointDataset.numLabels;
-    numLabels = 0; // TODO: remove numLabels from here when using jointDataset elsewhere.
+    numLabels = 4; // TODO: remove numLabels from here when using jointDataset elsewhere.
     return selectionIndexes.map((selectionArray) => {
 
         const count = selectionArray.length;
