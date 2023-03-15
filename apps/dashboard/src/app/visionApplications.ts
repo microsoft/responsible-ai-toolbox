@@ -4,6 +4,7 @@
 import { fridge } from "../model-assessment-vision/__mock_data__/fridge";
 import { fridgeBinary } from "../model-assessment-vision/__mock_data__/fridgeBinary";
 import { fridgeMultilabel } from "../model-assessment-vision/__mock_data__/fridgeMultilabel";
+import { fridgeObjectDetection } from "../model-assessment-vision/__mock_data__/fridgeObjectDetection";
 import { imagenet } from "../model-assessment-vision/__mock_data__/imagenet";
 
 import {
@@ -62,6 +63,20 @@ export const visionApplications: IApplications = <const>{
           target_column: fridgeMultilabel.target_column,
           task_type: fridgeMultilabel.task_type,
           true_y: fridgeMultilabel.true_y
+        }
+      },
+      fridgeObjectDetection: {
+        classDimension: 3,
+        dataset: {
+          categorical_features: fridgeObjectDetection.categorical_features,
+          class_names: fridgeObjectDetection.class_names,
+          feature_names: fridgeObjectDetection.feature_names,
+          features: fridgeObjectDetection.features,
+          images: fridgeObjectDetection.images,
+          predicted_y: fridgeObjectDetection.predicted_y,
+          target_column: fridgeObjectDetection.target_column,
+          task_type: fridgeObjectDetection.task_type,
+          true_y: fridgeObjectDetection.true_y
         }
       },
       imagenet: {
