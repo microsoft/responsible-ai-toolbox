@@ -616,7 +616,7 @@ class RAIInsights(RAIBaseInsights):
             # do not change the input data.
             if task_type != ModelTask.FORECASTING:
                 self._ensure_model_outputs(input_data=small_train_data)
-                self._ensure_model_outputs(input_data=small_test_data)
+            self._ensure_model_outputs(input_data=small_test_data)
 
             if task_type == ModelTask.REGRESSION:
                 if hasattr(model, SKLearn.PREDICT_PROBA):
