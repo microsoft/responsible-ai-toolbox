@@ -214,18 +214,18 @@ export class ModelOverview extends React.Component<
     );
 
     const selectableAggregateMethods : IComboBoxOption[] = [
-      { key: localization.ModelAssessment.ModelOverview.metricTypes.macro,
+      { key: "macro",
         text: localization.ModelAssessment.ModelOverview.metricTypes.macro },
-      { key: localization.ModelAssessment.ModelOverview.metricTypes.micro,
+      { key: "micro",
         text: localization.ModelAssessment.ModelOverview.metricTypes.micro }
     ];
 
     const selectableClassNames : IComboBoxOption[] = []
     if (this.context.dataset.class_names) {
-      for (var class_name of this.context.dataset.class_names) {
+      for (let className of this.context.dataset.class_names) {
         selectableClassNames.push({
-          key: class_name,
-          text: class_name
+          key: className,
+          text: className
         })
       }
     }
@@ -338,15 +338,15 @@ export class ModelOverview extends React.Component<
                   .helpMeChooseMetricsButton
               }
             </ActionButton>
-            <ComboBox
+            {this.context.dataset.task_type == DatasetTaskType.ObjectDetection && (<ComboBox
               id="modelOverviewAggregateMethod"
               label={localization.ModelAssessment.ModelOverview.metricsTypeDropdown}
-              selectedKey={localization.ModelAssessment.ModelOverview.metricTypes.macro}
+              selectedKey={"macro"}
               options={selectableAggregateMethods}
               className={classNames.dropdown}
               styles={FluentUIStyles.limitedSizeMenuDropdown}
-            />
-            <ComboBox
+            />)}
+            {this.context.dataset.task_type == DatasetTaskType.ObjectDetection && (<ComboBox
               id="modelOverviewClassSelection"
               placeholder={
                 localization.ModelAssessment.ModelOverview
@@ -356,14 +356,14 @@ export class ModelOverview extends React.Component<
               options={selectableClassNames}
               className={classNames.dropdown}
               styles={FluentUIStyles.limitedSizeMenuDropdown}
-            />
-            <Slider
+            />)}
+            {this.context.dataset.task_type == DatasetTaskType.ObjectDetection && (<Slider
               id="iouThreshold"
               label={localization.ModelAssessment.ModelOverview.iouThresholdDropdown}
               max={100}
               valueFormat={iouSliderValueFormat}
               showValue
-            />
+            />)}
           </Stack>
           {!this.state.datasetCohortViewIsVisible && (
             <Stack
