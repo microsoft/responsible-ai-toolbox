@@ -3,5 +3,4 @@
 
 export * from "./lib/ModelAssessmentDashboard/ModelAssessmentDashboard";
 export * from "./lib/ModelAssessmentDashboard/ModelAssessmentDashboardProps";
-export * from "./lib/ModelAssessmentDashboard/FeatureFlights";
 export * from "./lib/ModelAssessmentDashboard/Controls/ModelOverview/StatsTableUtils";
