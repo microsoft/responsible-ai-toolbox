@@ -630,7 +630,8 @@ class RAIInsights(RAIBaseInsights):
                 model, train, test, target_column, feature_metadata, classes)
 
     def _validate_classes(
-            self, model, train, test, target_column, feature_metadata, classes):
+            self, model, train, test, target_column,
+            feature_metadata, classes):
         if classes is not None:
             if (len(set(train[target_column].unique()) -
                     set(classes)) != 0 or
@@ -649,34 +650,38 @@ class RAIInsights(RAIBaseInsights):
                     'target (test data) do not match')
 
             if model is not None:
-                if feature_metadata is not None:
-                    if (feature_metadata.dropped_features is not None and
-                            len(feature_metadata.dropped_features) != 0):
-                        train_data = train.drop(
-                            columns=feature_metadata.dropped_features + [target_column], axis=1)
-                        test_data = test.drop(
-                            columns=feature_metadata.dropped_features + [target_column], axis=1)
-                    else:
-                        train_data = train.drop(
-                            columns=[target_column], axis=1)
-                        test_data = test.drop(
-                            columns=[target_column], axis=1)
+                if feature_metadata is not None and \
+                        feature_metadata.dropped_features is not None and \
+                        len(feature_metadata.dropped_features) != 0:
+                    train_data = train.drop(
+                        columns=feature_metadata.dropped_features + [
+                            target_column],
+                        axis=1)
+                    test_data = test.drop(
+                        columns=feature_metadata.dropped_features + [
+                            target_column],
+                        axis=1)
+                else:
+                    train_data = train.drop(
+                        columns=[target_column], axis=1)
+                    test_data = test.drop(
+                        columns=[target_column], axis=1)
 
-                    train_predictions = model.predict(train_data)
-                    test_predictions = model.predict(test_data)
+                train_predictions = model.predict(train_data)
+                test_predictions = model.predict(test_data)
 
-                if (len(set(train_predictions.unique()) -
+                if (len(set(np.unique(train_predictions)) -
                         set(classes)) != 0 or
                         len(set(classes) -
-                            set(train_predictions.unique())) != 0):
+                            set(np.unique(train_predictions))) != 0):
                     raise UserConfigValidationException(
                         'The train labels and distinct values in '
                         'predictions (train data) do not match')
 
-                if (len(set(test_predictions.unique()) -
+                if (len(set(np.unique(test_predictions)) -
                         set(classes)) != 0 or
                         len(set(classes) -
-                            set(test_predictions.unique())) != 0):
+                            set(np.unique(test_predictions))) != 0):
                     raise UserConfigValidationException(
                         'The train labels and distinct values in '
                         'predictions (test data) do not match')
