@@ -35,19 +35,15 @@ export function processPreBuiltDatasetCohort(
       const filterList: IFilter[] = [];
       preBuiltCohort.cohort_filter_list.forEach((preBuiltCohortFilter) => {
         switch (preBuiltCohortFilter.column) {
+          case CohortColumnNames.RegressionError:
           case CohortColumnNames.Index: {
+            let column = DatasetCohortColumns.Index
+            if (preBuiltCohortFilter.column === CohortColumnNames.RegressionError) {
+                column = DatasetCohortColumns.RegressionError
+            }
             const filter: IFilter = {
               arg: preBuiltCohortFilter.arg,
-              column: DatasetCohortColumns.Index,
-              method: preBuiltCohortFilter.method
-            };
-            filterList.push(filter);
-            break;
-          }
-          case CohortColumnNames.RegressionError: {
-            const filter: IFilter = {
-              arg: preBuiltCohortFilter.arg,
-              column: DatasetCohortColumns.RegressionError,
+              column: column,
               method: preBuiltCohortFilter.method
             };
             filterList.push(filter);
