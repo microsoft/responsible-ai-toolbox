@@ -23,16 +23,16 @@ export const generateObjectDetectionStats: (
     jointDataset: JointDataset,
     selectionIndexes: number[][]
   ): ILabeledStatistic[][] => {
-    const numLabels = jointDataset.numLabels;
-    numLabels; // TODO: remove numLabels from here when using jointDataset elsewhere.
+    let numLabels = jointDataset.numLabels;
+    numLabels = 0; // TODO: remove numLabels from here when using jointDataset elsewhere.
     return selectionIndexes.map((selectionArray) => {
 
         const count = selectionArray.length;
 
         // TODO: replace placeholder values with flask endpoint calls to python backend.
-        let meanAveragePrecision = 42;
-        let averagePrecision = 42;
-        let averageRecall = 42;
+        const meanAveragePrecision = 42;
+        const averagePrecision = 42;
+        const averageRecall = 42;
 
         return [
             {
