@@ -24,7 +24,6 @@ export const generateObjectDetectionStats: (
     selectionIndexes: number[][]
   ): ILabeledStatistic[][] => {
     let numLabels = jointDataset.numLabels;
-    numLabels = 4; // TODO: remove numLabels from here when using jointDataset elsewhere.
     return selectionIndexes.map((selectionArray) => {
 
         const count = selectionArray.length;
@@ -38,7 +37,7 @@ export const generateObjectDetectionStats: (
             {
                 key: TotalCohortSamples,
                 label: localization.Interpret.Statistics.samples,
-                stat: count
+                stat: count / numLabels // TODO: remove numLabels from here when using jointDataset elsewhere.
               },
             {
               key: ObjectDetectionMetrics.MeanAveragePrecision,
