@@ -8,13 +8,13 @@ import {
   IHighchartBoxData,
   IHighchartBubbleSDKClusterData,
   ICounterfactualData,
-  ILocalExplanations
+  ILocalExplanations,
+  parseFeatureFlights
 } from "@responsible-ai/core-ui";
 import {
   ModelAssessmentDashboard,
   IModelAssessmentData,
-  IModelAssessmentDashboardProps,
-  parseFeatureFlights
+  IModelAssessmentDashboardProps
 } from "@responsible-ai/model-assessment";
 import React from "react";
 
