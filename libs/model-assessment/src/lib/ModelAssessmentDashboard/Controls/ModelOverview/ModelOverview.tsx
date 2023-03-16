@@ -228,7 +228,7 @@ export class ModelOverview extends React.Component<
           text: className
         })
       }
-    };
+    }
 
     const iouSliderValueFormat: (value: number) => string =
     (value: number) => `IoU=${value}%`;
