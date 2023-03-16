@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 
 import {
+  ComboBox,
+  IComboBoxOption,
   Icon,
   Image,
   ImageFit,
@@ -14,7 +16,7 @@ import {
   Spinner,
   Separator
 } from "@fluentui/react";
-import { IVisionListItem } from "@responsible-ai/core-ui";
+import { FluentUIStyles, IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
@@ -103,6 +105,26 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
     const classNames = flyoutStyles();
     const predictedY = getJoinedLabelString(item?.predictedY);
     const trueY = getJoinedLabelString(item?.trueY);
+    const temp = [
+                  [
+                    [0,0,0,0,0],
+                    [0,0,0,0,0]
+                  ],
+                  [
+                    [0,0,0,0,0],
+                  ]
+                ]
+    // const temp = this.context.dataset.object_detection_true_y[index]
+    const SelectableObjectIndexes : IComboBoxOption[] = []
+      if (temp) {
+        temp[index].forEach((_, i) => {
+          SelectableObjectIndexes.push({
+            key: "Object " + String(i),
+            text: "Object " + String(i)
+          })
+        })
+      }
+
     return (
       <FocusZone>
         <Panel
@@ -111,10 +133,11 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
           closeButtonAriaLabel="Close"
           onDismiss={callback}
           isLightDismiss
-          type={PanelType.medium}
+          type={PanelType.large}
           className={classNames.mainContainer}
         >
-          <Stack tokens={stackTokens.medium}>
+          <Stack tokens={stackTokens.medium} horizontal={true}>
+            <Stack>
             <Stack.Item>
               <Separator className={classNames.separator} />
             </Stack.Item>
@@ -206,36 +229,6 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
               <Separator className={classNames.separator} />
             </Stack.Item>
             <Stack
-              tokens={stackTokens.medium}
-              className={classNames.sectionIndent}
-            >
-              <Stack.Item>
-                <Text variant="large" className={classNames.title}>
-                  {localization.InterpretVision.Dashboard.panelExplanation}
-                </Text>
-              </Stack.Item>
-              {!this.props.loadingExplanation[index] ? (
-                <Stack.Item>
-                  <Image
-                    src={`data:image/jpg;base64,${this.props.explanations.get(
-                      index
-                    )}`}
-                    width="700px"
-                    style={{ position: "relative", right: 85 }}
-                  />
-                </Stack.Item>
-              ) : (
-                <Stack.Item>
-                  <Spinner
-                    label={`${localization.InterpretVision.Dashboard.loading} ${item?.index}`}
-                  />
-                </Stack.Item>
-              )}
-            </Stack>
-            <Stack.Item>
-              <Separator className={classNames.separator} />
-            </Stack.Item>
-            <Stack
               tokens={{ childrenGap: "l2" }}
               className={classNames.sectionIndent}
             >
@@ -252,6 +245,46 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
               </Stack.Item>
             </Stack>
           </Stack>
+          <Stack >
+          <Stack.Item>
+            <Separator className={classNames.separator} />
+          </Stack.Item>
+          <Stack.Item>
+            <Text variant="large" className={classNames.title}>
+              {localization.InterpretVision.Dashboard.panelExplanation}
+            </Text>
+          </Stack.Item>
+          <Stack>
+          {(<ComboBox
+            id="objectSelection"
+            label={localization.InterpretVision.Dashboard.ExplainabilityObjectChoiceDropdown}
+            selectedKey={"macro"}
+            options={SelectableObjectIndexes}
+            className={"classNames.dropdown"}
+            styles={FluentUIStyles.smallDropdownStyle}
+          />)}
+                <Stack>
+          {!this.props.loadingExplanation[index] ? (
+            <Stack.Item>
+              <Image
+                src={`data:image/jpg;base64,${this.props.explanations.get(
+                  index
+                )}`}
+                width="700px"
+                style={{ position: "relative", right: 85 }}
+              />
+            </Stack.Item>
+          ) : (
+            <Stack.Item>
+              <Spinner
+                label={`${localization.InterpretVision.Dashboard.loading} ${item?.index}`}
+              />
+            </Stack.Item>
+          )}
+        </Stack>
+        </Stack>
+        </Stack>
+        </Stack>
         </Panel>
       </FocusZone>
     );
