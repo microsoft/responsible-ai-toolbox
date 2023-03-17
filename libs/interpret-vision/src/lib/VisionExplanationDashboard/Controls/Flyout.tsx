@@ -105,25 +105,15 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
     const classNames = flyoutStyles();
     const predictedY = getJoinedLabelString(item?.predictedY);
     const trueY = getJoinedLabelString(item?.trueY);
-    const temp = [
-                  [
-                    [0,0,0,0,0],
-                    [0,0,0,0,0]
-                  ],
-                  [
-                    [0,0,0,0,0],
-                  ]
-                ]
-    // const temp = this.context.dataset.object_detection_true_y[index]
+    const temp = item?.odPredictedY
     const SelectableObjectIndexes : IComboBoxOption[] = []
       if (temp) {
-        temp[index].forEach((_, i) => {
+        for (let i = 0; i < Object.values(temp).length; i++) {
           SelectableObjectIndexes.push({
             key: "Object " + String(i),
             text: "Object " + String(i)
           })
-        })
-      }
+      }}
 
     return (
       <FocusZone>

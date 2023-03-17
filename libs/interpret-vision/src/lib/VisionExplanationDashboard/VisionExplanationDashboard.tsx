@@ -50,7 +50,7 @@ export class VisionExplanationDashboard extends React.Component<
     this.state = defaultState;
   }
   public componentDidMount(): void {
-    const data = preprocessData(this.props);
+    const data = preprocessData(this.props, this.context.dataset);
     if (!data) {
       return;
     }
