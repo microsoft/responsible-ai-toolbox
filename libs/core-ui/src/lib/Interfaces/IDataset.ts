@@ -31,6 +31,8 @@ export interface IDataset {
   feature_metadata?: IFeatureMetaData;
   images?: string[];
   index?: string[];
+  object_detection_true_y?: number[][][];
+  object_detection_predicted_y?: number[][][];
 }
 
 // TODO Remove DatasetSummary when possible

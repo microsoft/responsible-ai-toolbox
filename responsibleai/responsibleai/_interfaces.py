@@ -27,6 +27,8 @@ class Dataset:
     data_balance_measures: Dict[str, Any]
     images: Optional[List[str]]
     index: Optional[List[str]]
+    object_detection_true_y: Optional[List]
+    object_detection_predicted_y: Optional[List]
 
 
 class BoundedCoordinates:
