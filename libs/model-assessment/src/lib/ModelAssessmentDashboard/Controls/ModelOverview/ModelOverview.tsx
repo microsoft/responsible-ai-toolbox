@@ -140,7 +140,7 @@ export class ModelOverview extends React.Component<
       ];
     } else if (
       this.context.dataset.task_type === DatasetTaskType.ObjectDetection
-      ) {
+    ) {
       defaultSelectedMetrics = [
         ObjectDetectionMetrics.MeanAveragePrecision,
         ObjectDetectionMetrics.AveragePrecision,
