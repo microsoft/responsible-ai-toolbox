@@ -4,6 +4,7 @@
 import {
   ComboBox,
   IComboBoxOption,
+  IComboBox,
   Icon,
   Image,
   ImageFit,
@@ -36,6 +37,8 @@ export interface IFlyoutProps {
 export interface IFlyoutState {
   item: IVisionListItem | undefined;
   metadata: Array<Array<string | number | boolean>> | undefined;
+  selectableObjectIndexes: IComboBoxOption[]; 
+  odSelectedKey: string; 
 }
 
 const stackTokens = {
@@ -48,8 +51,23 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
     super(props);
     this.state = {
       item: undefined,
-      metadata: undefined
+      metadata: undefined,
+      selectableObjectIndexes: [], 
+      odSelectedKey: ''
     };
+  }
+
+  public generateSelectableObjectDetectionIndexes(item: IVisionListItem | undefined): IComboBoxOption[] {
+    const temp = item?.odPredictedY
+    const selectableObjectIndexes : IComboBoxOption[] = []
+      if (temp) {
+        for (let i = 0; i < Object.values(temp).length; i++) {
+          selectableObjectIndexes.push({
+            key: "Object " + String(i),
+            text: "Object " + String(i)
+          })
+      }}
+    return selectableObjectIndexes
   }
 
   public componentDidMount(): void {
@@ -68,7 +86,10 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
         metadata.push([fieldName, itemValue]);
       }
     });
-    this.setState({ item, metadata });
+
+    const selectableObjectIndexes = this.generateSelectableObjectDetectionIndexes(item)
+
+    this.setState({ item, metadata, selectableObjectIndexes });
   }
 
   public componentDidUpdate(prevProps: IFlyoutProps): void {
@@ -88,9 +109,11 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
           metadata.push([fieldName, itemValue]);
         }
       });
+      const selectableObjectIndexes = this.generateSelectableObjectDetectionIndexes(item)
       this.setState({
         item: this.props.item,
-        metadata
+        metadata,
+        selectableObjectIndexes,
       });
     }
   }
@@ -105,15 +128,6 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
     const classNames = flyoutStyles();
     const predictedY = getJoinedLabelString(item?.predictedY);
     const trueY = getJoinedLabelString(item?.trueY);
-    const temp = item?.odPredictedY
-    const SelectableObjectIndexes : IComboBoxOption[] = []
-      if (temp) {
-        for (let i = 0; i < Object.values(temp).length; i++) {
-          SelectableObjectIndexes.push({
-            key: "Object " + String(i),
-            text: "Object " + String(i)
-          })
-      }}
 
     return (
       <FocusZone>
@@ -248,8 +262,9 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
           {(<ComboBox
             id="objectSelection"
             label={localization.InterpretVision.Dashboard.ExplainabilityObjectChoiceDropdown}
-            selectedKey={"macro"}
-            options={SelectableObjectIndexes}
+            onChange={this.selectODChoiceFromDropdown}
+            selectedKey={this.state.odSelectedKey}
+            options={this.state.selectableObjectIndexes}
             className={"classNames.dropdown"}
             styles={FluentUIStyles.smallDropdownStyle}
           />)}
@@ -304,5 +319,15 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
         <Separator className={classNames.separator} />
       </Stack.Item>
     );
+  };
+
+  private selectODChoiceFromDropdown = (
+    _event: React.FormEvent<IComboBox>,
+    item?: IComboBoxOption
+  ): void => {
+    if (typeof item?.key === "string") {
+      const key = item.key;
+      this.setState({odSelectedKey:key})
+    }
   };
 }
