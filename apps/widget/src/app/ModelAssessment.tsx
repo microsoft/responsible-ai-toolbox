@@ -65,7 +65,8 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
         return callFlaskService(
           this.props.config,
           [trueY, predictedY, aggregateMethod, className, iouThresh],
-          "/get_object_detection_metrics");
+          "/get_object_detection_metrics"
+        );
       };
       callBack.requestPredictions = async (data: any[]): Promise<any[]> => {
         return callFlaskService(this.props.config, data, "/predict");
