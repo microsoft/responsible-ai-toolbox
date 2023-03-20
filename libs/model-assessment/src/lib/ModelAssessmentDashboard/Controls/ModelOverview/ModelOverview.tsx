@@ -197,22 +197,7 @@ export class ModelOverview extends React.Component<
     }
   }
 
-  public render(): React.ReactNode {
-    if (this.context.dataset.predicted_y === undefined) {
-      return (
-        <MissingParametersPlaceholder>
-          {localization.Interpret.ModelPerformance.missingParameters}
-        </MissingParametersPlaceholder>
-      );
-    }
-
-    const classNames = modelOverviewStyles();
-
-    const selectableMetrics = getSelectableMetrics(
-      this.context.dataset.task_type,
-      IsMulticlass(this.context.jointDataset.getModelType())
-    );
-
+  public getObjectDetectionWidgetOptions(): [IComboBoxOption[], IComboBoxOption[], ((value: number) => string)] {
     const selectableAggregateMethods : IComboBoxOption[] = [
       { key: "macro",
         text: localization.ModelAssessment.ModelOverview.metricTypes.macro },
@@ -232,6 +217,28 @@ export class ModelOverview extends React.Component<
 
     const iouSliderValueFormat: (value: number) => string =
     (value: number) => `IoU=${value}%`;
+
+    return [selectableAggregateMethods, selectableClassNames, iouSliderValueFormat]
+
+  }
+
+  public render(): React.ReactNode {
+    if (this.context.dataset.predicted_y === undefined) {
+      return (
+        <MissingParametersPlaceholder>
+          {localization.Interpret.ModelPerformance.missingParameters}
+        </MissingParametersPlaceholder>
+      );
+    }
+
+    const classNames = modelOverviewStyles();
+
+    const selectableMetrics = getSelectableMetrics(
+      this.context.dataset.task_type,
+      IsMulticlass(this.context.jointDataset.getModelType())
+    );
+
+    const [selectableAggregateMethods, selectableClassNames, iouSliderValueFormat] = this.getObjectDetectionWidgetOptions();
 
     const columns: string[] = [
       localization.ModelAssessment.ModelOverview.countColumnHeader
