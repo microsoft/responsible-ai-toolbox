@@ -14,8 +14,7 @@ export enum ModelTypes {
   ImageMultilabel = "imagemultilabel",
   TextBinary = "textbinary",
   TextMulticlass = "textmulticlass",
-  TextMultilabel = "textmultilabel",
-  ObjectDetection = "objectdetection"
+  TextMultilabel = "textmultilabel"
 }
 
 export interface IExplanationContext {

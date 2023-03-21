@@ -21,9 +21,7 @@ import {
   IsClassifier,
   DatasetTaskType,
   isAllDataErrorCohort,
-  featureColumnsExist,
-  dataBalanceExperienceFlight,
-  isFlightActive
+  featureColumnsExist
 } from "@responsible-ai/core-ui";
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import {
@@ -46,6 +44,10 @@ import { Dictionary } from "lodash";
 import * as React from "react";
 
 import { AddTabButton } from "../../AddTabButton";
+import {
+  isFlightActive,
+  dataBalanceExperienceFlight
+} from "../../FeatureFlights";
 import { GlobalTabKeys } from "../../ModelAssessmentEnums";
 import {
   FeatureImportancesTab,

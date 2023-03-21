@@ -11,7 +11,6 @@ import {
   ImageClassificationMetrics,
   MulticlassClassificationMetrics,
   MultilabelMetrics,
-  ObjectDetectionMetrics,
   RegressionMetrics,
   TotalCohortSamples
 } from "@responsible-ai/core-ui";
@@ -401,33 +400,6 @@ export function getSelectableMetrics(
             .description,
         key: MultilabelMetrics.HammingScore,
         text: localization.ModelAssessment.ModelOverview.metrics.hammingScore
-          .name
-      }
-    );
-  } else if (taskType === DatasetTaskType.ObjectDetection) {
-    selectableMetrics.push(
-      {
-        description:
-          localization.ModelAssessment.ModelOverview.metrics
-            .meanAveragePrecision.description,
-        key: ObjectDetectionMetrics.MeanAveragePrecision,
-        text: localization.ModelAssessment.ModelOverview.metrics
-          .meanAveragePrecision.name
-      },
-      {
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.averagePrecision
-            .description,
-        key: ObjectDetectionMetrics.AveragePrecision,
-        text: localization.ModelAssessment.ModelOverview.metrics
-          .averagePrecision.name
-      },
-      {
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.averageRecall
-            .description,
-        key: ObjectDetectionMetrics.AverageRecall,
-        text: localization.ModelAssessment.ModelOverview.metrics.averageRecall
           .name
       }
     );

@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 
 import { ITheme } from "@fluentui/react";
-import { generateRoute, parseFeatureFlights } from "@responsible-ai/core-ui";
+import { generateRoute } from "@responsible-ai/core-ui";
 import { Language } from "@responsible-ai/localization";
+import { parseFeatureFlights } from "@responsible-ai/model-assessment";
 import _ from "lodash";
 import React from "react";
 import { Redirect, generatePath } from "react-router-dom";

@@ -4,11 +4,9 @@
 import {
   IExplanationModelMetadata,
   IGenericChartProps,
-  ICohortBasedComponentState,
-  ModelTypes
+  ICohortBasedComponentState
 } from "@responsible-ai/core-ui";
 import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
-import { ICategoricalRange, INumericRange } from "@responsible-ai/mlchartlib";
 
 import { GlobalTabKeys } from "./ModelAssessmentEnums";
 
@@ -16,11 +14,7 @@ export interface IModelAssessmentDashboardState
   extends ICohortBasedComponentState {
   activeGlobalTabs: IModelAssessmentDashboardTab[];
   customPoints: Array<{ [key: string]: any }>;
-  columnRanges?: {
-    [key: string]: INumericRange | ICategoricalRange;
-  };
   modelMetadata: IExplanationModelMetadata;
-  modelType: ModelTypes;
   modelChartConfig?: IGenericChartProps;
   dataChartConfig?: IGenericChartProps;
   dependenceProps?: IGenericChartProps;

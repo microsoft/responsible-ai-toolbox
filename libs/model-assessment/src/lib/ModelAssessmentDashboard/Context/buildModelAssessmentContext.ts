@@ -13,11 +13,12 @@ import {
   buildGlobalProperties,
   buildIndexedNames,
   getClassLength,
+  getModelTypeFromExplanation,
+  getModelTypeFromTextExplanation,
   MetricCohortStats,
   DatasetTaskType,
   ModelTypes,
-  IDataset,
-  getColumnRanges
+  IDataset
 } from "@responsible-ai/core-ui";
 import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
@@ -31,14 +32,11 @@ import {
   IModelAssessmentDashboardTab
 } from "../ModelAssessmentDashboardState";
 import { GlobalTabKeys } from "../ModelAssessmentEnums";
-import { getModelTypeFromProps } from "../utils/getModelTypeFromProps";
 
 export function buildInitialModelAssessmentContext(
   props: IModelAssessmentDashboardProps
 ): IModelAssessmentDashboardState {
   const modelMetadata = buildModelMetadata(props);
-  const modelType = getModelTypeFromProps(props);
-  const columnRanges = getColumnRanges(props.dataset, modelType);
 
   let localExplanations:
     | IMultiClassLocalFeatureImportance
@@ -110,7 +108,6 @@ export function buildInitialModelAssessmentContext(
     activeGlobalTabs,
     baseCohort: cohorts[0],
     cohorts,
-    columnRanges,
     customPoints: [],
     dataChartConfig: undefined,
     dependenceProps: undefined,
@@ -122,7 +119,6 @@ export function buildInitialModelAssessmentContext(
     jointDataset,
     modelChartConfig: undefined,
     modelMetadata,
-    modelType,
     onAddMessage: "",
     saveCohortVisible: false,
     selectedCohort: cohorts[0],
@@ -131,11 +127,55 @@ export function buildInitialModelAssessmentContext(
   };
 }
 
+function getModelTypeFromProps(
+  props: IModelAssessmentDashboardProps,
+  classNames: string[] | undefined
+): ModelTypes {
+  let modelType: ModelTypes = ModelTypes.Multiclass;
+  if (props.dataset.task_type === DatasetTaskType.Regression) {
+    modelType = ModelTypes.Regression;
+  } else if (props.dataset.task_type === DatasetTaskType.Classification) {
+    modelType = getModelTypeFromExplanation(
+      props.modelExplanationData?.[0]?.precomputedExplanations,
+      props.dataset.probability_y
+    );
+  }
+  if (props.dataset.task_type === DatasetTaskType.ImageClassification) {
+    if (classNames && classNames.length === 2) {
+      modelType = ModelTypes.ImageBinary;
+    } else {
+      modelType = ModelTypes.ImageMulticlass;
+    }
+  } else if (props.dataset.task_type === DatasetTaskType.TextClassification) {
+    if (classNames) {
+      if (classNames.length === 2) {
+        modelType = ModelTypes.TextBinary;
+      } else {
+        modelType = ModelTypes.TextMulticlass;
+      }
+    } else {
+      getModelTypeFromTextExplanation(
+        props.modelExplanationData?.[0]?.precomputedExplanations,
+        props.dataset.probability_y
+      );
+    }
+  } else if (
+    props.dataset.task_type === DatasetTaskType.MultilabelImageClassification
+  ) {
+    modelType = ModelTypes.ImageMultilabel;
+  } else if (
+    props.dataset.task_type === DatasetTaskType.MultilabelTextClassification
+  ) {
+    modelType = ModelTypes.TextMultilabel;
+  }
+  return modelType;
+}
+
 function buildModelMetadata(
   props: IModelAssessmentDashboardProps
 ): IExplanationModelMetadata {
   let classNames = props.dataset.class_names;
-  const modelType = getModelTypeFromProps(props);
+  const modelType = getModelTypeFromProps(props, classNames);
   let featureNames = props.dataset.feature_names;
   let featureNamesAbridged: string[];
   const maxLength = 18;
