@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { ITheme } from "@fluentui/react";
+import { ICategoricalRange, INumericRange } from "@responsible-ai/mlchartlib";
 import React from "react";
 
 import { Cohort } from "../Cohort/Cohort";
@@ -13,7 +14,10 @@ import {
 import { ICounterfactualData } from "../Interfaces/ICounterfactualData";
 import { IDataset } from "../Interfaces/IDataset";
 import { IErrorAnalysisData } from "../Interfaces/IErrorAnalysisData";
-import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
+import {
+  IExplanationModelMetadata,
+  ModelTypes
+} from "../Interfaces/IExplanationContext";
 import { IHighchartBoxData } from "../Interfaces/IHighchartBoxData";
 import { IHighchartBubbleSDKClusterData } from "../Interfaces/IHighchartBubbleData";
 import { IModelExplanationData } from "../Interfaces/IModelExplanationData";
@@ -24,6 +28,9 @@ export interface IModelAssessmentContext {
   causalAnalysisData?: ICausalAnalysisData;
   counterfactualData?: ICounterfactualData;
   dataset: IDataset;
+  // TODO: these ranges should come from backend
+  columnRanges?: { [key: string]: INumericRange | ICategoricalRange };
+  modelType?: ModelTypes;
   modelExplanationData?: IModelExplanationData;
   errorAnalysisData?: IErrorAnalysisData;
   theme?: ITheme;
@@ -146,6 +153,7 @@ export interface IModelAssessmentContext {
 export const defaultModelAssessmentContext: IModelAssessmentContext = {
   addCohort: () => undefined,
   baseErrorCohort: {} as ErrorCohort,
+  columnRanges: {},
   dataset: {} as IDataset,
   deleteCohort: () => undefined,
   editCohort: () => undefined,
@@ -153,6 +161,7 @@ export const defaultModelAssessmentContext: IModelAssessmentContext = {
   jointDataset: {} as JointDataset,
   modelExplanationData: undefined,
   modelMetadata: {} as IExplanationModelMetadata,
+  modelType: undefined,
   requestExp: undefined,
   requestLocalFeatureExplanations: undefined,
   requestPredictions: undefined,

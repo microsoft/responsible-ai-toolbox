@@ -20,6 +20,7 @@ import {
   MulticlassClassificationEnum
 } from "./JointDatasetUtils";
 import { generateMultilabelStats } from "./MultilabelStatisticsUtils";
+import { generateObjectDetectionStats } from "./ObjectDetectionStatisticsUtils";
 
 export enum BinaryClassificationMetrics {
   Accuracy = "accuracy",
@@ -276,6 +277,9 @@ export const generateMetrics: (
       const predYSubset = selectionArray.map((i) => predYs[i]);
       return generateImageStats(trueYSubset, predYSubset);
     });
+  }
+  if (modelType === ModelTypes.ObjectDetection) {
+    return generateObjectDetectionStats(jointDataset, selectionIndexes);
   }
   const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
   return selectionIndexes.map((selectionArray) => {
