@@ -81,7 +81,7 @@ export function preprocessData(
     return undefined;
   }
   const loadingExplanation: boolean[] = [];
-  const computedExplanations: Map<number, string> = new Map();
+  const computedExplanations: Map<number, Map<number, string>> = new Map();
   dataSummary.images?.forEach((image, index) => {
     const defVal = "object scenario not defined"; 
     const y = dataset.object_detection_predicted_y?.[index]; 
@@ -107,7 +107,7 @@ export function preprocessData(
       : errorInstances.push(item);
 
     loadingExplanation.push(false);
-    computedExplanations.set(index, "");
+    computedExplanations.set(index, new Map<number, string>());
   });
 
   return {

@@ -51,7 +51,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       | "requestTestDataRow"
     > = {};
     if (this.props.config.baseUrl) {
-      callBack.requestExp = async (data: number): Promise<any[]> => {
+      callBack.requestExp = async (data: number | number[]): Promise<any[]> => {
         return callFlaskService(this.props.config, data, "/get_exp");
       };
       callBack.requestPredictions = async (data: any[]): Promise<any[]> => {

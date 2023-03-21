@@ -197,7 +197,10 @@ export class VisionExplanationDashboard extends React.Component<
             loadingExplanation={this.state.loadingExplanation}
             otherMetadataFieldNames={this.state.otherMetadataFieldNames}
             callback={this.onPanelClose}
+            onChange={this.onItemSelect}
           />
+          {/* this.objectIndex = +(flyout.getOdChoiceFromDropdown().slice(7)) */}
+          {/* onItemSelect(this.onItemSelect) */}
         </Stack.Item>
       </Stack>
     );
@@ -220,8 +223,8 @@ export class VisionExplanationDashboard extends React.Component<
   ): void => {
     this.setState({ searchValue: newValue || "" });
   };
-  private onItemSelect = (item: IVisionListItem): void => {
-    this.setState({ panelOpen: !this.state.panelOpen, selectedItem: item });
+  private onItemSelect = (item: IVisionListItem, selectedObject = -1): void => {
+    this.setState({ panelOpen: true, selectedItem: item });
     const index = item.index;
     const { computedExplanations, loadingExplanation } = this.state;
     const computedExplanation = computedExplanations.get(index);
@@ -232,14 +235,15 @@ export class VisionExplanationDashboard extends React.Component<
       });
       return;
     }
-    if (this.props.requestExp) {
+    if (this.props.requestExp && selectedObject !== -1) {
       loadingExplanation[index] = true;
       this.setState({ loadingExplanation });
       this.props
-        .requestExp(index, new AbortController().signal)
+        .requestExp([index, selectedObject], new AbortController().signal)
         .then((result) => {
           const explanation = result.toString();
-          computedExplanations.set(index, explanation);
+          const computedObjectExplanations = computedExplanations.get(index);
+          computedObjectExplanations?.set(selectedObject, explanation);
           loadingExplanation[index] = false;
           this.setState({
             computedExplanations,

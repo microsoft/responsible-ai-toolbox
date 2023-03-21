@@ -4,7 +4,7 @@
 import { IVisionListItem } from "@responsible-ai/core-ui";
 
 export interface IVisionExplanationDashboardState {
-  computedExplanations: Map<number, string>;
+  computedExplanations: Map<number, Map<number, string>>;
   errorInstances: IVisionListItem[];
   successInstances: IVisionListItem[];
   imageDim: number;

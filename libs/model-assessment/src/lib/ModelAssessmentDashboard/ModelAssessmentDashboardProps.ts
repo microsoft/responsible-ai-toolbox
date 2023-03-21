@@ -111,7 +111,7 @@ export interface IModelAssessmentDashboardProps
     metric: string,
     abortSignal: AbortSignal
   ) => Promise<any>;
-  requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
+  requestExp?: (index: number | number[], abortSignal: AbortSignal) => Promise<any[]>;
   requestBubblePlotData?: (
     filter: unknown[],
     compositeFilter: unknown[],

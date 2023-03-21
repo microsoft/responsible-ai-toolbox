@@ -239,7 +239,10 @@ class ResponsibleAIDashboardInput:
 
     def get_exp(self, index):
         try:
-            exp = self._analysis.explainer.compute_single_explanation(index)
+            # index 0 = index of the image
+            # index 1 = index of the object 
+            exp = self._analysis.explainer.compute_single_explanation(index[0],
+                                                                      index[1])
             return {
                 WidgetRequestResponseConstants.data: exp
             }

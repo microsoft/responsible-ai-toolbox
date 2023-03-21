@@ -26,12 +26,13 @@ import { getJoinedLabelString } from "../utils/labelUtils";
 import { flyoutStyles } from "./Flyout.styles";
 
 export interface IFlyoutProps {
-  explanations: Map<number, string>;
+  explanations: Map<number, Map<number, string>>;
   isOpen: boolean;
   item: IVisionListItem | undefined;
   loadingExplanation: boolean[];
   otherMetadataFieldNames: string[];
   callback: () => void;
+  onChange: (item: IVisionListItem, index: number) => void; 
 }
 
 export interface IFlyoutState {
@@ -52,8 +53,8 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
     this.state = {
       item: undefined,
       metadata: undefined,
-      selectableObjectIndexes: [], 
-      odSelectedKey: ''
+      odSelectedKey: "",
+      selectableObjectIndexes: [] 
     };
   }
 
@@ -326,8 +327,12 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
     item?: IComboBoxOption
   ): void => {
     if (typeof item?.key === "string") {
-      const key = item.key;
-      this.setState({odSelectedKey:key})
+      const key = +item.key.slice(7);
+      this.setState({ odSelectedKey: item?.key })
+      const t = this.state.item
+      if (t !== undefined) {
+        this.props.onChange(t, key);
+      } 
     }
   };
 }

@@ -40,7 +40,7 @@ export interface ITabsViewProps {
   selectedCohort: ErrorCohort;
   dataset: IDataset;
   onClearCohortSelectionClick: () => void;
-  requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
+  requestExp?: (index: number | number[], abortSignal: AbortSignal) => Promise<any[]>;
   requestPredictions?: (
     request: any[],
     abortSignal: AbortSignal
