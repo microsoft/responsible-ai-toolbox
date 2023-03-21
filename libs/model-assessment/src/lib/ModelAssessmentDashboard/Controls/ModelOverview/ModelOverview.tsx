@@ -372,7 +372,7 @@ export class ModelOverview extends React.Component<
             />)}
             {this.context.dataset.task_type === DatasetTaskType.ObjectDetection && (<Slider
               id="iouThreshold"
-              label={localization.ModelAssessment.ModelOverview.iouThresholdDropdown}
+              label={localization.ModelAssessment.ModelOverview.iouthresholdDropdown}
               max={100}
               className={classNames.slider}
               valueFormat={(value: number) : string => `IoU=${value}%`}
