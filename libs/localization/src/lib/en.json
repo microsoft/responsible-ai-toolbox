@@ -1388,7 +1388,6 @@
       "columnFour": "Predicted Y",
       "columnFive": "Other metadata",
       "examples": "examples",
-      "ExplainabilityObjectChoiceDropdown": "Choose a detected object",
       "filter": "Filter",
       "indexLabel": "Image ",
       "labelTypeDropdown": "Select label type",

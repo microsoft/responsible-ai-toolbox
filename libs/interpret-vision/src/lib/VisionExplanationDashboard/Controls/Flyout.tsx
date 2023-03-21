@@ -2,20 +2,8 @@
 // Licensed under the MIT License.
 
 import {
-  ComboBox,
-  IComboBoxOption,
-  IComboBox,
-  Icon,
-  Image,
-  ImageFit,
-  List,
-  Panel,
-  PanelType,
-  FocusZone,
-  Stack,
-  Text,
-  Spinner,
-  Separator
+  ComboBox, IComboBoxOption, IComboBox, Icon, Image, ImageFit, List, Panel, PanelType, FocusZone,
+  Stack, Text, Spinner, Separator
 } from "@fluentui/react";
 import { FluentUIStyles, IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -50,12 +38,7 @@ const stackTokens = {
 export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
   public constructor(props: IFlyoutProps) {
     super(props);
-    this.state = {
-      item: undefined,
-      metadata: undefined,
-      odSelectedKey: "",
-      selectableObjectIndexes: [] 
-    };
+    this.state = { item: undefined, metadata: undefined, odSelectedKey: "", selectableObjectIndexes: [] };
   }
 
   public generateSelectableObjectDetectionIndexes(item: IVisionListItem | undefined): IComboBoxOption[] {
@@ -64,8 +47,8 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
       if (temp) {
         for (let i = 0; i < Object.values(temp).length; i++) {
           selectableObjectIndexes.push({
-            key: "Object " + String(i),
-            text: "Object " + String(i)
+            key: `Object ${i}`,
+            text: `Object ${i}`
           })
       }}
     return selectableObjectIndexes
@@ -87,9 +70,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
         metadata.push([fieldName, itemValue]);
       }
     });
-
     const selectableObjectIndexes = this.generateSelectableObjectDetectionIndexes(item)
-
     this.setState({ item, metadata, selectableObjectIndexes });
   }
 
@@ -104,8 +85,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
       fieldNames.forEach((fieldName) => {
         const itemField = item[fieldName];
         const itemValue = Array.isArray(itemField)
-          ? itemField.join(",")
-          : itemField;
+          ? itemField.join(",") : itemField;
         if (item[fieldName]) {
           metadata.push([fieldName, itemValue]);
         }
@@ -129,7 +109,6 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
     const classNames = flyoutStyles();
     const predictedY = getJoinedLabelString(item?.predictedY);
     const trueY = getJoinedLabelString(item?.trueY);
-
     return (
       <FocusZone>
         <Panel
@@ -139,9 +118,8 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
           onDismiss={callback}
           isLightDismiss
           type={PanelType.large}
-          className={classNames.mainContainer}
-        >
-          <Stack tokens={stackTokens.medium} horizontal={true}>
+          className={classNames.mainContainer}>
+          <Stack tokens={stackTokens.medium} horizontal>
             <Stack>
             <Stack.Item>
               <Separator className={classNames.separator} />
@@ -165,11 +143,9 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                       horizontalAlign="center"
                       verticalAlign="center"
                     >
-                      <Stack.Item className={classNames.iconContainer}>
+                      <Stack.Item className={ classNames.iconContainer }>
                         <Icon
-                          iconName={
-                            predictedY !== trueY ? "Cancel" : "Checkmark"
-                          }
+                          iconName={ predictedY !== trueY ? "Cancel" : "Checkmark" }
                           className={
                             predictedY !== trueY
                               ? classNames.errorIcon
@@ -181,22 +157,15 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                         {predictedY !== trueY ? (
                           <Text
                             variant="large"
-                            className={classNames.errorTitle}
-                          >
-                            {
-                              localization.InterpretVision.Dashboard
-                                .titleBarError
-                            }
+                            className={classNames.errorTitle}>
+                            {localization.InterpretVision.Dashboard.titleBarError}
                           </Text>
                         ) : (
                           <Text
                             variant="large"
                             className={classNames.successTitle}
                           >
-                            {
-                              localization.InterpretVision.Dashboard
-                                .titleBarSuccess
-                            }
+                            {localization.InterpretVision.Dashboard.titleBarSuccess}
                           </Text>
                         )}
                       </Stack.Item>
@@ -225,8 +194,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                   <Image
                     src={`data:image/jpg;base64,${item?.image}`}
                     className={classNames.image}
-                    imageFit={ImageFit.contain}
-                  />
+                    imageFit={ImageFit.contain}/>
                 </Stack.Item>
               </Stack>
             </Stack.Item>
@@ -235,8 +203,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
             </Stack.Item>
             <Stack
               tokens={{ childrenGap: "l2" }}
-              className={classNames.sectionIndent}
-            >
+              className={classNames.sectionIndent}>
               <Stack.Item>
                 <Text variant="large" className={classNames.title}>
                   {localization.InterpretVision.Dashboard.panelInformation}
@@ -245,8 +212,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
               <Stack.Item className={classNames.featureListContainer}>
                 <List
                   items={this.state.metadata}
-                  onRenderCell={this.onRenderCell}
-                />
+                  onRenderCell={this.onRenderCell}/>
               </Stack.Item>
             </Stack>
           </Stack>
@@ -262,7 +228,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
           <Stack>
           {(<ComboBox
             id="objectSelection"
-            label={localization.InterpretVision.Dashboard.ExplainabilityObjectChoiceDropdown}
+            label={"Choose a detected object"}
             onChange={this.selectODChoiceFromDropdown}
             selectedKey={this.state.odSelectedKey}
             options={this.state.selectableObjectIndexes}
@@ -277,14 +243,11 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                   index
                 )}`}
                 width="700px"
-                style={{ position: "relative", right: 85 }}
-              />
-            </Stack.Item>
-          ) : (
+                style={{ position: "relative", right: 85 }}/>
+            </Stack.Item> ) : (
             <Stack.Item>
               <Spinner
-                label={`${localization.InterpretVision.Dashboard.loading} ${item?.index}`}
-              />
+                label={`${localization.InterpretVision.Dashboard.loading} ${item?.index}`}/>
             </Stack.Item>
           )}
         </Stack>
@@ -309,8 +272,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
           horizontal
           tokens={{ childrenGap: "l2" }}
           verticalAlign="center"
-          className={classNames.cell}
-        >
+          className={classNames.cell}>
           {item.map((val) => (
             <Stack.Item key={val.toString()}>
               <Text variant="large">{val}</Text>
