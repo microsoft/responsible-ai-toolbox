@@ -197,7 +197,7 @@ export class ModelOverview extends React.Component<
     }
   }
 
-  public getObjectDetectionWidgetOptions(): [IComboBoxOption[], IComboBoxOption[], ((value: number) => string)] {
+  public getObjectDetectionWidgetOptions(): Array<IComboBoxOption[]> {
     const selectableAggregateMethods : IComboBoxOption[] = [
       { key: "macro",
         text: localization.ModelAssessment.ModelOverview.metricTypes.macro },
@@ -215,10 +215,7 @@ export class ModelOverview extends React.Component<
       }
     }
 
-    const iouSliderValueFormat: (value: number) => string =
-    (value: number) => `IoU=${value}%`;
-
-    return [selectableAggregateMethods, selectableClassNames, iouSliderValueFormat]
+    return [selectableAggregateMethods, selectableClassNames]
 
   }
 
@@ -238,7 +235,7 @@ export class ModelOverview extends React.Component<
       IsMulticlass(this.context.jointDataset.getModelType())
     );
 
-    const [selectableAggregateMethods, selectableClassNames, iouSliderValueFormat] = this.getObjectDetectionWidgetOptions();
+    const objectDetectionWidgetOptions = this.getObjectDetectionWidgetOptions();
 
     const columns: string[] = [
       localization.ModelAssessment.ModelOverview.countColumnHeader
@@ -350,7 +347,7 @@ export class ModelOverview extends React.Component<
               id="modelOverviewAggregateMethod"
               label={localization.ModelAssessment.ModelOverview.metricsTypeDropdown}
               selectedKey={"macro"}
-              options={selectableAggregateMethods}
+              options={objectDetectionWidgetOptions[0]}
               className={classNames.dropdown}
               styles={FluentUIStyles.smallDropdownStyle}
             />)}
@@ -361,7 +358,7 @@ export class ModelOverview extends React.Component<
                 .classSelectionDropdownPlaceholder
               }
               label={localization.ModelAssessment.ModelOverview.classSelectionDropdown}
-              options={selectableClassNames}
+              options={objectDetectionWidgetOptions[1]}
               className={classNames.dropdown}
               styles={FluentUIStyles.smallDropdownStyle}
             />)}
@@ -370,7 +367,7 @@ export class ModelOverview extends React.Component<
               label={localization.ModelAssessment.ModelOverview.iouThresholdDropdown}
               max={100}
               className={classNames.slider}
-              valueFormat={iouSliderValueFormat}
+              valueFormat={(value: number) => `IoU=${value}%`}
               showValue
             />)}
           </Stack>
