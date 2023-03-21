@@ -343,7 +343,7 @@ class ResponsibleAIDashboardInput:
             e_str = _format_exception(e)
             return {
                 WidgetRequestResponseConstants.error:
-                    "Failed to get OD MO metrics,"
+                    "Failed to get Object Detection Model Overview metrics,"
                     "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }
