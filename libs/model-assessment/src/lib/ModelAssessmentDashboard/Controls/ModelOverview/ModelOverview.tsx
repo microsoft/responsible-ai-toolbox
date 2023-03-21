@@ -197,14 +197,17 @@ export class ModelOverview extends React.Component<
     }
   }
 
-  public getObjectDetectionWidgetOptions(): Array<IComboBoxOption[]> {
+  public getSelectableAggregateMethod(): IComboBoxOption[] {
     const selectableAggregateMethods : IComboBoxOption[] = [
       { key: "macro",
         text: localization.ModelAssessment.ModelOverview.metricTypes.macro },
       { key: "micro",
         text: localization.ModelAssessment.ModelOverview.metricTypes.micro }
     ];
+    return selectableAggregateMethods;
+  }
 
+  public getSelectableClassNames(): IComboBoxOption[] {
     const selectableClassNames : IComboBoxOption[] = []
     if (this.context.dataset.class_names) {
       for (const className of this.context.dataset.class_names) {
@@ -214,9 +217,7 @@ export class ModelOverview extends React.Component<
         })
       }
     }
-
-    return [selectableAggregateMethods, selectableClassNames]
-
+    return selectableClassNames;
   }
 
   public render(): React.ReactNode {
@@ -234,8 +235,6 @@ export class ModelOverview extends React.Component<
       this.context.dataset.task_type,
       IsMulticlass(this.context.jointDataset.getModelType())
     );
-
-    const objectDetectionWidgetOptions = this.getObjectDetectionWidgetOptions();
 
     const columns: string[] = [
       localization.ModelAssessment.ModelOverview.countColumnHeader
@@ -347,7 +346,7 @@ export class ModelOverview extends React.Component<
               id="modelOverviewAggregateMethod"
               label={localization.ModelAssessment.ModelOverview.metricsTypeDropdown}
               selectedKey={"macro"}
-              options={objectDetectionWidgetOptions[0]}
+              options={this.getSelectableAggregateMethod()}
               className={classNames.dropdown}
               styles={FluentUIStyles.smallDropdownStyle}
             />)}
@@ -358,7 +357,7 @@ export class ModelOverview extends React.Component<
                 .classSelectionDropdownPlaceholder
               }
               label={localization.ModelAssessment.ModelOverview.classSelectionDropdown}
-              options={objectDetectionWidgetOptions[1]}
+              options={this.getSelectableClassNames()}
               className={classNames.dropdown}
               styles={FluentUIStyles.smallDropdownStyle}
             />)}
@@ -367,7 +366,7 @@ export class ModelOverview extends React.Component<
               label={localization.ModelAssessment.ModelOverview.iouThresholdDropdown}
               max={100}
               className={classNames.slider}
-              valueFormat={(value: number) => `IoU=${value}%`}
+              valueFormat={(value: number) : string => `IoU=${value}%`}
               showValue
             />)}
           </Stack>
