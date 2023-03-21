@@ -49,6 +49,7 @@ import { MetricConfigurationFlyout } from "./MetricConfigurationFlyout";
 import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewChartPivot } from "./ModelOverviewChartPivot";
 import { getSelectableMetrics } from "./StatsTableUtils";
+import { getSelectableAggregateMethod, getSelectableClassNames } from "./ObjectDetectionModelOverview";
 
 interface IModelOverviewProps {
   telemetryHook?: (message: ITelemetryEvent) => void;
@@ -206,29 +207,6 @@ export class ModelOverview extends React.Component<
     }
   }
 
-  public getSelectableAggregateMethod(): IComboBoxOption[] {
-    const selectableAggregateMethods : IComboBoxOption[] = [
-      { key: "macro",
-        text: localization.ModelAssessment.ModelOverview.metricTypes.macro },
-      { key: "micro",
-        text: localization.ModelAssessment.ModelOverview.metricTypes.micro }
-    ];
-    return selectableAggregateMethods;
-  }
-
-  public getSelectableClassNames(): IComboBoxOption[] {
-    const selectableClassNames : IComboBoxOption[] = []
-    if (this.context.dataset.class_names) {
-      for (const className of this.context.dataset.class_names) {
-        selectableClassNames.push({
-          key: className,
-          text: className
-        })
-      }
-    }
-    return selectableClassNames;
-  }
-
   public render(): React.ReactNode {
     if (this.context.dataset.predicted_y === undefined) {
       return (
@@ -355,7 +333,7 @@ export class ModelOverview extends React.Component<
               id="modelOverviewAggregateMethod"
               label={localization.ModelAssessment.ModelOverview.metricsTypeDropdown}
               selectedKey={"macro"}
-              options={this.getSelectableAggregateMethod()}
+              options={getSelectableAggregateMethod()}
               className={classNames.dropdown}
               styles={FluentUIStyles.smallDropdownStyle}
             />)}
@@ -366,7 +344,7 @@ export class ModelOverview extends React.Component<
                 .classSelectionDropdownPlaceholder
               }
               label={localization.ModelAssessment.ModelOverview.classSelectionDropdown}
-              options={this.getSelectableClassNames()}
+              options={getSelectableClassNames(this.context.dataset)}
               className={classNames.dropdown}
               styles={FluentUIStyles.smallDropdownStyle}
             />)}
