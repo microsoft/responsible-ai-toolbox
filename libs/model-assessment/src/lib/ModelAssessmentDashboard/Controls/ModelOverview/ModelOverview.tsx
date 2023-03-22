@@ -11,7 +11,6 @@ import {
   PivotItem,
   ActionButton,
   MessageBar,
-  Slider,
   Toggle
 } from "@fluentui/react";
 import {
@@ -49,7 +48,7 @@ import { MetricConfigurationFlyout } from "./MetricConfigurationFlyout";
 import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewChartPivot } from "./ModelOverviewChartPivot";
 import { getSelectableMetrics } from "./StatsTableUtils";
-import { getSelectableAggregateMethod, getSelectableClassNames } from "./ObjectDetectionModelOverview";
+import { ObjectDetectionWidgets } from "./ObjectDetectionModelOverview";
 
 interface IModelOverviewProps {
   telemetryHook?: (message: ITelemetryEvent) => void;
@@ -329,32 +328,9 @@ export class ModelOverview extends React.Component<
                   .helpMeChooseMetricsButton
               }
             </ActionButton>
-            {this.context.dataset.task_type === DatasetTaskType.ObjectDetection && (<ComboBox
-              id="modelOverviewAggregateMethod"
-              label={localization.ModelAssessment.ModelOverview.metricsTypeDropdown}
-              selectedKey={"macro"}
-              options={getSelectableAggregateMethod()}
-              className={classNames.dropdown}
-              styles={FluentUIStyles.smallDropdownStyle}
-            />)}
-            {this.context.dataset.task_type === DatasetTaskType.ObjectDetection && (<ComboBox
-              id="modelOverviewClassSelection"
-              placeholder={
-                localization.ModelAssessment.ModelOverview
-                .classSelectionDropdownPlaceholder
-              }
-              label={localization.ModelAssessment.ModelOverview.classSelectionDropdown}
-              options={getSelectableClassNames(this.context.dataset)}
-              className={classNames.dropdown}
-              styles={FluentUIStyles.smallDropdownStyle}
-            />)}
-            {this.context.dataset.task_type === DatasetTaskType.ObjectDetection && (<Slider
-              id="iouThreshold"
-              label={localization.ModelAssessment.ModelOverview.iouthresholdDropdown}
-              max={100}
-              className={classNames.slider}
-              valueFormat={(value: number) : string => `IoU=${value}%`}
-              showValue
+            {this.context.dataset.task_type === DatasetTaskType.ObjectDetection && (<ObjectDetectionWidgets
+              classNames={classNames}
+              dataset={this.context.dataset}
             />)}
           </Stack>
           {!this.state.datasetCohortViewIsVisible && (

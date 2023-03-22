@@ -1,6 +1,9 @@
-import { IComboBoxOption } from "@fluentui/react";
-import { IDataset } from "@responsible-ai/core-ui";
+import { ComboBox, IComboBoxOption, IProcessedStyleSet, Slider, Stack } from "@fluentui/react";
+import { FluentUIStyles, IDataset } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import React from "react";
+import { IModelOverviewStyles } from "./ModelOverview.styles";
+
 
 export function getSelectableAggregateMethod(): IComboBoxOption[] {
     const selectableAggregateMethods : IComboBoxOption[] = [
@@ -11,6 +14,7 @@ export function getSelectableAggregateMethod(): IComboBoxOption[] {
     ];
     return selectableAggregateMethods;
 };
+
 
 export function getSelectableClassNames(dataset: IDataset): IComboBoxOption[] {
     const selectableClassNames : IComboBoxOption[] = []
@@ -24,6 +28,55 @@ export function getSelectableClassNames(dataset: IDataset): IComboBoxOption[] {
     }
     return selectableClassNames;
 };
+
+
+export interface ObjectDetectionWidgetsProps {
+    classNames: IProcessedStyleSet<IModelOverviewStyles>,
+    dataset: IDataset
+}
+
+export class ObjectDetectionWidgets extends React.PureComponent<
+  ObjectDetectionWidgetsProps
+> {
+    public constructor(props: ObjectDetectionWidgetsProps) {
+        super(props);
+    }
+
+    public render(): React.ReactNode {
+        return (
+            <Stack.Item>
+                <ComboBox
+                    id="modelOverviewAggregateMethod"
+                    label={localization.ModelAssessment.ModelOverview.metricsTypeDropdown}
+                    selectedKey={"macro"}
+                    options={getSelectableAggregateMethod()}
+                    className={this.props.classNames.dropdown}
+                    styles={FluentUIStyles.smallDropdownStyle}
+                />
+                <ComboBox
+                    id="modelOverviewClassSelection"
+                    placeholder={
+                        localization.ModelAssessment.ModelOverview
+                        .classSelectionDropdownPlaceholder
+                    }
+                    label={localization.ModelAssessment.ModelOverview.classSelectionDropdown}
+                    options={getSelectableClassNames(this.props.dataset)}
+                    className={this.props.classNames.dropdown}
+                    styles={FluentUIStyles.smallDropdownStyle}
+                />
+                <Slider
+                    id="iouThreshold"
+                    label={localization.ModelAssessment.ModelOverview.iouthresholdDropdown}
+                    max={100}
+                    className={this.props.classNames.slider}
+                    valueFormat={(value: number) : string => `IoU=${value}%`}
+                    showValue
+                />
+            </Stack.Item>
+        )
+    }
+
+}
 
 
 
