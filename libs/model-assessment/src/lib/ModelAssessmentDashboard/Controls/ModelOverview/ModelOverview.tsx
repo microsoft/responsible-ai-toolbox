@@ -328,10 +328,13 @@ export class ModelOverview extends React.Component<
                   .helpMeChooseMetricsButton
               }
             </ActionButton>
-            {this.context.dataset.task_type === DatasetTaskType.ObjectDetection && (<ObjectDetectionWidgets
-              classNames={classNames}
-              dataset={this.context.dataset}
-            />)}
+            {this.context.dataset.task_type ===
+              DatasetTaskType.ObjectDetection && (
+              <ObjectDetectionWidgets
+                classNames={classNames}
+                dataset={this.context.dataset}
+              />
+            )}
           </Stack>
           {!this.state.datasetCohortViewIsVisible && (
             <Stack
