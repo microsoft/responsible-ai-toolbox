@@ -47,6 +47,7 @@ import { FeatureConfigurationFlyout } from "./FeatureConfigurationFlyout";
 import { MetricConfigurationFlyout } from "./MetricConfigurationFlyout";
 import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewChartPivot } from "./ModelOverviewChartPivot";
+import { ObjectDetectionWidgets } from "./ObjectDetectionModelOverview";
 import { getSelectableMetrics } from "./StatsTableUtils";
 
 interface IModelOverviewProps {
@@ -327,6 +328,13 @@ export class ModelOverview extends React.Component<
                   .helpMeChooseMetricsButton
               }
             </ActionButton>
+            {this.context.dataset.task_type ===
+              DatasetTaskType.ObjectDetection && (
+              <ObjectDetectionWidgets
+                classNames={classNames}
+                dataset={this.context.dataset}
+              />
+            )}
           </Stack>
           {!this.state.datasetCohortViewIsVisible && (
             <Stack
