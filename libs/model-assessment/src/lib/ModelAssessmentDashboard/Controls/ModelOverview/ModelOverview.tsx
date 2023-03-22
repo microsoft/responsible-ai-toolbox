@@ -47,8 +47,8 @@ import { FeatureConfigurationFlyout } from "./FeatureConfigurationFlyout";
 import { MetricConfigurationFlyout } from "./MetricConfigurationFlyout";
 import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewChartPivot } from "./ModelOverviewChartPivot";
-import { getSelectableMetrics } from "./StatsTableUtils";
 import { ObjectDetectionWidgets } from "./ObjectDetectionModelOverview";
+import { getSelectableMetrics } from "./StatsTableUtils";
 
 interface IModelOverviewProps {
   telemetryHook?: (message: ITelemetryEvent) => void;

@@ -1,7 +1,11 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ComboBox, IComboBoxOption, IProcessedStyleSet, Slider, Stack } from "@fluentui/react";
 import { FluentUIStyles, IDataset } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
+
 import { IModelOverviewStyles } from "./ModelOverview.styles";
 
 
@@ -13,7 +17,7 @@ export function getSelectableAggregateMethod(): IComboBoxOption[] {
         text: localization.ModelAssessment.ModelOverview.metricTypes.micro }
     ];
     return selectableAggregateMethods;
-};
+}
 
 
 export function getSelectableClassNames(dataset: IDataset): IComboBoxOption[] {
@@ -27,21 +31,17 @@ export function getSelectableClassNames(dataset: IDataset): IComboBoxOption[] {
       }
     }
     return selectableClassNames;
-};
+}
 
 
-export interface ObjectDetectionWidgetsProps {
+export interface IObjectDetectionWidgetsProps {
     classNames: IProcessedStyleSet<IModelOverviewStyles>,
     dataset: IDataset
 }
 
 export class ObjectDetectionWidgets extends React.PureComponent<
-  ObjectDetectionWidgetsProps
+IObjectDetectionWidgetsProps
 > {
-    public constructor(props: ObjectDetectionWidgetsProps) {
-        super(props);
-    }
-
     public render(): React.ReactNode {
         return (
             <Stack.Item>
