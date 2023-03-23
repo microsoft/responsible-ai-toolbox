@@ -68,7 +68,6 @@ export class FilterList extends React.Component<IFilterListProps> {
   private setFilterLabel(filter: IFilter): React.ReactNode {
     const abbridgedLabel = getColumnLabel(
       filter.column,
-      this.context.dataset.features,
       this.context.columnRanges
     );
     let isCategorical;

@@ -10,10 +10,10 @@ import { DatasetCohortColumns } from "../../DatasetCohortColumns";
 export const maxLength = 18;
 
 export function getColumnItems(
-  features?: unknown[][],
   columnRanges?: {
     [key: string]: IColumnRange;
-  }
+  },
+  features?: unknown[][]
 ): IChoiceGroupOption[] {
   const items: IChoiceGroupOption[] = [
     DatasetCohortColumns.Index,

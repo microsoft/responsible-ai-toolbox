@@ -7,12 +7,11 @@ import { getColumnItems, maxLength } from "./CohortEditorPanelContentUtils";
 
 export function getColumnLabel(
   column: string,
-  features: unknown[][],
   columnRanges?: {
     [key: string]: IColumnRange;
   }
 ): string {
-  const items = getColumnItems(features, columnRanges);
+  const items = getColumnItems(columnRanges);
   let label;
   items.forEach((item) => {
     if (item.key === column) {

@@ -68,10 +68,10 @@ export class CohortEditorPanelContent extends React.PureComponent<
   ICohortEditorPanelContentState
 > {
   private readonly leftItems = getColumnItems(
+    this.props.columnRanges,
     this.props.isFromExplanation
       ? this.props.features
-      : this.props.dataset.features,
-    this.props.columnRanges
+      : this.props.dataset.features
   );
   private _isInitialized = false;
 
