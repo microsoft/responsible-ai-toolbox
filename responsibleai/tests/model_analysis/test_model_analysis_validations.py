@@ -331,7 +331,7 @@ class TestModelAnalysisValidations:
                 task_type='classification',
                 train_labels=[0, 1])
 
-        assert 'The train labels and distinct values in target ' + \
+        assert 'The test labels and distinct values in target ' + \
             '(test data) do not match' in str(ucve.value)
 
 
