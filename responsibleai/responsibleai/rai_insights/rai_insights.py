@@ -629,25 +629,32 @@ class RAIInsights(RAIBaseInsights):
             self._validate_classes(
                 model, train, test, target_column, feature_metadata, classes)
 
+    def _validate_classes_helper(self, identified_classes, user_classes,
+                                 if_train_data=True,
+                                 if_predictions=False):
+        error_msg = ('The {0} labels and distinct values in '
+                     '{1} ({0} data) do not match').format(
+            "train" if if_train_data else "test",
+            "target" if not if_predictions else "predictions")
+        if (len(set(identified_classes) -
+                set(user_classes)) != 0 or
+                len(set(user_classes) -
+                    set(identified_classes)) != 0):
+            raise UserConfigValidationException(error_msg)
+
     def _validate_classes(
             self, model, train, test, target_column,
             feature_metadata, classes):
         if classes is not None:
-            if (len(set(train[target_column].unique()) -
-                    set(classes)) != 0 or
-                    len(set(classes) -
-                        set(train[target_column].unique())) != 0):
-                raise UserConfigValidationException(
-                    'The train labels and distinct values in '
-                    'target (train data) do not match')
+            self._validate_classes_helper(
+                identified_classes=set(train[target_column].unique()),
+                user_classes=set(classes)
+            )
 
-            if (len(set(test[target_column].unique()) -
-                    set(classes)) != 0 or
-                    len(set(classes) -
-                        set(test[target_column].unique())) != 0):
-                raise UserConfigValidationException(
-                    'The train labels and distinct values in '
-                    'target (test data) do not match')
+            self._validate_classes_helper(
+                identified_classes=set(test[target_column].unique()),
+                user_classes=set(classes), if_train_data=False
+            )
 
             if model is not None:
                 if feature_metadata is not None and \
@@ -670,21 +677,18 @@ class RAIInsights(RAIBaseInsights):
                 train_predictions = model.predict(train_data)
                 test_predictions = model.predict(test_data)
 
-                if (len(set(np.unique(train_predictions)) -
-                        set(classes)) != 0 or
-                        len(set(classes) -
-                            set(np.unique(train_predictions))) != 0):
-                    raise UserConfigValidationException(
-                        'The train labels and distinct values in '
-                        'predictions (train data) do not match')
+                self._validate_classes_helper(
+                    identified_classes=set(np.unique(train_predictions)),
+                    user_classes=set(classes),
+                    if_predictions=True
+                )
 
-                if (len(set(np.unique(test_predictions)) -
-                        set(classes)) != 0 or
-                        len(set(classes) -
-                            set(np.unique(test_predictions))) != 0):
-                    raise UserConfigValidationException(
-                        'The train labels and distinct values in '
-                        'predictions (test data) do not match')
+                self._validate_classes_helper(
+                    identified_classes=set(np.unique(test_predictions)),
+                    user_classes=set(classes),
+                    if_train_data=False,
+                    if_predictions=True
+                )
 
     def _validate_feature_metadata(
             self, feature_metadata, train, task_type, model):

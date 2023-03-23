@@ -413,7 +413,7 @@ class TestRAIInsightsValidations:
                 task_type='classification',
                 classes=[0, 1])
 
-        assert 'The train labels and distinct values in target ' + \
+        assert 'The test labels and distinct values in target ' + \
             '(test data) do not match' in str(ucve.value)
 
     def test_classes_exceptions_prediction_labels(self):
