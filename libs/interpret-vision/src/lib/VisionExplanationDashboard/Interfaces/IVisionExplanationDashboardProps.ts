@@ -13,6 +13,13 @@ export interface IVisionExplanationDashboardProps {
   cohorts: ErrorCohort[];
   dataSummary: IVisionExplanationDashboardData;
   requestExp?: (index: number | number[], abortSignal: AbortSignal) => Promise<any[]>;
+  requestObjectDetectionMetrics?: (
+    trueY: number[][][],
+    predictedY: number[][][],
+    aggregateMethod: string,
+    className: string,
+    iouThresh: number
+  ) => Promise<any[]>;
   selectedCohort: ErrorCohort;
   setSelectedCohort: (cohort: ErrorCohort) => void;
 }
