@@ -41,7 +41,6 @@ export interface ICohortEditorPanelContentProps {
   existingCohortNames?: string[];
   features?: unknown[][];
   metadata?: IExplanationModelMetadata;
-  filterList?: IFilter[];
   filters: IFilter[];
   isNewCohort: boolean;
   jointDataset: JointDataset;
@@ -78,7 +77,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
   public constructor(props: ICohortEditorPanelContentProps) {
     super(props);
     this.state = {
-      filterIndex: this.props.filterList?.length || 0,
+      filterIndex: this.props.filters?.length || 0,
       filtersMessage: "",
       openedFilter: this.getFilterValue(
         this.leftItems[0] && this.leftItems[0].key
@@ -234,7 +233,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
     // On duplication retained arg is shown only for filters in filterArgRetainableList
     this.props.disableEditName &&
       filterArgRetainableList.includes(key as DatasetCohortColumns) &&
-      this.props.filterList?.forEach((filter) => {
+      this.props.filters?.forEach((filter) => {
         if (filter.column === key) {
           arg = filter.arg;
         }
