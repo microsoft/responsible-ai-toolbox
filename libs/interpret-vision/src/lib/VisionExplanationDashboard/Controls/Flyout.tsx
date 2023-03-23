@@ -238,7 +238,6 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
             styles={FluentUIStyles.smallDropdownStyle}
           />)}
                 <Stack>
-                  {/* {!this.props.loadingExplanation[index][+this.state.odSelectedKey.slice(7)] ? ( */}
           {!this.props.loadingExplanation[index][+this.state.odSelectedKey.slice(7)] ? (
             <Stack.Item>
               <Image
@@ -295,4 +294,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
       const t = this.state.item
       if (t !== undefined) {
         this.props.onChange(t, key);
-      }}};}
+      }
+    }
+  };
+}
