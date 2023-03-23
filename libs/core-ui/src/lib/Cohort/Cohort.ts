@@ -11,14 +11,6 @@ import { compare } from "../util/compare";
 import { JointDataset } from "../util/JointDataset";
 import { ModelExplanationUtils } from "../util/ModelExplanationUtils";
 
-export enum CohortSource {
-  None = "None",
-  TreeMap = "Tree map",
-  HeatMap = "Heat map",
-  ManuallyCreated = "Manually created",
-  Prebuilt = "Prebuilt"
-}
-
 export class Cohort {
   private static _cohortIndex = 0;
 
