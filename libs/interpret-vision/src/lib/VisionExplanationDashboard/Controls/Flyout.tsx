@@ -45,8 +45,6 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
     const temp = item?.odPredictedY
     const selectableObjectIndexes : IComboBoxOption[] = []
       if (temp) {
-        console.log("HELLOOO")
-        console.log(item?.odPredictedY)
         for (let i = 0; i < Object.values(temp).length; i++) {
           selectableObjectIndexes.push({
             key: `Object ${i}`,
