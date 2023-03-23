@@ -106,7 +106,7 @@ export function preprocessData(
       ? successInstances.push(item)
       : errorInstances.push(item);
 
-    loadingExplanation.push(new Array<boolean>((dataset.object_detection_predicted_y)?.length ?? 10).fill(true)); //todo FIX the 10 value - only there for prorotyping 
+    loadingExplanation.push(new Array<boolean>((dataset.object_detection_predicted_y)?.length ?? 0).fill(true)); 
     computedExplanations.set(index, new Map<number, string>());
   });
 
