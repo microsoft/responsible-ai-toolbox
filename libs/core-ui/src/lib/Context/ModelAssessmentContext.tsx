@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { ITheme } from "@fluentui/react";
-import { ICategoricalRange, INumericRange } from "@responsible-ai/mlchartlib";
+import { IColumnRange } from "@responsible-ai/mlchartlib";
 import React from "react";
 
 import { Cohort } from "../Cohort/Cohort";
@@ -29,7 +29,7 @@ export interface IModelAssessmentContext {
   counterfactualData?: ICounterfactualData;
   dataset: IDataset;
   // TODO: these ranges should come from backend
-  columnRanges?: { [key: string]: INumericRange | ICategoricalRange };
+  columnRanges?: { [key: string]: IColumnRange };
   modelType?: ModelTypes;
   modelExplanationData?: IModelExplanationData;
   errorAnalysisData?: IErrorAnalysisData;
@@ -148,6 +148,7 @@ export interface IModelAssessmentContext {
   addCohort(cohort: Cohort, switchNew?: boolean): void;
   editCohort(cohort: Cohort, switchNew?: boolean): void;
   deleteCohort(cohort: ErrorCohort): void;
+  setAsCategorical?(column: string, treatAsCategorical: boolean): void;
 }
 
 export const defaultModelAssessmentContext: IModelAssessmentContext = {
@@ -166,6 +167,7 @@ export const defaultModelAssessmentContext: IModelAssessmentContext = {
   requestLocalFeatureExplanations: undefined,
   requestPredictions: undefined,
   selectedErrorCohort: {} as ErrorCohort,
+  setAsCategorical: () => undefined,
   shiftErrorCohort: () => undefined,
   telemetryHook: () => undefined,
   theme: {} as ITheme

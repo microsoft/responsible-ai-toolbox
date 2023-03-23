@@ -60,6 +60,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           addCohort: this.addCohort,
           baseErrorCohort: this.state.baseCohort,
           causalAnalysisData: this.props.causalAnalysisData?.[0],
+          columnRanges: this.state.columnRanges,
           counterfactualData: this.props.counterfactualData?.[0],
           dataset: this.props.dataset,
           deleteCohort: this.deleteCohort,
@@ -99,6 +100,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
             this.props.requestSplinePlotDistribution,
           requestTestDataRow: this.props.requestTestDataRow,
           selectedErrorCohort: this.state.selectedCohort,
+          setAsCategorical: this.setAsCategorical,
           shiftErrorCohort: this.shiftErrorCohort,
           telemetryHook:
             this.props.telemetryHook ||
@@ -159,6 +161,17 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       </ModelAssessmentContext.Provider>
     );
   }
+
+  private setAsCategorical = (
+    column: string,
+    treatAsCategorical: boolean
+  ): void => {
+    if (this.state.columnRanges) {
+      const ranges = this.state.columnRanges;
+      ranges[column].treatAsCategorical = treatAsCategorical;
+      this.setState({ columnRanges: ranges });
+    }
+  };
 
   private setSaveCohortVisible = (): void => {
     this.setState({ saveCohortVisible: true });
