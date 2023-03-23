@@ -17,7 +17,7 @@ export interface IFlyoutProps {
   explanations: Map<number, Map<number, string>>;
   isOpen: boolean;
   item: IVisionListItem | undefined;
-  loadingExplanation: boolean[];
+  loadingExplanation: boolean[][];
   otherMetadataFieldNames: string[];
   callback: () => void;
   onChange: (item: IVisionListItem, index: number) => void; 
@@ -45,6 +45,8 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
     const temp = item?.odPredictedY
     const selectableObjectIndexes : IComboBoxOption[] = []
       if (temp) {
+        console.log("HELLOOO")
+        console.log(item?.odPredictedY)
         for (let i = 0; i < Object.values(temp).length; i++) {
           selectableObjectIndexes.push({
             key: `Object ${i}`,
@@ -236,12 +238,11 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
             styles={FluentUIStyles.smallDropdownStyle}
           />)}
                 <Stack>
-          {!this.props.loadingExplanation[index] ? (
+                  {/* {!this.props.loadingExplanation[index][+this.state.odSelectedKey.slice(7)] ? ( */}
+          {!this.props.loadingExplanation[index][+this.state.odSelectedKey.slice(7)] ? (
             <Stack.Item>
               <Image
-                src={`data:image/jpg;base64,${this.props.explanations.get(
-                  index
-                )}`}
+                src={`data:image/jpg;base64,${this.props.explanations.get(index)?.get(+this.state.odSelectedKey.slice(7))}`}
                 width="700px"
                 style={{ position: "relative", right: 85 }}/>
             </Stack.Item> ) : (
@@ -294,7 +295,4 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
       const t = this.state.item
       if (t !== undefined) {
         this.props.onChange(t, key);
-      } 
-    }
-  };
-}
+      }}};}

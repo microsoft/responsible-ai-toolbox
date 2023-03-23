@@ -199,8 +199,6 @@ export class VisionExplanationDashboard extends React.Component<
             callback={this.onPanelClose}
             onChange={this.onItemSelect}
           />
-          {/* this.objectIndex = +(flyout.getOdChoiceFromDropdown().slice(7)) */}
-          {/* onItemSelect(this.onItemSelect) */}
         </Stack.Item>
       </Stack>
     );
@@ -227,16 +225,18 @@ export class VisionExplanationDashboard extends React.Component<
     this.setState({ panelOpen: true, selectedItem: item });
     const index = item.index;
     const { computedExplanations, loadingExplanation } = this.state;
-    const computedExplanation = computedExplanations.get(index);
-    if (computedExplanation) {
-      loadingExplanation[index] = false;
-      this.setState({
-        loadingExplanation
-      });
-      return;
+    if (selectedObject !== -1) {
+      const computedExplanation = computedExplanations.get(index)?.get(selectedObject);
+      if (computedExplanation) {
+        loadingExplanation[index][selectedObject] = false;
+        this.setState({
+          loadingExplanation
+        });
+        return;
+      }
     }
     if (this.props.requestExp && selectedObject !== -1) {
-      loadingExplanation[index] = true;
+      loadingExplanation[index][selectedObject] = true;
       this.setState({ loadingExplanation });
       this.props
         .requestExp([index, selectedObject], new AbortController().signal)
@@ -244,7 +244,8 @@ export class VisionExplanationDashboard extends React.Component<
           const explanation = result.toString();
           const computedObjectExplanations = computedExplanations.get(index);
           computedObjectExplanations?.set(selectedObject, explanation);
-          loadingExplanation[index] = false;
+          computedExplanations.set(index,computedObjectExplanations ?? (new Map()).set(selectedObject, explanation)) 
+          loadingExplanation[index][selectedObject] = false;
           this.setState({
             computedExplanations,
             loadingExplanation

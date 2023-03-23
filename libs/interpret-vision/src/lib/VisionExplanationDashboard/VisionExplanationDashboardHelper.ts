@@ -80,7 +80,7 @@ export function preprocessData(
   if (!features || !fieldNames) {
     return undefined;
   }
-  const loadingExplanation: boolean[] = [];
+  const loadingExplanation: boolean[][] = [[]];
   const computedExplanations: Map<number, Map<number, string>> = new Map();
   dataSummary.images?.forEach((image, index) => {
     const defVal = "object scenario not defined"; 
@@ -106,7 +106,7 @@ export function preprocessData(
       ? successInstances.push(item)
       : errorInstances.push(item);
 
-    loadingExplanation.push(false);
+    loadingExplanation.push(new Array<boolean>((dataset.object_detection_predicted_y)?.length ?? 10).fill(true)); //todo FIX the 10 value - only there for prorotyping 
     computedExplanations.set(index, new Map<number, string>());
   });
 
@@ -176,7 +176,7 @@ export const defaultState: IVisionExplanationDashboardState = {
   computedExplanations: new Map(),
   errorInstances: [],
   imageDim: 200,
-  loadingExplanation: [],
+  loadingExplanation: [[]],
   numRows: 3,
   otherMetadataFieldNames: ["mean_pixel_value"],
   pageSize: 10,
