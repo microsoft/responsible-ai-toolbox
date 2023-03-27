@@ -1177,7 +1177,10 @@
       "selectionRate": "Selection rate: {0}",
       "mae": "Mean absolute error: {0}",
       "f1Score": "F1 score: {0}",
-      "samples": "Sample size: {0}"
+      "samples": "Sample size: {0}",
+      "meanAveragePrecision": "Mean average precision: {0}",
+      "averagePrecision": "Average precision: {0}",
+      "averageRecall": "Average recall: {0}"
     },
     "ValidationErrors": {
       "_inconsistentDimensions.comment": "Raise warning if arguments passed in have different sizes, listing dimensions of both mismatching pieces.",
@@ -1737,6 +1740,18 @@
           "name": "Mean prediction",
           "description": "The average of all predictions."
         },
+        "meanAveragePrecision": {
+          "name": "Mean Average Precision score",
+          "description": "Mean Average Precision for Object Detection models."
+        },
+        "averagePrecision": {
+          "name": "Average Precision score",
+          "description": "Average Precision for a chosen class for Object Detection models."
+        },
+        "averageRecall": {
+          "name": "Average Recall score",
+          "description": "Average Recall for a chosen class for Object Detection models."
+        },
         "fairnessMetricDifference": "Difference",
         "fairnessMetricRatio": "Ratio"
       },
@@ -1746,6 +1761,8 @@
         "macro": "Macro",
         "micro": "Micro"
       },
+      "classSelectionDropdown": "Select class(es)",
+      "iouthresholdDropdown": "IoU Threshold",
       "notAvailable": "N/A",
       "countColumnHeader": "Sample size",
       "dataCohortsHeatmapHeader": "Cohorts",
@@ -1758,6 +1775,7 @@
       "probabilityForClassSelectionHeader": "Probability for class",
       "targetSelectionHeader": "Target",
       "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
+      "classSelectionDropdownPlaceholder": "Select class name for class-based analysis.",
       "featureSelectionDropdownPlaceholder": "Select features to use for a feature-based analysis.",
       "probabilityDistributionPivotItem": "Probability distribution",
       "regressionDistributionPivotItem": "Target distribution",

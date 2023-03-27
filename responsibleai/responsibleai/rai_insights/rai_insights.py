@@ -575,23 +575,6 @@ class RAIInsights(RAIBaseInsights):
                 "identified as categorical features: "
                 f"{non_categorical_or_time_string_columns}")
 
-        if classes is not None and task_type == ModelTask.CLASSIFICATION:
-            if (len(set(train[target_column].unique()) -
-                    set(classes)) != 0 or
-                    len(set(classes) -
-                        set(train[target_column].unique())) != 0):
-                raise UserConfigValidationException(
-                    'The train labels and distinct values in '
-                    'target (train data) do not match')
-
-            if (len(set(test[target_column].unique()) -
-                    set(classes)) != 0 or
-                    len(set(classes) -
-                        set(test[target_column].unique())) != 0):
-                raise UserConfigValidationException(
-                    'The train labels and distinct values in '
-                    'target (test data) do not match')
-
         self._validate_feature_metadata(
             feature_metadata, train, task_type, model)
 
@@ -641,6 +624,71 @@ class RAIInsights(RAIBaseInsights):
                         'The regression model '
                         'provided has a predict_proba function. '
                         'Please check the task_type.')
+
+        if task_type == ModelTask.CLASSIFICATION:
+            self._validate_classes(
+                model, train, test, target_column, feature_metadata, classes)
+
+    def _validate_classes_helper(self, identified_classes, user_classes,
+                                 if_train_data=True,
+                                 if_predictions=False):
+        error_msg = ('The {0} labels and distinct values in '
+                     '{1} ({0} data) do not match').format(
+            "train" if if_train_data else "test",
+            "target" if not if_predictions else "predictions")
+        if (len(set(identified_classes) -
+                set(user_classes)) != 0 or
+                len(set(user_classes) -
+                    set(identified_classes)) != 0):
+            raise UserConfigValidationException(error_msg)
+
+    def _validate_classes(
+            self, model, train, test, target_column,
+            feature_metadata, classes):
+        if classes is not None:
+            self._validate_classes_helper(
+                identified_classes=set(train[target_column].unique()),
+                user_classes=set(classes)
+            )
+
+            self._validate_classes_helper(
+                identified_classes=set(test[target_column].unique()),
+                user_classes=set(classes), if_train_data=False
+            )
+
+            if model is not None:
+                if feature_metadata is not None and \
+                        feature_metadata.dropped_features is not None and \
+                        len(feature_metadata.dropped_features) != 0:
+                    train_data = train.drop(
+                        columns=feature_metadata.dropped_features + [
+                            target_column],
+                        axis=1)
+                    test_data = test.drop(
+                        columns=feature_metadata.dropped_features + [
+                            target_column],
+                        axis=1)
+                else:
+                    train_data = train.drop(
+                        columns=[target_column], axis=1)
+                    test_data = test.drop(
+                        columns=[target_column], axis=1)
+
+                train_predictions = model.predict(train_data)
+                test_predictions = model.predict(test_data)
+
+                self._validate_classes_helper(
+                    identified_classes=set(np.unique(train_predictions)),
+                    user_classes=set(classes),
+                    if_predictions=True
+                )
+
+                self._validate_classes_helper(
+                    identified_classes=set(np.unique(test_predictions)),
+                    user_classes=set(classes),
+                    if_train_data=False,
+                    if_predictions=True
+                )
 
     def _validate_feature_metadata(
             self, feature_metadata, train, task_type, model):
