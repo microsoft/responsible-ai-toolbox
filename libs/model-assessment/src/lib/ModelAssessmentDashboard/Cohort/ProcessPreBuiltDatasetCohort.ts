@@ -43,7 +43,7 @@ export function processPreBuiltDatasetCohort(
             }
             const filter: IFilter = {
               arg: preBuiltCohortFilter.arg,
-              column: column,
+              column,
               method: preBuiltCohortFilter.method
             };
             filterList.push(filter);
