@@ -50,6 +50,10 @@ export function getModelTypeFromProps(
     props.dataset.task_type === DatasetTaskType.MultilabelTextClassification
   ) {
     modelType = ModelTypes.TextMultilabel;
+  } else if (
+    props.dataset.task_type === DatasetTaskType.ObjectDetection
+  ) {
+    modelType = ModelTypes.ObjectDetection;
   }
   return modelType;
 }
