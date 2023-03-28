@@ -49,6 +49,20 @@ export function translateToLegacyFilterColumn(
   return "";
 }
 
+export function translateToNewFilters(
+  legacyFilters: IFilter[],
+  featureNames?: string[]
+): IFilter[] {
+  const filters: IFilter[] = [];
+  legacyFilters.forEach((legacyFilter) => {
+    const filter = translateToNewFilter(legacyFilter, featureNames);
+    if (filter) {
+      filters.push(filter);
+    }
+  });
+  return filters;
+}
+
 export function translateToLegacyFilters(
   filters: IFilter[],
   featureNames: string[] | undefined
@@ -92,20 +106,6 @@ function translateToLegacyFilter(
     );
   }
   return undefined;
-}
-
-function translateToNewFilters(
-  legacyFilters: IFilter[],
-  featureNames?: string[]
-): IFilter[] {
-  const filters: IFilter[] = [];
-  legacyFilters.forEach((legacyFilter) => {
-    const filter = translateToNewFilter(legacyFilter, featureNames);
-    if (filter) {
-      filters.push(filter);
-    }
-  });
-  return filters;
 }
 
 function translateToNewFilter(
