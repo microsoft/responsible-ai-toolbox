@@ -52,6 +52,11 @@ import { getSelectableMetrics } from "./StatsTableUtils";
 
 interface IModelOverviewProps {
   telemetryHook?: (message: ITelemetryEvent) => void;
+  requestObjectDetectionMetrics?: (
+    aggregateMethod: string,
+    className: string,
+    iouThresh: number
+  ) => Promise<any[]>;
 }
 
 interface IModelOverviewState {

@@ -14,8 +14,6 @@ export interface IVisionExplanationDashboardProps {
   dataSummary: IVisionExplanationDashboardData;
   requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
   requestObjectDetectionMetrics?: (
-    trueY: number[][][],
-    predictedY: number[][][],
     aggregateMethod: string,
     className: string,
     iouThresh: number
