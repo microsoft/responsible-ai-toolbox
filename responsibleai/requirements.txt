@@ -5,7 +5,7 @@ erroranalysis>=0.4.2
 interpret-community>=0.28.0
 lightgbm>=2.0.11
 numpy>=1.17.2,<1.24.0
-numba<0.54.0
+numba<=0.55.2
 pandas>=0.25.1
 scikit-learn>=0.22.1,<1.1 # See PR 1429 about upper bound
 scipy>=1.4.1
@@ -14,6 +14,6 @@ ml_wrappers
 
 # Pinned dependencies
 networkx<=2.5
-ipykernel<=6.6.0
-markupsafe<2.1.0
+ipykernel<=6.8.0
+markupsafe<=2.1.2
 raiutils>=0.4.0
