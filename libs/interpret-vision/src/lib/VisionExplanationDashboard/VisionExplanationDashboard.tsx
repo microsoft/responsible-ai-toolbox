@@ -226,7 +226,9 @@ export class VisionExplanationDashboard extends React.Component<
     const index = item.index;
     const { computedExplanations, loadingExplanation } = this.state;
     if (selectedObject !== -1) {
-      const computedExplanation = computedExplanations.get(index)?.get(selectedObject);
+      const computedExplanation = computedExplanations
+        .get(index)
+        ?.get(selectedObject);
       if (computedExplanation) {
         loadingExplanation[index][selectedObject] = false;
         this.setState({
@@ -244,7 +246,11 @@ export class VisionExplanationDashboard extends React.Component<
           const explanation = result.toString();
           const computedObjectExplanations = computedExplanations.get(index);
           computedObjectExplanations?.set(selectedObject, explanation);
-          computedExplanations.set(index,computedObjectExplanations ?? (new Map()).set(selectedObject, explanation)) 
+          computedExplanations.set(
+            index,
+            computedObjectExplanations ??
+              new Map().set(selectedObject, explanation)
+          );
           loadingExplanation[index][selectedObject] = false;
           this.setState({
             computedExplanations,

@@ -2,8 +2,20 @@
 // Licensed under the MIT License.
 
 import {
-  ComboBox, IComboBoxOption, IComboBox, Icon, Image, ImageFit, List, Panel, PanelType, FocusZone,
-  Stack, Text, Spinner, Separator
+  ComboBox,
+  IComboBoxOption,
+  IComboBox,
+  Icon,
+  Image,
+  ImageFit,
+  List,
+  Panel,
+  PanelType,
+  FocusZone,
+  Stack,
+  Text,
+  Spinner,
+  Separator
 } from "@fluentui/react";
 import { FluentUIStyles, IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -20,14 +32,14 @@ export interface IFlyoutProps {
   loadingExplanation: boolean[][];
   otherMetadataFieldNames: string[];
   callback: () => void;
-  onChange: (item: IVisionListItem, index: number) => void; 
+  onChange: (item: IVisionListItem, index: number) => void;
 }
 
 export interface IFlyoutState {
   item: IVisionListItem | undefined;
   metadata: Array<Array<string | number | boolean>> | undefined;
-  selectableObjectIndexes: IComboBoxOption[]; 
-  odSelectedKey: string; 
+  selectableObjectIndexes: IComboBoxOption[];
+  odSelectedKey: string;
 }
 
 const stackTokens = {
@@ -38,20 +50,28 @@ const stackTokens = {
 export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
   public constructor(props: IFlyoutProps) {
     super(props);
-    this.state = { item: undefined, metadata: undefined, odSelectedKey: "", selectableObjectIndexes: [] };
+    this.state = {
+      item: undefined,
+      metadata: undefined,
+      odSelectedKey: "",
+      selectableObjectIndexes: []
+    };
   }
 
-  public generateSelectableObjectDetectionIndexes(item: IVisionListItem | undefined): IComboBoxOption[] {
-    const temp = item?.odPredictedY
-    const selectableObjectIndexes : IComboBoxOption[] = []
-      if (temp) {
-        for (let i = 0; i < Object.values(temp).length; i++) {
-          selectableObjectIndexes.push({
-            key: `Object ${i}`,
-            text: `Object ${i}`
-          })
-      }}
-    return selectableObjectIndexes
+  public generateSelectableObjectDetectionIndexes(
+    item: IVisionListItem | undefined
+  ): IComboBoxOption[] {
+    const temp = item?.odPredictedY;
+    const selectableObjectIndexes: IComboBoxOption[] = [];
+    if (temp) {
+      for (let i = 0; i < Object.values(temp).length; i++) {
+        selectableObjectIndexes.push({
+          key: `Object ${i}`,
+          text: `Object ${i}`
+        });
+      }
+    }
+    return selectableObjectIndexes;
   }
 
   public componentDidMount(): void {
@@ -70,7 +90,8 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
         metadata.push([fieldName, itemValue]);
       }
     });
-    const selectableObjectIndexes = this.generateSelectableObjectDetectionIndexes(item)
+    const selectableObjectIndexes =
+      this.generateSelectableObjectDetectionIndexes(item);
     this.setState({ item, metadata, selectableObjectIndexes });
   }
 
@@ -85,16 +106,18 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
       fieldNames.forEach((fieldName) => {
         const itemField = item[fieldName];
         const itemValue = Array.isArray(itemField)
-          ? itemField.join(",") : itemField;
+          ? itemField.join(",")
+          : itemField;
         if (item[fieldName]) {
           metadata.push([fieldName, itemValue]);
         }
       });
-      const selectableObjectIndexes = this.generateSelectableObjectDetectionIndexes(item)
+      const selectableObjectIndexes =
+        this.generateSelectableObjectDetectionIndexes(item);
       this.setState({
         item: this.props.item,
         metadata,
-        selectableObjectIndexes,
+        selectableObjectIndexes
       });
     }
   }
@@ -118,140 +141,162 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
           onDismiss={callback}
           isLightDismiss
           type={PanelType.large}
-          className={classNames.mainContainer}>
+          className={classNames.mainContainer}
+        >
           <Stack tokens={stackTokens.medium} horizontal>
             <Stack>
-            <Stack.Item>
-              <Separator className={classNames.separator} />
-            </Stack.Item>
-            <Stack.Item>
-              <Stack
-                horizontal
-                tokens={stackTokens.medium}
-                horizontalAlign="space-around"
-                verticalAlign="center"
-              >
-                <Stack.Item>
-                  <Stack
-                    tokens={stackTokens.large}
-                    horizontalAlign="start"
-                    verticalAlign="start"
-                  >
+              <Stack.Item>
+                <Separator className={classNames.separator} />
+              </Stack.Item>
+              <Stack.Item>
+                <Stack
+                  horizontal
+                  tokens={stackTokens.medium}
+                  horizontalAlign="space-around"
+                  verticalAlign="center"
+                >
+                  <Stack.Item>
                     <Stack
-                      horizontal
-                      tokens={{ childrenGap: "s1" }}
-                      horizontalAlign="center"
-                      verticalAlign="center"
+                      tokens={stackTokens.large}
+                      horizontalAlign="start"
+                      verticalAlign="start"
                     >
-                      <Stack.Item className={ classNames.iconContainer }>
-                        <Icon
-                          iconName={ predictedY !== trueY ? "Cancel" : "Checkmark" }
-                          className={
-                            predictedY !== trueY
-                              ? classNames.errorIcon
-                              : classNames.successIcon
-                          }
-                        />
+                      <Stack
+                        horizontal
+                        tokens={{ childrenGap: "s1" }}
+                        horizontalAlign="center"
+                        verticalAlign="center"
+                      >
+                        <Stack.Item className={classNames.iconContainer}>
+                          <Icon
+                            iconName={
+                              predictedY !== trueY ? "Cancel" : "Checkmark"
+                            }
+                            className={
+                              predictedY !== trueY
+                                ? classNames.errorIcon
+                                : classNames.successIcon
+                            }
+                          />
+                        </Stack.Item>
+                        <Stack.Item>
+                          {predictedY !== trueY ? (
+                            <Text
+                              variant="large"
+                              className={classNames.errorTitle}
+                            >
+                              {
+                                localization.InterpretVision.Dashboard
+                                  .titleBarError
+                              }
+                            </Text>
+                          ) : (
+                            <Text
+                              variant="large"
+                              className={classNames.successTitle}
+                            >
+                              {
+                                localization.InterpretVision.Dashboard
+                                  .titleBarSuccess
+                              }
+                            </Text>
+                          )}
+                        </Stack.Item>
+                      </Stack>
+                      <Stack.Item>
+                        <Text variant="large">
+                          {localization.InterpretVision.Dashboard.indexLabel}
+                          {item?.index}
+                        </Text>
                       </Stack.Item>
                       <Stack.Item>
-                        {predictedY !== trueY ? (
-                          <Text
-                            variant="large"
-                            className={classNames.errorTitle}>
-                            {localization.InterpretVision.Dashboard.titleBarError}
-                          </Text>
-                        ) : (
-                          <Text
-                            variant="large"
-                            className={classNames.successTitle}
-                          >
-                            {localization.InterpretVision.Dashboard.titleBarSuccess}
-                          </Text>
-                        )}
+                        <Text variant="large">
+                          {localization.InterpretVision.Dashboard.predictedY}
+                          {predictedY}
+                        </Text>
+                      </Stack.Item>
+                      <Stack.Item>
+                        <Text variant="large">
+                          {localization.InterpretVision.Dashboard.trueY}
+                          {trueY}
+                        </Text>
                       </Stack.Item>
                     </Stack>
-                    <Stack.Item>
-                      <Text variant="large">
-                        {localization.InterpretVision.Dashboard.indexLabel}
-                        {item?.index}
-                      </Text>
-                    </Stack.Item>
-                    <Stack.Item>
-                      <Text variant="large">
-                        {localization.InterpretVision.Dashboard.predictedY}
-                        {predictedY}
-                      </Text>
-                    </Stack.Item>
-                    <Stack.Item>
-                      <Text variant="large">
-                        {localization.InterpretVision.Dashboard.trueY}
-                        {trueY}
-                      </Text>
-                    </Stack.Item>
-                  </Stack>
+                  </Stack.Item>
+                  <Stack.Item className={classNames.imageContainer}>
+                    <Image
+                      src={`data:image/jpg;base64,${item?.image}`}
+                      className={classNames.image}
+                      imageFit={ImageFit.contain}
+                    />
+                  </Stack.Item>
+                </Stack>
+              </Stack.Item>
+              <Stack.Item>
+                <Separator className={classNames.separator} />
+              </Stack.Item>
+              <Stack
+                tokens={{ childrenGap: "l2" }}
+                className={classNames.sectionIndent}
+              >
+                <Stack.Item>
+                  <Text variant="large" className={classNames.title}>
+                    {localization.InterpretVision.Dashboard.panelInformation}
+                  </Text>
                 </Stack.Item>
-                <Stack.Item className={classNames.imageContainer}>
-                  <Image
-                    src={`data:image/jpg;base64,${item?.image}`}
-                    className={classNames.image}
-                    imageFit={ImageFit.contain}/>
+                <Stack.Item className={classNames.featureListContainer}>
+                  <List
+                    items={this.state.metadata}
+                    onRenderCell={this.onRenderCell}
+                  />
                 </Stack.Item>
               </Stack>
-            </Stack.Item>
-            <Stack.Item>
-              <Separator className={classNames.separator} />
-            </Stack.Item>
-            <Stack
-              tokens={{ childrenGap: "l2" }}
-              className={classNames.sectionIndent}>
+            </Stack>
+            <Stack>
+              <Stack.Item>
+                <Separator className={classNames.separator} />
+              </Stack.Item>
               <Stack.Item>
                 <Text variant="large" className={classNames.title}>
-                  {localization.InterpretVision.Dashboard.panelInformation}
+                  {localization.InterpretVision.Dashboard.panelExplanation}
                 </Text>
               </Stack.Item>
-              <Stack.Item className={classNames.featureListContainer}>
-                <List
-                  items={this.state.metadata}
-                  onRenderCell={this.onRenderCell}/>
-              </Stack.Item>
+              <Stack>
+                {
+                  <ComboBox
+                    id="objectSelection"
+                    label={"Choose a detected object"}
+                    onChange={this.selectODChoiceFromDropdown}
+                    selectedKey={this.state.odSelectedKey}
+                    options={this.state.selectableObjectIndexes}
+                    className={"classNames.dropdown"}
+                    styles={FluentUIStyles.smallDropdownStyle}
+                  />
+                }
+                <Stack>
+                  {!this.props.loadingExplanation[index][
+                    +this.state.odSelectedKey.slice(7)
+                  ] ? (
+                    <Stack.Item>
+                      <Image
+                        src={`data:image/jpg;base64,${this.props.explanations
+                          .get(index)
+                          ?.get(+this.state.odSelectedKey.slice(7))}`}
+                        width="700px"
+                        style={{ position: "relative", right: 85 }}
+                      />
+                    </Stack.Item>
+                  ) : (
+                    <Stack.Item>
+                      <Spinner
+                        label={`${localization.InterpretVision.Dashboard.loading} ${item?.index}`}
+                      />
+                    </Stack.Item>
+                  )}
+                </Stack>
+              </Stack>
             </Stack>
           </Stack>
-          <Stack >
-          <Stack.Item>
-            <Separator className={classNames.separator} />
-          </Stack.Item>
-          <Stack.Item>
-            <Text variant="large" className={classNames.title}>
-              {localization.InterpretVision.Dashboard.panelExplanation}
-            </Text>
-          </Stack.Item>
-          <Stack>
-          {(<ComboBox
-            id="objectSelection"
-            label={"Choose a detected object"}
-            onChange={this.selectODChoiceFromDropdown}
-            selectedKey={this.state.odSelectedKey}
-            options={this.state.selectableObjectIndexes}
-            className={"classNames.dropdown"}
-            styles={FluentUIStyles.smallDropdownStyle}
-          />)}
-                <Stack>
-          {!this.props.loadingExplanation[index][+this.state.odSelectedKey.slice(7)] ? (
-            <Stack.Item>
-              <Image
-                src={`data:image/jpg;base64,${this.props.explanations.get(index)?.get(+this.state.odSelectedKey.slice(7))}`}
-                width="700px"
-                style={{ position: "relative", right: 85 }}/>
-            </Stack.Item> ) : (
-            <Stack.Item>
-              <Spinner
-                label={`${localization.InterpretVision.Dashboard.loading} ${item?.index}`}/>
-            </Stack.Item>
-          )}
-        </Stack>
-        </Stack>
-        </Stack>
-        </Stack>
         </Panel>
       </FocusZone>
     );
@@ -270,7 +315,8 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
           horizontal
           tokens={{ childrenGap: "l2" }}
           verticalAlign="center"
-          className={classNames.cell}>
+          className={classNames.cell}
+        >
           {item.map((val) => (
             <Stack.Item key={val.toString()}>
               <Text variant="large">{val}</Text>
@@ -288,8 +334,8 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
   ): void => {
     if (typeof item?.key === "string") {
       const key = +item.key.slice(7);
-      this.setState({ odSelectedKey: item?.key })
-      const t = this.state.item
+      this.setState({ odSelectedKey: item?.key });
+      const t = this.state.item;
       if (t !== undefined) {
         this.props.onChange(t, key);
       }

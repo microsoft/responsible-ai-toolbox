@@ -51,7 +51,7 @@ export function mapClassNames(
 }
 
 export function preprocessData(
-  props: IVisionExplanationDashboardProps, 
+  props: IVisionExplanationDashboardProps,
   dataset: IDataset
 ):
   | Pick<
@@ -83,11 +83,11 @@ export function preprocessData(
   const loadingExplanation: boolean[][] = [[]];
   const computedExplanations: Map<number, Map<number, string>> = new Map();
   dataSummary.images?.forEach((image, index) => {
-    const defVal = "object scenario not defined"; 
-    const y = dataset.object_detection_predicted_y?.[index]; 
-    const odPredictedY = (typeof y === "undefined") ? defVal : y;
-    const x = dataset.object_detection_true_y?.[index]; 
-    const odTrueY = (typeof x === "undefined") ? defVal : x;
+    const defVal = "object scenario not defined";
+    const y = dataset.object_detection_predicted_y?.[index];
+    const odPredictedY = typeof y === "undefined" ? defVal : y;
+    const x = dataset.object_detection_true_y?.[index];
+    const odTrueY = typeof x === "undefined" ? defVal : x;
 
     const item: IVisionListItem = {
       image,
@@ -106,7 +106,11 @@ export function preprocessData(
       ? successInstances.push(item)
       : errorInstances.push(item);
 
-    loadingExplanation.push(new Array<boolean>((dataset.object_detection_predicted_y)?.length ?? 0).fill(true)); 
+    loadingExplanation.push(
+      new Array<boolean>(
+        dataset.object_detection_predicted_y?.length ?? 0
+      ).fill(true)
+    );
     computedExplanations.set(index, new Map<number, string>());
   });
 
