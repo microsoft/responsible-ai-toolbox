@@ -587,18 +587,15 @@ class RAIInsights(RAIBaseInsights):
                 (feature_metadata.dropped_features is not None and
                     len(feature_metadata.dropped_features) != 0):
                 has_dropped_features = True
-                small_train_data = small_train_data.drop(
-                    columns=feature_metadata.dropped_features + [
-                        target_column], axis=1)
-                small_test_data = small_test_data.drop(
-                    columns=feature_metadata.dropped_features + [
-                        target_column], axis=1)
+                features_to_drop = feature_metadata.dropped_features + [
+                    target_column]
             else:
-                small_train_data = small_train_data.drop(
-                    columns=[target_column], axis=1)
-                small_test_data = small_test_data.drop(
-                    columns=[target_column], axis=1)
+                features_to_drop = [target_column]
 
+            small_train_data = small_train_data.drop(
+                columns=features_to_drop, axis=1)
+            small_test_data = small_test_data.drop(
+                columns=features_to_drop, axis=1)
             if (len(small_train_data.columns) == 0 or
                     len(small_test_data.columns) == 0):
                 if has_dropped_features:
@@ -663,19 +660,15 @@ class RAIInsights(RAIBaseInsights):
                 if feature_metadata is not None and \
                         feature_metadata.dropped_features is not None and \
                         len(feature_metadata.dropped_features) != 0:
-                    train_data = train.drop(
-                        columns=feature_metadata.dropped_features + [
-                            target_column],
-                        axis=1)
-                    test_data = test.drop(
-                        columns=feature_metadata.dropped_features + [
-                            target_column],
-                        axis=1)
+                    features_to_drop = feature_metadata.dropped_features + [
+                        target_column]
                 else:
-                    train_data = train.drop(
-                        columns=[target_column], axis=1)
-                    test_data = test.drop(
-                        columns=[target_column], axis=1)
+                    features_to_drop = [target_column]
+
+                train_data = train.drop(
+                    columns=features_to_drop, axis=1)
+                test_data = test.drop(
+                    columns=features_to_drop, axis=1)
 
                 train_predictions = model.predict(train_data)
                 test_predictions = model.predict(test_data)
