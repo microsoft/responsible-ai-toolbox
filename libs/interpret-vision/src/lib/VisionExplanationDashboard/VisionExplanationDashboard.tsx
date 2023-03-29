@@ -38,8 +38,7 @@ import {
 } from "./VisionExplanationDashboardHelper";
 export class VisionExplanationDashboard extends React.Component<
   IVisionExplanationDashboardProps,
-  IVisionExplanationDashboardState
-> {
+  IVisionExplanationDashboardState> {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
@@ -243,13 +242,11 @@ export class VisionExplanationDashboard extends React.Component<
       this.props
         .requestExp([index, selectedObject], new AbortController().signal)
         .then((result) => {
-          const explanation = result.toString();
-          const computedObjectExplanations = computedExplanations.get(index);
-          computedObjectExplanations?.set(selectedObject, explanation);
+          computedExplanations.get(index)?.set(selectedObject, result.toString());
           computedExplanations.set(
             index,
-            computedObjectExplanations ??
-              new Map().set(selectedObject, explanation)
+            computedExplanations.get(index) ??
+              new Map().set(selectedObject, result.toString())
           );
           loadingExplanation[index][selectedObject] = false;
           this.setState({
