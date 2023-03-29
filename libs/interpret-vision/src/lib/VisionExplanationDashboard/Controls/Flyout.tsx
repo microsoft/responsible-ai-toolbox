@@ -3,8 +3,8 @@
 
 import {
   ComboBox,
-  IComboBoxOption,
   IComboBox,
+  IComboBoxOption,
   Icon,
   Image,
   ImageFit,
@@ -21,6 +21,11 @@ import { FluentUIStyles, IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import {
+  generateSelectableObjectDetectionIndexes,
+  onRenderCell,
+  updateMetadata
+} from "../utils/FlyoutUtils";
 import { getJoinedLabelString } from "../utils/labelUtils";
 
 import { flyoutStyles } from "./Flyout.styles";
@@ -58,40 +63,15 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
     };
   }
 
-  public generateSelectableObjectDetectionIndexes(
-    item: IVisionListItem | undefined
-  ): IComboBoxOption[] {
-    const temp = item?.odPredictedY;
-    const selectableObjectIndexes: IComboBoxOption[] = [];
-    if (temp) {
-      for (let i = 0; i < Object.values(temp).length; i++) {
-        selectableObjectIndexes.push({
-          key: `Object ${i}`,
-          text: `Object ${i}`
-        });
-      }
-    }
-    return selectableObjectIndexes;
-  }
-
   public componentDidMount(): void {
     const item = this.props.item;
     if (!item) {
       return;
     }
     const fieldNames = this.props.otherMetadataFieldNames;
-    const metadata: Array<Array<string | number | boolean>> = [];
-    fieldNames.forEach((fieldName) => {
-      const itemField = item[fieldName];
-      const itemValue = Array.isArray(itemField)
-        ? itemField.join(",")
-        : itemField;
-      if (item[fieldName]) {
-        metadata.push([fieldName, itemValue]);
-      }
-    });
+    const metadata = updateMetadata(item, fieldNames);
     const selectableObjectIndexes =
-      this.generateSelectableObjectDetectionIndexes(item);
+      generateSelectableObjectDetectionIndexes(item);
     this.setState({ item, metadata, selectableObjectIndexes });
   }
 
@@ -113,7 +93,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
         }
       });
       const selectableObjectIndexes =
-        this.generateSelectableObjectDetectionIndexes(item);
+        generateSelectableObjectDetectionIndexes(item);
       this.setState({
         item: this.props.item,
         metadata,
@@ -128,7 +108,6 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
     if (!item) {
       return <div />;
     }
-    const index = item.index;
     const classNames = flyoutStyles();
     const predictedY = getJoinedLabelString(item?.predictedY);
     const trueY = getJoinedLabelString(item?.trueY);
@@ -247,7 +226,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                 <Stack.Item className={classNames.featureListContainer}>
                   <List
                     items={this.state.metadata}
-                    onRenderCell={this.onRenderCell}
+                    onRenderCell={onRenderCell}
                   />
                 </Stack.Item>
               </Stack>
@@ -274,13 +253,13 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                   />
                 }
                 <Stack>
-                  {!this.props.loadingExplanation[index][
+                  {!this.props.loadingExplanation[item.index][
                     +this.state.odSelectedKey.slice(7)
                   ] ? (
                     <Stack.Item>
                       <Image
                         src={`data:image/jpg;base64,${this.props.explanations
-                          .get(index)
+                          .get(item.index)
                           ?.get(+this.state.odSelectedKey.slice(7))}`}
                         width="700px"
                         style={{ position: "relative", right: 85 }}
@@ -302,42 +281,14 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
     );
   }
 
-  private onRenderCell = (
-    item?: Array<string | number | boolean> | undefined
-  ): React.ReactNode => {
-    if (!item) {
-      return;
-    }
-    const classNames = flyoutStyles();
-    return (
-      <Stack.Item>
-        <Stack
-          horizontal
-          tokens={{ childrenGap: "l2" }}
-          verticalAlign="center"
-          className={classNames.cell}
-        >
-          {item.map((val) => (
-            <Stack.Item key={val.toString()}>
-              <Text variant="large">{val}</Text>
-            </Stack.Item>
-          ))}
-        </Stack>
-        <Separator className={classNames.separator} />
-      </Stack.Item>
-    );
-  };
-
   private selectODChoiceFromDropdown = (
     _event: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
     if (typeof item?.key === "string") {
-      const key = +item.key.slice(7);
       this.setState({ odSelectedKey: item?.key });
-      const t = this.state.item;
-      if (t !== undefined) {
-        this.props.onChange(t, key);
+      if (this.state.item !== undefined) {
+        this.props.onChange(this.state.item, +item.key.slice(7));
       }
     }
   };
