@@ -228,15 +228,17 @@ export class LocalImportanceChart extends React.PureComponent<
         this.props.weightLabels[this.props.selectedWeightVector];
       yAxisLabels = yAxisLabels.concat(" - ", weightLabel);
     }
+    const theme = getTheme();
     const seriesData = [
       {
-        color: getPrimaryChartColor(getTheme()),
+        color: getPrimaryChartColor(theme),
         data: y,
         name: ""
       }
     ];
     return {
       chart: {
+        backgroundColor: theme.semanticColors.bodyBackground,
         type: "column"
       },
       series: seriesData,
