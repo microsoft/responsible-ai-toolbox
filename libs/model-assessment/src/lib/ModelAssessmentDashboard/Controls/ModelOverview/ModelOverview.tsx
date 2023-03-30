@@ -75,6 +75,9 @@ interface IModelOverviewState {
   datasetBasedCohorts: ErrorCohort[];
   featureBasedCohortLabeledStatistics: ILabeledStatistic[][];
   featureBasedCohorts: ErrorCohort[];
+  aggregateMethod: string,
+  className: string,
+  iouThresh: number
 }
 
 const datasetCohortViewPivotKey = "datasetCohortView";
@@ -104,7 +107,10 @@ export class ModelOverview extends React.Component<
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
       selectedMetrics: [],
-      showHeatmapColors: true
+      showHeatmapColors: true,
+      aggregateMethod: "macro",
+      className: "", // TODO: default class name?
+      iouThresh: 70
     };
   }
 
@@ -338,6 +344,7 @@ export class ModelOverview extends React.Component<
               <ObjectDetectionWidgets
                 classNames={classNames}
                 dataset={this.context.dataset}
+                modelOverview={this}
               />
             )}
           </Stack>
@@ -523,7 +530,11 @@ export class ModelOverview extends React.Component<
       this.context.errorCohorts.map((errorCohort) =>
         errorCohort.cohort.unwrap(JointDataset.IndexLabel)
       ),
-      this.context.modelMetadata.modelType
+      this.context.modelMetadata.modelType,
+      this.context.requestObjectDetectionMetrics,
+      [this.state.aggregateMethod,
+       this.state.className,
+       this.state.iouThresh]
     );
 
     this.setState({
@@ -547,7 +558,11 @@ export class ModelOverview extends React.Component<
       featureBasedCohorts.map((errorCohort) =>
         errorCohort.cohort.unwrap(JointDataset.IndexLabel)
       ),
-      this.context.modelMetadata.modelType
+      this.context.modelMetadata.modelType,
+      this.context.requestObjectDetectionMetrics,
+      [this.state.aggregateMethod,
+       this.state.className,
+       this.state.iouThresh]
     );
 
     this.setState({

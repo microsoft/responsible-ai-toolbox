@@ -44,7 +44,8 @@ export interface ITabsViewProps {
   requestObjectDetectionMetrics?: (
     aggregateMethod: string,
     className: string,
-    iouThresh: number
+    iouThresh: number,
+    abortSignal: AbortSignal
   ) => Promise<any[]>;
   requestPredictions?: (
     request: any[],

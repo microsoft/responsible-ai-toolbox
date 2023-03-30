@@ -16,7 +16,8 @@ export interface IVisionExplanationDashboardProps {
   requestObjectDetectionMetrics?: (
     aggregateMethod: string,
     className: string,
-    iouThresh: number
+    iouThresh: number,
+    abortSignal: AbortSignal
   ) => Promise<any[]>;
   selectedCohort: ErrorCohort;
   setSelectedCohort: (cohort: ErrorCohort) => void;

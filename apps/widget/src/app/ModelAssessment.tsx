@@ -58,12 +58,14 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       callBack.requestObjectDetectionMetrics = async (
         aggregateMethod: string,
         className: string,
-        iouThresh: number
+        iouThresh: number,
+        abortSignal: AbortSignal
       ): Promise<any[]> => {
         return callFlaskService(
           this.props.config,
           [aggregateMethod, className, iouThresh],
-          "/get_object_detection_metrics"
+          "/get_object_detection_metrics",
+          abortSignal
         );
       };
       callBack.requestPredictions = async (data: any[]): Promise<any[]> => {

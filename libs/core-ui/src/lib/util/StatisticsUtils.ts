@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
+import { IModelAssessmentContext } from "@responsible-ai/core-ui";
 
 import { ModelTypes } from "../Interfaces/IExplanationContext";
 import {
@@ -248,11 +249,15 @@ const generateImageStats: (
 export const generateMetrics: (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
-  modelType: ModelTypes
+  modelType: ModelTypes,
+  requestObjectDetectionMetrics?: IModelAssessmentContext["requestObjectDetectionMetrics"],
+  objectDetectionState?: [string, string, number]
 ) => ILabeledStatistic[][] = (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
-  modelType: ModelTypes
+  modelType: ModelTypes,
+  requestObjectDetectionMetrics?: IModelAssessmentContext["requestObjectDetectionMetrics"],
+  objectDetectionState?: [string, string, number]
 ): ILabeledStatistic[][] => {
   if (
     modelType === ModelTypes.ImageMultilabel ||
@@ -279,7 +284,12 @@ export const generateMetrics: (
     });
   }
   if (modelType === ModelTypes.ObjectDetection) {
-    return generateObjectDetectionStats(jointDataset, selectionIndexes);
+    return generateObjectDetectionStats(
+      jointDataset,
+      selectionIndexes,
+      requestObjectDetectionMetrics,
+      objectDetectionState
+    );
   }
   const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
   return selectionIndexes.map((selectionArray) => {

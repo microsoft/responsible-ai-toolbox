@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IModelAssessmentContext } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 
 import {
@@ -18,19 +19,37 @@ export enum ObjectDetectionMetrics {
 
 export const generateObjectDetectionStats: (
   jointDataset: JointDataset,
-  selectionIndexes: number[][]
+  selectionIndexes: number[][],
+  requestObjectDetectionMetrics?: IModelAssessmentContext["requestObjectDetectionMetrics"],
+  objectDetectionState?: [string, string, number]
 ) => ILabeledStatistic[][] = (
   jointDataset: JointDataset,
-  selectionIndexes: number[][]
+  selectionIndexes: number[][],
+  requestObjectDetectionMetrics?: IModelAssessmentContext["requestObjectDetectionMetrics"],
+  objectDetectionState?: [string, string, number]
 ): ILabeledStatistic[][] => {
   const numLabels = jointDataset.numLabels;
   return selectionIndexes.map((selectionArray) => {
     const count = selectionArray.length;
 
-    // TODO: replace placeholder values with flask endpoint calls to python backend.
-    const meanAveragePrecision = 42;
-    const averagePrecision = 42;
-    const averageRecall = 42;
+    // Placeholder values without attached compute.
+    let meanAveragePrecision = 32;
+    let averagePrecision = 32;
+    let averageRecall = 32;
+
+    // checks for attached compute
+    if (requestObjectDetectionMetrics && objectDetectionState) {
+      requestObjectDetectionMetrics(
+        objectDetectionState[0],
+        objectDetectionState[1],
+        objectDetectionState[2],
+        new AbortController().signal
+      ).then(
+        (result) => {
+          [meanAveragePrecision, averagePrecision, averageRecall] = result
+        }
+      )
+    }
 
     return [
       {

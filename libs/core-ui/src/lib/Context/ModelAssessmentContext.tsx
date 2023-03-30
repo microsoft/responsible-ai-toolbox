@@ -140,7 +140,8 @@ export interface IModelAssessmentContext {
     | ((
         aggregateMethod: string,
         className: string,
-        iouThresh: number
+        iouThresh: number,
+        abortSignal: AbortSignal
       ) => Promise<any[]>)
     | undefined;
   requestSplinePlotDistribution?: (
@@ -170,6 +171,7 @@ export const defaultModelAssessmentContext: IModelAssessmentContext = {
   modelMetadata: {} as IExplanationModelMetadata,
   modelType: undefined,
   requestExp: undefined,
+  requestObjectDetectionMetrics: undefined,
   requestLocalFeatureExplanations: undefined,
   requestPredictions: undefined,
   selectedErrorCohort: {} as ErrorCohort,

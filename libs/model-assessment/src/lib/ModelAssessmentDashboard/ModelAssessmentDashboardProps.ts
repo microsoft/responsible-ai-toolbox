@@ -115,7 +115,8 @@ export interface IModelAssessmentDashboardProps
   requestObjectDetectionMetrics?: (
     aggregateMethod: string,
     className: string,
-    iouThresh: number
+    iouThresh: number,
+    abortSignal: AbortSignal
   ) => Promise<any[]>;
   requestBubblePlotData?: (
     filter: unknown[],
