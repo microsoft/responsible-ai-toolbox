@@ -7,7 +7,8 @@ import numpy as np
 import pytest
 from common_utils import replicate_dataset
 
-from erroranalysis._internal.constants import ModelTask
+from erroranalysis._internal.constants import (ErrorCorrelationMethods,
+                                               ModelTask)
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from rai_test_utils.datasets.tabular import (
     create_binary_classification_dataset, create_cancer_data,
@@ -22,11 +23,17 @@ from rai_test_utils.models.sklearn import (
 TOL = 1e-10
 NUM_SAMPLE_ROWS = 100
 DEFAULT_SAMPLE_COLS = 20
+MUTUAL_INFO = ErrorCorrelationMethods.MUTUAL_INFO
+EBM = ErrorCorrelationMethods.EBM
+GBM_SHAP = ErrorCorrelationMethods.GBM_SHAP
+GBM_ERROR_SAMPLES_TOL = 6
 
 
 class TestImportances(object):
 
-    def test_importances_iris(self):
+    @pytest.mark.parametrize('error_correlation_method',
+                             [MUTUAL_INFO, EBM, GBM_SHAP])
+    def test_importances_iris(self, error_correlation_method):
         X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
 
         models = create_models_classification(X_train, y_train)
@@ -34,9 +41,11 @@ class TestImportances(object):
         for model in models:
             categorical_features = []
             run_error_analyzer(model, X_test, y_test, feature_names,
-                               categorical_features)
+                               categorical_features, error_correlation_method)
 
-    def test_importances_cancer(self):
+    @pytest.mark.parametrize('error_correlation_method',
+                             [MUTUAL_INFO, EBM, GBM_SHAP])
+    def test_importances_cancer(self, error_correlation_method):
         X_train, X_test, y_train, y_test, feature_names, _ = \
             create_cancer_data()
 
@@ -45,9 +54,12 @@ class TestImportances(object):
         for model in models:
             categorical_features = []
             run_error_analyzer(model, X_test, y_test, feature_names,
-                               categorical_features)
+                               categorical_features, error_correlation_method)
 
-    def test_importances_binary_classification(self):
+    @pytest.mark.parametrize('error_correlation_method',
+                             [MUTUAL_INFO, EBM, GBM_SHAP])
+    def test_importances_binary_classification(self,
+                                               error_correlation_method):
         X_train, y_train, X_test, y_test, _ = \
             create_binary_classification_dataset()
         feature_names = list(X_train.columns)
@@ -56,18 +68,22 @@ class TestImportances(object):
         for model in models:
             categorical_features = []
             run_error_analyzer(model, X_test, y_test, feature_names,
-                               categorical_features)
+                               categorical_features, error_correlation_method)
 
-    def test_importances_titanic(self):
+    @pytest.mark.parametrize('error_correlation_method',
+                             [MUTUAL_INFO, EBM, GBM_SHAP])
+    def test_importances_titanic(self, error_correlation_method):
         X_train, X_test, y_train, y_test, numeric, categorical = \
             create_simple_titanic_data()
         feature_names = categorical + numeric
         clf = create_titanic_pipeline(X_train, y_train)
         categorical_features = categorical
         run_error_analyzer(clf, X_test, y_test, feature_names,
-                           categorical_features)
+                           categorical_features, error_correlation_method)
 
-    def test_importances_housing(self):
+    @pytest.mark.parametrize('error_correlation_method',
+                             [MUTUAL_INFO, EBM, GBM_SHAP])
+    def test_importances_housing(self, error_correlation_method):
         X_train, X_test, y_train, y_test, feature_names = \
             create_housing_data()
         models = create_models_regression(X_train, y_train)
@@ -75,9 +91,11 @@ class TestImportances(object):
         for model in models:
             categorical_features = []
             run_error_analyzer(model, X_test, y_test, feature_names,
-                               categorical_features)
+                               categorical_features, error_correlation_method)
 
-    def test_large_data_importances(self):
+    @pytest.mark.parametrize('error_correlation_method',
+                             [MUTUAL_INFO, EBM, GBM_SHAP])
+    def test_large_data_importances(self, error_correlation_method):
         # mutual information can be very costly for large number of rows
         # hence, assert we downsample to compute importances for large data
         X_train, y_train, X_test, y_test, _ = \
@@ -91,7 +109,7 @@ class TestImportances(object):
         model_analyzer = ModelAnalyzer(model, X_test, y_test,
                                        feature_names,
                                        categorical_features)
-        model_analyzer.compute_importances()
+        model_analyzer.compute_importances(error_correlation_method)
         t1 = time.time()
         execution_time = t1 - t0
         print(execution_time)
@@ -100,7 +118,9 @@ class TestImportances(object):
         assert execution_time < 20
 
     @pytest.mark.parametrize('num_rows', [1, 2, 3, 4])
-    def test_small_data_importances(self, num_rows):
+    @pytest.mark.parametrize('error_correlation_method',
+                             [MUTUAL_INFO, EBM, GBM_SHAP])
+    def test_small_data_importances(self, num_rows, error_correlation_method):
         # validate we can run on very few rows
         X_train, y_train, X_test, y_test, _ = \
             create_binary_classification_dataset(NUM_SAMPLE_ROWS)
@@ -112,10 +132,12 @@ class TestImportances(object):
         model_analyzer = ModelAnalyzer(model, X_test, y_test,
                                        feature_names,
                                        categorical_features)
-        scores = model_analyzer.compute_importances()
+        scores = model_analyzer.compute_importances(error_correlation_method)
         assert len(scores) == DEFAULT_SAMPLE_COLS
 
-    def test_importances_missings(self):
+    @pytest.mark.parametrize('error_correlation_method',
+                             [MUTUAL_INFO, EBM, GBM_SHAP])
+    def test_importances_missings(self, error_correlation_method):
         X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
 
         # add missing values to X_test
@@ -127,23 +149,29 @@ class TestImportances(object):
 
         categorical_features = []
         run_error_analyzer(model, X_test, y_test, feature_names,
-                           categorical_features)
+                           categorical_features, error_correlation_method)
 
 
 def run_error_analyzer(model, X_test, y_test, feature_names,
-                       categorical_features):
+                       categorical_features,
+                       error_correlation_method):
     model_analyzer = ModelAnalyzer(model, X_test, y_test,
                                    feature_names,
                                    categorical_features)
-    scores = model_analyzer.compute_importances()
+    scores = model_analyzer.compute_importances(error_correlation_method)
     if model_analyzer.model_task == ModelTask.CLASSIFICATION:
         diff = model.predict(model_analyzer.dataset) != model_analyzer.true_y
     else:
         diff = model.predict(model_analyzer.dataset) - model_analyzer.true_y
     assert isinstance(scores, list)
     assert len(scores) == len(feature_names)
+    # GBM methods seems to predict all zeros
+    # (and sometimes otherwise) even if very few instances non-zero
+    is_gbm = error_correlation_method == GBM_SHAP
+    sum_diff = sum(diff)
+    noisy_gbm = sum_diff < GBM_ERROR_SAMPLES_TOL and sum_diff > 0 and is_gbm
     # If model predicted perfectly, assert all scores are zeros
     if not any(diff):
         assert all(abs(score - 0) < TOL for score in scores)
-    else:
+    elif not noisy_gbm:
         assert any(score != 0 for score in scores)
