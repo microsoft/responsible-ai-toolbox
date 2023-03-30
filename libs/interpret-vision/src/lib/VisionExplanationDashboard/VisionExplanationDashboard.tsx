@@ -218,15 +218,14 @@ export class VisionExplanationDashboard extends React.Component<
   private onSearch = (
     _event?: React.ChangeEvent<HTMLInputElement>,
     newValue?: string
-  ): void => { this.setState({ searchValue: newValue || "" }); };
+  ): void => {
+    this.setState({ searchValue: newValue || "" });
+  };
   private onItemSelect = (item: IVisionListItem, selectedObject = -1): void => {
     this.setState({ panelOpen: true, selectedItem: item });
     const { computedExplanations, loadingExplanation } = this.state;
     if (selectedObject !== -1) {
-      const computedExplanation = computedExplanations
-        .get(item.index)
-        ?.get(selectedObject);
-      if (computedExplanation) {
+      if (computedExplanations.get(item.index)?.get(selectedObject)) {
         loadingExplanation[item.index][selectedObject] = false;
         this.setState({
           loadingExplanation

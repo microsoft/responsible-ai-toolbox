@@ -16,7 +16,7 @@ import {
 export const applicationKeys = <const>["modelAssessmentVision"];
 
 export type IApplications = {
-  [key in (typeof applicationKeys)[number]]: unknown;
+  [key in typeof applicationKeys[number]]: unknown;
 } & {
   modelAssessmentVision: IModelAssessmentSetting &
     IDataSet<IModelAssessmentDataSet>;
