@@ -88,7 +88,7 @@ class ResponsibleAIDashboard(Dashboard):
             data = request.get_json(force=True)
             return jsonify(self.input.get_object_detection_metrics(data))
         self.add_url_rule(
-            get_exp,
+            get_object_detection_metrics,
             '/get_object_detection_metrics',
             methods=["POST"]
         )
