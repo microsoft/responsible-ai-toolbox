@@ -222,32 +222,33 @@ export class VisionExplanationDashboard extends React.Component<
     this.setState({ searchValue: newValue || "" });
   };
   private onItemSelect = (item: IVisionListItem, selectedObject = -1): void => {
+    const selObjFrozen = Object.freeze(selectedObject);
     this.setState({ panelOpen: true, selectedItem: item });
     const { computedExplanations, loadingExplanation } = this.state;
-    if (selectedObject !== -1) {
-      if (computedExplanations.get(item.index)?.get(selectedObject)) {
-        loadingExplanation[item.index][selectedObject] = false;
+    if (selObjFrozen !== -1) {
+      if (computedExplanations.get(item.index)?.get(selObjFrozen)) {
+        loadingExplanation[item.index][selObjFrozen] = false;
         this.setState({
           loadingExplanation
         });
         return;
       }
     }
-    if (this.props.requestExp && selectedObject !== -1) {
-      loadingExplanation[item.index][selectedObject] = true;
+    if (this.props.requestExp && selObjFrozen !== -1) {
+      loadingExplanation[item.index][selObjFrozen] = true;
       this.setState({ loadingExplanation });
       this.props
-        .requestExp([item.index, selectedObject], new AbortController().signal)
+        .requestExp([item.index, selObjFrozen], new AbortController().signal)
         .then((result) => {
           computedExplanations
             .get(item.index)
-            ?.set(selectedObject, result.toString());
+            ?.set(selObjFrozen, result.toString());
           computedExplanations.set(
             item.index,
             computedExplanations.get(item.index) ??
-              new Map().set(selectedObject, result.toString())
+              new Map().set(selObjFrozen, result.toString())
           );
-          loadingExplanation[item.index][selectedObject] = false;
+          loadingExplanation[item.index][selObjFrozen] = false;
           this.setState({
             computedExplanations,
             loadingExplanation
