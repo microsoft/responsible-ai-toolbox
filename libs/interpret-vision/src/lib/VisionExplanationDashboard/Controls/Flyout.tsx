@@ -51,6 +51,7 @@ const stackTokens = {
   large: { childrenGap: "l2" },
   medium: { childrenGap: "l1" }
 };
+const ExcessLabelLen = 7; 
 
 export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
   public constructor(props: IFlyoutProps) {
@@ -288,7 +289,8 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
     if (typeof item?.key === "string") {
       this.setState({ odSelectedKey: item?.key });
       if (this.state.item !== undefined) {
-        this.props.onChange(this.state.item, +item.key.slice(7));
+        // Remove "Object: " from the labels. We only want to index  
+        this.props.onChange(this.state.item, +item.key.slice(ExcessLabelLen));
       }
     }
   };

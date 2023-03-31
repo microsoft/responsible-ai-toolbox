@@ -68,7 +68,7 @@ export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
     mainContainer: {
       height: "100%",
       overflow: "hidden"
-    },
+    }
     sectionIndent: {
       overflow: "hidden",
       width: "100%"
