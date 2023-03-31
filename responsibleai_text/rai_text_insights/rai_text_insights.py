@@ -109,6 +109,7 @@ class RAITextInsights(RAIBaseInsights):
         self._ext_test_df = pd.DataFrame(ext_test, columns=ext_features)
         self._ext_test_df[target_column] = test[target_column]
         self.predict_output = None
+
         super(RAITextInsights, self).__init__(
             model, train, test, target_column, task_type,
             serializer)
@@ -125,7 +126,7 @@ class RAITextInsights(RAIBaseInsights):
             self._classes)
         self._error_analysis_manager = ErrorAnalysisManager(
             self._wrapped_model, self.test, self._ext_test_df,
-            self.target_column, self._classes)
+            self.target_column, self.task_type, self._classes)
         self._managers = [self._explainer_manager,
                           self._error_analysis_manager]
 
