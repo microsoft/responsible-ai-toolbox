@@ -8,6 +8,7 @@ import {
   getTheme,
   mergeStyles
 } from "@fluentui/react";
+import React from "react";
 
 export interface IFlyoutStyles {
   cell: IStyle;
@@ -25,6 +26,13 @@ export interface IFlyoutStyles {
   separator: IStyle;
   title: IStyle;
 }
+
+export const explanationImage: React.CSSProperties = {
+  position: "relative",
+  right: "85" 
+}
+
+export const explanationImageWidth = "700px"
 
 export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
   const theme = getTheme();
@@ -68,7 +76,7 @@ export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
     mainContainer: {
       height: "100%",
       overflow: "hidden"
-    }
+    },
     sectionIndent: {
       overflow: "hidden",
       width: "100%"

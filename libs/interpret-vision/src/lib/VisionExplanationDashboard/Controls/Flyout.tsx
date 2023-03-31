@@ -28,7 +28,7 @@ import {
 } from "../utils/FlyoutUtils";
 import { getJoinedLabelString } from "../utils/labelUtils";
 
-import { flyoutStyles } from "./Flyout.styles";
+import { flyoutStyles, explanationImage, explanationImageWidth } from "./Flyout.styles";
 
 export interface IFlyoutProps {
   explanations: Map<number, Map<number, string>>;
@@ -262,8 +262,8 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                         src={`data:image/jpg;base64,${this.props.explanations
                           .get(item.index)
                           ?.get(+this.state.odSelectedKey.slice(7))}`}
-                        width="700px"
-                        style={{ position: "relative", right: 85 }}
+                        width={explanationImageWidth}
+                        style={explanationImage}
                       />
                     </Stack.Item>
                   ) : (
