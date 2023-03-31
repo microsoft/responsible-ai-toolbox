@@ -243,8 +243,8 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
               <Stack>
                 {
                   <ComboBox
-                    id="objectSelection"
-                    label={"Choose a detected object"}
+                    id={localization.InterpretVision.Dashboard.objectSelect}
+                    label={localization.InterpretVision.Dashboard.chooseObject}
                     onChange={this.selectODChoiceFromDropdown}
                     selectedKey={this.state.odSelectedKey}
                     options={this.state.selectableObjectIndexes}
