@@ -23,6 +23,7 @@ import {
   JointDataset,
   ModelTypes,
   MultilabelMetrics,
+  ObjectDetectionMetrics,
   FluentUIStyles,
   MulticlassClassificationMetrics,
   ErrorCohort,
@@ -46,6 +47,7 @@ import { FeatureConfigurationFlyout } from "./FeatureConfigurationFlyout";
 import { MetricConfigurationFlyout } from "./MetricConfigurationFlyout";
 import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewChartPivot } from "./ModelOverviewChartPivot";
+import { ObjectDetectionWidgets } from "./ObjectDetectionModelOverview";
 import { getSelectableMetrics } from "./StatsTableUtils";
 
 interface IModelOverviewProps {
@@ -136,6 +138,14 @@ export class ModelOverview extends React.Component<
       defaultSelectedMetrics = [
         MultilabelMetrics.ExactMatchRatio,
         MultilabelMetrics.HammingScore
+      ];
+    } else if (
+      this.context.dataset.task_type === DatasetTaskType.ObjectDetection
+    ) {
+      defaultSelectedMetrics = [
+        ObjectDetectionMetrics.MeanAveragePrecision,
+        ObjectDetectionMetrics.AveragePrecision,
+        ObjectDetectionMetrics.AverageRecall
       ];
     } else {
       // task_type === "regression"
@@ -318,6 +328,13 @@ export class ModelOverview extends React.Component<
                   .helpMeChooseMetricsButton
               }
             </ActionButton>
+            {this.context.dataset.task_type ===
+              DatasetTaskType.ObjectDetection && (
+              <ObjectDetectionWidgets
+                classNames={classNames}
+                dataset={this.context.dataset}
+              />
+            )}
           </Stack>
           {!this.state.datasetCohortViewIsVisible && (
             <Stack

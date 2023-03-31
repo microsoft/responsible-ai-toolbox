@@ -365,7 +365,7 @@ class TestRAIInsightsValidations:
         assert "Unsupported data type for either train or test. " + \
             "Expecting pandas DataFrame for train and test." in str(ucve.value)
 
-    def test_classes_exceptions(self):
+    def test_classes_exceptions_true_labels(self):
         X_train, X_test, y_train, y_test, _, _ = \
             create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
@@ -413,8 +413,32 @@ class TestRAIInsightsValidations:
                 task_type='classification',
                 classes=[0, 1])
 
-        assert 'The train labels and distinct values in target ' + \
+        assert 'The test labels and distinct values in target ' + \
             '(test data) do not match' in str(ucve.value)
+
+    def test_classes_exceptions_prediction_labels(self):
+        X_train, X_test, y_train, y_test, _, _ = \
+            create_cancer_data(return_dataframe=True)
+
+        y_train[0] = 2
+        y_test[0] = 2
+
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        model = MagicMock()
+        model.predict.return_value = np.array([0, 1])
+
+        with pytest.raises(UserConfigValidationException) as ucve:
+            RAIInsights(
+                model=model,
+                train=X_train,
+                test=X_test,
+                target_column=TARGET,
+                task_type='classification',
+                classes=[0, 1, 2])
+        assert 'The train labels and distinct values in ' + \
+            'predictions (train data) do not match' in str(ucve.value)
 
     def test_dataset_exception(self):
         X_train, X_test, y_train, y_test, _, _ = \
@@ -496,18 +520,72 @@ class TestRAIInsightsValidations:
             create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
-        X_train[TARGET] = y_train
-        X_test[TARGET] = y_test
-        feature_metadata = FeatureMetadata(identity_feature_name='id')
+        train = X_train.copy()
+        test = X_test.copy()
+        train[TARGET] = y_train
+        test[TARGET] = y_test
 
+        feature_metadata = FeatureMetadata(identity_feature_name='id')
         err_msg = (
             'The given identity feature name id is not present '
             f'in the provided features: {", ".join(X_train.columns)}.')
         with pytest.raises(UserConfigValidationException, match=err_msg):
             RAIInsights(
                 model=model,
-                train=X_train,
-                test=X_test,
+                train=train,
+                test=test,
+                target_column=TARGET,
+                task_type='classification',
+                feature_metadata=feature_metadata)
+
+        feature_metadata = FeatureMetadata(identity_feature_name=TARGET)
+        err_msg = (
+            'The given identity feature name target is not present '
+            f'in the provided features: {", ".join(X_train.columns)}.')
+        with pytest.raises(UserConfigValidationException, match=err_msg):
+            RAIInsights(
+                model=model,
+                train=train,
+                test=test,
+                target_column=TARGET,
+                task_type='classification',
+                feature_metadata=feature_metadata)
+
+        feature_metadata = FeatureMetadata(dropped_features=[TARGET])
+        err_msg = (
+            'The given dropped feature target is not present '
+            f'in the provided features: {", ".join(X_train.columns)}.')
+        with pytest.raises(UserConfigValidationException, match=err_msg):
+            RAIInsights(
+                model=model,
+                train=train,
+                test=test,
+                target_column=TARGET,
+                task_type='classification',
+                feature_metadata=feature_metadata)
+
+        feature_metadata = FeatureMetadata(datetime_features=[TARGET])
+        err_msg = (
+            'The given datetime feature target is not present '
+            f'in the provided features: {", ".join(X_train.columns)}.')
+        with pytest.raises(UserConfigValidationException, match=err_msg):
+            RAIInsights(
+                model=model,
+                train=train,
+                test=test,
+                target_column=TARGET,
+                task_type='classification',
+                feature_metadata=feature_metadata)
+
+        feature_metadata = FeatureMetadata(time_series_id_features=[TARGET])
+        err_msg = (
+            'The given time series ID feature target is not present '
+            f'in the provided features: {", ".join(X_train.columns)}.')
+        with pytest.raises(UserConfigValidationException, match=err_msg):
+            RAIInsights(
+                model=model,
+                train=train,
+                test=test,
                 target_column=TARGET,
                 task_type='classification',
                 feature_metadata=feature_metadata)

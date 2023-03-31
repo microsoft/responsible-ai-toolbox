@@ -15,6 +15,7 @@ import pandas as pd
 import responsibleai
 from responsibleai._internal.constants import (FileFormats, Metadata,
                                                SerializationAttributes)
+from responsibleai.exceptions import UserConfigValidationException
 
 _DTYPES = 'dtypes'
 _MODEL_PKL = Metadata.MODEL + FileFormats.PKL
@@ -186,11 +187,16 @@ class RAIBaseInsights(ABC):
                 has_setstate = hasattr(self.model, '__setstate__')
                 has_getstate = hasattr(self.model, '__getstate__')
                 if not (has_setstate and has_getstate):
-                    raise ValueError(
-                        "Model must be picklable or a custom serializer must"
-                        " be specified")
-            with open(top_dir / _MODEL_PKL, 'wb') as file:
-                pickle.dump(self.model, file)
+                    warnings.warn(
+                        "Model does not have __setstate__ and " +
+                        "__getstate__, pickle may fail")
+            try:
+                with open(top_dir / _MODEL_PKL, 'wb') as file:
+                    pickle.dump(self.model, file)
+            except Exception as e:
+                raise UserConfigValidationException(
+                    "Model must be picklable or a custom serializer must"
+                    " be specified") from e
 
     def _save_managers(self, path):
         """Save the state of individual managers.
