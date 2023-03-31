@@ -28,7 +28,11 @@ import {
 } from "../utils/FlyoutUtils";
 import { getJoinedLabelString } from "../utils/labelUtils";
 
-import { flyoutStyles, explanationImage, explanationImageWidth } from "./Flyout.styles";
+import {
+  flyoutStyles,
+  explanationImage,
+  explanationImageWidth
+} from "./Flyout.styles";
 
 export interface IFlyoutProps {
   explanations: Map<number, Map<number, string>>;
@@ -51,7 +55,7 @@ const stackTokens = {
   large: { childrenGap: "l2" },
   medium: { childrenGap: "l1" }
 };
-const ExcessLabelLen = 7; 
+const ExcessLabelLen = 7;
 
 export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
   public constructor(props: IFlyoutProps) {
@@ -288,8 +292,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
   ): void => {
     if (typeof item?.key === "string") {
       this.setState({ odSelectedKey: item?.key });
-      if (this.state.item !== undefined) {
-        // Remove "Object: " from the labels. We only want to index  
+      if (this.state.item !== undefined) { // Remove "Object: " from labels. We only want index
         this.props.onChange(this.state.item, +item.key.slice(ExcessLabelLen));
       }
     }

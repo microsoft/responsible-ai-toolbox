@@ -29,10 +29,10 @@ export interface IFlyoutStyles {
 
 export const explanationImage: React.CSSProperties = {
   position: "relative",
-  right: "85" 
-}
+  right: "85"
+};
 
-export const explanationImageWidth = "700px"
+export const explanationImageWidth = "700px";
 
 export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
   const theme = getTheme();
