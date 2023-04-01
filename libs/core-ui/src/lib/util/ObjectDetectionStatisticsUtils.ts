@@ -33,9 +33,9 @@ export const generateObjectDetectionStats: (
     const count = selectionArray.length;
 
     // Placeholder values without attached compute.
-    let meanAveragePrecision = 32;
-    let averagePrecision = 32;
-    let averageRecall = 32;
+    let meanAveragePrecision = numLabels;
+    let averagePrecision = numLabels;
+    let averageRecall = numLabels;
 
     // checks for attached compute
     if (requestObjectDetectionMetrics && objectDetectionState) {
@@ -46,7 +46,7 @@ export const generateObjectDetectionStats: (
         new AbortController().signal
       ).then(
         (result) => {
-          [meanAveragePrecision, averagePrecision, averageRecall] = result
+          [meanAveragePrecision, averagePrecision, averageRecall] = result as number[];
         }
       )
     }
@@ -55,7 +55,7 @@ export const generateObjectDetectionStats: (
       {
         key: TotalCohortSamples,
         label: localization.Interpret.Statistics.samples,
-        stat: count / numLabels // TODO: remove numLabels from here when using jointDataset elsewhere.
+        stat: count
       },
       {
         key: ObjectDetectionMetrics.MeanAveragePrecision,
