@@ -46,9 +46,10 @@ export const generateObjectDetectionStats: (
         new AbortController().signal
       ).then(
         (result) => {
-          [meanAveragePrecision, averagePrecision, averageRecall] = result as number[];
+          // [meanAveragePrecision, averagePrecision, averageRecall] = result as number[];
+          return result as number[];
 
-          console.log(meanAveragePrecision);
+          // console.log(meanAveragePrecision);
         }
       )
     }
