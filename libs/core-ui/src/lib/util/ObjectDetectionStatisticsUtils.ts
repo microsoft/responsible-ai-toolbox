@@ -46,10 +46,29 @@ export const generateObjectDetectionStats: (
         new AbortController().signal
       ).then(
         (result) => {
-          // [meanAveragePrecision, averagePrecision, averageRecall] = result as number[];
-          return result as number[];
-
-          // console.log(meanAveragePrecision);
+          [meanAveragePrecision, averagePrecision, averageRecall] = result as number[];
+          return [
+            {
+              key: TotalCohortSamples,
+              label: localization.Interpret.Statistics.samples,
+              stat: count
+            },
+            {
+              key: ObjectDetectionMetrics.MeanAveragePrecision,
+              label: localization.Interpret.Statistics.meanAveragePrecision,
+              stat: meanAveragePrecision
+            },
+            {
+              key: ObjectDetectionMetrics.AveragePrecision,
+              label: localization.Interpret.Statistics.averagePrecision,
+              stat: averagePrecision
+            },
+            {
+              key: ObjectDetectionMetrics.AverageRecall,
+              label: localization.Interpret.Statistics.averageRecall,
+              stat: averageRecall
+            }
+          ];
         }
       )
     }
