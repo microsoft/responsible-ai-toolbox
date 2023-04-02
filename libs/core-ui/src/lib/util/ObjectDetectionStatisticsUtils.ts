@@ -47,9 +47,13 @@ export const generateObjectDetectionStats: (
       ).then(
         (result) => {
           [meanAveragePrecision, averagePrecision, averageRecall] = result as number[];
+
+          console.log(meanAveragePrecision);
         }
       )
     }
+
+    console.log(meanAveragePrecision);
 
     return [
       {

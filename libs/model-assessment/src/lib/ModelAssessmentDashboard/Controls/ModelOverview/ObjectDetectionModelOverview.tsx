@@ -111,7 +111,7 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
         <ComboBox
           id="modelOverviewAggregateMethod"
           label={localization.ModelAssessment.ModelOverview.metricsTypeDropdown}
-          selectedKey={"macro"}
+          defaultSelectedKey={"macro"}
           options={getSelectableAggregateMethod()}
           onChange={this.onAggregateMethodChange}
           className={this.props.classNames.dropdown}
