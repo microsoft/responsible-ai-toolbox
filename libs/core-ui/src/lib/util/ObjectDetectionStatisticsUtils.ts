@@ -21,12 +21,12 @@ export const generateObjectDetectionStats: (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
   requestObjectDetectionMetrics?: IModelAssessmentContext["requestObjectDetectionMetrics"],
-  objectDetectionState?: [string, string, number, any]
+  objectDetectionState?: [string, string, number, ILabeledStatistic[][]]
 ) => ILabeledStatistic[][] = (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
   requestObjectDetectionMetrics?: IModelAssessmentContext["requestObjectDetectionMetrics"],
-  objectDetectionState?: [string, string, number, any]
+  objectDetectionState?: [string, string, number, ILabeledStatistic[][]]
 ): ILabeledStatistic[][] => {
   const numLabels = jointDataset.numLabels;
   return selectionIndexes.map((selectionArray) => {
@@ -39,6 +39,15 @@ export const generateObjectDetectionStats: (
 
     // checks for attached compute
     if (requestObjectDetectionMetrics && objectDetectionState) {
+
+      // let res = requestObjectDetectionMetrics(
+      //   objectDetectionState[0],
+      //   objectDetectionState[1],
+      //   objectDetectionState[2],
+      //   new AbortController().signal
+      // )
+
+
       requestObjectDetectionMetrics(
         objectDetectionState[0],
         objectDetectionState[1],
@@ -78,8 +87,7 @@ export const generateObjectDetectionStats: (
             }
           ];
 
-          // ModelOverview setState
-          objectDetectionState[3](updatedMetricStats);
+          objectDetectionState[3].push(updatedMetricStats);
 
           return updatedMetricStats;
         }

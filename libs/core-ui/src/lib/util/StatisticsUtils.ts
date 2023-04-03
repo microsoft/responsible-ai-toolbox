@@ -251,13 +251,13 @@ export const generateMetrics: (
   selectionIndexes: number[][],
   modelType: ModelTypes,
   requestObjectDetectionMetrics?: IModelAssessmentContext["requestObjectDetectionMetrics"],
-  objectDetectionState?: [string, string, number, any]
+  objectDetectionState?: [string, string, number, ILabeledStatistic[][]]
 ) => ILabeledStatistic[][] = (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
   modelType: ModelTypes,
   requestObjectDetectionMetrics?: IModelAssessmentContext["requestObjectDetectionMetrics"],
-  objectDetectionState?: [string, string, number, any]
+  objectDetectionState?: [string, string, number, ILabeledStatistic[][]]
 ): ILabeledStatistic[][] => {
   if (
     modelType === ModelTypes.ImageMultilabel ||

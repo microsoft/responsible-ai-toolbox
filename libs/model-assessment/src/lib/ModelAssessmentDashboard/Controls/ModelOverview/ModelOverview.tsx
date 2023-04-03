@@ -33,7 +33,8 @@ import {
   TelemetryLevels,
   TelemetryEventName,
   DatasetTaskType,
-  ImageClassificationMetrics
+  ImageClassificationMetrics,
+  TotalCohortSamples
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -535,7 +536,7 @@ export class ModelOverview extends React.Component<
       [this.state.aggregateMethod,
        this.state.className,
        this.state.iouThresh,
-       this.updateDatasetCohortState]
+       this.state.datasetCohortLabeledStatistics]
     );
 
     this.setState({
@@ -544,11 +545,11 @@ export class ModelOverview extends React.Component<
     });
   }
 
-  private updateDatasetCohortState(cohortMetricStats: ILabeledStatistic[][]): void {
-    this.setState({
-      datasetCohortLabeledStatistics: cohortMetricStats
-    });
-  }
+  // private updateDatasetCohortState(cohortMetricStats: ILabeledStatistic[][]): void {
+  //   this.setState({
+  //     datasetCohortLabeledStatistics: cohortMetricStats
+  //   });
+  // }
 
   private async updateFeatureCohortStats(): Promise<void> {
     // generate table contents for selected feature cohorts
@@ -570,7 +571,7 @@ export class ModelOverview extends React.Component<
       [this.state.aggregateMethod,
        this.state.className,
        this.state.iouThresh,
-       this.updateFeatureCohortState]
+       this.state.featureBasedCohortLabeledStatistics]
     );
 
     this.setState({
@@ -579,11 +580,11 @@ export class ModelOverview extends React.Component<
     });
   }
 
-  private updateFeatureCohortState(cohortMetricStats: ILabeledStatistic[][]): void {
-    this.setState({
-      featureBasedCohortLabeledStatistics: cohortMetricStats
-    });
-  }
+  // private updateFeatureCohortState(cohortMetricStats: ILabeledStatistic[][]): void {
+  //   this.setState({
+  //     featureBasedCohortLabeledStatistics: cohortMetricStats
+  //   });
+  // }
 
   private ifCohortIndexesEquals(a: number[], b: number[]): boolean {
     return (
