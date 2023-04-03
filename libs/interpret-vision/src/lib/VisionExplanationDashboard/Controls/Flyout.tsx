@@ -87,16 +87,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
         return;
       }
       const fieldNames = this.props.otherMetadataFieldNames;
-      const metadata: Array<Array<string | number | boolean>> = [];
-      fieldNames.forEach((fieldName) => {
-        const itemField = item[fieldName];
-        const itemValue = Array.isArray(itemField)
-          ? itemField.join(",")
-          : itemField;
-        if (item[fieldName]) {
-          metadata.push([fieldName, itemValue]);
-        }
-      });
+      const metadata = updateMetadata(item, fieldNames);
       const selectableObjectIndexes =
         generateSelectableObjectDetectionIndexes(item);
       this.setState({
@@ -292,7 +283,8 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
   ): void => {
     if (typeof item?.key === "string") {
       this.setState({ odSelectedKey: item?.key });
-      if (this.state.item !== undefined) { // Remove "Object: " from labels. We only want index
+      if (this.state.item !== undefined) {
+        // Remove "Object: " from labels. We only want index
         this.props.onChange(this.state.item, +item.key.slice(ExcessLabelLen));
       }
     }
