@@ -535,12 +535,18 @@ export class ModelOverview extends React.Component<
       [this.state.aggregateMethod,
        this.state.className,
        this.state.iouThresh,
-       this]
+       this.updateDatasetCohortState]
     );
 
     this.setState({
       datasetBasedCohorts: this.context.errorCohorts,
       datasetCohortLabeledStatistics: datasetCohortMetricStats
+    });
+  }
+
+  private updateDatasetCohortState(cohortMetricStats: ILabeledStatistic[][]): void {
+    this.setState({
+      datasetCohortLabeledStatistics: cohortMetricStats
     });
   }
 
@@ -564,12 +570,18 @@ export class ModelOverview extends React.Component<
       [this.state.aggregateMethod,
        this.state.className,
        this.state.iouThresh,
-       this]
+       this.updateFeatureCohortState]
     );
 
     this.setState({
       featureBasedCohortLabeledStatistics: featureCohortMetricStats,
       featureBasedCohorts
+    });
+  }
+
+  private updateFeatureCohortState(cohortMetricStats: ILabeledStatistic[][]): void {
+    this.setState({
+      featureBasedCohortLabeledStatistics: cohortMetricStats
     });
   }
 

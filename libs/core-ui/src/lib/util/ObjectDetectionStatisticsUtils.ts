@@ -79,9 +79,7 @@ export const generateObjectDetectionStats: (
           ];
 
           // ModelOverview setState
-          objectDetectionState[3].setState({
-            datasetCohortLabeledStatistics: updatedMetricStats
-          });
+          objectDetectionState[3](updatedMetricStats);
 
           return updatedMetricStats;
         }
