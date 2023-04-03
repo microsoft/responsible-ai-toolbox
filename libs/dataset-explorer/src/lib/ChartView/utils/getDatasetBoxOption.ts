@@ -49,6 +49,7 @@ export function getDatasetBoxOption(
   });
   return {
     chart: {
+      backgroundColor: theme.semanticColors.bodyBackground,
       type: "boxplot"
     },
     series: boxGroupData,
