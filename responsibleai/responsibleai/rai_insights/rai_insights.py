@@ -575,44 +575,27 @@ class RAIInsights(RAIBaseInsights):
                 "identified as categorical features: "
                 f"{non_categorical_or_time_string_columns}")
 
-        if classes is not None and task_type == ModelTask.CLASSIFICATION:
-            if (len(set(train[target_column].unique()) -
-                    set(classes)) != 0 or
-                    len(set(classes) -
-                        set(train[target_column].unique())) != 0):
-                raise UserConfigValidationException(
-                    'The train labels and distinct values in '
-                    'target (train data) do not match')
-
-            if (len(set(test[target_column].unique()) -
-                    set(classes)) != 0 or
-                    len(set(classes) -
-                        set(test[target_column].unique())) != 0):
-                raise UserConfigValidationException(
-                    'The train labels and distinct values in '
-                    'target (test data) do not match')
-
         self._validate_feature_metadata(
-            feature_metadata, train, task_type, model)
+            feature_metadata, train, task_type, model, target_column)
 
         if model is not None:
             # Pick one row from train and test data
             small_train_data = train[0:1]
             small_test_data = test[0:1]
             has_dropped_features = False
-            if feature_metadata is not None:
-                if (feature_metadata.dropped_features is not None and
-                        len(feature_metadata.dropped_features) != 0):
-                    has_dropped_features = True
-                    small_train_data = small_train_data.drop(
-                        columns=feature_metadata.dropped_features, axis=1)
-                    small_test_data = small_test_data.drop(
-                        columns=feature_metadata.dropped_features, axis=1)
+            if feature_metadata is not None and \
+                (feature_metadata.dropped_features is not None and
+                    len(feature_metadata.dropped_features) != 0):
+                has_dropped_features = True
+                features_to_drop = feature_metadata.dropped_features + [
+                    target_column]
+            else:
+                features_to_drop = [target_column]
 
             small_train_data = small_train_data.drop(
-                columns=[target_column], axis=1)
+                columns=features_to_drop, axis=1)
             small_test_data = small_test_data.drop(
-                columns=[target_column], axis=1)
+                columns=features_to_drop, axis=1)
             if (len(small_train_data.columns) == 0 or
                     len(small_test_data.columns) == 0):
                 if has_dropped_features:
@@ -642,8 +625,69 @@ class RAIInsights(RAIBaseInsights):
                         'provided has a predict_proba function. '
                         'Please check the task_type.')
 
+        if task_type == ModelTask.CLASSIFICATION:
+            self._validate_classes(
+                model, train, test, target_column, feature_metadata, classes)
+
+    def _validate_classes_helper(self, identified_classes, user_classes,
+                                 if_train_data=True,
+                                 if_predictions=False):
+        error_msg = ('The {0} labels and distinct values in '
+                     '{1} ({0} data) do not match').format(
+            "train" if if_train_data else "test",
+            "target" if not if_predictions else "predictions")
+        if (len(set(identified_classes) -
+                set(user_classes)) != 0 or
+                len(set(user_classes) -
+                    set(identified_classes)) != 0):
+            raise UserConfigValidationException(error_msg)
+
+    def _validate_classes(
+            self, model, train, test, target_column,
+            feature_metadata, classes):
+        if classes is not None:
+            self._validate_classes_helper(
+                identified_classes=set(train[target_column].unique()),
+                user_classes=set(classes)
+            )
+
+            self._validate_classes_helper(
+                identified_classes=set(test[target_column].unique()),
+                user_classes=set(classes), if_train_data=False
+            )
+
+            if model is not None:
+                if feature_metadata is not None and \
+                        feature_metadata.dropped_features is not None and \
+                        len(feature_metadata.dropped_features) != 0:
+                    features_to_drop = feature_metadata.dropped_features + [
+                        target_column]
+                else:
+                    features_to_drop = [target_column]
+
+                train_data = train.drop(
+                    columns=features_to_drop, axis=1)
+                test_data = test.drop(
+                    columns=features_to_drop, axis=1)
+
+                train_predictions = model.predict(train_data)
+                test_predictions = model.predict(test_data)
+
+                self._validate_classes_helper(
+                    identified_classes=set(np.unique(train_predictions)),
+                    user_classes=set(classes),
+                    if_predictions=True
+                )
+
+                self._validate_classes_helper(
+                    identified_classes=set(np.unique(test_predictions)),
+                    user_classes=set(classes),
+                    if_train_data=False,
+                    if_predictions=True
+                )
+
     def _validate_feature_metadata(
-            self, feature_metadata, train, task_type, model):
+            self, feature_metadata, train, task_type, model, target_column):
         """Validates the feature metadata."""
         if feature_metadata is not None:
             if not isinstance(feature_metadata, FeatureMetadata):
@@ -651,7 +695,7 @@ class RAIInsights(RAIBaseInsights):
                     "Expecting type FeatureMetadata but got "
                     f"{type(feature_metadata)}")
 
-            feature_names = list(train.columns)
+            feature_names = list(train.drop(columns=[target_column]).columns)
             feature_metadata.validate_feature_metadata_with_user_features(
                 feature_names)
 

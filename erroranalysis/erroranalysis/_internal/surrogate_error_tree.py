@@ -605,7 +605,7 @@ def filter_to_used_features(df, tree):
     """
     features = tree[CACHED_SUBTREE_FEATURES]
     features = features.union({PRED_Y, TRUE_Y, DIFF})
-    return df[features]
+    return df[list(features)]
 
 
 def cache_subtree_features(tree, feature_names, parent=None):
