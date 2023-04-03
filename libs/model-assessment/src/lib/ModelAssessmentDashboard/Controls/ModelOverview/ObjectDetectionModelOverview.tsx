@@ -73,10 +73,13 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
     _: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    if (item && item.selected !== undefined) {
+    // console log
+    console.log(item)
+    if (item) {
+
       console.log('entered aggregate method change');
 
-      this.props.modelOverview.setState({ aggregateMethod: item.key.toString() });
+      this.props.modelOverview.setState({ className: item.text.toString() });
 
       this.props.modelOverview.updateDatasetCohortStats();
       this.props.modelOverview.updateFeatureCohortStats();
@@ -91,10 +94,11 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
     _: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    if (item && item.selected !== undefined) {
+    console.log(item)
+    if (item) {
       console.log('entered class name change');
 
-      this.props.modelOverview.setState({ className: item.key.toString() });
+      this.props.modelOverview.setState({ className: item.text.toString() });
 
       this.props.modelOverview.updateDatasetCohortStats();
       this.props.modelOverview.updateFeatureCohortStats();
@@ -114,6 +118,7 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
 
       this.props.modelOverview.setState({ iouThresh: value });
 
+      // if else
       this.props.modelOverview.updateDatasetCohortStats();
       this.props.modelOverview.updateFeatureCohortStats();
 

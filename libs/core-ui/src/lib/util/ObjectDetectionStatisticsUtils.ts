@@ -21,12 +21,12 @@ export const generateObjectDetectionStats: (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
   requestObjectDetectionMetrics?: IModelAssessmentContext["requestObjectDetectionMetrics"],
-  objectDetectionState?: [string, string, number]
+  objectDetectionState?: [string, string, number, any]
 ) => ILabeledStatistic[][] = (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
   requestObjectDetectionMetrics?: IModelAssessmentContext["requestObjectDetectionMetrics"],
-  objectDetectionState?: [string, string, number]
+  objectDetectionState?: [string, string, number, any]
 ): ILabeledStatistic[][] => {
   const numLabels = jointDataset.numLabels;
   return selectionIndexes.map((selectionArray) => {
@@ -48,9 +48,14 @@ export const generateObjectDetectionStats: (
         (result) => {
           [meanAveragePrecision, averagePrecision, averageRecall] = result as number[];
 
+          // set state
+
           console.log(meanAveragePrecision);
 
-          return [
+          // TODO: call method from parent to trigger state update to show value on UI
+          // (await involves adding async all the way up ... complex)
+
+          let updatedMetricStats = [
             {
               key: TotalCohortSamples,
               label: localization.Interpret.Statistics.samples,
@@ -72,6 +77,13 @@ export const generateObjectDetectionStats: (
               stat: averageRecall
             }
           ];
+
+          // ModelOverview setState
+          objectDetectionState[3]({
+            datasetCohortLabeledStatistics: updatedMetricStats
+          });
+
+          return updatedMetricStats;
         }
       )
     }

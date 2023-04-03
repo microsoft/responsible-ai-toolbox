@@ -534,7 +534,8 @@ export class ModelOverview extends React.Component<
       this.context.requestObjectDetectionMetrics,
       [this.state.aggregateMethod,
        this.state.className,
-       this.state.iouThresh]
+       this.state.iouThresh,
+       this.setState]
     );
 
     this.setState({
@@ -562,7 +563,8 @@ export class ModelOverview extends React.Component<
       this.context.requestObjectDetectionMetrics,
       [this.state.aggregateMethod,
        this.state.className,
-       this.state.iouThresh]
+       this.state.iouThresh,
+       this.setState]
     );
 
     this.setState({
