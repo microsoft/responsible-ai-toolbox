@@ -52,7 +52,7 @@ export interface IObjectDetectionWidgetsProps {
   // single args on MO state & functions that updates the state,
   classNames: IProcessedStyleSet<IModelOverviewStyles>;
   dataset: IDataset;
-  modelOverview: any, // avoided ModelOverview due to circular imports
+  modelOverview: any, // avoided ModelOverview type due to circular imports
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
@@ -74,7 +74,13 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
     item?: IComboBoxOption
   ): void => {
     if (item && item.selected !== undefined) {
-      this.props.modelOverview.setState({ aggregateMethod: item.key.toString() })
+      console.log('entered aggregate method change');
+
+      this.props.modelOverview.setState({ aggregateMethod: item.key.toString() });
+
+      this.props.modelOverview.updateDatasetCohortStats();
+      this.props.modelOverview.updateFeatureCohortStats();
+
       this.logButtonClick(
         TelemetryEventName.ModelOverviewMetricsSelectionUpdated
       );
@@ -86,7 +92,13 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
     item?: IComboBoxOption
   ): void => {
     if (item && item.selected !== undefined) {
-      this.props.modelOverview.setState({ className: item.key.toString() })
+      console.log('entered class name change');
+
+      this.props.modelOverview.setState({ className: item.key.toString() });
+
+      this.props.modelOverview.updateDatasetCohortStats();
+      this.props.modelOverview.updateFeatureCohortStats();
+
       this.logButtonClick(
         TelemetryEventName.ModelOverviewMetricsSelectionUpdated
       );
@@ -98,7 +110,13 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
     value: number
   ): void => {
     if (value) {
-      this.props.modelOverview.setState({ iouThresh: value })
+      console.log('entered iou threshold change');
+
+      this.props.modelOverview.setState({ iouThresh: value });
+
+      this.props.modelOverview.updateDatasetCohortStats();
+      this.props.modelOverview.updateFeatureCohortStats();
+
       this.logButtonClick(
         TelemetryEventName.ModelOverviewMetricsSelectionUpdated
       );
