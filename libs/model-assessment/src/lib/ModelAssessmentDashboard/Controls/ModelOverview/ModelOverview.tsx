@@ -535,7 +535,7 @@ export class ModelOverview extends React.Component<
       [this.state.aggregateMethod,
        this.state.className,
        this.state.iouThresh,
-       this.setState]
+       this]
     );
 
     this.setState({
@@ -564,7 +564,7 @@ export class ModelOverview extends React.Component<
       [this.state.aggregateMethod,
        this.state.className,
        this.state.iouThresh,
-       this.setState]
+       this]
     );
 
     this.setState({
