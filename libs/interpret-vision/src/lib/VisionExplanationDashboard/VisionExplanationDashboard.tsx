@@ -222,7 +222,7 @@ export class VisionExplanationDashboard extends React.Component<
     this.setState({ searchValue: newValue || "" });
   };
   private onItemSelect = (item: IVisionListItem, selectedObject = -1): void => {
-    if (Object.prototype.hasOwnProperty.call(selectedObject, "__proto__")) {
+    if (!(Object.prototype.hasOwnProperty.call(selectedObject, "__proto__"))) {
       this.setState({ panelOpen: true, selectedItem: item });
       const { computedExplanations, loadingExplanation } = this.state;
       if (selectedObject !== -1) {
