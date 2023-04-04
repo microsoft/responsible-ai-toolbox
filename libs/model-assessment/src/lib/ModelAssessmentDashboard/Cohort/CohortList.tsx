@@ -93,6 +93,8 @@ export class CohortList extends React.Component<
         />
         {this.state.currentEditCohort && (
           <CohortEditor
+            dataset={this.context.dataset}
+            isFromExplanation={false}
             jointDataset={this.context.jointDataset}
             filterList={this.state.currentEditCohort.cohort.filters}
             compositeFilters={
