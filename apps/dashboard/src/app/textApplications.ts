@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { dbpediaLongDoc } from "../interpret-text/__mock_data__/dbpediaLongDoc";
 import { emotionLongDoc } from "../interpret-text/__mock_data__/emotionLongDoc";
 import { newsgroupBinaryData } from "../interpret-text/__mock_data__/newsgroupBinaryData";
 import {
@@ -34,6 +35,7 @@ export type ITextApplications = {
 export const textApplications: ITextApplications = <const>{
   interpretText: {
     datasets: {
+      dbpediaLongDoc: { data: dbpediaLongDoc },
       emotionLongDoc: { data: emotionLongDoc },
       newsgroupBinaryData: { data: newsgroupBinaryData }
     },
