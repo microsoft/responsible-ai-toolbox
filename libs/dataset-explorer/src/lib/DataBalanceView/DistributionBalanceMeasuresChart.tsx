@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Stack } from "@fluentui/react";
+import { Stack, getTheme } from "@fluentui/react";
 import {
   BasicHighChart,
   HeaderWithInfo,
@@ -185,9 +185,11 @@ export class DistributionBalanceMeasuresChart extends React.PureComponent<
         }
       }
     );
+    const theme = getTheme();
 
     return {
       chart: {
+        backgroundColor: theme.semanticColors.bodyBackground,
         numberFormatter: (value: number): string => value.toFixed(3),
         type: "column"
       },

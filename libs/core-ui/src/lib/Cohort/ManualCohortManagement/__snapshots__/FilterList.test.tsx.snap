@@ -6,22 +6,22 @@ Array [
     key="0"
   >
     <StyledTooltipHostBase
-      content="l  less than "
+      content="alcohol  less than 12.09"
       onTooltipToggle={[Function]}
       overflowMode={1}
     >
-      l  less than 
+      alcohol  less than 12.09
     </StyledTooltipHostBase>
   </div>,
   <div
     key="1"
   >
     <StyledTooltipHostBase
-      content="g  greater than "
+      content="ash  greater than 2.5"
       onTooltipToggle={[Function]}
       overflowMode={1}
     >
-      g  greater than 
+      ash  greater than 2.5
     </StyledTooltipHostBase>
   </div>,
 ]
@@ -33,22 +33,22 @@ Array [
     key="0"
   >
     <StyledTooltipHostBase
-      content="l  less than "
+      content="alcohol  less than 12.09"
       onTooltipToggle={[Function]}
       overflowMode={1}
     >
-      l  less than 
+      alcohol  less than 12.09
     </StyledTooltipHostBase>
   </div>,
   <div
     key="1"
   >
     <StyledTooltipHostBase
-      content="g  greater than "
+      content="ash  greater than 2.5"
       onTooltipToggle={[Function]}
       overflowMode={1}
     >
-      g  greater than 
+      ash  greater than 2.5
     </StyledTooltipHostBase>
   </div>,
 ]

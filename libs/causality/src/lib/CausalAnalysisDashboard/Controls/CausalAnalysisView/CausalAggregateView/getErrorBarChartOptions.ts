@@ -18,11 +18,12 @@ export function getErrorBarChartOptions(
   const colorTheme = {
     axisColor: theme.palette.neutralPrimary,
     axisGridColor: theme.palette.neutralLight,
-    backgroundColor: theme.palette.white,
+    backgroundColor: theme.semanticColors.bodyBackground,
     fontColor: theme.semanticColors.bodyText
   };
   return {
     chart: {
+      backgroundColor: colorTheme.backgroundColor,
       type: "lowmedhigh",
       zoomType: "xy"
     },

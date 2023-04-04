@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme } from "@fluentui/react";
 import { IGenericChartProps, JointDataset } from "@responsible-ai/core-ui";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 
@@ -12,8 +13,10 @@ export function getDatasetScatterOption(
   chartProps?: IGenericChartProps
 ): any {
   const dataSeries = getDatasetScatter(jointData, plotlyProps, chartProps);
+  const theme = getTheme();
   return {
     chart: {
+      backgroundColor: theme.semanticColors.bodyBackground,
       type: "scatter"
     },
     plotOptions: {
