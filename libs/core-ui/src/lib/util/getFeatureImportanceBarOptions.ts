@@ -20,7 +20,7 @@ export function getFeatureImportanceBarOptions(
   const colorTheme = {
     axisColor: theme.palette.neutralPrimary,
     axisGridColor: theme.palette.neutralLight,
-    backgroundColor: theme.palette.white,
+    backgroundColor: theme?.semanticColors.bodyBackground,
     fontColor: theme.semanticColors.bodyText
   };
   const sortedIndexVector = sortArray;
@@ -73,6 +73,7 @@ export function getFeatureImportanceBarOptions(
 
   return {
     chart: {
+      backgroundColor: colorTheme.backgroundColor,
       type: "column"
     },
     legend: {

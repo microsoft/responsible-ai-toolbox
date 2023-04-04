@@ -1,11 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  ICategoricalRange,
-  INumericRange,
-  RangeTypes
-} from "@responsible-ai/mlchartlib";
+import { IColumnRange, RangeTypes } from "@responsible-ai/mlchartlib";
 
 import { ErrorCohortStats, MetricCohortStats } from "./Cohort/CohortStats";
 import { CohortSource, Metrics } from "./Cohort/Constants";
@@ -25,8 +21,8 @@ export class DatasetCohort {
     public dataset: IDataset,
     public filters: IFilter[] = [],
     public modelTypes?: ModelTypes,
-    private featureRanges?: {
-      [key: string]: INumericRange | ICategoricalRange;
+    private columnRanges?: {
+      [key: string]: IColumnRange;
     },
     public source: CohortSource = CohortSource.None,
     public isTemporary: boolean = false,
@@ -154,8 +150,9 @@ export class DatasetCohort {
 
   private includesValue(filter: IFilter, val: unknown): boolean {
     if (
-      this.featureRanges &&
-      this.featureRanges[filter.column]?.rangeType === RangeTypes.Categorical
+      this.columnRanges &&
+      (this.columnRanges[filter.column]?.rangeType === RangeTypes.Categorical ||
+        this.columnRanges[filter.column].treatAsCategorical)
     ) {
       if (
         filter.column === DatasetCohortColumns.PredictedY ||
@@ -164,9 +161,7 @@ export class DatasetCohort {
       ) {
         return filter.arg.includes(val as number);
       }
-      const uniqueValues = (
-        this.featureRanges[filter.column] as ICategoricalRange
-      ).uniqueValues;
+      const uniqueValues = this.columnRanges[filter.column].sortedUniqueValues;
       const index = uniqueValues.findIndex((item) => item === val);
       return filter.arg.includes(index);
     }

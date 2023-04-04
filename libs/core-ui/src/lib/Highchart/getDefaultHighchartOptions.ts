@@ -8,7 +8,7 @@ export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
   const colorTheme = {
     axisColor: theme?.palette.neutralPrimary,
     axisGridColor: theme?.palette.neutralLight,
-    backgroundColor: theme?.palette.white,
+    backgroundColor: theme?.semanticColors.bodyBackground,
     fontColor: theme?.semanticColors.bodyText
   };
   return {
