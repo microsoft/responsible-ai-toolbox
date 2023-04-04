@@ -1,15 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IModelAssessmentContext } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 
 import {
   ILabeledStatistic,
   TotalCohortSamples
 } from "../Interfaces/IStatistic";
-
-import { JointDataset } from "./JointDataset";
 
 export enum ObjectDetectionMetrics {
   MeanAveragePrecision = "meanAveragePrecision",
@@ -18,27 +15,13 @@ export enum ObjectDetectionMetrics {
 }
 
 export const generateObjectDetectionStats: (
-  jointDataset: JointDataset,
-  selectionIndexes: number[][],
-  requestObjectDetectionMetrics?: IModelAssessmentContext["requestObjectDetectionMetrics"],
-  objectDetectionState?: [string, string, number, ILabeledStatistic[][]]
+  selectionIndexes: number[][]
 ) => ILabeledStatistic[][] = (
-  jointDataset: JointDataset,
-  selectionIndexes: number[][],
-  // requestObjectDetectionMetrics?: IModelAssessmentContext["requestObjectDetectionMetrics"],
-  // objectDetectionState?: [string, string, number, ILabeledStatistic[][]]
+  selectionIndexes: number[][]
 ): ILabeledStatistic[][] => {
-  const numLabels = jointDataset.numLabels;
-
-  // Placeholder values without attached compute.
-  let meanAveragePrecision = numLabels;
-  let averagePrecision = numLabels;
-  let averageRecall = numLabels;
 
   return selectionIndexes.map((selectionArray) => {
     const count = selectionArray.length;
-
-    console.log(meanAveragePrecision);
 
     return [
       {
@@ -49,17 +32,17 @@ export const generateObjectDetectionStats: (
       {
         key: ObjectDetectionMetrics.MeanAveragePrecision,
         label: localization.Interpret.Statistics.meanAveragePrecision,
-        stat: meanAveragePrecision
+        stat: 0
       },
       {
         key: ObjectDetectionMetrics.AveragePrecision,
         label: localization.Interpret.Statistics.averagePrecision,
-        stat: averagePrecision
+        stat: 0
       },
       {
         key: ObjectDetectionMetrics.AverageRecall,
         label: localization.Interpret.Statistics.averageRecall,
-        stat: averageRecall
+        stat: 0
       }
     ];
   });

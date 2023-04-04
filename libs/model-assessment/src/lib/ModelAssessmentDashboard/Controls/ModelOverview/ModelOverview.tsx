@@ -533,12 +533,7 @@ export class ModelOverview extends React.Component<
     const datasetCohortMetricStats = generateMetrics(
       this.context.jointDataset,
       selectionIndexes,
-      this.context.modelMetadata.modelType,
-      this.context.requestObjectDetectionMetrics,
-      [this.state.aggregateMethod,
-       this.state.className,
-       this.state.iouThresh,
-       this.state.datasetCohortLabeledStatistics]
+      this.context.modelMetadata.modelType
     );
 
     this.setState({
@@ -633,12 +628,7 @@ export class ModelOverview extends React.Component<
     const featureCohortMetricStats = generateMetrics(
       this.context.jointDataset,
       selectionIndexes,
-      this.context.modelMetadata.modelType,
-      this.context.requestObjectDetectionMetrics,
-      [this.state.aggregateMethod,
-       this.state.className,
-       this.state.iouThresh,
-       this.state.featureBasedCohortLabeledStatistics]
+      this.context.modelMetadata.modelType
     );
 
     this.setState({
