@@ -224,10 +224,9 @@ export class VisionExplanationDashboard extends React.Component<
   private onItemSelect = (item: IVisionListItem, selectedObject = -1): void => {
     this.setState({ panelOpen: true, selectedItem: item });
     const { computedExplanations, loadingExplanation } = this.state;
-    const loadingExplImage = loadingExplanation[item.index]
     if (selectedObject !== -1) {
       if (computedExplanations.get(item.index)?.get(selectedObject)) {
-        loadingExplImage[selectedObject] = false;
+        loadingExplanation[item.index][selectedObject] = false;
         this.setState({
           loadingExplanation
         });
@@ -235,7 +234,7 @@ export class VisionExplanationDashboard extends React.Component<
       }
     }
     if (this.props.requestExp && selectedObject !== -1) {
-      loadingExplImage[selectedObject] = true;
+      loadingExplanation[item.index][selectedObject] = true;
       this.setState({ loadingExplanation });
       this.props
         .requestExp([item.index, selectedObject], new AbortController().signal)
@@ -248,7 +247,7 @@ export class VisionExplanationDashboard extends React.Component<
             computedExplanations.get(item.index) ??
               new Map().set(selectedObject, result.toString())
           );
-          loadingExplImage[selectedObject] = false;
+          loadingExplanation[item.index][selectedObject] = false;
           this.setState({
             computedExplanations,
             loadingExplanation
