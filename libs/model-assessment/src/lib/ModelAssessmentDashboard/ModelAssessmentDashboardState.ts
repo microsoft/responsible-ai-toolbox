@@ -8,7 +8,7 @@ import {
   ModelTypes
 } from "@responsible-ai/core-ui";
 import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
-import { ICategoricalRange, INumericRange } from "@responsible-ai/mlchartlib";
+import { IColumnRange } from "@responsible-ai/mlchartlib";
 
 import { GlobalTabKeys } from "./ModelAssessmentEnums";
 
@@ -17,7 +17,7 @@ export interface IModelAssessmentDashboardState
   activeGlobalTabs: IModelAssessmentDashboardTab[];
   customPoints: Array<{ [key: string]: any }>;
   columnRanges?: {
-    [key: string]: INumericRange | ICategoricalRange;
+    [key: string]: IColumnRange;
   };
   modelMetadata: IExplanationModelMetadata;
   modelType: ModelTypes;
