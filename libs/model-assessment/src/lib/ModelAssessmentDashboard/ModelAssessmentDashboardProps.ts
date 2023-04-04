@@ -113,6 +113,7 @@ export interface IModelAssessmentDashboardProps
   ) => Promise<any>;
   requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
   requestObjectDetectionMetrics?: (
+    selectionIndexes: number[][],
     aggregateMethod: string,
     className: string,
     iouThresh: number,

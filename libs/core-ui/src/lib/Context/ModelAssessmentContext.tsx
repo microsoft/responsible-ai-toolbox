@@ -138,6 +138,7 @@ export interface IModelAssessmentContext {
     | undefined;
   requestObjectDetectionMetrics?:
     | ((
+        selectionIndexes: number[][],
         aggregateMethod: string,
         className: string,
         iouThresh: number,

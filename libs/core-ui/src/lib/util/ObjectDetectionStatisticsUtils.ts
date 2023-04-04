@@ -25,74 +25,18 @@ export const generateObjectDetectionStats: (
 ) => ILabeledStatistic[][] = (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
-  requestObjectDetectionMetrics?: IModelAssessmentContext["requestObjectDetectionMetrics"],
-  objectDetectionState?: [string, string, number, ILabeledStatistic[][]]
+  // requestObjectDetectionMetrics?: IModelAssessmentContext["requestObjectDetectionMetrics"],
+  // objectDetectionState?: [string, string, number, ILabeledStatistic[][]]
 ): ILabeledStatistic[][] => {
   const numLabels = jointDataset.numLabels;
+
+  // Placeholder values without attached compute.
+  let meanAveragePrecision = numLabels;
+  let averagePrecision = numLabels;
+  let averageRecall = numLabels;
+
   return selectionIndexes.map((selectionArray) => {
     const count = selectionArray.length;
-
-    // Placeholder values without attached compute.
-    let meanAveragePrecision = numLabels;
-    let averagePrecision = numLabels;
-    let averageRecall = numLabels;
-
-    // checks for attached compute
-    if (requestObjectDetectionMetrics && objectDetectionState) {
-
-      // let res = requestObjectDetectionMetrics(
-      //   objectDetectionState[0],
-      //   objectDetectionState[1],
-      //   objectDetectionState[2],
-      //   new AbortController().signal
-      // )
-
-
-      requestObjectDetectionMetrics(
-        objectDetectionState[0],
-        objectDetectionState[1],
-        objectDetectionState[2],
-        new AbortController().signal
-      ).then(
-        (result) => {
-          [meanAveragePrecision, averagePrecision, averageRecall] = result as number[];
-
-          // set state
-
-          console.log(meanAveragePrecision);
-
-          // TODO: call method from parent to trigger state update to show value on UI
-          // (await involves adding async all the way up ... complex)
-
-          let updatedMetricStats = [
-            {
-              key: TotalCohortSamples,
-              label: localization.Interpret.Statistics.samples,
-              stat: count
-            },
-            {
-              key: ObjectDetectionMetrics.MeanAveragePrecision,
-              label: localization.Interpret.Statistics.meanAveragePrecision,
-              stat: meanAveragePrecision
-            },
-            {
-              key: ObjectDetectionMetrics.AveragePrecision,
-              label: localization.Interpret.Statistics.averagePrecision,
-              stat: averagePrecision
-            },
-            {
-              key: ObjectDetectionMetrics.AverageRecall,
-              label: localization.Interpret.Statistics.averageRecall,
-              stat: averageRecall
-            }
-          ];
-
-          objectDetectionState[3].push(updatedMetricStats);
-
-          return updatedMetricStats;
-        }
-      )
-    }
 
     console.log(meanAveragePrecision);
 
