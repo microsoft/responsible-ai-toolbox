@@ -222,39 +222,38 @@ export class VisionExplanationDashboard extends React.Component<
     this.setState({ searchValue: newValue || "" });
   };
   private onItemSelect = (item: IVisionListItem, selectedObject = -1): void => {
-    if (!(Object.prototype.hasOwnProperty.call(selectedObject, "__proto__"))) {
-      this.setState({ panelOpen: true, selectedItem: item });
-      const { computedExplanations, loadingExplanation } = this.state;
-      if (selectedObject !== -1) {
-        if (computedExplanations.get(item.index)?.get(selectedObject)) {
-          loadingExplanation[item.index][selectedObject] = false;
+    this.setState({ panelOpen: true, selectedItem: item });
+    const { computedExplanations, loadingExplanation } = this.state;
+    const loadingExplImage = loadingExplanation[item.index]
+    if (selectedObject !== -1) {
+      if (computedExplanations.get(item.index)?.get(selectedObject)) {
+        loadingExplImage[selectedObject] = false;
+        this.setState({
+          loadingExplanation
+        });
+        return;
+      }
+    }
+    if (this.props.requestExp && selectedObject !== -1) {
+      loadingExplImage[selectedObject] = true;
+      this.setState({ loadingExplanation });
+      this.props
+        .requestExp([item.index, selectedObject], new AbortController().signal)
+        .then((result) => {
+          computedExplanations
+            .get(item.index)
+            ?.set(selectedObject, result.toString());
+          computedExplanations.set(
+            item.index,
+            computedExplanations.get(item.index) ??
+              new Map().set(selectedObject, result.toString())
+          );
+          loadingExplImage[selectedObject] = false;
           this.setState({
+            computedExplanations,
             loadingExplanation
           });
-          return;
-        }
-      }
-      if (this.props.requestExp && selectedObject !== -1) {
-        loadingExplanation[item.index][selectedObject] = true;
-        this.setState({ loadingExplanation });
-        this.props
-          .requestExp([item.index, selectedObject], new AbortController().signal)
-          .then((result) => {
-            computedExplanations
-              .get(item.index)
-              ?.set(selectedObject, result.toString());
-            computedExplanations.set(
-              item.index,
-              computedExplanations.get(item.index) ??
-                new Map().set(selectedObject, result.toString())
-            );
-            loadingExplanation[item.index][selectedObject] = false;
-            this.setState({
-              computedExplanations,
-              loadingExplanation
-            });
-          });
-      }
+        });
     }
   };
   /* For onSliderChange, the max imageDims per tab (400 and 100) are selected arbitrary to look like the Figma. 
