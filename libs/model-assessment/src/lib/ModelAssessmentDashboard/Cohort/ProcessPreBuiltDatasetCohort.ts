@@ -12,11 +12,7 @@ import {
   IsClassifier,
   ModelTypes
 } from "@responsible-ai/core-ui";
-import {
-  ICategoricalRange,
-  INumericRange,
-  RangeTypes
-} from "@responsible-ai/mlchartlib";
+import { IColumnRange, RangeTypes } from "@responsible-ai/mlchartlib";
 
 import { IModelAssessmentDashboardProps } from "../ModelAssessmentDashboardProps";
 
@@ -25,8 +21,8 @@ import { CohortColumnNames } from "./ProcessPreBuiltCohort";
 export function processPreBuiltDatasetCohort(
   props: IModelAssessmentDashboardProps,
   modelType: ModelTypes,
-  featureRanges: {
-    [key: string]: INumericRange | ICategoricalRange;
+  columnRanges: {
+    [key: string]: IColumnRange;
   }
 ): DatasetCohort[] {
   const datasetCohorts: DatasetCohort[] = [];
@@ -65,7 +61,7 @@ export function processPreBuiltDatasetCohort(
           case CohortColumnNames.ClassificationOutcome: {
             const filter = translateCohortFilterForClassificationOutcome(
               preBuiltCohortFilter,
-              featureRanges
+              columnRanges
             );
             filterList.push(filter);
             break;
@@ -73,7 +69,7 @@ export function processPreBuiltDatasetCohort(
           default: {
             const filter = translateCohortFilterForDataset(
               preBuiltCohortFilter,
-              featureRanges
+              columnRanges
             );
             if (filter) {
               filterList.push(filter);
@@ -87,7 +83,7 @@ export function processPreBuiltDatasetCohort(
         props.dataset,
         filterList,
         modelType,
-        featureRanges,
+        columnRanges,
         CohortSource.Prebuilt
       );
       datasetCohorts.push(datasetCohort);
@@ -131,15 +127,14 @@ function translateCohortFilterForTarget(
 
 function translateCohortFilterForClassificationOutcome(
   preBuiltCohortFilter: IPreBuiltFilter,
-  featureRanges: {
-    [key: string]: INumericRange | ICategoricalRange;
+  columnRanges: {
+    [key: string]: IColumnRange;
   }
 ): IFilter {
   let index: number[] = [];
-  const featureRange = featureRanges[DatasetCohortColumns.ClassificationError];
-  if (featureRange) {
-    const allowedClassificationErrorValues = (featureRange as ICategoricalRange)
-      .uniqueValues;
+  const columnRange = columnRanges[DatasetCohortColumns.ClassificationError];
+  if (columnRange) {
+    const allowedClassificationErrorValues = columnRange.sortedUniqueValues;
     index = preBuiltCohortFilter.arg
       .map((classificationError) =>
         allowedClassificationErrorValues.indexOf(classificationError)
@@ -157,20 +152,20 @@ function translateCohortFilterForClassificationOutcome(
 
 function translateCohortFilterForDataset(
   preBuiltCohortFilter: IPreBuiltFilter,
-  featureRanges: {
-    [key: string]: INumericRange | ICategoricalRange;
+  columnRanges: {
+    [key: string]: IColumnRange;
   }
 ): IFilter | undefined {
   if (
     preBuiltCohortFilter.method === FilterMethods.Includes ||
     preBuiltCohortFilter.method === FilterMethods.Excludes
   ) {
-    const featureRange = featureRanges[preBuiltCohortFilter.column];
-    if (featureRange?.rangeType !== RangeTypes.Categorical) {
+    const columnRange = columnRanges[preBuiltCohortFilter.column];
+    if (columnRange?.rangeType !== RangeTypes.Categorical) {
       return undefined;
     }
     let index: number[] = [];
-    const categoricalValues = featureRange?.uniqueValues;
+    const categoricalValues = columnRange?.sortedUniqueValues;
     if (categoricalValues) {
       index = preBuiltCohortFilter.arg
         .map((categoricalValue) => categoricalValues.indexOf(categoricalValue))
