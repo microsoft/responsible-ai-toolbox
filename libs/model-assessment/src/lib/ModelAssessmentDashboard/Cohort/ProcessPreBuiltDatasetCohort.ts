@@ -37,9 +37,11 @@ export function processPreBuiltDatasetCohort(
         switch (preBuiltCohortFilter.column) {
           case CohortColumnNames.RegressionError:
           case CohortColumnNames.Index: {
-            let column = DatasetCohortColumns.Index
-            if (preBuiltCohortFilter.column === CohortColumnNames.RegressionError) {
-                column = DatasetCohortColumns.RegressionError
+            let column = DatasetCohortColumns.Index;
+            if (
+              preBuiltCohortFilter.column === CohortColumnNames.RegressionError
+            ) {
+              column = DatasetCohortColumns.RegressionError;
             }
             const filter: IFilter = {
               arg: preBuiltCohortFilter.arg,
