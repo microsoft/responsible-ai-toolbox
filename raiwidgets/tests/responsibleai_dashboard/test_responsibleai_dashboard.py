@@ -6,9 +6,9 @@ import re
 
 import pytest
 
+from raiutils.cohort import Cohort, CohortFilter, CohortFilterMethods
 from raiutils.data_processing import serialize_json_safe
 from raiwidgets import ResponsibleAIDashboard
-from raiwidgets.cohort import Cohort, CohortFilter, CohortFilterMethods
 from raiwidgets.dashboard import invalid_feature_flights_error
 from responsibleai._interfaces import (CausalData, CounterfactualData, Dataset,
                                        ErrorAnalysisData, ModelExplanationData)
