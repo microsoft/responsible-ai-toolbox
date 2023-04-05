@@ -547,7 +547,10 @@ export class ModelOverview extends React.Component<
   private updateObjectDetectionMetrics(
     selectionIndexes: number[][],
     isDatasetCohort: boolean): void {
-    if (this.context.requestObjectDetectionMetrics) {
+    if (this.context.requestObjectDetectionMetrics &&
+        this.state.aggregateMethod &&
+        this.state.className &&
+        this.state.iouThresh) {
       console.log('entered endpoint')
       
       this.context.requestObjectDetectionMetrics(

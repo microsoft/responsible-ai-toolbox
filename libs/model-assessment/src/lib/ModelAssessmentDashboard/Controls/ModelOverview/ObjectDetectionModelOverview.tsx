@@ -49,7 +49,6 @@ export function getSelectableClassNames(dataset: IDataset): IComboBoxOption[] {
 }
 
 export interface IObjectDetectionWidgetsProps {
-  // single args on MO state & functions that updates the state,
   classNames: IProcessedStyleSet<IModelOverviewStyles>;
   dataset: IDataset;
   modelOverview: any, // avoided ModelOverview type due to circular imports
