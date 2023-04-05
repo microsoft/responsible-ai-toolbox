@@ -8,9 +8,9 @@ import numpy as np
 import pandas as pd
 
 from erroranalysis._internal.constants import ModelTask, display_name_to_metric
+from raiutils.cohort import Cohort
 from raiutils.data_processing import convert_to_list, serialize_json_safe
 from raiutils.models import is_classifier
-from raiutils.cohort import Cohort
 from raiwidgets.constants import ErrorMessages
 from raiwidgets.error_handling import _format_exception
 from raiwidgets.interfaces import WidgetRequestResponseConstants
