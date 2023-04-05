@@ -1408,7 +1408,7 @@
       "legendSuccess": "success",
       "loading": "Computing explanation for index",
       "multiselect": "Multiselect",
-      "objectSelect": "objectSelection",
+      "objectSelect": "Object Selection",
       "pageSize": "Page size: ",
       "panelTitle": "Selected instance",
       "panelExplanation": "Explanation",
