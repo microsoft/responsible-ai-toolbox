@@ -4,12 +4,19 @@
 """Module for defining cohorts in raiwidgets package."""
 
 import json
+import warnings
 from typing import Any, List, Optional
 
 import numpy as np
 import pandas as pd
 
 from responsibleai.exceptions import UserConfigValidationException
+
+warnings.warn(
+    "MODULE-DEPRECATION-WARNING: The module "
+    "raiwidgets.cohort is deprecated and will be removed in a later release. "
+    "Please use raiutils.cohort instead.",
+    DeprecationWarning)
 
 
 class CohortFilterMethods:
