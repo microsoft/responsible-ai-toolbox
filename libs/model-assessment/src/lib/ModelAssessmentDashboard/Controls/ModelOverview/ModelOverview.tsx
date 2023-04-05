@@ -548,8 +548,8 @@ export class ModelOverview extends React.Component<
     selectionIndexes: number[][],
     isDatasetCohort: boolean): void {
     if (this.context.requestObjectDetectionMetrics &&
-        this.state.aggregateMethod &&
-        this.state.className &&
+        this.state.aggregateMethod.length > 0 &&
+        this.state.className.length > 0 &&
         this.state.iouThresh) {
       console.log('entered endpoint')
       

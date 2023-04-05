@@ -78,7 +78,7 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
 
       console.log('entered aggregate method change');
 
-      this.props.modelOverview.setState({ className: item.text.toString() });
+      this.props.modelOverview.setState({ aggregateMethod: item.text.toString() });
 
       this.props.modelOverview.updateDatasetCohortStats();
       this.props.modelOverview.updateFeatureCohortStats();
