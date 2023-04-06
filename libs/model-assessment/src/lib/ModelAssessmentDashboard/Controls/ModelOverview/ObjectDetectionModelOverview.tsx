@@ -72,16 +72,21 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
     _: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    // console log
     console.log(item)
     if (item) {
 
       console.log('entered aggregate method change');
 
-      this.props.modelOverview.setState({ aggregateMethod: item.text.toString() });
+      // State directly changed instead of setState method
+      // to avoid memory leaks with unmounted Model Overview.
+      this.props.modelOverview.state.aggregateMethod = item.text.toString()
 
-      this.props.modelOverview.updateDatasetCohortStats();
-      this.props.modelOverview.updateFeatureCohortStats();
+      if (this.props.modelOverview.state.datasetCohortChartIsVisible) {
+        this.props.modelOverview.updateDatasetCohortStats();
+      }
+      else {
+        this.props.modelOverview.updateFeatureCohortStats();
+      }
 
       this.logButtonClick(
         TelemetryEventName.ModelOverviewMetricsSelectionUpdated
@@ -97,10 +102,17 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
     if (item) {
       console.log('entered class name change');
 
-      this.props.modelOverview.setState({ className: item.text.toString() });
+      // State directly changed instead of setState method
+      // to avoid memory leaks with unmounted Mount Overview.
+      this.props.modelOverview.state.className = item.text.toString()
+      console.log(this.props.modelOverview.state.className);
 
-      this.props.modelOverview.updateDatasetCohortStats();
-      this.props.modelOverview.updateFeatureCohortStats();
+      if (this.props.modelOverview.state.datasetCohortChartIsVisible) {
+        this.props.modelOverview.updateDatasetCohortStats();
+      }
+      else {
+        this.props.modelOverview.updateFeatureCohortStats();
+      }
 
       this.logButtonClick(
         TelemetryEventName.ModelOverviewMetricsSelectionUpdated
@@ -109,7 +121,7 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
   }
 
   private onIoUThresholdChange = (
-    _: React.FormEvent<IComboBox>,
+    _: React.MouseEvent,
     value: number
   ): void => {
     if (value) {
@@ -117,9 +129,12 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
 
       this.props.modelOverview.setState({ iouThresh: value });
 
-      // if else
-      this.props.modelOverview.updateDatasetCohortStats();
-      this.props.modelOverview.updateFeatureCohortStats();
+      if (this.props.modelOverview.state.datasetCohortChartIsVisible) {
+        this.props.modelOverview.updateDatasetCohortStats();
+      }
+      else {
+        this.props.modelOverview.updateFeatureCohortStats();
+      }
 
       this.logButtonClick(
         TelemetryEventName.ModelOverviewMetricsSelectionUpdated

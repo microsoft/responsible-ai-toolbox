@@ -96,6 +96,7 @@ export class ModelOverview extends React.Component<
 
   public constructor(props: IModelOverviewProps) {
     super(props);
+
     this.state = {
       chartConfigurationIsVisible: false,
       datasetBasedCohorts: [],
@@ -110,8 +111,8 @@ export class ModelOverview extends React.Component<
       selectedFeaturesContinuousFeatureBins: {},
       selectedMetrics: [],
       showHeatmapColors: true,
-      aggregateMethod: "macro",
-      className: "", // TODO: default class name?
+      aggregateMethod: localization.ModelAssessment.ModelOverview.metricTypes.macro,
+      className: "",
       iouThresh: 70
     };
   }
@@ -548,6 +549,7 @@ export class ModelOverview extends React.Component<
     selectionIndexes: number[][],
     isDatasetCohort: boolean): void {
     if (this.context.requestObjectDetectionMetrics &&
+        selectionIndexes.length > 0 &&
         this.state.aggregateMethod.length > 0 &&
         this.state.className.length > 0 &&
         this.state.iouThresh) {
@@ -596,15 +598,19 @@ export class ModelOverview extends React.Component<
 
           }
 
-          if (isDatasetCohort) {
-            this.updateDatasetCohortState(updatedMetricStats);
-          }
-          else {
-            this.updateFeatureCohortState(updatedMetricStats);
-          }
+          isDatasetCohort
+            ? this.updateDatasetCohortState(updatedMetricStats)
+            : this.updateFeatureCohortState(updatedMetricStats);
 
         }
       )
+    }
+    else {
+      console.log(this.context.requestObjectDetectionMetrics);
+      console.log(selectionIndexes.length)
+      console.log(this.state.aggregateMethod);
+      console.log(this.state.className);
+      console.log(this.state.iouThresh);
     }
   }
 
