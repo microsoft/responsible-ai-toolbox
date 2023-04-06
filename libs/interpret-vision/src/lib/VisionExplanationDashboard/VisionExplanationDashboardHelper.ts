@@ -11,6 +11,7 @@ import {
   JointDataset,
   Operations
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 
 import { IVisionExplanationDashboardProps } from "./Interfaces/IVisionExplanationDashboardProps";
 import { IVisionExplanationDashboardState } from "./Interfaces/IVisionExplanationDashboardState";
@@ -83,7 +84,7 @@ export function preprocessData(
   const loadingExplanation: boolean[][] = [[]];
   const computedExplanations: Map<number, Map<number, string>> = new Map();
   dataSummary.images?.forEach((image, index) => {
-    const defVal = "object scenario not defined";
+    const defVal = localization.InterpretVision.Dashboard.notdefined;
     const y = dataset.object_detection_predicted_y?.[index];
     const odPredictedY = typeof y === "undefined" ? defVal : y;
     const x = dataset.object_detection_true_y?.[index];

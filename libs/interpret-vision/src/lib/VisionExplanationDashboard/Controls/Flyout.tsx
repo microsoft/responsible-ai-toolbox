@@ -55,7 +55,7 @@ const stackTokens = {
   large: { childrenGap: "l2" },
   medium: { childrenGap: "l1" }
 };
-const ExcessLabelLen = 7;
+const ExcessLabelLen = localization.InterpretVision.Dashboard.prefix.length;
 
 export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
   public constructor(props: IFlyoutProps) {
@@ -75,8 +75,10 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
     }
     const fieldNames = this.props.otherMetadataFieldNames;
     const metadata = updateMetadata(item, fieldNames);
-    const selectableObjectIndexes =
-      generateSelectableObjectDetectionIndexes(item);
+    const selectableObjectIndexes = generateSelectableObjectDetectionIndexes(
+      localization.InterpretVision.Dashboard.prefix,
+      item
+    );
     this.setState({ item, metadata, selectableObjectIndexes });
   }
 
@@ -88,8 +90,10 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
       }
       const fieldNames = this.props.otherMetadataFieldNames;
       const metadata = updateMetadata(item, fieldNames);
-      const selectableObjectIndexes =
-        generateSelectableObjectDetectionIndexes(item);
+      const selectableObjectIndexes = generateSelectableObjectDetectionIndexes(
+        localization.InterpretVision.Dashboard.prefix,
+        item
+      );
       this.setState({
         item: this.props.item,
         metadata,
@@ -250,13 +254,15 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                 }
                 <Stack>
                   {!this.props.loadingExplanation[item.index][
-                    +this.state.odSelectedKey.slice(7)
+                    +this.state.odSelectedKey.slice(ExcessLabelLen)
                   ] ? (
                     <Stack.Item>
                       <Image
                         src={`data:image/jpg;base64,${this.props.explanations
                           .get(item.index)
-                          ?.get(+this.state.odSelectedKey.slice(7))}`}
+                          ?.get(
+                            +this.state.odSelectedKey.slice(ExcessLabelLen)
+                          )}`}
                         width={explanationImageWidth}
                         style={explanationImage}
                       />

@@ -33,6 +33,7 @@ export function onRenderCell(
 }
 
 export function generateSelectableObjectDetectionIndexes(
+  prefix: string,
   item: IVisionListItem | undefined
 ): IComboBoxOption[] {
   const temp = item?.odPredictedY;
@@ -40,8 +41,8 @@ export function generateSelectableObjectDetectionIndexes(
   if (temp) {
     for (let i = 0; i < Object.values(temp).length; i++) {
       selectableObjectIndexes.push({
-        key: `Object ${i}`,
-        text: `Object ${i}`
+        key: prefix + String(i),
+        text: prefix + String(i)
       });
     }
   }
