@@ -134,7 +134,7 @@ export interface IModelAssessmentContext {
     abortSignal: AbortSignal
   ) => Promise<any>;
   requestExp?:
-    | ((index: number, abortSignal: AbortSignal) => Promise<any[]>)
+    | ((index: number | number[], abortSignal: AbortSignal) => Promise<any[]>)
     | undefined;
   requestObjectDetectionMetrics?:
     | ((

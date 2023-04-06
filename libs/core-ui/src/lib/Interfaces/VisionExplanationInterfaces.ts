@@ -11,4 +11,6 @@ export interface IVisionExplanationDashboardData {
   class_names: string[];
   images: string[];
   categorical_features?: string[];
+  object_detection_predicted_y?: number[][][];
+  object_detection_true_y?: number[][][];
 }
