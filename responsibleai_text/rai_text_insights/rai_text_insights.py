@@ -8,27 +8,26 @@ import pickle
 import warnings
 from enum import Enum
 from pathlib import Path
-from typing import Any, Optional, List, Union
+from typing import Any, List, Optional, Union
 
 import numpy as np
 import pandas as pd
+from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
+from ml_wrappers import wrap_model
 from raiutils.data_processing import convert_to_list, serialize_json_safe
-from raiutils.models import is_classifier, SKLearn
+from raiutils.models import ModelTask as RAIModelTask
+from raiutils.models import SKLearn, is_classifier
+from responsibleai._interfaces import Dataset, RAIInsightsData
+from responsibleai._internal.constants import (ManagerNames, Metadata,
+                                               SerializationAttributes)
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
-from responsibleai._interfaces import Dataset, RAIInsightsData
-from responsibleai._internal.constants import (
-    ManagerNames, Metadata, SerializationAttributes)
-from responsibleai.rai_insights.constants import ModelTask as RAIModelTask
-from ml_wrappers import wrap_model
 
-from responsibleai_text.managers.explainer_manager import ExplainerManager
-from responsibleai_text.managers.error_analysis_manager import (
-    ErrorAnalysisManager)
 from responsibleai_text.common.constants import ModelTask
-from responsibleai_text.utils.feature_extractors import \
-    extract_features
-from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
+from responsibleai_text.managers.error_analysis_manager import \
+    ErrorAnalysisManager
+from responsibleai_text.managers.explainer_manager import ExplainerManager
+from responsibleai_text.utils.feature_extractors import extract_features
 
 _PREDICTIONS = 'predictions'
 _PREDICT_OUTPUT = 'predict_output'
@@ -113,6 +112,7 @@ class RAITextInsights(RAIBaseInsights):
         super(RAITextInsights, self).__init__(
             model, train, test, target_column, task_type,
             serializer)
+        self._initialize_managers()
 
     def _initialize_managers(self):
         """Initializes the managers.
@@ -147,6 +147,63 @@ class RAITextInsights(RAIBaseInsights):
                 return classes
         else:
             return None
+
+    def _validate_serializer(self, serializer):
+        """Validate the serializer.
+
+        :param serializer: The serializer to validate.
+        :type serializer: object
+        """
+        if not hasattr(serializer, 'save'):
+            raise UserConfigValidationException(
+                'The serializer does not implement save()')
+
+        if not hasattr(serializer, 'load'):
+            raise UserConfigValidationException(
+                'The serializer does not implement load()')
+
+        try:
+            pickle.dumps(serializer)
+        except Exception:
+            raise UserConfigValidationException(
+                'The serializer should be serializable via pickle')
+
+    def _validate_model(self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
+                        target_column: Union[str, List], task_type: str):
+        """Validate the model.
+
+        :param model: The model to validate.
+        :type model: object
+        :param train: The training dataset including the label column.
+        :type train: pandas.DataFrame
+        :param test: The test dataset including the label column.
+        :type test: pandas.DataFrame
+        :param target_column: The name of the label column or list of columns.
+            This is a list of columns for multilabel models.
+        :type target_column: str or list[str]
+        :param task_type: The task to run, can be `classification` or
+            `regression`.
+        :type task_type: str
+        """
+        if not isinstance(target_column, list):
+            target_column = [target_column]
+        # Pick one row from train and test data
+        small_train_data = train.iloc[0:1].drop(
+            target_column, axis=1).iloc[0]
+        small_test_data = test.iloc[0:1].drop(
+            target_column, axis=1).iloc[0]
+        if task_type != ModelTask.QUESTION_ANSWERING:
+            small_train_data = small_train_data.tolist()
+            small_test_data = small_test_data.tolist()
+        # Call the model
+        try:
+            model.predict(small_train_data)
+            model.predict(small_test_data)
+        except Exception:
+            raise UserConfigValidationException(
+                'The model passed cannot be used for'
+                ' getting predictions via predict()'
+            )
 
     def _validate_rai_insights_input_parameters(
             self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
@@ -202,19 +259,7 @@ class RAITextInsights(RAIBaseInsights):
                 'Explanations will not work')
 
         if serializer is not None:
-            if not hasattr(serializer, 'save'):
-                raise UserConfigValidationException(
-                    'The serializer does not implement save()')
-
-            if not hasattr(serializer, 'load'):
-                raise UserConfigValidationException(
-                    'The serializer does not implement load()')
-
-            try:
-                pickle.dumps(serializer)
-            except Exception:
-                raise UserConfigValidationException(
-                    'The serializer should be serializable via pickle')
+            self._validate_serializer(serializer)
 
         train_is_pd = isinstance(train, pd.DataFrame)
         test_is_pd = isinstance(test, pd.DataFrame)
@@ -277,25 +322,8 @@ class RAITextInsights(RAIBaseInsights):
                     'distinct values in target (test data)')
 
         if model is not None:
-            if not isinstance(target_column, list):
-                target_column = [target_column]
-            # Pick one row from train and test data
-            small_train_data = train.iloc[0:1].drop(
-                target_column, axis=1).iloc[0]
-            small_test_data = test.iloc[0:1].drop(
-                target_column, axis=1).iloc[0]
-            if task_type != ModelTask.QUESTION_ANSWERING:
-                small_train_data = small_train_data.tolist()
-                small_test_data = small_test_data.tolist()
-            # Call the model
-            try:
-                model.predict(small_train_data)
-                model.predict(small_test_data)
-            except Exception:
-                raise UserConfigValidationException(
-                    'The model passed cannot be used for'
-                    ' getting predictions via predict()'
-                )
+            self._validate_model(model, train, test, target_column,
+                                 task_type)
 
     def get_filtered_test_data(self, filters, composite_filters,
                                include_original_columns_only=False,

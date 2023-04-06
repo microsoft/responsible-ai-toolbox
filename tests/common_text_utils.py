@@ -1,14 +1,16 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import pandas as pd
 import os
-import datasets
 import zipfile
+
+import datasets
+import pandas as pd
+from raiutils.common.retries import retry_function
 from transformers import (AutoModelForSequenceClassification, AutoTokenizer,
                           pipeline)
+
 from responsibleai_text.common.constants import QuestionAnsweringFields
-from raiutils.common.retries import retry_function
 
 try:
     from urllib import urlretrieve

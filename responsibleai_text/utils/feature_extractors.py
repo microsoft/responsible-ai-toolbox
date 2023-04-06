@@ -3,14 +3,16 @@
 
 """Defines the text feature extraction utilities."""
 
-import pandas as pd
 from typing import List, Union
-from responsibleai_text.common.constants import (ModelTask,
-                                                 QuestionAnsweringFields)
+
+import pandas as pd
 import spacy
-from tqdm import tqdm
 from negspacy.termsets import termset
 from nlp_feature_extractors import attribute_extractors as exts
+from tqdm import tqdm
+
+from responsibleai_text.common.constants import (ModelTask,
+                                                 QuestionAnsweringFields)
 
 nlp = None
 
