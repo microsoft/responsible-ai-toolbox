@@ -9,10 +9,14 @@ import {
   IChoiceGroupOption
 } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
+import { IColumnRange, RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import React, { FormEvent } from "react";
 
 import { Announce } from "../../components/Announce";
+import { DatasetCohortColumns } from "../../DatasetCohortColumns";
+import { IDataset } from "../../Interfaces/IDataset";
+import { IExplanationModelMetadata } from "../../Interfaces/IExplanationContext";
 import {
   FilterMethods,
   ICompositeFilter,
@@ -23,13 +27,20 @@ import { JointDataset } from "../../util/JointDataset";
 import { cohortEditorStyles } from "./CohortEditor.styles";
 import { CohortEditorFilterList } from "./CohortEditorFilterList";
 import { CohortEditorFilterSection } from "./CohortEditorFilterSection";
+import { getColumnItems } from "./CohortEditorPanelContentUtils";
 
 export interface ICohortEditorPanelContentProps {
+  columnRanges?: {
+    [key: string]: IColumnRange;
+  };
+  dataset: IDataset;
+  isFromExplanation: boolean;
   cohortName?: string;
   compositeFilters: ICompositeFilter[];
   disableEditName?: boolean;
   existingCohortNames?: string[];
-  filterList?: IFilter[];
+  features?: unknown[][];
+  metadata?: IExplanationModelMetadata;
   filters: IFilter[];
   isNewCohort: boolean;
   jointDataset: JointDataset;
@@ -46,43 +57,27 @@ export interface ICohortEditorPanelContentState {
 }
 
 export const filterArgRetainableList = [
-  JointDataset.PredictedYLabel,
-  JointDataset.TrueYLabel,
-  JointDataset.ClassificationError
+  DatasetCohortColumns.PredictedY,
+  DatasetCohortColumns.TrueY,
+  DatasetCohortColumns.ClassificationError
 ];
 
 export class CohortEditorPanelContent extends React.PureComponent<
   ICohortEditorPanelContentProps,
   ICohortEditorPanelContentState
 > {
-  private readonly leftItems: IChoiceGroupOption[] = [
-    JointDataset.IndexLabel,
-    JointDataset.DataLabelRoot,
-    JointDataset.PredictedYLabel,
-    JointDataset.TrueYLabel,
-    JointDataset.ClassificationError,
-    JointDataset.RegressionError
-  ].reduce((previousValue: IChoiceGroupOption[], key: string) => {
-    const metaVal = this.props.jointDataset.metaDict[key];
-    if (
-      key === JointDataset.DataLabelRoot &&
-      this.props.jointDataset.hasDataset
-    ) {
-      previousValue.push({ key, text: "Dataset" });
-      return previousValue;
-    }
-    if (metaVal === undefined) {
-      return previousValue;
-    }
-    previousValue.push({ key, text: metaVal.abbridgedLabel });
-    return previousValue;
-  }, []);
+  private readonly leftItems = getColumnItems(
+    this.props.columnRanges,
+    this.props.isFromExplanation
+      ? this.props.features
+      : this.props.dataset.features
+  );
   private _isInitialized = false;
 
   public constructor(props: ICohortEditorPanelContentProps) {
     super(props);
     this.state = {
-      filterIndex: this.props.filterList?.length || 0,
+      filterIndex: this.props.filters?.length || 0,
       filtersMessage: "",
       openedFilter: this.getFilterValue(
         this.leftItems[0] && this.leftItems[0].key
@@ -196,8 +191,10 @@ export class CohortEditorPanelContent extends React.PureComponent<
     if (!this._isInitialized) {
       return;
     }
-    if (property === JointDataset.DataLabelRoot) {
-      property += "0";
+    if (property === DatasetCohortColumns.Dataset) {
+      property = this.props.isFromExplanation
+        ? this.props.metadata?.featureNames[0] || ""
+        : this.props.dataset.feature_names[0];
     }
     this.setDefaultStateForKey(property);
   };
@@ -211,16 +208,21 @@ export class CohortEditorPanelContent extends React.PureComponent<
 
   private getFilterValue(key: string): IFilter {
     const filter: IFilter = { column: key } as IFilter;
-    const meta = this.props.jointDataset.metaDict[key];
-    if (meta?.treatAsCategorical && meta.sortedCategoricalValues) {
+    const range = this.props.columnRanges
+      ? this.props.columnRanges[key]
+      : undefined;
+    if (
+      range?.rangeType === RangeTypes.Categorical ||
+      range?.treatAsCategorical
+    ) {
       const arg = this.getPreviousFilterArgValue(key);
       filter.method = FilterMethods.Includes;
       filter.arg = arg ?? [
-        ...new Array(meta.sortedCategoricalValues.length).keys()
+        ...new Array(range.sortedUniqueValues.length).keys()
       ];
     } else {
       filter.method = FilterMethods.LessThan;
-      filter.arg = [meta.featureRange?.max || Number.MAX_SAFE_INTEGER];
+      filter.arg = [range?.max || Number.MAX_SAFE_INTEGER];
     }
     return filter;
   }
@@ -230,8 +232,8 @@ export class CohortEditorPanelContent extends React.PureComponent<
     // only execute this if in edit mode
     // On duplication retained arg is shown only for filters in filterArgRetainableList
     this.props.disableEditName &&
-      filterArgRetainableList.includes(key) &&
-      this.props.filterList?.forEach((filter) => {
+      filterArgRetainableList.includes(key as DatasetCohortColumns) &&
+      this.props.filters?.forEach((filter) => {
         if (filter.column === key) {
           arg = filter.arg;
         }

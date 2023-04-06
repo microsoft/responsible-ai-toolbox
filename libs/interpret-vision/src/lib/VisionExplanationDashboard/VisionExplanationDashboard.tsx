@@ -50,7 +50,7 @@ export class VisionExplanationDashboard extends React.Component<
     this.state = defaultState;
   }
   public componentDidMount(): void {
-    const data = preprocessData(this.props);
+    const data = preprocessData(this.props, this.context.dataset);
     if (!data) {
       return;
     }
@@ -197,6 +197,7 @@ export class VisionExplanationDashboard extends React.Component<
             loadingExplanation={this.state.loadingExplanation}
             otherMetadataFieldNames={this.state.otherMetadataFieldNames}
             callback={this.onPanelClose}
+            onChange={this.onItemSelect}
           />
         </Stack.Item>
       </Stack>
@@ -220,27 +221,33 @@ export class VisionExplanationDashboard extends React.Component<
   ): void => {
     this.setState({ searchValue: newValue || "" });
   };
-  private onItemSelect = (item: IVisionListItem): void => {
-    this.setState({ panelOpen: !this.state.panelOpen, selectedItem: item });
-    const index = item.index;
+  private onItemSelect = (item: IVisionListItem, selectedObject = -1): void => {
+    this.setState({ panelOpen: true, selectedItem: item });
     const { computedExplanations, loadingExplanation } = this.state;
-    const computedExplanation = computedExplanations.get(index);
-    if (computedExplanation) {
-      loadingExplanation[index] = false;
-      this.setState({
-        loadingExplanation
-      });
-      return;
+    if (selectedObject !== -1) {
+      if (computedExplanations.get(item.index)?.get(selectedObject)) {
+        loadingExplanation[item.index][selectedObject] = false;
+        this.setState({
+          loadingExplanation
+        });
+        return;
+      }
     }
-    if (this.props.requestExp) {
-      loadingExplanation[index] = true;
+    if (this.props.requestExp && selectedObject !== -1) {
+      loadingExplanation[item.index][selectedObject] = true;
       this.setState({ loadingExplanation });
       this.props
-        .requestExp(index, new AbortController().signal)
+        .requestExp([item.index, selectedObject], new AbortController().signal)
         .then((result) => {
-          const explanation = result.toString();
-          computedExplanations.set(index, explanation);
-          loadingExplanation[index] = false;
+          computedExplanations
+            .get(item.index)
+            ?.set(selectedObject, result.toString());
+          computedExplanations.set(
+            item.index,
+            computedExplanations.get(item.index) ??
+              new Map().set(selectedObject, result.toString())
+          );
+          loadingExplanation[item.index][selectedObject] = false;
           this.setState({
             computedExplanations,
             loadingExplanation
@@ -248,9 +255,8 @@ export class VisionExplanationDashboard extends React.Component<
         });
     }
   };
-  /* For onSliderChange, the max imageDims for each tab (400 and 100) are selected arbitrary to 
-  look close to the Figma design sketch. For handleLinkClick, the default values chosen are half
-  the maximum values chosen in onSliderChange. */
+  /* For onSliderChange, the max imageDims per tab (400 and 100) are selected arbitrary to look like the Figma. 
+  For handleLinkClick, the default are half the max values chosen in onSliderChange. */
   private onSliderChange = (value: number): void => {
     if (
       this.state.selectedKey ===

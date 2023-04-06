@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme } from "@fluentui/react";
 import { FluentUIStyles, IGenericChartProps } from "@responsible-ai/core-ui";
 import { WhatIfConstants } from "@responsible-ai/interpret";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
@@ -46,8 +47,10 @@ export function getCounterfactualChartOptions(
       showInLegend: false
     };
   });
+  const theme = getTheme();
   return {
     chart: {
+      backgroundColor: theme.semanticColors.bodyBackground,
       type: "scatter",
       zoomType: "xy"
     },

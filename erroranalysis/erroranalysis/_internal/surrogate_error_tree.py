@@ -292,7 +292,6 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
         scored dataset.
     :rtype: (Booster, pandas.DataFrame, (list[str], list[int]))
     """
-    row_index = filtered_df[ROW_INDEX]
     true_y = filtered_df[TRUE_Y]
     dropped_cols = [TRUE_Y, ROW_INDEX]
     if not is_model_analyzer:
@@ -330,7 +329,7 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
         else:
             string_indexed_data = analyzer.string_indexed_data
         for idx, c_i in enumerate(analyzer.categorical_indexes):
-            input_data[:, c_i] = string_indexed_data[row_index, idx]
+            input_data[:, c_i] = string_indexed_data[:, idx]
     dataset_sub_features = input_data[:, indexes]
 
     categorical_info = get_categorical_info(analyzer,
@@ -605,7 +604,7 @@ def filter_to_used_features(df, tree):
     """
     features = tree[CACHED_SUBTREE_FEATURES]
     features = features.union({PRED_Y, TRUE_Y, DIFF})
-    return df[features]
+    return df[list(features)]
 
 
 def cache_subtree_features(tree, feature_names, parent=None):

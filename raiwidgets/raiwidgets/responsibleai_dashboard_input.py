@@ -8,9 +8,9 @@ import numpy as np
 import pandas as pd
 
 from erroranalysis._internal.constants import ModelTask, display_name_to_metric
+from raiutils.cohort import Cohort
 from raiutils.data_processing import convert_to_list, serialize_json_safe
 from raiutils.models import is_classifier
-from raiwidgets.cohort import Cohort
 from raiwidgets.constants import ErrorMessages
 from raiwidgets.error_handling import _format_exception
 from raiwidgets.interfaces import WidgetRequestResponseConstants
@@ -239,7 +239,11 @@ class ResponsibleAIDashboardInput:
 
     def get_exp(self, index):
         try:
-            exp = self._analysis.explainer.compute_single_explanation(index)
+            # index 0 = index of the image
+            # index 1 = index of the object
+            exp = self._analysis.explainer.compute_single_explanation(
+                index=index[0],
+                object_index=index[1])
             return {
                 WidgetRequestResponseConstants.data: exp
             }

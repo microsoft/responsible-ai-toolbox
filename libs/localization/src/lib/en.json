@@ -876,6 +876,14 @@
       "regressor": "Regressor"
     },
     "CohortEditor": {
+      "columns": {
+        "index": "Index",
+        "dataset": "Dataset",
+        "predictedY": "Predicted Y",
+        "trueY": "True Y",
+        "classificationOutcome": "Classification outcome",
+        "regressionError": "Error"
+      },
       "TreatAsCategorical": "Treat as categorical",
       "_TreatAsCategorical.comment": "a checkbox label to treat integers as categories instead of as numbers",
       "_addFilter.comment": "button text to add the current settings as a new filter",
@@ -1390,6 +1398,7 @@
       "columnThree": "True Y",
       "columnFour": "Predicted Y",
       "columnFive": "Other metadata",
+      "chooseObject": "Choose a detected object",
       "examples": "examples",
       "filter": "Filter",
       "indexLabel": "Image ",
@@ -1399,12 +1408,15 @@
       "legendSuccess": "success",
       "loading": "Computing explanation for index",
       "multiselect": "Multiselect",
+      "notdefined": "object scenario not defined",
+      "objectSelect": "Object Selection",
       "pageSize": "Page size: ",
       "panelTitle": "Selected instance",
       "panelExplanation": "Explanation",
       "panelInformation": "Information",
       "predictedLabel": "Predicted label",
       "predictedY": "Predicted: ",
+      "prefix": "Object: ",
       "rows": "Rows: ",
       "search": "Search",
       "selectAll": "Select all",

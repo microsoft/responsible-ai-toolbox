@@ -5,4 +5,4 @@ requests==2.25.1
 
 requirements-parser==0.2.0
 
-pandas>=0.25.1
+pandas>=0.25.1,<2.0.0

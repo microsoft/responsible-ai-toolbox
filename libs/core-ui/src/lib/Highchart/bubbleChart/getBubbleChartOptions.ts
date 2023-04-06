@@ -37,6 +37,7 @@ export function getBubbleChartOptions(
   const theme = getTheme();
   return {
     chart: {
+      backgroundColor: theme.semanticColors.bodyBackground,
       plotBorderWidth: 1,
       type: "bubble",
       zoomType: "xy"
