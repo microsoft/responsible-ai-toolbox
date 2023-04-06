@@ -2,19 +2,18 @@
 # Licensed under the MIT License.
 
 import os
+import shutil
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import pytest
-import shutil
+from common_text_utils import (EMOTION, TextClassificationPipelineSerializer,
+                               create_text_classification_pipeline,
+                               load_emotion_dataset)
+from rai_text_insights_validator import validate_rai_text_insights
+from responsibleai._internal.constants import ManagerNames
 
 from responsibleai_text import ModelTask, RAITextInsights
-from responsibleai._internal.constants import ManagerNames
-from rai_text_insights_validator import validate_rai_text_insights
-
-from common_text_utils import (
-    load_emotion_dataset, create_text_classification_pipeline, EMOTION,
-    TextClassificationPipelineSerializer)
 
 
 class TestRAITextInsightsSaveAndLoadScenarios(object):

@@ -1,14 +1,15 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from responsibleai_text import RAITextInsights, ModelTask
-from common_text_utils import (
-    load_covid19_emergency_event_dataset,
-    load_emotion_dataset, load_squad_dataset,
-    create_multilabel_pipeline,
-    create_text_classification_pipeline, ANSWERS, EMOTION,
-    create_question_answering_pipeline, COVID19_EVENTS_LABELS)
+from common_text_utils import (ANSWERS, COVID19_EVENTS_LABELS, EMOTION,
+                               create_multilabel_pipeline,
+                               create_question_answering_pipeline,
+                               create_text_classification_pipeline,
+                               load_covid19_emergency_event_dataset,
+                               load_emotion_dataset, load_squad_dataset)
 from rai_text_insights_validator import validate_rai_text_insights
+
+from responsibleai_text import ModelTask, RAITextInsights
 
 
 class TestRAITextInsights(object):

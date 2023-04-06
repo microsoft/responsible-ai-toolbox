@@ -4,6 +4,7 @@
 """Defines the Explainer Manager class."""
 
 import json
+import pickle
 import warnings
 from pathlib import Path
 from typing import Any, List, Optional
@@ -11,7 +12,6 @@ from typing import Any, List, Optional
 import numpy as np
 import pandas as pd
 import shap
-import pickle
 from raiutils.data_processing import convert_to_list
 from responsibleai._interfaces import (FeatureImportance, ModelExplanationData,
                                        PrecomputedExplanations,
@@ -23,9 +23,11 @@ from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.managers.base_manager import BaseManager
-from responsibleai_text.common.constants import ModelTask
+
+from responsibleai_text.common.constants import (ModelTask,
+                                                 QuestionAnsweringFields,
+                                                 Tokens)
 from responsibleai_text.utils.question_answering import QAPredictor
-from responsibleai_text.common.constants import Tokens, QuestionAnsweringFields
 
 CONTEXT = QuestionAnsweringFields.CONTEXT
 QUESTIONS = QuestionAnsweringFields.QUESTIONS
