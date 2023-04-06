@@ -4,8 +4,8 @@
 """Defines utilities for question answering text scenario."""
 
 import logging
-from responsibleai_text.common.constants import Tokens
 
+from responsibleai_text.common.constants import Tokens
 
 module_logger = logging.getLogger(__name__)
 module_logger.setLevel(logging.INFO)

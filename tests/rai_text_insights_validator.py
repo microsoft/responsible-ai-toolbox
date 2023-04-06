@@ -3,6 +3,7 @@
 
 import numpy as np
 import pandas as pd
+
 from responsibleai_text import ModelTask
 
 

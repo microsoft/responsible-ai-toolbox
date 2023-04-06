@@ -3,23 +3,21 @@
 
 """Defines the Error Analysis Manager class."""
 
+import json
 from typing import Any, List, Optional
 
-import pandas as pd
-import numpy as np
-
-import json
-
 import jsonschema
-
-from ml_wrappers import wrap_model
-
+import numpy as np
+import pandas as pd
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.error_report import as_error_report
-from responsibleai._tools.shared.state_directory_management import (
-    DirectoryManager)
-from responsibleai.managers.error_analysis_manager import (
-    as_error_config, ErrorAnalysisManager as BaseErrorAnalysisManager)
+from ml_wrappers import wrap_model
+from responsibleai._tools.shared.state_directory_management import \
+    DirectoryManager
+from responsibleai.managers.error_analysis_manager import \
+    ErrorAnalysisManager as BaseErrorAnalysisManager
+from responsibleai.managers.error_analysis_manager import as_error_config
+
 from responsibleai_text.common.constants import ModelTask
 
 LABELS = 'labels'
@@ -83,7 +81,7 @@ class WrappedIndexPredictorModel:
         if self.task_type in [ModelTask.TEXT_CLASSIFICATION, ModelTask.MULTILABEL_TEXT_CLASSIFICATION]:
             predictions = self.model.predict(indexed_dataset.iloc[:, 0].tolist())
         elif self.task_type == ModelTask.QUESTION_ANSWERING:
-            predictions = self.model.predict(indexed_dataset.loc[:, ['context','questions']])
+            predictions = self.model.predict(indexed_dataset.loc[:, ['context', 'questions']])
         else:
             raise ValueError("Unknown task type: {}".format(self.task_type))
 

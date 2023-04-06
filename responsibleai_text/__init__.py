@@ -3,8 +3,8 @@
 
 """Responsible AI Text SDK package."""
 
-from responsibleai_text.rai_text_insights import RAITextInsights
 from responsibleai_text.common.constants import ModelTask
+from responsibleai_text.rai_text_insights import RAITextInsights
 
 from .version import name, version
 
