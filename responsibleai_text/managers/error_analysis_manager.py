@@ -162,7 +162,10 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
         index_predictor = ErrorAnalysisManager._create_index_predictor(
             model, dataset, target_column, is_multilabel, task_type,
             index_classes)
-        categorical_features = []
+        if task_type == ModelTask.QUESTION_ANSWERING:
+            categorical_features = ['question_type']
+        else:
+            categorical_features = []
         super(ErrorAnalysisManager, self).__init__(
             index_predictor, ext_dataset, target_column,
             classes, categorical_features)
@@ -267,6 +270,7 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
             is_multilabel = True
             true_y = index_dataset[target_column]
         inst.__dict__['_true_y'] = true_y
+        inst.__dict__['_task_type'] = rai_insights.task_type
         index_predictor = ErrorAnalysisManager._create_index_predictor(
             wrapped_model, index_dataset, target_column, is_multilabel,
             rai_insights.task_type, index_classes)

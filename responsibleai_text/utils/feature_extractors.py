@@ -3,6 +3,7 @@
 
 """Defines the text feature extraction utilities."""
 
+import re
 from typing import List, Union
 
 import pandas as pd
@@ -46,6 +47,8 @@ def extract_features(text_dataset: pd.DataFrame,
         for prefix in prefixes:
             for feature_name in base_feature_names:
                 feature_names.append(prefix + feature_name)
+
+        feature_names.append("question_type")
     else:
         raise ValueError("Unknown task type: {}".format(task_type))
     if not isinstance(target_column, list):
@@ -64,14 +67,14 @@ def extract_features(text_dataset: pd.DataFrame,
             add_extracted_features_for_sentence(
                 row[QuestionAnsweringFields.CONTEXT], extracted_features)
             add_extracted_features_for_sentence(
-                row[QuestionAnsweringFields.QUESTIONS], extracted_features)
+                row[QuestionAnsweringFields.QUESTIONS], extracted_features, sentence_type="QUESTION")
             results.append(extracted_features)
     else:
         raise ValueError("Unknown task type: {}".format(task_type))
     return results, feature_names
 
 
-def add_extracted_features_for_sentence(sentence, extracted_features):
+def add_extracted_features_for_sentence(sentence, extracted_features, sentence_type=None):
     global nlp
     if nlp is None:
         nlp = spacy.load("en_core_web_sm")
@@ -81,12 +84,52 @@ def add_extracted_features_for_sentence(sentence, extracted_features):
     positive_negative_count = exts.positive_negative_word_count(doc)
     named_persons = exts.get_named_persons(doc)
     neg_words_and_entities = exts.detect_negation_words_and_entities(doc)
+    sentence_length = len(sentence)
+    features = [positive_negative_count["positive_word_count"],
+                positive_negative_count["negative_word_count"],
+                neg_words_and_entities["negation_words"],
+                neg_words_and_entities["negated_entities"],
+                len(named_persons),
+                sentence_length]
+
+    if sentence_type == 'QUESTION':
+        question_type = get_question_type(sentence)
+        features.append(question_type)
+
     # TODO: This extractor seems to be very slow:
     # mf_count = exts.get_male_female_words_count(doc)
-    sentence_length = len(sentence)
-    extracted_features.extend([positive_negative_count["positive_word_count"],
-                               positive_negative_count["negative_word_count"],
-                               neg_words_and_entities["negation_words"],
-                               neg_words_and_entities["negated_entities"],
-                               len(named_persons),
-                               sentence_length])
+
+    extracted_features.extend(features)
+
+
+def get_question_type(qtext):
+
+    if re.search(r'\b\A(can|could|will|would|have|has|do|does|' +
+                 'did|is|are|was|may|might)', qtext, re.I):
+        return "YES/NO"
+    elif re.search(r'\b\A(what|which)\s+(\w+)', qtext, re.I):
+        nextword = re.search(r'\b\A(what|which)\s+(\w+)', qtext, re.I).group(2)
+        if nextword == "year" or nextword == "month" or nextword == "date" or nextword == "day":
+            return "WHEN"
+        else:
+            return "WHAT"
+    elif re.search(r'\bwho\s', qtext, re.I):
+        return "WHO"
+    elif re.search(r'\bwhy\s', qtext, re.I):
+        return "WHY"
+    elif re.search(r'\bwhere\s', qtext, re.I):
+        return "WHERE"
+    elif re.search(r'\bhow\s', qtext, re.I):
+        nextword = re.search(r'\b(how)\s(\w+)', qtext, re.I).group(2)
+        if nextword == "many" or nextword == "much" or nextword == "long":
+            return "NUMBER"
+        else:
+            return "HOW"
+    elif re.search(r'\bwhen\s', qtext, re.I):
+        return "WHEN"
+    elif "in what year" in qtext or "in which year" in qtext:
+        return "WHEN"
+    elif re.search(r'\bto\swhom\s', qtext, re.I):
+        return "WHO"
+    else:
+        return "OTHER"
