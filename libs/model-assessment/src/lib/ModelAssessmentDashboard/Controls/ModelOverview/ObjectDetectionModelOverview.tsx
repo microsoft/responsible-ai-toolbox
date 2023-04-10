@@ -13,9 +13,7 @@ import {
   FluentUIStyles,
   IDataset,
   ITelemetryEvent,
-  TelemetryEventName,
-  TelemetryLevels
-} from "@responsible-ai/core-ui";
+  TelemetryEventName} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
@@ -98,14 +96,6 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
     );
   }
 
-  private logButtonClick = (eventName: TelemetryEventName): void => {
-    // Copied from ModelOverview.tsx. TODO: Maybe emulate from there?
-    this.props.telemetryHook?.({
-      level: TelemetryLevels.ButtonClick,
-      type: eventName
-    });
-  };
-
   private onAggregateMethodChange = (
     _: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
@@ -124,7 +114,7 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
         this.props.modelOverview.updateFeatureCohortStats();
       }
 
-      this.logButtonClick(
+      this.props.modelOverview.logButtonClick(
         TelemetryEventName.ModelOverviewMetricsSelectionUpdated
       );
     }
@@ -149,7 +139,7 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
         this.props.modelOverview.updateFeatureCohortStats();
       }
 
-      this.logButtonClick(
+      this.props.modelOverview.logButtonClick(
         TelemetryEventName.ModelOverviewMetricsSelectionUpdated
       );
     }
@@ -167,7 +157,7 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
         this.props.modelOverview.updateFeatureCohortStats();
       }
 
-      this.logButtonClick(
+      this.props.modelOverview.logButtonClick(
         TelemetryEventName.ModelOverviewMetricsSelectionUpdated
       );
     }

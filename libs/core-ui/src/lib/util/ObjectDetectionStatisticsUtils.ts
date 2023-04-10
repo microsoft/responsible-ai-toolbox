@@ -31,17 +31,17 @@ export const generateObjectDetectionStats: (
       {
         key: ObjectDetectionMetrics.MeanAveragePrecision,
         label: localization.Interpret.Statistics.meanAveragePrecision,
-        stat: 0
+        stat: Number.NaN
       },
       {
         key: ObjectDetectionMetrics.AveragePrecision,
         label: localization.Interpret.Statistics.averagePrecision,
-        stat: 0
+        stat: Number.NaN
       },
       {
         key: ObjectDetectionMetrics.AverageRecall,
         label: localization.Interpret.Statistics.averageRecall,
-        stat: 0
+        stat: Number.NaN
       }
     ];
   });
