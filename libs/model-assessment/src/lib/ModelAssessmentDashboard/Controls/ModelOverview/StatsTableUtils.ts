@@ -140,7 +140,9 @@ export function generateCohortsStatsTable(
             // only 1 unique value in the set, set color to 0
             colorValue = 0;
           }
+          const colorConfig = { color: "transparent" };
           items.push({
+            ...colorConfig,
             colorValue,
             value: Number(labeledStat.stat.toFixed(3)),
             x: metricIndex + 1,
