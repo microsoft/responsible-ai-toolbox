@@ -13,7 +13,8 @@ import {
   FluentUIStyles,
   IDataset,
   ITelemetryEvent,
-  TelemetryEventName} from "@responsible-ai/core-ui";
+  TelemetryEventName
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
