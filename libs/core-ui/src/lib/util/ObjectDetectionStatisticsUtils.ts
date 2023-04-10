@@ -19,7 +19,6 @@ export const generateObjectDetectionStats: (
 ) => ILabeledStatistic[][] = (
   selectionIndexes: number[][]
 ): ILabeledStatistic[][] => {
-
   return selectionIndexes.map((selectionArray) => {
     const count = selectionArray.length;
 

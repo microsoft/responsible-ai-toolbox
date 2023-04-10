@@ -42,7 +42,8 @@ export class JointDataset {
   public static readonly PredictedYLabel = "PredictedY";
   public static readonly ProbabilityYRoot = "ProbabilityClass";
   public static readonly TrueYLabel = "TrueY";
-  public static readonly ObjectDetectionPredictedYLabel = "ObjectDetectionPredictedY";
+  public static readonly ObjectDetectionPredictedYLabel =
+    "ObjectDetectionPredictedY";
   public static readonly ObjectDetectionTrueYLabel = "ObjectDetectionTrueY";
   public static readonly DitherLabel = "Dither";
   public static readonly DitherLabel2 = "Dither2";

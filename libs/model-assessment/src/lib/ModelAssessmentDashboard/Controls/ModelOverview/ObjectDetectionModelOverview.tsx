@@ -51,97 +51,11 @@ export function getSelectableClassNames(dataset: IDataset): IComboBoxOption[] {
 export interface IObjectDetectionWidgetsProps {
   classNames: IProcessedStyleSet<IModelOverviewStyles>;
   dataset: IDataset;
-  modelOverview: any, // avoided ModelOverview type due to circular imports
+  modelOverview: any; // avoided ModelOverview type due to circular imports
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetectionWidgetsProps> {
-  public constructor(props: IObjectDetectionWidgetsProps) {
-    super(props);
-  }
-
-  private logButtonClick = (eventName: TelemetryEventName): void => {
-    // Copied from ModelOverview.tsx. TODO: Maybe emulate from there?
-    this.props.telemetryHook?.({
-      level: TelemetryLevels.ButtonClick,
-      type: eventName
-    });
-  };
-
-  private onAggregateMethodChange = (
-    _: React.FormEvent<IComboBox>,
-    item?: IComboBoxOption
-  ): void => {
-    console.log(item)
-    if (item) {
-
-      console.log('entered aggregate method change');
-
-      // State directly changed instead of setState method
-      // to avoid memory leaks with unmounted Model Overview.
-      this.props.modelOverview.state.aggregateMethod = item.text.toString()
-
-      if (this.props.modelOverview.state.datasetCohortChartIsVisible) {
-        this.props.modelOverview.updateDatasetCohortStats();
-      }
-      else {
-        this.props.modelOverview.updateFeatureCohortStats();
-      }
-
-      this.logButtonClick(
-        TelemetryEventName.ModelOverviewMetricsSelectionUpdated
-      );
-    }
-  }
-
-  private onClassNameChange = (
-    _: React.FormEvent<IComboBox>,
-    item?: IComboBoxOption
-  ): void => {
-    console.log(item)
-    if (item) {
-      console.log('entered class name change');
-
-      // State directly changed instead of setState method
-      // to avoid memory leaks with unmounted Mount Overview.
-      this.props.modelOverview.state.className = item.text.toString()
-      console.log(this.props.modelOverview.state.className);
-
-      if (this.props.modelOverview.state.datasetCohortChartIsVisible) {
-        this.props.modelOverview.updateDatasetCohortStats();
-      }
-      else {
-        this.props.modelOverview.updateFeatureCohortStats();
-      }
-
-      this.logButtonClick(
-        TelemetryEventName.ModelOverviewMetricsSelectionUpdated
-      );
-    }
-  }
-
-  private onIoUThresholdChange = (
-    _: React.MouseEvent,
-    value: number
-  ): void => {
-    if (value) {
-      console.log('entered iou threshold change');
-
-      this.props.modelOverview.setState({ iouThresh: value });
-
-      if (this.props.modelOverview.state.datasetCohortChartIsVisible) {
-        this.props.modelOverview.updateDatasetCohortStats();
-      }
-      else {
-        this.props.modelOverview.updateFeatureCohortStats();
-      }
-
-      this.logButtonClick(
-        TelemetryEventName.ModelOverviewMetricsSelectionUpdated
-      );
-    }
-  }
-
   public render(): React.ReactNode {
     return (
       <Stack.Item>
@@ -183,4 +97,79 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
       </Stack.Item>
     );
   }
+
+  private logButtonClick = (eventName: TelemetryEventName): void => {
+    // Copied from ModelOverview.tsx. TODO: Maybe emulate from there?
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: eventName
+    });
+  };
+
+  private onAggregateMethodChange = (
+    _: React.FormEvent<IComboBox>,
+    item?: IComboBoxOption
+  ): void => {
+    console.log(item);
+    if (item) {
+      console.log("entered aggregate method change");
+
+      // State directly changed instead of setState method
+      // to avoid memory leaks with unmounted Model Overview.
+      this.props.modelOverview.state.aggregateMethod = item.text.toString();
+
+      if (this.props.modelOverview.state.datasetCohortChartIsVisible) {
+        this.props.modelOverview.updateDatasetCohortStats();
+      } else {
+        this.props.modelOverview.updateFeatureCohortStats();
+      }
+
+      this.logButtonClick(
+        TelemetryEventName.ModelOverviewMetricsSelectionUpdated
+      );
+    }
+  };
+
+  private onClassNameChange = (
+    _: React.FormEvent<IComboBox>,
+    item?: IComboBoxOption
+  ): void => {
+    console.log(item);
+    if (item) {
+      console.log("entered class name change");
+
+      // State directly changed instead of setState method
+      // to avoid memory leaks with unmounted Mount Overview.
+      this.props.modelOverview.state.className = item.text.toString();
+      console.log(this.props.modelOverview.state.className);
+
+      if (this.props.modelOverview.state.datasetCohortChartIsVisible) {
+        this.props.modelOverview.updateDatasetCohortStats();
+      } else {
+        this.props.modelOverview.updateFeatureCohortStats();
+      }
+
+      this.logButtonClick(
+        TelemetryEventName.ModelOverviewMetricsSelectionUpdated
+      );
+    }
+  };
+
+  private onIoUThresholdChange = (_: React.MouseEvent, value: number): void => {
+    if (value) {
+      console.log("entered iou threshold change");
+
+      this.props.modelOverview.setState({ iouThresh: value });
+
+      if (this.props.modelOverview.state.datasetCohortChartIsVisible) {
+        this.props.modelOverview.updateDatasetCohortStats();
+      } else {
+        this.props.modelOverview.updateFeatureCohortStats();
+      }
+
+      this.logButtonClick(
+        TelemetryEventName.ModelOverviewMetricsSelectionUpdated
+      );
+    }
+  };
 }

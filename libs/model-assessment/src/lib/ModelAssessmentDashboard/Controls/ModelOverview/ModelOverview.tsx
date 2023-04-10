@@ -69,17 +69,17 @@ interface IModelOverviewState {
   selectedFeatureBasedCohorts?: number[];
   chartConfigurationIsVisible: boolean;
   datasetCohortViewIsVisible: boolean;
+  aggregateMethod: string;
   datasetCohortChartIsVisible: boolean;
   featureConfigurationIsVisible: boolean;
   metricConfigurationIsVisible: boolean;
   showHeatmapColors: boolean;
   datasetCohortLabeledStatistics: ILabeledStatistic[][];
   datasetBasedCohorts: ErrorCohort[];
+  className: string;
   featureBasedCohortLabeledStatistics: ILabeledStatistic[][];
   featureBasedCohorts: ErrorCohort[];
-  aggregateMethod: string,
-  className: string,
-  iouThresh: number
+  iouThresh: number;
 }
 
 const datasetCohortViewPivotKey = "datasetCohortView";
@@ -98,7 +98,10 @@ export class ModelOverview extends React.Component<
     super(props);
 
     this.state = {
+      aggregateMethod:
+        localization.ModelAssessment.ModelOverview.metricTypes.macro,
       chartConfigurationIsVisible: false,
+      className: "",
       datasetBasedCohorts: [],
       datasetCohortChartIsVisible: true,
       datasetCohortLabeledStatistics: [],
@@ -106,14 +109,12 @@ export class ModelOverview extends React.Component<
       featureBasedCohortLabeledStatistics: [],
       featureBasedCohorts: [],
       featureConfigurationIsVisible: false,
+      iouThresh: 70,
       metricConfigurationIsVisible: false,
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
       selectedMetrics: [],
-      showHeatmapColors: true,
-      aggregateMethod: localization.ModelAssessment.ModelOverview.metricTypes.macro,
-      className: "",
-      iouThresh: 70
+      showHeatmapColors: true
     };
   }
 
@@ -528,8 +529,8 @@ export class ModelOverview extends React.Component<
   }
 
   private updateDatasetCohortStats(): void {
-    let selectionIndexes : number[][] = this.context.errorCohorts.map((errorCohort) =>
-      errorCohort.cohort.unwrap(JointDataset.IndexLabel)
+    const selectionIndexes: number[][] = this.context.errorCohorts.map(
+      (errorCohort) => errorCohort.cohort.unwrap(JointDataset.IndexLabel)
     );
     const datasetCohortMetricStats = generateMetrics(
       this.context.jointDataset,
@@ -547,31 +548,36 @@ export class ModelOverview extends React.Component<
 
   private updateObjectDetectionMetrics(
     selectionIndexes: number[][],
-    isDatasetCohort: boolean): void {
-    if (this.context.requestObjectDetectionMetrics &&
-        selectionIndexes.length > 0 &&
-        this.state.aggregateMethod.length > 0 &&
-        this.state.className.length > 0 &&
-        this.state.iouThresh) {
-      console.log('entered endpoint')
-      
-      this.context.requestObjectDetectionMetrics(
-        selectionIndexes,
-        this.state.aggregateMethod,
-        this.state.className,
-        this.state.iouThresh,
-        new AbortController().signal
-      ).then(
-        (result) => {
+    isDatasetCohort: boolean
+  ): void {
+    if (
+      this.context.requestObjectDetectionMetrics &&
+      selectionIndexes.length > 0 &&
+      this.state.aggregateMethod.length > 0 &&
+      this.state.className.length > 0 &&
+      this.state.iouThresh
+    ) {
+      console.log("entered endpoint");
+
+      this.context
+        .requestObjectDetectionMetrics(
+          selectionIndexes,
+          this.state.aggregateMethod,
+          this.state.className,
+          this.state.iouThresh,
+          new AbortController().signal
+        )
+        .then((result) => {
           // TODO: assert length of result and selectionIndexes are the same.
-          let updatedMetricStats : ILabeledStatistic[][] = [];
+          const updatedMetricStats: ILabeledStatistic[][] = [];
 
-          for (let cohortIndex = 0; cohortIndex < result.length; cohortIndex++) {
-            let count = selectionIndexes[cohortIndex].length;
+          for (const [
+            cohortIndex,
+            [meanAveragePrecision, averagePrecision, averageRecall]
+          ] of result.entries()) {
+            const count = selectionIndexes[cohortIndex].length;
 
-            let [meanAveragePrecision, averagePrecision, averageRecall] = result[cohortIndex];
-
-            let updatedCohortMetricStats = [
+            const updatedCohortMetricStats = [
               {
                 key: TotalCohortSamples,
                 label: localization.Interpret.Statistics.samples,
@@ -595,26 +601,24 @@ export class ModelOverview extends React.Component<
             ];
 
             updatedMetricStats.push(updatedCohortMetricStats);
-
           }
 
           isDatasetCohort
             ? this.updateDatasetCohortState(updatedMetricStats)
             : this.updateFeatureCohortState(updatedMetricStats);
-
-        }
-      )
-    }
-    else {
+        });
+    } else {
       console.log(this.context.requestObjectDetectionMetrics);
-      console.log(selectionIndexes.length)
+      console.log(selectionIndexes.length);
       console.log(this.state.aggregateMethod);
       console.log(this.state.className);
       console.log(this.state.iouThresh);
     }
   }
 
-  private updateDatasetCohortState(cohortMetricStats: ILabeledStatistic[][]): void {
+  private updateDatasetCohortState(
+    cohortMetricStats: ILabeledStatistic[][]
+  ): void {
     this.setState({
       datasetCohortLabeledStatistics: cohortMetricStats
     });
@@ -630,8 +634,8 @@ export class ModelOverview extends React.Component<
       this.state.selectedFeaturesContinuousFeatureBins
     );
 
-    let selectionIndexes: number[][] = featureBasedCohorts.map((errorCohort) =>
-      errorCohort.cohort.unwrap(JointDataset.IndexLabel)
+    const selectionIndexes: number[][] = featureBasedCohorts.map(
+      (errorCohort) => errorCohort.cohort.unwrap(JointDataset.IndexLabel)
     );
 
     const featureCohortMetricStats = generateMetrics(
@@ -648,7 +652,9 @@ export class ModelOverview extends React.Component<
     this.updateObjectDetectionMetrics(selectionIndexes, false);
   }
 
-  private updateFeatureCohortState(cohortMetricStats: ILabeledStatistic[][]): void {
+  private updateFeatureCohortState(
+    cohortMetricStats: ILabeledStatistic[][]
+  ): void {
     this.setState({
       featureBasedCohortLabeledStatistics: cohortMetricStats
     });

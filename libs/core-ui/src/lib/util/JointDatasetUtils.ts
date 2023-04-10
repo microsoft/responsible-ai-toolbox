@@ -23,8 +23,8 @@ export interface IJointDatasetArgs {
   metadata: IExplanationModelMetadata;
   featureMetaData?: IFeatureMetaData;
   targetColumn?: string | string[];
-  objectDetectionTrueY?: number[][][],
-  objectDetectionPredictedY?: number[][][]
+  objectDetectionTrueY?: number[][][];
+  objectDetectionPredictedY?: number[][][];
 }
 
 export enum ColumnCategories {
