@@ -36,9 +36,15 @@ class TestRAITextInsights(object):
 
 def run_rai_insights(model, train_data, test_data,
                      target_column, task_type):
-    rai_insights = RAITextInsights(model, train_data, test_data,
+    if task_type == ModelTask.TEXT_CLASSIFICATION:
+        classes = train_data[target_column].unique()
+        classes.sort()
+    else:
+        classes = None
+    rai_insights = RAITextInsights(model, test_data,
                                    target_column,
-                                   task_type=task_type)
+                                   task_type=task_type,
+                                   classes=classes)
     rai_insights.explainer.add()
     if task_type != ModelTask.QUESTION_ANSWERING:
         rai_insights.error_analysis.add()
@@ -46,5 +52,5 @@ def run_rai_insights(model, train_data, test_data,
     rai_insights.get_data()
     # Validate
     validate_rai_text_insights(
-        rai_insights, train_data, test_data,
+        rai_insights, classes, test_data,
         target_column, task_type)

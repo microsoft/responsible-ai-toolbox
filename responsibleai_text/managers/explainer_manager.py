@@ -36,7 +36,6 @@ SPARSE_NUM_FEATURES_THRESHOLD = 1000
 IS_RUN = 'is_run'
 IS_ADDED = 'is_added'
 CLASSES = 'classes'
-U_INITIALIZATION_EXAMPLES = '_initialization_examples'
 U_EVALUATION_EXAMPLES = '_evaluation_examples'
 FEATURES = 'features'
 META_JSON = Metadata.META_JSON
@@ -49,8 +48,7 @@ class ExplainerManager(BaseManager):
 
     """Defines the ExplainerManager for explaining a text-based model."""
 
-    def __init__(self, model: Any, initialization_examples: pd.DataFrame,
-                 evaluation_examples: pd.DataFrame,
+    def __init__(self, model: Any, evaluation_examples: pd.DataFrame,
                  target_column: str,
                  task_type: str,
                  classes: Optional[List] = None):
@@ -60,10 +58,6 @@ class ExplainerManager(BaseManager):
             A model that implements sklearn.predict or sklearn.predict_proba
             or function that accepts a 2d ndarray.
         :type model: object
-        :param initialization_examples: A matrix of feature vector
-            examples (# examples x # features) for initializing the explainer,
-            with an additional label column.
-        :type initialization_examples: pandas.DataFrame
         :param evaluation_examples: A matrix of feature vector
             examples (# examples x # features) on which to explain the
             model's output, with an additional label column.
@@ -82,13 +76,11 @@ class ExplainerManager(BaseManager):
         self._target_column = target_column
         if not isinstance(target_column, list):
             target_column = [target_column]
-        self._initialization_examples = \
-            initialization_examples.drop(columns=target_column)
         self._evaluation_examples = \
             evaluation_examples.drop(columns=target_column)
         self._is_run = False
         self._is_added = False
-        self._features = list(self._initialization_examples.columns)
+        self._features = list(self._evaluation_examples.columns)
         self._classes = classes
         self._explanation = None
         self._task_type = task_type
@@ -351,11 +343,9 @@ class ExplainerManager(BaseManager):
         target_column = rai_insights.target_column
         if not isinstance(target_column, list):
             target_column = [target_column]
-        train = rai_insights.train.drop(columns=target_column)
         test = rai_insights.test.drop(columns=target_column)
-        inst.__dict__[U_INITIALIZATION_EXAMPLES] = train
         inst.__dict__[U_EVALUATION_EXAMPLES] = test
-        inst.__dict__['_' + FEATURES] = list(train.columns)
+        inst.__dict__['_' + FEATURES] = list(test.columns)
         inst.__dict__[TASK_TYPE] = rai_insights.task_type
 
         return inst

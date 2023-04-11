@@ -31,12 +31,11 @@ from responsibleai_text.utils.feature_extractors import extract_features
 
 _PREDICTIONS = 'predictions'
 _PREDICT_OUTPUT = 'predict_output'
-_TRAIN = 'train'
+_TEST = 'test'
 _TARGET_COLUMN = 'target_column'
 _TASK_TYPE = 'task_type'
 _CLASSES = 'classes'
 _META_JSON = Metadata.META_JSON
-_TRAIN_LABELS = 'train_labels'
 _JSON_EXTENSION = '.json'
 _PREDICT = 'predict'
 _PREDICT_PROBA = 'predict_proba'
@@ -51,7 +50,7 @@ class RAITextInsights(RAIBaseInsights):
     single API.
     """
 
-    def __init__(self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
+    def __init__(self, model: Any, test: pd.DataFrame,
                  target_column: str, task_type: str,
                  classes: Optional[np.ndarray] = None,
                  serializer: Optional[Any] = None,
@@ -62,8 +61,6 @@ class RAITextInsights(RAIBaseInsights):
             A model that implements sklearn.predict or sklearn.predict_proba
             or function that accepts a 2d ndarray.
         :type model: object
-        :param train: The training dataset including the label column.
-        :type train: pandas.DataFrame
         :param test: The test dataset including the label column.
         :type test: pandas.DataFrame
         :param target_column: The name of the label column or list of columns.
@@ -85,18 +82,17 @@ class RAITextInsights(RAIBaseInsights):
         """
         # drop index as this can cause issues later like when copying
         # target column below from test dataset to _ext_test_df
-        train = train.reset_index(drop=True)
         test = test.reset_index(drop=True)
         self._wrapped_model = wrap_model(model, test, task_type)
         self._validate_rai_insights_input_parameters(
-            model=self._wrapped_model, train=train, test=test,
+            model=self._wrapped_model, test=test,
             target_column=target_column, task_type=task_type,
             classes=classes,
             serializer=serializer,
             maximum_rows_for_test=maximum_rows_for_test)
         self._classes = RAITextInsights._get_classes(
             task_type=task_type,
-            train=train,
+            test=test,
             target_column=target_column,
             classes=classes
         )
@@ -109,8 +105,9 @@ class RAITextInsights(RAIBaseInsights):
         self._ext_test_df[target_column] = test[target_column]
         self.predict_output = None
 
+        # TODO: on next responsibleai package upgrade pass None for train
         super(RAITextInsights, self).__init__(
-            model, train, test, target_column, task_type,
+            model, test, test, target_column, task_type,
             serializer)
         self._initialize_managers()
 
@@ -120,7 +117,7 @@ class RAITextInsights(RAIBaseInsights):
         Initializes the explainer and error analysis managers.
         """
         self._explainer_manager = ExplainerManager(
-            self.model, self.train, self.test,
+            self.model, self.test,
             self.target_column,
             self.task_type,
             self._classes)
@@ -131,10 +128,10 @@ class RAITextInsights(RAIBaseInsights):
                           self._error_analysis_manager]
 
     @staticmethod
-    def _get_classes(task_type, train, target_column, classes):
+    def _get_classes(task_type, test, target_column, classes):
         if task_type == ModelTask.TEXT_CLASSIFICATION:
             if classes is None:
-                classes = train[target_column].unique()
+                classes = test[target_column].unique()
                 # sort the classes after calling unique in numeric case
                 classes.sort()
                 return classes
@@ -168,14 +165,12 @@ class RAITextInsights(RAIBaseInsights):
             raise UserConfigValidationException(
                 'The serializer should be serializable via pickle')
 
-    def _validate_model(self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
+    def _validate_model(self, model: Any, test: pd.DataFrame,
                         target_column: Union[str, List], task_type: str):
         """Validate the model.
 
         :param model: The model to validate.
         :type model: object
-        :param train: The training dataset including the label column.
-        :type train: pandas.DataFrame
         :param test: The test dataset including the label column.
         :type test: pandas.DataFrame
         :param target_column: The name of the label column or list of columns.
@@ -187,17 +182,13 @@ class RAITextInsights(RAIBaseInsights):
         """
         if not isinstance(target_column, list):
             target_column = [target_column]
-        # Pick one row from train and test data
-        small_train_data = train.iloc[0:1].drop(
-            target_column, axis=1).iloc[0]
+        # Pick one row from test data
         small_test_data = test.iloc[0:1].drop(
             target_column, axis=1).iloc[0]
         if task_type != ModelTask.QUESTION_ANSWERING:
-            small_train_data = small_train_data.tolist()
             small_test_data = small_test_data.tolist()
         # Call the model
         try:
-            model.predict(small_train_data)
             model.predict(small_test_data)
         except Exception:
             raise UserConfigValidationException(
@@ -206,7 +197,7 @@ class RAITextInsights(RAIBaseInsights):
             )
 
     def _validate_rai_insights_input_parameters(
-            self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
+            self, model: Any, test: pd.DataFrame,
             target_column: Union[str, List], task_type: str,
             classes: np.ndarray,
             serializer,
@@ -217,8 +208,6 @@ class RAITextInsights(RAIBaseInsights):
             A model that implements sklearn.predict or sklearn.predict_proba
             or function that accepts a 2d ndarray.
         :type model: object
-        :param train: The training dataset including the label column.
-        :type train: pandas.DataFrame
         :param test: The test dataset including the label column.
         :type test: pandas.DataFrame
         :param target_column: The name of the label column or list of columns.
@@ -261,12 +250,11 @@ class RAITextInsights(RAIBaseInsights):
         if serializer is not None:
             self._validate_serializer(serializer)
 
-        train_is_pd = isinstance(train, pd.DataFrame)
         test_is_pd = isinstance(test, pd.DataFrame)
-        if not train_is_pd or not test_is_pd:
+        if not test_is_pd:
             raise UserConfigValidationException(
-                "Unsupported data type for either train or test. "
-                "Expecting pandas DataFrame for train and test."
+                "Unsupported data type for test dataset. "
+                "Expecting pandas DataFrame."
             )
 
         if test.shape[0] > maximum_rows_for_test:
@@ -279,42 +267,24 @@ class RAITextInsights(RAIBaseInsights):
                     test.shape[0], maximum_rows_for_test)
             )
 
-        if len(set(train.columns) - set(test.columns)) != 0 or \
-                len(set(test.columns) - set(train.columns)):
-            raise UserConfigValidationException(
-                'The features in train and test data do not match')
-
         if task_type == ModelTask.MULTILABEL_TEXT_CLASSIFICATION.value:
             if not isinstance(target_column, list):
                 raise UserConfigValidationException(
                     'The target_column should be a list for multilabel '
                     'classification')
-            # check all target columns are present in train and test
+            # check all target columns are present in test
             target_columns_set = set(target_column)
-            if not target_columns_set.issubset(set(train.columns)):
-                raise UserConfigValidationException(
-                    'The list of target_column(s) should be in train data')
             if not target_columns_set.issubset(set(test.columns)):
                 raise UserConfigValidationException(
                     'The list of target_column(s) should be in test data')
         else:
-            if target_column not in list(train.columns) or \
-                    target_column not in list(test.columns):
+            if target_column not in list(test.columns):
                 raise UserConfigValidationException(
-                    'Target name {0} not present in train/test data'.format(
+                    'Target name {0} not present in test data'.format(
                         target_column)
                 )
 
-        if classes is not None and task_type == \
-                ModelTask.TEXT_CLASSIFICATION:
-            if len(set(train[target_column].unique()) -
-                    set(classes)) != 0 or \
-                    len(set(classes) -
-                        set(train[target_column].unique())) != 0:
-                raise UserConfigValidationException(
-                    'The train labels and distinct values in '
-                    'target (train data) do not match')
-
+        if classes is not None and task_type == ModelTask.TEXT_CLASSIFICATION:
             if len(set(test[target_column].unique()) -
                     set(classes)) != 0:
                 raise UserConfigValidationException(
@@ -322,7 +292,7 @@ class RAITextInsights(RAIBaseInsights):
                     'distinct values in target (test data)')
 
         if model is not None:
-            self._validate_model(model, train, test, target_column,
+            self._validate_model(model, test, target_column,
                                  task_type)
 
     def get_filtered_test_data(self, filters, composite_filters,
@@ -413,8 +383,7 @@ class RAITextInsights(RAIBaseInsights):
         self._save_ext_data(path)
 
     def _save_ext_data(self, path):
-        """Save the copy of raw data (train and test sets) and
-           their related metadata.
+        """Save the copy of raw data and their related metadata.
 
         :param path: The directory path to save the RAIBaseInsights to.
         :type path: str
@@ -609,15 +578,11 @@ class RAITextInsights(RAIBaseInsights):
         inst.__dict__[_TARGET_COLUMN] = meta[_TARGET_COLUMN]
         inst.__dict__[_TASK_TYPE] = meta[_TASK_TYPE]
         inst.__dict__[_PREDICT_OUTPUT] = None
-        classes = None
-        if _TRAIN_LABELS in meta:
-            classes = meta[_TRAIN_LABELS]
-        else:
-            classes = meta[_CLASSES]
+        classes = meta[_CLASSES]
 
         inst.__dict__['_' + _CLASSES] = RAITextInsights._get_classes(
             task_type=meta[_TASK_TYPE],
-            train=inst.__dict__[_TRAIN],
+            test=inst.__dict__[_TEST],
             target_column=meta[_TARGET_COLUMN],
             classes=classes
         )

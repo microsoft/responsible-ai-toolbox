@@ -23,11 +23,14 @@ class TestRAITextInsightsSaveAndLoadScenarios(object):
         pred = create_text_classification_pipeline()
         train = data
         test = data[:3]
+        classes = train[EMOTION].unique()
+        classes.sort()
 
         rai_insights = RAITextInsights(
-            pred, train, test, EMOTION,
+            pred, test, EMOTION,
             task_type=ModelTask.TEXT_CLASSIFICATION,
-            serializer=TextClassificationPipelineSerializer())
+            serializer=TextClassificationPipelineSerializer(),
+            classes=classes)
 
         with TemporaryDirectory() as tmpdir:
             save_1 = Path(tmpdir) / "first_save"
@@ -43,7 +46,7 @@ class TestRAITextInsightsSaveAndLoadScenarios(object):
 
             # Validate
             validate_rai_text_insights(
-                rai_2, train, test,
+                rai_2, classes, test,
                 EMOTION, ModelTask.TEXT_CLASSIFICATION)
 
             # Save again
@@ -58,11 +61,14 @@ class TestRAITextInsightsSaveAndLoadScenarios(object):
         pred = create_text_classification_pipeline()
         train = data
         test = data[:3]
+        classes = train[EMOTION].unique()
+        classes.sort()
 
         rai_insights = RAITextInsights(
-            pred, train, test, EMOTION,
+            pred, test, EMOTION,
             task_type=ModelTask.TEXT_CLASSIFICATION,
-            serializer=TextClassificationPipelineSerializer())
+            serializer=TextClassificationPipelineSerializer(),
+            classes=classes)
 
         with TemporaryDirectory() as tmpdir:
             save_1 = Path(tmpdir) / "first_save"
@@ -87,7 +93,7 @@ class TestRAITextInsightsSaveAndLoadScenarios(object):
 
             # Validate
             validate_rai_text_insights(
-                rai_2, train, test,
+                rai_2, classes, test,
                 EMOTION, ModelTask.TEXT_CLASSIFICATION)
 
             # Save again
@@ -98,11 +104,14 @@ class TestRAITextInsightsSaveAndLoadScenarios(object):
         pred = create_text_classification_pipeline()
         train = data
         test = data[:3]
+        classes = train[EMOTION].unique()
+        classes.sort()
 
         rai_insights = RAITextInsights(
-            pred, train, test, EMOTION,
+            pred, test, EMOTION,
             task_type=ModelTask.TEXT_CLASSIFICATION,
-            serializer=TextClassificationPipelineSerializer())
+            serializer=TextClassificationPipelineSerializer(),
+            classes=classes)
 
         with TemporaryDirectory() as tmpdir:
             assert rai_insights.model is not None
@@ -126,11 +135,14 @@ class TestRAITextInsightsSaveAndLoadScenarios(object):
         pred = create_text_classification_pipeline()
         train = data
         test = data[:3]
+        classes = train[EMOTION].unique()
+        classes.sort()
 
         rai_insights = RAITextInsights(
-            pred, train, test, EMOTION,
+            pred, test, EMOTION,
             task_type=ModelTask.TEXT_CLASSIFICATION,
-            serializer=TextClassificationPipelineSerializer())
+            serializer=TextClassificationPipelineSerializer(),
+            classes=classes)
 
         # Call a single manager
         if manager_type == ManagerNames.EXPLAINER:
@@ -155,7 +167,7 @@ class TestRAITextInsightsSaveAndLoadScenarios(object):
 
             # Validate
             validate_rai_text_insights(
-                rai_2, train, test,
+                rai_2, classes, test,
                 EMOTION, ModelTask.TEXT_CLASSIFICATION)
 
             # Save again
