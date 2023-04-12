@@ -623,7 +623,7 @@ export class ModelOverview extends React.Component<
           new AbortController().signal
         )
         .then((result) => {
-          // TODO: assert length of result and selectionIndexes are the same.
+          // Assumption: the lengths of `result` and `selectionIndexes` are the same.
           const updatedMetricStats: ILabeledStatistic[][] = [];
 
           for (const [

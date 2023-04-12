@@ -52,7 +52,7 @@ export interface IObjectDetectionWidgetsProps {
   setClassName: (value: string) => void;
   setIoUThreshold: (value: number) => void;
   updateDatasetCohortStats: () => void;
-  updateFeatureCohortStats: () => void;
+  updateFeatureCohortStats: () => Promise<void>;
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
@@ -117,7 +117,7 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
     console.log(item);
     if (item) {
       console.log("entered class name change");
-      this.props.setClassName(item.text.toString())
+      this.props.setClassName(item.text.toString());
     }
   };
 
