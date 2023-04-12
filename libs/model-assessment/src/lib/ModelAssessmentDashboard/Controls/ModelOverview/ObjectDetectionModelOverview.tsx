@@ -12,9 +12,7 @@ import {
 import {
   FluentUIStyles,
   IDataset,
-  ITelemetryEvent,
-  TelemetryEventName
-} from "@responsible-ai/core-ui";
+  ITelemetryEvent} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
@@ -50,7 +48,11 @@ export function getSelectableClassNames(dataset: IDataset): IComboBoxOption[] {
 export interface IObjectDetectionWidgetsProps {
   classNames: IProcessedStyleSet<IModelOverviewStyles>;
   dataset: IDataset;
-  modelOverview: any; // avoided ModelOverview type due to circular imports
+  setAggregateMethod: (value: string) => void;
+  setClassName: (value: string) => void;
+  setIoUThreshold: (value: number) => void;
+  updateDatasetCohortStats: () => void;
+  updateFeatureCohortStats: () => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
@@ -104,20 +106,7 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
     console.log(item);
     if (item) {
       console.log("entered aggregate method change");
-
-      // State directly changed instead of setState method
-      // to avoid memory leaks with unmounted Model Overview.
-      this.props.modelOverview.state.aggregateMethod = item.text.toString();
-
-      if (this.props.modelOverview.state.datasetCohortChartIsVisible) {
-        this.props.modelOverview.updateDatasetCohortStats();
-      } else {
-        this.props.modelOverview.updateFeatureCohortStats();
-      }
-
-      this.props.modelOverview.logButtonClick(
-        TelemetryEventName.ModelOverviewMetricsSelectionUpdated
-      );
+      this.props.setAggregateMethod(item.text.toString());
     }
   };
 
@@ -128,39 +117,14 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
     console.log(item);
     if (item) {
       console.log("entered class name change");
-
-      // State directly changed instead of setState method
-      // to avoid memory leaks with unmounted Mount Overview.
-      this.props.modelOverview.state.className = item.text.toString();
-      console.log(this.props.modelOverview.state.className);
-
-      if (this.props.modelOverview.state.datasetCohortChartIsVisible) {
-        this.props.modelOverview.updateDatasetCohortStats();
-      } else {
-        this.props.modelOverview.updateFeatureCohortStats();
-      }
-
-      this.props.modelOverview.logButtonClick(
-        TelemetryEventName.ModelOverviewMetricsSelectionUpdated
-      );
+      this.props.setClassName(item.text.toString())
     }
   };
 
   private onIoUThresholdChange = (_: React.MouseEvent, value: number): void => {
     if (value) {
       console.log("entered iou threshold change");
-
-      this.props.modelOverview.setState({ iouThresh: value });
-
-      if (this.props.modelOverview.state.datasetCohortChartIsVisible) {
-        this.props.modelOverview.updateDatasetCohortStats();
-      } else {
-        this.props.modelOverview.updateFeatureCohortStats();
-      }
-
-      this.props.modelOverview.logButtonClick(
-        TelemetryEventName.ModelOverviewMetricsSelectionUpdated
-      );
+      this.props.setIoUThreshold(value);
     }
   };
 }

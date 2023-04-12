@@ -348,7 +348,11 @@ export class ModelOverview extends React.Component<
               <ObjectDetectionWidgets
                 classNames={classNames}
                 dataset={this.context.dataset}
-                modelOverview={this}
+                setAggregateMethod={this.setAggregateMethod}
+                setClassName={this.setClassName}
+                setIoUThreshold={this.setIoUThreshold}
+                updateDatasetCohortStats={this.updateDatasetCohortStats}
+                updateFeatureCohortStats={this.updateFeatureCohortStats}
               />
             )}
           </Stack>
@@ -528,7 +532,58 @@ export class ModelOverview extends React.Component<
     );
   }
 
-  private updateDatasetCohortStats(): void {
+  private setAggregateMethod = (value: string): void => {
+    console.log(value);
+    this.setState({ aggregateMethod: value }, () => {
+      if (this.state.datasetCohortChartIsVisible) {
+        console.log('entering dataset cohort state update');
+        this.updateDatasetCohortStats();
+      } else {
+        console.log('entering feature cohort state update');
+        this.updateFeatureCohortStats();
+      }
+    });
+
+    this.logButtonClick(
+      TelemetryEventName.ModelOverviewMetricsSelectionUpdated
+    );
+  }
+
+  private setClassName = (value: string): void => {
+    console.log(value);
+    this.setState({ className: value }, () => {
+      if (this.state.datasetCohortChartIsVisible) {
+        console.log('entering dataset cohort state update');
+        this.updateDatasetCohortStats();
+      } else {
+        console.log('entering feature cohort state update');
+        this.updateFeatureCohortStats();
+      }
+    });
+
+    this.logButtonClick(
+      TelemetryEventName.ModelOverviewMetricsSelectionUpdated
+    );
+  }
+
+  private setIoUThreshold = (value: number): void => {
+    console.log(value);
+    this.setState({ iouThresh: value }, () => {
+      if (this.state.datasetCohortChartIsVisible) {
+        console.log('entering dataset cohort state update');
+        this.updateDatasetCohortStats();
+      } else {
+        console.log('entering feature cohort state update');
+        this.updateFeatureCohortStats();
+      }
+    });
+
+    this.logButtonClick(
+      TelemetryEventName.ModelOverviewMetricsSelectionUpdated
+    );
+  }
+
+  private updateDatasetCohortStats = (): void => {
     const selectionIndexes: number[][] = this.context.errorCohorts.map(
       (errorCohort) => errorCohort.cohort.unwrap(JointDataset.IndexLabel)
     );
