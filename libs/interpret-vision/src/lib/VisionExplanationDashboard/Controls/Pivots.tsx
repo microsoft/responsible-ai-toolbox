@@ -36,7 +36,7 @@ export class Pivots extends React.Component<IPivotsProps> {
           />
           <PivotItem
             headerText={localization.InterpretVision.Dashboard.tabOptionThird}
-            itemKey={VisionDatasetExplorerTabOptions.DataCharacteristics}
+            itemKey={VisionDatasetExplorerTabOptions.ClassView}
           />
         </Pivot>
       </Stack>
