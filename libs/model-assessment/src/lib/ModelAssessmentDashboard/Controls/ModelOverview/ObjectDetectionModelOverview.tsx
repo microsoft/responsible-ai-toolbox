@@ -12,7 +12,8 @@ import {
 import {
   FluentUIStyles,
   IDataset,
-  ITelemetryEvent} from "@responsible-ai/core-ui";
+  ITelemetryEvent
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 

@@ -536,10 +536,10 @@ export class ModelOverview extends React.Component<
     console.log(value);
     this.setState({ aggregateMethod: value }, () => {
       if (this.state.datasetCohortChartIsVisible) {
-        console.log('entering dataset cohort state update');
+        console.log("entering dataset cohort state update");
         this.updateDatasetCohortStats();
       } else {
-        console.log('entering feature cohort state update');
+        console.log("entering feature cohort state update");
         this.updateFeatureCohortStats();
       }
     });
@@ -547,16 +547,16 @@ export class ModelOverview extends React.Component<
     this.logButtonClick(
       TelemetryEventName.ModelOverviewMetricsSelectionUpdated
     );
-  }
+  };
 
   private setClassName = (value: string): void => {
     console.log(value);
     this.setState({ className: value }, () => {
       if (this.state.datasetCohortChartIsVisible) {
-        console.log('entering dataset cohort state update');
+        console.log("entering dataset cohort state update");
         this.updateDatasetCohortStats();
       } else {
-        console.log('entering feature cohort state update');
+        console.log("entering feature cohort state update");
         this.updateFeatureCohortStats();
       }
     });
@@ -564,16 +564,16 @@ export class ModelOverview extends React.Component<
     this.logButtonClick(
       TelemetryEventName.ModelOverviewMetricsSelectionUpdated
     );
-  }
+  };
 
   private setIoUThreshold = (value: number): void => {
     console.log(value);
     this.setState({ iouThresh: value }, () => {
       if (this.state.datasetCohortChartIsVisible) {
-        console.log('entering dataset cohort state update');
+        console.log("entering dataset cohort state update");
         this.updateDatasetCohortStats();
       } else {
-        console.log('entering feature cohort state update');
+        console.log("entering feature cohort state update");
         this.updateFeatureCohortStats();
       }
     });
@@ -581,7 +581,7 @@ export class ModelOverview extends React.Component<
     this.logButtonClick(
       TelemetryEventName.ModelOverviewMetricsSelectionUpdated
     );
-  }
+  };
 
   private updateDatasetCohortStats = (): void => {
     const selectionIndexes: number[][] = this.context.errorCohorts.map(
@@ -599,7 +599,7 @@ export class ModelOverview extends React.Component<
     });
 
     this.updateObjectDetectionMetrics(selectionIndexes, true);
-  }
+  };
 
   private updateObjectDetectionMetrics(
     selectionIndexes: number[][],
@@ -679,7 +679,7 @@ export class ModelOverview extends React.Component<
     });
   }
 
-  private async updateFeatureCohortStats(): Promise<void> {
+  private updateFeatureCohortStats = async (): Promise<void> => {
     // generate table contents for selected feature cohorts
     const featureBasedCohorts = generateOverlappingFeatureBasedCohorts(
       this.context.baseErrorCohort,
@@ -705,7 +705,7 @@ export class ModelOverview extends React.Component<
     });
 
     this.updateObjectDetectionMetrics(selectionIndexes, false);
-  }
+  };
 
   private updateFeatureCohortState(
     cohortMetricStats: ILabeledStatistic[][]
