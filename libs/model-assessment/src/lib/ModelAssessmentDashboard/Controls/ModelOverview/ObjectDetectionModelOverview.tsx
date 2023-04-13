@@ -104,9 +104,7 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
     _: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    console.log(item);
     if (item) {
-      console.log("entered aggregate method change");
       this.props.setAggregateMethod(item.text.toString());
     }
   };
@@ -115,16 +113,13 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
     _: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    console.log(item);
     if (item) {
-      console.log("entered class name change");
       this.props.setClassName(item.text.toString());
     }
   };
 
   private onIoUThresholdChange = (_: React.MouseEvent, value: number): void => {
     if (value) {
-      console.log("entered iou threshold change");
       this.props.setIoUThreshold(value);
     }
   };

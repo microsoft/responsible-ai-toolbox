@@ -533,13 +533,10 @@ export class ModelOverview extends React.Component<
   }
 
   private setAggregateMethod = (value: string): void => {
-    console.log(value);
     this.setState({ aggregateMethod: value }, () => {
       if (this.state.datasetCohortChartIsVisible) {
-        console.log("entering dataset cohort state update");
         this.updateDatasetCohortStats();
       } else {
-        console.log("entering feature cohort state update");
         this.updateFeatureCohortStats();
       }
     });
@@ -550,13 +547,10 @@ export class ModelOverview extends React.Component<
   };
 
   private setClassName = (value: string): void => {
-    console.log(value);
     this.setState({ className: value }, () => {
       if (this.state.datasetCohortChartIsVisible) {
-        console.log("entering dataset cohort state update");
         this.updateDatasetCohortStats();
       } else {
-        console.log("entering feature cohort state update");
         this.updateFeatureCohortStats();
       }
     });
@@ -567,13 +561,10 @@ export class ModelOverview extends React.Component<
   };
 
   private setIoUThreshold = (value: number): void => {
-    console.log(value);
     this.setState({ iouThresh: value }, () => {
       if (this.state.datasetCohortChartIsVisible) {
-        console.log("entering dataset cohort state update");
         this.updateDatasetCohortStats();
       } else {
-        console.log("entering feature cohort state update");
         this.updateFeatureCohortStats();
       }
     });
@@ -612,8 +603,6 @@ export class ModelOverview extends React.Component<
       this.state.className.length > 0 &&
       this.state.iouThresh
     ) {
-      console.log("entered endpoint");
-
       this.context
         .requestObjectDetectionMetrics(
           selectionIndexes,
@@ -662,12 +651,6 @@ export class ModelOverview extends React.Component<
             ? this.updateDatasetCohortState(updatedMetricStats)
             : this.updateFeatureCohortState(updatedMetricStats);
         });
-    } else {
-      console.log(this.context.requestObjectDetectionMetrics);
-      console.log(selectionIndexes.length);
-      console.log(this.state.aggregateMethod);
-      console.log(this.state.className);
-      console.log(this.state.iouThresh);
     }
   }
 
