@@ -47,5 +47,8 @@ export function getModelTypeFromProps(
   if (taskType === DatasetTaskType.MultilabelTextClassification) {
     return ModelTypes.TextMultilabel;
   }
+  if (taskType === DatasetTaskType.ObjectDetection) {
+    return ModelTypes.ObjectDetection;
+  }
   return modelType;
 }

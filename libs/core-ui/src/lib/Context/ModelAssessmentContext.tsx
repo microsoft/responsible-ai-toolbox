@@ -138,11 +138,11 @@ export interface IModelAssessmentContext {
     | undefined;
   requestObjectDetectionMetrics?:
     | ((
-        trueY: number[][][],
-        predictedY: number[][][],
+        selectionIndexes: number[][],
         aggregateMethod: string,
         className: string,
-        iouThresh: number
+        iouThresh: number,
+        abortSignal: AbortSignal
       ) => Promise<any[]>)
     | undefined;
   requestSplinePlotDistribution?: (
@@ -174,6 +174,7 @@ export const defaultModelAssessmentContext: IModelAssessmentContext = {
   modelType: undefined,
   requestExp: undefined,
   requestLocalFeatureExplanations: undefined,
+  requestObjectDetectionMetrics: undefined,
   requestPredictions: undefined,
   selectedErrorCohort: {} as ErrorCohort,
   setAsCategorical: () => undefined,

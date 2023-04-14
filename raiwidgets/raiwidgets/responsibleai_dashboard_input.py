@@ -326,14 +326,12 @@ class ResponsibleAIDashboardInput:
         :rtype: Dict[str, List]
         """
         try:
-            true_y = post_data[0]
-            predicted_y = post_data[1]
-            aggregate_method = post_data[2]
-            class_name = post_data[3]
-            iou_thresh = post_data[4]
+            selection_indexes = post_data[0]
+            aggregate_method = post_data[1]
+            class_name = post_data[2]
+            iou_thresh = post_data[3]
             exp = self._analysis.compute_object_detection_metrics(
-                true_y,
-                predicted_y,
+                selection_indexes,
                 aggregate_method,
                 class_name,
                 iou_thresh

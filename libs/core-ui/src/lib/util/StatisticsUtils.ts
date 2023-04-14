@@ -279,7 +279,7 @@ export const generateMetrics: (
     });
   }
   if (modelType === ModelTypes.ObjectDetection) {
-    return generateObjectDetectionStats(jointDataset, selectionIndexes);
+    return generateObjectDetectionStats(selectionIndexes);
   }
   const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
   return selectionIndexes.map((selectionArray) => {

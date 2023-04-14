@@ -17,11 +17,11 @@ export interface IVisionExplanationDashboardProps {
     abortSignal: AbortSignal
   ) => Promise<any[]>;
   requestObjectDetectionMetrics?: (
-    trueY: number[][][],
-    predictedY: number[][][],
+    selectionIndexes: number[][],
     aggregateMethod: string,
     className: string,
-    iouThresh: number
+    iouThresh: number,
+    abortSignal: AbortSignal
   ) => Promise<any[]>;
   selectedCohort: ErrorCohort;
   setSelectedCohort: (cohort: ErrorCohort) => void;
