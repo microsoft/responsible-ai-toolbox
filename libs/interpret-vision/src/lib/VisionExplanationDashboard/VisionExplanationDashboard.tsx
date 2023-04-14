@@ -113,7 +113,7 @@ export class VisionExplanationDashboard extends React.Component<
                 onChange={this.onSliderChange}
                 disabled={
                   this.state.selectedKey ===
-                  VisionDatasetExplorerTabOptions.DataCharacteristics
+                  VisionDatasetExplorerTabOptions.ClassView
                 }
               />
             </Stack.Item>
