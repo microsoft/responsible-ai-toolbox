@@ -20,7 +20,7 @@ import { getJoinedLabelString } from "./utils/labelUtils";
 export enum VisionDatasetExplorerTabOptions {
   ImageExplorerView = "Image explorer view",
   TableView = "Table view",
-  DataCharacteristics = "Data characteristics"
+  ClassView = "Class view"
 }
 
 export enum TitleBarOptions {
