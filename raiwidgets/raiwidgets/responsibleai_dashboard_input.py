@@ -48,8 +48,8 @@ class ResponsibleAIDashboardInput:
             self.dashboard_input.cohortData = []
 
         self._feature_length = len(self.dashboard_input.dataset.feature_names)
-        if (hasattr(analysis, ManagerNames.ERROR_ANALYSIS)
-           and analysis.error_analysis is not None):
+        if (hasattr(analysis, ManagerNames.ERROR_ANALYSIS) and
+           analysis.error_analysis is not None):
             self._error_analyzer = analysis.error_analysis._analyzer
 
     def _validate_cohort_list(self, cohort_list=None):
