@@ -66,6 +66,28 @@ class WrappedIndexPredictorModel:
         self.classes = classes
         self.is_multilabel = is_multilabel
         self.task_type = task_type
+        if self.task_type in [ModelTask.TEXT_CLASSIFICATION, ModelTask.MULTILABEL_TEXT_CLASSIFICATION]:
+            self.predictions = self.model.predict(self.dataset.iloc[:, 0].tolist())
+        elif self.task_type == ModelTask.QUESTION_ANSWERING:
+            self.predictions = self.model.predict(self.dataset.loc[:, ['context', 'questions']])
+            self.predictions = np.array(self.predictions)
+        else:
+            raise ValueError("Unknown task type: {}".format(self.task_type))
+
+        if self.is_multilabel:
+            predictions_joined = []
+            for row in self.predictions:
+                # get all labels where prediction is 1
+                pred_labels = [i for i in range(len(row)) if row[i]]
+                if self.classes is not None:
+                    pred_labels = [self.classes[i] for i in pred_labels]
+                else:
+                    pred_labels = [str(i) for i in pred_labels]
+                # concatenate all predicted labels into a single string
+                predictions_joined.append(','.join(pred_labels))
+            self.predictions = np.array(predictions_joined)
+        if self.task_type != ModelTask.QUESTION_ANSWERING:
+            self.predict_proba = self.model.predict_proba(self.dataset.iloc[:, 0].tolist())
 
     def predict(self, X):
         """Predict the class labels for the provided data.
@@ -76,27 +98,9 @@ class WrappedIndexPredictorModel:
         :rtype: list
         """
         index = X.index
-        indexed_dataset = self.dataset.iloc[index]
-
-        if self.task_type in [ModelTask.TEXT_CLASSIFICATION, ModelTask.MULTILABEL_TEXT_CLASSIFICATION]:
-            predictions = self.model.predict(indexed_dataset.iloc[:, 0].tolist())
-        elif self.task_type == ModelTask.QUESTION_ANSWERING:
-            predictions = self.model.predict(indexed_dataset.loc[:, ['context', 'questions']])
-        else:
-            raise ValueError("Unknown task type: {}".format(self.task_type))
-
-        if self.is_multilabel:
-            predictions_joined = []
-            for row in predictions:
-                # get all labels where prediction is 1
-                pred_labels = [i for i in range(len(row)) if row[i]]
-                if self.classes is not None:
-                    pred_labels = [self.classes[i] for i in pred_labels]
-                else:
-                    pred_labels = [str(i) for i in pred_labels]
-                # concatenate all predicted labels into a single string
-                predictions_joined.append(','.join(pred_labels))
-            return np.array(predictions_joined)
+        predictions = self.predictions[index]
+        if self.task_type == ModelTask.MULTILABEL_TEXT_CLASSIFICATION:
+            return predictions
         if self.classes is not None:
             predictions = [self.classes[y] for y in predictions]
         return predictions
@@ -110,8 +114,8 @@ class WrappedIndexPredictorModel:
         :rtype: list[list]
         """
         index = X.index
-        indexed_dataset = self.dataset.iloc[index]
-        return self.model.predict_proba(indexed_dataset.iloc[:, 0].tolist())
+        pred_proba = self.predict_proba[index]
+        return pred_proba
 
 
 class ErrorAnalysisManager(BaseErrorAnalysisManager):
