@@ -1754,15 +1754,15 @@
         },
         "meanAveragePrecision": {
           "name": "Mean Average Precision score",
-          "description": "Mean Average Precision for Object Detection models."
+          "description": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall."
         },
         "averagePrecision": {
           "name": "Average Precision score",
-          "description": "Average Precision for a chosen class for Object Detection models."
+          "description": "Average precision for object detection models is calculated for a selected class."
         },
         "averageRecall": {
           "name": "Average Recall score",
-          "description": "Average Recall for a chosen class for Object Detection models."
+          "description": "Average recall for object detection models is calculated for a selected class."
         },
         "fairnessMetricDifference": "Difference",
         "fairnessMetricRatio": "Ratio"
@@ -1774,7 +1774,12 @@
         "micro": "Micro"
       },
       "classSelectionDropdown": "Select class(es)",
-      "iouthresholdDropdown": "IoU Threshold",
+      "iouThresholdDropdown": {
+        "name": "IoU Threshold",
+        "description": "The Intersection over Union score is calculated as the ratio of area of intersection to area of union of the ground truth and predicted bounding boxes. A higher IoU score means the predicted box needs to more closely resemble the ground truth bounding box to be deemed a correct prediction.",
+        "iconId": "iouThresholdIconId",
+        "title": "Learn about the IoU threshold"
+      },
       "notAvailable": "N/A",
       "countColumnHeader": "Sample size",
       "dataCohortsHeatmapHeader": "Cohorts",
