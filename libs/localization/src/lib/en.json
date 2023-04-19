@@ -1776,7 +1776,7 @@
       "classSelectionDropdown": "Select class(es)",
       "iouThresholdDropdown": {
         "name": "IoU Threshold",
-        "description": "The Intersection over Union score is calculated as the ratio of area of intersection to area of union of the ground truth and predicted bounding boxes. A higher IoU score means the predicted box needs to more closely resemble the ground truth bounding box to be deemed a correct prediction.",
+        "description": "Intersection over Union quantifies the degree of overlap between the prediction and ground truth bounding box of a detected object in an image. For example, setting an IOU threshold of 70% means that a prediction with greater than 70% overlap with ground truth is True, thus influencing the definition of prediction correctness and calculation of other performance metrics.",
         "iconId": "iouThresholdIconId",
         "title": "Learn about the IoU threshold"
       },
