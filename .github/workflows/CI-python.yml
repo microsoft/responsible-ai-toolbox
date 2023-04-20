@@ -29,6 +29,8 @@ jobs:
             pythonVersion: "3.8"
           - operatingSystem: ubuntu-20.04
             pythonVersion: "3.9"
+          - operatingSystem: ubuntu-20.04
+            pythonVersion: "3.10"
           - operatingSystem: ubuntu-latest
             pythonVersion: "3.6"
 
@@ -50,23 +52,23 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install --upgrade setuptools
-          pip install --upgrade "pip-tools<6.12.2"
+          pip install --upgrade "pip-tools<=6.13.0"
 
       - name: Pip compile
         run: |
-          pip-compile requirements-dev.txt
-          cat requirements-dev.txt
+          pip-compile requirements-dev.txt -o requirements-dev-comp.txt
+          cat requirements-dev-comp.txt
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Upload requirements
         uses: actions/upload-artifact@v3
         with:
-          name: requirements-dev.txt
-          path: ${{ matrix.packageDirectory }}/requirements-dev.txt
+          name: requirements-dev-comp.txt
+          path: ${{ matrix.packageDirectory }}/requirements-dev-comp.txt
 
       - name: Install dependencies
         run: |
-          pip-sync requirements-dev.txt
+          pip-sync requirements-dev-comp.txt
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Install package

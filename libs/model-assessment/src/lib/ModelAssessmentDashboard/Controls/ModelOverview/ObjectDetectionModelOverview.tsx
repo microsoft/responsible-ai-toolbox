@@ -14,6 +14,7 @@ import {
   IDataset,
   ITelemetryEvent
 } from "@responsible-ai/core-ui";
+import { InfoCallout } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
@@ -60,7 +61,7 @@ export interface IObjectDetectionWidgetsProps {
 export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetectionWidgetsProps> {
   public render(): React.ReactNode {
     return (
-      <Stack.Item>
+      <Stack horizontal>
         <ComboBox
           id="modelOverviewAggregateMethod"
           label={localization.ModelAssessment.ModelOverview.metricsTypeDropdown}
@@ -87,7 +88,7 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
         <Slider
           id="iouThreshold"
           label={
-            localization.ModelAssessment.ModelOverview.iouthresholdDropdown
+            localization.ModelAssessment.ModelOverview.iouThresholdDropdown.name
           }
           max={100}
           defaultValue={70}
@@ -96,7 +97,21 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
           valueFormat={(value: number): string => `IoU=${value}%`}
           showValue
         />
-      </Stack.Item>
+        <InfoCallout
+          iconId={
+            localization.ModelAssessment.ModelOverview.iouThresholdDropdown
+              .iconId
+          }
+          infoText={
+            localization.ModelAssessment.ModelOverview.iouThresholdDropdown
+              .description
+          }
+          title={
+            localization.ModelAssessment.ModelOverview.iouThresholdDropdown
+              .title
+          }
+        />
+      </Stack>
     );
   }
 
