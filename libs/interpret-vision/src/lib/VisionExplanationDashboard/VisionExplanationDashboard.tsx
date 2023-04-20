@@ -198,7 +198,7 @@ export class VisionExplanationDashboard extends React.Component<
             loadingExplanation={this.state.loadingExplanation}
             otherMetadataFieldNames={this.state.otherMetadataFieldNames}
             callback={this.onPanelClose}
-            onChange={this.onItemSelect}
+            onChange={this.onItemSelectObjectDetection}
           />
         </Stack.Item>
       </Stack>) : 
@@ -349,7 +349,35 @@ export class VisionExplanationDashboard extends React.Component<
   ): void => {
     this.setState({ searchValue: newValue || "" });
   };
-  private onItemSelect = (item: IVisionListItem, selectedObject = -1): void => {
+  private onItemSelect = (item: IVisionListItem): void => {
+    this.setState({ panelOpen: !this.state.panelOpen, selectedItem: item });
+    const index = item.index;
+    const { computedExplanations, loadingExplanation } = this.state;
+    const computedExplanation = computedExplanations.get(index);
+    if (computedExplanation) {
+      loadingExplanation[index] = [false];
+      this.setState({
+        loadingExplanation
+      });
+      return;
+    }
+    if (this.props.requestExp) {
+      loadingExplanation[index] = [true];
+      this.setState({ loadingExplanation });
+      this.props
+        .requestExp(index, new AbortController().signal)
+        .then((result) => {
+          computedExplanations.get(item.index) ??
+              new Map().set(0, result.toString());
+          loadingExplanation[index] = [false];
+          this.setState({
+            computedExplanations,
+            loadingExplanation
+          });
+        });
+    }
+  }; 
+  private onItemSelectObjectDetection = (item: IVisionListItem, selectedObject = -1): void => {
     this.setState({ panelOpen: true, selectedItem: item });
     const { computedExplanations, loadingExplanation } = this.state;
     if (selectedObject !== -1) {
