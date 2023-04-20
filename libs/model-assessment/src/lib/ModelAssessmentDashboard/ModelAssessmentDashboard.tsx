@@ -307,6 +307,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
 
     if (switchNew) {
       this.setState({
+        baseCohort: newCohorts[editIndex],
         cohorts: newCohorts,
         selectedCohort: newCohorts[editIndex]
       });

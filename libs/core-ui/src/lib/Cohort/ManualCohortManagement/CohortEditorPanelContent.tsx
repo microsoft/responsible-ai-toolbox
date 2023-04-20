@@ -150,6 +150,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
   private clearAllFilters = (): void => {
     this.props.onCompositeFiltersUpdated([]);
     this.props.onFiltersUpdated([]);
+    this.setState({ filterIndex: 0 });
     this.setFilterMessage(localization.Interpret.CohortEditor.noFiltersApplied);
   };
 
@@ -245,6 +246,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
     const filters = [...this.props.filters];
     filters.splice(index, 1);
     this.props.onFiltersUpdated(filters);
+    this.setState({ filterIndex: filters.length });
   };
 
   private removeCompositeFilter = (index: number): void => {
