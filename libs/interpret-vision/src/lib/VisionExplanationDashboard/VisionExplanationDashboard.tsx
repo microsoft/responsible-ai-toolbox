@@ -353,23 +353,23 @@ export class VisionExplanationDashboard extends React.Component<
     this.setState({ panelOpen: !this.state.panelOpen, selectedItem: item });
     const index = item.index;
     const { computedExplanations, loadingExplanation } = this.state;
-    const computedExplanation = computedExplanations.get(index);
+    const computedExplanation = computedExplanations.get(0)?.get(index);
     if (computedExplanation) {
-      loadingExplanation[index] = [false];
+      loadingExplanation[0][index] = false;
       this.setState({
         loadingExplanation
       });
       return;
     }
     if (this.props.requestExp) {
-      loadingExplanation[index] = [true];
+      loadingExplanation[0][index] = true;
       this.setState({ loadingExplanation });
       this.props
         .requestExp(index, new AbortController().signal)
         .then((result) => {
-          computedExplanations.get(item.index) ??
+          computedExplanations.get(0)?.get(item.index) ??
               new Map().set(0, result.toString());
-          loadingExplanation[index] = [false];
+          loadingExplanation[0][index] = false;
           this.setState({
             computedExplanations,
             loadingExplanation
