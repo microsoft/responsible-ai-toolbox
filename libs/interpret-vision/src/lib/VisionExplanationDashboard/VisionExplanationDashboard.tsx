@@ -367,8 +367,8 @@ export class VisionExplanationDashboard extends React.Component<
       this.props
         .requestExp(index, new AbortController().signal)
         .then((result) => {
-          computedExplanations.get(0)?.get(item.index) ??
-              new Map().set(0, result.toString());
+          const explanation = result.toString();
+          computedExplanations.get(0)?.set(index, explanation);
           loadingExplanation[0][index] = false;
           this.setState({
             computedExplanations,
@@ -376,7 +376,7 @@ export class VisionExplanationDashboard extends React.Component<
           });
         });
     }
-  }; 
+  };
   private onItemSelectObjectDetection = (item: IVisionListItem, selectedObject = -1): void => {
     this.setState({ panelOpen: true, selectedItem: item });
     const { computedExplanations, loadingExplanation } = this.state;

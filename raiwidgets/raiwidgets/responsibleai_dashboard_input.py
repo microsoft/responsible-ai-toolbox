@@ -241,11 +241,11 @@ class ResponsibleAIDashboardInput:
         try:
             # index 0 = index of the image
             # index 1 = index of the object
-            try:
+            if self.dashboard_input.dataset.task_type == "object_detection":
                 exp = self._analysis.explainer.compute_single_explanation(
                     index=index[0],
                     object_index=index[1])
-            except Exception:
+            else:
                 exp = self._analysis.explainer.compute_single_explanation(
                     index)
             return {
