@@ -124,6 +124,16 @@ class TreeNode(str, Enum):
     METRIC_VALUE = MetricKeys.METRIC_VALUE.value
 
 
+class ErrorCorrelationMethods(str, Enum):
+    """Provide the supported error correlation methods.
+
+    The supported methods are 'mutual_info', 'ebm' and 'gbm_shap'.
+    """
+    MUTUAL_INFO = 'mutual_info'
+    EBM = 'ebm'
+    GBM_SHAP = 'gbm_shap'
+
+
 metric_to_display_name = {
     Metrics.ACCURACY_SCORE: 'Accuracy score',
     Metrics.MEAN_PREDICTION: 'Mean prediction',
