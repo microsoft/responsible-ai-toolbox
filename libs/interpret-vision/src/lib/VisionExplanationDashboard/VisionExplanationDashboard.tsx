@@ -20,6 +20,7 @@ import React from "react";
 
 import { CohortToolBar } from "./Controls/CohortToolBar";
 import { Flyout } from "./Controls/Flyout";
+import { FlyoutObjectDetection } from "./Controls/FlyoutObjectDetection";
 import { imageListStyles } from "./Controls/ImageList.styles";
 import { PageSizeSelectors } from "./Controls/PageSizeSelectors";
 import { Pivots } from "./Controls/Pivots";
@@ -72,7 +73,7 @@ export class VisionExplanationDashboard extends React.Component<
   public render(): React.ReactNode {
     const classNames = visionExplanationDashboardStyles();
     const imageStyles = imageListStyles();
-    return (
+    return this.context.dataset.task_type === "object_detection" ? (
       <Stack
         horizontal={false}
         grow
@@ -190,7 +191,7 @@ export class VisionExplanationDashboard extends React.Component<
           />
         </Stack.Item>
         <Stack.Item>
-          <Flyout
+          <FlyoutObjectDetection
             explanations={this.state.computedExplanations}
             isOpen={this.state.panelOpen}
             item={this.state.selectedItem}
@@ -200,7 +201,134 @@ export class VisionExplanationDashboard extends React.Component<
             onChange={this.onItemSelect}
           />
         </Stack.Item>
-      </Stack>
+      </Stack>) : 
+      (<Stack
+      horizontal={false}
+      grow
+      tokens={{ childrenGap: "l1", padding: "m 40px" }}
+    >
+      <Stack.Item>
+        <Pivots
+          selectedKey={this.state.selectedKey}
+          onLinkClick={this.handleLinkClick}
+        />
+      </Stack.Item>
+      <Stack.Item>
+        <Separator styles={{ root: { width: "100%" } }} />
+      </Stack.Item>
+      <Stack.Item>
+        <ToolBar
+          cohorts={this.props.cohorts}
+          searchValue={this.state.searchValue}
+          onSearch={this.onSearch}
+          selectedCohort={this.props.selectedCohort}
+          setSelectedCohort={this.props.setSelectedCohort}
+        />
+      </Stack.Item>
+      <Stack.Item>
+        <Stack
+          horizontal
+          horizontalAlign="space-between"
+          verticalAlign="start"
+        >
+          <Stack.Item>
+            <Slider
+              max={80}
+              min={20}
+              className={classNames.slider}
+              label={localization.InterpretVision.Dashboard.thumbnailSize}
+              defaultValue={50}
+              showValue={false}
+              onChange={this.onSliderChange}
+              disabled={
+                this.state.selectedKey ===
+                VisionDatasetExplorerTabOptions.ClassView
+              }
+            />
+          </Stack.Item>
+          {this.state.selectedKey !==
+          VisionDatasetExplorerTabOptions.ImageExplorerView ? (
+            <Stack.Item>
+              <PageSizeSelectors
+                selectedKey={this.state.selectedKey}
+                onNumRowsSelect={this.onNumRowsSelect}
+                onPageSizeSelect={this.onPageSizeSelect}
+              />
+            </Stack.Item>
+          ) : (
+            <Stack
+              horizontal
+              tokens={{ childrenGap: "l1" }}
+              verticalAlign="center"
+            >
+              <Stack.Item>
+                <Text>
+                  {localization.InterpretVision.Dashboard.predictedLabel}
+                </Text>
+              </Stack.Item>
+              <Stack.Item
+                className={mergeStyles(
+                  imageStyles.errorIndicator,
+                  classNames.legendIndicator
+                )}
+              >
+                <Text className={imageStyles.labelPredicted}>
+                  {localization.InterpretVision.Dashboard.legendFailure}
+                </Text>
+              </Stack.Item>
+              <Stack.Item
+                className={mergeStyles(
+                  imageStyles.successIndicator,
+                  classNames.legendIndicator
+                )}
+              >
+                <Text className={imageStyles.labelPredicted}>
+                  {localization.InterpretVision.Dashboard.legendSuccess}
+                </Text>
+              </Stack.Item>
+            </Stack>
+          )}
+        </Stack>
+      </Stack.Item>
+      {this.state.selectedKey ===
+        VisionDatasetExplorerTabOptions.TableView && (
+        <Stack.Item>
+          <CohortToolBar
+            addCohort={this.addCohortWrapper}
+            cohorts={this.props.cohorts}
+            selectedIndices={this.state.selectedIndices}
+          />
+        </Stack.Item>
+      )}
+      <Stack.Item>
+        <TabsView
+          addCohort={this.addCohortWrapper}
+          errorInstances={this.state.errorInstances}
+          successInstances={this.state.successInstances}
+          imageDim={this.state.imageDim}
+          numRows={this.state.numRows}
+          otherMetadataFieldNames={this.state.otherMetadataFieldNames}
+          pageSize={this.state.pageSize}
+          searchValue={this.state.searchValue}
+          selectedItem={this.state.selectedItem}
+          selectedKey={this.state.selectedKey}
+          onItemSelect={this.onItemSelect}
+          updateSelectedIndices={this.updateSelectedIndices}
+          selectedCohort={this.props.selectedCohort}
+          setSelectedCohort={this.props.setSelectedCohort}
+        />
+      </Stack.Item>
+      <Stack.Item>
+        <Flyout
+          explanations={this.state.computedExplanations}
+          isOpen={this.state.panelOpen}
+          item={this.state.selectedItem}
+          loadingExplanation={this.state.loadingExplanation}
+          otherMetadataFieldNames={this.state.otherMetadataFieldNames}
+          callback={this.onPanelClose}
+        />
+      </Stack.Item>
+    </Stack>
     );
   }
   private updateSelectedIndices = (indices: number[]): void => {
