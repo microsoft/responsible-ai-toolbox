@@ -263,15 +263,6 @@ export class ModelOverview extends React.Component<
         };
       });
 
-    // only show heatmap toggle if there are multiple cohorts since there won't be a color gradient otherwise.
-    const showHeatmapToggleInDatasetCohortView =
-      this.state.datasetCohortViewIsVisible &&
-      this.context.errorCohorts.length > 1;
-    const showHeatmapToggleInFeatureCohortView =
-      !this.state.datasetCohortViewIsVisible &&
-      this.state.selectedFeatures.length > 0 &&
-      this.state.featureBasedCohorts.length > 1;
-
     return (
       <Stack
         className={classNames.sectionStack}
@@ -392,8 +383,7 @@ export class ModelOverview extends React.Component<
               </ActionButton>
             </Stack>
           )}
-          {(showHeatmapToggleInDatasetCohortView ||
-            showHeatmapToggleInFeatureCohortView) && (
+          {this.showHeatmap() && (
             <Toggle
               id="modelOverviewHeatmapVisualDisplayToggle"
               checked={this.state.showHeatmapColors}
@@ -518,6 +508,24 @@ export class ModelOverview extends React.Component<
           )}
         </Stack>
       </Stack>
+    );
+  }
+
+  private showHeatmap(): boolean {
+    // only show heatmap toggle if there are multiple cohorts since there won't be a color gradient otherwise.
+    const showHeatmapToggleInDatasetCohortView =
+      this.state.datasetCohortViewIsVisible &&
+      this.context.errorCohorts.length > 1;
+    const showHeatmapToggleInFeatureCohortView =
+      !this.state.datasetCohortViewIsVisible &&
+      this.state.selectedFeatures.length > 0 &&
+      this.state.featureBasedCohorts.length > 1;
+
+    return (
+      (showHeatmapToggleInDatasetCohortView ||
+        showHeatmapToggleInFeatureCohortView) &&
+      // excluding object detection scenario
+      this.context.dataset.task_type !== DatasetTaskType.ObjectDetection
     );
   }
 
