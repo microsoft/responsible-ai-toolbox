@@ -1,11 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IDropdownOption,
-  Stack,
-  PivotItem
-} from "@fluentui/react";
+import { IDropdownOption, Stack, PivotItem } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   IVisionListItem,
@@ -20,7 +16,7 @@ import { TabsView } from "./Controls/TabsView";
 import { IVisionExplanationDashboardProps } from "./Interfaces/IVisionExplanationDashboardProps";
 import { IVisionExplanationDashboardState } from "./Interfaces/IVisionExplanationDashboardState";
 import { visionExplanationDashboardStyles } from "./VisionExplanationDashboard.styles";
-import { VisionExplanationDashboardCommon } from "./VisionExplanationDashboardCommon"
+import { VisionExplanationDashboardCommon } from "./VisionExplanationDashboardCommon";
 import {
   preprocessData,
   getItems,
@@ -71,14 +67,14 @@ export class VisionExplanationDashboard extends React.Component<
         grow
         tokens={{ childrenGap: "l1", padding: "m 40px" }}
       >
-      <Stack.Item>
-      <VisionExplanationDashboardCommon 
-        thisdashboard={this}
-        imageStyles={imageStyles}
-        classNames={classNames}
-      />
-      </Stack.Item>
-      <Stack.Item>
+        <Stack.Item>
+          <VisionExplanationDashboardCommon
+            thisdashboard={this}
+            imageStyles={imageStyles}
+            classNames={classNames}
+          />
+        </Stack.Item>
+        <Stack.Item>
           <TabsView
             addCohort={this.addCohortWrapper}
             errorInstances={this.state.errorInstances}
@@ -107,17 +103,18 @@ export class VisionExplanationDashboard extends React.Component<
             onChange={this.onItemSelectObjectDetection}
           />
         </Stack.Item>
-      </Stack>) : 
-      (<Stack
-      horizontal={false}
-      grow
-      tokens={{ childrenGap: "l1", padding: "m 40px" }}
-    >
-      <VisionExplanationDashboardCommon 
-        thisdashboard={this}
-        imageStyles={imageStyles}
-        classNames={classNames}
-      />
+      </Stack>
+    ) : (
+      <Stack
+        horizontal={false}
+        grow
+        tokens={{ childrenGap: "l1", padding: "m 40px" }}
+      >
+        <VisionExplanationDashboardCommon
+          thisdashboard={this}
+          imageStyles={imageStyles}
+          classNames={classNames}
+        />
         <Stack.Item>
           <TabsView
             addCohort={this.addCohortWrapper}
@@ -136,17 +133,17 @@ export class VisionExplanationDashboard extends React.Component<
             setSelectedCohort={this.props.setSelectedCohort}
           />
         </Stack.Item>
-      <Stack.Item>
-        <Flyout
-          explanations={this.state.computedExplanations}
-          isOpen={this.state.panelOpen}
-          item={this.state.selectedItem}
-          loadingExplanation={this.state.loadingExplanation}
-          otherMetadataFieldNames={this.state.otherMetadataFieldNames}
-          callback={this.onPanelClose}
-        />
-      </Stack.Item>
-    </Stack>
+        <Stack.Item>
+          <Flyout
+            explanations={this.state.computedExplanations}
+            isOpen={this.state.panelOpen}
+            item={this.state.selectedItem}
+            loadingExplanation={this.state.loadingExplanation}
+            otherMetadataFieldNames={this.state.otherMetadataFieldNames}
+            callback={this.onPanelClose}
+          />
+        </Stack.Item>
+      </Stack>
     );
   }
   public updateSelectedIndices = (indices: number[]): void => {
@@ -195,7 +192,10 @@ export class VisionExplanationDashboard extends React.Component<
         });
     }
   };
-  public onItemSelectObjectDetection = (item: IVisionListItem, selectedObject = -1): void => {
+  public onItemSelectObjectDetection = (
+    item: IVisionListItem,
+    selectedObject = -1
+  ): void => {
     this.setState({ panelOpen: true, selectedItem: item });
     const { computedExplanations, loadingExplanation } = this.state;
     if (selectedObject !== -1) {

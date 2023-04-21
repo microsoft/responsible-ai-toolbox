@@ -57,7 +57,10 @@ const stackTokens = {
 };
 const ExcessLabelLen = localization.InterpretVision.Dashboard.prefix.length;
 
-export class FlyoutObjectDetection extends React.Component<IFlyoutProps, IFlyoutState> {
+export class FlyoutObjectDetection extends React.Component<
+  IFlyoutProps,
+  IFlyoutState
+> {
   public constructor(props: IFlyoutProps) {
     super(props);
     this.state = {
@@ -88,8 +91,7 @@ export class FlyoutObjectDetection extends React.Component<IFlyoutProps, IFlyout
       if (!item) {
         return;
       }
-      const fieldNames = this.props.otherMetadataFieldNames;
-      const metadata = updateMetadata(item, fieldNames);
+      const metadata = updateMetadata(item, this.props.otherMetadataFieldNames);
       const selectableObjectIndexes = generateSelectableObjectDetectionIndexes(
         localization.InterpretVision.Dashboard.prefix,
         item

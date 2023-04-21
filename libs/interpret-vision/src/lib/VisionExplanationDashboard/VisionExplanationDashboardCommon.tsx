@@ -7,29 +7,25 @@ import {
   Stack,
   Slider,
   Separator,
-  Text,
+  Text
 } from "@fluentui/react";
-import {
-  IVisionListItem
-} from "@responsible-ai/core-ui";
+import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { CohortToolBar } from "./Controls/CohortToolBar";
-import { IDatasetExplorerTabStyles } from "./Controls/ImageList.styles"
+import { IDatasetExplorerTabStyles } from "./Controls/ImageList.styles";
 import { PageSizeSelectors } from "./Controls/PageSizeSelectors";
 import { Pivots } from "./Controls/Pivots";
 import { ToolBar } from "./Controls/ToolBar";
 import { VisionExplanationDashboard } from "./VisionExplanationDashboard";
 import { IVisionExplanationDashboardStyles } from "./VisionExplanationDashboard.styles";
-import {
-  VisionDatasetExplorerTabOptions,
-} from "./VisionExplanationDashboardHelper";
+import { VisionDatasetExplorerTabOptions } from "./VisionExplanationDashboardHelper";
 
 export interface IVisionExplanationDashboardCommonProps {
   thisdashboard: VisionExplanationDashboard;
   imageStyles: IProcessedStyleSet<IDatasetExplorerTabStyles>;
-  classNames: IProcessedStyleSet<IVisionExplanationDashboardStyles>; 
+  classNames: IProcessedStyleSet<IVisionExplanationDashboardStyles>;
 }
 
 export interface IVisionExplanationDashboardCommonState {
@@ -37,11 +33,13 @@ export interface IVisionExplanationDashboardCommonState {
   metadata: Array<Array<string | number | boolean>> | undefined;
 }
 
-
-export class VisionExplanationDashboardCommon extends React.Component<IVisionExplanationDashboardCommonProps, IVisionExplanationDashboardCommonState> {
+export class VisionExplanationDashboardCommon extends React.Component<
+  IVisionExplanationDashboardCommonProps,
+  IVisionExplanationDashboardCommonState
+> {
   public render(): React.ReactNode {
-    return ( 
-    <Stack>
+    return (
+      <Stack>
         <Stack.Item>
           <Pivots
             selectedKey={this.props.thisdashboard.state.selectedKey}
@@ -135,7 +133,7 @@ export class VisionExplanationDashboardCommon extends React.Component<IVisionExp
             />
           </Stack.Item>
         )}
-    </Stack>
-    )
+      </Stack>
+    );
   }
 }
