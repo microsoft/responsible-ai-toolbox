@@ -5,3 +5,4 @@ requests==2.25.1
 
 requirements-parser==0.2.0
 rai_test_utils==0.1.0
+interpret-core[required]<=0.3.2
