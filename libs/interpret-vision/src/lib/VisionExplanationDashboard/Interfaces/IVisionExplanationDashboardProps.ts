@@ -30,13 +30,6 @@ export interface IVisionExplanationDashboardProps {
     className: string,
     iouThresh: number
   ) => Promise<any[]>;
-  requestQuestionAnsweringMetrics?: (
-    trueY: number[][][],
-    predictedY: number[][][],
-    aggregateMethod: string,
-    className: string,
-    iouThresh: number
-  ) => Promise<any[]>;
   selectedCohort: ErrorCohort;
   setSelectedCohort: (cohort: ErrorCohort) => void;
 }

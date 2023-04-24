@@ -668,7 +668,6 @@ export class JointDataset {
 
   private updateMetaDataDict(
     values: number[] | number[][] | string[],
-    values: number[] | number[][] | string[],
     metadata: IExplanationModelMetadata,
     labelColName: string,
     abbridgedLabel: string,

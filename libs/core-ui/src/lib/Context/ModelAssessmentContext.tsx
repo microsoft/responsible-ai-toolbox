@@ -154,18 +154,6 @@ export interface IModelAssessmentContext {
         iouThresh: number
       ) => Promise<any[]>)
     | undefined;
-<<<<<<< HEAD
-  requestQuestionAnsweringMetrics?:
-    | ((
-        trueY: number[][][],
-        predictedY: number[][][],
-        aggregateMethod: string,
-        className: string,
-        iouThresh: number
-      ) => Promise<any[]>)
-    | undefined;
-=======
->>>>>>> 8bdf8400 (python scripts placeholder for QA metrics)
   requestSplinePlotDistribution?: (
     request: any,
     abortSignal: AbortSignal

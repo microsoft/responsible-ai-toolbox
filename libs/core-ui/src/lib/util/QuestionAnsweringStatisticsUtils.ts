@@ -16,9 +16,6 @@ export enum QuestionAnsweringMetrics {
   F1Score = "f1Score",
   MeteorScore = "meteorScore",
   RougeScore = "rougeScore"
-  F1Score = "f1Score",
-  MeteorScore = "meteorScore",
-  RougeScore = "rougeScore"
 }
 
 function getf1Score(actual: string[], predicted: string[]): number {
@@ -75,10 +72,6 @@ export const generateQuestionAnsweringStats: (
       jointDataset.unwrap(JointDataset.TrueYLabel),
       jointDataset.unwrap(JointDataset.PredictedYLabel)
     );
-
-    const meteorScore = 0;
-    const rougeScore = 0;
-    const bleuScore = 0;
 
     return [
       {

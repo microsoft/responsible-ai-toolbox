@@ -129,21 +129,6 @@ export interface IModelAssessmentDashboardProps
     className: string,
     iouThresh: number
   ) => Promise<any[]>;
-<<<<<<< HEAD
-  requestQuestionAnsweringMetrics?: (
-    trueY: number[][][],
-    predictedY: number[][][],
-    aggregateMethod: string,
-    className: string,
-    iouThresh: number
-  ) => Promise<any[]>;
-  requestQuestionAnsweringMetrics?: (
-    trueY: number[][][],
-    predictedY: number[][][],
-    aggregateMethod: string,
-    className: string,
-    iouThresh: number
-  ) => Promise<any[]>;
   requestBubblePlotData?: (
     filter: unknown[],
     compositeFilter: unknown[],

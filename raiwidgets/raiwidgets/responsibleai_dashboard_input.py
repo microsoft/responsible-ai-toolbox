@@ -390,7 +390,6 @@ class ResponsibleAIDashboardInput:
                     "Failed to get Question Answering Model Overview metrics,"
                     "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
-<<<<<<< HEAD
             }
     def get_question_answering_metrics(self, post_data):
         """Flask endpoint function to get Model Overview metrics
@@ -428,6 +427,4 @@ class ResponsibleAIDashboardInput:
                     "Failed to get Question Answering Model Overview metrics,"
                     "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
-=======
->>>>>>> 8bdf8400 (python scripts placeholder for QA metrics)
             }

@@ -11,8 +11,7 @@ import {
 import { IModelAssessmentDashboardProps } from "../ModelAssessmentDashboardProps";
 
 export function getModelTypeFromProps(
-  props: IModelAssessmentDashboardProps,
-  classNames: string[] | undefined
+  props: IModelAssessmentDashboardProps
 ): ModelTypes {
   const modelType: ModelTypes = ModelTypes.Multiclass;
   const classNames = props.dataset.class_names;
