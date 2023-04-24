@@ -39,7 +39,7 @@ export function buildInitialModelAssessmentContext(
   props: IModelAssessmentDashboardProps
 ): IModelAssessmentDashboardState {
   const modelMetadata = buildModelMetadata(props);
-  const modelType = getModelTypeFromProps(props, modelMetadata.classNames);
+  const modelType = getModelTypeFromProps(props);
   const columnRanges = getColumnRanges(props.dataset, modelType);
 
   let localExplanations:
@@ -157,7 +157,7 @@ function buildModelMetadata(
   props: IModelAssessmentDashboardProps
 ): IExplanationModelMetadata {
   let classNames = props.dataset.class_names;
-  const modelType = getModelTypeFromProps(props, classNames);
+  const modelType = getModelTypeFromProps(props);
   let featureNames = props.dataset.feature_names;
   let featureNamesAbridged: string[];
   const maxLength = 18;
