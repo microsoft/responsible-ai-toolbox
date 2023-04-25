@@ -96,14 +96,7 @@ export class Cohort {
   }
 
   public getRow(index: number): { [key: string]: number } {
-    const dataDict = this.jointDataset.dataDict?.[index];
-    const convertedDataDict: { [key: string]: number } = {};
-    if (dataDict) {
-      for (const key in dataDict) {
-        convertedDataDict[key] = Number(dataDict[key]);
-      }
-    }
-    return convertedDataDict;
+    return { ...this.jointDataset.dataDict?.[index] };
   }
 
   public sort(

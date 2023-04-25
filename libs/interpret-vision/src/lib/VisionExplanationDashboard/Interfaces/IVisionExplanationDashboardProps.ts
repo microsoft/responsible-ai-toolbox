@@ -24,11 +24,9 @@ export interface IVisionExplanationDashboardProps {
     abortSignal: AbortSignal
   ) => Promise<any[]>;
   requestQuestionAnsweringMetrics?: (
-    trueY: number[][][],
-    predictedY: number[][][],
-    aggregateMethod: string,
-    className: string,
-    iouThresh: number
+    selectionIndexes: number[][],
+    trueY: string[],
+    predictedY: string[]
   ) => Promise<any[]>;
   selectedCohort: ErrorCohort;
   setSelectedCohort: (cohort: ErrorCohort) => void;
