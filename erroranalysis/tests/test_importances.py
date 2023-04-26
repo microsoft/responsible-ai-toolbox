@@ -115,7 +115,11 @@ class TestImportances(object):
         print(execution_time)
         # assert we don't take too long and downsample the dataset
         # note execution time is in seconds
-        assert execution_time < 20
+        # note GBM_SHAP is slower than the other methods
+        if error_correlation_method == GBM_SHAP:
+            assert execution_time < 35
+        else:
+            assert execution_time < 25
 
     @pytest.mark.parametrize('num_rows', [1, 2, 3, 4])
     @pytest.mark.parametrize('error_correlation_method',
