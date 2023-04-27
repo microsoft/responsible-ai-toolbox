@@ -105,9 +105,8 @@ class RAITextInsights(RAIBaseInsights):
         self._ext_test_df[target_column] = test[target_column]
         self.predict_output = None
 
-        # TODO: on next responsibleai package upgrade pass None for train
         super(RAITextInsights, self).__init__(
-            model, test, test, target_column, task_type,
+            model, None, test, target_column, task_type,
             serializer)
         self._initialize_managers()
 
