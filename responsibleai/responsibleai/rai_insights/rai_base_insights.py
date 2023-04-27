@@ -13,9 +13,9 @@ from typing import Any, Optional
 import pandas as pd
 
 import responsibleai
+from raiutils.exceptions import UserConfigValidationException
 from responsibleai._internal.constants import (FileFormats, Metadata,
                                                SerializationAttributes)
-from raiutils.exceptions import UserConfigValidationException
 
 _DTYPES = 'dtypes'
 _MODEL_PKL = Metadata.MODEL + FileFormats.PKL

@@ -20,6 +20,7 @@ from interpret_community.mimic.models.linear_model import \
 from scipy.sparse import issparse
 
 from raiutils.data_processing import convert_to_list
+from raiutils.exceptions import UserConfigValidationException
 from raiutils.models import ModelTask
 from responsibleai._interfaces import (EBMGlobalExplanation, FeatureImportance,
                                        ModelExplanationData,
@@ -29,7 +30,6 @@ from responsibleai._internal.constants import (ExplanationKeys, ListProperties,
                                                ManagerNames, Metadata)
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
-from raiutils.exceptions import UserConfigValidationException
 from responsibleai.managers.base_manager import BaseManager
 
 SPARSE_NUM_FEATURES_THRESHOLD = 1000
