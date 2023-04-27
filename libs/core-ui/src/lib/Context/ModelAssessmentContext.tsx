@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { ITheme } from "@fluentui/react";
+import { IColumnRange } from "@responsible-ai/mlchartlib";
 import React from "react";
 
 import { Cohort } from "../Cohort/Cohort";
@@ -13,7 +14,10 @@ import {
 import { ICounterfactualData } from "../Interfaces/ICounterfactualData";
 import { IDataset } from "../Interfaces/IDataset";
 import { IErrorAnalysisData } from "../Interfaces/IErrorAnalysisData";
-import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
+import {
+  IExplanationModelMetadata,
+  ModelTypes
+} from "../Interfaces/IExplanationContext";
 import { IHighchartBoxData } from "../Interfaces/IHighchartBoxData";
 import { IHighchartBubbleSDKClusterData } from "../Interfaces/IHighchartBubbleData";
 import { IModelExplanationData } from "../Interfaces/IModelExplanationData";
@@ -24,6 +28,9 @@ export interface IModelAssessmentContext {
   causalAnalysisData?: ICausalAnalysisData;
   counterfactualData?: ICounterfactualData;
   dataset: IDataset;
+  // TODO: these ranges should come from backend
+  columnRanges?: { [key: string]: IColumnRange };
+  modelType?: ModelTypes;
   modelExplanationData?: IModelExplanationData;
   errorAnalysisData?: IErrorAnalysisData;
   theme?: ITheme;
@@ -72,6 +79,19 @@ export interface IModelAssessmentContext {
     absoluteIndex: number,
     abortSignal: AbortSignal
   ) => Promise<ICounterfactualData>;
+  requestLocalExplanations?: (
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
+  requestLocalCausalEffects?: (
+    causalId: string,
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<ICausalAnalysisData>;
+  requestTestDataRow?: (
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   requestGlobalCausalEffects?: (
     id: string,
     filter: unknown[],
@@ -114,8 +134,28 @@ export interface IModelAssessmentContext {
     abortSignal: AbortSignal
   ) => Promise<any>;
   requestExp?:
-    | ((index: number, abortSignal: AbortSignal) => Promise<any[]>)
+    | ((index: number | number[], abortSignal: AbortSignal) => Promise<any[]>)
     | undefined;
+  requestObjectDetectionMetrics?:
+    | ((
+        selectionIndexes: number[][],
+        aggregateMethod: string,
+        className: string,
+        iouThresh: number,
+        abortSignal: AbortSignal
+      ) => Promise<any[]>)
+    | undefined;
+  requestQuestionAnsweringMetrics?:
+    | ((
+        selectionIndexes: number[][],
+        trueY: string[],
+        predictedY: string[]
+      ) => Promise<any[]>)
+    | undefined;
+  requestSplinePlotDistribution?: (
+    request: any,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   requestForecast?: (
     request: any[],
     abortSignal: AbortSignal
@@ -124,11 +164,13 @@ export interface IModelAssessmentContext {
   addCohort(cohort: Cohort, switchNew?: boolean): void;
   editCohort(cohort: Cohort, switchNew?: boolean): void;
   deleteCohort(cohort: ErrorCohort): void;
+  setAsCategorical?(column: string, treatAsCategorical: boolean): void;
 }
 
 export const defaultModelAssessmentContext: IModelAssessmentContext = {
   addCohort: () => undefined,
   baseErrorCohort: {} as ErrorCohort,
+  columnRanges: {},
   dataset: {} as IDataset,
   deleteCohort: () => undefined,
   editCohort: () => undefined,
@@ -136,10 +178,13 @@ export const defaultModelAssessmentContext: IModelAssessmentContext = {
   jointDataset: {} as JointDataset,
   modelExplanationData: undefined,
   modelMetadata: {} as IExplanationModelMetadata,
+  modelType: undefined,
   requestExp: undefined,
   requestLocalFeatureExplanations: undefined,
+  requestObjectDetectionMetrics: undefined,
   requestPredictions: undefined,
   selectedErrorCohort: {} as ErrorCohort,
+  setAsCategorical: () => undefined,
   shiftErrorCohort: () => undefined,
   telemetryHook: () => undefined,
   theme: {} as ITheme

@@ -9,7 +9,8 @@
     "decreaseValue": "Decrease value",
     "increaseValue": "Increase value",
     "decreaseValueByOne": "Decrease value by 1",
-    "increaseValueByOne": "Increase value by 1"
+    "increaseValueByOne": "Increase value by 1",
+    "loading": "Loading..."
   },
   "ChartContextMenu": {
     "hideData": "Hide data table",
@@ -166,6 +167,7 @@
     "listDescription": "This list shows which datapoints in the current data sample have the largest causal response to the selected treatment, based on all features included in the estimated causal model. The left five columns report whether treatment is recommended for the observation, the current treatment, the estimated effect of treatment (effect of applying a treatment from a baseline of no treatment for binary treatments or increasing/decreasing the treatment feature by 10% of the typical treatment size in the sample: [dynamic: report the numerical change in treatment we used] ), and the lower and upper confidence intervals (CI) for this effect. The remaining columns show the current treatment status and other features of each observation.",
     "localImportanceDescription": "The top ranked features in Row {0} to perturb to achieve desired model prediction. Based on what-if analysis for prediction: {1}",
     "localImportanceSelectData": "Select a data point to view local importance chart",
+    "largeLocalImportanceSelectData": "Select a bubble, followed by a data point to view local importance chart",
     "localImportanceFetchError": "There was an error while fetching the local importance data. Error details: {0} Please check the data used.",
     "BubbleChartFetchError": "There was an error while fetching the data. Error details: {0} Please check the data used.",
     "noData": "No data",
@@ -874,6 +876,14 @@
       "regressor": "Regressor"
     },
     "CohortEditor": {
+      "columns": {
+        "index": "Index",
+        "dataset": "Dataset",
+        "predictedY": "Predicted Y",
+        "trueY": "True Y",
+        "classificationOutcome": "Classification outcome",
+        "regressionError": "Error"
+      },
       "TreatAsCategorical": "Treat as categorical",
       "_TreatAsCategorical.comment": "a checkbox label to treat integers as categories instead of as numbers",
       "_addFilter.comment": "button text to add the current settings as a new filter",
@@ -921,6 +931,8 @@
       "falsePositive": "False positive",
       "none": "Count",
       "predictedProbabilities": "Prediction probabilities",
+      "predictedLabels": "Predicted labels",
+      "trueLabels": "True labels",
       "regressionError": "Regression error",
       "trueNegative": "True negative",
       "truePositive": "True positive",
@@ -1161,11 +1173,14 @@
       "_rSquared.comment": "the coefficient of determination, see https://en.wikipedia.org/wiki/Coefficient_of_determination",
       "_recall.comment": "computed recall of model, see https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers",
       "accuracy": "Accuracy: {0}",
+      "bleuScore": "Bleu score: {0}",
       "exactMatchRatio": "Exact match ratio: {0}",
+      "rougeScore": "Rouge Score: {0}",
       "fnr": "False negative rate: {0}",
       "fpr": "False positive rate: {0}",
       "hammingScore": "Hamming score: {0}",
       "meanPrediction": "Mean prediction {0}",
+      "meteorScore": "Meteor Score: {0}",
       "mse": "Mean squared error: {0}",
       "precision": "Precision: {0}",
       "rSquared": "R²: {0}",
@@ -1173,7 +1188,10 @@
       "selectionRate": "Selection rate: {0}",
       "mae": "Mean absolute error: {0}",
       "f1Score": "F1 score: {0}",
-      "samples": "Sample size: {0}"
+      "samples": "Sample size: {0}",
+      "meanAveragePrecision": "Mean average precision: {0}",
+      "averagePrecision": "Average precision: {0}",
+      "averageRecall": "Average recall: {0}"
     },
     "ValidationErrors": {
       "_inconsistentDimensions.comment": "Raise warning if arguments passed in have different sizes, listing dimensions of both mismatching pieces.",
@@ -1383,6 +1401,7 @@
       "columnThree": "True Y",
       "columnFour": "Predicted Y",
       "columnFive": "Other metadata",
+      "chooseObject": "Choose a detected object",
       "examples": "examples",
       "filter": "Filter",
       "indexLabel": "Image ",
@@ -1392,12 +1411,15 @@
       "legendSuccess": "success",
       "loading": "Computing explanation for index",
       "multiselect": "Multiselect",
+      "notdefined": "object scenario not defined",
+      "objectSelect": "Object Selection",
       "pageSize": "Page size: ",
       "panelTitle": "Selected instance",
       "panelExplanation": "Explanation",
       "panelInformation": "Information",
       "predictedLabel": "Predicted label",
       "predictedY": "Predicted: ",
+      "prefix": "Object: ",
       "rows": "Rows: ",
       "search": "Search",
       "selectAll": "Select all",
@@ -1405,7 +1427,7 @@
       "showAll": "Show all",
       "tabOptionFirst": "Image explorer view",
       "tabOptionSecond": "Table view",
-      "tabOptionThird": "Data characteristics",
+      "tabOptionThird": "Class view",
       "thumbnailSize": "Thumbnail size",
       "titleBarError": "Error instances",
       "titleBarSuccess": "Success instances",
@@ -1454,6 +1476,7 @@
     },
     "CohortInformation": {
       "ShiftCohort": "Switch cohort",
+      "SwitchTimeSeries": "Switch time series",
       "NewCohort": "New cohort",
       "DataPoints": "Number of datapoints",
       "DefaultCohort": " (default)",
@@ -1668,6 +1691,18 @@
           "name": "Exact match ratio",
           "description": "The ratio of instances classified correctly for every label in multilabel task."
         },
+        "meteorScore": {
+          "name": "Meteor Score",
+          "description": "The ratio of instances classified correctly for every label in multilabel task."
+        },
+        "bleuScore": {
+          "name": "Bleu Score",
+          "description": "The ratio of instances classified correctly for every label in multilabel task."
+        },
+        "rougeScore": {
+          "name": "Rouge Score",
+          "description": "The ratio of instances classified correctly for every label in multilabel task."
+        },
         "hammingScore": {
           "name": "Hamming score",
           "description": "The average ratio of labels classified correctly among those classified as 1 in multilabel task."
@@ -1732,6 +1767,18 @@
           "name": "Mean prediction",
           "description": "The average of all predictions."
         },
+        "meanAveragePrecision": {
+          "name": "Mean Average Precision score",
+          "description": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall."
+        },
+        "averagePrecision": {
+          "name": "Average Precision score",
+          "description": "Average precision for object detection models is calculated for a selected class."
+        },
+        "averageRecall": {
+          "name": "Average Recall score",
+          "description": "Average recall for object detection models is calculated for a selected class."
+        },
         "fairnessMetricDifference": "Difference",
         "fairnessMetricRatio": "Ratio"
       },
@@ -1740,6 +1787,13 @@
       "metricTypes": {
         "macro": "Macro",
         "micro": "Micro"
+      },
+      "classSelectionDropdown": "Select class(es)",
+      "iouThresholdDropdown": {
+        "name": "IoU Threshold",
+        "description": "Intersection over Union quantifies the degree of overlap between the prediction and ground truth bounding box of a detected object in an image. For example, setting an IoU threshold of 70% means that a prediction with greater than 70% overlap with ground truth is True, thus influencing the definition of prediction correctness and calculation of other performance metrics.",
+        "iconId": "iouThresholdIconId",
+        "title": "Learn about the IoU threshold"
       },
       "notAvailable": "N/A",
       "countColumnHeader": "Sample size",
@@ -1753,6 +1807,7 @@
       "probabilityForClassSelectionHeader": "Probability for class",
       "targetSelectionHeader": "Target",
       "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
+      "classSelectionDropdownPlaceholder": "Select class name for class-based analysis.",
       "featureSelectionDropdownPlaceholder": "Select features to use for a feature-based analysis.",
       "probabilityDistributionPivotItem": "Probability distribution",
       "regressionDistributionPivotItem": "Target distribution",
@@ -1846,7 +1901,7 @@
     "forecastHeader": "Forecast analysis",
     "whatIfForecastingDescription": "What-if allows you to perturb features for your entire time series and observe how the model's forecast changes.",
     "whatIfForecastingChooseTimeSeries": "To start, choose a time series from the options below.",
-    "forecastDescription": "Forecast analysis compares your model's forecast to the actual values of your time series.",
+    "forecastDescription": "Forecast analysis compares your model's forecast to the actual values of your time series. To enable what-if analysis, provide a dataset with features.",
     "timeSeries": "Time series",
     "selectTimeSeries": "Select a time series.",
     "singleTimeSeries": "The dataset contains only a single time series '{0}' which has been selected by default.",
@@ -1873,7 +1928,9 @@
       "scenarioNamingInstructionsPlaceholder": "Enter a unique name",
       "scenarioNamingInstructions": "Enter a name for your what-if scenario.",
       "scenarioNamingCollisionMessage": "This name exists already. Please enter a unique name.",
-      "valueErrorMessage": "For operation {0} please select a value between {1} and {2} other than {3}.",
+      "scenarioNamingLengthMessage": "The name must be between 1 and 50 characters. The actual length is {0}.",
+      "scenarioNamingInvalidCharactersMessage": "The name can only contain alphanumeric characters, whitespaces, dashes, or underscores, and needs to start with an alphanumeric character.",
+      "valueErrorMessage": "For operation {0} please select a value other than {1}.",
       "invalidCombinationErrorMessage": "This is identical to an existing what-if scenario. Please change the feature, operation, or value.",
       "addTransformationButton": "Add Transformation",
       "divisionAndMultiplicationBy": "by"

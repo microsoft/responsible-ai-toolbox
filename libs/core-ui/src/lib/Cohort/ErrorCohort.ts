@@ -6,9 +6,9 @@ import { getBasicFilterString } from "../util/getBasicFilterString";
 import { getCompositeFilterString } from "../util/getCompositeFilterString";
 import { JointDataset } from "../util/JointDataset";
 
-import { Cohort, CohortSource } from "./Cohort";
+import { Cohort } from "./Cohort";
 import { MetricCohortStats, ErrorCohortStats } from "./CohortStats";
-import { Metrics } from "./Constants";
+import { CohortSource, Metrics } from "./Constants";
 
 export class ErrorCohort {
   public cohortStats: MetricCohortStats;
@@ -70,7 +70,7 @@ export class ErrorCohort {
   }
 
   private updateStatsFromData(
-    filteredData: Array<{ [key: string]: number }>,
+    filteredData: Array<{ [key: string]: string | number }>,
     jointDataset: JointDataset
   ): ErrorCohortStats {
     // Calculate various cohort and global stats

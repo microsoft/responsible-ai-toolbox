@@ -32,6 +32,7 @@ class Metadata(object):
     CATEGORY_DICTIONARY = 'category_dictionary'
     CATEGORICAL_INDEXES = 'categorical_indexes'
     STRING_IND_DATA = 'string_ind_data'
+    NUMBER_LARGE_TEST_SAMPLES = 'number_large_test_samples'
 
 
 class ListProperties(object):
@@ -118,9 +119,13 @@ class SerializationAttributes:
 
     # Prediction filenames
     PREDICT_JSON = "predict.json"
-    LARGE_PREDICT_JSON = "large_predict.json"
+    FORECAST_JSON = "forecast.json"
     PREDICT_PROBA_JSON = "predict_proba.json"
+    FORECAST_QUANTILES_JSON = "forecast_quantiles.json"
+    LARGE_PREDICT_JSON = "large_predict.json"
+    LARGE_FORECAST_JSON = "large_forecast.json"
     LARGE_PREDICT_PROBA_JSON = "large_predict_proba.json"
+    LARGE_FORECAST_QUANTILES_JSON = "large_forecast_quantiles.json"
 
     # Data filenames
     LARGE_TEST_JSON = "large_test.json"

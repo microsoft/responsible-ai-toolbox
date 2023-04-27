@@ -21,7 +21,9 @@ import {
   IsClassifier,
   DatasetTaskType,
   isAllDataErrorCohort,
-  featureColumnsExist
+  featureColumnsExist,
+  dataBalanceExperienceFlight,
+  isFlightActive
 } from "@responsible-ai/core-ui";
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import {
@@ -44,10 +46,6 @@ import { Dictionary } from "lodash";
 import * as React from "react";
 
 import { AddTabButton } from "../../AddTabButton";
-import {
-  isFlightActive,
-  dataBalanceExperienceFlight
-} from "../../FeatureFlights";
 import { GlobalTabKeys } from "../../ModelAssessmentEnums";
 import {
   FeatureImportancesTab,
@@ -181,6 +179,12 @@ export class TabsView extends React.PureComponent<
                         true_y: this.props.dataset.true_y
                       }}
                       requestExp={this.props.requestExp}
+                      requestObjectDetectionMetrics={
+                        this.props.requestObjectDetectionMetrics
+                      }
+                      requestQuestionAnsweringMetrics={
+                        this.props.requestQuestionAnsweringMetrics
+                      }
                       cohorts={this.props.cohorts}
                       setSelectedCohort={this.props.setSelectedCohort}
                       selectedCohort={this.props.selectedCohort}
@@ -205,6 +209,8 @@ export class TabsView extends React.PureComponent<
                 </>
               )}
               {t.key === GlobalTabKeys.ErrorAnalysisTab &&
+                this.context.dataset.task_type !==
+                  DatasetTaskType.Forecasting &&
                 this.props.errorAnalysisData?.[0] && (
                   <>
                     <Stack

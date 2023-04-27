@@ -17,7 +17,7 @@ export function getTreatmentBarChartOptions(
   const colorTheme = {
     axisColor: theme?.palette.neutralPrimary,
     axisGridColor: theme?.palette.neutralLight,
-    backgroundColor: theme?.palette.white,
+    backgroundColor: theme?.semanticColors.bodyBackground,
     fontColor: theme?.semanticColors.bodyText
   };
   const alwaysTreats = data?.treatment_gains
@@ -36,6 +36,7 @@ export function getTreatmentBarChartOptions(
     : [localization.Counterfactuals.recommendedPolicy];
   return {
     chart: {
+      backgroundColor: colorTheme.backgroundColor,
       type: "bar"
     },
     series: [

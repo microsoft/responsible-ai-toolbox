@@ -106,7 +106,7 @@ export function generatePlotlyProps(
 }
 
 function generateDataTrace(
-  dictionary: Array<{ [key: string]: number }>,
+  dictionary: Array<{ [key: string]: string | number }>,
   chartProps: IGenericChartProps,
   trace: IData,
   jointDataset: JointDataset

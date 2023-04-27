@@ -11,20 +11,22 @@ import numpy as np
 import pandas as pd
 import pytest
 from tests.causal_manager_validator import validate_causal
-from tests.common_utils import (create_adult_income_dataset,
-                                create_binary_classification_dataset,
-                                create_cancer_data,
-                                create_complex_classification_pipeline,
-                                create_housing_data, create_iris_data,
-                                create_models_classification,
-                                create_models_regression)
+from tests.common_utils import create_adult_income_dataset, create_iris_data
 from tests.counterfactual_manager_validator import validate_counterfactual
 from tests.error_analysis_validator import (setup_error_analysis,
                                             validate_error_analysis)
 from tests.explainer_manager_validator import (setup_explainer,
                                                validate_explainer)
 
-from responsibleai import ModelTask, RAIInsights
+from rai_test_utils.datasets.tabular import (
+    create_binary_classification_dataset, create_cancer_data,
+    create_housing_data)
+from rai_test_utils.models.model_utils import (create_models_classification,
+                                               create_models_regression)
+from rai_test_utils.models.sklearn import \
+    create_complex_classification_pipeline
+from raiutils.models import ModelTask
+from responsibleai import RAIInsights
 from responsibleai._internal.constants import (ManagerNames,
                                                SerializationAttributes)
 from responsibleai._tools.shared.state_directory_management import \
@@ -77,7 +79,7 @@ class TestRAIInsights(object):
                                               ManagerNames.EXPLAINER])
     def test_rai_insights_cancer(self, manager_type):
         X_train, X_test, y_train, y_test, _, classes = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         models = create_models_classification(X_train, y_train)
         X_train[LABELS] = y_train
         X_test[LABELS] = y_test
@@ -113,12 +115,19 @@ class TestRAIInsights(object):
                                               ManagerNames.ERROR_ANALYSIS,
                                               ManagerNames.EXPLAINER,
                                               ManagerNames.COUNTERFACTUAL])
-    def test_rai_insights_binary_mixed_types(self, manager_type):
+    @pytest.mark.parametrize('add_boolean', [True, False])
+    def test_rai_insights_binary_mixed_types(self, manager_type, add_boolean):
 
         data_train, data_test, y_train, y_test, categorical_features, \
             continuous_features, target_name, classes, \
             feature_columns, feature_range_keys = \
             create_adult_income_dataset()
+
+        if add_boolean:
+            data_train['is_adult'] = data_train['age'] >= 18
+            data_test['is_adult'] = data_test['age'] >= 18
+            categorical_features = categorical_features + ['is_adult']
+
         X_train = data_train.drop([target_name], axis=1)
 
         model = create_complex_classification_pipeline(
@@ -366,14 +375,14 @@ def validate_rai_insights(
         assert len(ind_data) == expected_length
 
     if rai_insights.model is None:
-        assert rai_insights.predict_output is None
-        assert rai_insights.predict_proba_output is None
+        assert rai_insights._predict_output is None
+        assert rai_insights._predict_proba_output is None
     else:
-        assert rai_insights.predict_output is not None
+        assert rai_insights._predict_output is not None
         if task_type == ModelTask.CLASSIFICATION:
-            assert rai_insights.predict_proba_output is not None
-            assert isinstance(rai_insights.predict_proba_output, np.ndarray)
-            assert len(rai_insights.predict_proba_output.tolist()[0]) == \
+            assert rai_insights._predict_proba_output is not None
+            assert isinstance(rai_insights._predict_proba_output, np.ndarray)
+            assert len(rai_insights._predict_proba_output.tolist()[0]) == \
                 len(rai_insights._classes)
 
     if task_type == ModelTask.CLASSIFICATION:

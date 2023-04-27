@@ -14,7 +14,8 @@ import {
   IErrorAnalysisMatrix,
   IHighchartBoxData,
   IPreBuiltCohort,
-  IHighchartBubbleSDKClusterData
+  IHighchartBubbleSDKClusterData,
+  ILocalExplanations
 } from "@responsible-ai/core-ui";
 import { IStringsParam } from "@responsible-ai/error-analysis";
 
@@ -110,7 +111,22 @@ export interface IModelAssessmentDashboardProps
     metric: string,
     abortSignal: AbortSignal
   ) => Promise<any>;
-  requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
+  requestExp?: (
+    index: number | number[],
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
+  requestObjectDetectionMetrics?: (
+    selectionIndexes: number[][],
+    aggregateMethod: string,
+    className: string,
+    iouThresh: number,
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
+  requestQuestionAnsweringMetrics?: (
+    selectionIndexes: number[][],
+    trueY: string[],
+    predictedY: string[]
+  ) => Promise<any[]>;
   requestBubblePlotData?: (
     filter: unknown[],
     compositeFilter: unknown[],
@@ -123,11 +139,28 @@ export interface IModelAssessmentDashboardProps
     absoluteIndex: number,
     abortSignal: AbortSignal
   ) => Promise<ICounterfactualData>;
+  requestLocalExplanations?: (
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<ILocalExplanations>;
+  requestLocalCausalEffects?: (
+    causalId: string,
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<ICausalAnalysisData>;
+  requestTestDataRow?: (
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   localUrl?: string;
   requestForecast?: (
     request: any[],
     abortSignal: AbortSignal
   ) => Promise<any[]>;
+  requestSplinePlotDistribution?: (
+    request: any,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   telemetryHook?: (message: ITelemetryEvent) => void;
 
   // TODO figure out how to persist starting tab for fairness

@@ -8,11 +8,14 @@ import numpy as np
 import pandas as pd
 import pytest
 from lightgbm import LGBMClassifier
-from tests.common_utils import (create_binary_classification_dataset,
-                                create_cancer_data, create_housing_data,
-                                create_iris_data, create_lightgbm_classifier,
-                                create_sklearn_random_forest_regressor)
+from tests.common_utils import create_iris_data
 
+from rai_test_utils.datasets.tabular import (
+    create_binary_classification_dataset, create_cancer_data,
+    create_housing_data)
+from rai_test_utils.models.lightgbm import create_lightgbm_classifier
+from rai_test_utils.models.sklearn import \
+    create_sklearn_random_forest_regressor
 from raiutils.exceptions import UserConfigValidationException
 from responsibleai import RAIInsights
 from responsibleai.feature_metadata import FeatureMetadata
@@ -21,7 +24,8 @@ TARGET = 'target'
 
 
 class TestRAIInsightsValidations:
-    def test_validate_unsupported_task_type(self):
+    @pytest.mark.parametrize("forecasting_enabled", [True, False])
+    def test_validate_unsupported_task_type(self, forecasting_enabled):
         X_train, X_test, y_train, y_test, _, _ = \
             create_iris_data()
 
@@ -29,15 +33,19 @@ class TestRAIInsightsValidations:
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
 
+        forecasting_extension = \
+            ", 'forecasting'" if forecasting_enabled else ""
         message = ("Unsupported task type 'regre'. "
-                   "Should be one of \\['classification', 'regression'\\]")
+                   "Should be one of \\['classification', 'regression'"
+                   f"{forecasting_extension}\\]")
         with pytest.raises(UserConfigValidationException, match=message):
             RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
                 target_column=TARGET,
-                task_type='regre')
+                task_type='regre',
+                forecasting_enabled=forecasting_enabled)
 
     def test_validate_test_data_size(self):
         X_train, X_test, y_train, y_test, _, _ = \
@@ -46,14 +54,13 @@ class TestRAIInsightsValidations:
         model = create_lightgbm_classifier(X_train, y_train)
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
-
+        length = len(y_test)
         with pytest.warns(
                 UserWarning,
-                match="The size of test set {0} is greater than "
-                      "supported limit of {1}. Computing insights"
-                      " for first {1} samples "
-                      "of test set".format(len(y_test),
-                                           len(y_test) - 1)):
+                match=f"The size of the test set {length} is greater than "
+                      f"the supported limit of {length - 1}. Computing "
+                      f"insights for the first {length - 1} samples of the "
+                      "test set"):
             RAIInsights(
                 model=model,
                 train=X_train,
@@ -154,7 +161,7 @@ class TestRAIInsightsValidations:
 
     def test_validate_serializer(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train
@@ -224,7 +231,7 @@ class TestRAIInsightsValidations:
 
     def test_model_predictions_predict(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
 
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
@@ -239,12 +246,12 @@ class TestRAIInsightsValidations:
                 target_column=TARGET,
                 task_type='classification')
 
-        assert 'The model passed cannot be used for getting predictions ' + \
-            'via predict()' in str(ucve.value)
+        assert 'The passed model cannot be used for getting predictions ' + \
+            'via predict' in str(ucve.value)
 
     def test_model_predictions_predict_proba(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
 
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
@@ -261,20 +268,19 @@ class TestRAIInsightsValidations:
                 target_column=TARGET,
                 task_type='classification')
 
-        assert 'The model passed cannot be used for getting predictions ' + \
-            'via predict_proba()' in str(ucve.value)
+        assert 'The passed model cannot be used for getting predictions ' + \
+            'via predict_proba' in str(ucve.value)
 
     def test_incorrect_task_type(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
 
-        err_msg = ('The regression model'
-                   'provided has a predict_proba function. '
-                   'Please check the task_type.')
+        err_msg = ('The regression model provided has a predict_proba '
+                   'function. Please check the task_type.')
         with pytest.raises(UserConfigValidationException, match=err_msg):
             RAIInsights(
                 model=model,
@@ -285,7 +291,7 @@ class TestRAIInsightsValidations:
 
     def test_mismatch_train_test_features(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train
@@ -342,7 +348,7 @@ class TestRAIInsightsValidations:
 
     def test_unsupported_train_test_types(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train
@@ -359,9 +365,9 @@ class TestRAIInsightsValidations:
         assert "Unsupported data type for either train or test. " + \
             "Expecting pandas DataFrame for train and test." in str(ucve.value)
 
-    def test_classes_exceptions(self):
+    def test_classes_exceptions_true_labels(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train
@@ -407,12 +413,36 @@ class TestRAIInsightsValidations:
                 task_type='classification',
                 classes=[0, 1])
 
-        assert 'The train labels and distinct values in target ' + \
+        assert 'The test labels and distinct values in target ' + \
             '(test data) do not match' in str(ucve.value)
+
+    def test_classes_exceptions_prediction_labels(self):
+        X_train, X_test, y_train, y_test, _, _ = \
+            create_cancer_data(return_dataframe=True)
+
+        y_train[0] = 2
+        y_test[0] = 2
+
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        model = MagicMock()
+        model.predict.return_value = np.array([0, 1])
+
+        with pytest.raises(UserConfigValidationException) as ucve:
+            RAIInsights(
+                model=model,
+                train=X_train,
+                test=X_test,
+                target_column=TARGET,
+                task_type='classification',
+                classes=[0, 1, 2])
+        assert 'The train labels and distinct values in ' + \
+            'predictions (train data) do not match' in str(ucve.value)
 
     def test_dataset_exception(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
         X_train_feature_names = X_train.columns.tolist()
 
@@ -451,7 +481,7 @@ class TestRAIInsightsValidations:
 
     def test_classes_passes(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train
@@ -469,7 +499,7 @@ class TestRAIInsightsValidations:
 
     def test_no_model_but_serializer_provided(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
 
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
@@ -487,21 +517,75 @@ class TestRAIInsightsValidations:
 
     def test_feature_metadata(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
-        X_train[TARGET] = y_train
-        X_test[TARGET] = y_test
-        from responsibleai.feature_metadata import FeatureMetadata
-        feature_metadata = FeatureMetadata(identity_feature_name='id')
+        train = X_train.copy()
+        test = X_test.copy()
+        train[TARGET] = y_train
+        test[TARGET] = y_test
 
-        err_msg = ('The given identity feature name id is not present'
-                   ' in user features.')
+        feature_metadata = FeatureMetadata(identity_feature_name='id')
+        err_msg = (
+            'The given identity feature name id is not present '
+            f'in the provided features: {", ".join(X_train.columns)}.')
         with pytest.raises(UserConfigValidationException, match=err_msg):
             RAIInsights(
                 model=model,
-                train=X_train,
-                test=X_test,
+                train=train,
+                test=test,
+                target_column=TARGET,
+                task_type='classification',
+                feature_metadata=feature_metadata)
+
+        feature_metadata = FeatureMetadata(identity_feature_name=TARGET)
+        err_msg = (
+            'The given identity feature name target is not present '
+            f'in the provided features: {", ".join(X_train.columns)}.')
+        with pytest.raises(UserConfigValidationException, match=err_msg):
+            RAIInsights(
+                model=model,
+                train=train,
+                test=test,
+                target_column=TARGET,
+                task_type='classification',
+                feature_metadata=feature_metadata)
+
+        feature_metadata = FeatureMetadata(dropped_features=[TARGET])
+        err_msg = (
+            'The given dropped feature target is not present '
+            f'in the provided features: {", ".join(X_train.columns)}.')
+        with pytest.raises(UserConfigValidationException, match=err_msg):
+            RAIInsights(
+                model=model,
+                train=train,
+                test=test,
+                target_column=TARGET,
+                task_type='classification',
+                feature_metadata=feature_metadata)
+
+        feature_metadata = FeatureMetadata(datetime_features=[TARGET])
+        err_msg = (
+            'The given datetime feature target is not present '
+            f'in the provided features: {", ".join(X_train.columns)}.')
+        with pytest.raises(UserConfigValidationException, match=err_msg):
+            RAIInsights(
+                model=model,
+                train=train,
+                test=test,
+                target_column=TARGET,
+                task_type='classification',
+                feature_metadata=feature_metadata)
+
+        feature_metadata = FeatureMetadata(time_series_id_features=[TARGET])
+        err_msg = (
+            'The given time series ID feature target is not present '
+            f'in the provided features: {", ".join(X_train.columns)}.')
+        with pytest.raises(UserConfigValidationException, match=err_msg):
+            RAIInsights(
+                model=model,
+                train=train,
+                test=test,
                 target_column=TARGET,
                 task_type='classification',
                 feature_metadata=feature_metadata)
@@ -531,6 +615,143 @@ class TestRAIInsightsValidations:
 
         assert "The following string features were not " + \
             "identified as categorical features: {\'c1\'}" in str(ucve.value)
+
+    @pytest.mark.parametrize(
+        'categorical_features',
+        [[], ["c1"], ["c2"], ["c1", "c2"]])
+    @pytest.mark.parametrize('no_feature_metadata', [True, False])
+    def test_feature_metadata_and_categorical_features_deprecation_warning(
+            self, categorical_features, no_feature_metadata):
+        X = pd.DataFrame(data=[[1, 1], [2, 3]], columns=['c1', 'c2'])
+        y = np.array([1, 0])
+        model = create_lightgbm_classifier(X, y)
+
+        X[TARGET] = y
+        feature_metadata = FeatureMetadata(
+            categorical_features=categorical_features) \
+            if no_feature_metadata else None
+
+        with pytest.warns(
+                UserWarning,
+                match="The categorical_features argument on the "
+                      "RAIInsights constructor is deprecated and will "
+                      "be removed after version 0.26. Please provide "
+                      "categorical features via the feature_metadata "
+                      "argument instead."):
+            RAIInsights(
+                model=model,
+                train=X,
+                test=X,
+                target_column=TARGET,
+                task_type='classification',
+                categorical_features=categorical_features,
+                feature_metadata=feature_metadata)
+
+    @pytest.mark.parametrize(
+        'categorical_features',
+        [([], ['c1']),
+         (['c1'], []),
+         (['c1'], ['c2']),
+         (['c1'], ['c1', 'c2']),
+         (['c1', 'c2'], ['c1']),
+         ([], ['c1', 'c2']),
+         (['c1', 'c2'], [])])
+    def test_feature_metadata_and_categorical_features_mismatch(
+            self, categorical_features):
+        arg_categorical_features, feature_metadata_categorical_features = \
+            categorical_features
+        X = pd.DataFrame(data=[[1, 1], [2, 3]], columns=['c1', 'c2'])
+        y = np.array([1, 0])
+        model = create_lightgbm_classifier(X, y)
+
+        X[TARGET] = y
+        feature_metadata = FeatureMetadata(
+            categorical_features=feature_metadata_categorical_features)
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match='The categorical_features provided via the '
+                      'RAIInsights constructor and the categorical_features '
+                      'provided via the feature_metadata argument do not '
+                      'match.'):
+            RAIInsights(
+                model=model,
+                train=X,
+                test=X,
+                target_column=TARGET,
+                task_type='classification',
+                categorical_features=arg_categorical_features,
+                feature_metadata=feature_metadata)
+
+    @pytest.mark.parametrize(
+        'categorical_features',
+        [None, ['c1'], ['c1', 'c2']])
+    def test_feature_metadata_categorical_features_only(
+            self, categorical_features):
+        X = pd.DataFrame(data=[[1, 1], [2, 3]], columns=['c1', 'c2'])
+        y = np.array([1, 0])
+        model = create_lightgbm_classifier(X, y)
+
+        X[TARGET] = y
+        feature_metadata = FeatureMetadata(
+            categorical_features=categorical_features)
+
+        RAIInsights(
+            model=model,
+            train=X,
+            test=X,
+            target_column=TARGET,
+            task_type='classification',
+            feature_metadata=feature_metadata)
+
+    @pytest.mark.parametrize("feature_metadata", [
+        FeatureMetadata(datetime_features=['c1']),
+        FeatureMetadata(time_series_id_features=['c1'])
+    ])
+    def test_feature_metadata_unsupported_time_series_features(
+            self, feature_metadata):
+        X = pd.DataFrame(data=[[1, 1], [2, 3]], columns=['c1', 'c2'])
+        y = np.array([1, 0])
+        model = create_lightgbm_classifier(X, y)
+        X[TARGET] = y
+
+        changed_metadata_field = [
+            k for k in feature_metadata.__dict__.keys()
+            if feature_metadata.__dict__[k] is not None][0]
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match=f"The specified metadata {changed_metadata_field} is "
+                      "only supported for the forecasting task type."):
+            RAIInsights(
+                model=model,
+                train=X,
+                test=X,
+                target_column=TARGET,
+                task_type='classification',
+                feature_metadata=feature_metadata)
+
+    def test_feature_metadata_forecasting_multiple_datetime_features(self):
+        X = pd.DataFrame(data=[[1, 1], [2, 3]],
+                         columns=['c1', 'c2'])
+        y = np.array([1, 0])
+        model = MagicMock()
+        model.forecast.return_value = y
+        X[TARGET] = y
+        feature_metadata = FeatureMetadata(datetime_features=['c1', 'c2'])
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="Only a single datetime feature is supported at "
+                      "this point."):
+            RAIInsights(
+                model=model,
+                train=X,
+                test=X,
+                target_column=TARGET,
+                task_type='forecasting',
+                feature_metadata=feature_metadata,
+                forecasting_enabled=True)
 
 
 class TestCausalUserConfigValidations:
@@ -865,7 +1086,7 @@ class TestCounterfactualUserConfigValidations:
 
         message = ('Calling model predict_proba function modifies '
                    'input dataset features. Please check if '
-                   'predict function is defined correctly.')
+                   'predict_proba function is defined correctly.')
         with pytest.raises(
                 UserConfigValidationException, match=message):
             RAIInsights(

@@ -8,11 +8,14 @@ from unittest.mock import MagicMock
 
 import pandas as pd
 import pytest
-from tests.common_utils import (create_binary_classification_dataset,
-                                create_cancer_data, create_housing_data,
-                                create_iris_data, create_lightgbm_classifier,
-                                create_sklearn_random_forest_regressor)
+from tests.common_utils import create_iris_data
 
+from rai_test_utils.datasets.tabular import (
+    create_binary_classification_dataset, create_cancer_data,
+    create_housing_data)
+from rai_test_utils.models.lightgbm import create_lightgbm_classifier
+from rai_test_utils.models.sklearn import \
+    create_sklearn_random_forest_regressor
 from raiutils.exceptions import UserConfigValidationException
 from responsibleai.modelanalysis.model_analysis import ModelAnalysis
 
@@ -44,13 +47,12 @@ class TestModelAnalysisValidations:
         X_train['target'] = y_train
         X_test['target'] = y_test
 
+        length = len(y_test)
         with pytest.warns(
                 UserWarning,
-                match="The size of test set {0} is greater than "
-                      "supported limit of {1}. Computing insights"
-                      " for first {1} samples "
-                      "of test set".format(len(y_test),
-                                           len(y_test) - 1)):
+                match=f"The size of the test set {length} is greater than "
+                      f"the supported limit of {length-1}. Computing insights"
+                      f" for the first {length-1} samples of the test set"):
             ModelAnalysis(
                 model=model,
                 train=X_train,
@@ -117,7 +119,7 @@ class TestModelAnalysisValidations:
 
     def test_validate_serializer(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train['target'] = y_train
@@ -187,7 +189,7 @@ class TestModelAnalysisValidations:
 
     def test_model_predictions_predict(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
 
         X_train['target'] = y_train
         X_test['target'] = y_test
@@ -202,12 +204,12 @@ class TestModelAnalysisValidations:
                 target_column='target',
                 task_type='classification')
 
-        assert 'The model passed cannot be used for getting predictions ' + \
-            'via predict()' in str(ucve.value)
+        assert 'The passed model cannot be used for getting predictions ' + \
+            'via predict' in str(ucve.value)
 
     def test_model_predictions_predict_proba(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
 
         X_train['target'] = y_train
         X_test['target'] = y_test
@@ -224,20 +226,19 @@ class TestModelAnalysisValidations:
                 target_column='target',
                 task_type='classification')
 
-        assert 'The model passed cannot be used for getting predictions ' + \
-            'via predict_proba()' in str(ucve.value)
+        assert 'The passed model cannot be used for getting predictions ' + \
+            'via predict_proba' in str(ucve.value)
 
     def test_model_analysis_incorrect_task_type(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train['target'] = y_train
         X_test['target'] = y_test
 
-        err_msg = ('The regression model'
-                   'provided has a predict_proba function. '
-                   'Please check the task_type.')
+        err_msg = ('The regression model provided has a predict_proba '
+                   'function. Please check the task_type.')
         with pytest.raises(UserConfigValidationException, match=err_msg):
             ModelAnalysis(
                 model=model,
@@ -248,7 +249,7 @@ class TestModelAnalysisValidations:
 
     def test_mismatch_train_test_features(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train['target'] = y_train
@@ -266,7 +267,7 @@ class TestModelAnalysisValidations:
 
     def test_unsupported_train_test_types(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train['target'] = y_train
@@ -284,7 +285,7 @@ class TestModelAnalysisValidations:
 
     def test_train_labels(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train['target'] = y_train
@@ -330,7 +331,7 @@ class TestModelAnalysisValidations:
                 task_type='classification',
                 train_labels=[0, 1])
 
-        assert 'The train labels and distinct values in target ' + \
+        assert 'The test labels and distinct values in target ' + \
             '(test data) do not match' in str(ucve.value)
 
 

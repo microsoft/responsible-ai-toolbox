@@ -5,11 +5,13 @@ import {
   Cohort,
   FilterMethods,
   ICompositeFilter,
+  IDataset,
   IFilter,
   IVisionListItem,
   JointDataset,
   Operations
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 
 import { IVisionExplanationDashboardProps } from "./Interfaces/IVisionExplanationDashboardProps";
 import { IVisionExplanationDashboardState } from "./Interfaces/IVisionExplanationDashboardState";
@@ -18,7 +20,7 @@ import { getJoinedLabelString } from "./utils/labelUtils";
 export enum VisionDatasetExplorerTabOptions {
   ImageExplorerView = "Image explorer view",
   TableView = "Table view",
-  DataCharacteristics = "Data characteristics"
+  ClassView = "Class view"
 }
 
 export enum TitleBarOptions {
@@ -33,7 +35,7 @@ export const defaultImageSizes = {
 };
 
 export function mapClassNames(
-  labels: number[] | number[][],
+  labels: number[] | number[][] | string[],
   classNames: string[]
 ): string[] | string[][] {
   if (Array.isArray(labels[0])) {
@@ -50,7 +52,8 @@ export function mapClassNames(
 }
 
 export function preprocessData(
-  props: IVisionExplanationDashboardProps
+  props: IVisionExplanationDashboardProps,
+  dataset: IDataset
 ):
   | Pick<
       IVisionExplanationDashboardState,
@@ -78,12 +81,20 @@ export function preprocessData(
   if (!features || !fieldNames) {
     return undefined;
   }
-  const loadingExplanation: boolean[] = [];
-  const computedExplanations: Map<number, string> = new Map();
+  const loadingExplanation: boolean[][] = [[]];
+  const computedExplanations: Map<number, Map<number, string>> = new Map();
   dataSummary.images?.forEach((image, index) => {
+    const defVal = localization.InterpretVision.Dashboard.notdefined;
+    const y = dataset.object_detection_predicted_y?.[index];
+    const odPredictedY = typeof y === "undefined" ? defVal : y;
+    const x = dataset.object_detection_true_y?.[index];
+    const odTrueY = typeof x === "undefined" ? defVal : x;
+
     const item: IVisionListItem = {
       image,
       index,
+      odPredictedY,
+      odTrueY,
       predictedY: predictedY[index],
       trueY: trueY[index]
     };
@@ -96,8 +107,12 @@ export function preprocessData(
       ? successInstances.push(item)
       : errorInstances.push(item);
 
-    loadingExplanation.push(false);
-    computedExplanations.set(index, "");
+    loadingExplanation.push(
+      new Array<boolean>(
+        dataset.object_detection_predicted_y?.length ?? 0
+      ).fill(true)
+    );
+    computedExplanations.set(index, new Map<number, string>());
   });
 
   return {
@@ -119,8 +134,8 @@ export function getItems(
 > {
   const indices = new Set(
     props.selectedCohort.cohort.filteredData.map(
-      (row: { [key: string]: number }) => {
-        return row[JointDataset.IndexLabel] as number;
+      (row: { [key: string]: string | number }) => {
+        return row[JointDataset.IndexLabel] as string | number;
       }
     )
   );
@@ -166,7 +181,7 @@ export const defaultState: IVisionExplanationDashboardState = {
   computedExplanations: new Map(),
   errorInstances: [],
   imageDim: 200,
-  loadingExplanation: [],
+  loadingExplanation: [[]],
   numRows: 3,
   otherMetadataFieldNames: ["mean_pixel_value"],
   pageSize: 10,

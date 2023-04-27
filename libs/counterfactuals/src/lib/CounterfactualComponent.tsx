@@ -57,6 +57,8 @@ export interface ICounterfactualComponentState {
   isRevertButtonClicked: boolean;
 }
 
+const counterfactualListName = "cfs_list";
+
 export class CounterfactualComponent extends React.PureComponent<
   ICounterfactualComponentProps,
   ICounterfactualComponentState
@@ -208,6 +210,7 @@ export class CounterfactualComponent extends React.PureComponent<
     this.temporaryPoint = getCopyOfDatasetPoint(
       index,
       this.context.jointDataset,
+      this.context.dataset,
       this.state.customPointLength,
       absoluteIndex
     );
@@ -240,10 +243,12 @@ export class CounterfactualComponent extends React.PureComponent<
       );
       if (
         typeof localCounterfactualData === "object" &&
-        localCounterfactualData["error"]
+        localCounterfactualData &&
+        !this.instanceOfCounterfactualsData(localCounterfactualData)
       ) {
         this.setState({
-          localCounterfactualErrorMessage: localCounterfactualData["error"]
+          localCounterfactualErrorMessage: localCounterfactualData
+            .toString()
             .split(":")
             .pop()
         });
@@ -414,4 +419,10 @@ export class CounterfactualComponent extends React.PureComponent<
     this.forceUpdate();
     this.fetchData(editingData);
   };
+
+  private instanceOfCounterfactualsData(
+    object: any
+  ): object is ICounterfactualData {
+    return counterfactualListName in object;
+  }
 }

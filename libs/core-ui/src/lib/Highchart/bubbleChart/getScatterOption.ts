@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme } from "@fluentui/react";
 import { Point } from "highcharts";
 
 import { IGenericChartProps } from "../../util/IGenericChartProps";
@@ -8,6 +9,7 @@ import { JointDataset } from "../../util/JointDataset";
 import { IHighchartsConfig } from "../IHighchartsConfig";
 
 import { ICustomData } from "./buildScatterTemplate";
+import { IClusterData } from "./ChartUtils";
 import { getScatterPlot } from "./getScatterPlot";
 
 export interface IScatterPoint extends Point {
@@ -15,9 +17,7 @@ export interface IScatterPoint extends Point {
 }
 
 export function getScatterOption(
-  xSeries: number[],
-  ySeries: number[],
-  indexSeries: number[],
+  clusterData: IClusterData,
   chartProps: IGenericChartProps,
   jointData: JointDataset,
   selectedPointsIndexes: number[],
@@ -28,9 +28,7 @@ export function getScatterOption(
   selectPointFromChartLargeData?: (data: IScatterPoint) => void
 ): IHighchartsConfig {
   const dataSeries = getScatterPlot(
-    xSeries,
-    ySeries,
-    indexSeries,
+    clusterData,
     jointData,
     selectedPointsIndexes,
     chartProps,
@@ -38,9 +36,11 @@ export function getScatterOption(
     showColorAxis,
     useDifferentColorForScatterPoints
   );
+  const theme = getTheme();
 
   return {
     chart: {
+      backgroundColor: theme.semanticColors.bodyBackground,
       type: "scatter",
       zoomType: "xy"
     },

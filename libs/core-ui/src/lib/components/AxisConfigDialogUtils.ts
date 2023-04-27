@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 
 import { JointDataset } from "../util/JointDataset";
@@ -80,4 +81,59 @@ export function getBinCountForProperty(
         : defaultBinCount;
   }
   return binCount;
+}
+
+export function constructClassArray(
+  jointDataset: JointDataset
+): IComboBoxOption[] {
+  return new Array(jointDataset.predictionClassCount)
+    .fill(0)
+    .map((_, index) => {
+      const key = JointDataset.ProbabilityYRoot + index.toString();
+      return {
+        key,
+        text: jointDataset.metaDict[key].abbridgedLabel
+      };
+    });
+}
+
+export function constructDataArray(
+  jointDataset: JointDataset,
+  hideDroppedFeatures: boolean | undefined,
+  droppedFeatureSet: Set<string>
+): IComboBoxOption[] {
+  return new Array(jointDataset.datasetFeatureCount)
+    .fill(0)
+    .map((_, index) => {
+      const key = JointDataset.DataLabelRoot + index.toString();
+      return {
+        key,
+        text: jointDataset.metaDict[key].abbridgedLabel
+      };
+    })
+    .filter((item) => {
+      if (hideDroppedFeatures) {
+        return !droppedFeatureSet.has(item.text);
+      }
+      return true;
+    });
+}
+
+export function constructMultilabelArray(
+  jointDataset: JointDataset,
+  label: string
+): IComboBoxOption[] {
+  const multilabelPredictedYArray = [];
+  if (jointDataset.numLabels > 1) {
+    multilabelPredictedYArray.push(
+      ...new Array(jointDataset.numLabels).fill(0).map((_, index) => {
+        const key = label + index.toString();
+        return {
+          key,
+          text: jointDataset.metaDict[key].abbridgedLabel
+        };
+      })
+    );
+  }
+  return multilabelPredictedYArray;
 }

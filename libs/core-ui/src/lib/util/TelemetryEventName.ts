@@ -44,6 +44,7 @@ export enum TelemetryEventName {
   FeatureImportancesWhatDoValuesMeanCalloutClick = "RAI_FeatureImportancesWhatDoValuesMeanCalloutClick",
   FeatureImportancesCrossClassWeightsCalloutClick = "RAI_FeatureImportancesCrossClassWeightsCalloutClick",
   FeatureImportancesHowToReadChartCalloutClick = "RAI_FeatureImportancesHowToReadChartCalloutClick",
+  FeatureImportancesNewDatapointSelectedFromChart = "RAI_FeatureImportancesNewDatapointSelectedFromChart",
   // Counterfactual
   CounterfactualNewDatapointSelectedFromChart = "RAI_CounterfactualNewDatapointSelectedFromChart",
   CounterfactualNewDatapointSelectedFromDropdown = "RAI_CounterfactualNewDatapointSelectedFromDropdown",
@@ -58,5 +59,6 @@ export enum TelemetryEventName {
   IndividualCausalSelectedDatapointUpdatedFromChart = "RAI_IndividualCausalSelectedDatapointUpdatedFromChart",
   IndividualCausalSelectedDatapointUpdatedFromDropdown = "RAI_IndividualCausalSelectedDatapointUpdatedFromDropdown",
   CausalTreatmentPolicyTabClick = "RAI_CausalTreatmentPolicyTabClick",
-  CausalTreatmentPolicyNewTreatmentFeatureSelected = "RAI_CausalTreatmentPolicyNewTreatmentFeatureSelected"
+  CausalTreatmentPolicyNewTreatmentFeatureSelected = "RAI_CausalTreatmentPolicyNewTreatmentFeatureSelected",
+  LocalCausalEffectsFetchError = "LocalCausalEffectsFetchError"
 }

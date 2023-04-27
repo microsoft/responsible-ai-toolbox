@@ -4,11 +4,12 @@
 import pandas as pd
 import pytest
 
+from rai_test_utils.models.lightgbm import create_lightgbm_classifier
 from raiutils.exceptions import UserConfigValidationException
 from responsibleai._interfaces import ModelExplanationData
 from responsibleai.rai_insights import RAIInsights
 
-from ..common_utils import create_iris_data, create_lightgbm_classifier
+from ..common_utils import create_iris_data
 
 
 class TestExplainerManager:

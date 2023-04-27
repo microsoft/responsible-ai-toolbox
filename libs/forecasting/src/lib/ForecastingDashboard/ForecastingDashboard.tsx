@@ -127,6 +127,8 @@ export class ForecastingDashboard extends React.Component<
                     : this.context.baseErrorCohort.cohort.getCohortID()
                 }
                 placeholder={localization.Forecasting.selectTimeSeries}
+                disabled={false}
+                calloutProps={{ doNotLayer: true }}
               />
             )}
           </Stack.Item>

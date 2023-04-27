@@ -10,7 +10,7 @@ import { ChartTypes } from "../util/IGenericChartProps";
 import { JointDataset } from "../util/JointDataset";
 
 import { BasicHighChart } from "./BasicHighChart";
-import { featureImportanceBarStyles } from "./FeatureImportanceBar.styles";
+import { getFeatureImportanceBarStyles } from "./FeatureImportanceBar.styles";
 import { IHighchartsConfig } from "./IHighchartsConfig";
 
 export interface IGlobalSeries {
@@ -64,8 +64,8 @@ export class FeatureImportanceBar extends React.Component<
       });
     }
   }
-
   public render(): React.ReactNode {
+    const featureImportanceBarStyles = getFeatureImportanceBarStyles();
     return (
       <Stack
         horizontal

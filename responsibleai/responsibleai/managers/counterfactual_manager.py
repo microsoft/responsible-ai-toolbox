@@ -17,6 +17,7 @@ from dice_ml.counterfactual_explanations import CounterfactualExplanations
 from dice_ml.explainer_interfaces.explainer_base import ExplainerBase
 
 from raiutils.exceptions import UserConfigValidationException
+from raiutils.models import ModelTask
 from responsibleai._config.base_config import BaseConfig
 from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._interfaces import CounterfactualData
@@ -28,7 +29,6 @@ from responsibleai._tools.shared.state_directory_management import \
 from responsibleai.exceptions import (DuplicateManagerConfigException,
                                       SchemaErrorException)
 from responsibleai.managers.base_manager import BaseManager
-from responsibleai.rai_insights.constants import ModelTask
 
 
 class CounterfactualConstants:
@@ -644,7 +644,7 @@ class CounterfactualManager(BaseManager):
         return self._get_counterfactual(query_cf_config, counterfactual_obj)
 
     def get(self, failed_to_compute=False):
-        """Return the computed counterfactual examples objects or failure reason.
+        """Return computed counterfactual examples objects or failure reason.
 
         :param failed_to_compute: Get the failure reasons if counterfactual
                                   examples failed to compute.

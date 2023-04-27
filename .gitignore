@@ -6,7 +6,7 @@
 /out-tsc
 /raiwidgets/raiwidgets/widget
 
-#debug file
+# debug file
 webpack.json
 rollup.json
 
@@ -69,9 +69,12 @@ apps/*-e2e/debug.log
 /notebooks/*.csv
 /notebooks/*.zip
 *.csv
+/notebooks/**/config.json
+/notebooks/responsibleaidashboard/*.py
+/notebooks/**/*.log
+/notebooks/**/*.json
+/notebooks/**/*.pkl
 
 # docs
 docs/build/*
 */.mypy_cache/*
-
-notebooks/responsibleaidashboard/*.py

@@ -11,13 +11,15 @@ export enum DatasetTaskType {
   TextClassification = "text_classification",
   MultilabelTextClassification = "multilabel_text_classification",
   MultilabelImageClassification = "multilabel_image_classification",
-  Forecasting = "forecasting"
+  Forecasting = "forecasting",
+  ObjectDetection = "object_detection",
+  QuestionAnswering = "question_answering"
 }
 
 export interface IDataset {
   task_type: DatasetTaskType;
-  true_y: number[] | number[][];
-  predicted_y?: number[] | number[][];
+  true_y: number[] | number[][] | string[];
+  predicted_y?: number[] | number[][] | string[];
   probability_y?: number[][];
   features: unknown[][];
   feature_names: string[];
@@ -30,6 +32,8 @@ export interface IDataset {
   feature_metadata?: IFeatureMetaData;
   images?: string[];
   index?: string[];
+  object_detection_true_y?: number[][][];
+  object_detection_predicted_y?: number[][][];
 }
 
 // TODO Remove DatasetSummary when possible

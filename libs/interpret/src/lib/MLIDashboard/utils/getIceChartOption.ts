@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme } from "@fluentui/react";
 import {
   IExplanationModelMetadata,
   isTwoDimArray,
@@ -92,8 +93,10 @@ export function getIceChartOption(
       name: d.name
     };
   });
+  const theme = getTheme();
   return {
     chart: {
+      backgroundColor: theme.semanticColors.bodyBackground,
       type: rangeType === RangeTypes.Categorical ? "scatter" : ""
     },
     plotOptions: {

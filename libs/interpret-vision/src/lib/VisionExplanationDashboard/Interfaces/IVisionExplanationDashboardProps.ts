@@ -12,7 +12,22 @@ export interface IVisionExplanationDashboardProps {
    */
   cohorts: ErrorCohort[];
   dataSummary: IVisionExplanationDashboardData;
-  requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
+  requestExp?: (
+    index: number | number[],
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
+  requestObjectDetectionMetrics?: (
+    selectionIndexes: number[][],
+    aggregateMethod: string,
+    className: string,
+    iouThresh: number,
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
+  requestQuestionAnsweringMetrics?: (
+    selectionIndexes: number[][],
+    trueY: string[],
+    predictedY: string[]
+  ) => Promise<any[]>;
   selectedCohort: ErrorCohort;
   setSelectedCohort: (cohort: ErrorCohort) => void;
 }

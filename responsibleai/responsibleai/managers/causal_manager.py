@@ -10,6 +10,7 @@ import pandas as pd
 from econml.solutions.causal_analysis import CausalAnalysis
 
 from raiutils.exceptions import UserConfigValidationException
+from raiutils.models import ModelTask
 from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._internal.constants import (CausalManagerKeys,
                                                ListProperties, ManagerNames)
@@ -21,7 +22,6 @@ from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.managers.base_manager import BaseManager
-from responsibleai.rai_insights.constants import ModelTask
 
 
 class CausalManager(BaseManager):

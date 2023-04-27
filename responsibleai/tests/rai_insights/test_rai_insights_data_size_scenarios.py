@@ -1,15 +1,18 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import pandas as pd
 import pytest
-from tests.common_utils import (create_housing_data, create_iris_data,
-                                create_sklearn_random_forest_classifier,
-                                create_sklearn_random_forest_regressor)
+from tests.common_utils import create_iris_data
 
+from rai_test_utils.datasets.tabular import create_housing_data
+from rai_test_utils.models.sklearn import (
+    create_sklearn_random_forest_classifier,
+    create_sklearn_random_forest_regressor)
 from responsibleai import RAIInsights
 
 LABELS = 'labels'
@@ -41,18 +44,27 @@ class TestRAIInsightsLargeData(object):
             [], [], use_entire_test_data=True)
         assert len(filtered_large_data) == len(rai_insights.test) + 1
 
+    def validate_number_of_large_test_samples_on_save(
+            self, rai_insights, path):
+        top_dir = Path(path)
+        with open(top_dir / 'meta.json', 'r') as meta_file:
+            meta = meta_file.read()
+        meta = json.loads(meta)
+        assert 'number_large_test_samples' in meta
+        assert meta['number_large_test_samples'] == \
+            len(rai_insights._large_test)
+
     def validate_rai_insights_for_large_data(
             self, model, train_data, test_data,
             target_column,
             categorical_features, task_type):
 
+        length = len(test_data)
         with pytest.warns(
                 UserWarning,
-                match="The size of test set {0} is greater than "
-                      "supported limit of {1}. Computing insights"
-                      " for first {1} samples "
-                      "of test set".format(len(test_data),
-                                           len(test_data) - 1)):
+                match=f"The size of the test set {length} is greater than the"
+                      f" supported limit of {length - 1}. Computing insights"
+                      f" for the first {length - 1} samples of the test set"):
             rai_insights = RAIInsights(
                 model, train_data, test_data,
                 LABELS,
@@ -66,6 +78,9 @@ class TestRAIInsightsLargeData(object):
             path = Path(tmpdir) / 'rai_test_path'
             # save the rai_insights
             rai_insights.save(path)
+
+            self.validate_number_of_large_test_samples_on_save(
+                rai_insights, path)
 
             # load the rai_insights
             rai_insights = RAIInsights.load(path)
@@ -114,6 +129,16 @@ class TestRAIInsightsNonLargeData(object):
             [], [], use_entire_test_data=True)
         assert len(filtered_large_data) == len(rai_insights.test)
 
+    def validate_number_of_large_test_samples_on_save(
+            self, rai_insights, path):
+        top_dir = Path(path)
+        with open(top_dir / 'meta.json', 'r') as meta_file:
+            meta = meta_file.read()
+        meta = json.loads(meta)
+        assert 'number_large_test_samples' in meta
+        assert meta['number_large_test_samples'] == \
+            len(rai_insights.test)
+
     def validate_rai_insights_for_non_large_data(
             self, model, train_data, test_data,
             target_column,
@@ -131,6 +156,9 @@ class TestRAIInsightsNonLargeData(object):
             path = Path(tmpdir) / 'rai_test_path'
             # save the rai_insights
             rai_insights.save(path)
+
+            self.validate_number_of_large_test_samples_on_save(
+                rai_insights, path)
 
             # load the rai_insights
             rai_insights = RAIInsights.load(path)

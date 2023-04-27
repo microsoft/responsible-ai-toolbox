@@ -19,7 +19,7 @@ import { CausalAggregateChart } from "./CausalAggregateChart";
 import { CausalAggregateTable } from "./CausalAggregateTable";
 
 export interface ICausalAggregateViewProps {
-  globalEffects: ICausalAnalysisSingleData[];
+  globalEffects?: ICausalAnalysisSingleData[];
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
@@ -30,7 +30,6 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
 
   public render(): React.ReactNode {
     const styles = CausalAggregateStyles();
-    this.props.globalEffects.sort((d1, d2) => d2.point - d1.point);
 
     return (
       <Stack

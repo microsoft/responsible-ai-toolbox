@@ -7,13 +7,14 @@ import {
   IErrorAnalysisMatrix,
   IHighchartBoxData,
   IHighchartBubbleSDKClusterData,
-  ICounterfactualData
+  ICounterfactualData,
+  ILocalExplanations,
+  parseFeatureFlights
 } from "@responsible-ai/core-ui";
 import {
   ModelAssessmentDashboard,
   IModelAssessmentData,
-  IModelAssessmentDashboardProps,
-  parseFeatureFlights
+  IModelAssessmentDashboardProps
 } from "@responsible-ai/model-assessment";
 import React from "react";
 
@@ -29,7 +30,9 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
     const callBack: Pick<
       IModelAssessmentDashboardProps,
       | "requestExp"
+      | "requestObjectDetectionMetrics"
       | "requestPredictions"
+      | "requestQuestionAnsweringMetrics"
       | "requestDebugML"
       | "requestMatrix"
       | "requestImportances"
@@ -43,14 +46,43 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       | "requestGlobalExplanations"
       | "requestBubblePlotData"
       | "requestLocalCounterfactuals"
+      | "requestLocalExplanations"
       | "requestMetrics"
+      | "requestLocalCausalEffects"
+      | "requestSplinePlotDistribution"
+      | "requestTestDataRow"
     > = {};
     if (this.props.config.baseUrl) {
-      callBack.requestExp = async (data: number): Promise<any[]> => {
+      callBack.requestExp = async (data: number | number[]): Promise<any[]> => {
         return callFlaskService(this.props.config, data, "/get_exp");
+      };
+      callBack.requestObjectDetectionMetrics = async (
+        selectionIndexes: number[][],
+        aggregateMethod: string,
+        className: string,
+        iouThresh: number,
+        abortSignal: AbortSignal
+      ): Promise<any[]> => {
+        return callFlaskService(
+          this.props.config,
+          [selectionIndexes, aggregateMethod, className, iouThresh],
+          "/get_object_detection_metrics",
+          abortSignal
+        );
       };
       callBack.requestPredictions = async (data: any[]): Promise<any[]> => {
         return callFlaskService(this.props.config, data, "/predict");
+      };
+      callBack.requestQuestionAnsweringMetrics = async (
+        selectionIndexes: number[][],
+        trueY: string[],
+        predictedY: string[]
+      ): Promise<any[]> => {
+        return callFlaskService(
+          this.props.config,
+          [selectionIndexes, trueY, predictedY],
+          "/get_question_answering_metrics"
+        );
       };
       callBack.requestMatrix = async (
         data: any[]
@@ -194,6 +226,40 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
           abortSignal
         );
       };
+      callBack.requestLocalExplanations = async (
+        absoluteIndex: number,
+        abortSignal: AbortSignal
+      ): Promise<ILocalExplanations> => {
+        return callFlaskService(
+          this.props.config,
+          [absoluteIndex],
+          "/local_explanations",
+          abortSignal
+        );
+      };
+      callBack.requestLocalCausalEffects = async (
+        causalId: string,
+        absoluteIndex: number,
+        abortSignal: AbortSignal
+      ): Promise<ICausalAnalysisData> => {
+        return callFlaskService(
+          this.props.config,
+          [causalId, absoluteIndex],
+          "/local_causal_effects",
+          abortSignal
+        );
+      };
+      callBack.requestTestDataRow = async (
+        absoluteIndex: number,
+        abortSignal: AbortSignal
+      ): Promise<any> => {
+        return callFlaskService(
+          this.props.config,
+          [absoluteIndex],
+          "/test_data_row",
+          abortSignal
+        );
+      };
       callBack.requestMetrics = async (
         filter: unknown[],
         compositeFilter: unknown[],
@@ -205,6 +271,15 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
           [filter, compositeFilter, metric],
           "/model_overview_metrics",
           abortSignal
+        );
+      };
+      callBack.requestSplinePlotDistribution = async (
+        data: any
+      ): Promise<any> => {
+        return callFlaskService(
+          this.props.config,
+          data,
+          "/model_overview_spline_distribution"
         );
       };
     }

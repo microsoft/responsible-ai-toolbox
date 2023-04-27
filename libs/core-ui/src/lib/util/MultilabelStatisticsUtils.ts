@@ -11,8 +11,13 @@ import {
 import { JointDataset } from "./JointDataset";
 
 export enum MultilabelMetrics {
+  BleuScore = "bleuScore",
   ExactMatchRatio = "exactMatchRatio",
-  HammingScore = "hammingScore"
+  HammingScore = "hammingScore",
+  F1Score = "f1Score",
+
+  MeteorScore = "meteorScore",
+  RougeScore = "rougeScore"
 }
 
 export const generateMultilabelStats: (
@@ -50,6 +55,10 @@ export const generateMultilabelStats: (
     hammingScore = hammingScore / numLabels;
     const sum = matchingLabels.reduce((prev, curr) => prev + curr, 0);
     const exactMatchRatio = sum / (numLabels * selectionArray.length);
+    const meteorScore = 0;
+    const f1Score = 0;
+    const rougeScore = 0;
+    const bleuScore = 0;
 
     return [
       {
@@ -61,6 +70,26 @@ export const generateMultilabelStats: (
         key: MultilabelMetrics.ExactMatchRatio,
         label: localization.Interpret.Statistics.exactMatchRatio,
         stat: exactMatchRatio
+      },
+      {
+        key: MultilabelMetrics.MeteorScore,
+        label: localization.Interpret.Statistics.meteorScore,
+        stat: meteorScore
+      },
+      {
+        key: MultilabelMetrics.F1Score,
+        label: localization.Interpret.Statistics.f1Score,
+        stat: f1Score
+      },
+      {
+        key: MultilabelMetrics.BleuScore,
+        label: localization.Interpret.Statistics.bleuScore,
+        stat: bleuScore
+      },
+      {
+        key: MultilabelMetrics.RougeScore,
+        label: localization.Interpret.Statistics.rougeScore,
+        stat: rougeScore
       },
       {
         key: MultilabelMetrics.HammingScore,

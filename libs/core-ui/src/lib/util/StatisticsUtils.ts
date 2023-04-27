@@ -20,6 +20,8 @@ import {
   MulticlassClassificationEnum
 } from "./JointDatasetUtils";
 import { generateMultilabelStats } from "./MultilabelStatisticsUtils";
+import { generateObjectDetectionStats } from "./ObjectDetectionStatisticsUtils";
+import { generateQuestionAnsweringStats } from "./QuestionAnsweringStatisticsUtils";
 
 export enum BinaryClassificationMetrics {
   Accuracy = "accuracy",
@@ -98,7 +100,7 @@ const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
     {
       key: BinaryClassificationMetrics.SelectionRate,
       label: localization.Interpret.Statistics.selectionRate,
-      stat: (falseNegCount + truePosCount) / total
+      stat: (falsePosCount + truePosCount) / total
     }
   ];
 };
@@ -113,9 +115,10 @@ const generateRegressionStats: (
   errors: number[]
 ): ILabeledStatistic[] => {
   const count = trueYs.length;
-  const meanAbsoluteError = errors.reduce((prev, curr) => {
-    return Math.abs(prev) + Math.abs(curr);
-  }, 0);
+  const meanAbsoluteError =
+    errors.reduce((prev, curr) => {
+      return Math.abs(prev) + Math.abs(curr);
+    }, 0) / count;
   const residualSumOfSquares = errors.reduce((prev, curr) => {
     return prev + curr * curr;
   }, 0);
@@ -258,6 +261,9 @@ export const generateMetrics: (
   ) {
     return generateMultilabelStats(jointDataset, selectionIndexes);
   }
+  if (modelType === ModelTypes.QuestionAnswering) {
+    return generateQuestionAnsweringStats(jointDataset, selectionIndexes);
+  }
   const trueYs = jointDataset.unwrap(JointDataset.TrueYLabel);
   const predYs = jointDataset.unwrap(JointDataset.PredictedYLabel);
   if (modelType === ModelTypes.Regression) {
@@ -275,6 +281,9 @@ export const generateMetrics: (
       const predYSubset = selectionArray.map((i) => predYs[i]);
       return generateImageStats(trueYSubset, predYSubset);
     });
+  }
+  if (modelType === ModelTypes.ObjectDetection) {
+    return generateObjectDetectionStats(selectionIndexes);
   }
   const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
   return selectionIndexes.map((selectionArray) => {

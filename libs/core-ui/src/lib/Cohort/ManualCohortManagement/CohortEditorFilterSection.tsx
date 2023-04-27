@@ -3,16 +3,23 @@
 
 import { IComboBoxOption, IComboBox, Text, Stack } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { RangeTypes } from "@responsible-ai/mlchartlib";
+import { IColumnRange, RangeTypes } from "@responsible-ai/mlchartlib";
 import React from "react";
 
+import {
+  defaultModelAssessmentContext,
+  ModelAssessmentContext
+} from "../../Context/ModelAssessmentContext";
+import { IExplanationModelMetadata } from "../../Interfaces/IExplanationContext";
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
 import { JointDataset } from "../../util/JointDataset";
-import { IJointMeta } from "../../util/JointDatasetUtils";
 
 import { CohortEditorFilter } from "./CohortEditorFilter";
+import { translateToLegacyFilterColumn } from "./CohortEditorUtils";
 
 export interface ICohortEditorFilterSectionProps {
+  isFromExplanation: boolean;
+  metadata?: IExplanationModelMetadata;
   filterIndex?: number;
   filters: IFilter[];
   jointDataset: JointDataset;
@@ -32,6 +39,9 @@ export class CohortEditorFilterSection extends React.PureComponent<
   ICohortEditorFilterSectionProps,
   ICohortEditorFilterSectionState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
   public constructor(props: ICohortEditorFilterSectionProps) {
     super(props);
     this.state = {
@@ -49,9 +59,14 @@ export class CohortEditorFilterSection extends React.PureComponent<
           </Text>
         ) : (
           <CohortEditorFilter
+            featureNames={
+              this.props.isFromExplanation
+                ? this.props.metadata?.featureNames || []
+                : this.context.dataset.feature_names
+            }
+            columnRanges={this.context.columnRanges}
             cancelFilter={this.cancelFilter}
             filters={this.props.filters}
-            jointDataset={this.props.jointDataset}
             openedFilter={this.props.openedFilter}
             saveState={this.saveState}
             setAsCategorical={this.setAsCategorical}
@@ -77,7 +92,14 @@ export class CohortEditorFilterSection extends React.PureComponent<
       return;
     }
     const openedFilter = this.props.openedFilter;
-    this.props.jointDataset.setTreatAsCategorical(openedFilter.column, checked);
+    const legacyColumn = translateToLegacyFilterColumn(
+      openedFilter.column,
+      this.context.dataset.feature_names
+    );
+    this.props.jointDataset.setTreatAsCategorical(legacyColumn, checked);
+    if (this.context.setAsCategorical) {
+      this.context.setAsCategorical(openedFilter.column, checked);
+    }
     if (checked) {
       this.props.onOpenedFilterUpdated({
         arg: [],
@@ -85,11 +107,12 @@ export class CohortEditorFilterSection extends React.PureComponent<
         method: FilterMethods.Includes
       });
     } else {
+      const args = (
+        this.context.columnRanges &&
+        this.context.columnRanges[openedFilter.column]
+      )?.max;
       this.props.onOpenedFilterUpdated({
-        arg: [
-          this.props.jointDataset.metaDict[openedFilter.column].featureRange
-            ?.max || Number.MAX_SAFE_INTEGER
-        ],
+        arg: [args || Number.MAX_SAFE_INTEGER],
         column: openedFilter.column,
         method: FilterMethods.LessThan
       });
@@ -146,17 +169,18 @@ export class CohortEditorFilterSection extends React.PureComponent<
     const openedFilter = this.props.openedFilter;
     if ((item.key as FilterMethods) === FilterMethods.InTheRangeOf) {
       //default values for in the range operation
-      const meta =
-        this.props.jointDataset.metaDict[openedFilter.column].featureRange;
-      if (meta?.min === undefined) {
+      const range =
+        this.context.columnRanges &&
+        this.context.columnRanges[this.props.openedFilter.column];
+      if (range?.min === undefined) {
         openedFilter.arg[0] = Number.MIN_SAFE_INTEGER;
       } else {
-        openedFilter.arg[0] = meta.min;
+        openedFilter.arg[0] = range.min;
       }
-      if (meta?.max === undefined) {
+      if (range?.max === undefined) {
         openedFilter.arg[1] = Number.MAX_SAFE_INTEGER;
       } else {
-        openedFilter.arg[1] = meta.max;
+        openedFilter.arg[1] = range.max;
       }
     } else {
       //handle switch from in the range to less than, equals etc
@@ -171,21 +195,21 @@ export class CohortEditorFilterSection extends React.PureComponent<
 
   private readonly setNumericValue = (
     delta: number,
-    column: IJointMeta,
     index: number,
-    stringVal: string
+    stringVal: string,
+    range?: IColumnRange
   ): string | void => {
     if (!this.props.openedFilter) {
       return;
     }
     const openArg = this.props.openedFilter.arg;
-    const max = column.featureRange?.max || Number.MAX_SAFE_INTEGER;
-    const min = column.featureRange?.min || Number.MIN_SAFE_INTEGER;
+    const max = range?.max || Number.MAX_SAFE_INTEGER;
+    const min = range?.min || Number.MIN_SAFE_INTEGER;
     if (delta === 0) {
       const numberVal = +stringVal;
       if (
         (!Number.isInteger(numberVal) &&
-          column.featureRange?.rangeType === RangeTypes.Integer) ||
+          range?.rangeType === RangeTypes.Integer) ||
         numberVal > max ||
         numberVal < min
       ) {
@@ -236,13 +260,18 @@ export class CohortEditorFilterSection extends React.PureComponent<
 
   private getFilterValue(key: string): IFilter {
     const filter: IFilter = { column: key } as IFilter;
-    const meta = this.props.jointDataset.metaDict[key];
-    if (meta?.treatAsCategorical && meta.sortedCategoricalValues) {
+    const range = this.context.columnRanges
+      ? this.context.columnRanges[key]
+      : undefined;
+    if (
+      range?.rangeType === RangeTypes.Categorical ||
+      range?.treatAsCategorical
+    ) {
       filter.method = FilterMethods.Includes;
-      filter.arg = [...new Array(meta.sortedCategoricalValues.length).keys()];
+      filter.arg = [...new Array(range.sortedUniqueValues.length).keys()];
     } else {
       filter.method = FilterMethods.LessThan;
-      filter.arg = [meta.featureRange?.max || Number.MAX_SAFE_INTEGER];
+      filter.arg = [range?.max || Number.MAX_SAFE_INTEGER];
     }
     return filter;
   }
