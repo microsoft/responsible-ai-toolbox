@@ -15,7 +15,7 @@ import pandas as pd
 import responsibleai
 from responsibleai._internal.constants import (FileFormats, Metadata,
                                                SerializationAttributes)
-from responsibleai.exceptions import UserConfigValidationException
+from raiutils.exceptions import UserConfigValidationException
 
 _DTYPES = 'dtypes'
 _MODEL_PKL = Metadata.MODEL + FileFormats.PKL
