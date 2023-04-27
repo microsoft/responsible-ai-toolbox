@@ -50,5 +50,8 @@ export function getModelTypeFromProps(
   if (taskType === DatasetTaskType.ObjectDetection) {
     return ModelTypes.ObjectDetection;
   }
+  if (taskType === DatasetTaskType.QuestionAnswering) {
+    return ModelTypes.QuestionAnswering;
+  }
   return modelType;
 }

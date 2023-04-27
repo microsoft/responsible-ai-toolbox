@@ -92,3 +92,12 @@ class ResponsibleAIDashboard(Dashboard):
             '/get_object_detection_metrics',
             methods=["POST"]
         )
+
+        def get_question_answering_metrics():
+            data = request.get_json(force=True)
+            return jsonify(self.input.get_question_answering_metrics(data))
+        self.add_url_rule(
+            get_exp,
+            '/get_question_answering_metrics',
+            methods=["POST"]
+        )

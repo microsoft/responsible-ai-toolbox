@@ -399,6 +399,35 @@ export function getSelectableMetrics(
       },
       {
         description:
+          localization.ModelAssessment.ModelOverview.metrics.meteorScore
+            .description,
+        key: MultilabelMetrics.MeteorScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.meteorScore
+          .name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.f1Score
+            .description,
+        key: MultilabelMetrics.F1Score,
+        text: localization.ModelAssessment.ModelOverview.metrics.f1Score.name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.bleuScore
+            .description,
+        key: MultilabelMetrics.BleuScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.bleuScore.name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.rougeScore
+            .description,
+        key: MultilabelMetrics.RougeScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.rougeScore.name
+      },
+      {
+        description:
           localization.ModelAssessment.ModelOverview.metrics.hammingScore
             .description,
         key: MultilabelMetrics.HammingScore,
@@ -431,6 +460,46 @@ export function getSelectableMetrics(
         key: ObjectDetectionMetrics.AverageRecall,
         text: localization.ModelAssessment.ModelOverview.metrics.averageRecall
           .name
+      }
+    );
+  } else if (taskType === DatasetTaskType.QuestionAnswering) {
+    selectableMetrics.push(
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.exactMatchRatio
+            .description,
+        key: MultilabelMetrics.ExactMatchRatio,
+        text: localization.ModelAssessment.ModelOverview.metrics.exactMatchRatio
+          .name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.meteorScore
+            .description,
+        key: MultilabelMetrics.MeteorScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.meteorScore
+          .name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.f1Score
+            .description,
+        key: MultilabelMetrics.F1Score,
+        text: localization.ModelAssessment.ModelOverview.metrics.f1Score.name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.bleuScore
+            .description,
+        key: MultilabelMetrics.BleuScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.bleuScore.name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.rougeScore
+            .description,
+        key: MultilabelMetrics.RougeScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.rougeScore.name
       }
     );
   } else {
