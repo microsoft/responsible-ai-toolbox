@@ -16,13 +16,13 @@ import pandas as pd
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
+from raiutils.exceptions import UserConfigValidationException
 from raiutils.models import Forecasting, ModelTask, SKLearn
 from responsibleai._interfaces import Dataset, RAIInsightsData
 from responsibleai._internal._forecasting_wrappers import _wrap_model
 from responsibleai._internal.constants import (FileFormats, ManagerNames,
                                                Metadata,
                                                SerializationAttributes)
-from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.managers.causal_manager import CausalManager
 from responsibleai.managers.counterfactual_manager import CounterfactualManager

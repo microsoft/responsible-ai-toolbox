@@ -8,11 +8,11 @@ import pytest
 
 from raiutils.cohort import Cohort, CohortFilter, CohortFilterMethods
 from raiutils.data_processing import serialize_json_safe
+from raiutils.exceptions import UserConfigValidationException
 from raiwidgets import ResponsibleAIDashboard
 from raiwidgets.dashboard import invalid_feature_flights_error
 from responsibleai._interfaces import (CausalData, CounterfactualData, Dataset,
                                        ErrorAnalysisData, ModelExplanationData)
-from responsibleai.exceptions import UserConfigValidationException
 
 
 @pytest.mark.parametrize("with_model", [True, False])

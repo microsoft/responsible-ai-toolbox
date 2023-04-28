@@ -10,7 +10,7 @@ from typing import Any, List, Optional
 import numpy as np
 import pandas as pd
 
-from responsibleai.exceptions import UserConfigValidationException
+from raiutils.exceptions import UserConfigValidationException
 
 warnings.warn(
     "MODULE-DEPRECATION-WARNING: The module "

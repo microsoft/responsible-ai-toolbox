@@ -3,7 +3,7 @@
 
 from typing import Any, Dict, List, Optional
 
-from responsibleai.exceptions import UserConfigValidationException
+from raiutils.exceptions import UserConfigValidationException
 
 _DROPPED_FEATURE_PURPOSE = 'dropped feature'
 _CATEGORICAL_FEATURE_PURPOSE = 'categorical feature'

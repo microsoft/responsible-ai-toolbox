@@ -7,7 +7,7 @@ from typing import List, Optional
 import numpy as np
 import pandas as pd
 
-from responsibleai.exceptions import UserConfigValidationException
+from raiutils.exceptions import UserConfigValidationException
 
 
 def validate_train_test_categories(

@@ -16,8 +16,8 @@ from rai_test_utils.datasets.tabular import (
 from rai_test_utils.models.lightgbm import create_lightgbm_classifier
 from rai_test_utils.models.sklearn import \
     create_sklearn_random_forest_regressor
+from raiutils.exceptions import UserConfigValidationException
 from responsibleai import RAIInsights
-from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
 
 TARGET = 'target'

@@ -10,13 +10,13 @@ import pandas as pd
 from erroranalysis._internal.constants import ModelTask, display_name_to_metric
 from raiutils.cohort import Cohort
 from raiutils.data_processing import convert_to_list, serialize_json_safe
+from raiutils.exceptions import UserConfigValidationException
 from raiutils.models import is_classifier
 from raiwidgets.constants import ErrorMessages
 from raiwidgets.error_handling import _format_exception
 from raiwidgets.interfaces import WidgetRequestResponseConstants
 from responsibleai import RAIInsights
 from responsibleai._internal.constants import ManagerNames
-from responsibleai.exceptions import UserConfigValidationException
 
 EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 
