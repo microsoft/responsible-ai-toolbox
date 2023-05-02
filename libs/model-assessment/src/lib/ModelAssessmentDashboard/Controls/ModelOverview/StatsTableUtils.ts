@@ -12,6 +12,7 @@ import {
   MulticlassClassificationMetrics,
   MultilabelMetrics,
   ObjectDetectionMetrics,
+  QuestionAnsweringMetrics,
   RegressionMetrics,
   TotalCohortSamples,
   QuestionAnsweringMetrics

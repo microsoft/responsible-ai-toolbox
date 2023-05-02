@@ -60,6 +60,9 @@ interface IModelOverviewProps {
     className: string,
     iouThresh: number
   ) => Promise<any[]>;
+  requestQuestionAnsweringMetrics?: (
+    selectionIndexes: number[][]
+  ) => Promise<any[]>;
 }
 
 interface IModelOverviewState {
@@ -607,7 +610,13 @@ export class ModelOverview extends React.Component<
       datasetCohortLabeledStatistics: datasetCohortMetricStats
     });
 
-    this.updateObjectDetectionMetrics(selectionIndexes, true);
+    if (this.context.modelMetadata.modelType === ModelTypes.ObjectDetection) {
+      this.updateObjectDetectionMetrics(selectionIndexes, true);
+    } else if (
+      this.context.modelMetadata.modelType === ModelTypes.QuestionAnswering
+    ) {
+      this.updateQuestionAnsweringMetrics(selectionIndexes, true);
+    }
   };
 
   private updateObjectDetectionMetrics(
@@ -672,6 +681,72 @@ export class ModelOverview extends React.Component<
     }
   }
 
+  private updateQuestionAnsweringMetrics(
+    selectionIndexes: number[][],
+    isDatasetCohort: boolean
+  ): void {
+    if (
+      this.context.requestQuestionAnsweringMetrics &&
+      selectionIndexes.length > 0
+    ) {
+      this.context
+        .requestQuestionAnsweringMetrics(
+          selectionIndexes,
+          new AbortController().signal
+        )
+        .then((result) => {
+          // Assumption: the lengths of `result` and `selectionIndexes` are the same.
+          const updatedMetricStats: ILabeledStatistic[][] = [];
+
+          for (const [
+            cohortIndex,
+            [exactMatchRatio, f1Score, meteorScore, bleuScore, rougeScore]
+          ] of result.entries()) {
+            const count = selectionIndexes[cohortIndex].length;
+
+            const updatedCohortMetricStats = [
+              {
+                key: TotalCohortSamples,
+                label: localization.Interpret.Statistics.samples,
+                stat: count
+              },
+              {
+                key: QuestionAnsweringMetrics.ExactMatchRatio,
+                label: localization.Interpret.Statistics.exactMatchRatio,
+                stat: exactMatchRatio
+              },
+              {
+                key: QuestionAnsweringMetrics.F1Score,
+                label: localization.Interpret.Statistics.f1Score,
+                stat: f1Score
+              },
+              {
+                key: QuestionAnsweringMetrics.MeteorScore,
+                label: localization.Interpret.Statistics.meteorScore,
+                stat: meteorScore
+              },
+              {
+                key: QuestionAnsweringMetrics.BleuScore,
+                label: localization.Interpret.Statistics.bleuScore,
+                stat: bleuScore
+              },
+              {
+                key: QuestionAnsweringMetrics.RougeScore,
+                label: localization.Interpret.Statistics.rougeScore,
+                stat: rougeScore
+              }
+            ];
+
+            updatedMetricStats.push(updatedCohortMetricStats);
+          }
+
+          isDatasetCohort
+            ? this.updateDatasetCohortState(updatedMetricStats)
+            : this.updateFeatureCohortState(updatedMetricStats);
+        });
+    }
+  }
+
   private updateDatasetCohortState(
     cohortMetricStats: ILabeledStatistic[][]
   ): void {
@@ -705,7 +780,13 @@ export class ModelOverview extends React.Component<
       featureBasedCohorts
     });
 
-    this.updateObjectDetectionMetrics(selectionIndexes, false);
+    if (this.context.modelMetadata.modelType === ModelTypes.ObjectDetection) {
+      this.updateObjectDetectionMetrics(selectionIndexes, false);
+    } else if (
+      this.context.modelMetadata.modelType === ModelTypes.QuestionAnswering
+    ) {
+      this.updateQuestionAnsweringMetrics(selectionIndexes, false);
+    }
   };
 
   private updateFeatureCohortState(

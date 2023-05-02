@@ -262,7 +262,7 @@ export const generateMetrics: (
     return generateMultilabelStats(jointDataset, selectionIndexes);
   }
   if (modelType === ModelTypes.QuestionAnswering) {
-    return generateQuestionAnsweringStats(jointDataset, selectionIndexes);
+    return generateQuestionAnsweringStats(selectionIndexes);
   }
   const trueYs = jointDataset.unwrap(JointDataset.TrueYLabel);
   const predYs = jointDataset.unwrap(JointDataset.PredictedYLabel);
