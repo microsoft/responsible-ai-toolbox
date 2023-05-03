@@ -153,11 +153,7 @@ export class ModelOverview extends React.Component<
     ) {
       defaultSelectedMetrics = [
         MultilabelMetrics.ExactMatchRatio,
-        MultilabelMetrics.HammingScore,
-        MultilabelMetrics.MeteorScore,
-        MultilabelMetrics.BleuScore,
-        MultilabelMetrics.F1Score,
-        MultilabelMetrics.RougeScore
+        MultilabelMetrics.HammingScore
       ];
     } else if (
       this.context.dataset.task_type === DatasetTaskType.ObjectDetection
@@ -172,7 +168,9 @@ export class ModelOverview extends React.Component<
     ) {
       defaultSelectedMetrics = [
         QuestionAnsweringMetrics.ExactMatchRatio,
-        QuestionAnsweringMetrics.F1Score
+        QuestionAnsweringMetrics.MeteorScore,
+        QuestionAnsweringMetrics.BleuScore,
+        QuestionAnsweringMetrics.RougeScore
       ];
     } else {
       // task_type === "regression"
