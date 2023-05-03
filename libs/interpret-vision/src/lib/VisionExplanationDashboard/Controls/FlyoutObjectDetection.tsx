@@ -56,7 +56,6 @@ const stackTokens = {
   medium: { childrenGap: "l1" }
 };
 const ExcessLabelLen = localization.InterpretVision.Dashboard.prefix.length;
-
 export class FlyoutObjectDetection extends React.Component<
   IFlyoutProps,
   IFlyoutState
@@ -70,7 +69,6 @@ export class FlyoutObjectDetection extends React.Component<
       selectableObjectIndexes: []
     };
   }
-
   public componentDidMount(): void {
     const item = this.props.item;
     if (!item) {
@@ -84,7 +82,6 @@ export class FlyoutObjectDetection extends React.Component<
     );
     this.setState({ item, metadata, selectableObjectIndexes });
   }
-
   public componentDidUpdate(prevProps: IFlyoutProps): void {
     if (prevProps !== this.props) {
       const item = this.props.item;
@@ -103,23 +100,27 @@ export class FlyoutObjectDetection extends React.Component<
       });
     }
   }
-
+  public callbackWrapper = (): void => {
+    const { callback } = this.props;
+    this.setState({ odSelectedKey: ""});
+    callback()
+  }
   public render(): React.ReactNode {
-    const { isOpen, callback } = this.props;
+    const { isOpen } = this.props;
     const item = this.state.item;
     if (!item) {
       return <div />;
     }
     const classNames = flyoutStyles();
     const predictedY = getJoinedLabelString(item?.predictedY);
-    const trueY = getJoinedLabelString(item?.trueY);
+    const trueY = getJoinedLabelString(item?.trueY); 
     return (
       <FocusZone>
         <Panel
           headerText={localization.InterpretVision.Dashboard.panelTitle}
           isOpen={isOpen}
           closeButtonAriaLabel="Close"
-          onDismiss={callback}
+          onDismiss={this.callbackWrapper}
           isLightDismiss
           type={PanelType.large}
           className={classNames.mainContainer}
@@ -284,7 +285,6 @@ export class FlyoutObjectDetection extends React.Component<
       </FocusZone>
     );
   }
-
   private selectODChoiceFromDropdown = (
     _event: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
