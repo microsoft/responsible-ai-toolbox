@@ -102,9 +102,9 @@ export class FlyoutObjectDetection extends React.Component<
   }
   public callbackWrapper = (): void => {
     const { callback } = this.props;
-    this.setState({ odSelectedKey: ""});
-    callback()
-  }
+    this.setState({ odSelectedKey: "" });
+    callback();
+  };
   public render(): React.ReactNode {
     const { isOpen } = this.props;
     const item = this.state.item;
