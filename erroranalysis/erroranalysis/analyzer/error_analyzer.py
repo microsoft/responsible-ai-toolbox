@@ -442,7 +442,7 @@ class BaseAnalyzer(ABC):
         input_data = self.dataset
         diff = self.get_diff()
         if isinstance(self.dataset, pd.DataFrame):
-            input_data = input_data.to_numpy()
+            input_data = input_data.to_numpy(copy=True)
         if self.categorical_features:
             # Inplace replacement of columns
             indexes = self.categorical_indexes
