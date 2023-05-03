@@ -182,6 +182,9 @@ export class TabsView extends React.PureComponent<
                       requestObjectDetectionMetrics={
                         this.props.requestObjectDetectionMetrics
                       }
+                      requestQuestionAnsweringMetrics={
+                        this.props.requestQuestionAnsweringMetrics
+                      }
                       cohorts={this.props.cohorts}
                       setSelectedCohort={this.props.setSelectedCohort}
                       selectedCohort={this.props.selectedCohort}

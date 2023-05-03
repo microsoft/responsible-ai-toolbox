@@ -145,6 +145,13 @@ export interface IModelAssessmentContext {
         abortSignal: AbortSignal
       ) => Promise<any[]>)
     | undefined;
+  requestQuestionAnsweringMetrics?:
+    | ((
+        selectionIndexes: number[][],
+        trueY: string[],
+        predictedY: string[]
+      ) => Promise<any[]>)
+    | undefined;
   requestSplinePlotDistribution?: (
     request: any,
     abortSignal: AbortSignal

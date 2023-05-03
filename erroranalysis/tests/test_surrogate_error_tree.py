@@ -77,9 +77,9 @@ class TestSurrogateErrorTree(object):
         X_train, X_test, y_train, y_test, categorical_features = \
             create_adult_census_data()
         model = create_kneighbors_classifier(X_train, y_train)
-        filters = [{'arg': [40],
-                    'column': 'Age',
-                    'method': 'less and equal'}]
+        filters = [{ARG: [40],
+                    COLUMN: 'Age',
+                    METHOD: 'less and equal'}]
         run_error_analyzer(model, X_test, y_test, list(X_train.columns),
                            analyzer_type, categorical_features,
                            filters=filters)

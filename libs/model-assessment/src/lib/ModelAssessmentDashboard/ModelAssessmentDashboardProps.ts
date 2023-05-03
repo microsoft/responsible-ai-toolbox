@@ -122,6 +122,11 @@ export interface IModelAssessmentDashboardProps
     iouThresh: number,
     abortSignal: AbortSignal
   ) => Promise<any[]>;
+  requestQuestionAnsweringMetrics?: (
+    selectionIndexes: number[][],
+    trueY: string[],
+    predictedY: string[]
+  ) => Promise<any[]>;
   requestBubblePlotData?: (
     filter: unknown[],
     compositeFilter: unknown[],

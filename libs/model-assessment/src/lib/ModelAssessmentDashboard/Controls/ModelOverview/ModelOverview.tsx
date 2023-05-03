@@ -34,6 +34,7 @@ import {
   TelemetryEventName,
   DatasetTaskType,
   ImageClassificationMetrics,
+  QuestionAnsweringMetrics,
   TotalCohortSamples
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -152,7 +153,11 @@ export class ModelOverview extends React.Component<
     ) {
       defaultSelectedMetrics = [
         MultilabelMetrics.ExactMatchRatio,
-        MultilabelMetrics.HammingScore
+        MultilabelMetrics.HammingScore,
+        MultilabelMetrics.MeteorScore,
+        MultilabelMetrics.BleuScore,
+        MultilabelMetrics.F1Score,
+        MultilabelMetrics.RougeScore
       ];
     } else if (
       this.context.dataset.task_type === DatasetTaskType.ObjectDetection
@@ -161,6 +166,13 @@ export class ModelOverview extends React.Component<
         ObjectDetectionMetrics.MeanAveragePrecision,
         ObjectDetectionMetrics.AveragePrecision,
         ObjectDetectionMetrics.AverageRecall
+      ];
+    } else if (
+      this.context.dataset.task_type === DatasetTaskType.QuestionAnswering
+    ) {
+      defaultSelectedMetrics = [
+        QuestionAnsweringMetrics.ExactMatchRatio,
+        QuestionAnsweringMetrics.F1Score
       ];
     } else {
       // task_type === "regression"

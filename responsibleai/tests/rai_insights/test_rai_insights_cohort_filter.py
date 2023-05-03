@@ -6,12 +6,14 @@ import pandas as pd
 import pytest
 from tests.common_utils import create_iris_data
 
-from erroranalysis._internal.constants import PRED_Y, ROW_INDEX, TRUE_Y
+from erroranalysis._internal.constants import (ARG, COLUMN, METHOD, PRED_Y,
+                                               ROW_INDEX, TRUE_Y)
 from rai_test_utils.datasets.tabular import (create_housing_data,
                                              create_simple_titanic_data)
 from rai_test_utils.models.sklearn import (
     create_sklearn_random_forest_regressor, create_sklearn_svm_classifier,
     create_titanic_pipeline)
+from raiutils.cohort import CohortFilterMethods
 from raiutils.models import ModelTask
 from responsibleai.rai_insights import RAIInsights
 
@@ -26,9 +28,9 @@ class TestCohortFilterRAIInsights(object):
     def test_cohort_filter_equal(self):
         X_train, X_test, y_train, y_test, feature_names, _ = \
             create_iris_pandas()
-        filters = [{'arg': [2.8],
-                    'column': SEPAL_WIDTH,
-                    'method': 'equal'}]
+        filters = [{ARG: [2.8],
+                    COLUMN: SEPAL_WIDTH,
+                    METHOD: CohortFilterMethods.METHOD_EQUAL}]
         validation_data = create_validation_data(X_test, y_test)
         validation_data = validation_data.loc[X_test[SEPAL_WIDTH] == 2.8]
         model_task = ModelTask.CLASSIFICATION
@@ -53,9 +55,9 @@ class TestCohortFilterRAIInsights(object):
                         "in Predicted Y cohort filtering")
         X_train, X_test, y_train, y_test, feature_names, classes = \
             create_iris_pandas(use_str_labels)
-        filters = [{'arg': [2],
-                    'column': target_type,
-                    'method': 'includes'}]
+        filters = [{ARG: [2],
+                    COLUMN: target_type,
+                    METHOD: CohortFilterMethods.METHOD_INCLUDES}]
         validation_data = create_validation_data(X_test, y_test)
         if use_str_labels:
             validation_filter = y_test == classes[2]
@@ -79,9 +81,9 @@ class TestCohortFilterRAIInsights(object):
     def test_cohort_filter_less(self):
         X_train, X_test, y_train, y_test, feature_names, _ = \
             create_iris_pandas()
-        filters = [{'arg': [2.8],
-                    'column': SEPAL_WIDTH,
-                    'method': 'less'}]
+        filters = [{ARG: [2.8],
+                    COLUMN: SEPAL_WIDTH,
+                    METHOD: CohortFilterMethods.METHOD_LESS}]
         validation_data = create_validation_data(X_test, y_test)
         validation_data = validation_data.loc[X_test[SEPAL_WIDTH] < 2.8]
         model_task = ModelTask.CLASSIFICATION
@@ -102,9 +104,9 @@ class TestCohortFilterRAIInsights(object):
         X_train, X_test, y_train, y_test, feature_names, _ = \
             create_iris_pandas()
 
-        filters = [{'arg': [2.8],
-                    'column': SEPAL_WIDTH,
-                    'method': 'less and equal'}]
+        filters = [{ARG: [2.8],
+                    COLUMN: SEPAL_WIDTH,
+                    METHOD: CohortFilterMethods.METHOD_LESS_AND_EQUAL}]
         validation_data = create_validation_data(X_test, y_test)
         validation_data = validation_data.loc[X_test[SEPAL_WIDTH] <= 2.8]
         model_task = ModelTask.CLASSIFICATION
@@ -124,9 +126,9 @@ class TestCohortFilterRAIInsights(object):
     def test_cohort_filter_greater(self):
         X_train, X_test, y_train, y_test, feature_names, _ = \
             create_iris_pandas()
-        filters = [{'arg': [2.8],
-                    'column': SEPAL_WIDTH,
-                    'method': 'greater'}]
+        filters = [{ARG: [2.8],
+                    COLUMN: SEPAL_WIDTH,
+                    METHOD: CohortFilterMethods.METHOD_GREATER}]
         validation_data = create_validation_data(X_test, y_test)
         validation_data = validation_data.loc[X_test[SEPAL_WIDTH] > 2.8]
         model_task = ModelTask.CLASSIFICATION
@@ -146,9 +148,9 @@ class TestCohortFilterRAIInsights(object):
     def test_cohort_filter_greater_and_equal(self):
         X_train, X_test, y_train, y_test, feature_names, _ = \
             create_iris_pandas()
-        filters = [{'arg': [2.8],
-                    'column': SEPAL_WIDTH,
-                    'method': 'greater and equal'}]
+        filters = [{ARG: [2.8],
+                    COLUMN: SEPAL_WIDTH,
+                    METHOD: CohortFilterMethods.METHOD_GREATER_AND_EQUAL}]
         validation_data = create_validation_data(X_test, y_test)
         validation_data = validation_data.loc[X_test[SEPAL_WIDTH] >= 2.8]
         model_task = ModelTask.CLASSIFICATION
@@ -168,9 +170,9 @@ class TestCohortFilterRAIInsights(object):
     def test_cohort_filter_in_the_range_of(self):
         X_train, X_test, y_train, y_test, feature_names, _ = \
             create_iris_pandas()
-        filters = [{'arg': [2.8, 3.4],
-                    'column': SEPAL_WIDTH,
-                    'method': 'in the range of'}]
+        filters = [{ARG: [2.8, 3.4],
+                    COLUMN: SEPAL_WIDTH,
+                    METHOD: CohortFilterMethods.METHOD_RANGE}]
         validation_data = create_validation_data(X_test, y_test)
         validation_data = validation_data.loc[
             (X_test[SEPAL_WIDTH] <= 3.4) & (X_test[SEPAL_WIDTH] >= 2.8)]
@@ -200,9 +202,9 @@ class TestCohortFilterRAIInsights(object):
 
         # the index 1, corresponds to incorrect prediction
         # the index 0 correspond to correct prediction
-        filters = [{'arg': arg,
-                    'column': CLASSIFICATION_OUTCOME,
-                    'method': 'includes'}]
+        filters = [{ARG: arg,
+                    COLUMN: CLASSIFICATION_OUTCOME,
+                    METHOD: CohortFilterMethods.METHOD_INCLUDES}]
         pred_y = model.predict(X_test)
         validation_data = create_validation_data(X_test, y_test, pred_y)
         if correct_prediction:
@@ -233,9 +235,9 @@ class TestCohortFilterRAIInsights(object):
         clf = create_titanic_pipeline(X_train, y_train)
         categorical_features = categorical
         # the indexes 0, 2 correspond to S, C
-        filters = [{'arg': [0, 2],
-                    'column': EMBARKED,
-                    'method': 'includes'}]
+        filters = [{ARG: [0, 2],
+                    COLUMN: EMBARKED,
+                    METHOD: CohortFilterMethods.METHOD_INCLUDES}]
         validation_data = create_validation_data(X_test, y_test)
         filter_embarked = X_test[EMBARKED].isin(['S', 'C'])
         validation_data = validation_data.loc[filter_embarked]
@@ -258,9 +260,9 @@ class TestCohortFilterRAIInsights(object):
         clf = create_titanic_pipeline(X_train, y_train)
         categorical_features = categorical
         # the indexes other than 0, 2 correspond to Q
-        filters = [{'arg': [0, 2],
-                    'column': EMBARKED,
-                    'method': 'excludes'}]
+        filters = [{ARG: [0, 2],
+                    COLUMN: EMBARKED,
+                    METHOD: CohortFilterMethods.METHOD_EXCLUDES}]
         validation_data = create_validation_data(X_test, y_test)
         filter_embarked = X_test[EMBARKED].isin(['Q'])
         validation_data = validation_data.loc[filter_embarked]
@@ -285,9 +287,9 @@ class TestCohortFilterRAIInsights(object):
         categorical_features = categorical
         # the indexes 1, 2 correspond to false positives and false negatives
         # the indexes 0, 3 correspond to true positives and true negatives
-        filters = [{'arg': arg,
-                    'column': CLASSIFICATION_OUTCOME,
-                    'method': 'includes'}]
+        filters = [{ARG: arg,
+                    COLUMN: CLASSIFICATION_OUTCOME,
+                    METHOD: CohortFilterMethods.METHOD_INCLUDES}]
         pred_y = clf.predict(X_test)
         validation_data = create_validation_data(X_test, y_test, pred_y)
         if not outcome:
@@ -314,9 +316,9 @@ class TestCohortFilterRAIInsights(object):
         X_train, X_test, y_train, y_test, feature_names, _ = \
             create_iris_pandas()
         # filter on index, which can be done from the RAI dashboard
-        filters = [{'arg': [40],
-                    'column': ROW_INDEX,
-                    'method': 'less and equal'}]
+        filters = [{ARG: [40],
+                    COLUMN: ROW_INDEX,
+                    METHOD: CohortFilterMethods.METHOD_LESS}]
         validation_data = create_validation_data(X_test, y_test)
         validation_data = validation_data.loc[validation_data[ROW_INDEX] <= 40]
         model_task = ModelTask.CLASSIFICATION
@@ -342,9 +344,9 @@ class TestCohortFilterRAIInsights(object):
 
         # filter on regression error, which can be done from the
         # RAI dashboard
-        filters = [{'arg': [40],
-                    'column': REGRESSION_ERROR,
-                    'method': 'less and equal'}]
+        filters = [{ARG: [40],
+                    COLUMN: REGRESSION_ERROR,
+                    METHOD: CohortFilterMethods.METHOD_LESS_AND_EQUAL}]
 
         model = create_sklearn_random_forest_regressor(X_train, y_train)
         pred_y = model.predict(X_test)
