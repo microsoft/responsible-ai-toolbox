@@ -119,6 +119,7 @@ export class FlyoutObjectDetection extends React.Component<
         <Panel
           headerText={localization.InterpretVision.Dashboard.panelTitle}
           isOpen={isOpen}
+          closeButtonAriaLabel="Close"
           onDismiss={this.callbackWrapper}
           isLightDismiss
           type={PanelType.large}
