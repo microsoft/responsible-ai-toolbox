@@ -69,6 +69,10 @@ export class FlyoutObjectDetection extends React.Component<
       selectableObjectIndexes: []
     };
   }
+  public componentDidMount(): void {
+    const item = this.props.item;
+    if (!item) {
+      return;
     }
     const fieldNames = this.props.otherMetadataFieldNames;
     const metadata = updateMetadata(item, fieldNames);
@@ -106,10 +110,15 @@ export class FlyoutObjectDetection extends React.Component<
     const item = this.state.item;
     if (!item) {
       return <div />;
+    }
     const classNames = flyoutStyles();
     const predictedY = getJoinedLabelString(item?.predictedY);
     const trueY = getJoinedLabelString(item?.trueY);
-          closeButtonAriaLabel="Close"
+    return (
+      <FocusZone>
+        <Panel
+          headerText={localization.InterpretVision.Dashboard.panelTitle}
+          isOpen={isOpen}
           onDismiss={this.callbackWrapper}
           isLightDismiss
           type={PanelType.large}
@@ -275,10 +284,6 @@ export class FlyoutObjectDetection extends React.Component<
       </FocusZone>
     );
   }
-<<<<<<< HEAD
-=======
-
->>>>>>> main
   private selectODChoiceFromDropdown = (
     _event: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
