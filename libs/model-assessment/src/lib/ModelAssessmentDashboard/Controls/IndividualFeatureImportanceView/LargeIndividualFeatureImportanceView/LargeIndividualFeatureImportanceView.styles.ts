@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
+import { flexLgDown } from "@responsible-ai/core-ui";
 
 export interface ILargeIndividualFeatureImportanceViewStyles {
   chart: IStyle;
@@ -10,7 +11,7 @@ export interface ILargeIndividualFeatureImportanceViewStyles {
   rotatedVerticalBox: IStyle;
   chartContainer: IStyle;
   horizontalAxis: IStyle;
-  legendContainer: IStyle;
+  chartWithLegend: IStyle;
 }
 
 export const largeIndividualFeatureImportanceViewStyles: () => IProcessedStyleSet<ILargeIndividualFeatureImportanceViewStyles> =
@@ -18,21 +19,19 @@ export const largeIndividualFeatureImportanceViewStyles: () => IProcessedStyleSe
     return mergeStyleSets<ILargeIndividualFeatureImportanceViewStyles>({
       chart: {
         marginBottom: "40px",
-        width: "90%"
+        width: "80%"
       },
       chartContainer: {
         height: "100%",
         width: "90%"
       },
+      chartWithLegend: flexLgDown,
       chartWithAxes: {
         height: "100%",
         paddingRight: "10px"
       },
       horizontalAxis: {
         textAlign: "center"
-      },
-      legendContainer: {
-        width: "15%"
       },
       rotatedVerticalBox: {
         marginLeft: "28px",

@@ -63,7 +63,12 @@ export class LargeIndividualFeatureImportanceChartArea extends React.PureCompone
       chartProps?.chartType === ChartTypes.Box;
 
     return (
-      <Stack horizontal grow tokens={{ childrenGap: "l1" }}>
+      <Stack
+        horizontal
+        grow
+        tokens={{ childrenGap: "l1" }}
+        className={classNames.chartWithLegend}
+      >
         <Stack.Item className={classNames.chart}>
           <Stack.Item className={classNames.chartWithAxes}>
             <Stack horizontal>
@@ -153,7 +158,7 @@ export class LargeIndividualFeatureImportanceChartArea extends React.PureCompone
             )}
           </Stack.Item>
         </Stack.Item>
-        <Stack.Item className={classNames.legendContainer}>
+        <Stack.Item>
           <LargeIndividualFeatureImportanceLegend
             setIsRevertButtonClicked={this.props.setIsRevertButtonClicked}
             isBubbleChartRendered={this.props.isBubbleChartRendered}
