@@ -1174,6 +1174,7 @@
       "_recall.comment": "computed recall of model, see https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers",
       "accuracy": "Accuracy: {0}",
       "bleuScore": "Bleu score: {0}",
+      "bertScore": "Bert score: {0}",
       "exactMatchRatio": "Exact match ratio: {0}",
       "rougeScore": "Rouge Score: {0}",
       "fnr": "False negative rate: {0}",
@@ -1689,19 +1690,23 @@
         },
         "exactMatchRatio": {
           "name": "Exact match ratio",
-          "description": "The ratio of instances classified correctly for every label in multilabel task."
+          "description": "The ratio of instances classified correctly for every label in question answering task."
         },
         "meteorScore": {
           "name": "Meteor Score",
-          "description": "The ratio of instances classified correctly for every label in multilabel task."
+          "description": "The ratio of instances classified correctly for every label in question answering task."
         },
         "bleuScore": {
           "name": "Bleu Score",
-          "description": "The ratio of instances classified correctly for every label in multilabel task."
+          "description": "The ratio of instances classified correctly for every label in question answering task."
+        },
+        "bertScore": {
+          "name": "Bert Score",
+          "description": "The ratio of instances classified correctly for every label in question answering task."
         },
         "rougeScore": {
           "name": "Rouge Score",
-          "description": "The ratio of instances classified correctly for every label in multilabel task."
+          "description": "The ratio of instances classified correctly for every label in question answering task."
         },
         "hammingScore": {
           "name": "Hamming score",

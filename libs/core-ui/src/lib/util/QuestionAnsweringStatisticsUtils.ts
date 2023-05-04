@@ -10,6 +10,7 @@ import {
 
 export enum QuestionAnsweringMetrics {
   BleuScore = "bleuScore",
+  BertScore = "bertScore",
   ExactMatchRatio = "exactMatchRatio",
   F1Score = "f1Score",
   MeteorScore = "meteorScore",
@@ -48,6 +49,11 @@ export const generateQuestionAnsweringStats: (
       {
         key: QuestionAnsweringMetrics.BleuScore,
         label: localization.Interpret.Statistics.bleuScore,
+        stat: Number.NaN
+      },
+      {
+        key: QuestionAnsweringMetrics.BertScore,
+        label: localization.Interpret.Statistics.bertScore,
         stat: Number.NaN
       },
       {

@@ -466,6 +466,14 @@ export function getSelectableMetrics(
         key: QuestionAnsweringMetrics.BleuScore,
         text: localization.ModelAssessment.ModelOverview.metrics.bleuScore.name
       },
+
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.bertScore
+            .description,
+        key: QuestionAnsweringMetrics.BertScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.bertScore.name
+      },
       {
         description:
           localization.ModelAssessment.ModelOverview.metrics.rougeScore

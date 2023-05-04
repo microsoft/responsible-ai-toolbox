@@ -171,9 +171,8 @@ export class ModelOverview extends React.Component<
     ) {
       defaultSelectedMetrics = [
         QuestionAnsweringMetrics.ExactMatchRatio,
-        QuestionAnsweringMetrics.MeteorScore,
-        QuestionAnsweringMetrics.BleuScore,
-        QuestionAnsweringMetrics.RougeScore
+        QuestionAnsweringMetrics.F1Score,
+        QuestionAnsweringMetrics.BertScore
       ];
     } else {
       // task_type === "regression"
@@ -700,7 +699,14 @@ export class ModelOverview extends React.Component<
 
           for (const [
             cohortIndex,
-            [exactMatchRatio, f1Score, meteorScore, bleuScore, rougeScore]
+            [
+              exactMatchRatio,
+              f1Score,
+              meteorScore,
+              bleuScore,
+              bertScore,
+              rougeScore
+            ]
           ] of result.entries()) {
             const count = selectionIndexes[cohortIndex].length;
 
@@ -729,6 +735,11 @@ export class ModelOverview extends React.Component<
                 key: QuestionAnsweringMetrics.BleuScore,
                 label: localization.Interpret.Statistics.bleuScore,
                 stat: bleuScore
+              },
+              {
+                key: QuestionAnsweringMetrics.BertScore,
+                label: localization.Interpret.Statistics.bertScore,
+                stat: bertScore
               },
               {
                 key: QuestionAnsweringMetrics.RougeScore,
