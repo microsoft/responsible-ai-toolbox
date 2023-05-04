@@ -96,7 +96,8 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
             hasCohortUpdated,
             hasAxisTypeChanged,
             this.updateBubblePlotData,
-            this.updateScatterPlotData
+            this.updateScatterPlotData,
+            this.renderBubblePlotDataOnRevertClick
           )
         : this.setState({
             chartProps: this.state.chartProps
@@ -157,7 +158,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       localExplanationsErrorMessage: undefined,
       selectedPointsIndexes: []
     });
-    const datasetBarConfigOverride = await getBubblePlotData(
+    const datasetBubblePlotConfigOverride = await getBubblePlotData(
       chartProps,
       this.props.cohort,
       this.context.jointDataset,
@@ -168,11 +169,13 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       this.onBubbleClick
     );
     if (
-      datasetBarConfigOverride &&
-      !instanceOfHighChart(datasetBarConfigOverride)
+      datasetBubblePlotConfigOverride &&
+      !instanceOfHighChart(datasetBubblePlotConfigOverride)
     ) {
       this.setState({
-        bubbleChartErrorMessage: getErrorMessage(datasetBarConfigOverride),
+        bubbleChartErrorMessage: getErrorMessage(
+          datasetBubblePlotConfigOverride
+        ),
         highChartConfigOverride: undefined,
         isBubbleChartDataLoading: false
       });
@@ -180,7 +183,25 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     }
     this.setState({
       chartProps,
-      highChartConfigOverride: datasetBarConfigOverride,
+      highChartConfigOverride: datasetBubblePlotConfigOverride,
+      isBubbleChartDataLoading: false,
+      isBubbleChartRendered: true,
+      isRevertButtonClicked: false,
+      bubblePlotData: datasetBubblePlotConfigOverride
+    });
+  };
+
+  private renderBubblePlotDataOnRevertClick = (
+    chartProps: IGenericChartProps
+  ): void => {
+    this.setState({
+      clusterData: getInitialClusterState(),
+      isLocalExplanationsDataLoading: false,
+      localExplanationsData: undefined,
+      localExplanationsErrorMessage: undefined,
+      selectedPointsIndexes: [],
+      chartProps,
+      highChartConfigOverride: this.state.bubblePlotData,
       isBubbleChartDataLoading: false,
       isBubbleChartRendered: true,
       isRevertButtonClicked: false

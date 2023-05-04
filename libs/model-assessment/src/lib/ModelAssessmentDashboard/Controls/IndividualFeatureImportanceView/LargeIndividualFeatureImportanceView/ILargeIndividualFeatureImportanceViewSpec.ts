@@ -36,6 +36,7 @@ export interface ILargeIndividualFeatureImportanceViewState {
   localExplanationsData?: ILocalExplanations;
   isLocalExplanationsDataLoading?: boolean;
   localExplanationsErrorMessage?: string;
+  bubblePlotData?: IHighchartsConfig;
 }
 
 export function getInitialSpec(): ILargeIndividualFeatureImportanceViewState {
@@ -48,6 +49,7 @@ export function getInitialSpec(): ILargeIndividualFeatureImportanceViewState {
     isRevertButtonClicked: false,
     localExplanationsData: undefined,
     localExplanationsErrorMessage: undefined,
-    selectedPointsIndexes: []
+    selectedPointsIndexes: [],
+    bubblePlotData: undefined
   };
 }
