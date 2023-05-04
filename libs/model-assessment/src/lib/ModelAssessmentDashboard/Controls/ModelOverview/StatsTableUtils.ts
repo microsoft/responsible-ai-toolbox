@@ -14,8 +14,7 @@ import {
   ObjectDetectionMetrics,
   QuestionAnsweringMetrics,
   RegressionMetrics,
-  TotalCohortSamples,
-  QuestionAnsweringMetrics
+  TotalCohortSamples
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
