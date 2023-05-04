@@ -49,6 +49,7 @@ def extract_features(text_dataset: pd.DataFrame,
                 feature_names.append(prefix + feature_name)
 
         feature_names.append("question_type")
+        feature_names.append("context_overlap")
     else:
         raise ValueError("Unknown task type: {}".format(task_type))
     if not isinstance(target_column, list):
@@ -68,6 +69,10 @@ def extract_features(text_dataset: pd.DataFrame,
                 row[QuestionAnsweringFields.CONTEXT], extracted_features)
             add_extracted_features_for_sentence(
                 row[QuestionAnsweringFields.QUESTIONS], extracted_features, sentence_type="QUESTION")
+
+            context_overlap = get_context_overlap(context=row[QuestionAnsweringFields.CONTEXT],
+                                                  question=row[QuestionAnsweringFields.QUESTIONS])
+            extracted_features.append(context_overlap)
             results.append(extracted_features)
     else:
         raise ValueError("Unknown task type: {}".format(task_type))
@@ -103,33 +108,53 @@ def add_extracted_features_for_sentence(sentence, extracted_features, sentence_t
 
 
 def get_question_type(qtext):
-
-    if re.search(r'\b\A(can|could|will|would|have|has|do|does|' +
-                 'did|is|are|was|may|might)', qtext, re.I):
+    if re.search(r'\b\A(can|could|will|would|have|has|do|does|did|is|are|was|may|might)\s',
+                 qtext, re.I):
         return "YES/NO"
-    elif re.search(r'\b\A(what|which)\s+(\w+)', qtext, re.I):
-        nextword = re.search(r'\b\A(what|which)\s+(\w+)', qtext, re.I).group(2)
-        if nextword == "year" or nextword == "month" or nextword == "date" or nextword == "day":
+    elif re.search(r'\b\A(what|which)(\'s|\'re)?\s+(\w+)', qtext, re.I):
+        nextword = re.search(r'\b\A(what|which)(\'s|\'re)?\s+(\w+)', qtext, re.I).group(3)
+        if nextword in ["year", "month", "date", "day"]:
             return "WHEN"
         else:
             return "WHAT"
-    elif re.search(r'\bwho\s', qtext, re.I):
+    elif re.search(r'\bwho(\'s|\'re)?\s', qtext, re.I):
         return "WHO"
-    elif re.search(r'\bwhy\s', qtext, re.I):
+    elif re.search(r'\bwhy(\'s|\'re)?\s', qtext, re.I):
         return "WHY"
-    elif re.search(r'\bwhere\s', qtext, re.I):
+    elif re.search(r'\bwhere(\'s|\'re)?\s', qtext, re.I):
         return "WHERE"
-    elif re.search(r'\bhow\s', qtext, re.I):
-        nextword = re.search(r'\b(how)\s(\w+)', qtext, re.I).group(2)
-        if nextword == "many" or nextword == "much" or nextword == "long":
+    elif re.search(r'\bhow(\'s|\'re)?\s', qtext, re.I):
+        nextword = re.search(r'\b(how)(\'s|\'re)?\s(\w+)', qtext, re.I).group(3)
+        if nextword in ["many", "much", "long", "old", "often"]:
             return "NUMBER"
         else:
             return "HOW"
-    elif re.search(r'\bwhen\s', qtext, re.I):
+    elif re.search(r'\bwhen(\'s|\'re)?\s', qtext, re.I):
         return "WHEN"
-    elif "in what year" in qtext or "in which year" in qtext:
+    elif re.search(r'\b(in|on|at|by|for|to|from|during|within)\s+(what|which)\s+(year|month|day|date|time)\s',
+                   qtext, re.I):
         return "WHEN"
     elif re.search(r'\bto\swhom\s', qtext, re.I):
         return "WHO"
     else:
         return "OTHER"
+
+
+def get_context_overlap(context, question):
+    global nlp
+    if nlp is None:
+        nlp = spacy.load("en_core_web_sm")
+
+    doc_q = nlp(question)
+    doc_c = nlp(context)
+
+    # get tokens in base form
+    tokens_q = set([token.lemma_ for token in doc_q if not token.is_stop and not token.is_punct])
+    tokens_c = set([token.lemma_ for token in doc_c if not token.is_stop and not token.is_punct])
+
+    intersection = tokens_q.intersection(tokens_c)
+
+    # the size of the intersection token set /  the size of the question token set
+    overlap_ratio = len(intersection) / len(tokens_q)
+
+    return round(overlap_ratio, 3)
