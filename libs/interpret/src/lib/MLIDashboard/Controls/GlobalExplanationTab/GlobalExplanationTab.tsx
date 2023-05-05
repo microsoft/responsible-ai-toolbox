@@ -554,8 +554,11 @@ export class GlobalExplanationTab extends React.PureComponent<
     if (typeof item?.key === "string") {
       const key = item.key;
       const index = this.context.jointDataset.metaDict[key].index;
-      if (index !== undefined) {
-        this.handleFeatureSelection(this.state.selectedCohortIndex, index);
+      for (const i of this.featureIndexMap.keys()) {
+        if (index && this.featureIndexMap.get(i) === index) {
+          this.handleFeatureSelection(this.state.selectedCohortIndex, i);
+          break;
+        }
       }
     }
   };
@@ -589,8 +592,7 @@ export class GlobalExplanationTab extends React.PureComponent<
     const xIsDithered =
       this.context.jointDataset.metaDict[xKey]?.treatAsCategorical;
     const yKey =
-      JointDataset.ReducedLocalImportanceRoot +
-      featureIndexBeforeDrop.toString();
+      JointDataset.ReducedLocalImportanceRoot + featureIndex.toString();
     const chartProps: IGenericChartProps = {
       chartType: ChartTypes.Scatter,
       xAxis: {
