@@ -75,7 +75,7 @@ export class LargeDatasetExplorerTab extends React.Component<
       this.state.isRevertButtonClicked &&
       preState.isRevertButtonClicked !== this.state.isRevertButtonClicked
     ) {
-      this.generateHighChartConfigOverride(
+      this.renderBubblePlotDataOnRevertClick(
         this.state.selectedCohortIndex,
         this.state.chartProps
       );
@@ -195,6 +195,20 @@ export class LargeDatasetExplorerTab extends React.Component<
     });
   };
 
+  private renderBubblePlotDataOnRevertClick = (
+    cohortIndex: number,
+    chartProps: IGenericChartProps | undefined
+  ): void => {
+    this.setState({
+      chartProps,
+      highChartConfigOverride: this.state.bubblePlotData,
+      isBubbleChartDataLoading: false,
+      isBubbleChartRendered: true,
+      isRevertButtonClicked: false,
+      selectedCohortIndex: cohortIndex
+    });
+  };
+
   private async generateHighChartConfigOverride(
     cohortIndex: number,
     chartProps: IGenericChartProps | undefined
@@ -284,25 +298,26 @@ export class LargeDatasetExplorerTab extends React.Component<
     this.setState({
       isBubbleChartDataLoading: true
     });
-    const datasetBarConfigOverride = await this.getBubblePlotData(
+    const datasetBubbleConfigOverride = await this.getBubblePlotData(
       chartProps,
       cohortIndex
     );
     this.resetSeries(chartProps);
     if (
-      datasetBarConfigOverride &&
-      !instanceOfHighChart(datasetBarConfigOverride)
+      datasetBubbleConfigOverride &&
+      !instanceOfHighChart(datasetBubbleConfigOverride)
     ) {
-      this.setErrorStatus(chartProps, cohortIndex, datasetBarConfigOverride);
+      this.setErrorStatus(chartProps, cohortIndex, datasetBubbleConfigOverride);
       return;
     }
     this.setState({
       chartProps,
-      highChartConfigOverride: datasetBarConfigOverride,
+      highChartConfigOverride: datasetBubbleConfigOverride,
       isBubbleChartDataLoading: false,
       isBubbleChartRendered: true,
       isRevertButtonClicked: false,
-      selectedCohortIndex: cohortIndex
+      selectedCohortIndex: cohortIndex,
+      bubblePlotData: datasetBubbleConfigOverride
     });
   };
 
