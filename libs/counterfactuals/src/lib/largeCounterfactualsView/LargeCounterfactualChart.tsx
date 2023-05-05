@@ -56,6 +56,7 @@ export interface ICounterfactualChartState {
   isBubbleChartDataLoading: boolean;
   bubbleChartErrorMessage?: string;
   isBubbleChartRendered: boolean;
+  bubblePlotData?: IHighchartsConfig;
 }
 
 export class LargeCounterfactualChart extends React.PureComponent<
@@ -85,7 +86,11 @@ export class LargeCounterfactualChart extends React.PureComponent<
   }
 
   public componentDidUpdate(prevProps: ILargeCounterfactualChartProps): void {
-    if (this.shouldUpdateBubbleChartPlot(prevProps)) {
+    if (this.hasRevertToBubbleChartUpdated(prevProps)) {
+      this.renderBubblePlotDataOnRevertClick();
+      return;
+    }
+    if (this.hasCohortUpdated(prevProps)) {
       this.updateBubblePlot();
       return;
     }
@@ -244,14 +249,19 @@ export class LargeCounterfactualChart extends React.PureComponent<
     );
   };
 
-  private readonly shouldUpdateBubbleChartPlot = (
+  private readonly hasRevertToBubbleChartUpdated = (
     prevProps: ILargeCounterfactualChartProps
   ): boolean => {
     return (
-      this.props.cohort.name !== prevProps.cohort.name ||
-      (this.props.isRevertButtonClicked &&
-        prevProps.isRevertButtonClicked !== this.props.isRevertButtonClicked)
+      this.props.isRevertButtonClicked &&
+      prevProps.isRevertButtonClicked !== this.props.isRevertButtonClicked
     );
+  };
+
+  private readonly hasCohortUpdated = (
+    prevProps: ILargeCounterfactualChartProps
+  ): boolean => {
+    return this.props.cohort.name !== prevProps.cohort.name;
   };
 
   private readonly hasAxisTypeChanged = (
@@ -268,6 +278,15 @@ export class LargeCounterfactualChart extends React.PureComponent<
 
   private readonly setYDialogOpen = (): void => {
     this.setState({ yDialogOpen: !this.state.yDialogOpen });
+  };
+
+  private renderBubblePlotDataOnRevertClick = (): void => {
+    this.setState({
+      bubbleChartErrorMessage: undefined,
+      isBubbleChartDataLoading: false,
+      isBubbleChartRendered: true,
+      plotData: this.state.bubblePlotData
+    });
   };
 
   private async updateBubblePlot(): Promise<void> {
@@ -290,7 +309,8 @@ export class LargeCounterfactualChart extends React.PureComponent<
       bubbleChartErrorMessage: undefined,
       isBubbleChartDataLoading: false,
       isBubbleChartRendered: true,
-      plotData
+      plotData,
+      bubblePlotData: plotData
     });
   }
 
