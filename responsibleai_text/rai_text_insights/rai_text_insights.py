@@ -10,6 +10,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, List, Optional, Union
 
+import evaluate
 import numpy as np
 import pandas as pd
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
@@ -632,3 +633,76 @@ class RAITextInsights(RAIBaseInsights):
                               RAITextInsights._load_metadata)
         inst._wrapped_model = wrap_model(inst.model, inst.test, inst.task_type)
         return inst
+
+    def normalize_text(self, s):
+        """Removing articles and punctuation, and standardizing whitespace are all typical text processing steps."""
+        import re
+        import string
+
+        def remove_articles(text):
+            regex = re.compile(r"\b(a|an|the)\b", re.UNICODE)
+            return re.sub(regex, " ", text)
+
+        def white_space_fix(text):
+            return " ".join(text.split())
+
+        def remove_punc(text):
+            exclude = set(string.punctuation)
+            return "".join(ch for ch in text if ch not in exclude)
+
+        def lower(text):
+            return text.lower()
+
+        return white_space_fix(remove_articles(remove_punc(lower(s))))
+
+    def compute_f1(self, prediction, truth):
+        pred_tokens = self.normalize_text(prediction).split()
+        truth_tokens = self.normalize_text(truth).split()
+
+        # if either the prediction or the truth is no-answer then f1 = 1 if they agree, 0 otherwise
+        if len(pred_tokens) == 0 or len(truth_tokens) == 0:
+            return int(pred_tokens == truth_tokens)
+
+        common_tokens = set(pred_tokens) & set(truth_tokens)
+
+        # if there are no common tokens then f1 = 0
+        if len(common_tokens) == 0:
+            return 0
+
+        prec = len(common_tokens) / len(pred_tokens)
+        rec = len(common_tokens) / len(truth_tokens)
+
+        return 2 * (prec * rec) / (prec + rec)
+
+    def compute_question_answering_metrics(self, selection_indexes):
+        dashboard_dataset = self.get_data().dataset
+        true_y = dashboard_dataset.true_y
+        predicted_y = dashboard_dataset.predicted_y
+        all_cohort_metrics = []
+        for cohort_indices in selection_indexes:
+            true_y_cohort = [true_y[cohort_index] for cohort_index
+                             in cohort_indices]
+            predicted_y_cohort = [predicted_y[cohort_index] for cohort_index
+                                  in cohort_indices]
+            f1_score = []
+            for cohort_index in cohort_indices:
+                f1_score.append(self.compute_f1(predicted_y[cohort_index], true_y[cohort_index]))
+            try:
+                exact_match = evaluate.load('exact_match')
+                exact_match_results = exact_match.compute(predictions=predicted_y_cohort, references=true_y_cohort)
+                rouge = evaluate.load('rouge')
+                rouge_results = rouge.compute(predictions=predicted_y_cohort, references=true_y_cohort)
+                bleu = evaluate.load('bleu')
+                bleu_results = bleu.compute(predictions=predicted_y_cohort, references=true_y_cohort)
+                meteor = evaluate.load('meteor')
+                meteor_results = meteor.compute(predictions=predicted_y_cohort, references=true_y_cohort)
+                bert_score = evaluate.load('bertscore')
+                bert_score_results = bert_score.compute(predictions=predicted_y_cohort, references=true_y_cohort,
+                                                        model_type="distilbert-base-uncased")
+                bert_f1_score = np.mean(bert_score_results['f1'])
+                all_cohort_metrics.append([exact_match_results['exact_match'], np.mean(f1_score),
+                                           meteor_results['meteor'], bleu_results['bleu'], bert_f1_score,
+                                           rouge_results['rougeL']])
+            except ValueError:
+                all_cohort_metrics.append([0, 0, 0, 0, 0, 0])
+        return all_cohort_metrics

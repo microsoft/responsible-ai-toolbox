@@ -18,7 +18,14 @@ with open('README.md', 'r') as fh:
 # Use requirements.txt to set the install_requires
 with open('requirements.txt') as f:
     install_requires = [line.strip() for line in f]
-
+EXTRAS = {
+    "qa": [
+        'evaluate',
+        'bert_score',
+        'nltk',
+        'rouge_score'
+    ]
+}
 setuptools.setup(
     name=name,  # noqa: F821
     version=version,  # noqa: F821
@@ -31,6 +38,7 @@ setuptools.setup(
     url="https://github.com/microsoft/responsible-ai-toolbox",
     packages=setuptools.find_packages(),
     python_requires='>=3.6',
+    extras_require=EXTRAS,
     install_requires=install_requires,
     classifiers=[
         "Programming Language :: Python :: 3.6",
