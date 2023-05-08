@@ -122,6 +122,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
         </MissingParametersPlaceholder>
       );
     }
+    console.log("!!bub data: ", this.state.plotData, this.state.bubblePlotData);
 
     return (
       <Stack horizontal id="CausalIndividualChart" className={classNames.chart}>
@@ -153,8 +154,35 @@ export class LargeCausalIndividualChart extends React.PureComponent<
   };
 
   private updateBubblePlotData = async (
-    chartProps: IGenericChartProps
+    chartProps: IGenericChartProps,
+    hasRevertToBubbleChartUpdated: boolean
   ): Promise<void> => {
+    if (hasRevertToBubbleChartUpdated) {
+      this.setState(
+        {
+          chartProps,
+          isBubbleChartDataLoading: true,
+          isBubbleChartRendered: true,
+          isRevertButtonClicked: false,
+          clusterData: getInitialClusterState(),
+          isLocalCausalDataLoading: false,
+          localCausalData: undefined,
+          localCausalErrorMessage: undefined,
+          selectedPointsIndexes: []
+        },
+        () => {
+          this.setState({
+            chartProps,
+            isBubbleChartDataLoading: false,
+            isBubbleChartRendered: true,
+            isRevertButtonClicked: false,
+            plotData: this.state.bubblePlotData
+          });
+        }
+      );
+      return;
+    }
+
     this.setState({
       clusterData: getInitialClusterState(),
       isBubbleChartDataLoading: true,
@@ -164,7 +192,9 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       selectedPointsIndexes: []
     });
     this.props.onDataClick(false, undefined);
-    const datasetBarConfigOverride = await getBubblePlotData(
+    let datasetBubbleConfigOverride: any = this.state.bubblePlotData;
+    // if (!hasRevertToBubbleChartUpdated) {
+    datasetBubbleConfigOverride = await getBubblePlotData(
       chartProps,
       this.props.cohort,
       this.context.jointDataset,
@@ -175,24 +205,31 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       this.onBubbleClick
     );
     if (
-      datasetBarConfigOverride &&
-      !instanceOfHighChart(datasetBarConfigOverride)
+      datasetBubbleConfigOverride &&
+      !instanceOfHighChart(datasetBubbleConfigOverride)
     ) {
       this.setState({
-        bubbleChartErrorMessage: getErrorMessage(datasetBarConfigOverride),
+        bubbleChartErrorMessage: getErrorMessage(datasetBubbleConfigOverride),
         isBubbleChartDataLoading: false,
         plotData: undefined
       });
       return;
     }
-    this.setState({
+    // }
+    // hasRevertToBubbleChartUpdated && (await this.delay(500));
+    this.setState((_prevState) => ({
       chartProps,
       isBubbleChartDataLoading: false,
       isBubbleChartRendered: true,
       isRevertButtonClicked: false,
-      plotData: datasetBarConfigOverride
-    });
+      plotData: datasetBubbleConfigOverride,
+      bubblePlotData: datasetBubbleConfigOverride
+    }));
   };
+
+  // private delay(ms: number) {
+  //   return new Promise((resolve) => setTimeout(resolve, ms));
+  // }
 
   private updateScatterPlotData = (chartProps: IGenericChartProps): void => {
     const datasetBarConfigOverride = getScatterOption(
