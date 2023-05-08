@@ -12,6 +12,8 @@ import { JointDataset } from "../util/JointDataset";
 import { BasicHighChart } from "./BasicHighChart";
 import { getFeatureImportanceBarStyles } from "./FeatureImportanceBar.styles";
 import { IHighchartsConfig } from "./IHighchartsConfig";
+import { LoadingSpinner } from "../components/LoadingSpinner";
+import { localization } from "@responsible-ai/localization";
 
 export interface IGlobalSeries {
   unsortedAggregateY: number[];
@@ -34,6 +36,7 @@ export interface IFeatureBarProps {
   unsortedSeries: IGlobalSeries[];
   originX?: string[];
   xMapping?: string[];
+  loading?: boolean;
   onFeatureSelection?: (seriesIndex: number, featureIndex: number) => void;
 }
 
@@ -72,24 +75,31 @@ export class FeatureImportanceBar extends React.Component<
         id="FeatureImportanceBar"
         className={featureImportanceBarStyles.chartWithVertical}
       >
-        <Stack.Item className={featureImportanceBarStyles.verticalAxis}>
-          <div className={featureImportanceBarStyles.rotatedVerticalBox}>
-            <div>
-              {this.props.yAxisLabels.map((label, i) => (
-                <Text
-                  block
-                  variant="medium"
-                  className={featureImportanceBarStyles.boldText}
-                  key={i}
-                >
-                  {label}
-                </Text>
-              ))}
+        {!this.props.loading && (
+          <Stack.Item className={featureImportanceBarStyles.verticalAxis}>
+            <div className={featureImportanceBarStyles.rotatedVerticalBox}>
+              <div>
+                {this.props.yAxisLabels.map((label, i) => (
+                  <Text
+                    block
+                    variant="medium"
+                    className={featureImportanceBarStyles.boldText}
+                    key={i}
+                  >
+                    {label}
+                  </Text>
+                ))}
+              </div>
             </div>
-          </div>
-        </Stack.Item>
+          </Stack.Item>
+        )}
+
         <Stack.Item className={featureImportanceBarStyles.chart}>
-          <BasicHighChart configOverride={this.state.highchartOption} />
+          {this.props.loading ? (
+            <LoadingSpinner label={localization.Counterfactuals.loading} />
+          ) : (
+            <BasicHighChart configOverride={this.state.highchartOption} />
+          )}
         </Stack.Item>
       </Stack>
     );
