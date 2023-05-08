@@ -47,7 +47,8 @@ def extract_features(text_dataset: pd.DataFrame,
         for prefix in prefixes:
             for feature_name in base_feature_names:
                 feature_names.append(prefix + feature_name)
-
+            feature_names.append(prefix + "average_parse_tree_depth")
+            feature_names.append(prefix + "maximum_parse_tree_depth")
         feature_names.append("question_type")
         feature_names.append("context_overlap")
     else:
@@ -66,9 +67,9 @@ def extract_features(text_dataset: pd.DataFrame,
         for _, row in tqdm(text_features.iterrows()):
             extracted_features = []
             add_extracted_features_for_sentence(
-                row[QuestionAnsweringFields.CONTEXT], extracted_features)
+                row[QuestionAnsweringFields.CONTEXT], extracted_features, task_type)
             add_extracted_features_for_sentence(
-                row[QuestionAnsweringFields.QUESTIONS], extracted_features, sentence_type="QUESTION")
+                row[QuestionAnsweringFields.QUESTIONS], extracted_features, task_type, sentence_type="QUESTION")
 
             context_overlap = get_context_overlap(context=row[QuestionAnsweringFields.CONTEXT],
                                                   question=row[QuestionAnsweringFields.QUESTIONS])
@@ -79,7 +80,7 @@ def extract_features(text_dataset: pd.DataFrame,
     return results, feature_names
 
 
-def add_extracted_features_for_sentence(sentence, extracted_features, sentence_type=None):
+def add_extracted_features_for_sentence(sentence, extracted_features, task_type=None, sentence_type=None):
     global nlp
     if nlp is None:
         nlp = spacy.load("en_core_web_sm")
@@ -96,6 +97,11 @@ def add_extracted_features_for_sentence(sentence, extracted_features, sentence_t
                 neg_words_and_entities["negated_entities"],
                 len(named_persons),
                 sentence_length]
+
+    if task_type == ModelTask.QUESTION_ANSWERING:
+
+        features.append(get_average_depth(doc))
+        features.append(get_max_depth(doc))
 
     if sentence_type == 'QUESTION':
         question_type = get_question_type(sentence)
@@ -138,6 +144,33 @@ def get_question_type(qtext):
         return "WHO"
     else:
         return "OTHER"
+
+
+def get_parse_tree_depth(root):
+    if not list(root.children):
+        return 1
+    else:
+        return 1 + max(get_parse_tree_depth(x) for x in root.children)
+
+
+def get_average_depth(doc):
+
+    roots = []
+    for each in doc.sents:
+        roots.append([token for token in each if token.head == token][0])
+
+    parse_tree_depths = [get_parse_tree_depth(root) for root in roots]
+
+    return sum(parse_tree_depths)/len(parse_tree_depths)
+
+
+def get_max_depth(doc):
+
+    roots = []
+    for each in doc.sents:
+        roots.append([token for token in each if token.head == token][0])
+
+    return max([get_parse_tree_depth(root) for root in roots])
 
 
 def get_context_overlap(context, question):
