@@ -178,6 +178,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
             isRevertButtonClicked: false,
             plotData: this.state.bubblePlotData
           });
+          this.props.onDataClick(false, undefined);
         }
       );
       return;
@@ -192,9 +193,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       selectedPointsIndexes: []
     });
     this.props.onDataClick(false, undefined);
-    let datasetBubbleConfigOverride: any = this.state.bubblePlotData;
-    // if (!hasRevertToBubbleChartUpdated) {
-    datasetBubbleConfigOverride = await getBubblePlotData(
+    const datasetBubbleConfigOverride = await getBubblePlotData(
       chartProps,
       this.props.cohort,
       this.context.jointDataset,
@@ -215,8 +214,6 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       });
       return;
     }
-    // }
-    // hasRevertToBubbleChartUpdated && (await this.delay(500));
     this.setState((_prevState) => ({
       chartProps,
       isBubbleChartDataLoading: false,
@@ -226,10 +223,6 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       bubblePlotData: datasetBubbleConfigOverride
     }));
   };
-
-  // private delay(ms: number) {
-  //   return new Promise((resolve) => setTimeout(resolve, ms));
-  // }
 
   private updateScatterPlotData = (chartProps: IGenericChartProps): void => {
     const datasetBarConfigOverride = getScatterOption(
