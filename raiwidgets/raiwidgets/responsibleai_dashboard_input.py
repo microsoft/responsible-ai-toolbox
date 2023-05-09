@@ -366,9 +366,9 @@ class ResponsibleAIDashboardInput:
         :rtype: Dict[str, List]
         """
         try:
-            selection_index = post_data[0]
+            selection_indexes = post_data[0]
             exp = self._analysis.compute_question_answering_metrics(
-                selection_index
+                selection_indexes
             )
             return {
                 WidgetRequestResponseConstants.data: exp
