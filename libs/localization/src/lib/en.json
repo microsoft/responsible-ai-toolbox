@@ -1690,23 +1690,23 @@
         },
         "exactMatchRatio": {
           "name": "Exact match ratio",
-          "description": "The ratio of instances classified correctly for every label in question answering task."
+          "description": "The ratio of instances classified correctly for every label."
         },
         "meteorScore": {
           "name": "Meteor Score",
-          "description": "The ratio of instances classified correctly for every label in question answering task."
+          "description": "METEOR Score is calculated based on the harmonic mean of precision and recall, with recall weighted more than precision in question answering task."
         },
         "bleuScore": {
           "name": "Bleu Score",
-          "description": "The ratio of instances classified correctly for every label in question answering task."
+          "description": "Bleu Score measures the ratio of words (and/or n-grams) in the machine generated text that appeared in the reference text in question answering task."
         },
         "bertScore": {
           "name": "Bert Score",
-          "description": "The ratio of instances classified correctly for every label in question answering task."
+          "description": "BERTScore focuses on computing semantic similarity between tokens of reference and machine generated text in question answering task."
         },
         "rougeScore": {
           "name": "Rouge Score",
-          "description": "The ratio of instances classified correctly for every label in question answering task."
+          "description": "Rouge Score measures the ratio of words (and/or n-grams) in the reference text that appeared in the machine generated text in question answering task."
         },
         "hammingScore": {
           "name": "Hamming score",
