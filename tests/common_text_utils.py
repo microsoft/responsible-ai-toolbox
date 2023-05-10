@@ -22,6 +22,7 @@ ANSWERS = QuestionAnsweringFields.ANSWERS
 CONTEXT = QuestionAnsweringFields.CONTEXT
 QUESTION = QuestionAnsweringFields.QUESTION
 QUESTIONS = QuestionAnsweringFields.QUESTIONS
+TITLE = 'title'
 EMOTION_DATASET = 'SetFit/emotion'
 EMOTION = 'emotion'
 COVID19_EVENTS_LABELS = ["event1", "event2", "event3", "event4",
@@ -49,35 +50,47 @@ def load_emotion_dataset():
     return data
 
 
-def load_squad_dataset():
+def load_squad_dataset(with_metadata=False):
     dataset = datasets.load_dataset("squad", split="train")
     answers = []
     questions = []
     context = []
+    title = []
     for row in dataset:
         context.append(row[CONTEXT])
         questions.append(row[QUESTION])
         answers.append(row[ANSWERS]['text'][0])
-    data = pd.DataFrame(
-        {CONTEXT: context, QUESTIONS: questions, ANSWERS: answers})
+        if with_metadata:
+            title.append(row[TITLE])
+    columns = {CONTEXT: context, QUESTIONS: questions, ANSWERS: answers}
+    if with_metadata:
+        columns.update({TITLE: title})
+    data = pd.DataFrame(columns)
     return data
 
 
-def load_covid19_emergency_event_dataset():
+def load_covid19_emergency_event_dataset(with_metadata=False):
     dataset = datasets.load_dataset("joelito/covid19_emergency_event",
                                     split="train")
-    dataset = pd.DataFrame({"language": dataset["language"],
-                            "text": dataset["text"],
-                            "event1": dataset["event1"],
-                            "event2": dataset["event2"],
-                            "event3": dataset["event3"],
-                            "event4": dataset["event4"],
-                            "event5": dataset["event5"],
-                            "event6": dataset["event6"],
-                            "event7": dataset["event7"],
-                            "event8": dataset["event8"]})
-    dataset = dataset[dataset.language == "en"].reset_index(drop=True)
-    dataset = dataset.drop(columns="language")
+    columns = {"text": dataset["text"],
+               "event1": dataset["event1"],
+               "event2": dataset["event2"],
+               "event3": dataset["event3"],
+               "event4": dataset["event4"],
+               "event5": dataset["event5"],
+               "event6": dataset["event6"],
+               "event7": dataset["event7"],
+               "event8": dataset["event8"],
+               "language": dataset["language"]}
+    if with_metadata:
+        columns.update({'country': dataset['country']})
+    dataset = pd.DataFrame(columns)
+    if not with_metadata:
+        dataset = dataset[dataset.language == "en"].reset_index(drop=True)
+        dataset = dataset.drop(columns="language")
+    else:
+        selected_languages = dataset.language.isin(["en", "es", "fr"])
+        dataset = dataset[selected_languages].reset_index(drop=True)
     return dataset
 
 

@@ -4,7 +4,7 @@
 """Defines the text feature extraction utilities."""
 
 import re
-from typing import List, Union
+from typing import List, Optional, Union
 
 import pandas as pd
 import spacy
@@ -19,7 +19,8 @@ nlp = None
 
 
 def extract_features(text_dataset: pd.DataFrame,
-                     target_column: Union[str, List], task_type: str):
+                     target_column: Union[str, List], task_type: str,
+                     dropped_features: Optional[List[str]] = None):
     '''Extract tabular data features from the text dataset.
 
     :param text_dataset: A pandas dataframe containing the text data.
@@ -29,6 +30,8 @@ def extract_features(text_dataset: pd.DataFrame,
     :type target_column: str or list[str]
     :param task_type: The type of task to be performed.
     :type task_type: str
+    :param dropped_features: The list of features to be dropped.
+    :type dropped_features: list[str]
     :return: The list of extracted features and the feature names.
     :rtype: list, list
     '''
@@ -38,9 +41,15 @@ def extract_features(text_dataset: pd.DataFrame,
                           "named_persons", "sentence_length"]
     single_text_col_tasks = [ModelTask.TEXT_CLASSIFICATION,
                              ModelTask.MULTILABEL_TEXT_CLASSIFICATION]
+    has_dropped_features = dropped_features is not None
+    start_meta_index = 2
+    column_names = text_dataset.columns
+    if isinstance(target_column, list):
+        start_meta_index = len(target_column) + 1
     if task_type in single_text_col_tasks:
         feature_names = base_feature_names
     elif task_type == ModelTask.QUESTION_ANSWERING:
+        start_meta_index += 1
         feature_names = []
         prefixes = [QuestionAnsweringFields.CONTEXT + "_",
                     QuestionAnsweringFields.QUESTION + "_"]
@@ -53,18 +62,27 @@ def extract_features(text_dataset: pd.DataFrame,
         feature_names.append("context_overlap")
     else:
         raise ValueError("Unknown task type: {}".format(task_type))
+    # copy over the metadata column names
+    for j in range(start_meta_index, text_dataset.shape[1]):
+        if has_dropped_features and column_names[j] in dropped_features:
+            continue
+        feature_names.append(column_names[j])
     if not isinstance(target_column, list):
         target_column = [target_column]
     text_features = text_dataset.drop(target_column, axis=1)
 
     if task_type in single_text_col_tasks:
         sentences = text_features.iloc[:, 0].tolist()
-        for sentence in tqdm(sentences):
+        for i, sentence in tqdm(enumerate(sentences)):
             extracted_features = []
             add_extracted_features_for_sentence(sentence, extracted_features)
+            # append all other metadata features
+            append_metadata_values(start_meta_index, text_dataset, i,
+                                   extracted_features, has_dropped_features,
+                                   dropped_features, column_names)
             results.append(extracted_features)
     elif task_type == ModelTask.QUESTION_ANSWERING:
-        for _, row in tqdm(text_features.iterrows()):
+        for i, row in tqdm(text_features.iterrows()):
             extracted_features = []
             add_extracted_features_for_sentence(
                 row[QuestionAnsweringFields.CONTEXT], extracted_features, task_type)
@@ -74,10 +92,46 @@ def extract_features(text_dataset: pd.DataFrame,
             context_overlap = get_context_overlap(context=row[QuestionAnsweringFields.CONTEXT],
                                                   question=row[QuestionAnsweringFields.QUESTIONS])
             extracted_features.append(context_overlap)
+            # append all other metadata features
+            append_metadata_values(start_meta_index, text_dataset, i,
+                                   extracted_features, has_dropped_features,
+                                   dropped_features, column_names)
             results.append(extracted_features)
     else:
         raise ValueError("Unknown task type: {}".format(task_type))
     return results, feature_names
+
+
+def append_metadata_values(start_meta_index, text_dataset, i,
+                           extracted_features, has_dropped_features,
+                           dropped_features, column_names):
+    """Append the metadata values to the extracted features.
+
+    Note this also modifies the input array in-place.
+
+    :param start_meta_index: The index of the first metadata column.
+    :type start_meta_index: int
+    :param text_dataset: The text dataset.
+    :type text_dataset: pandas.DataFrame
+    :param i: The index of the current row.
+    :type i: int
+    :param extracted_features: The list of extracted features.
+    :type extracted_features: list
+    :param has_dropped_features: Whether there are dropped features.
+    :type has_dropped_features: bool
+    :param dropped_features: The list of dropped features.
+    :type dropped_features: list
+    :param column_names: The list of column names.
+    :type column_names: list
+    :return: The list of extracted features.
+    :rtype: list
+    """
+    # append all other metadata features
+    for j in range(start_meta_index, text_dataset.shape[1]):
+        if has_dropped_features and column_names[j] in dropped_features:
+            continue
+        extracted_features.append(text_dataset.iloc[i][j])
+    return extracted_features
 
 
 def add_extracted_features_for_sentence(sentence, extracted_features, task_type=None, sentence_type=None):

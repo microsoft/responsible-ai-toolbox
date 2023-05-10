@@ -4,13 +4,13 @@
 """Defines the RAITextInsights class."""
 
 import json
+import logging
 import pickle
 import warnings
 from enum import Enum
 from pathlib import Path
 from typing import Any, List, Optional, Union
 
-import evaluate
 import numpy as np
 import pandas as pd
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
@@ -21,6 +21,7 @@ from responsibleai._interfaces import Dataset, RAIInsightsData
 from responsibleai._internal.constants import (ManagerNames, Metadata,
                                                SerializationAttributes)
 from responsibleai.exceptions import UserConfigValidationException
+from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
 
 from responsibleai_text.common.constants import ModelTask
@@ -28,6 +29,15 @@ from responsibleai_text.managers.error_analysis_manager import \
     ErrorAnalysisManager
 from responsibleai_text.managers.explainer_manager import ExplainerManager
 from responsibleai_text.utils.feature_extractors import extract_features
+
+module_logger = logging.getLogger(__name__)
+module_logger.setLevel(logging.INFO)
+
+try:
+    import evaluate
+except ImportError:
+    module_logger.debug(
+        'Could not import evaluate, required if using a QA model')
 
 _PREDICTIONS = 'predictions'
 _PREDICT_OUTPUT = 'predict_output'
@@ -41,6 +51,12 @@ _PREDICT = 'predict'
 _PREDICT_PROBA = 'predict_proba'
 _EXT_TEST = '_ext_test'
 _EXT_FEATURES = '_ext_features'
+_FEATURE_METADATA = Metadata.FEATURE_METADATA
+_IDENTITY_FEATURE_NAME = 'identity_feature_name'
+_DATETIME_FEATURES = 'datetime_features'
+_TIME_SERIES_ID_FEATURES = 'time_series_id_features'
+_CATEGORICAL_FEATURES = 'categorical_features'
+_DROPPED_FEATURES = 'dropped_features'
 
 
 class RAITextInsights(RAIBaseInsights):
@@ -54,7 +70,8 @@ class RAITextInsights(RAIBaseInsights):
                  target_column: str, task_type: str,
                  classes: Optional[np.ndarray] = None,
                  serializer: Optional[Any] = None,
-                 maximum_rows_for_test: int = 5000):
+                 maximum_rows_for_test: int = 5000,
+                 feature_metadata: Optional[FeatureMetadata] = None):
         """Creates an RAITextInsights object.
 
         :param model: The model to compute RAI insights for.
@@ -79,10 +96,17 @@ class RAITextInsights(RAIBaseInsights):
         :param maximum_rows_for_test: Limit on size of test data
             (for performance reasons)
         :type maximum_rows_for_test: int
+        :param feature_metadata: Feature metadata for the dataset
+            to identify different kinds of features.
+        :type feature_metadata: Optional[FeatureMetadata]
         """
         # drop index as this can cause issues later like when copying
         # target column below from test dataset to _ext_test_df
         test = test.reset_index(drop=True)
+        if feature_metadata is None:
+            # initialize to avoid having to keep checking if it is None
+            feature_metadata = FeatureMetadata()
+        self._feature_metadata = feature_metadata
         self._wrapped_model = wrap_model(model, test, task_type)
         self._validate_rai_insights_input_parameters(
             model=self._wrapped_model, test=test,
@@ -96,9 +120,9 @@ class RAITextInsights(RAIBaseInsights):
             target_column=target_column,
             classes=classes
         )
-        ext_test, ext_features = extract_features(test,
-                                                  target_column,
-                                                  task_type)
+        ext_test, ext_features = extract_features(
+            test, target_column, task_type,
+            self._feature_metadata.dropped_features)
         self._ext_test = ext_test
         self._ext_features = ext_features
         self._ext_test_df = pd.DataFrame(ext_test, columns=ext_features)
@@ -122,7 +146,8 @@ class RAITextInsights(RAIBaseInsights):
             self._classes)
         self._error_analysis_manager = ErrorAnalysisManager(
             self._wrapped_model, self.test, self._ext_test_df,
-            self.target_column, self.task_type, self._classes)
+            self.target_column, self.task_type, self._classes,
+            self._feature_metadata.categorical_features)
         self._managers = [self._explainer_manager,
                           self._error_analysis_manager]
 
@@ -435,7 +460,10 @@ class RAITextInsights(RAIBaseInsights):
         if isinstance(tasktype, Enum):
             tasktype = tasktype.value
         dashboard_dataset.task_type = tasktype
-        dashboard_dataset.categorical_features = []
+        categorical_features = self._feature_metadata.categorical_features
+        if categorical_features is None:
+            categorical_features = []
+        dashboard_dataset.categorical_features = categorical_features
         dashboard_dataset.class_names = convert_to_list(
             self._classes)
         is_classification_task = self._is_classification_task
@@ -551,10 +579,12 @@ class RAITextInsights(RAIBaseInsights):
         """
         top_dir = Path(path)
         classes = convert_to_list(self._classes)
+        feature_metadata_dict = self._feature_metadata.to_dict()
         meta = {
             _TARGET_COLUMN: self.target_column,
             _TASK_TYPE: self.task_type,
-            _CLASSES: classes
+            _CLASSES: classes,
+            _FEATURE_METADATA: feature_metadata_dict,
         }
         with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)
@@ -583,6 +613,24 @@ class RAITextInsights(RAIBaseInsights):
             target_column=meta[_TARGET_COLUMN],
             classes=classes
         )
+
+        if (Metadata.FEATURE_METADATA not in meta or
+                meta[Metadata.FEATURE_METADATA] is None):
+            inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata()
+        else:
+            feature_metadata = meta[Metadata.FEATURE_METADATA]
+            inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata(
+                identity_feature_name=feature_metadata[
+                    _IDENTITY_FEATURE_NAME],
+                datetime_features=feature_metadata[
+                    _DATETIME_FEATURES],
+                time_series_id_features=feature_metadata[
+                    _TIME_SERIES_ID_FEATURES],
+                categorical_features=feature_metadata[
+                    _CATEGORICAL_FEATURES],
+                dropped_features=feature_metadata[
+                    _DROPPED_FEATURES])
+
         # load the extracted features as part of metadata
         RAITextInsights._load_ext_data(inst, path)
 
