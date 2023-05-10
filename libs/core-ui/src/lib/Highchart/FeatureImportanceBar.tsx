@@ -2,8 +2,10 @@
 // Licensed under the MIT License.
 
 import { getTheme, Stack, Text } from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { LoadingSpinner } from "../components/LoadingSpinner";
 import { getFeatureImportanceBarOptions } from "../util/getFeatureImportanceBarOptions";
 import { getFeatureImportanceBoxOptions } from "../util/getFeatureImportanceBoxOptions";
 import { ChartTypes } from "../util/IGenericChartProps";
@@ -12,8 +14,6 @@ import { JointDataset } from "../util/JointDataset";
 import { BasicHighChart } from "./BasicHighChart";
 import { getFeatureImportanceBarStyles } from "./FeatureImportanceBar.styles";
 import { IHighchartsConfig } from "./IHighchartsConfig";
-import { LoadingSpinner } from "../components/LoadingSpinner";
-import { localization } from "@responsible-ai/localization";
 
 export interface IGlobalSeries {
   unsortedAggregateY: number[];
