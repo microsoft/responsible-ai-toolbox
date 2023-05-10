@@ -93,12 +93,8 @@ export async function generateHighChartConfigOverride(
   updateScatterPlotData: (chartProps: IGenericChartProps) => void
 ): Promise<void> {
   if (chartProps) {
-    if (hasCohortUpdated) {
-      updateBubblePlotData(chartProps, false);
-      return;
-    }
-    if (hasRevertToBubbleChartUpdated) {
-      updateBubblePlotData(chartProps, true);
+    if (hasCohortUpdated || hasRevertToBubbleChartUpdated) {
+      updateBubblePlotData(chartProps, hasRevertToBubbleChartUpdated);
       return;
     }
     if (hasAxisTypeChanged) {

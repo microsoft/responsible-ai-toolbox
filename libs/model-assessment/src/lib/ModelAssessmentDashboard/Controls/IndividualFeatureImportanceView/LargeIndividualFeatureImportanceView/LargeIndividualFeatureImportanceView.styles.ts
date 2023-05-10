@@ -25,11 +25,11 @@ export const largeIndividualFeatureImportanceViewStyles: () => IProcessedStyleSe
         height: "100%",
         width: "90%"
       },
-      chartWithLegend: flexLgDown,
       chartWithAxes: {
         height: "100%",
         paddingRight: "10px"
       },
+      chartWithLegend: flexLgDown,
       horizontalAxis: {
         textAlign: "center"
       },

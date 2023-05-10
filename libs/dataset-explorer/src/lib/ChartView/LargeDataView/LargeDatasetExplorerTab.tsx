@@ -320,13 +320,13 @@ export class LargeDatasetExplorerTab extends React.Component<
       return;
     }
     this.setState({
+      bubblePlotData: datasetBubbleConfigOverride,
       chartProps,
       highChartConfigOverride: datasetBubbleConfigOverride,
       isBubbleChartDataLoading: false,
       isBubbleChartRendered: true,
       isRevertButtonClicked: false,
-      selectedCohortIndex: cohortIndex,
-      bubblePlotData: datasetBubbleConfigOverride
+      selectedCohortIndex: cohortIndex
     });
   };
 

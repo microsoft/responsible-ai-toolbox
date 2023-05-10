@@ -42,6 +42,7 @@ export interface ILargeIndividualFeatureImportanceViewState {
 export function getInitialSpec(): ILargeIndividualFeatureImportanceViewState {
   return {
     bubbleChartErrorMessage: undefined,
+    bubblePlotData: undefined,
     clusterData: getInitialClusterState(),
     isBubbleChartDataLoading: false,
     isBubbleChartRendered: true,
@@ -49,7 +50,6 @@ export function getInitialSpec(): ILargeIndividualFeatureImportanceViewState {
     isRevertButtonClicked: false,
     localExplanationsData: undefined,
     localExplanationsErrorMessage: undefined,
-    selectedPointsIndexes: [],
-    bubblePlotData: undefined
+    selectedPointsIndexes: []
   };
 }

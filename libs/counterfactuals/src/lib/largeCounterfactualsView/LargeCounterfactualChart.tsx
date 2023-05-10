@@ -314,10 +314,10 @@ export class LargeCounterfactualChart extends React.PureComponent<
     }
     this.setState({
       bubbleChartErrorMessage: undefined,
+      bubblePlotData: plotData,
       isBubbleChartDataLoading: false,
       isBubbleChartRendered: true,
-      plotData,
-      bubblePlotData: plotData
+      plotData
     });
   }
 

@@ -122,7 +122,6 @@ export class LargeCausalIndividualChart extends React.PureComponent<
         </MissingParametersPlaceholder>
       );
     }
-    console.log("!!bub data: ", this.state.plotData, this.state.bubblePlotData);
 
     return (
       <Stack horizontal id="CausalIndividualChart" className={classNames.chart}>
@@ -161,11 +160,11 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       this.setState(
         {
           chartProps,
+          clusterData: getInitialClusterState(),
           isBubbleChartDataLoading: true,
           isBubbleChartRendered: true,
-          isRevertButtonClicked: false,
-          clusterData: getInitialClusterState(),
           isLocalCausalDataLoading: false,
+          isRevertButtonClicked: false,
           localCausalData: undefined,
           localCausalErrorMessage: undefined,
           selectedPointsIndexes: []
@@ -214,14 +213,14 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       });
       return;
     }
-    this.setState((_prevState) => ({
+    this.setState({
+      bubblePlotData: datasetBubbleConfigOverride,
       chartProps,
       isBubbleChartDataLoading: false,
       isBubbleChartRendered: true,
       isRevertButtonClicked: false,
-      plotData: datasetBubbleConfigOverride,
-      bubblePlotData: datasetBubbleConfigOverride
-    }));
+      plotData: datasetBubbleConfigOverride
+    });
   };
 
   private updateScatterPlotData = (chartProps: IGenericChartProps): void => {

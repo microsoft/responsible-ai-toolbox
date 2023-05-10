@@ -204,12 +204,12 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       return;
     }
     this.setState({
+      bubblePlotData: datasetBubblePlotConfigOverride,
       chartProps,
       highChartConfigOverride: datasetBubblePlotConfigOverride,
       isBubbleChartDataLoading: false,
       isBubbleChartRendered: true,
-      isRevertButtonClicked: false,
-      bubblePlotData: datasetBubblePlotConfigOverride
+      isRevertButtonClicked: false
     });
   };
 
