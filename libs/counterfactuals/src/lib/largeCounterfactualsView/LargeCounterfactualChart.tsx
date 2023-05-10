@@ -82,16 +82,14 @@ export class LargeCounterfactualChart extends React.PureComponent<
   }
 
   public componentDidMount(): void {
-    this.updateBubblePlot();
+    this.updateBubblePlot(false);
   }
 
   public componentDidUpdate(prevProps: ILargeCounterfactualChartProps): void {
-    if (this.hasRevertToBubbleChartUpdated(prevProps)) {
-      this.renderBubblePlotDataOnRevertClick();
-      return;
-    }
-    if (this.hasCohortUpdated(prevProps)) {
-      this.updateBubblePlot();
+    const hasRevertToBubbleChartUpdated =
+      this.hasRevertToBubbleChartUpdated(prevProps);
+    if (hasRevertToBubbleChartUpdated || this.hasCohortUpdated(prevProps)) {
+      this.updateBubblePlot(hasRevertToBubbleChartUpdated);
       return;
     }
     if (this.hasAxisTypeChanged(prevProps.chartProps)) {
@@ -99,7 +97,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
       return;
     }
     if (!_.isEqual(prevProps.chartProps, this.props.chartProps)) {
-      this.updateBubblePlot();
+      this.updateBubblePlot(false);
       return;
     }
     if (this.shouldUpdateScatterPlot(prevProps)) {
@@ -280,16 +278,25 @@ export class LargeCounterfactualChart extends React.PureComponent<
     this.setState({ yDialogOpen: !this.state.yDialogOpen });
   };
 
-  private renderBubblePlotDataOnRevertClick = (): void => {
-    this.setState({
-      bubbleChartErrorMessage: undefined,
-      isBubbleChartDataLoading: false,
-      isBubbleChartRendered: true,
-      plotData: this.state.bubblePlotData
-    });
-  };
-
-  private async updateBubblePlot(): Promise<void> {
+  private async updateBubblePlot(
+    hasRevertToBubbleChartUpdated: boolean
+  ): Promise<void> {
+    if (hasRevertToBubbleChartUpdated) {
+      this.setState(
+        {
+          isBubbleChartDataLoading: true
+        },
+        () => {
+          this.setState({
+            bubbleChartErrorMessage: undefined,
+            isBubbleChartDataLoading: false,
+            isBubbleChartRendered: true,
+            plotData: this.state.bubblePlotData
+          });
+        }
+      );
+      return;
+    }
     this.setState({
       isBubbleChartDataLoading: true
     });
