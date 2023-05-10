@@ -23,6 +23,7 @@ export interface IDatasetExplorerTabState {
   bubbleChartErrorMessage?: string;
   isRevertButtonClicked?: boolean;
   bubblePlotData?: IHighchartsConfig;
+  isAggregatePlotLoading?: boolean;
 }
 
 export function getInitialState(): IDatasetExplorerTabState {

@@ -140,7 +140,10 @@ export class LargeDatasetExplorerTab extends React.Component<
                 ariaLabel={
                   localization.Interpret.DatasetExplorer.datasetCohortDropdown
                 }
-                disabled={this.state.isBubbleChartDataLoading}
+                disabled={
+                  this.state.isBubbleChartDataLoading ||
+                  this.state.isAggregatePlotLoading
+                }
               />
             )}
           </Stack>
@@ -153,6 +156,7 @@ export class LargeDatasetExplorerTab extends React.Component<
               isBubbleChartRendered={this.state.isBubbleChartRendered}
               highChartConfigOverride={this.state.highChartConfigOverride}
               isBubbleChartDataLoading={this.state.isBubbleChartDataLoading}
+              isAggregatePlotLoading={this.state.isAggregatePlotLoading}
               bubbleChartErrorMessage={this.state.bubbleChartErrorMessage}
               onXSet={this.onXSet}
               onYSet={this.onYSet}
@@ -170,6 +174,10 @@ export class LargeDatasetExplorerTab extends React.Component<
                 disabled={this.state.isBubbleChartDataLoading}
                 isBubbleChartRendered={this.state.isBubbleChartRendered}
                 setIsRevertButtonClicked={this.setIsRevertButtonClicked}
+                loading={
+                  this.state.isAggregatePlotLoading ||
+                  this.state.isBubbleChartDataLoading
+                }
               />
             </Stack.Item>
           </Stack>
@@ -221,6 +229,7 @@ export class LargeDatasetExplorerTab extends React.Component<
         return;
       }
       if (chartProps.chartType !== OtherChartTypes.Bubble) {
+        this.setState({ isAggregatePlotLoading: true });
         const datasetBarConfigOverride = await getBarOrBoxChartConfig(
           this.context.errorCohorts[cohortIndex].cohort,
           this.context.jointDataset,
@@ -233,6 +242,7 @@ export class LargeDatasetExplorerTab extends React.Component<
         this.setState({
           chartProps,
           highChartConfigOverride: datasetBarConfigOverride,
+          isAggregatePlotLoading: false,
           selectedCohortIndex: cohortIndex
         });
       } else {
