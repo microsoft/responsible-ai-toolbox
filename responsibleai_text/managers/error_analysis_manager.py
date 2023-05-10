@@ -166,10 +166,10 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
         index_predictor = ErrorAnalysisManager._create_index_predictor(
             model, dataset, target_column, is_multilabel, task_type,
             index_classes)
-        if task_type == ModelTask.QUESTION_ANSWERING:
-            categorical_features = ['question_type']
-        else:
+        if categorical_features is None:
             categorical_features = []
+        if task_type == ModelTask.QUESTION_ANSWERING:
+            categorical_features.append('question_type')
         super(ErrorAnalysisManager, self).__init__(
             index_predictor, ext_dataset, target_column,
             classes, categorical_features)
