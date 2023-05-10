@@ -96,8 +96,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
             hasCohortUpdated,
             hasAxisTypeChanged,
             this.updateBubblePlotData,
-            this.updateScatterPlotData,
-            this.renderBubblePlotDataOnRevertClick
+            this.updateScatterPlotData
           )
         : this.setState({
             chartProps: this.state.chartProps
@@ -148,8 +147,31 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
   };
 
   private updateBubblePlotData = async (
-    chartProps: IGenericChartProps
+    chartProps: IGenericChartProps,
+    hasRevertToBubbleChartUpdated: boolean
   ): Promise<void> => {
+    if (hasRevertToBubbleChartUpdated) {
+      this.setState(
+        {
+          clusterData: getInitialClusterState(),
+          isBubbleChartDataLoading: true,
+          isLocalExplanationsDataLoading: false,
+          localExplanationsData: undefined,
+          localExplanationsErrorMessage: undefined,
+          selectedPointsIndexes: []
+        },
+        () => {
+          this.setState({
+            chartProps,
+            highChartConfigOverride: this.state.bubblePlotData,
+            isBubbleChartDataLoading: false,
+            isBubbleChartRendered: true,
+            isRevertButtonClicked: false
+          });
+        }
+      );
+      return;
+    }
     this.setState({
       clusterData: getInitialClusterState(),
       isBubbleChartDataLoading: true,
@@ -188,23 +210,6 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       isBubbleChartRendered: true,
       isRevertButtonClicked: false,
       bubblePlotData: datasetBubblePlotConfigOverride
-    });
-  };
-
-  private renderBubblePlotDataOnRevertClick = (
-    chartProps: IGenericChartProps
-  ): void => {
-    this.setState({
-      clusterData: getInitialClusterState(),
-      isLocalExplanationsDataLoading: false,
-      localExplanationsData: undefined,
-      localExplanationsErrorMessage: undefined,
-      selectedPointsIndexes: [],
-      chartProps,
-      highChartConfigOverride: this.state.bubblePlotData,
-      isBubbleChartDataLoading: false,
-      isBubbleChartRendered: true,
-      isRevertButtonClicked: false
     });
   };
 
