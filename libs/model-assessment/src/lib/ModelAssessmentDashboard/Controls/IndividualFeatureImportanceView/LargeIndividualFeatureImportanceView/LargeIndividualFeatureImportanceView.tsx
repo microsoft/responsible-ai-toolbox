@@ -147,8 +147,31 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
   };
 
   private updateBubblePlotData = async (
-    chartProps: IGenericChartProps
+    chartProps: IGenericChartProps,
+    hasRevertToBubbleChartUpdated: boolean
   ): Promise<void> => {
+    if (hasRevertToBubbleChartUpdated) {
+      this.setState(
+        {
+          clusterData: getInitialClusterState(),
+          isBubbleChartDataLoading: true,
+          isLocalExplanationsDataLoading: false,
+          localExplanationsData: undefined,
+          localExplanationsErrorMessage: undefined,
+          selectedPointsIndexes: []
+        },
+        () => {
+          this.setState({
+            chartProps,
+            highChartConfigOverride: this.state.bubblePlotData,
+            isBubbleChartDataLoading: false,
+            isBubbleChartRendered: true,
+            isRevertButtonClicked: false
+          });
+        }
+      );
+      return;
+    }
     this.setState({
       clusterData: getInitialClusterState(),
       isBubbleChartDataLoading: true,
@@ -157,7 +180,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       localExplanationsErrorMessage: undefined,
       selectedPointsIndexes: []
     });
-    const datasetBarConfigOverride = await getBubblePlotData(
+    const datasetBubblePlotConfigOverride = await getBubblePlotData(
       chartProps,
       this.props.cohort,
       this.context.jointDataset,
@@ -168,19 +191,22 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       this.onBubbleClick
     );
     if (
-      datasetBarConfigOverride &&
-      !instanceOfHighChart(datasetBarConfigOverride)
+      datasetBubblePlotConfigOverride &&
+      !instanceOfHighChart(datasetBubblePlotConfigOverride)
     ) {
       this.setState({
-        bubbleChartErrorMessage: getErrorMessage(datasetBarConfigOverride),
+        bubbleChartErrorMessage: getErrorMessage(
+          datasetBubblePlotConfigOverride
+        ),
         highChartConfigOverride: undefined,
         isBubbleChartDataLoading: false
       });
       return;
     }
     this.setState({
+      bubblePlotData: datasetBubblePlotConfigOverride,
       chartProps,
-      highChartConfigOverride: datasetBarConfigOverride,
+      highChartConfigOverride: datasetBubblePlotConfigOverride,
       isBubbleChartDataLoading: false,
       isBubbleChartRendered: true,
       isRevertButtonClicked: false
