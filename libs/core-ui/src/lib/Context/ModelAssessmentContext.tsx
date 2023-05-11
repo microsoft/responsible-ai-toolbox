@@ -148,8 +148,7 @@ export interface IModelAssessmentContext {
   requestQuestionAnsweringMetrics?:
     | ((
         selectionIndexes: number[][],
-        trueY: string[],
-        predictedY: string[]
+        abortSignal: AbortSignal
       ) => Promise<any[]>)
     | undefined;
   requestSplinePlotDistribution?: (
@@ -183,6 +182,7 @@ export const defaultModelAssessmentContext: IModelAssessmentContext = {
   requestLocalFeatureExplanations: undefined,
   requestObjectDetectionMetrics: undefined,
   requestPredictions: undefined,
+  requestQuestionAnsweringMetrics: undefined,
   selectedErrorCohort: {} as ErrorCohort,
   setAsCategorical: () => undefined,
   shiftErrorCohort: () => undefined,
