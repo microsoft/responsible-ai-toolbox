@@ -9,6 +9,15 @@ from rai_test_utils.models.xgboost import create_xgboost_classifier
 
 
 def create_models_classification(X_train, y_train):
+    """Create a list of models for classification.
+
+    :param X_train: The training data.
+    :type X_train: numpy.ndarray or pandas.DataFrame
+    :param y_train: The training labels.
+    :type y_train: numpy.ndarray or pandas.DataFrame
+    :return: A list of models.
+    :rtype: list
+    """
     svm_model = create_sklearn_svm_classifier(X_train, y_train)
     log_reg_model = create_sklearn_logistic_regressor(X_train, y_train)
     xgboost_model = create_xgboost_classifier(X_train, y_train)
@@ -19,6 +28,15 @@ def create_models_classification(X_train, y_train):
 
 
 def create_models_regression(X_train, y_train):
+    """Create a list of models for regression.
+
+    :param X_train: The training data.
+    :type X_train: numpy.ndarray or pandas.DataFrame
+    :param y_train: The training labels.
+    :type y_train: numpy.ndarray or pandas.DataFrame
+    :return: A list of models.
+    :rtype: list
+    """
     rf_model = create_sklearn_random_forest_regressor(X_train, y_train)
 
     return [rf_model]

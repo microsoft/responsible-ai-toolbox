@@ -36,11 +36,13 @@ export interface ILargeIndividualFeatureImportanceViewState {
   localExplanationsData?: ILocalExplanations;
   isLocalExplanationsDataLoading?: boolean;
   localExplanationsErrorMessage?: string;
+  bubblePlotData?: IHighchartsConfig;
 }
 
 export function getInitialSpec(): ILargeIndividualFeatureImportanceViewState {
   return {
     bubbleChartErrorMessage: undefined,
+    bubblePlotData: undefined,
     clusterData: getInitialClusterState(),
     isBubbleChartDataLoading: false,
     isBubbleChartRendered: true,

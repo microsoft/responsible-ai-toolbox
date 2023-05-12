@@ -154,7 +154,7 @@
     "counterfactualName": "What-if counterfactual name",
     "createWhatIfCounterfactual": "Create what-if counterfactual",
     "createCounterfactual": "Counterfactual",
-    "revertToBubbleChart": "Revert to bubble chart",
+    "revertToBubbleChart": "View bubble chart",
     "createOwn": "Create your own counterfactual:",
     "currentClass": "Current class",
     "currentRange": "Current range",
@@ -1174,6 +1174,7 @@
       "_recall.comment": "computed recall of model, see https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers",
       "accuracy": "Accuracy: {0}",
       "bleuScore": "Bleu score: {0}",
+      "bertScore": "Bert score: {0}",
       "exactMatchRatio": "Exact match ratio: {0}",
       "rougeScore": "Rouge Score: {0}",
       "fnr": "False negative rate: {0}",
@@ -1689,19 +1690,23 @@
         },
         "exactMatchRatio": {
           "name": "Exact match ratio",
-          "description": "The ratio of instances classified correctly for every label in multilabel task."
+          "description": "The ratio of instances classified correctly for every label."
         },
         "meteorScore": {
           "name": "Meteor Score",
-          "description": "The ratio of instances classified correctly for every label in multilabel task."
+          "description": "METEOR Score is calculated based on the harmonic mean of precision and recall, with recall weighted more than precision in question answering task."
         },
         "bleuScore": {
           "name": "Bleu Score",
-          "description": "The ratio of instances classified correctly for every label in multilabel task."
+          "description": "Bleu Score measures the ratio of words (and/or n-grams) in the machine generated text that appeared in the reference text in question answering task."
+        },
+        "bertScore": {
+          "name": "Bert Score",
+          "description": "BERTScore focuses on computing semantic similarity between tokens of reference and machine generated text in question answering task."
         },
         "rougeScore": {
           "name": "Rouge Score",
-          "description": "The ratio of instances classified correctly for every label in multilabel task."
+          "description": "Rouge Score measures the ratio of words (and/or n-grams) in the reference text that appeared in the machine generated text in question answering task."
         },
         "hammingScore": {
           "name": "Hamming score",
