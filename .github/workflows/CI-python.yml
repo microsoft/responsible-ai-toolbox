@@ -7,7 +7,6 @@ on:
     branches: [main]
     paths:
       - "erroranalysis/**"
-      - "rai_core_flask/**"
       - "rai_test_utils/**"
       - "raiutils/**"
       - "responsibleai/**"
