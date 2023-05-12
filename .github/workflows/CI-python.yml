@@ -46,7 +46,7 @@ jobs:
 
       - if: ${{ matrix.operatingSystem == 'macos-latest' }}
         name: Use Homebrew to install libomp on MacOS for lightgbm
-			  with:
+        with:
           max_attempts: 3
           retry_on: error
           timeout_seconds: 5
