@@ -11,9 +11,12 @@ from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.error_report import ErrorReport
 from rai_test_utils.datasets.tabular import (create_cancer_data,
                                              create_housing_data,
-                                             create_iris_data)
+                                             create_iris_data,
+                                             create_simple_titanic_data)
 from rai_test_utils.models.model_utils import (create_models_classification,
                                                create_models_regression)
+from rai_test_utils.models.sklearn import \
+    create_complex_classification_pipeline
 
 
 class TestErrorReport(object):
@@ -78,6 +81,22 @@ class TestErrorReport(object):
             run_error_analyzer(model, X_test, y_test, feature_names,
                                categorical_features,
                                filter_features=filter_features)
+
+    def test_error_report_titanic(self):
+        X_train, X_test, y_train, y_test, numeric, categorical = \
+            create_simple_titanic_data()
+
+        # Drop all numeric features
+        X_train = X_train.drop(['pclass', 'age', 'fare'], axis=1)
+        X_test = X_test.drop(['pclass', 'age', 'fare'], axis=1)
+
+        clf = create_complex_classification_pipeline(
+            X_train, y_train, [], ['embarked', 'sex'])
+
+        # Pass the remaining categorical features
+        run_error_analyzer(clf, X_test, y_test, ['embarked', 'sex'],
+                           ['embarked', 'sex'],
+                           filter_features=[])
 
 
 def is_valid_uuid(id):
