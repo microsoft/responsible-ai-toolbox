@@ -72,6 +72,21 @@ export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
       outside: true,
       shared: true
     },
+    exporting: {
+      menuItemDefinitions: {
+        viewFullscreen: {
+          textKey: "viewFullscreen",
+          onclick: function () {
+            this.update({
+              tooltip: {
+                outside: this.fullscreen.isOpen
+              }
+            });
+            this.fullscreen.toggle();
+          }
+        }
+      }
+    },
     xAxis: {
       gridLineWidth: 0,
       labels: {
