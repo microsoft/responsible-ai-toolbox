@@ -50,8 +50,7 @@ jobs:
         with:
           max_attempts: 3
           retry_on: error
-          timeout_seconds: 10
-          retry_wait_seconds: 3 
+          timeout_minutes: 1
           command: |
             brew install https://publictestdatasets.blob.core.windows.net/data/libomp-11.1.0.catalina.bottle.tar.gz
 
