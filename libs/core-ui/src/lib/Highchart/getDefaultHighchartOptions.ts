@@ -38,6 +38,21 @@ export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
       zoomType: "xy"
     },
     credits: undefined,
+    exporting: {
+      menuItemDefinitions: {
+        viewFullscreen: {
+          onclick(): void {
+            this.update({
+              tooltip: {
+                outside: this.fullscreen.isOpen
+              }
+            });
+            this.fullscreen.toggle();
+          },
+          textKey: "viewFullscreen"
+        }
+      }
+    },
     legend: {
       enabled: false
     },
