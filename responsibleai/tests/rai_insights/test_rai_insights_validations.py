@@ -19,6 +19,8 @@ from rai_test_utils.models.sklearn import \
 from raiutils.exceptions import UserConfigValidationException
 from responsibleai import RAIInsights
 from responsibleai.feature_metadata import FeatureMetadata
+from rai_test_utils.models.sklearn import \
+    create_complex_classification_pipeline
 
 TARGET = 'target'
 
@@ -46,6 +48,36 @@ class TestRAIInsightsValidations:
                 target_column=TARGET,
                 task_type='regre',
                 forecasting_enabled=forecasting_enabled)
+
+    def test_missing_data_warnings(self):
+        train_data = {
+            'Column1': [10, 20, 90, 40, 50],
+            'Column2': [10, 20, 90, 40, 50],
+            'Target': [10, 20, 90, 40, 50]
+        }
+        train = pd.DataFrame(train_data)
+
+        test_data = {
+            'Column1': [10, 20, np.nan, 40, 50],
+            'Column2': [10, 20, 90, 40, 50],
+            'Target': [10, 20, 90, 40, 50]
+        }
+        test = pd.DataFrame(test_data)
+
+        X_train = train.drop(columns=['Target'])
+        y_train = train['Target'].values
+        model = create_complex_classification_pipeline(
+            X_train, y_train, ['Column1', 'Column2'], [])
+
+        with pytest.warns(
+            UserWarning,
+                match="Feature Column1 has missing values in test data"):
+            RAIInsights(
+                model=model,
+                train=train,
+                test=test,
+                target_column='Target',
+                task_type='classification')
 
     def test_validate_test_data_size(self):
         X_train, X_test, y_train, y_test, _, _ = \

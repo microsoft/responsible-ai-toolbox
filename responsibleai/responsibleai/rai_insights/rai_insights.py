@@ -575,6 +575,11 @@ class RAIInsights(RAIBaseInsights):
                 "identified as categorical features: "
                 f"{non_categorical_or_time_string_columns}")
 
+        for feature in test.columns.tolist():
+            if np.any(test[feature].isnull()):
+                warnings.warn(
+                    f"Feature {feature} has missing values in test data")
+
         self._validate_feature_metadata(
             feature_metadata, train, task_type, model, target_column)
 
