@@ -302,7 +302,7 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
     if is_pandas:
         true_y = true_y.to_numpy()
     else:
-        input_data = input_data.to_numpy()
+        input_data = input_data.to_numpy(copy=True)
     if is_model_analyzer:
         pred_y = analyzer.model.predict(input_data)
     if analyzer.model_task == ModelTask.CLASSIFICATION:
@@ -316,7 +316,7 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
     if not isinstance(true_y, np.ndarray):
         true_y = np.array(true_y)
     if is_pandas:
-        input_data = input_data.to_numpy()
+        input_data = input_data.to_numpy(copy=True)
 
     if analyzer.categorical_features:
         # Inplace replacement of columns
