@@ -1,7 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DatasetTaskType, IDataset } from "@responsible-ai/core-ui";
+import {
+  DatasetTaskType,
+  IDataset,
+  IErrorAnalysisData
+} from "@responsible-ai/core-ui";
 
 export const covid19events: IDataset = {
   categorical_features: [],
@@ -680,5 +684,117 @@ export const covid19events: IDataset = {
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 1, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0]
+  ]
+};
+
+export const covidEventsErrorAnalysisData: IErrorAnalysisData = {
+  importances: [0, 0, 0, 0.06568140659494959, 0, 0.0650392307220089],
+  matrix: undefined,
+  maxDepth: 3,
+  metric: "Error rate",
+  minChildSamples: 20,
+  numLeaves: 31,
+  root_stats: {
+    errorCoverage: 100,
+    metricName: "Error rate",
+    metricValue: 30.864197530864196,
+    totalSize: 81
+  },
+  tree: [
+    {
+      arg: undefined,
+      badFeaturesRowCount: 0,
+      condition: "",
+      error: 25,
+      id: 0,
+      isErrorMetric: true,
+      method: "",
+      metricName: "Error rate",
+      metricValue: 0.30864197530864196,
+      nodeIndex: 0,
+      nodeName: "positive_words",
+      parentId: undefined,
+      parentNodeName: "",
+      pathFromRoot: "",
+      size: 81,
+      sourceRowKeyHash: "hashkey",
+      success: 56
+    },
+    {
+      arg: 7.500000000000001,
+      badFeaturesRowCount: 0,
+      condition: "positive_words <= 7.50",
+      error: 5,
+      id: 2,
+      isErrorMetric: true,
+      method: "less and equal",
+      metricName: "Error rate",
+      metricValue: 0.19230769230769232,
+      nodeIndex: 2,
+      nodeName: "",
+      parentId: 0,
+      parentNodeName: "positive_words",
+      pathFromRoot: "",
+      size: 26,
+      sourceRowKeyHash: "hashkey",
+      success: 21
+    },
+    {
+      arg: 7.500000000000001,
+      badFeaturesRowCount: 0,
+      condition: "positive_words > 7.50",
+      error: 20,
+      id: 1,
+      isErrorMetric: true,
+      method: "greater",
+      metricName: "Error rate",
+      metricValue: 0.36363636363636365,
+      nodeIndex: 1,
+      nodeName: "sentence_length",
+      parentId: 0,
+      parentNodeName: "positive_words",
+      pathFromRoot: "",
+      size: 55,
+      sourceRowKeyHash: "hashkey",
+      success: 35
+    },
+    {
+      arg: 287.50000000000006,
+      badFeaturesRowCount: 0,
+      condition: "sentence_length <= 287.50",
+      error: 11,
+      id: 3,
+      isErrorMetric: true,
+      method: "less and equal",
+      metricName: "Error rate",
+      metricValue: 0.3235294117647059,
+      nodeIndex: 3,
+      nodeName: "",
+      parentId: 1,
+      parentNodeName: "sentence_length",
+      pathFromRoot: "",
+      size: 34,
+      sourceRowKeyHash: "hashkey",
+      success: 23
+    },
+    {
+      arg: 287.50000000000006,
+      badFeaturesRowCount: 0,
+      condition: "sentence_length > 287.50",
+      error: 9,
+      id: 4,
+      isErrorMetric: true,
+      method: "greater",
+      metricName: "Error rate",
+      metricValue: 0.42857142857142855,
+      nodeIndex: 4,
+      nodeName: "",
+      parentId: 1,
+      parentNodeName: "sentence_length",
+      pathFromRoot: "",
+      size: 21,
+      sourceRowKeyHash: "hashkey",
+      success: 12
+    }
   ]
 };

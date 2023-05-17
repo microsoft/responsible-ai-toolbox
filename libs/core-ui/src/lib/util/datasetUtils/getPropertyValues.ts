@@ -4,7 +4,7 @@
 import { DatasetCohortColumns } from "../../DatasetCohortColumns";
 import { IDataset } from "../../Interfaces/IDataset";
 import { ModelTypes } from "../../Interfaces/IExplanationContext";
-import { IsBinary, IsMulticlass } from "../ExplanationUtils";
+import { IsBinary, IsMulticlass, IsMultilabel } from "../ExplanationUtils";
 import { MulticlassClassificationEnum } from "../JointDatasetUtils";
 
 // get property values for the selected data point
@@ -91,7 +91,7 @@ function getErrors(
     if (
       property === DatasetCohortColumns.ClassificationError &&
       modelType &&
-      IsMulticlass(modelType)
+      (IsMulticlass(modelType) || IsMultilabel(modelType))
     ) {
       return indexes.map((index) => {
         return trueY[index] !== predictedY[index]
