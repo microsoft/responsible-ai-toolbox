@@ -57,6 +57,48 @@ _DATETIME_FEATURES = 'datetime_features'
 _TIME_SERIES_ID_FEATURES = 'time_series_id_features'
 _CATEGORICAL_FEATURES = 'categorical_features'
 _DROPPED_FEATURES = 'dropped_features'
+_QUESTION_TYPE = 'question_type'
+
+
+def _feature_metadata_from_dict(feature_meta_dict):
+    """Create a FeatureMetadata from a dictionary.
+
+    :param feature_meta_dict: The dictionary to create the FeatureMetadata
+        from.
+    :type feature_meta_dict: dict
+    :return: The FeatureMetadata created from the dictionary.
+    :rtype: FeatureMetadata
+    """
+    return FeatureMetadata(
+        identity_feature_name=feature_meta_dict[_IDENTITY_FEATURE_NAME],
+        datetime_features=feature_meta_dict[_DATETIME_FEATURES],
+        time_series_id_features=feature_meta_dict[_TIME_SERIES_ID_FEATURES],
+        categorical_features=feature_meta_dict[_CATEGORICAL_FEATURES],
+        dropped_features=feature_meta_dict[_DROPPED_FEATURES])
+
+
+def _add_extra_metadata_features(task_type, feature_metadata):
+    """Add extra metadata features for the given task type.
+
+    For question answering task, adds the question type feature.
+
+    :param task_type: The task type.
+    :type task_type: str
+    :param feature_metadata: The feature metadata.
+    :type feature_metadata: FeatureMetadata
+    :return: The feature metadata with extra metadata features added.
+    :rtype: FeatureMetadata
+    """
+    is_qa = task_type == ModelTask.QUESTION_ANSWERING
+    categorical_features = feature_metadata.categorical_features
+    is_cat_empty = categorical_features is None
+    if is_qa and (is_cat_empty or _QUESTION_TYPE not in categorical_features):
+        feature_metadata = _feature_metadata_from_dict(
+            feature_metadata.to_dict().copy())
+        if is_cat_empty:
+            feature_metadata.categorical_features = []
+        feature_metadata.categorical_features.append(_QUESTION_TYPE)
+    return feature_metadata
 
 
 class RAITextInsights(RAIBaseInsights):
@@ -106,6 +148,8 @@ class RAITextInsights(RAIBaseInsights):
         if feature_metadata is None:
             # initialize to avoid having to keep checking if it is None
             feature_metadata = FeatureMetadata()
+        feature_metadata = _add_extra_metadata_features(
+            task_type, feature_metadata)
         self._feature_metadata = feature_metadata
         self._wrapped_model = wrap_model(model, test, task_type)
         self._validate_rai_insights_input_parameters(
@@ -618,18 +662,10 @@ class RAITextInsights(RAIBaseInsights):
                 meta[Metadata.FEATURE_METADATA] is None):
             inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata()
         else:
-            feature_metadata = meta[Metadata.FEATURE_METADATA]
-            inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata(
-                identity_feature_name=feature_metadata[
-                    _IDENTITY_FEATURE_NAME],
-                datetime_features=feature_metadata[
-                    _DATETIME_FEATURES],
-                time_series_id_features=feature_metadata[
-                    _TIME_SERIES_ID_FEATURES],
-                categorical_features=feature_metadata[
-                    _CATEGORICAL_FEATURES],
-                dropped_features=feature_metadata[
-                    _DROPPED_FEATURES])
+            feature_metadata_dict = meta[Metadata.FEATURE_METADATA]
+            feature_metadata = _feature_metadata_from_dict(
+                feature_metadata_dict)
+            inst.__dict__['_' + Metadata.FEATURE_METADATA] = feature_metadata
 
         # load the extracted features as part of metadata
         RAITextInsights._load_ext_data(inst, path)
@@ -669,7 +705,6 @@ class RAITextInsights(RAIBaseInsights):
         # create the RAITextInsights without any properties using the __new__
         # function, similar to pickle
         inst = RAITextInsights.__new__(RAITextInsights)
-        inst.categorical_features = []
 
         manager_map = {
             ManagerNames.EXPLAINER: ExplainerManager,
