@@ -168,8 +168,6 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
             index_classes)
         if categorical_features is None:
             categorical_features = []
-        if task_type == ModelTask.QUESTION_ANSWERING:
-            categorical_features.append('question_type')
         super(ErrorAnalysisManager, self).__init__(
             index_predictor, ext_dataset, target_column,
             classes, categorical_features)
@@ -246,7 +244,8 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
         inst.__dict__['_ea_report_list'] = ea_report_list
         inst.__dict__['_ea_config_list'] = ea_config_list
 
-        categorical_features = []
+        feature_metadata = rai_insights._feature_metadata
+        categorical_features = feature_metadata.categorical_features
         inst.__dict__['_categorical_features'] = categorical_features
         target_column = rai_insights.target_column
         true_y = rai_insights._ext_test_df[target_column]
