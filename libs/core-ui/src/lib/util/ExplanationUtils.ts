@@ -19,6 +19,13 @@ export function IsBinary(modelType: ModelTypes): boolean {
   );
 }
 
+export function IsMultilabel(modelType: ModelTypes): boolean {
+  return (
+    modelType === ModelTypes.ImageMultilabel ||
+    modelType === ModelTypes.TextMultilabel
+  );
+}
+
 export function IsClassifier(modelType: ModelTypes): boolean {
   return (
     modelType === ModelTypes.Binary ||
