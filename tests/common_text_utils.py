@@ -43,6 +43,14 @@ class TextClassificationPipelineSerializer(object):
         return os.path.join(path, 'text-classification-model')
 
 
+class MultilabelTextClassificationSerializer(object):
+    def save(self, model, path):
+        pass
+
+    def load(self, path):
+        return create_multilabel_pipeline()
+
+
 def load_emotion_dataset():
     dataset = datasets.load_dataset(EMOTION_DATASET, split="train")
     data = pd.DataFrame({'text': dataset['text'],
