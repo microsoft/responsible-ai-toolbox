@@ -165,8 +165,7 @@ def create_complex_classification_pipeline(
     # We create the preprocessing pipelines for both
     # numeric and categorical data.
     numeric_transformer = Pipeline(steps=[
-        ("imputer",
-                SimpleImputer(strategy='median')),
+        ("imputer", SimpleImputer(strategy='median')),
         ('scaler', StandardScaler())])
 
     categorical_transformer = Pipeline(steps=[
