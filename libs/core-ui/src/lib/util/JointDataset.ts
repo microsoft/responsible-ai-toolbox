@@ -18,7 +18,7 @@ import {
   WeightVectors,
   WeightVectorOption
 } from "../Interfaces/IWeightedDropdownContext";
-import { IsBinary, IsMulticlass } from "../util/ExplanationUtils";
+import { IsBinary, IsMulticlass, IsMultilabel } from "../util/ExplanationUtils";
 
 import { AxisTypes } from "./IGenericChartProps";
 import {
@@ -207,7 +207,11 @@ export class JointDataset {
     // include error columns if applicable
     if (this.hasPredictedY && this.hasTrueY) {
       this.dataDict?.forEach((row) => {
-        JointDataset.setErrorMetrics(row, this._modelMeta.modelType);
+        JointDataset.setErrorMetrics(
+          row,
+          this._modelMeta.modelType,
+          this.numLabels
+        );
       });
       // Set appropriate metadata
       if (args.metadata.modelType === ModelTypes.Regression && this.dataDict) {
@@ -242,7 +246,10 @@ export class JointDataset {
           treatAsCategorical: true
         };
       }
-      if (IsMulticlass(args.metadata.modelType)) {
+      if (
+        IsMulticlass(args.metadata.modelType) ||
+        IsMultilabel(args.metadata.modelType)
+      ) {
         this.metaDict[JointDataset.ClassificationError] = {
           abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
           category: ColumnCategories.Outcome,
@@ -336,7 +343,8 @@ export class JointDataset {
   // set the appropriate error value in the keyed column
   public static setErrorMetrics(
     row: { [key: string]: any },
-    modelType: ModelTypes
+    modelType: ModelTypes,
+    numLabels = 0
   ): void {
     if (modelType === ModelTypes.Regression) {
       row[JointDataset.RegressionError] = Math.abs(
@@ -360,6 +368,23 @@ export class JointDataset {
         row[JointDataset.TrueYLabel] !== row[JointDataset.PredictedYLabel]
           ? MulticlassClassificationEnum.Misclassified
           : MulticlassClassificationEnum.Correct;
+      return;
+    }
+    if (IsMultilabel(modelType)) {
+      let misclassified = false;
+      // go over each label and check if it is misclassified
+      for (let i = 0; i < numLabels; i++) {
+        if (
+          row[JointDataset.TrueYLabel + i.toString()] !==
+          row[JointDataset.PredictedYLabel + i.toString()]
+        ) {
+          misclassified = true;
+          break;
+        }
+      }
+      row[JointDataset.ClassificationError] = misclassified
+        ? MulticlassClassificationEnum.Misclassified
+        : MulticlassClassificationEnum.Correct;
       return;
     }
   }
