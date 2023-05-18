@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import pandas as pd
+
 from responsibleai.rai_insights import RAIInsights
 
 
@@ -14,5 +15,5 @@ class TestRAIInsightsGetFeatureRanges:
 
         feature_ranges = RAIInsights._get_feature_ranges(
             df, ['Category'], ['Category', 'Numerical'])
-        assert'Category' in feature_ranges
+        assert 'Category' in feature_ranges
         assert 'Numerical' in feature_ranges
