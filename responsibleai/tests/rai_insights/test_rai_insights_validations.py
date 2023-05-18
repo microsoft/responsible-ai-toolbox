@@ -70,7 +70,7 @@ class TestRAIInsightsValidations:
 
         with pytest.warns(
             UserWarning,
-                match="Feature Column1 has missing values in test data"):
+                match="['Column1']"):
             RAIInsights(
                 model=model,
                 train=train,

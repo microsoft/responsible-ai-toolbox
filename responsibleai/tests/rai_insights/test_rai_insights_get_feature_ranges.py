@@ -15,5 +15,6 @@ class TestRAIInsightsGetFeatureRanges:
 
         feature_ranges = RAIInsights._get_feature_ranges(
             df, ['Category'], ['Category', 'Numerical'])
-        assert 'Category' in feature_ranges
-        assert 'Numerical' in feature_ranges
+        assert len(feature_ranges) == 2
+        assert 'Category' == feature_ranges[0]['column_name']
+        assert 'Numerical' == feature_ranges[1]['column_name']
