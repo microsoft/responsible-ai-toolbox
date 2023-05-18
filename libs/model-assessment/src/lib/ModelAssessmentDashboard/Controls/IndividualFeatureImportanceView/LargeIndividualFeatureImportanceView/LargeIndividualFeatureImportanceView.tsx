@@ -137,6 +137,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
           weightOptions={this.props.weightOptions}
           weightLabels={this.props.weightLabels}
           modelType={this.props.modelType}
+          isBubbleChartDataLoading={this.state.isBubbleChartDataLoading}
         />
       </Stack>
     );
