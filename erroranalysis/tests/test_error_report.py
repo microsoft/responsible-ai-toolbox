@@ -1,8 +1,6 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import uuid
-
 import numpy as np
 import pandas as pd
 import pytest
@@ -17,6 +15,7 @@ from rai_test_utils.models.model_utils import (create_models_classification,
                                                create_models_regression)
 from rai_test_utils.models.sklearn import \
     create_complex_classification_pipeline
+from rai_test_utils.utilities import is_valid_uuid
 
 
 class TestErrorReport(object):
@@ -97,14 +96,6 @@ class TestErrorReport(object):
         run_error_analyzer(clf, X_test, y_test, ['embarked', 'sex'],
                            ['embarked', 'sex'],
                            filter_features=[])
-
-
-def is_valid_uuid(id):
-    try:
-        uuid.UUID(str(id))
-        return True
-    except ValueError:
-        return False
 
 
 def run_error_analyzer(model, X_test, y_test, feature_names,
