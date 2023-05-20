@@ -2983,7 +2983,76 @@ export const adultCensusWithFairnessDataset: IDataset = {
   true_y: [
     1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1,
     0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1
-  ]
+  ],
+  tabular_dataset_metadata: {
+    is_large_data_scenario: false,
+    use_entire_test_data: false,
+    num_rows: 48,
+    feature_ranges: [
+      {
+        column_name: "age",
+        range_type: "integer",
+        min_value: 17.0,
+        max_value: 74.0
+      },
+      {
+        column_name: "workclass",
+        range_type: "categorical",
+        unique_values: [
+          "Private",
+          "Government",
+          "Other/Unknown",
+          "Self-Employed"
+        ]
+      },
+      {
+        column_name: "education",
+        range_type: "categorical",
+        unique_values: [
+          "HS-grad",
+          "Masters",
+          "Some-college",
+          "Assoc",
+          "Bachelors",
+          "School",
+          "Doctorate"
+        ]
+      },
+      {
+        column_name: "marital_status",
+        range_type: "categorical",
+        unique_values: ["Married", "Divorced", "Single", "Widowed"]
+      },
+      {
+        column_name: "occupation",
+        range_type: "categorical",
+        unique_values: [
+          "Blue-Collar",
+          "Sales",
+          "White-Collar",
+          "Service",
+          "Other/Unknown",
+          "Professional"
+        ]
+      },
+      {
+        column_name: "race",
+        range_type: "categorical",
+        unique_values: ["White", "Other"]
+      },
+      {
+        column_name: "gender",
+        range_type: "categorical",
+        unique_values: ["Male", "Female"]
+      },
+      {
+        column_name: "hours_per_week",
+        range_type: "integer",
+        min_value: 10.0,
+        max_value: 70.0
+      }
+    ]
+  }
 };
 
 export const adultCensusWithFairnessModelExplanationData: Omit<
