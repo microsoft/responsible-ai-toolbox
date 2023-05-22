@@ -26,4 +26,4 @@ jobs:
 
       - name: Check sorted python imports using isort
         run: |
-          isort . -c -i 4 -l 79
+          isort . -c
