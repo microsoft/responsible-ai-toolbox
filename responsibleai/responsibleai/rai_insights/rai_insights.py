@@ -929,8 +929,8 @@ class RAIInsights(RAIBaseInsights):
             True if self._large_test is not None else False
         dashboard_dataset.tabular_dataset_metadata.use_entire_test_data = False
         dashboard_dataset.tabular_dataset_metadata.num_rows = \
-            len(self._large_test) if self._large_test is not None else \
-                len(self.test)
+            len(self._large_test) \
+            if self._large_test is not None else len(self.test)
         dashboard_dataset.tabular_dataset_metadata.feature_ranges = \
             self._feature_ranges
 
