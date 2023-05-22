@@ -1275,9 +1275,10 @@ class RAIInsights(RAIBaseInsights):
                     max_value = float(col_max)
                 except Exception as e:
                     raise ValueError(
-                        f"Unable to convert min or max value of feature column {col} to float."
-                        f"min value of {col} is of type {type(col_min)} and"
-                        f"max value of {col} is of type {type(col_max)}"
+                        "Unable to convert min or max value "
+                        f"of feature column {col} to float. "
+                        f"min value of {col} is of type {type(col_min)} and "
+                        f"max value of {col} is of type {type(col_max)} "
                         f"Original Excepton: {e}")
                 res_object[_RANGE_TYPE] = "integer"
                 res_object[_MIN_VALUE] = min_value
