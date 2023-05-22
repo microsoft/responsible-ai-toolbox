@@ -2978,22 +2978,13 @@ export const adultCensusWithFairnessDataset: IDataset = {
     [0.7355988315726243, 0.2644011684273757],
     [0.6804143936790036, 0.3195856063209964]
   ],
-  target_column: "income",
-  task_type: DatasetTaskType.Classification,
-  true_y: [
-    1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1,
-    0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1
-  ],
   tabular_dataset_metadata: {
-    is_large_data_scenario: false,
-    use_entire_test_data: false,
-    num_rows: 48,
     feature_ranges: [
       {
         column_name: "age",
-        range_type: "integer",
-        min_value: 17.0,
-        max_value: 74.0
+        max_value: 74,
+        min_value: 17,
+        range_type: "integer"
       },
       {
         column_name: "workclass",
@@ -3047,12 +3038,21 @@ export const adultCensusWithFairnessDataset: IDataset = {
       },
       {
         column_name: "hours_per_week",
-        range_type: "integer",
-        min_value: 10.0,
-        max_value: 70.0
+        max_value: 70,
+        min_value: 10,
+        range_type: "integer"
       }
-    ]
-  }
+    ],
+    is_large_data_scenario: false,
+    num_rows: 48,
+    use_entire_test_data: false
+  },
+  target_column: "income",
+  task_type: DatasetTaskType.Classification,
+  true_y: [
+    1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1,
+    0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1
+  ]
 };
 
 export const adultCensusWithFairnessModelExplanationData: Omit<
