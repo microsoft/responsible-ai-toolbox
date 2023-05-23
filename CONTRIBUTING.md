@@ -32,7 +32,6 @@ If you have previously committed changes that were not signed follow
 to sign them retroactively after setting up your GPG key as described in the
 [GitHub documentation](https://docs.github.com/en/github/authenticating-to-github/managing-commit-signature-verification).
 
-
 ## Code of conduct
 
 This project has adopted the
