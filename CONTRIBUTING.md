@@ -27,6 +27,8 @@ Setting up a GPG key has three stages:
 Note that the `GitBash` shell installed by Git on Windows already has GPG
 installed, so there is no need to install GPG separately.
 
+Please also make sure to set email in git config (git config --global user.email "MY_NAME@example.com") which should be the same email linked to the PGP Key.
+
 If you have previously committed changes that were not signed follow
 [these steps](https://dev.to/jrushlow/oops-i-forgot-to-sign-my-commit-from-last-monday-2jke)
 to sign them retroactively after setting up your GPG key as described in the
