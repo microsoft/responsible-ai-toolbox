@@ -114,6 +114,9 @@ export class CohortStatsHeatmap extends React.Component<
                 dataLabels: {
                   enabled: true,
                   nullFormat: "N/A",
+                  style: {
+                    textOutline: "none"
+                  },
                   ...colorConfig
                 },
                 name: "Metrics",
