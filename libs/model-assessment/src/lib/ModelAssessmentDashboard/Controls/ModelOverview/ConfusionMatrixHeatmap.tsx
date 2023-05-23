@@ -199,7 +199,10 @@ export class ConfusionMatrixHeatmap extends React.Component<
                       data: confusionMatrix,
                       dataLabels: {
                         color: theme.palette.black,
-                        enabled: true
+                        enabled: true,
+                        style: {
+                          textOutline: "none"
+                        }
                       },
                       type: "heatmap"
                     }
