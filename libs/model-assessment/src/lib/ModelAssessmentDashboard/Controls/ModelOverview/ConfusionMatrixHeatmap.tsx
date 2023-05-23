@@ -45,7 +45,6 @@ export class ConfusionMatrixHeatmap extends React.Component<
 
   public constructor(props: Record<string, never> = {}) {
     super(props);
-
     this.state = {
       allClasses: [],
       selectedClasses: []
@@ -62,6 +61,8 @@ export class ConfusionMatrixHeatmap extends React.Component<
 
   public render(): React.ReactNode {
     const classNames = modelOverviewChartStyles();
+    const confusionMatrixStrings =
+      localization.ModelAssessment.ModelOverview.confusionMatrix;
     if (
       this.context.dataset.predicted_y === undefined ||
       this.context.dataset.true_y === undefined
@@ -72,7 +73,6 @@ export class ConfusionMatrixHeatmap extends React.Component<
     if (this.context.dataset.true_y.length !== yLength) {
       return React.Fragment;
     }
-
     let selectedCohort = this.context.errorCohorts.find(
       (errorCohort) =>
         errorCohort.cohort.getCohortID() === this.state.selectedCohort
@@ -81,7 +81,6 @@ export class ConfusionMatrixHeatmap extends React.Component<
       // if previously selected cohort does not exist use globally selected cohort
       selectedCohort = this.context.baseErrorCohort;
     }
-
     const confusionMatrixData = calculateConfusionMatrixData(
       selectedCohort.cohort.unwrap(JointDataset.TrueYLabel),
       selectedCohort.cohort.unwrap(JointDataset.PredictedYLabel),
@@ -107,14 +106,12 @@ export class ConfusionMatrixHeatmap extends React.Component<
     let classSelectionErrorMessage: string | undefined;
     if (this.state.selectedClasses.length < this.minDisplayableClasses) {
       classSelectionErrorMessage = localization.formatString(
-        localization.ModelAssessment.ModelOverview.confusionMatrix
-          .confusionMatrixClassMinSelectionError,
+        confusionMatrixStrings.confusionMatrixClassMinSelectionError,
         this.minDisplayableClasses
       );
     } else if (this.state.selectedClasses.length > this.maxDisplayableClasses) {
       classSelectionErrorMessage = localization.formatString(
-        localization.ModelAssessment.ModelOverview.confusionMatrix
-          .confusionMatrixClassMaxSelectionError,
+        confusionMatrixStrings.confusionMatrixClassMaxSelectionError,
         this.maxDisplayableClasses
       );
     }
@@ -125,10 +122,7 @@ export class ConfusionMatrixHeatmap extends React.Component<
           <StackItem className={classNames.dropdown}>
             <ComboBox
               id="confusionMatrixCohortDropdown"
-              label={
-                localization.ModelAssessment.ModelOverview.confusionMatrix
-                  .confusionMatrixCohortSelectionLabel
-              }
+              label={confusionMatrixStrings.confusionMatrixCohortSelectionLabel}
               selectedKey={selectedCohort.cohort.getCohortID()}
               options={this.context.errorCohorts.map(
                 (errorCohort: ErrorCohort) => {
@@ -146,13 +140,9 @@ export class ConfusionMatrixHeatmap extends React.Component<
             <ComboBox
               id="confusionMatrixClassDropdown"
               placeholder={
-                localization.ModelAssessment.ModelOverview.confusionMatrix
-                  .confusionMatrixClassSelectionDefaultPlaceholder
+                confusionMatrixStrings.confusionMatrixClassSelectionDefaultPlaceholder
               }
-              label={
-                localization.ModelAssessment.ModelOverview.confusionMatrix
-                  .confusionMatrixClassSelectionLabel
-              }
+              label={confusionMatrixStrings.confusionMatrixClassSelectionLabel}
               selectedKey={this.state.selectedClasses}
               options={this.state.allClasses.map((category: string) => {
                 return { key: category, text: category };
@@ -234,14 +224,14 @@ export class ConfusionMatrixHeatmap extends React.Component<
                       style: {
                         fontWeight: "bold"
                       },
-                      text: `${localization.ModelAssessment.ModelOverview.confusionMatrix.confusionMatrixXAxisLabel}`
+                      text: `${confusionMatrixStrings.confusionMatrixXAxisLabel}`
                     }
                   },
                   yAxis: {
                     categories: this.state.selectedClasses,
                     reversed: true,
                     title: {
-                      text: `<b>${localization.ModelAssessment.ModelOverview.confusionMatrix.confusionMatrixYAxisLabel}</b>`
+                      text: `<b>${confusionMatrixStrings.confusionMatrixYAxisLabel}</b>`
                     }
                   }
                 }}
