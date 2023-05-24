@@ -12,13 +12,21 @@ export enum DatasetTaskType {
   MultilabelTextClassification = "multilabel_text_classification",
   MultilabelImageClassification = "multilabel_image_classification",
   Forecasting = "forecasting",
-  ObjectDetection = "object_detection"
+  ObjectDetection = "object_detection",
+  QuestionAnswering = "question_answering"
+}
+
+export interface ITabularDatasetMetadata {
+  is_large_data_scenario: boolean;
+  use_entire_test_data: boolean;
+  num_rows: number;
+  feature_ranges: Array<{ [key: string]: any }>;
 }
 
 export interface IDataset {
   task_type: DatasetTaskType;
-  true_y: number[] | number[][];
-  predicted_y?: number[] | number[][];
+  true_y: number[] | number[][] | string[];
+  predicted_y?: number[] | number[][] | string[];
   probability_y?: number[][];
   features: unknown[][];
   feature_names: string[];
@@ -29,6 +37,7 @@ export interface IDataset {
   target_column?: string | string[];
   data_balance_measures?: IDataBalanceMeasures;
   feature_metadata?: IFeatureMetaData;
+  tabular_dataset_metadata?: ITabularDatasetMetadata;
   images?: string[];
   index?: string[];
   object_detection_true_y?: number[][][];

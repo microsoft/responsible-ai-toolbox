@@ -9,6 +9,7 @@ import {
   defaultModelAssessmentContext,
   IsBinary,
   IsMulticlass,
+  IsMultilabel,
   ITelemetryEvent,
   TelemetryLevels,
   TelemetryEventName
@@ -55,6 +56,8 @@ export class MetricSelector extends React.Component<IMetricSelectorProps> {
       options.push(this.addDropdownOption(Metrics.MicroF1Score));
       options.push(this.addDropdownOption(Metrics.MacroF1Score));
       options.push(this.addDropdownOption(Metrics.AccuracyScore));
+    } else if (IsMultilabel(modelType)) {
+      options.push(this.addDropdownOption(Metrics.ErrorRate));
     }
     return (
       <Dropdown

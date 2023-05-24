@@ -12,6 +12,15 @@ from sklearn.model_selection import train_test_split
 
 
 def create_iris_data(append_special_characters=False):
+    """Create Iris dataset for classification.
+
+    param append_special_characters: Whether to append special characters
+        to feature names.
+    type append_special_characters: bool
+    return: Tuple of X_train, X_test, y_train, y_test, feature_names, classes.
+    rtype: Tuple of pandas.DataFrame, pandas.DataFrame, numpy.ndarray,
+           numpy.ndarray, list, list
+    """
     # Import Iris dataset
     iris = load_iris()
     # Split data into train and test
@@ -28,6 +37,12 @@ def create_iris_data(append_special_characters=False):
 
 
 def create_wine_data():
+    """Create Wine dataset for classification.
+
+    return: Tuple of X_train, X_test, y_train, y_test, feature_names, classes.
+    rtype: Tuple of pandas.DataFrame, pandas.DataFrame,
+           numpy.ndarray, numpy.ndarray, list, list
+    """
     wine = load_wine()
     X = wine.data
     y = wine.target
@@ -41,6 +56,14 @@ def create_wine_data():
 
 
 def create_adult_census_data(string_labels=False):
+    """Create Adult census dataset for classification.
+
+    param string_labels: Whether to return labels as strings.
+    type string_labels: bool
+    return: Tuple of X_train, X_test, y_train, y_test, categorical_features.
+    rtype: Tuple of pandas.DataFrame, pandas.DataFrame, numpy.ndarray,
+           numpy.ndarray, list
+    """
     X, y = shap.datasets.adult()
     if string_labels:
         y = [">=50K" if r else "<50K" for r in y]
@@ -62,6 +85,14 @@ def create_adult_census_data(string_labels=False):
 
 
 def create_cancer_data(return_dataframe=False):
+    """Create Breast Cancer dataset for classification.
+
+    param return_dataframe: Whether to return data as pandas DataFrame.
+    type return_dataframe: bool
+    return: Tuple of X_train, X_test, y_train, y_test, feature_names, classes.
+    rtype: Tuple of pandas.DataFrame, pandas.DataFrame, numpy.ndarray,
+           numpy.ndarray, list, list
+    """
     breast_cancer_data = load_breast_cancer()
     classes = breast_cancer_data.target_names.tolist()
 
@@ -80,6 +111,12 @@ def create_cancer_data(return_dataframe=False):
 
 
 def create_diabetes_data():
+    """Create Diabetes dataset for regression.
+
+    return: Tuple of X_train, X_test, y_train, y_test, feature_names.
+    rtype: Tuple of numpy.ndarray, numpy.ndarray, numpy.ndarray,
+           numpy.ndarray, list
+    """
     diabetes_data = load_diabetes()
     X = diabetes_data.data
     y = diabetes_data.target
@@ -91,6 +128,14 @@ def create_diabetes_data():
 
 
 def create_binary_classification_dataset(n_samples=100):
+    """Create a binary classification dataset.
+
+    param n_samples: Number of samples.
+    type n_samples: int
+    return: Tuple of X_train, y_train, X_test, y_test, classes.
+    rtype: Tuple of pandas.DataFrame, pandas.DataFrame, numpy.ndarray,
+           numpy.ndarray, list
+    """
     X, y = make_classification(n_samples=n_samples, random_state=777)
 
     # Split data into train and test
@@ -106,6 +151,13 @@ def create_binary_classification_dataset(n_samples=100):
 
 
 def create_simple_titanic_data():
+    """Create simple Titanic dataset for classification.
+
+    return: Tuple of X_train, X_test, y_train, y_test, num_features,
+            cat_features.
+    rtype: Tuple of pd.DataFrame, pd.DataFrame, numpy.ndarray, numpy.ndarray,
+           list, list
+    """
     titanic_url = ('https://raw.githubusercontent.com/amueller/'
                    'scipy-2017-sklearn/091d371/notebooks/'
                    'datasets/titanic3.csv')
@@ -125,6 +177,14 @@ def create_simple_titanic_data():
 
 
 def create_housing_data(create_small_dataset=True):
+    """Create California housing dataset for regression.
+
+    param create_small_dataset: Whether to create a small dataset or not.
+    type create_small_dataset: bool
+    return: Tuple of x_train, x_test, y_train, y_test, feature_names.
+    rtype: Tuple of numpy.ndarray, numpy.ndarray, numpy.ndarray,
+           numpy.ndarray, list
+    """
     # Import California housing dataset
     housing = fetch_california_housing()
     # Split data into train and test

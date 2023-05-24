@@ -1,17 +1,22 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { dbpediaLongDoc } from "../interpret-text/__mock_data__/dbpediaLongDoc";
 import { emotionLongDoc } from "../interpret-text/__mock_data__/emotionLongDoc";
 import { newsgroupBinaryData } from "../interpret-text/__mock_data__/newsgroupBinaryData";
 import {
   blbooksgenre,
   blbooksgenreModelExplanationData
 } from "../model-assessment-text/__mock_data__/blbooksgenre";
-import { covid19events } from "../model-assessment-text/__mock_data__/covidevents";
+import {
+  covid19events,
+  covidEventsErrorAnalysisData
+} from "../model-assessment-text/__mock_data__/covidevents";
 import {
   emotion,
   emotionModelExplanationData
 } from "../model-assessment-text/__mock_data__/emotion";
+import { squad } from "../model-assessment-text/__mock_data__/squad";
 
 import {
   IDataSet,
@@ -34,6 +39,7 @@ export type ITextApplications = {
 export const textApplications: ITextApplications = <const>{
   interpretText: {
     datasets: {
+      dbpediaLongDoc: { data: dbpediaLongDoc },
       emotionLongDoc: { data: emotionLongDoc },
       newsgroupBinaryData: { data: newsgroupBinaryData }
     },
@@ -48,12 +54,17 @@ export const textApplications: ITextApplications = <const>{
       } as IModelAssessmentDataSet,
       covid19events: {
         classDimension: 3,
-        dataset: covid19events
+        dataset: covid19events,
+        errorAnalysisData: [covidEventsErrorAnalysisData]
       } as IModelAssessmentDataSet,
       emotion: {
         classDimension: 3,
         dataset: emotion,
         modelExplanationData: [emotionModelExplanationData]
+      } as IModelAssessmentDataSet,
+      squad: {
+        classDimension: 3,
+        dataset: squad
       } as IModelAssessmentDataSet
     },
     versions: { "1": 1, "2:Static-View": 2 }

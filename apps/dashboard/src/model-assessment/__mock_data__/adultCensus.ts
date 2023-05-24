@@ -2978,6 +2978,75 @@ export const adultCensusWithFairnessDataset: IDataset = {
     [0.7355988315726243, 0.2644011684273757],
     [0.6804143936790036, 0.3195856063209964]
   ],
+  tabular_dataset_metadata: {
+    feature_ranges: [
+      {
+        column_name: "age",
+        max_value: 74,
+        min_value: 17,
+        range_type: "integer"
+      },
+      {
+        column_name: "workclass",
+        range_type: "categorical",
+        unique_values: [
+          "Private",
+          "Government",
+          "Other/Unknown",
+          "Self-Employed"
+        ]
+      },
+      {
+        column_name: "education",
+        range_type: "categorical",
+        unique_values: [
+          "HS-grad",
+          "Masters",
+          "Some-college",
+          "Assoc",
+          "Bachelors",
+          "School",
+          "Doctorate"
+        ]
+      },
+      {
+        column_name: "marital_status",
+        range_type: "categorical",
+        unique_values: ["Married", "Divorced", "Single", "Widowed"]
+      },
+      {
+        column_name: "occupation",
+        range_type: "categorical",
+        unique_values: [
+          "Blue-Collar",
+          "Sales",
+          "White-Collar",
+          "Service",
+          "Other/Unknown",
+          "Professional"
+        ]
+      },
+      {
+        column_name: "race",
+        range_type: "categorical",
+        unique_values: ["White", "Other"]
+      },
+      {
+        column_name: "gender",
+        range_type: "categorical",
+        unique_values: ["Male", "Female"]
+      },
+      {
+        column_name: "hours_per_week",
+        max_value: 70,
+        min_value: 10,
+        range_type: "integer"
+      }
+    ],
+    is_large_data_scenario: false,
+    num_rows: 48,
+    use_entire_test_data: false
+  },
   target_column: "income",
   task_type: DatasetTaskType.Classification,
   true_y: [

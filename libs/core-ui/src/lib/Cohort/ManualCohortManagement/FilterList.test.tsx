@@ -1,45 +1,34 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IColumnRange, RangeTypes } from "@responsible-ai/mlchartlib";
 import { shallow } from "enzyme";
 import React from "react";
 
-import { IExplanationModelMetadata } from "../../Interfaces/IExplanationContext";
+import { defaultModelAssessmentContext } from "../../Context/ModelAssessmentContext";
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
-import { JointDataset } from "../../util/JointDataset";
-import { ColumnCategories } from "../../util/JointDatasetUtils";
 
 import { FilterList } from "./FilterList";
 
-const featureIsCategorical = [
-  false,
-  false,
-  false,
-  true,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false
-];
-const modelMetadata = {
-  classNames: ["Class 0"],
-  featureIsCategorical,
-  featureNames: [],
-  featureNamesAbridged: [],
-  featureRanges: [],
-  modelType: "binary"
-} as IExplanationModelMetadata;
-const jointDataset = new JointDataset({
-  dataset: [],
-  metadata: modelMetadata
-});
-
 describe("FilterList", () => {
+  const ranges: { [key: string]: IColumnRange } = {
+    alcohol: {
+      max: 13,
+      min: 0.1,
+      rangeType: RangeTypes.Numeric,
+      sortedUniqueValues: [0.1, 13]
+    },
+    ash: {
+      max: 5,
+      min: 0.3,
+      rangeType: RangeTypes.Numeric,
+      sortedUniqueValues: [0.3, 1, 4, 5]
+    }
+  };
+  beforeEach(() => {
+    defaultModelAssessmentContext.columnRanges = ranges;
+  });
+
   it("Should render", () => {
     const filters = [
       {
@@ -54,24 +43,7 @@ describe("FilterList", () => {
       }
     ];
 
-    jointDataset.metaDict.alcohol = {
-      abbridgedLabel: "l",
-      category: ColumnCategories.Dataset,
-      isCategorical: true,
-      label: "less than",
-      treatAsCategorical: true
-    };
-    jointDataset.metaDict.ash = {
-      abbridgedLabel: "g",
-      category: ColumnCategories.Dataset,
-      isCategorical: true,
-      label: "greater than",
-      treatAsCategorical: true
-    };
-
-    const wrapper = shallow(
-      <FilterList filters={filters} jointDataset={jointDataset} />
-    );
+    const wrapper = shallow(<FilterList filters={filters} />);
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -90,24 +62,7 @@ describe("FilterList", () => {
       undefined as unknown as IFilter
     ];
 
-    jointDataset.metaDict.alcohol = {
-      abbridgedLabel: "l",
-      category: ColumnCategories.Dataset,
-      isCategorical: true,
-      label: "less than",
-      treatAsCategorical: true
-    };
-    jointDataset.metaDict.ash = {
-      abbridgedLabel: "g",
-      category: ColumnCategories.Dataset,
-      isCategorical: true,
-      label: "greater than",
-      treatAsCategorical: true
-    };
-
-    const wrapper = shallow(
-      <FilterList filters={filters} jointDataset={jointDataset} />
-    );
+    const wrapper = shallow(<FilterList filters={filters} />);
     expect(wrapper).toMatchSnapshot();
   });
 });

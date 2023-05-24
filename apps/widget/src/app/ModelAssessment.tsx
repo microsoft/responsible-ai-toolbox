@@ -32,6 +32,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       | "requestExp"
       | "requestObjectDetectionMetrics"
       | "requestPredictions"
+      | "requestQuestionAnsweringMetrics"
       | "requestDebugML"
       | "requestMatrix"
       | "requestImportances"
@@ -52,24 +53,36 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       | "requestTestDataRow"
     > = {};
     if (this.props.config.baseUrl) {
-      callBack.requestExp = async (data: number): Promise<any[]> => {
+      callBack.requestExp = async (data: number | number[]): Promise<any[]> => {
         return callFlaskService(this.props.config, data, "/get_exp");
       };
       callBack.requestObjectDetectionMetrics = async (
-        trueY: number[][][],
-        predictedY: number[][][],
+        selectionIndexes: number[][],
         aggregateMethod: string,
         className: string,
-        iouThresh: number
+        iouThresh: number,
+        abortSignal: AbortSignal
       ): Promise<any[]> => {
         return callFlaskService(
           this.props.config,
-          [trueY, predictedY, aggregateMethod, className, iouThresh],
-          "/get_object_detection_metrics"
+          [selectionIndexes, aggregateMethod, className, iouThresh],
+          "/get_object_detection_metrics",
+          abortSignal
         );
       };
       callBack.requestPredictions = async (data: any[]): Promise<any[]> => {
         return callFlaskService(this.props.config, data, "/predict");
+      };
+      callBack.requestQuestionAnsweringMetrics = async (
+        selectionIndexes: number[][],
+        abortSignal: AbortSignal
+      ): Promise<any[]> => {
+        return callFlaskService(
+          this.props.config,
+          [selectionIndexes],
+          "/get_question_answering_metrics",
+          abortSignal
+        );
       };
       callBack.requestMatrix = async (
         data: any[]

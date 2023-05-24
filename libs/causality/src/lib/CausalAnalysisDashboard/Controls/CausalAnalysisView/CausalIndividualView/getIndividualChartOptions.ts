@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme } from "@fluentui/react";
 import { IGenericChartProps } from "@responsible-ai/core-ui";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 
@@ -40,8 +41,10 @@ export function getIndividualChartOptions(
       name: ""
     };
   });
+  const theme = getTheme();
   return {
     chart: {
+      backgroundColor: theme.semanticColors.bodyBackground,
       type: "scatter",
       zoomType: "xy"
     },

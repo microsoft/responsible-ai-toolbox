@@ -56,8 +56,10 @@ export function getFeatureImportanceBoxOptions(
       type: "boxplot"
     });
   });
+
   return {
     chart: {
+      backgroundColor: theme.semanticColors.bodyBackground,
       type: "boxplot"
     },
     legend: {

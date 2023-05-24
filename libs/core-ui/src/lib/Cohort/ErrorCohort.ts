@@ -70,7 +70,7 @@ export class ErrorCohort {
   }
 
   private updateStatsFromData(
-    filteredData: Array<{ [key: string]: number }>,
+    filteredData: Array<{ [key: string]: string | number }>,
     jointDataset: JointDataset
   ): ErrorCohortStats {
     // Calculate various cohort and global stats

@@ -5,7 +5,6 @@ import os
 import pickle
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from uuid import UUID
 
 import numpy as np
 import pandas as pd
@@ -25,6 +24,7 @@ from rai_test_utils.models.model_utils import (create_models_classification,
                                                create_models_regression)
 from rai_test_utils.models.sklearn import \
     create_complex_classification_pipeline
+from rai_test_utils.utilities import is_valid_uuid
 from raiutils.models import ModelTask
 from responsibleai import RAIInsights
 from responsibleai._internal.constants import (ManagerNames,
@@ -115,12 +115,19 @@ class TestRAIInsights(object):
                                               ManagerNames.ERROR_ANALYSIS,
                                               ManagerNames.EXPLAINER,
                                               ManagerNames.COUNTERFACTUAL])
-    def test_rai_insights_binary_mixed_types(self, manager_type):
+    @pytest.mark.parametrize('add_boolean', [True, False])
+    def test_rai_insights_binary_mixed_types(self, manager_type, add_boolean):
 
         data_train, data_test, y_train, y_test, categorical_features, \
             continuous_features, target_name, classes, \
             feature_columns, feature_range_keys = \
             create_adult_income_dataset()
+
+        if add_boolean:
+            data_train['is_adult'] = data_train['age'] >= 18
+            data_test['is_adult'] = data_test['age'] >= 18
+            categorical_features = categorical_features + ['is_adult']
+
         X_train = data_train.drop([target_name], axis=1)
 
         model = create_complex_classification_pipeline(
@@ -318,7 +325,7 @@ def validate_component_state_directory(path, manager_type):
     all_component_paths = os.listdir(path / manager_type)
     for component_path in all_component_paths:
         # Test if the component directory has UUID structure
-        UUID(component_path, version=4)
+        is_valid_uuid(component_path)
         dm = DirectoryManager(path / manager_type, component_path)
 
         config_path = dm.get_config_directory()

@@ -8,8 +8,6 @@ import {
   TotalCohortSamples
 } from "../Interfaces/IStatistic";
 
-import { JointDataset } from "./JointDataset";
-
 export enum ObjectDetectionMetrics {
   MeanAveragePrecision = "meanAveragePrecision",
   AveragePrecision = "averagePrecision",
@@ -17,41 +15,33 @@ export enum ObjectDetectionMetrics {
 }
 
 export const generateObjectDetectionStats: (
-  jointDataset: JointDataset,
   selectionIndexes: number[][]
 ) => ILabeledStatistic[][] = (
-  jointDataset: JointDataset,
   selectionIndexes: number[][]
 ): ILabeledStatistic[][] => {
-  const numLabels = jointDataset.numLabels;
   return selectionIndexes.map((selectionArray) => {
     const count = selectionArray.length;
-
-    // TODO: replace placeholder values with flask endpoint calls to python backend.
-    const meanAveragePrecision = 42;
-    const averagePrecision = 42;
-    const averageRecall = 42;
 
     return [
       {
         key: TotalCohortSamples,
         label: localization.Interpret.Statistics.samples,
-        stat: count / numLabels // TODO: remove numLabels from here when using jointDataset elsewhere.
+        stat: count
       },
       {
         key: ObjectDetectionMetrics.MeanAveragePrecision,
         label: localization.Interpret.Statistics.meanAveragePrecision,
-        stat: meanAveragePrecision
+        stat: Number.NaN
       },
       {
         key: ObjectDetectionMetrics.AveragePrecision,
         label: localization.Interpret.Statistics.averagePrecision,
-        stat: averagePrecision
+        stat: Number.NaN
       },
       {
         key: ObjectDetectionMetrics.AverageRecall,
         label: localization.Interpret.Statistics.averageRecall,
-        stat: averageRecall
+        stat: Number.NaN
       }
     ];
   });

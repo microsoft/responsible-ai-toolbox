@@ -60,6 +60,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           addCohort: this.addCohort,
           baseErrorCohort: this.state.baseCohort,
           causalAnalysisData: this.props.causalAnalysisData?.[0],
+          columnRanges: this.state.columnRanges,
           counterfactualData: this.props.counterfactualData?.[0],
           dataset: this.props.dataset,
           deleteCohort: this.deleteCohort,
@@ -97,10 +98,13 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           requestObjectDetectionMetrics:
             this.props.requestObjectDetectionMetrics,
           requestPredictions: this.props.requestPredictions,
+          requestQuestionAnsweringMetrics:
+            this.props.requestQuestionAnsweringMetrics,
           requestSplinePlotDistribution:
             this.props.requestSplinePlotDistribution,
           requestTestDataRow: this.props.requestTestDataRow,
           selectedErrorCohort: this.state.selectedCohort,
+          setAsCategorical: this.setAsCategorical,
           shiftErrorCohort: this.shiftErrorCohort,
           telemetryHook:
             this.props.telemetryHook ||
@@ -135,6 +139,9 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                 this.props.requestObjectDetectionMetrics
               }
               requestPredictions={this.props.requestPredictions}
+              requestQuestionAnsweringMetrics={
+                this.props.requestQuestionAnsweringMetrics
+              }
               requestDebugML={this.props.requestDebugML}
               requestImportances={this.props.requestImportances}
               requestMatrix={this.props.requestMatrix}
@@ -164,6 +171,17 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       </ModelAssessmentContext.Provider>
     );
   }
+
+  private setAsCategorical = (
+    column: string,
+    treatAsCategorical: boolean
+  ): void => {
+    if (this.state.columnRanges) {
+      const ranges = this.state.columnRanges;
+      ranges[column].treatAsCategorical = treatAsCategorical;
+      this.setState({ columnRanges: ranges });
+    }
+  };
 
   private setSaveCohortVisible = (): void => {
     this.setState({ saveCohortVisible: true });
@@ -294,6 +312,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
 
     if (switchNew) {
       this.setState({
+        baseCohort: newCohorts[editIndex],
         cohorts: newCohorts,
         selectedCohort: newCohorts[editIndex]
       });

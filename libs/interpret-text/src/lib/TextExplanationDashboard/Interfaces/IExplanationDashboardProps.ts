@@ -6,6 +6,10 @@ export interface ITextExplanationDashboardProps {
    * The interface design for the dashboard
    */
   dataSummary: IDatasetSummary;
+  requestQuestionAnsweringMetrics?: (
+    selectionIndexes: number[][],
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
 }
 
 export interface IDatasetSummary {

@@ -57,6 +57,7 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
         paddingTop: "10px"
       },
       chart: {
+        backgroundColor: theme.semanticColors.bodyBackground,
         marginBottom: "40px",
         width: "85%"
       },
