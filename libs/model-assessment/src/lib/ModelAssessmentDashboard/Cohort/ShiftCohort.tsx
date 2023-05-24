@@ -17,7 +17,8 @@ import {
   defaultModelAssessmentContext,
   ErrorCohort,
   isAllDataErrorCohort,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  translateToNewFilters
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -76,8 +77,12 @@ export class ShiftCohort extends React.Component<
     if (!this.state) {
       return React.Fragment;
     }
-    const filters =
+    const legacyFilters =
       this.state.savedCohorts[this.state.selectedCohort].cohort.filters;
+    const filters = translateToNewFilters(
+      legacyFilters,
+      this.context.dataset.feature_names
+    );
     let localizationBase;
     if (
       this.context &&

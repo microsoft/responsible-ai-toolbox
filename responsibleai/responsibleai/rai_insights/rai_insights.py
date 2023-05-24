@@ -16,13 +16,14 @@ import pandas as pd
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
+from raiutils.exceptions import UserConfigValidationException
 from raiutils.models import Forecasting, ModelTask, SKLearn
-from responsibleai._interfaces import Dataset, RAIInsightsData
+from responsibleai._interfaces import (Dataset, RAIInsightsData,
+                                       TabularDatasetMetadata)
 from responsibleai._internal._forecasting_wrappers import _wrap_model
 from responsibleai._internal.constants import (FileFormats, ManagerNames,
                                                Metadata,
                                                SerializationAttributes)
-from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.managers.causal_manager import CausalManager
 from responsibleai.managers.counterfactual_manager import CounterfactualManager
@@ -234,7 +235,7 @@ class RAIInsights(RAIBaseInsights):
         self._feature_columns = \
             test.drop(columns=[target_column]).columns.tolist()
         self._feature_ranges = RAIInsights._get_feature_ranges(
-            test=test,
+            test=(self._large_test if self._large_test is not None else test),
             categorical_features=self.categorical_features,
             feature_columns=self._feature_columns,
             datetime_features=self._feature_metadata.datetime_features)
@@ -575,27 +576,36 @@ class RAIInsights(RAIBaseInsights):
                 "identified as categorical features: "
                 f"{non_categorical_or_time_string_columns}")
 
+        list_of_feature_having_missing_values = []
+        for feature in test.columns.tolist():
+            if np.any(test[feature].isnull()):
+                list_of_feature_having_missing_values.append(feature)
+        if len(list_of_feature_having_missing_values) > 0:
+            warnings.warn(
+                f"Features {list_of_feature_having_missing_values} "
+                "have missing values in test data")
+
         self._validate_feature_metadata(
-            feature_metadata, train, task_type, model)
+            feature_metadata, train, task_type, model, target_column)
 
         if model is not None:
             # Pick one row from train and test data
             small_train_data = train[0:1]
             small_test_data = test[0:1]
             has_dropped_features = False
-            if feature_metadata is not None:
-                if (feature_metadata.dropped_features is not None and
-                        len(feature_metadata.dropped_features) != 0):
-                    has_dropped_features = True
-                    small_train_data = small_train_data.drop(
-                        columns=feature_metadata.dropped_features, axis=1)
-                    small_test_data = small_test_data.drop(
-                        columns=feature_metadata.dropped_features, axis=1)
+            if feature_metadata is not None and \
+                (feature_metadata.dropped_features is not None and
+                    len(feature_metadata.dropped_features) != 0):
+                has_dropped_features = True
+                features_to_drop = feature_metadata.dropped_features + [
+                    target_column]
+            else:
+                features_to_drop = [target_column]
 
             small_train_data = small_train_data.drop(
-                columns=[target_column], axis=1)
+                columns=features_to_drop, axis=1)
             small_test_data = small_test_data.drop(
-                columns=[target_column], axis=1)
+                columns=features_to_drop, axis=1)
             if (len(small_train_data.columns) == 0 or
                     len(small_test_data.columns) == 0):
                 if has_dropped_features:
@@ -660,19 +670,15 @@ class RAIInsights(RAIBaseInsights):
                 if feature_metadata is not None and \
                         feature_metadata.dropped_features is not None and \
                         len(feature_metadata.dropped_features) != 0:
-                    train_data = train.drop(
-                        columns=feature_metadata.dropped_features + [
-                            target_column],
-                        axis=1)
-                    test_data = test.drop(
-                        columns=feature_metadata.dropped_features + [
-                            target_column],
-                        axis=1)
+                    features_to_drop = feature_metadata.dropped_features + [
+                        target_column]
                 else:
-                    train_data = train.drop(
-                        columns=[target_column], axis=1)
-                    test_data = test.drop(
-                        columns=[target_column], axis=1)
+                    features_to_drop = [target_column]
+
+                train_data = train.drop(
+                    columns=features_to_drop, axis=1)
+                test_data = test.drop(
+                    columns=features_to_drop, axis=1)
 
                 train_predictions = model.predict(train_data)
                 test_predictions = model.predict(test_data)
@@ -691,7 +697,7 @@ class RAIInsights(RAIBaseInsights):
                 )
 
     def _validate_feature_metadata(
-            self, feature_metadata, train, task_type, model):
+            self, feature_metadata, train, task_type, model, target_column):
         """Validates the feature metadata."""
         if feature_metadata is not None:
             if not isinstance(feature_metadata, FeatureMetadata):
@@ -699,7 +705,7 @@ class RAIInsights(RAIBaseInsights):
                     "Expecting type FeatureMetadata but got "
                     f"{type(feature_metadata)}")
 
-            feature_names = list(train.columns)
+            feature_names = list(train.drop(columns=[target_column]).columns)
             feature_metadata.validate_feature_metadata_with_user_features(
                 feature_names)
 
@@ -917,6 +923,16 @@ class RAIInsights(RAIBaseInsights):
         dashboard_dataset.is_large_data_scenario = \
             True if self._large_test is not None else False
         dashboard_dataset.use_entire_test_data = False
+
+        dashboard_dataset.tabular_dataset_metadata = TabularDatasetMetadata()
+        dashboard_dataset.tabular_dataset_metadata.is_large_data_scenario = \
+            True if self._large_test is not None else False
+        dashboard_dataset.tabular_dataset_metadata.use_entire_test_data = False
+        dashboard_dataset.tabular_dataset_metadata.num_rows = \
+            len(self._large_test) \
+            if self._large_test is not None else len(self.test)
+        dashboard_dataset.tabular_dataset_metadata.feature_ranges = \
+            self._feature_ranges
 
         if self._feature_metadata is not None:
             dashboard_dataset.feature_metadata = \

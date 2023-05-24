@@ -17,7 +17,8 @@ import {
   DatasetTaskType,
   ModelTypes,
   IDataset,
-  getColumnRanges
+  getColumnRanges,
+  DatasetCohort
 } from "@responsible-ai/core-ui";
 import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
@@ -25,6 +26,7 @@ import { ModelMetadata } from "@responsible-ai/mlchartlib";
 
 import { getAvailableTabs } from "../AvailableTabs";
 import { processPreBuiltCohort } from "../Cohort/ProcessPreBuiltCohort";
+import { processPreBuiltDatasetCohort } from "../Cohort/ProcessPreBuiltDatasetCohort";
 import { IModelAssessmentDashboardProps } from "../ModelAssessmentDashboardProps";
 import {
   IModelAssessmentDashboardState,
@@ -95,6 +97,25 @@ export function buildInitialModelAssessmentContext(
   errorCohortList = errorCohortList.concat(preBuiltErrorCohortList);
   const cohorts = errorCohortList;
 
+  const preBuiltDatasetCohortList = processPreBuiltDatasetCohort(
+    props,
+    modelType,
+    columnRanges
+  );
+  const defaultDatasetCohort = new DatasetCohort(
+    localization.ErrorAnalysis.Cohort.defaultLabel,
+    props.dataset,
+    [],
+    modelType,
+    columnRanges,
+    CohortSource.None,
+    false,
+    metricStats
+  );
+  const datasetCohorts = [defaultDatasetCohort].concat(
+    preBuiltDatasetCohortList
+  );
+
   // only include tabs for which we have the required data
   const activeGlobalTabs: IModelAssessmentDashboardTab[] = getAvailableTabs(
     props,
@@ -113,6 +134,7 @@ export function buildInitialModelAssessmentContext(
     columnRanges,
     customPoints: [],
     dataChartConfig: undefined,
+    datasetCohorts,
     dependenceProps: undefined,
     errorAnalysisOption: ErrorAnalysisOptions.TreeMap,
     globalImportance: globalProps.globalImportance,

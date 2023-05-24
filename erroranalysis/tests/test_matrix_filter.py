@@ -6,8 +6,9 @@ import pandas as pd
 import pytest
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
-from erroranalysis._internal.constants import (ROW_INDEX, TRUE_Y, MatrixParams,
-                                               Metrics, ModelTask, f1_metrics,
+from erroranalysis._internal.constants import (ARG, COLUMN, METHOD, ROW_INDEX,
+                                               TRUE_Y, MatrixParams, Metrics,
+                                               ModelTask, f1_metrics,
                                                metric_to_display_name,
                                                precision_metrics,
                                                recall_metrics)
@@ -50,9 +51,9 @@ class TestMatrixFilter(object):
         # cohort was chosen in tree view
         X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
 
-        filters = [{'arg': [2.85],
-                    'column': feature_names[1],
-                    'method': 'less and equal'}]
+        filters = [{ARG: [2.85],
+                    COLUMN: feature_names[1],
+                    METHOD: 'less and equal'}]
 
         model_task = ModelTask.CLASSIFICATION
         run_error_analyzer_on_models(X_train, y_train, X_test,
@@ -67,9 +68,9 @@ class TestMatrixFilter(object):
         X_train = pd.DataFrame(X_train, columns=feature_names)
         X_test = pd.DataFrame(X_test, columns=feature_names)
 
-        filters = [{'arg': [2.85],
-                    'column': feature_names[1],
-                    'method': 'less and equal'}]
+        filters = [{ARG: [2.85],
+                    COLUMN: feature_names[1],
+                    METHOD: 'less and equal'}]
 
         model_task = ModelTask.CLASSIFICATION
         run_error_analyzer_on_models(X_train, y_train, X_test,
@@ -222,24 +223,24 @@ class TestMatrixFilter(object):
 
         composite_filters = [{'compositeFilters':
                              [{'compositeFilters':
-                              [{'arg': [11.364, 13.182],
-                                'column': 'mean radius',
-                                'method': 'in the range of'}],
+                              [{ARG: [11.364, 13.182],
+                                COLUMN: 'mean radius',
+                                METHOD: 'in the range of'}],
                                'operation': 'and'},
                               {'compositeFilters':
-                               [{'arg': [13.182, 15],
-                                 'column': 'mean radius',
-                                 'method': 'in the range of'}],
+                               [{ARG: [13.182, 15],
+                                 COLUMN: 'mean radius',
+                                 METHOD: 'in the range of'}],
                                'operation': 'and'},
                               {'compositeFilters':
-                               [{'arg': [15, 16.817],
-                                 'column': 'mean radius',
-                                 'method': 'in the range of'}],
+                               [{ARG: [15, 16.817],
+                                 COLUMN: 'mean radius',
+                                 METHOD: 'in the range of'}],
                                'operation': 'and'},
                               {'compositeFilters':
-                               [{'arg': [16.817, 18.635],
-                                 'column': 'mean radius',
-                                 'method': 'in the range of'}],
+                               [{ARG: [16.817, 18.635],
+                                 COLUMN: 'mean radius',
+                                 METHOD: 'in the range of'}],
                                'operation': 'and'}],
                              'operation': 'or'}]
 
@@ -293,12 +294,12 @@ class TestMatrixFilter(object):
     def test_matrix_filter_housing_filters(self):
         X_train, X_test, y_train, y_test, feature_names = create_housing_data()
 
-        filters = [{'arg': [600],
-                    'column': 'Population',
-                    'method': 'less and equal'},
-                   {'arg': [6],
-                    'column': 'AveRooms',
-                    'method': 'greater'}]
+        filters = [{ARG: [600],
+                    COLUMN: 'Population',
+                    METHOD: 'less and equal'},
+                   {ARG: [6],
+                    COLUMN: 'AveRooms',
+                    METHOD: 'greater'}]
 
         model_task = ModelTask.REGRESSION
         run_error_analyzer_on_models(X_train, y_train, X_test,

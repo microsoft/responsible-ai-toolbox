@@ -66,11 +66,23 @@ class TestSurrogateErrorTree(object):
     def test_surrogate_error_tree_int_categorical(self, analyzer_type):
         X_train, X_test, y_train, y_test, categorical_features = \
             create_adult_census_data()
-
         model = create_kneighbors_classifier(X_train, y_train)
 
         run_error_analyzer(model, X_test, y_test, list(X_train.columns),
                            analyzer_type, categorical_features)
+
+    @pytest.mark.parametrize('analyzer_type', [AnalyzerType.MODEL,
+                                               AnalyzerType.PREDICTIONS])
+    def test_surrogate_error_tree_categorical_filtered(self, analyzer_type):
+        X_train, X_test, y_train, y_test, categorical_features = \
+            create_adult_census_data()
+        model = create_kneighbors_classifier(X_train, y_train)
+        filters = [{ARG: [40],
+                    COLUMN: 'Age',
+                    METHOD: 'less and equal'}]
+        run_error_analyzer(model, X_test, y_test, list(X_train.columns),
+                           analyzer_type, categorical_features,
+                           filters=filters)
 
     def test_large_data_surrogate_error_tree(self):
         # validate tree trains quickly for large data

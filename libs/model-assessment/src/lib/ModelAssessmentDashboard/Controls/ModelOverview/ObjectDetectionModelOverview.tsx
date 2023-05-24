@@ -3,12 +3,18 @@
 
 import {
   ComboBox,
+  IComboBox,
   IComboBoxOption,
   IProcessedStyleSet,
   Slider,
   Stack
 } from "@fluentui/react";
-import { FluentUIStyles, IDataset } from "@responsible-ai/core-ui";
+import {
+  FluentUIStyles,
+  IDataset,
+  ITelemetryEvent
+} from "@responsible-ai/core-ui";
+import { InfoCallout } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
@@ -44,17 +50,24 @@ export function getSelectableClassNames(dataset: IDataset): IComboBoxOption[] {
 export interface IObjectDetectionWidgetsProps {
   classNames: IProcessedStyleSet<IModelOverviewStyles>;
   dataset: IDataset;
+  setAggregateMethod: (value: string) => void;
+  setClassName: (value: string) => void;
+  setIoUThreshold: (value: number) => void;
+  updateDatasetCohortStats: () => void;
+  updateFeatureCohortStats: () => Promise<void>;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetectionWidgetsProps> {
   public render(): React.ReactNode {
     return (
-      <Stack.Item>
+      <Stack horizontal>
         <ComboBox
           id="modelOverviewAggregateMethod"
           label={localization.ModelAssessment.ModelOverview.metricsTypeDropdown}
-          selectedKey={"macro"}
+          defaultSelectedKey={"macro"}
           options={getSelectableAggregateMethod()}
+          onChange={this.onAggregateMethodChange}
           className={this.props.classNames.dropdown}
           styles={FluentUIStyles.smallDropdownStyle}
         />
@@ -68,20 +81,61 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
             localization.ModelAssessment.ModelOverview.classSelectionDropdown
           }
           options={getSelectableClassNames(this.props.dataset)}
+          onChange={this.onClassNameChange}
           className={this.props.classNames.dropdown}
           styles={FluentUIStyles.smallDropdownStyle}
         />
         <Slider
           id="iouThreshold"
           label={
-            localization.ModelAssessment.ModelOverview.iouthresholdDropdown
+            localization.ModelAssessment.ModelOverview.iouThresholdDropdown.name
           }
           max={100}
+          defaultValue={70}
           className={this.props.classNames.slider}
+          onChanged={this.onIoUThresholdChange}
           valueFormat={(value: number): string => `IoU=${value}%`}
           showValue
         />
-      </Stack.Item>
+        <InfoCallout
+          iconId={
+            localization.ModelAssessment.ModelOverview.iouThresholdDropdown
+              .iconId
+          }
+          infoText={
+            localization.ModelAssessment.ModelOverview.iouThresholdDropdown
+              .description
+          }
+          title={
+            localization.ModelAssessment.ModelOverview.iouThresholdDropdown
+              .title
+          }
+        />
+      </Stack>
     );
   }
+
+  private onAggregateMethodChange = (
+    _: React.FormEvent<IComboBox>,
+    item?: IComboBoxOption
+  ): void => {
+    if (item) {
+      this.props.setAggregateMethod(item.text.toString());
+    }
+  };
+
+  private onClassNameChange = (
+    _: React.FormEvent<IComboBox>,
+    item?: IComboBoxOption
+  ): void => {
+    if (item) {
+      this.props.setClassName(item.text.toString());
+    }
+  };
+
+  private onIoUThresholdChange = (_: React.MouseEvent, value: number): void => {
+    if (value) {
+      this.props.setIoUThreshold(value);
+    }
+  };
 }

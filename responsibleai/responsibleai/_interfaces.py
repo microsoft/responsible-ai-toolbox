@@ -11,6 +11,13 @@ class TaskType(str, Enum):
     FORECASTING = 'forecasting'
 
 
+class TabularDatasetMetadata:
+    is_large_data_scenario: bool
+    use_entire_test_data: bool
+    feature_ranges: List[Dict[str, Any]]
+    num_rows: int
+
+
 class Dataset:
     task_type: TaskType
     predicted_y: List
@@ -24,6 +31,7 @@ class Dataset:
     is_large_data_scenario: bool
     use_entire_test_data: bool
     feature_metadata: Optional[Dict[str, Any]]
+    tabular_dataset_metadata: Optional[TabularDatasetMetadata]
     data_balance_measures: Dict[str, Any]
     images: Optional[List[str]]
     index: Optional[List[str]]

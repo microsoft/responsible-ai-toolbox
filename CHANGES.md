@@ -24,6 +24,71 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.27.0
+
+- educational materials
+  - Update explanation-dashboard-employee-attrition.ipynb to remove deprecated `iteritems()` and use `items()` instead by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2030
+- new features
+  - ## Responsible AI Dashboard
+    - Drop Down For Object Detection by @natalie-isak in https://github.com/microsoft/responsible-ai-toolbox/pull/2010
+    - Renaming Data Characteristics Tab by @natalie-isak in https://github.com/microsoft/responsible-ai-toolbox/pull/2032
+    - Object Detection UX & Documentation updates by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2037
+    - Ensuring backwards compat b/w OD scenario and other vision scenarios by @natalie-isak in https://github.com/microsoft/responsible-ai-toolbox/pull/2039
+  - ## Model Overview
+    - [Model Overview] Object Detection Metrics support by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2025
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - [Refactor] Add preBuiltCohort to datasetCohorts in modelAssessmentContext by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/2007
+    - Fix bugs 1.Save and switch doesn't do anything in cohort edit panel 2.Unable to edit cohort filters in certain scenario by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/2040
+  - ## RAIInsights
+    - make train data optional on RAIBaseInsights class by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2029
+    - responsibleai: Add test case for dataset having boolean features by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2042
+  - ## Error Analysis
+    - fix indexing error when creating a filtered error analysis tree view with a dataset that contains categoricals by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2026
+    - add EBM and LightGBM with TreeShap methods to calculate error correlation in error analysis by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2018
+    - release erroranalysis v0.4.3 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2043
+    - update responsibleai and raiwidgets to erroranalysis 0.4.3 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2045
+    - fix transient test failures by increasing timeout for gbm shap method by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2044
+  - ## RAI Utils
+    - Move import of `cohort` module from `raiwidgets` to `raituils` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2027
+  - ## Interpret
+    - update responsibleai to interpret-community 0.29.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2031
+- ## other
+  - Add python 3.10 tests by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2033
+  - fix failing builds by upgrading pip-tools after latest pip release by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2038
+  - Add 3.10 classifier for python packages by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2035
+  - Upgrade python from 3.7 to 3.10 in few workflows by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2041
+
+## v0.26.0
+
+- educational materials
+  - Update notebooks for categorical features to pass through FeatureMetadata by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/2011
+- new features
+  - ## Responsible AI Dashboard
+    - Adding Object Detection Fridge Data by @natalie-isak in https://github.com/microsoft/responsible-ai-toolbox/pull/1998
+  - ## RAIInsights
+    - Support forecasting in RAIInsights by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1948
+  - ## Model Overview
+    - [Model Overview] Metrics Template support with OD-specific optional args by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2002
+    - Object Detection Model Overview Flask template by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2004
+    - Model Overview: Object Detection Widgets for Aggregate Methods, Class selection, & IoU Threshold by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/1997
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - Forecasting: UI code adjustments to renamed datetime_features and time_series_id_features by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1993
+    - [Refactor]1.Add DatasetCohort 2. Move FeatureFlights to core by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/2003
+    - [Refactor]Add columnRanges and modelType to ModelAssessmentContext by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/2006
+  - ## RAIInsights
+    - Add validations for model predictions by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2008
+    - Add validations if target column is included in `FeatureMetadata` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2013
+    - try pickling model instead of failing based on state functions and change to UserConfigValidationException by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2014
+    - update dependencies for rai-core-flask, raiwidgets and responsibleai packages by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2016
+    - Fix deprecated DataFrame indexer type in Error Analysis package by @JarvisG495 in https://github.com/microsoft/responsible-ai-toolbox/pull/2019
+  - ## Error Analysis
+    - fix bug in tree view where slider params are not used by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1990
+    - fix error analysis showing float values with many zeros for some classification task nodes by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1991
+    - release erroranalysis v0.4.2 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2000
+    - update raiwidgets and responsibleai to erroranalysis 0.4.2 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2001
+
 ## v0.25.0
 
 - educational materials

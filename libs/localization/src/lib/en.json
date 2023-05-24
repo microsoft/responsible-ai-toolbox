@@ -154,7 +154,7 @@
     "counterfactualName": "What-if counterfactual name",
     "createWhatIfCounterfactual": "Create what-if counterfactual",
     "createCounterfactual": "Counterfactual",
-    "revertToBubbleChart": "Revert to bubble chart",
+    "revertToBubbleChart": "View bubble chart",
     "createOwn": "Create your own counterfactual:",
     "currentClass": "Current class",
     "currentRange": "Current range",
@@ -876,6 +876,14 @@
       "regressor": "Regressor"
     },
     "CohortEditor": {
+      "columns": {
+        "index": "Index",
+        "dataset": "Dataset",
+        "predictedY": "Predicted Y",
+        "trueY": "True Y",
+        "classificationOutcome": "Classification outcome",
+        "regressionError": "Error"
+      },
       "TreatAsCategorical": "Treat as categorical",
       "_TreatAsCategorical.comment": "a checkbox label to treat integers as categories instead of as numbers",
       "_addFilter.comment": "button text to add the current settings as a new filter",
@@ -1165,11 +1173,15 @@
       "_rSquared.comment": "the coefficient of determination, see https://en.wikipedia.org/wiki/Coefficient_of_determination",
       "_recall.comment": "computed recall of model, see https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers",
       "accuracy": "Accuracy: {0}",
+      "bleuScore": "Bleu score: {0}",
+      "bertScore": "Bert score: {0}",
       "exactMatchRatio": "Exact match ratio: {0}",
+      "rougeScore": "Rouge Score: {0}",
       "fnr": "False negative rate: {0}",
       "fpr": "False positive rate: {0}",
       "hammingScore": "Hamming score: {0}",
       "meanPrediction": "Mean prediction {0}",
+      "meteorScore": "Meteor Score: {0}",
       "mse": "Mean squared error: {0}",
       "precision": "Precision: {0}",
       "rSquared": "R²: {0}",
@@ -1390,6 +1402,7 @@
       "columnThree": "True Y",
       "columnFour": "Predicted Y",
       "columnFive": "Other metadata",
+      "chooseObject": "Choose a detected object",
       "examples": "examples",
       "filter": "Filter",
       "indexLabel": "Image ",
@@ -1399,12 +1412,15 @@
       "legendSuccess": "success",
       "loading": "Computing explanation for index",
       "multiselect": "Multiselect",
+      "notdefined": "object scenario not defined",
+      "objectSelect": "Object Selection",
       "pageSize": "Page size: ",
       "panelTitle": "Selected instance",
       "panelExplanation": "Explanation",
       "panelInformation": "Information",
       "predictedLabel": "Predicted label",
       "predictedY": "Predicted: ",
+      "prefix": "Object: ",
       "rows": "Rows: ",
       "search": "Search",
       "selectAll": "Select all",
@@ -1412,7 +1428,7 @@
       "showAll": "Show all",
       "tabOptionFirst": "Image explorer view",
       "tabOptionSecond": "Table view",
-      "tabOptionThird": "Data characteristics",
+      "tabOptionThird": "Class view",
       "thumbnailSize": "Thumbnail size",
       "titleBarError": "Error instances",
       "titleBarSuccess": "Success instances",
@@ -1674,7 +1690,23 @@
         },
         "exactMatchRatio": {
           "name": "Exact match ratio",
-          "description": "The ratio of instances classified correctly for every label in multilabel task."
+          "description": "The ratio of instances classified correctly for every label."
+        },
+        "meteorScore": {
+          "name": "Meteor Score",
+          "description": "METEOR Score is calculated based on the harmonic mean of precision and recall, with recall weighted more than precision in question answering task."
+        },
+        "bleuScore": {
+          "name": "Bleu Score",
+          "description": "Bleu Score measures the ratio of words (and/or n-grams) in the machine generated text that appeared in the reference text in question answering task."
+        },
+        "bertScore": {
+          "name": "Bert Score",
+          "description": "BERTScore focuses on computing semantic similarity between tokens of reference and machine generated text in question answering task."
+        },
+        "rougeScore": {
+          "name": "Rouge Score",
+          "description": "Rouge Score measures the ratio of words (and/or n-grams) in the reference text that appeared in the machine generated text in question answering task."
         },
         "hammingScore": {
           "name": "Hamming score",
@@ -1742,15 +1774,15 @@
         },
         "meanAveragePrecision": {
           "name": "Mean Average Precision score",
-          "description": "Mean Average Precision for Object Detection models."
+          "description": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall."
         },
         "averagePrecision": {
           "name": "Average Precision score",
-          "description": "Average Precision for a chosen class for Object Detection models."
+          "description": "Average precision for object detection models is calculated for a selected class."
         },
         "averageRecall": {
           "name": "Average Recall score",
-          "description": "Average Recall for a chosen class for Object Detection models."
+          "description": "Average recall for object detection models is calculated for a selected class."
         },
         "fairnessMetricDifference": "Difference",
         "fairnessMetricRatio": "Ratio"
@@ -1762,7 +1794,12 @@
         "micro": "Micro"
       },
       "classSelectionDropdown": "Select class(es)",
-      "iouthresholdDropdown": "IoU Threshold",
+      "iouThresholdDropdown": {
+        "name": "IoU Threshold",
+        "description": "Intersection over Union quantifies the degree of overlap between the prediction and ground truth bounding box of a detected object in an image. For example, setting an IoU threshold of 70% means that a prediction with greater than 70% overlap with ground truth is True, thus influencing the definition of prediction correctness and calculation of other performance metrics.",
+        "iconId": "iouThresholdIconId",
+        "title": "Learn about the IoU threshold"
+      },
       "notAvailable": "N/A",
       "countColumnHeader": "Sample size",
       "dataCohortsHeatmapHeader": "Cohorts",
