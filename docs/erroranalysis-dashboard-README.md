@@ -13,11 +13,11 @@ For instance, you can use Error Analysis to discover that the model has a higher
 
 ## Example Notebooks
 
-- [Error analysis and interpretability of a census income prediction model](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/individual-dashboards/erroranalysis-dashboard/erroranalysis-interpretability-dashboard-census.ipynb)
-- [Error analysis and interpretability of a breast cancer prediction model](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/individual-dashboards/erroranalysis-dashboard/erroranalysis-interpretability-dashboard-breast-cancer.ipynb)
-- [Error analysis of a multi class classification model](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/individual-dashboards/erroranalysis-dashboard/erroranalysis-dashboard-multiclass.ipynb)
-- [Error analysis of a boston housing price prediction model](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/individual-dashboards/erroranalysis-dashboard/erroranalysis-dashboard-regression-boston-housing.ipynb)
-- [Error analysis of a critical temperature of superconductors prediction model](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/individual-dashboards/erroranalysis-dashboard/erroranalysis-dashboard-regression-superconductor.ipynb)
+- [Error analysis and interpretability of a census income prediction model](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/individual-dashboards/erroranalysis-dashboard/erroranalysis-interpretability-dashboard-census.ipynb)
+- [Error analysis and interpretability of a breast cancer prediction model](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/individual-dashboards/erroranalysis-dashboard/erroranalysis-interpretability-dashboard-breast-cancer.ipynb)
+- [Error analysis of a multi class classification model](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/individual-dashboards/erroranalysis-dashboard/erroranalysis-dashboard-multiclass.ipynb)
+- [Error analysis of a housing price prediction model](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/individual-dashboards/erroranalysis-dashboard/erroranalysis-dashboard-regression-housing.ipynb)
+- [Error analysis of a critical temperature of superconductors prediction model](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/individual-dashboards/erroranalysis-dashboard/erroranalysis-dashboard-regression-superconductor.ipynb)
 
 <a name="interpretability dashboard"></a>
 

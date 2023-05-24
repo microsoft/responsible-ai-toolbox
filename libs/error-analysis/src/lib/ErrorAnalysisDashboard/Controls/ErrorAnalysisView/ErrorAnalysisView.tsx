@@ -10,7 +10,8 @@ import {
   MetricCohortStats,
   ModelAssessmentContext,
   IErrorAnalysisTreeNode,
-  IErrorAnalysisMatrix
+  IErrorAnalysisMatrix,
+  ITelemetryEvent
 } from "@responsible-ai/core-ui";
 import React from "react";
 
@@ -37,6 +38,7 @@ export interface IErrorAnalysisViewProps {
   matrixFeatures?: string[];
   errorAnalysisOption: ErrorAnalysisOptions;
   onClearCohortSelectionClick: () => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
   updateSelectedCohort: (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
@@ -72,6 +74,7 @@ export class ErrorAnalysisView extends React.Component<IErrorAnalysisViewProps> 
             baseCohort={this.props.baseCohort}
             showCohortName={this.props.showCohortName}
             disabledView={this.props.disabledView}
+            telemetryHook={this.props.telemetryHook}
           />
         )}
         {this.props.errorAnalysisOption === ErrorAnalysisOptions.HeatMap && (
@@ -86,6 +89,7 @@ export class ErrorAnalysisView extends React.Component<IErrorAnalysisViewProps> 
             baseCohort={this.props.baseCohort}
             isEnabled={matrixViewIsEnabled}
             disabledView={this.props.disabledView}
+            telemetryHook={this.props.telemetryHook}
           />
         )}
       </>

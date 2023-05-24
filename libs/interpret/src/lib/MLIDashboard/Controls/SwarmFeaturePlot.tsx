@@ -6,7 +6,7 @@ import {
   JointDataset,
   Cohort,
   IExplanationModelMetadata,
-  ModelTypes
+  IsBinary
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -68,7 +68,7 @@ export class SwarmFeaturePlot extends React.PureComponent<
         "layout.xaxis.tickvals",
         sortVector.map((_, index) => index)
       );
-      if (metadata.modelType === ModelTypes.Binary) {
+      if (IsBinary(metadata.modelType)) {
         _.set(
           plotlyProps,
           "layout.yaxis.title",
@@ -115,8 +115,7 @@ export class SwarmFeaturePlot extends React.PureComponent<
       plotlyProps.data[0].x = x;
       plotlyProps.data[0].y = y;
       return plotlyProps;
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private static BasePlotlyProps: IPlotlyProperty = {

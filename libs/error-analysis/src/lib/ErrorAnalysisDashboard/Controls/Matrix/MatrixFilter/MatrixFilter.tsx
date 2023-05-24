@@ -1,7 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
+import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
+  IStackTokens,
+  ITheme,
+  MessageBar,
+  MessageBarType,
+  Stack,
+  Text
+} from "@fluentui/react";
 import {
   IFilter,
   ICompositeFilter,
@@ -10,17 +20,10 @@ import {
   ErrorCohort,
   MetricCohortStats,
   ModelAssessmentContext,
-  IErrorAnalysisMatrix
+  IErrorAnalysisMatrix,
+  ITelemetryEvent
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  IStackTokens,
-  ITheme,
-  MessageBar,
-  MessageBarType,
-  Stack,
-  Text
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { MetricSelector } from "../../MetricSelector/MetricSelector";
@@ -54,6 +57,7 @@ export interface IMatrixFilterProps {
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
   isEnabled: boolean;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 const stackTokens: IStackTokens = { childrenGap: "l1" };
@@ -122,65 +126,93 @@ export class MatrixFilter extends React.PureComponent<
               </Text>
             </MessageBar>
           )}
-          <MatrixLegend
-            selectedCohort={this.props.selectedCohort}
-            baseCohort={this.props.baseCohort}
-            max={this.state.matrixLegendState.maxMetricValue}
-            isErrorMetric={this.state.matrixLegendState.isErrorMetric}
-            disabledView={this.props.disabledView}
-          />
-          <Stack horizontal tokens={stackTokens} horizontalAlign="start">
-            <MetricSelector
-              isEnabled={this.props.isEnabled && !featuresUnselected}
-              setMetric={this.setMetric}
-            />
-            <Stack.Item key="feature1key">
-              <ComboBox
-                defaultSelectedKey={this.state.selectedFeature1 || ""}
-                label="Rows: Feature 1"
-                options={this.options}
-                dropdownMaxWidth={300}
-                useComboBoxAsMenuWidth
-                onChange={this.handleFeature1Changed}
-                calloutProps={{
-                  calloutMaxHeight: 300,
-                  directionalHintFixed: true
-                }}
-                disabled={!this.props.isEnabled}
-              />
-            </Stack.Item>
-            <Stack.Item key="feature2key">
-              <ComboBox
-                defaultSelectedKey={this.state.selectedFeature2 || ""}
-                label="Columns: Feature 2"
-                options={this.options}
-                dropdownMaxWidth={300}
-                useComboBoxAsMenuWidth
-                onChange={this.handleFeature2Changed}
-                calloutProps={{
-                  calloutMaxHeight: 300,
-                  directionalHintFixed: true
-                }}
-                defaultValue={this.state.selectedFeature2}
-                disabled={!this.props.isEnabled}
-              />
-            </Stack.Item>
-          </Stack>
-          {!this.props.disabledView && (
-            <MatrixArea
-              theme={this.props.theme}
-              features={this.props.features}
-              getMatrix={this.props.getMatrix}
-              matrix={this.props.matrix}
-              selectedFeature1={this.state.selectedFeature1}
-              selectedFeature2={this.state.selectedFeature2}
-              updateSelectedCohort={this.props.updateSelectedCohort}
+          <Stack.Item>
+            <MatrixLegend
               selectedCohort={this.props.selectedCohort}
               baseCohort={this.props.baseCohort}
-              updateMatrixLegendState={this.updateMatrixLegendState}
-              isEnabled={this.props.isEnabled}
-              metric={this.context.errorAnalysisData!.metric}
+              max={this.state.matrixLegendState.maxMetricValue}
+              isErrorMetric={this.state.matrixLegendState.isErrorMetric}
+              disabledView={this.props.disabledView}
             />
+          </Stack.Item>
+          <Stack.Item>
+            <Stack
+              horizontal
+              tokens={stackTokens}
+              horizontalAlign="start"
+              className={classNames.selections}
+            >
+              <Stack.Item grow>
+                <MetricSelector
+                  isEnabled={this.props.isEnabled && !featuresUnselected}
+                  setMetric={this.setMetric}
+                  telemetryHook={this.props.telemetryHook}
+                />
+              </Stack.Item>
+              <Stack.Item grow>
+                <Stack horizontal className={classNames.featureSelections}>
+                  <Stack.Item
+                    key="feature1key"
+                    className={classNames.rowSelection}
+                  >
+                    <ComboBox
+                      defaultSelectedKey={this.state.selectedFeature1 || ""}
+                      label={
+                        localization.ErrorAnalysis.MetricSelector
+                          .feature1SelectorLabel
+                      }
+                      options={this.options}
+                      dropdownMaxWidth={300}
+                      useComboBoxAsMenuWidth
+                      onChange={this.handleFeature1Changed}
+                      calloutProps={{
+                        calloutMaxHeight: 300,
+                        directionalHintFixed: true
+                      }}
+                      disabled={!this.props.isEnabled}
+                    />
+                  </Stack.Item>
+                  <Stack.Item key="feature2key">
+                    <ComboBox
+                      defaultSelectedKey={this.state.selectedFeature2 || ""}
+                      label={
+                        localization.ErrorAnalysis.MetricSelector
+                          .feature2SelectorLabel
+                      }
+                      options={this.options}
+                      dropdownMaxWidth={300}
+                      useComboBoxAsMenuWidth
+                      onChange={this.handleFeature2Changed}
+                      calloutProps={{
+                        calloutMaxHeight: 300,
+                        directionalHintFixed: true
+                      }}
+                      defaultValue={this.state.selectedFeature2}
+                      disabled={!this.props.isEnabled}
+                    />
+                  </Stack.Item>
+                </Stack>
+              </Stack.Item>
+            </Stack>
+          </Stack.Item>
+          {!this.props.disabledView && (
+            <Stack.Item>
+              <MatrixArea
+                theme={this.props.theme}
+                features={this.props.features}
+                getMatrix={this.props.getMatrix}
+                matrix={this.props.matrix}
+                selectedFeature1={this.state.selectedFeature1}
+                selectedFeature2={this.state.selectedFeature2}
+                updateSelectedCohort={this.props.updateSelectedCohort}
+                selectedCohort={this.props.selectedCohort}
+                baseCohort={this.props.baseCohort}
+                updateMatrixLegendState={this.updateMatrixLegendState}
+                isEnabled={this.props.isEnabled}
+                metric={this.context.errorAnalysisData?.metric}
+                telemetryHook={this.props.telemetryHook}
+              />
+            </Stack.Item>
           )}
         </Stack>
       </div>
@@ -206,7 +238,9 @@ export class MatrixFilter extends React.PureComponent<
   };
 
   private setMetric = (metric: string): void => {
-    this.context.errorAnalysisData!.metric = metric;
+    if (this.context.errorAnalysisData) {
+      this.context.errorAnalysisData.metric = metric;
+    }
     this.forceUpdate();
   };
 

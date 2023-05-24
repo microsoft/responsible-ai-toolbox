@@ -1,12 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
-import { FabricStyles } from "@responsible-ai/core-ui";
+import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
+  TextField
+} from "@fluentui/react";
+import { FluentUIStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import { toNumber } from "lodash";
-import { TextField } from "office-ui-fabric-react";
 import React from "react";
 
 import { featureEditingTileStyles } from "./FeatureEditingTile.styles";
@@ -71,7 +75,7 @@ export class FeatureEditingTile extends React.Component<
         </div>
         {this.props.enumeratedValues === undefined && (
           <TextField
-            styles={FabricStyles.textFieldStyle}
+            styles={FluentUIStyles.textFieldStyle}
             ariaLabel={this.props.featureName}
             value={this.state.value}
             onChange={this.onValueChanged}
@@ -86,7 +90,7 @@ export class FeatureEditingTile extends React.Component<
             autoComplete="on"
             options={this.options || []}
             onChange={this.onComboSelected}
-            styles={FabricStyles.defaultDropdownStyle}
+            styles={FluentUIStyles.defaultDropdownStyle}
           />
         )}
       </div>

@@ -1,37 +1,38 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { CheckboxVisibility } from "@fluentui/react";
+import {
+  CheckboxVisibility,
+  IColumn,
+  DetailsList,
+  DetailsListLayoutMode,
+  Stack,
+  Text,
+  SelectionMode
+} from "@fluentui/react";
 import {
   Cohort,
   CohortEditor,
+  CohortNameColumn,
   defaultModelAssessmentContext,
   ErrorCohort,
   getCohortFilterCount,
   IModelAssessmentContext,
+  isAllDataErrorCohort,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
-import {
-  IColumn,
-  DetailsList,
-  DetailsListLayoutMode,
-  Link,
-  Stack,
-  Text,
-  SelectionMode,
-  IconButton
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { CohortDeleteDialog } from "./CohortDeleteDialog";
 import { cohortListStyles } from "./CohortList.styles";
+import { CohortListDeleteButton } from "./CohortListDeleteButton";
 
 export interface ICohortListProps {
   onEditCohortClick?: (editedCohort: ErrorCohort) => void;
   onRemoveCohortClick?: (editedCohort: ErrorCohort) => void;
   enableEditing: boolean;
+  showAllDataCohort: boolean;
 }
 
 export interface ICohortListItem {
@@ -65,7 +66,7 @@ export class CohortList extends React.Component<
         fieldName: "name",
         isResizable: true,
         key: "nameColumn",
-        maxWidth: 200,
+        maxWidth: 400,
         minWidth: 50,
         name: "Name"
       },
@@ -92,6 +93,8 @@ export class CohortList extends React.Component<
         />
         {this.state.currentEditCohort && (
           <CohortEditor
+            dataset={this.context.dataset}
+            isFromExplanation={false}
             jointDataset={this.context.jointDataset}
             filterList={this.state.currentEditCohort.cohort.filters}
             compositeFilters={
@@ -122,7 +125,7 @@ export class CohortList extends React.Component<
     item: ICohortListItem,
     index: number | undefined,
     column: IColumn | undefined
-  ) => {
+  ): React.ReactNode => {
     const style = cohortListStyles();
     if (column !== undefined && index !== undefined) {
       const fieldContent = item[
@@ -143,22 +146,21 @@ export class CohortList extends React.Component<
                 <Stack.Item>
                   <Stack horizontal tokens={{ childrenGap: "10px" }}>
                     <Stack.Item>
-                      <Link
-                        onClick={this.onEditCohortClick.bind(this, item.key)}
+                      <CohortNameColumn
                         disabled={this.isActiveCohort(item.key)}
-                      >
-                        {localization.Interpret.CohortBanner.edit}
-                      </Link>
+                        fieldContent={localization.Interpret.CohortBanner.edit}
+                        name={item.key}
+                        onClick={this.onEditCohortClick}
+                      />
                     </Stack.Item>
                     <Stack.Item>
-                      <Link
-                        onClick={this.onDuplicateCohortClick.bind(
-                          this,
-                          item.key
-                        )}
-                      >
-                        {localization.Interpret.CohortBanner.duplicateCohort}
-                      </Link>
+                      <CohortNameColumn
+                        fieldContent={
+                          localization.Interpret.CohortBanner.duplicateCohort
+                        }
+                        name={item.key}
+                        onClick={this.onDuplicateCohortClick}
+                      />
                     </Stack.Item>
                   </Stack>
                 </Stack.Item>
@@ -180,13 +182,15 @@ export class CohortList extends React.Component<
                     </Stack.Item>
                   </Stack>
                 </Stack.Item>
-                <Stack.Item>
-                  <IconButton
-                    iconProps={{ iconName: "Trash" }}
-                    disabled={this.isActiveCohort(item.key)}
-                    onClick={this.onDeleteCohortClick.bind(this, item.key)}
-                  />
-                </Stack.Item>
+                {this.props.enableEditing && (
+                  <Stack.Item>
+                    <CohortListDeleteButton
+                      disabled={this.isActiveCohort(item.key)}
+                      itemKey={item.key}
+                      onDeleteCohortClick={this.onDeleteCohortClick}
+                    />
+                  </Stack.Item>
+                )}
               </Stack>
             );
           }
@@ -216,7 +220,7 @@ export class CohortList extends React.Component<
     );
   }
 
-  private onDuplicateCohortClick(index: number): void {
+  private onDuplicateCohortClick = (index: number): void => {
     const all = this.getAllCohort();
     if (index >= 0 && index < all.length) {
       const originCohort = all[index];
@@ -235,7 +239,7 @@ export class CohortList extends React.Component<
       );
       this.context.addCohort(newCohort);
     }
-  }
+  };
 
   private existsCohort(cohorts: ErrorCohort[], name: string): boolean {
     return cohorts.some((errorCohort) => {
@@ -243,13 +247,13 @@ export class CohortList extends React.Component<
     });
   }
 
-  private onEditCohortClick(index: number): void {
+  private onEditCohortClick = (index: number): void => {
     const all = this.getAllCohort();
     const cohort = index >= 0 && index < all.length && all[index];
     if (cohort) {
       this.setState({ currentEditCohort: cohort });
     }
-  }
+  };
 
   private isActiveCohort(index: number): boolean {
     const all = this.getAllCohort();
@@ -264,19 +268,19 @@ export class CohortList extends React.Component<
     return false;
   }
 
-  private onDeleteCohortClick(index: number): void {
+  private onDeleteCohortClick = (index: number): void => {
     const all = this.getAllCohort();
     this.setState({
       currentDeleteCohortName: all[index].cohort.name,
       currentDeleteIndex: index
     });
-  }
+  };
 
-  private onDismissDelete = () => {
+  private onDismissDelete = (): void => {
     this.setState({ currentDeleteIndex: undefined });
   };
 
-  private onDeleteCohort = () => {
+  private onDeleteCohort = (): void => {
     if (this.state.currentDeleteIndex !== undefined) {
       const index = this.state.currentDeleteIndex;
       const all = this.getAllCohort();
@@ -290,6 +294,11 @@ export class CohortList extends React.Component<
 
   private getCohortListItems(): ICohortListItem[] {
     const allItems = this.context.errorCohorts
+      .filter(
+        (errorCohort: ErrorCohort) =>
+          this.props.showAllDataCohort ||
+          !isAllDataErrorCohort(errorCohort, true)
+      )
       .filter((errorCohort: ErrorCohort) => !errorCohort.isTemporary)
       .map((errorCohort: ErrorCohort, index: number) => {
         const details = [
@@ -314,12 +323,12 @@ export class CohortList extends React.Component<
     return allItems;
   }
 
-  private saveEditedCohort = (cohort: Cohort, switchNew?: boolean) => {
+  private saveEditedCohort = (cohort: Cohort, switchNew?: boolean): void => {
     this.context.editCohort(cohort, switchNew);
     this.toggleEditPanel();
   };
 
-  private toggleEditPanel = () => {
+  private toggleEditPanel = (): void => {
     this.setState({ currentEditCohort: undefined });
   };
 }

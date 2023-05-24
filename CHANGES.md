@@ -24,6 +24,648 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.27.0
+
+- educational materials
+  - Update explanation-dashboard-employee-attrition.ipynb to remove deprecated `iteritems()` and use `items()` instead by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2030
+- new features
+  - ## Responsible AI Dashboard
+    - Drop Down For Object Detection by @natalie-isak in https://github.com/microsoft/responsible-ai-toolbox/pull/2010
+    - Renaming Data Characteristics Tab by @natalie-isak in https://github.com/microsoft/responsible-ai-toolbox/pull/2032
+    - Object Detection UX & Documentation updates by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2037
+    - Ensuring backwards compat b/w OD scenario and other vision scenarios by @natalie-isak in https://github.com/microsoft/responsible-ai-toolbox/pull/2039
+  - ## Model Overview
+    - [Model Overview] Object Detection Metrics support by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2025
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - [Refactor] Add preBuiltCohort to datasetCohorts in modelAssessmentContext by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/2007
+    - Fix bugs 1.Save and switch doesn't do anything in cohort edit panel 2.Unable to edit cohort filters in certain scenario by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/2040
+  - ## RAIInsights
+    - make train data optional on RAIBaseInsights class by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2029
+    - responsibleai: Add test case for dataset having boolean features by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2042
+  - ## Error Analysis
+    - fix indexing error when creating a filtered error analysis tree view with a dataset that contains categoricals by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2026
+    - add EBM and LightGBM with TreeShap methods to calculate error correlation in error analysis by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2018
+    - release erroranalysis v0.4.3 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2043
+    - update responsibleai and raiwidgets to erroranalysis 0.4.3 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2045
+    - fix transient test failures by increasing timeout for gbm shap method by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2044
+  - ## RAI Utils
+    - Move import of `cohort` module from `raiwidgets` to `raituils` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2027
+  - ## Interpret
+    - update responsibleai to interpret-community 0.29.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2031
+- ## other
+  - Add python 3.10 tests by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2033
+  - fix failing builds by upgrading pip-tools after latest pip release by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2038
+  - Add 3.10 classifier for python packages by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2035
+  - Upgrade python from 3.7 to 3.10 in few workflows by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2041
+
+## v0.26.0
+
+- educational materials
+  - Update notebooks for categorical features to pass through FeatureMetadata by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/2011
+- new features
+  - ## Responsible AI Dashboard
+    - Adding Object Detection Fridge Data by @natalie-isak in https://github.com/microsoft/responsible-ai-toolbox/pull/1998
+  - ## RAIInsights
+    - Support forecasting in RAIInsights by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1948
+  - ## Model Overview
+    - [Model Overview] Metrics Template support with OD-specific optional args by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2002
+    - Object Detection Model Overview Flask template by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2004
+    - Model Overview: Object Detection Widgets for Aggregate Methods, Class selection, & IoU Threshold by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/1997
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - Forecasting: UI code adjustments to renamed datetime_features and time_series_id_features by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1993
+    - [Refactor]1.Add DatasetCohort 2. Move FeatureFlights to core by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/2003
+    - [Refactor]Add columnRanges and modelType to ModelAssessmentContext by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/2006
+  - ## RAIInsights
+    - Add validations for model predictions by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2008
+    - Add validations if target column is included in `FeatureMetadata` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2013
+    - try pickling model instead of failing based on state functions and change to UserConfigValidationException by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2014
+    - update dependencies for rai-core-flask, raiwidgets and responsibleai packages by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2016
+    - Fix deprecated DataFrame indexer type in Error Analysis package by @JarvisG495 in https://github.com/microsoft/responsible-ai-toolbox/pull/2019
+  - ## Error Analysis
+    - fix bug in tree view where slider params are not used by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1990
+    - fix error analysis showing float values with many zeros for some classification task nodes by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1991
+    - release erroranalysis v0.4.2 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2000
+    - update raiwidgets and responsibleai to erroranalysis 0.4.2 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2001
+
+## v0.25.0
+
+- educational materials
+  - Update README badges by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1933
+  - DOC improving several error strings by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1943
+  - Add `rai_test_utils` badge in README.md by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1953
+  - improve installation instructions for onboarding to RAI toolbox repository by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1962
+  - fix outdated example link in Error Analysis README by @JarvisG495 in https://github.com/microsoft/responsible-ai-toolbox/pull/1965
+  - Update example notebook links in README docs by @JarvisG495 in https://github.com/microsoft/responsible-ai-toolbox/pull/1970
+  - Create README.md for python tests by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1984
+- new features
+  - ## Responsible AI Dashboard
+    - Forecasting RAI dashboard: expand test data, add categorical what if by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1921
+  - ## Dataset Explorer
+    - [Large data Data explorer] Add individual data points - data explorer for large data. by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1919
+    - add missing true and predicted labels to axis config for dataset explorer in multilabel text and vision scenarios by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1960
+  - ## Counterfactual
+    - [Large data counterfactuals] Use data from local counterfactuals to display in counterfactuals panel by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1913
+  - ## Interpret
+    - [Large data feature importance] Add individual feature importance by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1929
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - Fix typo in variable name `disaggregatedAnalysisBaseCohortDislaimer` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1855
+    - add real model for dev env to have better test data by @xuke444 in https://github.com/microsoft/responsible-ai-toolbox/pull/1893
+    - Remove `setstate()` out of render function in `RegressionDistributionChart.tsx` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1922
+    - Unify responsibleai constants by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1925
+    - Fix bubble chart render issue due to exception in `SidePanel` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1941
+    - Fix table view feature value && scroll bar by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1954
+    - [Large counterfactuals & explanations] Do not call local counterfactuals/explanations on unselecting the point by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1957
+    - [Large data] Map classification outcome to string values, dither, count changes by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1955
+    - add (none) category for empty predicted or true labels in multilabel vision dashboard for data characteristics by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1961
+    - fix CI notebook build via updated yarn command flags by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/
+    - upgrade tslib to 2.5.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1973
+    - Forecasting: improve description in no-features case by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1978
+    - Forecasting: fix dropdown scroll issue by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1979
+    - Forecasting: restrict transformation names to 50 chars by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1981
+    - Forecasting: create a better UX for value inputs by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1985
+    - Forecasting: turn off Error Analysis by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1987
+    - Forecasting: fix button text to say "switch time series" by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1988
+    - Forecasting: validate characters for name field in transformation creation dialog by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1986
+  - ## RAIInsights
+    - raiwidgets tests: Change `post_data` from tuple to list by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1920
+    - Remove duplicate load() and save() for large data by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1930
+    - Deprecate categorical_features argument in favor of feature_metadata.categorical_features, improve metadata validation, and add forecasting-related metadata by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1934
+    - Add number of samples in large data in `meta.json` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1976
+  - ## Data balance
+    - [Bugfix] FeatureBalanceMeasures: skip computing measures for col if unique vals < 2 by @ms-kashyap in https://github.com/microsoft/responsible-ai-toolbox/pull/1980
+  - ## Model Overview
+    - fix mean absolute error metric calculation in model overview panel by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1950
+    - Fix selection rate by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1958
+  - ## Dataset Explorer
+    - Dataset explorer: Propagate number of bins to SDK backend API by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1940
+    - Fix robot page exception on data explorer by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1963
+    - Add spline chart data fetch from SDK backend by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1959
+  - ## Error Analysis
+    - erroranalysis: Fix the scenario when samples in dataset and string_indexed_data don't match by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1915
+    - improve error message for invalid features passed to matrix and tree views from API endpoint in dashboard by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1917
+    - improve erroranalysis error message when invalid features passed to matrix and tree methods by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1918
+    - Fix confusion matrix Heatmap bugs by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1926
+    - Fix focus indicator is not visible on all four sides for “Tree map” and "heat map" tabs. by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1947
+    - release erroranalysis v0.4.1 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1966
+    - update raiwidgets and responsibleai to erroranalysis 0.4.1 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1969
+  - ## Interpret
+    - Adding a limit on the number of samples used for computing global explanations by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1924
+  - ## Causal
+    - Move sort operation of out `render()` in `CausalAggregateView` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1927
+    - [Large data individual causal] Add individual causal what-if to large data by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1942
+  - ## RAI Utils
+    - Add random sampling module to `raiutils` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1928
+    - Move ModelTask to raiutils and create forecasting utils by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/
+    - Add `SystemErrorException` class to `raiutils` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1951
+    - Update version.py in `raiutils` to 0.4.0 by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1977
+    - Update `raiutils` to 0.4.0 in `raiwidgets`, `responsibleai`, `nlp_feature_extractors` and `erroranalysis` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1982
+  - ## RAI Test Utils
+    - Migrate responsibleai tests to use utilities in rai_test_utils - Part 1 by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1937
+    - Add more test helper functions in rai_test_utils by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1938
+    - Create 0.1.0 release for `rai_test_utils` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1952
+    - Migrate responsibleai tests to use utilities in rai_test_utils - Part 2 by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1956
+- ## other
+  - Update workflow ymls to pin pip-tools to below 6.12.2 by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1931
+
+## v0.24.1
+
+- educational materials
+  - Update some sample notebooks to include dropped_features by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1911
+- new features
+  - ## Responsible AI Dashboard
+    - Add forecasting dashboard - UI - time series selection & forecast comparison by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1894
+    - Confusion Matrix by @t-wangjohn in https://github.com/microsoft/responsible-ai-toolbox/pull/1794
+    - Update release workflows to include forecasting npm package by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1901
+    - Add forecasting dashboard - UI - transformation creation, table, and comparison by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1874
+  - ## Counterfactual
+    - [Big data] Counterfactuals - Part2 by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1832
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - Remove <h3> tags and replace with <Text> by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1900
+    - raiwidgets: Fix url in setup.py by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1906
+    - Enable logarithmic scaling, reflect cohort change and add add Revert to bubble chart button by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1905
+  - ## RAIInsights
+    - Move import to top level from within the function by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1898
+    - Raise `UserConfigValidationException` when `treatment_feature` is empty list by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1904
+  - ## Data balance
+    - Make `DataBalanceManager.compute()` throw warning instead of exception by @ms-kashyap in https://github.com/microsoft/responsible-ai-toolbox/pull/1902
+  - ## Error Analysis
+    - fix small data erroring out on mutual info score for error analysis guidance by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1907
+    - release erroranalysis v0.4.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1909
+    - update raiwidgets and responsibleai to erroranalysis 0.4.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1910
+    - Fix model wrapper to identify model type, remove task type from error analysis by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1912
+  - ## Interpret
+    - Fix unwrap error in individual feature importance by @hawestra in https://github.com/microsoft/responsible-ai-toolbox/pull/1897
+- ## other
+  - Exempt only files from max-lines rule that are already in violation, but not new files (part 2/2) by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1899
+
+## v0.24.0
+
+- educational materials
+  - Add more linting instructions to CONTRIBUTING.md by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1810
+  - Update some sample notebooks to include dropped_features by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1836
+  - Fix notebook links and typos by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1863
+- new features
+  - ## Responsible AI Dashboard
+    - add binary classification support for RAI text and vision scenarios by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1778
+    - add multilabel support to RAI dashboard and multilabel text classification covid events dataset by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1811
+    - Enable dropped_features for error analysis, data explorer and explainer, counterfactual and causal managers by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1824
+  - ## Error Analysis
+    - Always display tree branching decisions by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1870
+    - Show branching decisions on hover over on unselected tree nodes by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1881
+  - ## RAI test utils
+    - Add rai_test_utils package by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1777
+    - Add release-rai-test-utils.yml to release rai_test_utils package by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1797
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - Update e2e visit() function to not refresh the page if provided name doesn't exist in RAINotebookNames by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1792
+    - Fix TypeError: Cannot read properties of undefined (reading 'sort') by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1798
+    - Fix multiple Scroll bars appear on Model demo page after setting the page to 320\*256px viewport by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1796
+    - Fix ‘Close button’ and ‘Spin button’ present in new cohort dialog does not have any title or aria-label by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1806
+    - Fix fast pass accessibility bugs by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1817
+    - Add min-width for highchart and fix padding by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1818
+    - Add user feature name to box plot hover over by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1819
+    - update to latest 16.x node version for tests by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1809
+    - Simplify route generation logic for testing with flights by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1530
+    - Use "lower whisker" and "upper whisker" instead of misleading "minimum" and "maximum" on boxplot tooltips by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1825
+    - Remove unused flight "newSdkEndpoints" by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1831
+    - Gate call to probability distribution end point by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1839
+    - Disable partial dependence plots for large data scenarios by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1843
+    - add multilabel text example and fix correct and incorrect groups in data analysis by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1848
+    - Add number of cohort samples inside generateMetrics() by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1849
+    - add multilabel RAI vision example for fridge multilabel dataset by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1844
+    - update raiwidgets to rai-core-flask v0.5.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1851
+    - Remove warning for 'dropped_features are not in use currently.' by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1871
+    - add multilabel model overview metrics by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1882
+    - Populate probability box chart data on mount by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1883
+    - Improve spacing in RAI dashboard by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1875
+    - release raiwidgets and responsibleai 0.24.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1891
+    - Refactor metric computation in ModelOverview by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1850
+    - Remove `setState` call from render function in `ProbabilityDistributionChart.tsx` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1858
+    - Forecasting: boilerplate only by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1887
+  - ## RAIInsights
+    - Update requirements.txt to pin econml to 0.14.0 by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1813
+    - Remove pip pinning to unblock RAI gates by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1826
+    - Update requirements-linting.txt to pin isort by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1847
+    - fix loading older versions of RAIInsights due to \_FEATURE_METADATA key error by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1857
+    - Add better error message if all features are dropped from dataset by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1867
+    - Refer to prediction wrappers from ml-wrappers by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1830
+    - Raise exception instead of logging warnings when model cannot be loaded by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1886
+  - ## Counterfactual
+    - [Metadata] Fix counterfactual error on unable to update feature value by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1842
+    - Add `test_data` to `ICounterfactualData` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1892
+    - Add test_data to `CounterfactualData` for large data scenario by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1885
+    - [Big data] Counterfactuals - part 1 by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1888
+    - Add missing property 'id' in ICounterfactualData by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1834
+  - ## Causal
+    - Add e2e for dependency plot Avg of abs value option by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1768
+    - Remove redundant call to serialize_json_safe() in raiwidgets causal tests by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1840
+    - Fetching global causal effects and global policy from SDK backend by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1753
+    - Remove typo casual and correcting it to causal by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1846
+    - Disable local causal chart for large data support by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1845
+    - Add better error message if causal treatment features contain dropped features by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1868
+  - ## Error Analysis
+    - Update erroranalysis tests to use new rai_test_utils package by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1800
+    - Fix Heatmap tooltip theme by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1808
+    - impute missing values prior to calculating mutual information in erroranalysis by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1807
+    - update raiwidgets and responsibleai to erroranalysis 0.3.13 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1822
+    - Migrate debug_ml and matrix endpoints to compute_error_tree_on_dataset() and compute_matrix_on_dataset() by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1795
+    - in error analysis, refactor error rate metric into function by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1742
+    - fix error in erroranalysis heatmap caused by max value over right side of max bin by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1866
+  - ## Dataset Explorer
+    - Add dataset analysis chart view for large data by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1829
+  - ## Model Overview
+    - Fix Model overview - Dataset cohorts]: At 320\*256 viewport content is getting truncated and graph is not visible. by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1801
+    - Model overview: add box plot in the regression case by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1532
+    - Send the correct column name to SDK backend for model overview distribution charts by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1835
+    - Derive fairness metrics from metric stats instead of cohort stats by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1854
+    - Add common APIs for model overview metrics by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1862
+  - ## Interpret
+    - Get global explanations from SDK if endpoint available by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1820
+    - Disabling local feature importance view for large data scenario by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1828
+    - Remove dead space in aggregate feature importance by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1869
+    - update responsibleai to interpret-community 0.28.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1879
+  - ## NLP Feature Extractors
+    - remove the unnecessary dependency pins in nlp-feature-extractors package by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1759
+    - release nlp-feature-extractors 0.1.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1821
+    - remove unused dependency and method in nlp-feature-extractors package by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1823
+  - ## RAI Utils
+    - Port `cohort.py` from `raiwidgets` to `raiutils` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1859
+    - Update `raiutils` to 0.3.0 in `raiwidgets`, `responsibleai`, `erroranalysis` and `nlp_feature_extractors` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1873
+- ## other
+  - Add Ke as code owner to remaining folders by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1799
+  - Update CODEOWNERS by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1805
+  - merge postga branch into main by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1815
+  - Remove postga build trigger by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1816
+  - upgrade setup-python github action from v2 to v4 and pin to older ubuntu image for python 3.6 to fix build error by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1838
+  - Revert "Update some sample notebooks to include dropped_features" by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1837
+  - fix install command for speech to text example by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1856
+  - update rai-core-flask by closing WSGIServer on separate thread to fix segfault errors and get the rai-core-flask release builds working again by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1852
+  - Update maintainers by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1860
+  - Update requirements.txt in `raiwidgets` and `responsibleai` to pin numpy upper bound by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1864
+  - Update requirements-linting.txt to remove pin on isort by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1861
+  - Turn off fail-fast for python tests by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1878
+  - Separate out rai_core_flask CI and add paths filter by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1884
+  - Remove unused definitions, commented out code, etc. by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1876
+  - Update CI-raiwidgets-pytest.yml to skip windows 3.8 tests by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1890
+  - Exempt only files from max-lines rule that are already in violation, but not new files by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1896
+  - skip CI-Python gates when pull requests are unrelated by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1895
+
+## v0.23.0
+
+- educational materials
+  - fixed the link to developer blog for housing example by @aminadibi in https://github.com/microsoft/responsible-ai-toolbox/pull/1713
+  - Fix developer blog link in notebook by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1715
+  - readme-enhancements by @mesameki in https://github.com/microsoft/responsible-ai-toolbox/pull/1704
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - Update UT - use new ErrorCohort() to mock data by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1711
+    - [A11y] 1.Error analysis tree node text alignment 2. Add ariaLabel for new cohort panel 3. Model overview chart fix by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1719
+    - reduce file size for e2e by @xuke444 in https://github.com/microsoft/responsible-ai-toolbox/pull/1723
+    - fix max line line error for vision by @xuke444 in https://github.com/microsoft/responsible-ai-toolbox/pull/1725
+    - clean up fairness by @xuke444 in https://github.com/microsoft/responsible-ai-toolbox/pull/1724
+    - rollback local importance selection by @xuke444 in https://github.com/microsoft/responsible-ai-toolbox/pull/1726
+    - add fridge dataset to test app for RAI vision dashboard and fix bug with large images in flyout by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1730
+    - fix images in data characteristics panel hiding the success/failure instances by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1731
+    - add test watch mode by @xuke444 in https://github.com/microsoft/responsible-ai-toolbox/pull/1728
+    - refactor vision dashboard to remove getDerivedStateFromProps by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1732
+    - [A11y]Show Error analysis tree focus && Add Screen reader for 1. New cohort panel, 2. Add component callout 3. Callout tooltip by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1727
+    - [A11y] Fix bug - Screen reader is not announcing the associated information with axis selection radio buttons in data analysis chart view by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1736
+    - Fix cohort deletion not working by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1738
+    - fix e2e watch mode by @xuke444 in https://github.com/microsoft/responsible-ai-toolbox/pull/1740
+    - fix an reference issue for chart lib by @xuke444 in https://github.com/microsoft/responsible-ai-toolbox/pull/1741
+    - fix chart that generates duplicate plotly data by @xuke444 in https://github.com/microsoft/responsible-ai-toolbox/pull/1744
+    - [A11y] Fix table view keyboard access by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1739
+    - add data characteristics search and fix switching between tabs in RAI vision dashboard by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1745
+    - fix RAI dashboard for vision models crashing when selecting individual datapoints in data analysis by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1733
+    - remove duplicate settings button in RAI dashboard for images by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1747
+    - in data characteristics of RAI vision dashboard, fix bug where labels to display is reset when changing number of rows by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1748
+    - [A11y][screen reader] Announce component added after adding a component by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1751
+    - [A11y] 1. Hide chart heading & 2. Fix Add component callout high contrast focus indicator by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1758
+    - Fix full name not visible for features in highcharts by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1761
+    - Filter out undefined filters to resolve a robot page exception by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1764
+  - ## RAIInsights
+    - Correct predict call to predict_proba by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1717
+    - Port over cohort filtering tests for 'Predicted Y' cohort to responsibleai by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1709
+    - Raise exception in case categorical feature list doesn't have all string features by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1720
+    - Pass classes into the sklearn confusion_matrix by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1674
+    - fix flaky test test_rai_insights_add_save_load_save on dataset fetch by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1734
+    - Add validations to catch empty train/test scenarios by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1749
+    - responsibleai: Move tests into respective directories by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1746
+  - ## Counterfactual
+    - Update requirements.txt to upgrade dice-ml to 0.9 by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1782
+  - ## Causal
+    - Add attributes 'outcome', 'feature' and 'feature_value' to causal global effects by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1750
+    - Move causal only function from core-ui to causality by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1752
+  - ## Error Analysis
+    - Change multiclass F1_Score metrics to Macro_F1_Score/Micro_F1_Score by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1710
+    - Fix "Clear” button of Search field under 'Feature List' dialog is not Functional and Focus indicator is not visible on all four sides for “Tree map” and "heat map" tabs. by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1718
+    - Rename 'Error' filter name to 'Regression error' by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1729
+    - [A11y] announce the displayed search results information of Feature List "Search" edit field. by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1757
+    - fix error analysis cohort filter for string label values by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1766
+    - fix isnan exception in erroranalysis for newer versions of pandas and numpy when calling qcut by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1784
+    - update raiwidgets and responsibleai to erroranalysis 0.3.11 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1767
+  - ## Dataset Explorer
+    - clean up dataset explorer by @xuke444 in https://github.com/microsoft/responsible-ai-toolbox/pull/1721
+  - ## Model Overview
+    - Fix [Keyboard navigation - Azure Machine Learning - Model overview - Dataset cohorts]: Focus indicator is overlapping with the "help me choose metrics" button. by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1716
+  - ## Interpret
+    - in RAI text dashboard, fix topK and maxK on slidebar not updating when selecting different text documents by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1737
+    - fix table view for image and text based on discussions for local importances and data analysis by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1735
+    - Fix dependency plot showing Average of abs value by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1765
+  - ## NLP Feature Extractors
+    - Bump protobuf from 3.17.3 to 3.18.3 in /nlp_feature_extractors by @dependabot in https://github.com/microsoft/responsible-ai-toolbox/pull/1743
+- ## other
+  - fix lint rules by @xuke444 in https://github.com/microsoft/responsible-ai-toolbox/pull/1714
+  - Add postga build trigger by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1755
+  - Update flake8 to 4.0.1 in requirements-linting.txt to fix failing linting build by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1760
+
+## v0.22.0
+
+- educational materials
+  - Notebook change showing the usage of identity feature and feature metadata by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1627
+- new features
+  - ## Responsible AI Dashboard
+    - Vision Dashboard Table View and initial explanation flyout by @jamesbchao in https://github.com/microsoft/responsible-ai-toolbox/pull/1621
+    - Vision dashboard backend without data characteristics tab by @jamesbchao in https://github.com/microsoft/responsible-ai-toolbox/pull/1668
+    - Vision dashboard data characteristics tab by @jamesbchao in https://github.com/microsoft/responsible-ai-toolbox/pull/1675
+    - Vision dashboard cohorts by @jamesbchao in https://github.com/microsoft/responsible-ai-toolbox/pull/1686
+    - Vision model overview metrics by @jamesbchao in https://github.com/microsoft/responsible-ai-toolbox/pull/1688
+  - ## Error Analysis
+  - ## NLP Feature Extractors
+    - Add the code for the nlp_feature_extractors to the RAI Toolbox by @ilmarinen in https://github.com/microsoft/responsible-ai-toolbox/pull/1580
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - [Accessibility] Data analysis scatter chart - use symbol and color to differentiate data series by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1667
+    - Bump moment-timezone from 0.5.34 to 0.5.35 by @dependabot in https://github.com/microsoft/responsible-ai-toolbox/pull/1677
+    - Add validations for dashboard endpoints by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1672
+    - [Accessibility][reflow] Error analysis tree map & Data explorer & Feature importance Reflow by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1678
+    - [Accessibility][reflow] Error Analysis heat map & Model overview & Counterfactual & Causal analysis by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1680
+    - [localization] Localize high chart context menu items by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1691
+    - for RAI text dashboard, remove radio buttons and legend text when avg of abs value local importances selected by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1683
+    - Vision dashboard UI Fixups by @jamesbchao in https://github.com/microsoft/responsible-ai-toolbox/pull/1687
+    - touch ups from designer feedback to RAI dashboard for text data by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1695
+  - ## RAIInsights
+    - Update econml to 0.13.1 by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1660
+    - [responsibleai]: Add tests for classification outcome (multiclass) and regression error by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1662
+    - JSON serialize the endpoint output and add tests by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1679
+    - Cache predict() and predict_proba() output by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1702
+    - Reduce the train and test dataset sizes in responsibleai to reduce test time by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1630
+  - ## Counterfactual
+  - ## Causal
+    - Add validations for heterogeneity_features in causal manager by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1659
+    - Fix localization for causal tooltips by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1690
+  - ## Error Analysis
+    - [Accessibility] Error analysis screen reader by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1663
+    - Add metric computation of mean prediction by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1693
+    - Add support for 'True Y' filter for cohort filtering by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1685
+    - Avoid additional predict call in case of ModelAnalyzer by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1701
+    - release erroranalysis v0.3.10 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1706
+  - ## Dataset Explorer
+    - refactor table view into data analysis component by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1673
+    - add mini-table to feature importances view by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1682
+  - ## Model Overview
+    - [Model Overview] Box plot data for classification probabilities from SDK endpoint by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1689
+    - Change 'Accuracy' to 'Accuracy score' in ModelOverview by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1700
+  - ## Interpret
+    - [Accessibility][reflow] Individual conditional expectation plot by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1699
+  - ## NLP Feature Extractors
+    - update nlp-feature-extractors readme, dependencies and add a release script by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1666
+    - fix nlp-feature-extractors release by renaming requirements file by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1670
+    - add missing positive negative words csv file to attribute extractors by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1671
+- ## other
+  - [localization] LEGO: Pull request from JUNO/hb_a12a4630-4852-4e7d-9cbc-c0e1117da1ab_20220907180147477 to main by @csigs in https://github.com/microsoft/responsible-ai-toolbox/pull/1694
+  - Update CODEOWNERS by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1696
+
+## v0.21.0
+
+- educational materials
+  - [docs] Add Data Balance README by @ms-kashyap in https://github.com/microsoft/responsible-ai-toolbox/pull/1567
+  - Replace SynapseML links with RAIToolbox links by @ms-kashyap in https://github.com/microsoft/responsible-ai-toolbox/pull/1592
+- new features
+  - ## Responsible AI Dashboard
+    - Data Balance UX Part 2: Add visualizations as a flight by @ms-kashyap in https://github.com/microsoft/responsible-ai-toolbox/pull/1512
+    - add new interpret-vision library skeleton by @jamesbchao in https://github.com/microsoft/responsible-ai-toolbox/pull/1586
+    - add support for multiclass local importance values for text by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1601
+    - Vision explanation dashboard -- Image explorer view by @jamesbchao in https://github.com/microsoft/responsible-ai-toolbox/pull/1587
+  - ## Error Analysis
+    - Make generic class interface for cohort based filtering by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1597
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - update release workflows to include interpret-text npm package by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1582
+    - Add RAI prefix for OSS UI telemetry events by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1584
+    - Bump moment from 2.29.2 to 2.29.4 by @dependabot in https://github.com/microsoft/responsible-ai-toolbox/pull/1538
+    - Bump eventsource from 1.0.7 to 1.1.1 by @dependabot in https://github.com/microsoft/responsible-ai-toolbox/pull/1456
+    - [Bugfix] Fix Dropdown bug and Update styling for feature balance measures by @ms-kashyap in https://github.com/microsoft/responsible-ai-toolbox/pull/1583
+    - Refactor tests in test_responsibleai_dashboard_input.py to have common success and failure criteria by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1591
+    - update raiwidgets and responsibleai to erroranalysis 0.3.6 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1588
+    - Fix tooltip location showing up incorrectly due to conflicting ids by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1599
+    - Update e2e test to expand correct predictions caret symbol by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1603
+    - Updates to RAI text dashboard - update test app values to latest shap release, fix predicted label, limit selection to one row, fix random crash by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1605
+    - [300 line limit] Refactor AxisConfigDialog: create AxisConfigBinOptions and AxisConfigChoiceGroup component by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1609
+    - [300 line limit] Refactor CohortEditor, OverallMetricChart, set max-lines rule for core-ui package by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1612
+    - design updates for the RAI text dashboard local importances view by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1611
+    - [Accessibility] Fix all existing accessibility bugs by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1613
+    - Move CalculateBoxPlot.test.tsx to core-ui by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1620
+    - Add feature metadata to IDataset and JointDataset by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1614
+    - Remove console.log() statement from CohortEditor.tsx by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1628
+    - update raiwidgets and responsibleai to erroranalysis 0.3.8 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1629
+    - add new interpret-vision package to npm publish workflows in build and release gates by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1615
+    - [Accessibility] fix several accessibility bugs by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1632
+    - add UI tests for RAI text dashboard by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1636
+    - Fix typo for indices by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1640
+    - Add extra space between Identity feature and the actual feature name by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1641
+    - Use JointDataset API in ProcessPreBuiltCohort.ts by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1635
+    - add wrapping for long text documents to text highlighting component in RAI dashboard for text by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1643
+    - add tests to RAI text dashboard importances part 2 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1642
+    - add radio button tests for RAI text dashboard by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1648
+    - Localized file check-in by OneLocBuild Task: Build definition ID 21368: Build ID 69976515 by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1653
+    - Add unit test for calculateLineData by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1654
+    - Add test for uncovered condition in responsibleai_dashboard_input.py by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1638
+    - update raiwidgets and responsibleai to erroranalysis 0.3.9 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1657
+  - ## RAIInsights
+    - responsibleai: Add FeatureMetadata class and related tests by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1604
+    - Add categorical statistics computation in RAIInsights by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1598
+    - Add cohort filtering capability in RAIInsights class by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1618
+    - Inject FeatureMetadata into RAIInsights by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1616
+    - responsibleai: Remove old manager namespaces by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1564
+    - Fix docs in rai_base_insights.py by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1650
+    - fix failing RAI Insights test due to change in EA \_string_ind_data type by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1658
+    - Enable validations for FeatureMetadata when passed into RAIInsights by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1651
+  - ## Counterfactual
+    - [300 line limit] Refactor CounterfactualList by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1619
+    - Reduce the time taken by RAIInsights counterfactual tests by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1622
+    - [300 line limit] Refactor CounterfactualChart by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1624
+    - Add identity feature value to counterfactual hover over by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1626
+    - Minor refactoring in counterfactual package by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1634
+    - [Accessibility] Add headings & change counterfactual text color by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1646
+  - ## Causal
+    - Add backend functions in causal_manager.py to handle dashboard requests by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1579
+    - SDK change for computing aggregate causal effects and policy tree per cohort by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1552
+    - Add identity feature value to causal hover over by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1633
+  - ## Error Analysis
+    - Refactor categorical statistics computation in separate module by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1600
+    - Add more classification metrics to erroranalysis by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1575
+    - Improve error message when categorical string column is treated as numeric and error analysis is run by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1562
+    - fix bug in treeview filtering logic in error analysis package by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1593
+    - erroranalysis: Bug fix in classification outcome cohort filter by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1596
+    - release erroranalysis 0.3.7 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1606
+    - fix error analysis predictions analyzer failing due to new filtering refactor by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1625
+    - Make return type of string_ind_data in process_categoricals consistent by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1617
+    - Handle 'Classification outcome' cohort filter for multiclass scenario in SDK by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1623
+    - Handle 'Regression Error' cohort filter for regression scenario in SDK by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1644
+    - [Accessibility] Error analysis tree node change 1. Bubble error rate colors; 2. Bubble text & fill by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1649
+    - release erroranalysis 0.3.9 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1655
+  - ## Dataset Explorer
+    - Add identity feature value to dataset explorer scatter plot by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1645
+  - ## Model Overview
+    - If feature groups is more than 10, short it to 10 with "Other" for the rest by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1602
+    - [Model Overview]Fix bug: x axis selection is not kept between tab switch by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1607
+    - [ModelOverview] Fix bug- On choosing a specific feature cohort and trying to choose feature cohort again - dropdown has all cohorts selected by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1608
+    - [ModelOverview]Fix bug- Model Overview: Clarification - Should state of 'use line chart' be persisted when switched from Probability -> Metrics -> Prob tab by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1610
+    - enable new Model Overview experience in OSS RAI Dashboard by default by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1647
+  - ## Interpret
+    - Add backend functions in explainer_manager.py to handle dashboard requests by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1585
+    - Add identity feature value to feature importance hover over by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1637
+- ## other
+  - update CHANGES.md release notes to reflect delay in package release by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1581
+  - Remove strict pinnings from rai-core-flask requirements.txt. by @janjagusch in https://github.com/microsoft/responsible-ai-toolbox/pull/1578
+  - release rai-core-flask 0.5.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1589
+  - update deprecated pypi publish github action to new supported version by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1595
+  - Update CODEOWNERS to add default reviewers for core-ui by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1639
+
+## v0.20.0
+
+- new features
+  - ## Responsible AI Dashboard
+    - Model overview: add legend to probability line chart by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1492
+    - Model overview: add cohort selection hint by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1496
+    - Model overview: wrap text after max line width by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1503
+    - Model overview: use spline instead of line chart by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1508
+    - Model overview: turn on heatmap colors by default by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1510
+    - Model overview: disable confirm button when no changes were made by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1509
+    - Add e2e tests for new model overview experience (part 1) by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1467
+    - Model overview: use unique key to avoid heatmap color mismatch by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1517
+    - Model overview: new cohorts should show up by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1519
+    - Model overview: bold cohort names in tooltip by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1531
+    - add text interpretability dashboard UI by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1159
+    - Data Balance UX Part 1: add data_balance_measures to IDataset by @ms-kashyap in https://github.com/microsoft/responsible-ai-toolbox/pull/1511
+    - refactor individual importances view to integrate local importances view for text data by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1569
+  - ## RAIInsights
+    - Create DataBalanceManager + unit tests; clean up data balance conftest by @ms-kashyap in https://github.com/microsoft/responsible-ai-toolbox/pull/1485
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - [office-ui upgrade] Move components in causality, counterfactuals and dataset-explorer package to fluentui by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1481
+    - [office-ui upgrade] Move components in error-analysis package to fluentui by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1484
+    - [office-ui upgrade] Move components in interpret package to fluentui by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1495
+    - [office-ui upgrade] Move components in fairness package to fluentui by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1494
+    - [office-ui upgrade] Move components in model-assessment & dependencies to fluentui by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1497
+    - [office-ui upgrade] Move ChoiceGroup & all other remaining dependencies to fluentui by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1501
+    - [Bugfix] HeatmapHighChart: Prioritize configOverride over defaultOptions by @ms-kashyap in https://github.com/microsoft/responsible-ai-toolbox/pull/1490
+    - Remove download svg option due to highcharts limitations by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1498
+    - Upgrade highcharts from v9.3.0 to v10.1.0, remove highcharts bundle by setting it to external module by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1506
+    - Fix highcharts tooltip is clipped by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1502
+    - Bump shell-quote from 1.7.2 to 1.7.3 by @dependabot in https://github.com/microsoft/responsible-ai-toolbox/pull/1514
+    - [UI refactor] Remove all alert functions and set no-alert rule by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1518
+    - Use of "==" and "!=" confusing to non-programmers, update operators to strings by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1525
+    - [UI refactor] Remove .bind() part 1 - Remove .bind(this, true/false) by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1523
+    - Panel buttons should be uniform: change all buttons to "Apply"; all buttons should be at bottom by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1524
+    - Fix slider bug by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1526
+    - Fix e2e-widget.js for the case without flight argument by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1529
+    - Make the local point selection drop down consistent in causal and counterfactual by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1539
+    - [UI refactor] Remove .bind() part2 - Remove .bind in counterfactual folder and part of .bind() in other folders by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1542
+    - [UI refactor] Remove .bind() part3 - Remove .bind for SpinButton in AxisConfigDialog, MultiICEPlot and Fairness by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1555
+    - refactor text highlighting component to use Text and Label from FluentUI instead of styles on spans by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1558
+    - centralize plot colors to core ui by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1559
+    - create other cohort in model overview when there are more than 10 cohorts by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1572
+    - [Telemetry] Add button click event tracking for main menu and error analysis component by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1570
+    - Remove redundant lines of code in StatisticsUtils.ts by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1571
+    - [Telemetry] Add button click event trackers for new model overview, data explorer, feature importances, counterfactual and causal by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1574
+  - ## RAIInsights
+    - update responsibleai package to latest interpret-community 0.26.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1491
+    - Update requirements.txt to bump up econml to 0.13.0 by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1499
+    - remove version for flask by @xuke444 in https://github.com/microsoft/responsible-ai-toolbox/pull/1515
+    - Remove unused variables from create_classification_pipeline() by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1520
+    - update raiwidgets and responsibleai to latest erroranalysis 0.3.3 release by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1535
+    - Add column and feature range meta data to meta file by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1541
+    - update raiwidgets and responsibleai to erroranalysis 0.3.4 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1544
+    - update packages to new raiutils 0.2.0 and rai-core-flask 0.4.0 releases by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1550
+    - Add hierarchy to rai exceptions by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1568
+    - Add multiclass classification test in raiwidgets by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1576
+  - ## Counterfactual
+    - Update counterfactual serialization via dice-ml APIs by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1479
+    - Fix unable to input decimal point in what if counterfactual feature text field by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1459
+    - Bold input text for values that have changed from the original reference values for counterfactual list by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1516
+    - Fix bug in deserializing counterfactual explainer by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1554
+    - Add ID to counterfactual config and serialized counterfactual data by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1553
+  - ## Causal
+    - Enable skipped causal unit test by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1565
+  - ## Error Analysis
+    - add more docs to matrix filter aka heatmap in error analysis by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1489
+    - part 2: add pyspark support to tree surrogate model in error analysis by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1388
+    - use new getNativeModel method in get_surrogate_booster_pyspark to simplify erroranalysis code by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1475
+    - fix erroranalysis erroring on serialization with numpy int64 feature names by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1537
+  - ## Dataset Explorer
+    - Reorder controls in data explorer legend by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1493
+    - Fill color for data explorer box plot by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1504
+- ## other
+  - Add issues template for bugs and feature requests by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1486
+  - Taking dependency on `is_classifier()` method and `SKLearn` constants class from `raiutils` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1289
+  - Localized file check-in by OneLocBuild Task: Build definition ID 21368: Build ID 65085801 by @riedgar-ms in https://github.com/microsoft/responsible-ai-toolbox/pull/1500
+  - Split raiwidgets/e2e-notebooks test pipeline in two by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1478
+  - Derandomize notebooks by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1507
+  - Unify naming between notebooks and test cases by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1505
+  - Update CODEOWNERS by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1513
+  - Add License and Requirements to Source Distribtion by @janjagusch in https://github.com/microsoft/responsible-ai-toolbox/pull/1522
+  - Move references for \_convert_to_list() and \_convert_to_string_list_dict() to raiutils by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1534
+  - Move references for serialize_json_safe() to raiutils by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1536
+  - fix flaky test by adding retry logic to fetch openml dataset in notebook by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1547
+  - release rai-core-flask 0.4.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1546
+  - release raiutils v0.2.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1545
+  - update sphinx dependencies to fix jinja2 doc build error by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1551
+  - Update CODEOWNERS by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1557
+  - [E2ETests]Add flight && screenshots by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1566
+  - fix release pipeline failing on UI widget tests by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1573
+  - fix e2e UI tests incorrectly running tests with flights when no notebook name specified and reduce number of test jobs by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1577
+
+## v0.19.0
+
+- educational materials
+  - add info about PR reviews to the contributing docs file by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1472
+  - Adding extra statement in PR template for e2e by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1461
+- new features
+  - ## Responsible AI Dashboard
+    - Model overview: improve placeholder, put confirm/cancel buttons at the bottom, and hide toggle when needed by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1433
+  - ## RAIInsights
+    - Add DataBalanceAnalysis module to ResponsibleAI package to be consumed by visualizations by @ms-kashyap in https://github.com/microsoft/responsible-ai-toolbox/pull/1473
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - Fix locators logic for string features - data explorer component by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1441
+    - Fix cohort name conflict and not run few tests for AML by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1442
+    - Few e2e tests changes to accommodate AML static tests by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1445
+    - Fix locators logic for string features - data explorer and model statistics components by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1446
+    - Add more unittests RAI dashboard input class by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1448
+    - Update the way to get the length of elements obtained in e2e tests by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1450
+    - Fix dataset explorer plot with count not displaying by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1454
+    - Add toggle for switching classes in binary classification case by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1444
+    - [office-ui upgrade] Move checkbox to fluentui by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1465
+    - [office-ui upgrade] Move combobox to fluentui by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1469
+    - [office-ui upgrade] Move components in core-ui packageto fluentui by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1471
+    - Fix TypeError: Cannot read properties of undefined (reading 'treatAsCategorical')" by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1452
+    - Update predicted class value to uneditable text in counterfactual panel by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1458
+    - Collapse correct prediction by default for individual feature importance by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1474
+  - ## RAIInsights
+    - Update requirements.txt to pin dice-ml at 0.8 by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1470
+- ## other
+  - Add more utilities into raiutils by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1295
+  - Release raiutils v0.1.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1480
+  - Update responsibleai to raiutils 0.1.0, raiwidgets and responsibleai to erroranalysis 0.3.2 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1483
+  - Merge postbuild branch back into main by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1466
+  - Remove postbuild branch triggers by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1476
+
 ## v0.18.2
 
 - bug fixes and tests

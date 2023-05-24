@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Label, Text } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { Label, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { ICompositeFilter, IFilter } from "../../Interfaces/IFilter";
@@ -32,7 +32,6 @@ export class CohortEditorFilterList extends React.Component<ICohortEditorFilterL
         <Label>{localization.Interpret.CohortEditor.addedFilters}</Label>
         <FilterList
           filters={this.props.filters}
-          jointDataset={this.props.jointDataset}
           editFilter={this.props.editFilter}
           removeFilter={this.props.removeFilter}
         />

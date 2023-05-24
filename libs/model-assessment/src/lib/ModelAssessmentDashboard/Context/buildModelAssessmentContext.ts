@@ -13,8 +13,12 @@ import {
   buildGlobalProperties,
   buildIndexedNames,
   getClassLength,
-  getModelType,
-  MetricCohortStats
+  MetricCohortStats,
+  DatasetTaskType,
+  ModelTypes,
+  IDataset,
+  getColumnRanges,
+  DatasetCohort
 } from "@responsible-ai/core-ui";
 import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
@@ -22,17 +26,21 @@ import { ModelMetadata } from "@responsible-ai/mlchartlib";
 
 import { getAvailableTabs } from "../AvailableTabs";
 import { processPreBuiltCohort } from "../Cohort/ProcessPreBuiltCohort";
+import { processPreBuiltDatasetCohort } from "../Cohort/ProcessPreBuiltDatasetCohort";
 import { IModelAssessmentDashboardProps } from "../ModelAssessmentDashboardProps";
 import {
   IModelAssessmentDashboardState,
   IModelAssessmentDashboardTab
 } from "../ModelAssessmentDashboardState";
 import { GlobalTabKeys } from "../ModelAssessmentEnums";
+import { getModelTypeFromProps } from "../utils/getModelTypeFromProps";
 
 export function buildInitialModelAssessmentContext(
   props: IModelAssessmentDashboardProps
 ): IModelAssessmentDashboardState {
   const modelMetadata = buildModelMetadata(props);
+  const modelType = getModelTypeFromProps(props);
+  const columnRanges = getColumnRanges(props.dataset, modelType);
 
   let localExplanations:
     | IMultiClassLocalFeatureImportance
@@ -46,12 +54,15 @@ export function buildInitialModelAssessmentContext(
       props.modelExplanationData[0].precomputedExplanations
         .localFeatureImportance;
   }
+  validateForecastingSpecificMetadata(props.dataset);
   const jointDataset = new JointDataset({
     dataset: props.dataset.features,
+    featureMetaData: props.dataset.feature_metadata,
     localExplanations,
     metadata: modelMetadata,
     predictedProbabilities: props.dataset.probability_y,
     predictedY: props.dataset.predicted_y,
+    targetColumn: props.dataset.target_column,
     trueY: props.dataset.true_y
   });
   const globalProps = buildGlobalProperties(
@@ -86,6 +97,25 @@ export function buildInitialModelAssessmentContext(
   errorCohortList = errorCohortList.concat(preBuiltErrorCohortList);
   const cohorts = errorCohortList;
 
+  const preBuiltDatasetCohortList = processPreBuiltDatasetCohort(
+    props,
+    modelType,
+    columnRanges
+  );
+  const defaultDatasetCohort = new DatasetCohort(
+    localization.ErrorAnalysis.Cohort.defaultLabel,
+    props.dataset,
+    [],
+    modelType,
+    columnRanges,
+    CohortSource.None,
+    false,
+    metricStats
+  );
+  const datasetCohorts = [defaultDatasetCohort].concat(
+    preBuiltDatasetCohortList
+  );
+
   // only include tabs for which we have the required data
   const activeGlobalTabs: IModelAssessmentDashboardTab[] = getAvailableTabs(
     props,
@@ -101,8 +131,10 @@ export function buildInitialModelAssessmentContext(
     activeGlobalTabs,
     baseCohort: cohorts[0],
     cohorts,
+    columnRanges,
     customPoints: [],
     dataChartConfig: undefined,
+    datasetCohorts,
     dependenceProps: undefined,
     errorAnalysisOption: ErrorAnalysisOptions.TreeMap,
     globalImportance: globalProps.globalImportance,
@@ -112,6 +144,8 @@ export function buildInitialModelAssessmentContext(
     jointDataset,
     modelChartConfig: undefined,
     modelMetadata,
+    modelType,
+    onAddMessage: "",
     saveCohortVisible: false,
     selectedCohort: cohorts[0],
     selectedWhatIfIndex: undefined,
@@ -122,11 +156,8 @@ export function buildInitialModelAssessmentContext(
 function buildModelMetadata(
   props: IModelAssessmentDashboardProps
 ): IExplanationModelMetadata {
-  const modelType = getModelType(
-    props.dataset.task_type === "regression" ? "regressor" : "classifier",
-    props.modelExplanationData?.[0]?.precomputedExplanations,
-    props.dataset.probability_y
-  );
+  let classNames = props.dataset.class_names;
+  const modelType = getModelTypeFromProps(props);
   let featureNames = props.dataset.feature_names;
   let featureNamesAbridged: string[];
   const maxLength = 18;
@@ -183,15 +214,20 @@ function buildModelMetadata(
     );
     featureNamesAbridged = featureNames;
   }
-  let classNames = props.dataset.class_names;
-  const classLength = getClassLength(
-    props.modelExplanationData?.[0]?.precomputedExplanations,
-    props.dataset.probability_y
-  );
-  if (!classNames || classNames.length !== classLength) {
-    classNames = buildIndexedNames(
-      classLength,
-      localization.ErrorAnalysis.defaultClassNames
+  if (modelType !== ModelTypes.ImageMulticlass) {
+    const classLength = getClassLength(
+      props.modelExplanationData?.[0]?.precomputedExplanations,
+      props.dataset.probability_y
+    );
+    if (!classNames || classNames.length !== classLength) {
+      classNames = buildIndexedNames(
+        classLength,
+        localization.ErrorAnalysis.defaultClassNames
+      );
+    }
+  } else if (!classNames) {
+    throw new Error(
+      "Invalid input data for image classification, class names required."
     );
   }
   const featureIsCategorical = ModelMetadata.buildIsCategorical(
@@ -217,4 +253,15 @@ function buildModelMetadata(
     featureRanges,
     modelType
   };
+}
+
+function validateForecastingSpecificMetadata(dataset: IDataset): void {
+  if (dataset.task_type === DatasetTaskType.Forecasting) {
+    if (!dataset.feature_metadata) {
+      throw new Error("feature_metadata is required for forecasting.");
+    }
+    if (dataset.index === undefined) {
+      throw new Error("A datetime index is required for forecasting.");
+    }
+  }
 }

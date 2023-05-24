@@ -1,26 +1,39 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
 import {
-  ColumnCategories,
-  FabricStyles,
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
+  Slider,
+  Stack,
+  Text
+} from "@fluentui/react";
+import {
+  FluentUIStyles,
   ICausalWhatIfData,
   JointDataset,
   ModelAssessmentContext,
   NoData,
-  defaultModelAssessmentContext
+  defaultModelAssessmentContext,
+  DatasetTaskType,
+  ifEnableLargeData
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
-import { Slider, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { causalWhatIfStyles } from "./CausalWhatIf.styles";
+import {
+  getTargetColumn,
+  getTreatmentValue,
+  getWhatIf
+} from "./causalWhatIfUtils";
 import { Outcome } from "./Outcome";
 
 export interface ICausalWhatIfProps {
   selectedIndex: number | undefined;
+  absoluteIndex?: number;
+  isLocalCausalDataLoading?: boolean;
 }
 interface ICausalWhatIfState {
   treatmentFeature?: string;
@@ -33,6 +46,7 @@ interface ICausalWhatIfState {
   treatmentValueStep?: number;
   currentOutcome?: number;
   newOutcome?: ICausalWhatIfData;
+  testDataRow?: any;
 }
 
 export class CausalWhatIf extends React.Component<
@@ -42,7 +56,6 @@ export class CausalWhatIf extends React.Component<
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
-  private _getWhatIfController: AbortController | undefined;
   public constructor(props: ICausalWhatIfProps) {
     super(props);
     this.state = {};
@@ -53,7 +66,7 @@ export class CausalWhatIf extends React.Component<
     }
   }
   public render(): React.ReactNode {
-    if (this.context.dataset.task_type !== "regression") {
+    if (this.context.dataset.task_type !== DatasetTaskType.Regression) {
       return React.Fragment;
     }
     if (!this.context.causalAnalysisData?.config) {
@@ -73,9 +86,10 @@ export class CausalWhatIf extends React.Component<
           options={treatmentOptions}
           ariaLabel={"treatment picker"}
           useComboBoxAsMenuWidth
-          styles={FabricStyles.smallDropdownStyle}
+          styles={FluentUIStyles.smallDropdownStyle}
           selectedKey={this.state.treatmentFeature}
           onChange={this.setTreatmentFeature}
+          disabled={this.props.isLocalCausalDataLoading}
         />
         {this.state.currentTreatmentValue !== undefined && (
           <Text className={classNames.boldText}>
@@ -145,7 +159,10 @@ export class CausalWhatIf extends React.Component<
       this.context.dataset.feature_names.indexOf(this.state.treatmentFeature);
     this.setState(
       {
-        newTreatmentRawValue: this.getRawValue(value, featureKey),
+        newTreatmentRawValue: this.context.jointDataset.getRawValue(
+          value,
+          featureKey
+        ),
         newTreatmentValue: value
       },
       this.getWhatIf
@@ -156,10 +173,18 @@ export class CausalWhatIf extends React.Component<
     return `${this.state.newTreatmentRawValue}`;
   };
 
-  private readonly setTreatmentFeature = (
+  private readonly setTestDataRow = (testDataRow: any): void => {
+    this.setState({ testDataRow });
+  };
+
+  private readonly setNewOutcome = (newOutcome?: ICausalWhatIfData): void => {
+    this.setState({ newOutcome });
+  };
+
+  private readonly setTreatmentFeature = async (
     _?: React.FormEvent<IComboBox>,
     option?: IComboBoxOption | undefined
-  ): void => {
+  ): Promise<void> => {
     let featureName = this.state.treatmentFeature;
     if (typeof option?.key === "string") {
       featureName = option.key;
@@ -179,9 +204,16 @@ export class CausalWhatIf extends React.Component<
     const featureKey =
       JointDataset.DataLabelRoot +
       this.context.dataset.feature_names.indexOf(featureName);
-    const treatmentValue = this.context.selectedErrorCohort.cohort.getRow(
-      this.props.selectedIndex
-    )[featureKey];
+    const treatmentValue = await getTreatmentValue(
+      this.context.dataset,
+      this.context.selectedErrorCohort.cohort,
+      this.props.selectedIndex,
+      featureName,
+      this.setTestDataRow,
+      this.props.absoluteIndex,
+      this.context.requestTestDataRow
+    );
+
     const meta =
       this.context.jointDataset.metaDict[
         JointDataset.DataLabelRoot +
@@ -201,12 +233,20 @@ export class CausalWhatIf extends React.Component<
       treatmentValueMax = treatmentValue * 1.1;
       treatmentValueStep = treatmentValue * 0.01;
     }
-    const rawValue = this.getRawValue(treatmentValue, featureKey);
+    const rawValue = this.context.jointDataset.getRawValue(
+      treatmentValue,
+      featureKey
+    );
+    const targetColumn = getTargetColumn(this.context.dataset);
+    const currentOutcome =
+      ifEnableLargeData(this.context.dataset) && targetColumn
+        ? this.state.testDataRow[targetColumn]
+        : this.context.selectedErrorCohort.cohort.getRow(
+            this.props.selectedIndex
+          )[JointDataset.TrueYLabel];
     this.setState(
       {
-        currentOutcome: this.context.selectedErrorCohort.cohort.getRow(
-          this.props.selectedIndex
-        )[JointDataset.TrueYLabel],
+        currentOutcome,
         currentTreatmentRawValue: rawValue,
         currentTreatmentValue: treatmentValue,
         newTreatmentRawValue: rawValue,
@@ -220,65 +260,19 @@ export class CausalWhatIf extends React.Component<
     );
   };
 
-  private readonly getRawValue = (
-    v: number | undefined,
-    k: string
-  ): string | number | undefined => {
-    const meta = this.context.jointDataset.metaDict[k];
-    if (v === undefined) {
-      return v;
-    }
-    if (
-      (meta.isCategorical || meta?.treatAsCategorical) &&
-      meta.sortedCategoricalValues
-    ) {
-      return meta.sortedCategoricalValues[v];
-    }
-    return v;
-  };
-
   private readonly getWhatIf = async (): Promise<void> => {
-    if (
-      !this.context.causalAnalysisData ||
-      !this.state.treatmentFeature ||
-      this.props.selectedIndex === undefined ||
-      this.state.newTreatmentValue === undefined ||
-      !this.context.requestCausalWhatIf
-    ) {
-      return;
-    }
-    this.setState({
-      newOutcome: undefined
-    });
-    const data = _.chain(
-      this.context.selectedErrorCohort.cohort.getRow(this.props.selectedIndex)
-    )
-      .pickBy(
-        (_, k) =>
-          this.context.jointDataset.metaDict[k]?.category ===
-          ColumnCategories.Dataset
-      )
-      .mapValues(this.getRawValue)
-      .mapKeys((_, k) => this.context.jointDataset.metaDict[k].label)
-      .value();
-    if (this._getWhatIfController) {
-      this._getWhatIfController.abort();
-    }
-    this._getWhatIfController = new AbortController();
-    const result = await this.context.requestCausalWhatIf(
+    getWhatIf(
+      this.context.dataset,
+      this.context.jointDataset,
+      this.context.selectedErrorCohort.cohort,
+      this.state.testDataRow,
+      this.setNewOutcome,
       this.context.causalAnalysisData?.id,
-      [data],
+      this.state.newTreatmentValue,
+      this.state.newTreatmentRawValue,
+      this.props.selectedIndex,
       this.state.treatmentFeature,
-      [this.state.newTreatmentRawValue],
-      [
-        this.context.selectedErrorCohort.cohort.getRow(
-          this.props.selectedIndex
-        )[JointDataset.TrueYLabel]
-      ],
-      this._getWhatIfController.signal
+      this.context.requestCausalWhatIf
     );
-    this.setState({
-      newOutcome: result[0]
-    });
   };
 }

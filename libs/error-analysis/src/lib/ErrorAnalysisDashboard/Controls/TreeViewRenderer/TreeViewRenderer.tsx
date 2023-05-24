@@ -2,10 +2,19 @@
 // Licensed under the MIT License.
 
 import {
+  getTheme,
+  IProcessedStyleSet,
+  mergeStyles,
+  MessageBar,
+  MessageBarType,
+  Stack,
+  Text
+} from "@fluentui/react";
+import {
   IFilter,
   FilterMethods,
   CohortSource,
-  ErrorCohort,
+  Cohort,
   ErrorCohortStats,
   getRandomId,
   Metrics,
@@ -28,15 +37,6 @@ import { scaleLinear as d3scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
 import { linkVertical as d3linkVertical } from "d3-shape";
 import _ from "lodash";
-import {
-  getTheme,
-  IProcessedStyleSet,
-  mergeStyles,
-  MessageBar,
-  MessageBarType,
-  Stack,
-  Text
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { ColorPalette } from "../../ColorPalette";
@@ -44,6 +44,7 @@ import { FilterProps } from "../../FilterProps";
 import { TreeLegend } from "../TreeLegend/TreeLegend";
 
 import { TreeViewNode } from "./TreeViewNode";
+import { ITreeViewLink, TreeViewPath } from "./TreeViewPath";
 import { ITreeViewRendererProps } from "./TreeViewProps";
 import {
   ITreeViewRendererStyles,
@@ -69,8 +70,8 @@ export interface ISVGDatum {
 }
 
 const svgOuterFrame: React.RefObject<SVGSVGElement> = React.createRef();
-const errorAvgColor = ColorPalette.ErrorAvgColor;
 const disabledColor = ColorPalette.DisabledColor;
+const errorAvgColor = ColorPalette.ErrorAvgColor;
 const errorRatioThreshold = 1;
 
 export class TreeViewRenderer extends React.PureComponent<
@@ -190,7 +191,7 @@ export class TreeViewRenderer extends React.PureComponent<
     // or not we highlight it.  We use the d3 linkVertical which is a curved
     // spline to draw the link.  The thickness of the links depends on the
     // ratio of data going through the path versus overall data in the tree.
-    const links = rootDescendants
+    const links: ITreeViewLink[] = rootDescendants
       .slice(1)
       .map((d: HierarchyPointNode<ITreeNode>) => {
         const thick = 1 + Math.floor(30 * (d.data.size / this.state.rootSize));
@@ -201,8 +202,10 @@ export class TreeViewRenderer extends React.PureComponent<
         const linkVerticalD = linkVertical({ source: d.parent, target: d });
         return {
           d: linkVerticalD || "",
-          id: id + getRandomId(),
+          id,
+          key: id + getRandomId(),
           style: {
+            cursor: "pointer",
             fill: theme.semanticColors.bodyBackground,
             stroke: lineColor,
             strokeWidth: thick
@@ -230,7 +233,10 @@ export class TreeViewRenderer extends React.PureComponent<
           bbY: -0.5 * (bb.height + labelPaddingY) - labelYOffset,
           id: `linkLabel${d.id}`,
           style: {
-            display: d.data.nodeState.onSelectedPath ? undefined : "none",
+            display:
+              d.data.nodeState.onSelectedPath || this.state.hoverPathId === d.id
+                ? undefined
+                : "none",
             transform: `translate(${labelX}px, ${labelY}px)`
           },
           text: d.data.condition
@@ -276,6 +282,9 @@ export class TreeViewRenderer extends React.PureComponent<
 
     const svgWidth = maxX - minX;
     const svgHeight = maxY - minY;
+    const chartAriaLabel = this.props.disabledView
+      ? localization.ErrorAnalysis.TreeView.disabledArialLabel
+      : localization.ErrorAnalysis.TreeView.ariaLabel;
     return (
       <Stack tokens={{ childrenGap: "l1", padding: "l1" }}>
         <Stack.Item className={classNames.infoWithText}>
@@ -308,8 +317,10 @@ export class TreeViewRenderer extends React.PureComponent<
                 this.props.onClearCohortSelectionClick
               }
               disabledView={this.props.disabledView}
+              telemetryHook={this.props.telemetryHook}
             />
             <svg
+              aria-label={chartAriaLabel}
               ref={svgOuterFrame}
               className={classNames.svgOuterFrame}
               id="svgOuterFrame"
@@ -319,14 +330,14 @@ export class TreeViewRenderer extends React.PureComponent<
                 width: svgWidth * 1.5
               }}
             >
-              <g className={containerStyles}>
+              <g className={containerStyles} tabIndex={0}>
                 <g>
                   {links.map((link) => (
-                    <path
-                      key={link.id}
-                      id={link.id}
-                      d={link.d}
-                      style={link.style}
+                    <TreeViewPath
+                      key={link.key}
+                      link={link}
+                      onMouseOver={this.onMouseOver}
+                      onMouseOut={this.onMouseOut}
                     />
                   ))}
                 </g>
@@ -348,23 +359,24 @@ export class TreeViewRenderer extends React.PureComponent<
                     <g
                       key={linkLabel.id}
                       style={linkLabel.style}
-                      pointerEvents="none"
+                      pointerEvents="all"
                     >
                       <rect
                         x={linkLabel.bbX}
                         y={linkLabel.bbY}
                         width={linkLabel.bbWidth}
                         height={linkLabel.bbHeight}
-                        fill="white"
-                        stroke={ColorPalette.LinkLabelOutline}
-                        strokeWidth="1px"
-                        rx="10"
-                        ry="10"
+                        fill={theme.semanticColors.bodyBackground}
+                        stroke={theme.semanticColors.link}
+                        strokeWidth="3px"
+                        rx="15"
+                        ry="15"
                         pointerEvents="none"
                       />
                       <text
                         className={classNames.linkLabel}
                         pointerEvents="none"
+                        fontFamily="Segoe UI Semibold"
                       >
                         {linkLabel.text}
                       </text>
@@ -378,6 +390,14 @@ export class TreeViewRenderer extends React.PureComponent<
       </Stack>
     );
   }
+
+  private onMouseOver = (linkId: string | undefined): void => {
+    this.setState({ hoverPathId: linkId });
+  };
+
+  private onMouseOut = (): void => {
+    this.setState({ hoverPathId: undefined });
+  };
 
   private calculateFilterProps(
     node: IErrorAnalysisTreeNode,
@@ -434,15 +454,16 @@ export class TreeViewRenderer extends React.PureComponent<
       if (
         !requestTreeNodes ||
         requestTreeNodes.length === 0 ||
-        !requestTreeNodes[0]
+        !requestTreeNodes[0] ||
+        !this.context.errorAnalysisData
       ) {
         return state;
       }
 
-      const maxDepth = this.context.errorAnalysisData!.maxDepth;
-      const numLeaves = this.context.errorAnalysisData!.numLeaves;
-      const minChildSamples = this.context.errorAnalysisData!.minChildSamples;
-      const metric = this.context.errorAnalysisData!.metric;
+      const maxDepth = this.context.errorAnalysisData.maxDepth;
+      const numLeaves = this.context.errorAnalysisData.numLeaves;
+      const minChildSamples = this.context.errorAnalysisData.minChildSamples;
+      const metric = this.context.errorAnalysisData.metric;
 
       const rootSize = requestTreeNodes[0].size;
       const rootErrorSize = requestTreeNodes[0].error;
@@ -465,12 +486,10 @@ export class TreeViewRenderer extends React.PureComponent<
         })
       );
 
-      const minColor = isErrorMetric
-        ? ColorPalette.MinErrorColor
-        : ColorPalette.MinMetricColor;
+      const minColor = ColorPalette.white;
       const maxColor = isErrorMetric
-        ? ColorPalette.MaxErrorColor
-        : ColorPalette.MaxMetricColor;
+        ? ColorPalette.ErrorColor100
+        : ColorPalette.MetricColor100;
 
       const colorgrad = d3scaleLinear<Property.Color>()
         .domain([min, max])
@@ -536,6 +555,7 @@ export class TreeViewRenderer extends React.PureComponent<
       }
 
       return {
+        hoverPathId: undefined,
         isErrorMetric,
         maxDepth,
         metric,
@@ -654,6 +674,7 @@ export class TreeViewRenderer extends React.PureComponent<
       // APPLY TO NODEDETAIL OBJECT TO UPDATE DISPLAY PANEL
       const nodeDetail = this.getNodeDetail(node);
       return {
+        hoverPathId: undefined,
         isErrorMetric: state.isErrorMetric,
         maxDepth: state.maxDepth,
         metric: state.metric,
@@ -684,7 +705,9 @@ export class TreeViewRenderer extends React.PureComponent<
   }
 
   private setMetric = (metric: string): void => {
-    this.context.errorAnalysisData!.metric = metric;
+    if (this.context.errorAnalysisData) {
+      this.context.errorAnalysisData.metric = metric;
+    }
     this.fetchTreeNodes();
   };
 
@@ -701,15 +724,18 @@ export class TreeViewRenderer extends React.PureComponent<
       }
       return;
     }
-    const filtersRelabeled = ErrorCohort.getLabeledFilters(
+    const filtersRelabeled = Cohort.getLabeledFilters(
       this.props.baseCohort.cohort.filters,
       this.props.baseCohort.jointDataset
     );
-    const compositeFiltersRelabeled = ErrorCohort.getLabeledCompositeFilters(
+    const compositeFiltersRelabeled = Cohort.getLabeledCompositeFilters(
       this.props.baseCohort.cohort.compositeFilters,
       this.props.baseCohort.jointDataset
     );
-    const errorAnalysisData = this.context.errorAnalysisData!;
+    const errorAnalysisData = this.context.errorAnalysisData;
+    if (!errorAnalysisData) {
+      return;
+    }
     this.props
       .getTreeNodes(
         [

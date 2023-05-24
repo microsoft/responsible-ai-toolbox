@@ -1,16 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme, Stack, Text } from "@fluentui/react";
 import {
   BasicHighChart,
   defaultModelAssessmentContext,
-  FabricStyles,
+  getPrimaryChartColor,
   ICounterfactualData,
+  ifEnableLargeData,
+  LoadingSpinner,
   MissingParametersPlaceholder,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 export interface ILocalImportanceChartProps {
@@ -18,6 +20,8 @@ export interface ILocalImportanceChartProps {
   currentClass: string;
   data: ICounterfactualData;
   theme?: string;
+  isCounterfactualsDataLoading?: boolean;
+  localCounterfactualErrorMessage?: string;
 }
 
 export interface ILocalImportanceData {
@@ -38,6 +42,18 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
         </MissingParametersPlaceholder>
       );
     }
+
+    if (this.props.localCounterfactualErrorMessage) {
+      return (
+        <MissingParametersPlaceholder>
+          {localization.formatString(
+            localization.Counterfactuals.localImportanceFetchError,
+            this.props.localCounterfactualErrorMessage
+          )}
+        </MissingParametersPlaceholder>
+      );
+    }
+
     return (
       <Stack horizontal={false} grow tokens={{ childrenGap: "l1" }}>
         <Stack.Item>
@@ -50,11 +66,14 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
           </Text>
         </Stack.Item>
         <Stack.Item>
-          <div id={"WhatIfFeatureImportanceBar"}>
+          {this.props.isCounterfactualsDataLoading ? (
+            <LoadingSpinner label={localization.Counterfactuals.loading} />
+          ) : (
             <BasicHighChart
               configOverride={this.getLocalImportanceBarOptions()}
+              id={"WhatIfFeatureImportanceBar"}
             />
-          </div>
+          )}
         </Stack.Item>
       </Stack>
     );
@@ -63,15 +82,17 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
     const sortedData = this.getSortedData();
     const x = sortedData.map((d) => d.label);
     const y = sortedData.map((d) => d.value);
+    const theme = getTheme();
     const seriesData = [
       {
-        color: FabricStyles.fabricColorPalette[0],
+        color: getPrimaryChartColor(theme),
         data: y,
         name: ""
       }
     ];
     return {
       chart: {
+        backgroundColor: theme.semanticColors.bodyBackground,
         type: "column"
       },
       series: seriesData,
@@ -94,8 +115,9 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
     if (this.props.rowNumber === undefined) {
       return data;
     }
-    const localImportanceData =
-      this.props.data?.local_importance?.[this.props.rowNumber];
+    const localImportanceData = ifEnableLargeData(this.context.dataset)
+      ? this.props.data?.local_importance?.[0]
+      : this.props.data?.local_importance?.[this.props.rowNumber];
     if (!localImportanceData) {
       return data;
     }

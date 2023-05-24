@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
 import {
   DetailsList,
   IColumn,
   Panel,
   SelectionMode,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { IModelAssessmentDashboardTab } from "../ModelAssessmentDashboardState";
@@ -44,7 +44,7 @@ export class DashboardSettings extends React.PureComponent<IDashboardSettingsPro
         headerText={localization.ModelAssessment.DashboardSettings.Title}
         isOpen={this.props.isOpen}
         // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
-        closeButtonAriaLabel="Close"
+        closeButtonAriaLabel={localization.Common.close}
         isBlocking={false}
         onDismiss={this.props.onDismiss}
         title={localization.ModelAssessment.DashboardSettings.Title}

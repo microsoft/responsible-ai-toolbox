@@ -23,6 +23,8 @@ export class CreateGlobalCohort extends React.Component<ICreateGlobalCohortProps
     return (
       this.props.visible && (
         <CohortEditor
+          isFromExplanation={false}
+          dataset={this.context.dataset}
           jointDataset={this.context.jointDataset}
           filterList={this.context.baseErrorCohort.cohort.filters}
           cohortName={`${localization.Interpret.Cohort.cohort} ${(
@@ -39,7 +41,7 @@ export class CreateGlobalCohort extends React.Component<ICreateGlobalCohortProps
     );
   }
 
-  private addCohort = (cohort: Cohort, switchNew?: boolean) => {
+  private addCohort = (cohort: Cohort, switchNew?: boolean): void => {
     this.context.addCohort(cohort, switchNew);
     this.props.onDismiss();
   };

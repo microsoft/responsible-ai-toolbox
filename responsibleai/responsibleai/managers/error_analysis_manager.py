@@ -15,15 +15,16 @@ from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.error_report import as_error_report
 from erroranalysis._internal.error_report import \
     json_converter as report_json_converter
+from raiutils.exceptions import UserConfigValidationException
 from responsibleai._config.base_config import BaseConfig
 from responsibleai._interfaces import ErrorAnalysisData
 from responsibleai._internal.constants import ErrorAnalysisManagerKeys as Keys
-from responsibleai._internal.constants import ListProperties, ManagerNames
+from responsibleai._internal.constants import (FileFormats, ListProperties,
+                                               ManagerNames)
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.exceptions import (ConfigAndResultMismatchException,
-                                      DuplicateManagerConfigException,
-                                      UserConfigValidationException)
+                                      DuplicateManagerConfigException)
 from responsibleai.managers.base_manager import BaseManager
 from responsibleai.utils import _measure_time
 
@@ -81,6 +82,72 @@ def as_error_config(json_dict):
         return config
     else:
         return json_dict
+
+
+def get_wrapped_model(model, dropped_features):
+    predict_proba_flag = hasattr(model, 'predict_proba')
+    if predict_proba_flag:
+        wrapper_model = MetadataRemovalClassificationModelWrapper(
+            model,
+            dropped_features)
+    else:
+        wrapper_model = MetadataRemovalRegressionModelWrapper(
+            model,
+            dropped_features)
+    return wrapper_model
+
+
+class MetadataRemovalClassificationModelWrapper():
+    """Defines MetadataRemovalClassificationModelWrapper, wrapping the
+    classification model to ignore dropped feature metadata if any."""
+
+    def __init__(self, model: any,
+                 dropped_features: Optional[List[str]] = None):
+        """If needed, wraps classification model to ignore dropped features.
+
+        :param model: The model or function to evaluate on the examples.
+        :type model: function or model with a predict or predict_proba function
+        :param dropped_features: List of features that were dropped by the
+                                 the user during training of their model.
+        :type dropped_features: Optional[List[str]]
+        """
+        self.model = model
+        self.dropped_features = dropped_features
+
+    def predict(self, dataset: pd.DataFrame):
+        return self._apply_func(self.model.predict, dataset)
+
+    def predict_proba(self, dataset: pd.DataFrame):
+        return self._apply_func(self.model.predict_proba, dataset)
+
+    def _apply_func(self, func, dataset):
+        if self.dropped_features is None or len(self.dropped_features) == 0:
+            return func(dataset)
+        return func(dataset.drop(columns=self.dropped_features, axis=1))
+
+
+class MetadataRemovalRegressionModelWrapper():
+    """Defines MetadataRemovalRegressionModelWrapper, wrapping the
+    regression model to ignore dropped feature metadata if any."""
+
+    def __init__(self, model: any,
+                 dropped_features: Optional[List[str]] = None):
+        """If needed, wraps the model to ignore the dropped features.
+
+        :param model: The model or function to evaluate on the examples.
+        :type model: function or model with a predict function
+        :param dropped_features: List of features that were dropped by the
+                                 the user during training of their model.
+        :type dropped_features: Optional[List[str]]
+        """
+        self.model = model
+        self.dropped_features = dropped_features
+
+    def predict(self, dataset: pd.DataFrame):
+        if self.dropped_features is None or len(self.dropped_features) == 0:
+            return self.model.predict(dataset)
+        return self.model.predict(dataset.drop(
+            columns=self.dropped_features, axis=1))
 
 
 class ErrorAnalysisConfig(BaseConfig):
@@ -159,7 +226,8 @@ class ErrorAnalysisManager(BaseManager):
 
     def __init__(self, model: Any, dataset: pd.DataFrame, target_column: str,
                  classes: Optional[List] = None,
-                 categorical_features: Optional[List[str]] = None):
+                 categorical_features: Optional[List[str]] = None,
+                 dropped_features: Optional[List[str]] = None):
         """Creates an ErrorAnalysisManager object.
 
         :param model: The model to analyze errors on.
@@ -176,6 +244,10 @@ class ErrorAnalysisManager(BaseManager):
         :type classes: list
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
+        :param dropped_features: List of features that are omitted for model
+                            training. This includes metadata that is useful
+                            for evaluating the model.
+        :type dropped_features: Optional[List[str]]
         """
         self._true_y = dataset[target_column]
         self._dataset = dataset.drop(columns=[target_column])
@@ -184,12 +256,16 @@ class ErrorAnalysisManager(BaseManager):
         self._categorical_features = categorical_features
         self._ea_config_list = []
         self._ea_report_list = []
-        self._analyzer = ModelAnalyzer(model,
-                                       self._dataset,
-                                       self._true_y,
-                                       self._feature_names,
-                                       self._categorical_features,
-                                       classes=self._classes)
+        wrapper_model = get_wrapped_model(
+            model,
+            dropped_features)
+        self._analyzer = ModelAnalyzer(
+            wrapper_model,
+            self._dataset,
+            self._true_y,
+            self._feature_names,
+            self._categorical_features,
+            classes=self._classes)
 
     def add(self, max_depth: int = 3, num_leaves: int = 31,
             min_child_samples: int = 20,
@@ -207,7 +283,9 @@ class ErrorAnalysisManager(BaseManager):
             matrix filter.
         :type filter_features: Optional[list]
         """
-        if self._analyzer.model is None:
+        model_wrapper_without_metadata = self._analyzer.model
+        if model_wrapper_without_metadata is None or \
+                model_wrapper_without_metadata.model is None:
             raise UserConfigValidationException(
                 'Model is required for error analysis')
 
@@ -270,7 +348,7 @@ class ErrorAnalysisManager(BaseManager):
         """Get the schema for validating the error analysis output."""
         schema_directory = (Path(__file__).parent.parent / '_tools' /
                             'error_analysis' / 'dashboard_schemas')
-        schema_filename = 'error_analysis_output_v0.0.json'
+        schema_filename = f'error_analysis_output_v0.0{FileFormats.JSON}'
         schema_filepath = schema_directory / schema_filename
         with open(schema_filepath, 'r') as f:
             return json.load(f)
@@ -348,7 +426,7 @@ class ErrorAnalysisManager(BaseManager):
             # save the configs
             directory_manager = DirectoryManager(parent_directory_path=path)
             config_path = (directory_manager.create_config_directory() /
-                           'config.json')
+                           f'config{FileFormats.JSON}')
             ea_config = self._ea_config_list[index]
             with open(config_path, 'w') as file:
                 json.dump(ea_config, file,
@@ -356,7 +434,7 @@ class ErrorAnalysisManager(BaseManager):
 
             # save the reports
             report_path = (directory_manager.create_data_directory() /
-                           'report.json')
+                           f'report{FileFormats.JSON}')
             ea_report = self._ea_report_list[index]
             with open(report_path, 'w') as file:
                 json.dump(ea_report, file,
@@ -386,13 +464,13 @@ class ErrorAnalysisManager(BaseManager):
                 sub_directory_name=ea_dir)
 
             config_path = (directory_manager.get_config_directory() /
-                           'config.json')
+                           f'config{FileFormats.JSON}')
             with open(config_path, 'r') as file:
                 ea_config = json.load(file, object_hook=as_error_config)
                 ea_config_list.append(ea_config)
 
             report_path = (directory_manager.get_data_directory() /
-                           'report.json')
+                           f'report{FileFormats.JSON}')
             with open(report_path, 'r') as file:
                 ea_report = json.load(file, object_hook=as_error_report)
                 # Validate the serialized output against schema
@@ -413,9 +491,17 @@ class ErrorAnalysisManager(BaseManager):
         inst.__dict__['_true_y'] = true_y
         feature_names = list(dataset.columns)
         inst.__dict__['_feature_names'] = feature_names
-        inst.__dict__['_analyzer'] = ModelAnalyzer(rai_insights.model,
-                                                   dataset,
-                                                   true_y,
-                                                   feature_names,
-                                                   categorical_features)
+        dropped_features = None
+        if rai_insights._feature_metadata is not None:
+            dropped_features = rai_insights._feature_metadata.dropped_features
+        inst.__dict__['_dropped_features'] = dropped_features
+        wrapper_model = get_wrapped_model(
+            rai_insights.model,
+            dropped_features)
+        inst.__dict__['_analyzer'] = ModelAnalyzer(
+            wrapper_model,
+            dataset,
+            true_y,
+            feature_names,
+            categorical_features)
         return inst

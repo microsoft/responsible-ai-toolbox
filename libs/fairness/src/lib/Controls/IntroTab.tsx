@@ -1,15 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { PrimaryButton, Stack, Text } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { PrimaryButton, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { IntroTabStyles } from "./IntroTab.styles";
 import { ReactComponent } from "./IntroTabIcon.svg";
 
 export interface IIntroTabProps {
-  onNext: () => void;
+  featureBinTabKey: string;
+  onNext: (key: string) => void;
 }
 
 export class IntroTab extends React.PureComponent<IIntroTabProps> {
@@ -86,7 +87,7 @@ export class IntroTab extends React.PureComponent<IIntroTabProps> {
             <PrimaryButton
               id="nextButton"
               className={styles.getStarted}
-              onClick={this.props.onNext}
+              onClick={this.onNext}
             >
               {localization.Fairness.Intro.getStarted}
             </PrimaryButton>
@@ -95,4 +96,8 @@ export class IntroTab extends React.PureComponent<IIntroTabProps> {
       </Stack>
     );
   }
+
+  private onNext = (): void => {
+    this.props.onNext(this.props.featureBinTabKey);
+  };
 }

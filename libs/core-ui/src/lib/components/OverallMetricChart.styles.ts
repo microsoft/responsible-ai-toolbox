@@ -6,7 +6,7 @@ import {
   mergeStyleSets,
   IProcessedStyleSet,
   getTheme
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
 export interface IOverallMetricChartStyles {
   infoIcon: IStyle;
@@ -37,6 +37,7 @@ export const overallMetricChartStyles: () => IProcessedStyleSet<IOverallMetricCh
         paddingBottom: "5px"
       },
       chart: {
+        backgroundColor: theme.semanticColors.bodyBackground,
         flexGrow: "1"
       },
       chartWithAxes: {

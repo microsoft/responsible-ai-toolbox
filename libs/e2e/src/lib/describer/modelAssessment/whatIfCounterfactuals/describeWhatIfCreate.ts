@@ -3,8 +3,8 @@
 
 import { getSpan } from "../../../../util/getSpan";
 import { Locators } from "../Constants";
+import { modelAssessmentDatasets } from "../datasets/modelAssessmentDatasets";
 import { IModelAssessmentData } from "../IModelAssessmentData";
-import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
 
 export function describeWhatIfCreate(
   dataShape: IModelAssessmentData,
@@ -57,6 +57,30 @@ export function describeWhatIfCreate(
           );
       });
 
+      it("Should have 'Create your own counterfactual' section and should be able to input decimal point", () => {
+        cy.get(Locators.CreateYourOwnCounterfactualInputField)
+          .eq(3)
+          .clear()
+          .type(
+            dataShape.whatIfCounterfactualsData
+              ?.createYourOwnCounterfactualDecimalInput || "18.5"
+          );
+        cy.get(Locators.CreateYourOwnCounterfactualInputField).eq(3).focus();
+        cy.focused()
+          .should("have.attr", "value")
+          .and(
+            "contain",
+            dataShape.whatIfCounterfactualsData
+              ?.createYourOwnCounterfactualDecimalInput || "18.5"
+          );
+      });
+
+      it("Should have 'Predicted value' section and it should not be editable", () => {
+        cy.get(Locators.CreateYourOwnCounterfactualPredictedValueField).should(
+          "exist"
+        );
+      });
+
       it("Should have what-if counterfactual name as 'Copy of row <index selected>' by default and should be editable", () => {
         cy.get(Locators.WhatIfNameLabel)
           .should("have.attr", "value")
@@ -93,7 +117,7 @@ export function describeWhatIfCreate(
       cy.get(Locators.WhatIfSaveAsNewDatapointButton).click();
       cy.get(Locators.WhatIfSaveAsDataPoints).should(
         "contain",
-        dataShape.whatIfCounterfactualsData!.whatIfNameLabel
+        dataShape.whatIfCounterfactualsData?.whatIfNameLabel
       );
 
       // Should be able to delete datapoint created

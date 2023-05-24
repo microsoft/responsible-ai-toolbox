@@ -6,41 +6,52 @@ import { FairnessWizard } from "@responsible-ai/fairness";
 import React from "react";
 
 import { callFlaskService } from "./callFlaskService";
-import { config } from "./config";
-import { modelData } from "./modelData";
+import { IAppConfig } from "./config";
 
-export class Fairness extends React.Component {
+interface IFairnessProps {
+  config: IAppConfig;
+  modelData: any;
+}
+export class Fairness extends React.Component<IFairnessProps> {
   public render(): React.ReactNode {
     let requestMethod = undefined;
-    if (config.baseUrl !== undefined) {
+    if (this.props.config.baseUrl) {
       requestMethod = async (
         data: IMetricRequest
       ): Promise<IMetricResponse> => {
-        return callFlaskService(data, "/metrics") as Promise<IMetricResponse>;
+        return callFlaskService(
+          this.props.config,
+          data,
+          "/metrics"
+        ) as Promise<IMetricResponse>;
       };
     }
 
     return (
       <FairnessWizard
         dataSummary={{
-          classNames: modelData.classes,
-          featureNames: modelData.features
+          classNames: this.props.modelData.classes,
+          featureNames: this.props.modelData.features
         }}
-        errorBarsEnabled={modelData.errorBarsEnabled}
-        testData={modelData.dataset}
-        predictedY={modelData.predicted_ys}
-        trueY={modelData.true_y}
-        modelNames={modelData.model_names}
-        precomputedMetrics={modelData.precomputedMetrics}
-        precomputedFeatureBins={modelData.precomputedFeatureBins}
-        customMetrics={modelData.customMetrics}
-        predictionType={modelData.predictionType}
+        errorBarsEnabled={this.props.modelData.errorBarsEnabled}
+        testData={this.props.modelData.dataset}
+        predictedY={this.props.modelData.predicted_ys}
+        trueY={this.props.modelData.true_y}
+        modelNames={this.props.modelData.model_names}
+        precomputedMetrics={this.props.modelData.precomputedMetrics}
+        precomputedFeatureBins={this.props.modelData.precomputedFeatureBins}
+        customMetrics={this.props.modelData.customMetrics}
+        predictionType={this.props.modelData.predictionType}
         supportedBinaryClassificationPerformanceKeys={
-          modelData.classification_methods
+          this.props.modelData.classification_methods
         }
-        supportedRegressionPerformanceKeys={modelData.regression_methods}
-        supportedProbabilityPerformanceKeys={modelData.probability_methods}
-        locale={config.locale}
+        supportedRegressionPerformanceKeys={
+          this.props.modelData.regression_methods
+        }
+        supportedProbabilityPerformanceKeys={
+          this.props.modelData.probability_methods
+        }
+        locale={this.props.config.locale}
         requestMetrics={requestMethod}
       />
     );

@@ -2,20 +2,20 @@
 // Licensed under the MIT License.
 
 import {
-  IExplanationModelMetadata,
-  ModelTypes,
-  JointDataset,
-  ModelExplanationUtils
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
   DirectionalHint,
   IconButton,
   ITooltipProps,
   Text,
   TooltipDelay,
   TooltipHost
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  IExplanationModelMetadata,
+  ModelTypes,
+  JointDataset,
+  ModelExplanationUtils
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { WhatIfConstants } from "./WhatIfConstants";
@@ -45,8 +45,8 @@ export class ExistingPredictionLabels extends React.Component<IExistingPredictio
               .sortedCategoricalValues?.[predictedClass]
           : undefined;
       if (this.props.jointDataset.hasPredictedProbabilities) {
-        let predictedProb: number;
-        let tempPredictedProb: number | undefined = undefined;
+        let predictedProb: number | string;
+        let tempPredictedProb: number | undefined | string = undefined;
         if (
           this.props.jointDataset.metaDict[JointDataset.PredictedYLabel]
             ?.treatAsCategorical

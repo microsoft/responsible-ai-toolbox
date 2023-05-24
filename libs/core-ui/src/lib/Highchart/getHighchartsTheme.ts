@@ -2,68 +2,27 @@
 // Licensed under the MIT License.
 
 import { ITheme } from "@fluentui/react";
+import * as Highcharts from "highcharts";
 
+import { IColorNames } from "../util/FluentUIStyles";
+
+import { getChartColors, getChartColorsMap } from "./ChartColors";
 import { IHighchartsConfig } from "./IHighchartsConfig";
-
-export interface IChartColorNames {
-  black: string;
-  blueMid: string;
-  magentaDark: string;
-  magentaLight: string;
-  neutral: string;
-  orangeLighter: string;
-  primary: string;
-  primaryLight: string;
-  purple: string;
-  purpleLight: string;
-  red: string;
-  redDark: string;
-  teal: string;
-}
 
 export function getHighchartsTheme(
   chartOptions: IHighchartsConfig,
   theme: ITheme,
-  colorAxisMaxColor?: keyof IChartColorNames
+  colorAxisMaxColor?: keyof IColorNames
 ): Highcharts.Options {
-  const {
-    black,
-    blueMid,
-    magentaDark,
-    magentaLight,
-    neutralSecondaryAlt,
-    orangeLighter,
-    purple,
-    purpleLight,
-    red,
-    redDark,
-    teal,
-    themeLight,
-    themePrimary,
-    white
-  } = theme.palette;
+  const { white } = theme.palette;
 
   const { bodyBackground, bodySubtext, bodyText, variantBorder } =
     theme.semanticColors;
   const { medium: mediumFont, small: smallFont, tiny: tinyFont } = theme.fonts;
 
-  const chartColors = new Map<keyof IChartColorNames, string>([
-    ["primary", themePrimary],
-    ["blueMid", blueMid],
-    ["teal", teal],
-    ["purple", purple],
-    ["purpleLight", purpleLight],
-    ["magentaDark", magentaDark],
-    ["magentaLight", magentaLight],
-    ["black", black],
-    ["orangeLighter", orangeLighter],
-    ["redDark", redDark],
-    ["red", red],
-    ["neutral", neutralSecondaryAlt],
-    ["primaryLight", themeLight]
-  ]);
+  const chartColors = getChartColorsMap(theme);
 
-  const colors: string[] = [...chartColors.values()];
+  const colors: string[] = getChartColors(theme);
 
   let colorAxis: Highcharts.ColorAxisOptions | undefined;
   if (colorAxisMaxColor) {

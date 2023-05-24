@@ -2,9 +2,9 @@ name: Python Linting
 
 on:
   push:
-    branches: [main, postbuild]
+    branches: [main]
   pull_request:
-    branches: [main, postbuild]
+    branches: [main]
 
 jobs:
   build:
@@ -12,10 +12,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python 3.7
-        uses: actions/setup-python@v2
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
         with:
-          python-version: 3.7
+          python-version: "3.10"
 
       - name: Install linting dependencies
         run: |
@@ -26,4 +26,4 @@ jobs:
 
       - name: Check sorted python imports using isort
         run: |
-          isort . -c -i 4 -l 79
+          isort . -c

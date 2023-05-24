@@ -49,10 +49,16 @@
     "fairness": {
       "tags": []
     },
+    "forecasting": {
+      "tags": []
+    },
     "interpret": {
       "tags": []
     },
     "interpret-text": {
+      "tags": []
+    },
+    "interpret-vision": {
       "tags": []
     },
     "localization": {

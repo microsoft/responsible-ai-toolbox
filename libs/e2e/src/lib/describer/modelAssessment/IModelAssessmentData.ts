@@ -4,14 +4,18 @@
 export interface IModelAssessmentData {
   errorAnalysisData?: IErrorAnalysisData;
   modelStatisticsData?: IModelStatisticsData;
+  modelOverviewData?: IModelOverviewData;
   datasetExplorerData?: IDatasetExplorerData;
   featureImportanceData?: IFeatureImportanceData;
+  dataBalanceData?: IDataBalanceData;
   causalAnalysisData?: ICausalAnalysisData;
   whatIfCounterfactualsData?: IWhatIfCounterfactualsData;
   featureNames?: string[];
   cohortDefaultName?: string;
+  checkDupCohort?: boolean;
   isMulticlass?: boolean;
   isRegression?: boolean;
+  isBinary?: boolean;
 }
 
 export interface IErrorAnalysisData {
@@ -51,6 +55,24 @@ export interface IModelStatisticsData {
   newXAxisChartValues?: { [key: string]: string[] };
   onUpdateSideBarValues?: { [key: string]: string[] };
   cohortDropDownValues?: string[];
+}
+
+export interface IModelOverviewData {
+  hasModelOverviewComponent?: boolean;
+  initialCohorts?: IExpectedCohortData[];
+  newCohort?: IExpectedCohortData;
+  featureCohortView?: {
+    singleFeatureCohorts: number;
+    multiFeatureCohorts: number;
+    firstFeatureToSelect: string;
+    secondFeatureToSelect: string;
+  };
+}
+
+interface IExpectedCohortData {
+  name: string;
+  sampleSize: string;
+  metrics: { [name: string]: string };
 }
 
 export interface IDatasetExplorerData {
@@ -99,6 +121,13 @@ export interface IFeatureImportanceData {
   aggregateFeatureImportanceExpectedValues?: {
     [key: string]: number;
   };
+  avgOfAbsValue?: string;
+}
+
+export interface IDataBalanceData {
+  aggregateBalanceMeasuresComputed?: boolean;
+  distributionBalanceMeasuresComputed?: boolean;
+  featureBalanceMeasuresComputed?: boolean;
 }
 
 export interface ICausalAnalysisData {
@@ -126,6 +155,7 @@ export interface IWhatIfCounterfactualsData {
   searchBarQuery?: string;
   whatIfNameLabel?: string;
   whatIfNameLabelUpdated?: string;
+  createYourOwnCounterfactualDecimalInput?: string;
   createYourOwnCounterfactualInputFieldUpdated?: string;
   yAxisValue?: string;
   yAxisNewValue?: string;
@@ -135,10 +165,16 @@ export interface IWhatIfCounterfactualsData {
 }
 
 export enum RAINotebookNames {
-  "ClassificationModelDebugging" = "responsibleaidashboard-census-classification-model-debugging.py",
+  "CensusClassificationModelDebugging" = "responsibleaidashboard-census-classification-model-debugging.py",
+  "CensusClassificationModelDebuggingDataBalanceExperience" = "responsibleaidashboard-census-classification-model-debugging.py",
   "DiabetesRegressionModelDebugging" = "responsibleaidashboard-diabetes-regression-model-debugging.py",
+  "DiabetesRegressionModelDebuggingDataBalanceExperience" = "responsibleaidashboard-diabetes-regression-model-debugging.py",
   "HousingClassificationModelDebugging" = "responsibleaidashboard-housing-classification-model-debugging.py",
+  "HousingClassificationModelDebuggingDataBalanceExperience" = "responsibleaidashboard-housing-classification-model-debugging.py",
   "DiabetesDecisionMaking" = "responsibleaidashboard-diabetes-decision-making.py",
+  "DiabetesDecisionMakingDataBalanceExperience" = "responsibleaidashboard-diabetes-decision-making.py",
   "HousingDecisionMaking" = "responsibleaidashboard-housing-decision-making.py",
-  "MulticlassDnnModelDebugging" = "responsibleaidashboard-multiclass-dnn-model-debugging.py"
+  "HousingDecisionMakingDataBalanceExperience" = "responsibleaidashboard-housing-decision-making.py",
+  "MulticlassDnnModelDebugging" = "responsibleaidashboard-multiclass-dnn-model-debugging.py",
+  "MulticlassDnnModelDebuggingDataBalanceExperience" = "responsibleaidashboard-multiclass-dnn-model-debugging.py"
 }

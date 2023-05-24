@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.7
 
@@ -58,7 +58,7 @@ jobs:
       # publish to PyPI
       - name: Publish erroranalysis package to Test PyPI
         if: ${{ github.event.inputs.type == 'Test' }}
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_ERROR_ANALYSIS }}
@@ -66,7 +66,7 @@ jobs:
           packages_dir: erroranalysis/dist/
       - name: Publish erroranalysis package to PyPI
         if: ${{ github.event.inputs.type == 'Prod' }}
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_ERROR_ANALYSIS }}

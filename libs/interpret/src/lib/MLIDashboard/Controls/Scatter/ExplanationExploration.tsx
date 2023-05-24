@@ -1,12 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
-import { ModelTypes, FabricStyles } from "@responsible-ai/core-ui";
+import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
+  Callout,
+  DefaultButton,
+  IconButton
+} from "@fluentui/react";
+import { FluentUIStyles, IsClassifier } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import { Callout, DefaultButton, IconButton } from "office-ui-fabric-react";
 import React from "react";
 
 import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
@@ -71,8 +77,7 @@ export class ExplanationExploration extends React.PureComponent<
       const weightContext = this.props.dashboardContext.weightContext;
       const modelType =
         this.props.dashboardContext.explanationContext.modelMetadata.modelType;
-      const includeWeightDropdown =
-        modelType === ModelTypes.Multiclass || modelType === ModelTypes.Binary;
+      const includeWeightDropdown = IsClassifier(modelType);
       let plotProp = ScatterUtils.populatePlotlyProps(
         projectedData,
         _.cloneDeep(this.plotlyProps)
@@ -92,7 +97,7 @@ export class ExplanationExploration extends React.PureComponent<
                 ariaLabel="x picker"
                 selectedKey={this.plotlyProps.data[0].xAccessor}
                 useComboBoxAsMenuWidth
-                styles={FabricStyles.defaultDropdownStyle}
+                styles={FluentUIStyles.defaultDropdownStyle}
               />
             </div>
             <div>
@@ -103,7 +108,7 @@ export class ExplanationExploration extends React.PureComponent<
                 ariaLabel="color picker"
                 selectedKey={initialColorOption}
                 useComboBoxAsMenuWidth
-                styles={FabricStyles.defaultDropdownStyle}
+                styles={FluentUIStyles.defaultDropdownStyle}
               />
             </div>
           </div>
@@ -116,7 +121,7 @@ export class ExplanationExploration extends React.PureComponent<
                 ariaLabel="y picker"
                 selectedKey={this.plotlyProps.data[0].yAccessor}
                 useComboBoxAsMenuWidth
-                styles={FabricStyles.defaultDropdownStyle}
+                styles={FluentUIStyles.defaultDropdownStyle}
               />
             </div>
             {includeWeightDropdown && (
@@ -142,7 +147,7 @@ export class ExplanationExploration extends React.PureComponent<
                   options={weightContext.options}
                   ariaLabel={"Cross-class weighting selector"}
                   useComboBoxAsMenuWidth
-                  styles={FabricStyles.defaultDropdownStyle}
+                  styles={FluentUIStyles.defaultDropdownStyle}
                 />
               </div>
             )}

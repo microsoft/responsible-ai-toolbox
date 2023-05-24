@@ -5,8 +5,8 @@ import { Locators } from "../lib/describer/modelAssessment/Constants";
 
 import { generateId } from "./generateId";
 
-export function createCohort(): void {
-  const cohortName = `CohortCreateE2E-${generateId(4)}`;
+export function createCohort(name?: string): void {
+  const cohortName = name ?? `CohortCreateE2E-${generateId(4)}`;
   cy.get(Locators.CreateNewCohortButton).click();
   cy.get("#cohortEditPanel").should("exist");
   cy.get(Locators.CohortNameInput).clear().type(cohortName);

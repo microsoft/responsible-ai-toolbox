@@ -2,13 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  defaultModelAssessmentContext,
-  ErrorCohort,
-  JointDataset,
-  ModelAssessmentContext
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
   DefaultButton,
   ChoiceGroup,
   IChoiceGroupOption,
@@ -17,24 +10,38 @@ import {
   Text,
   PrimaryButton,
   Toggle
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  defaultModelAssessmentContext,
+  ErrorCohort,
+  ITelemetryEvent,
+  JointDataset,
+  ModelAssessmentContext,
+  TelemetryEventName,
+  TelemetryLevels,
+  IBoxChartState
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 import { ProbabilityDistributionBoxChart } from "./ProbabilityDistributionBoxChart";
-import { ProbabilityDistributionLineChart } from "./ProbabilityDistributionLineChart";
+import { ProbabilityDistributionSplineChart } from "./ProbabilityDistributionSplineChart";
 
 interface IProbabilityDistributionChartProps {
+  boxPlotState: IBoxChartState;
   cohorts: ErrorCohort[];
-  selectedCohorts: number[];
+  showSplineChart: boolean;
+  onBoxPlotStateUpdate: (boxPlotState: IBoxChartState) => void;
   onChooseCohorts: () => void;
+  onToggleChange: (checked: boolean) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 interface IProbabilityDistributionChartState {
   probabilityOption?: IChoiceGroupOption;
   newlySelectedProbabilityOption?: IChoiceGroupOption;
   probabilityFlyoutIsVisible: boolean;
-  showLineChart: boolean;
 }
 
 export class ProbabilityDistributionChart extends React.Component<
@@ -45,9 +52,9 @@ export class ProbabilityDistributionChart extends React.Component<
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
-  constructor(props: IProbabilityDistributionChartProps) {
+  public constructor(props: IProbabilityDistributionChartProps) {
     super(props);
-    this.state = { probabilityFlyoutIsVisible: false, showLineChart: false };
+    this.state = { probabilityFlyoutIsVisible: false };
   }
 
   public componentDidMount(): void {
@@ -66,12 +73,8 @@ export class ProbabilityDistributionChart extends React.Component<
   public render(): React.ReactNode {
     const classNames = modelOverviewChartStyles();
     if (!this.context.jointDataset.hasPredictedProbabilities) {
-      return;
+      return React.Fragment;
     }
-
-    const selectedCohorts = this.props.cohorts.filter((_cohort, index) => {
-      return this.props.selectedCohorts.includes(index);
-    });
 
     const probabilityOptions = this.getProbabilityOptions();
 
@@ -80,30 +83,39 @@ export class ProbabilityDistributionChart extends React.Component<
     }
 
     if (this.state.probabilityOption === undefined) {
-      this.setState({ probabilityOption: probabilityOptions[0] });
       return React.Fragment;
     }
 
-    const noCohortSelected = this.props.selectedCohorts.length === 0;
+    const noCohortSelected = this.props.cohorts.length === 0;
+    const showChooseCohortsButton =
+      this.props.showSplineChart ||
+      (!noCohortSelected && !this.props.showSplineChart);
 
     return (
-      <Stack tokens={{ childrenGap: "10px" }}>
+      <Stack
+        tokens={{ childrenGap: "10px" }}
+        id="modelOverviewProbabilityDistributionChart"
+      >
         <Stack
           horizontal
           tokens={{ childrenGap: "10px", padding: "10px 0 0 0" }}
+          className={classNames.splineButtons}
         >
           <Stack.Item className={classNames.chartToggle}>
             <Toggle
+              id="modelOverviewProbabilityDistributionChartToggle"
               label={
                 localization.ModelAssessment.ModelOverview
-                  .probabilityLineChartToggleLabel
+                  .probabilitySplineChartToggleLabel
               }
               inlineLabel
-              onChange={this.onLineChartToggleChange}
+              onChange={this.onSplineChartToggleChange}
+              checked={this.props.showSplineChart}
             />
           </Stack.Item>
-          {this.state.showLineChart && (
+          {showChooseCohortsButton && (
             <DefaultButton
+              id="modelOverviewProbabilityDistributionCohortSelectionButton"
               text={
                 localization.ModelAssessment.ModelOverview.cohortSelectionButton
               }
@@ -111,70 +123,57 @@ export class ProbabilityDistributionChart extends React.Component<
             />
           )}
         </Stack>
-        <Stack horizontal>
-          {!noCohortSelected && !this.state.showLineChart && (
-            <Stack.Item className={classNames.verticalAxis}>
-              <DefaultButton
-                className={classNames.rotatedVerticalBox}
-                text={
-                  localization.ModelAssessment.ModelOverview
-                    .cohortSelectionButton
-                }
-                onClick={this.props.onChooseCohorts}
-              />
-            </Stack.Item>
+        <Stack className={classNames.chart}>
+          {noCohortSelected && (
+            <div className={classNames.placeholderText}>
+              <Text>
+                {localization.ModelAssessment.ModelOverview.boxPlotPlaceholder}
+              </Text>
+            </div>
           )}
-          <Stack.Item className={classNames.chart}>
-            {noCohortSelected && (
-              <div className={classNames.placeholderText}>
-                <Text>
-                  {
+          {!noCohortSelected && (
+            <Stack>
+              {this.props.showSplineChart ? (
+                <ProbabilityDistributionSplineChart
+                  selectedCohorts={this.props.cohorts}
+                  probabilityOption={this.state.probabilityOption}
+                />
+              ) : (
+                <ProbabilityDistributionBoxChart
+                  boxPlotState={this.props.boxPlotState}
+                  selectedCohorts={this.props.cohorts}
+                  probabilityOption={this.state.probabilityOption}
+                  onBoxPlotStateUpdate={this.props.onBoxPlotStateUpdate}
+                />
+              )}
+              <Stack.Item
+                className={
+                  this.props.showSplineChart
+                    ? classNames.horizontalAxisNoExtraLeftPadding
+                    : classNames.horizontalAxis
+                }
+              >
+                <DefaultButton
+                  id="modelOverviewProbabilityDistributionChartLabelSelectionButton"
+                  text={
                     localization.ModelAssessment.ModelOverview
-                      .boxPlotPlaceholder
+                      .probabilityLabelSelectionButton
                   }
-                </Text>
-              </div>
-            )}
-            {!noCohortSelected && (
-              <Stack>
-                {this.state.showLineChart ? (
-                  <ProbabilityDistributionLineChart
-                    selectedCohorts={selectedCohorts}
-                    probabilityOption={this.state.probabilityOption}
-                  />
-                ) : (
-                  <ProbabilityDistributionBoxChart
-                    selectedCohorts={selectedCohorts}
-                    probabilityOption={this.state.probabilityOption}
-                  />
-                )}
-                <Stack.Item
-                  className={
-                    this.state.showLineChart
-                      ? classNames.horizontalAxisNoExtraLeftPadding
-                      : classNames.horizontalAxis
+                  onClick={(): void =>
+                    this.setState({
+                      probabilityFlyoutIsVisible: true
+                    })
                   }
-                >
-                  <DefaultButton
-                    text={
-                      localization.ModelAssessment.ModelOverview
-                        .probabilityLabelSelectionButton
-                    }
-                    onClick={() =>
-                      this.setState({
-                        probabilityFlyoutIsVisible: true
-                      })
-                    }
-                  />
-                </Stack.Item>
-              </Stack>
-            )}
-          </Stack.Item>
+                />
+              </Stack.Item>
+            </Stack>
+          )}
         </Stack>
         <Panel
+          id="modelOverviewProbabilityDistributionChartLabelSelectionFlyout"
           isOpen={this.state.probabilityFlyoutIsVisible}
           closeButtonAriaLabel="Close"
-          onDismiss={() => {
+          onDismiss={(): void => {
             this.setState({ probabilityFlyoutIsVisible: false });
           }}
           onRenderFooterContent={this.onRenderFooterContent}
@@ -197,21 +196,22 @@ export class ProbabilityDistributionChart extends React.Component<
     );
   }
 
-  private onRenderFooterContent = () => {
+  private onRenderFooterContent = (): React.ReactElement => {
     return (
       <Stack horizontal tokens={{ childrenGap: "10px" }}>
         <PrimaryButton
-          onClick={() => {
-            if (this.state.newlySelectedProbabilityOption)
+          onClick={(): void => {
+            if (this.state.newlySelectedProbabilityOption) {
               this.setState({
                 probabilityFlyoutIsVisible: false,
                 probabilityOption: this.state.newlySelectedProbabilityOption
               });
+            }
           }}
-          text={localization.ModelAssessment.ModelOverview.chartConfigConfirm}
+          text={localization.ModelAssessment.ModelOverview.chartConfigApply}
         />
         <DefaultButton
-          onClick={() => {
+          onClick={(): void => {
             this.setState({ probabilityFlyoutIsVisible: false });
           }}
           text={localization.ModelAssessment.ModelOverview.chartConfigCancel}
@@ -235,18 +235,23 @@ export class ProbabilityDistributionChart extends React.Component<
       .map((_, index) => {
         const key = JointDataset.ProbabilityYRoot + index.toString();
         return {
+          id: index.toString(),
           key,
           text: this.context.jointDataset.metaDict[key].label
         };
       });
   }
 
-  private onLineChartToggleChange = (
+  private onSplineChartToggleChange = (
     _event: React.MouseEvent<HTMLElement, MouseEvent>,
     checked?: boolean | undefined
-  ) => {
+  ): void => {
     if (checked !== undefined) {
-      this.setState({ showLineChart: checked });
+      this.props.onToggleChange(checked);
+      this.props.telemetryHook?.({
+        level: TelemetryLevels.ButtonClick,
+        type: TelemetryEventName.ModelOverviewSplineChartToggleUpdated
+      });
     }
   };
 }

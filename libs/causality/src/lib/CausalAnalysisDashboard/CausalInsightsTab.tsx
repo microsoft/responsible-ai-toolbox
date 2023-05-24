@@ -1,13 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Pivot, PivotItem, Stack, MessageBar } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
+  ErrorCohort,
   ICausalAnalysisData,
-  ModelAssessmentContext
+  ITelemetryEvent,
+  ModelAssessmentContext,
+  TelemetryEventName,
+  TelemetryLevels
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Pivot, PivotItem, Stack, MessageBar } from "office-ui-fabric-react";
 import React from "react";
 
 import { CausalAnalysisOptions } from "./CausalAnalysisEnums";
@@ -16,6 +20,9 @@ import { CausalAnalysisView } from "./Controls/CausalAnalysisView/CausalAnalysis
 
 export interface ICausalInsightsTabProps {
   data: ICausalAnalysisData;
+  newCohort: ErrorCohort;
+  telemetryHook?: (message: ITelemetryEvent) => void;
+  onPivotChange?: (option: CausalAnalysisOptions) => void;
 }
 
 interface ICausalInsightsTabState {
@@ -44,13 +51,15 @@ export class CausalInsightsTab extends React.PureComponent<
         className={classNames.container}
       >
         <Stack.Item>
-          <MessageBar>
-            {localization.CausalAnalysis.MainMenu.cohortInfo}
-          </MessageBar>
+          <MessageBar>{this.getCausalMessage()}</MessageBar>
         </Stack.Item>
         <Stack.Item>
-          <Stack horizontal tokens={{ childrenGap: "s1" }}>
-            <Pivot onLinkClick={this.onViewTypeChange}>
+          <Stack>
+            <Pivot
+              onLinkClick={this.onViewTypeChange}
+              overflowBehavior="menu"
+              className={classNames.tabs}
+            >
               <PivotItem
                 itemKey={CausalAnalysisOptions.Aggregate}
                 headerText={localization.CausalAnalysis.MainMenu.aggregate}
@@ -70,6 +79,8 @@ export class CausalInsightsTab extends React.PureComponent<
           <CausalAnalysisView
             viewOption={this.state.viewOption}
             data={this.props.data}
+            newCohort={this.props.newCohort}
+            telemetryHook={this.props.telemetryHook}
           />
         </Stack.Item>
       </Stack>
@@ -84,6 +95,31 @@ export class CausalInsightsTab extends React.PureComponent<
       this.setState({
         viewOption: item.props.itemKey
       });
+      this.props.telemetryHook?.({
+        level: TelemetryLevels.ButtonClick,
+        type: this.getTelemetryEventName(item.props.itemKey)
+      });
+      this.props.onPivotChange?.(item.props.itemKey as CausalAnalysisOptions);
     }
   };
+
+  private getTelemetryEventName = (itemKey: string): TelemetryEventName => {
+    switch (itemKey) {
+      case CausalAnalysisOptions.Aggregate:
+        return TelemetryEventName.AggregateCausalTabClick;
+      case CausalAnalysisOptions.Individual:
+        return TelemetryEventName.IndividualCausalTabClick;
+      case CausalAnalysisOptions.Treatment:
+        return TelemetryEventName.CausalTreatmentPolicyTabClick;
+      default:
+        return TelemetryEventName.AggregateCausalTabClick;
+    }
+  };
+
+  private getCausalMessage(): string {
+    if (!this.context.requestGlobalCausalEffects) {
+      return localization.CausalAnalysis.MainMenu.cohortInfo;
+    }
+    return `The current causal effects are for cohort: ${this.props.newCohort.cohort.name}`;
+  }
 }

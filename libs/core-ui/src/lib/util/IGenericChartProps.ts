@@ -8,8 +8,17 @@ export enum ChartTypes {
   Bar = "bar"
 }
 
+export enum OtherChartTypes {
+  Bubble = "bubble"
+}
+
+export enum AxisTypes {
+  Linear = "linear",
+  Logarithmic = "logarithmic"
+}
+
 export interface IGenericChartProps {
-  chartType: ChartTypes;
+  chartType: ChartTypes | OtherChartTypes;
   xAxis: ISelectorConfig;
   yAxis: ISelectorConfig;
   colorAxis?: ISelectorConfig;
@@ -24,4 +33,5 @@ export interface ISelectorConfig {
     // this is only used in the ambiguous case of numeric values on color axis for scatter chart, when binned or unbinned are valid
     bin?: boolean;
   };
+  type?: AxisTypes;
 }

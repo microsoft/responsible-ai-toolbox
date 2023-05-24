@@ -9,9 +9,9 @@ import {
   IStyle,
   mergeStyleSets,
   ICalloutContentStyles
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
-import { FabricStyles } from "../util/FabricStyles";
+import { FluentUIStyles } from "../util/FluentUIStyles";
 
 export interface IAxisControlDialogStyles {
   wrapper: IStyle;
@@ -109,7 +109,7 @@ export const axisControlCallout: () => ICalloutContentStyles = () => {
       overflowY: "visible",
       width: "560px"
     },
-    container: FabricStyles.calloutContainer,
+    container: FluentUIStyles.calloutContainer,
     root: {}
   };
 };

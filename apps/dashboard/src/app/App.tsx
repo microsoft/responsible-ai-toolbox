@@ -2,21 +2,24 @@
 // Licensed under the MIT License.
 
 import { ITheme } from "@fluentui/react";
-import { generateRoute } from "@responsible-ai/core-ui";
+import { generateRoute, parseFeatureFlights } from "@responsible-ai/core-ui";
 import { Language } from "@responsible-ai/localization";
-import { parseFeatureFlights } from "@responsible-ai/model-assessment";
 import _ from "lodash";
 import React from "react";
 import { Redirect, generatePath } from "react-router-dom";
 
 import { App as ErrorAnalysis } from "../error-analysis/App";
 import { App as Fairness } from "../fairness/App";
+import { App as InterpretText } from "../interpret-text/App";
 import { App as Interpret } from "../interpret/App";
+import { App as ModelAssessmentForecasting } from "../model-assessment-forecasting/App";
+import { App as ModelAssessmentText } from "../model-assessment-text/App";
+import { App as ModelAssessmentVision } from "../model-assessment-vision/App";
 import { App as ModelAssessment } from "../model-assessment/App";
 
 import { AppHeader } from "./AppHeader";
 import { applications, IApplications, applicationKeys } from "./applications";
-import { IAppSetting, noFlights, routeKey } from "./IAppSetting";
+import { IAppSetting, routeKey } from "./IAppSetting";
 import { themes } from "./themes";
 
 interface IAppState extends Required<IAppSetting> {
@@ -26,6 +29,7 @@ interface IAppState extends Required<IAppSetting> {
 
 export class App extends React.Component<IAppSetting, IAppState> {
   public static route = generateRoute(routeKey);
+
   public constructor(props: IAppSetting) {
     super(props);
     this.state = this.getState({ ...this.props, iteration: 0 });
@@ -62,6 +66,22 @@ export class App extends React.Component<IAppSetting, IAppState> {
                 applications[this.state.application].datasets[
                   this.state.dataset
                 ].classDimension
+              }
+              theme={themes[this.state.theme]}
+              language={Language[this.state.language]}
+              version={
+                applications[this.state.application].versions[
+                  this.state.version
+                ]
+              }
+            />
+          )}
+          {this.state.application === "interpretText" && (
+            <InterpretText
+              dataset={
+                applications[this.state.application].datasets[
+                  this.state.dataset
+                ].data
               }
               theme={themes[this.state.theme]}
               language={Language[this.state.language]}
@@ -122,11 +142,52 @@ export class App extends React.Component<IAppSetting, IAppState> {
                   this.state.version
                 ]
               }
-              featureFlights={
-                this.state.featureFlights === noFlights
-                  ? []
-                  : parseFeatureFlights(this.state.featureFlights)
+              featureFlights={parseFeatureFlights(this.state.featureFlights)}
+            />
+          )}
+          {this.state.application === "modelAssessmentText" && (
+            <ModelAssessmentText
+              {...applications[this.state.application].datasets[
+                this.state.dataset
+              ]}
+              theme={themes[this.state.theme]}
+              language={Language[this.state.language]}
+              version={
+                applications[this.state.application].versions[
+                  this.state.version
+                ]
               }
+              featureFlights={parseFeatureFlights(this.state.featureFlights)}
+            />
+          )}
+          {this.state.application === "modelAssessmentVision" && (
+            <ModelAssessmentVision
+              {...applications[this.state.application].datasets[
+                this.state.dataset
+              ]}
+              theme={themes[this.state.theme]}
+              language={Language[this.state.language]}
+              version={
+                applications[this.state.application].versions[
+                  this.state.version
+                ]
+              }
+              featureFlights={parseFeatureFlights(this.state.featureFlights)}
+            />
+          )}
+          {this.state.application === "modelAssessmentForecasting" && (
+            <ModelAssessmentForecasting
+              {...applications[this.state.application].datasets[
+                this.state.dataset
+              ]}
+              theme={themes[this.state.theme]}
+              language={Language[this.state.language]}
+              version={
+                applications[this.state.application].versions[
+                  this.state.version
+                ]
+              }
+              featureFlights={parseFeatureFlights(this.state.featureFlights)}
             />
           )}
         </div>
@@ -149,14 +210,14 @@ export class App extends React.Component<IAppSetting, IAppState> {
       props.application as keyof IApplications
     );
     const application: keyof IApplications =
-      idx < 0 ? "interpret" : applicationKeys[idx];
+      idx < 0 ? "modelAssessment" : applicationKeys[idx];
     return {
       application,
       dataset:
         !props.dataset || !applications[application].datasets[props.dataset]
           ? Object.keys(applications[application].datasets)[0]
           : props.dataset,
-      featureFlights: props.featureFlights ?? noFlights,
+      featureFlights: props.featureFlights ?? "",
       iteration: props.iteration + 1,
       language:
         !props.language || !Language[props.language]

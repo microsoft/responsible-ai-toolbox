@@ -1,11 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  DirectionalHint,
-  TooltipDelay,
-  TooltipHost
-} from "office-ui-fabric-react";
+import { DirectionalHint, TooltipDelay, TooltipHost } from "@fluentui/react";
 import React from "react";
 
 import { IMatrixSingleCategory } from "../IMatrixCategory";
@@ -13,7 +9,7 @@ import { IMatrixSingleCategory } from "../IMatrixCategory";
 import { matrixCategoryStyles } from "./MatrixCategory.styles";
 
 export interface IMatrixCategoryProps {
-  featureName: string;
+  featureName: string | undefined;
   category: IMatrixSingleCategory[];
   index: number;
 }

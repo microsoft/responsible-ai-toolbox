@@ -1,18 +1,23 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme, IDropdownOption } from "@fluentui/react";
 import {
   BinaryClassificationMetrics,
-  classificationTask,
+  DatasetTaskType,
   ErrorCohort,
   HighchartsNull,
   ILabeledStatistic,
+  ImageClassificationMetrics,
   MulticlassClassificationMetrics,
-  RegressionMetrics
+  MultilabelMetrics,
+  ObjectDetectionMetrics,
+  QuestionAnsweringMetrics,
+  RegressionMetrics,
+  TotalCohortSamples
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
-import { getTheme, IDropdownOption } from "office-ui-fabric-react";
 
 export interface IFairnessStats {
   max: number;
@@ -29,15 +34,28 @@ export function generateCohortsStatsTable(
   labeledStatistics: ILabeledStatistic[][],
   selectedMetrics: string[],
   useTexturedBackgroundForNaN: boolean
-) {
-  // The "count" metric has to be treated separately
-  // since it's not handled like other metrics, but
-  // is part of the ErrorCohort object.
-  const items: PointOptionsObject[] = cohorts.map(
-    (errorCohort, cohortIndex) => {
+): {
+  fairnessStats: IFairnessStats[];
+  items: PointOptionsObject[];
+} {
+  const items: PointOptionsObject[] = labeledStatistics.map(
+    (labeledStatistic, cohortIndex) => {
+      const cohortStats = labeledStatistic.find(
+        (cohortStats: ILabeledStatistic) =>
+          cohortStats.key === TotalCohortSamples
+      );
+      if (cohortStats) {
+        return {
+          colorValue: 0,
+          value: cohortStats.stat,
+          x: 0,
+          // metric index for Count column
+          y: cohortIndex
+        };
+      }
       return {
         colorValue: 0,
-        value: errorCohort.cohortStats.totalCohort,
+        value: 0,
         x: 0,
         // metric index for Count column
         y: cohortIndex
@@ -48,15 +66,19 @@ export function generateCohortsStatsTable(
   let countMin = Number.MAX_SAFE_INTEGER;
   let countMinCohortName = "";
   let countMaxCohortName = "";
-  cohorts.forEach((errorCohort) => {
-    const cohortCount = errorCohort.cohortStats.totalCohort;
-    if (cohortCount > countMax) {
-      countMax = cohortCount;
-      countMaxCohortName = errorCohort.cohort.name;
-    }
-    if (cohortCount < countMin) {
-      countMin = cohortCount;
-      countMinCohortName = errorCohort.cohort.name;
+  cohorts.forEach((errorCohort, cohortIndex) => {
+    const labeledStat = labeledStatistics[cohortIndex].find(
+      (labeledStat) => labeledStat.key === TotalCohortSamples
+    );
+    if (labeledStat) {
+      if (labeledStat.stat > countMax) {
+        countMax = labeledStat.stat;
+        countMaxCohortName = errorCohort.cohort.name;
+      }
+      if (labeledStat.stat < countMin) {
+        countMin = labeledStat.stat;
+        countMinCohortName = errorCohort.cohort.name;
+      }
     }
   });
   const fairnessStats: IFairnessStats[] = [
@@ -114,8 +136,15 @@ export function generateCohortsStatsTable(
           (labeledStat) => labeledStat.key === metricOption.key
         );
         if (labeledStat && !Number.isNaN(labeledStat.stat)) {
+          let colorValue = (labeledStat.stat - metricMin) / metricMinMaxDiff;
+          if (metricMin === metricMax) {
+            // only 1 unique value in the set, set color to 0
+            colorValue = 0;
+          }
+          const colorConfig = { color: "transparent" };
           items.push({
-            colorValue: (labeledStat.stat - metricMin) / metricMinMaxDiff,
+            ...colorConfig,
+            colorValue,
             value: Number(labeledStat.stat.toFixed(3)),
             x: metricIndex + 1,
             y: cohortIndex
@@ -163,7 +192,7 @@ export function wrapText(
   maxLines = 2,
   lineStart = 0,
   currentLine = 0
-) {
+): string {
   if (text.length <= lineStart + maxLineLength) {
     // label is short enough to fit on current line
     return text;
@@ -221,19 +250,84 @@ export interface IMetricOption extends IDropdownOption {
 }
 
 export function getSelectableMetrics(
-  taskType: "classification" | "regression",
+  taskType: DatasetTaskType,
   isMulticlass: boolean
-) {
+): IMetricOption[] {
   const selectableMetrics: IMetricOption[] = [];
-  if (taskType === classificationTask) {
+  if (
+    taskType === DatasetTaskType.Classification ||
+    taskType === DatasetTaskType.TextClassification ||
+    taskType === DatasetTaskType.ImageClassification
+  ) {
     if (isMulticlass) {
-      selectableMetrics.push({
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.accuracy
-            .description,
-        key: MulticlassClassificationMetrics.Accuracy,
-        text: localization.ModelAssessment.ModelOverview.metrics.accuracy.name
-      });
+      if (taskType === DatasetTaskType.ImageClassification) {
+        selectableMetrics.push(
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.accuracy
+                .description,
+            key: ImageClassificationMetrics.Accuracy,
+            text: localization.ModelAssessment.ModelOverview.metrics.accuracy
+              .name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.precisionMacro
+                .description,
+            key: ImageClassificationMetrics.MacroPrecision,
+            text: localization.ModelAssessment.ModelOverview.metrics
+              .precisionMacro.name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.recallMacro
+                .description,
+            key: ImageClassificationMetrics.MacroRecall,
+            text: localization.ModelAssessment.ModelOverview.metrics.recallMacro
+              .name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.f1ScoreMacro
+                .description,
+            key: ImageClassificationMetrics.MacroF1,
+            text: localization.ModelAssessment.ModelOverview.metrics
+              .f1ScoreMacro.name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.precisionMicro
+                .description,
+            key: ImageClassificationMetrics.MicroPrecision,
+            text: localization.ModelAssessment.ModelOverview.metrics
+              .precisionMicro.name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.recallMicro
+                .description,
+            key: ImageClassificationMetrics.MicroRecall,
+            text: localization.ModelAssessment.ModelOverview.metrics.recallMicro
+              .name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.f1ScoreMicro
+                .description,
+            key: ImageClassificationMetrics.MicroF1,
+            text: localization.ModelAssessment.ModelOverview.metrics
+              .f1ScoreMicro.name
+          }
+        );
+      } else {
+        selectableMetrics.push({
+          description:
+            localization.ModelAssessment.ModelOverview.metrics.accuracy
+              .description,
+          key: MulticlassClassificationMetrics.Accuracy,
+          text: localization.ModelAssessment.ModelOverview.metrics.accuracy.name
+        });
+      }
     } else {
       selectableMetrics.push(
         {
@@ -291,6 +385,103 @@ export function getSelectableMetrics(
         }
       );
     }
+  } else if (
+    taskType === DatasetTaskType.MultilabelImageClassification ||
+    taskType === DatasetTaskType.MultilabelTextClassification
+  ) {
+    selectableMetrics.push(
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.exactMatchRatio
+            .description,
+        key: MultilabelMetrics.ExactMatchRatio,
+        text: localization.ModelAssessment.ModelOverview.metrics.exactMatchRatio
+          .name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.hammingScore
+            .description,
+        key: MultilabelMetrics.HammingScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.hammingScore
+          .name
+      }
+    );
+  } else if (taskType === DatasetTaskType.ObjectDetection) {
+    selectableMetrics.push(
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics
+            .meanAveragePrecision.description,
+        key: ObjectDetectionMetrics.MeanAveragePrecision,
+        text: localization.ModelAssessment.ModelOverview.metrics
+          .meanAveragePrecision.name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.averagePrecision
+            .description,
+        key: ObjectDetectionMetrics.AveragePrecision,
+        text: localization.ModelAssessment.ModelOverview.metrics
+          .averagePrecision.name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.averageRecall
+            .description,
+        key: ObjectDetectionMetrics.AverageRecall,
+        text: localization.ModelAssessment.ModelOverview.metrics.averageRecall
+          .name
+      }
+    );
+  } else if (taskType === DatasetTaskType.QuestionAnswering) {
+    selectableMetrics.push(
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.exactMatchRatio
+            .description,
+        key: QuestionAnsweringMetrics.ExactMatchRatio,
+        text: localization.ModelAssessment.ModelOverview.metrics.exactMatchRatio
+          .name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.meteorScore
+            .description,
+        key: QuestionAnsweringMetrics.MeteorScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.meteorScore
+          .name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.f1Score
+            .description,
+        key: QuestionAnsweringMetrics.F1Score,
+        text: localization.ModelAssessment.ModelOverview.metrics.f1Score.name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.bleuScore
+            .description,
+        key: QuestionAnsweringMetrics.BleuScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.bleuScore.name
+      },
+
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.bertScore
+            .description,
+        key: QuestionAnsweringMetrics.BertScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.bertScore.name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.rougeScore
+            .description,
+        key: QuestionAnsweringMetrics.RougeScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.rougeScore.name
+      }
+    );
   } else {
     // task_type === "regression"
     selectableMetrics.push(

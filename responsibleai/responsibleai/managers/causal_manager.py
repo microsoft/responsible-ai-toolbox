@@ -9,19 +9,19 @@ import numpy as np
 import pandas as pd
 from econml.solutions.causal_analysis import CausalAnalysis
 
+from raiutils.exceptions import UserConfigValidationException
+from raiutils.models import ModelTask
 from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._internal.constants import (CausalManagerKeys,
                                                ListProperties, ManagerNames)
 from responsibleai._tools.causal.causal_config import CausalConfig
 from responsibleai._tools.causal.causal_constants import (DefaultParams,
-                                                          ModelTypes,
-                                                          ResultAttributes)
+                                                          ModelTypes)
 from responsibleai._tools.causal.causal_result import CausalResult
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
-from responsibleai.exceptions import UserConfigValidationException
+from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.managers.base_manager import BaseManager
-from responsibleai.rai_insights.constants import ModelTask
 from responsibleai.utils import _measure_time
 
 
@@ -34,7 +34,8 @@ class CausalManager(BaseManager):
         test: pd.DataFrame,
         target_column: str,
         task_type: str,
-        categorical_features: Optional[List[str]]
+        categorical_features: Optional[List[str]],
+        feature_metadata: Optional[FeatureMetadata] = None
     ):
         """Construct a CausalManager for generating causal analyses
             from a dataset.
@@ -50,6 +51,10 @@ class CausalManager(BaseManager):
         :type task_type: str
         :param categorical_features: All categorical feature names.
         :type categorical_features: list
+        :param feature_metadata: Feature metadata for the train/test
+                                 dataset to identify different kinds
+                                 of features in the dataset.
+        :type feature_metadata: FeatureMetadata
         """
         self._train = train
         self._test = test
@@ -59,6 +64,7 @@ class CausalManager(BaseManager):
         self._categorical_features = categorical_features
         if categorical_features is None:
             self._categorical_features = []
+        self._feature_metadata = feature_metadata
 
         self._results = []
 
@@ -152,11 +158,34 @@ class CausalManager(BaseManager):
         :param random_state: Controls the randomness of the estimator.
         :type random_state: int or RandomState or None
         """
+        if not isinstance(treatment_features, list):
+            raise UserConfigValidationException(
+                "Expecting a list for treatment_features but got {0}".format(
+                    type(treatment_features)))
+        if len(treatment_features) == 0:
+            raise UserConfigValidationException(
+                "Please specify at least one feature in "
+                "treatment_features list")
+        for feature in treatment_features:
+            if self._feature_metadata and \
+                    self._feature_metadata.dropped_features and \
+                    feature in set(self._feature_metadata.dropped_features):
+                message = ("'{}' in treatment_features has been dropped "
+                           "during training the model").format(feature)
+                raise UserConfigValidationException(message)
         difference_set = set(treatment_features) - set(self._train.columns)
         if len(difference_set) > 0:
             message = ("Feature names in treatment_features do "
                        f"not exist in train data: {list(difference_set)}")
             raise UserConfigValidationException(message)
+
+        if heterogeneity_features is not None:
+            difference_set = \
+                set(heterogeneity_features) - set(self._train.columns)
+            if len(difference_set) > 0:
+                message = ("Feature names in heterogeneity_features do "
+                           f"not exist in train data: {list(difference_set)}")
+                raise UserConfigValidationException(message)
 
         if self._task_type == ModelTask.CLASSIFICATION:
             is_multiclass = len(np.unique(
@@ -229,7 +258,7 @@ class CausalManager(BaseManager):
 
     def _create_policy(
         self,
-        causal_analysis,
+        causal_result,
         X_test,
         treatment_feature,
         treatment_cost,
@@ -237,29 +266,14 @@ class CausalManager(BaseManager):
         max_tree_depth,
         min_tree_leaf_samples,
     ):
-        local_policies = causal_analysis.individualized_policy(
-            X_test, treatment_feature,
-            treatment_costs=treatment_cost,
-            alpha=alpha)
-
-        tree = causal_analysis._policy_tree_output(
-            X_test, treatment_feature,
-            treatment_costs=treatment_cost,
-            max_depth=max_tree_depth,
-            min_samples_leaf=min_tree_leaf_samples,
-            alpha=alpha)
-
-        return {
-            ResultAttributes.TREATMENT_FEATURE: treatment_feature,
-            ResultAttributes.CONTROL_TREATMENT: tree.control_name,
-            ResultAttributes.LOCAL_POLICIES: local_policies,
-            ResultAttributes.POLICY_GAINS: {
-                ResultAttributes.RECOMMENDED_POLICY_GAINS:
-                    tree.policy_value,
-                ResultAttributes.TREATMENT_GAINS: tree.always_treat,
-            },
-            ResultAttributes.POLICY_TREE: tree.tree_dictionary
-        }
+        return causal_result._create_policy(
+            X_test=X_test,
+            treatment_feature=treatment_feature,
+            treatment_cost=treatment_cost,
+            alpha=alpha,
+            max_tree_depth=max_tree_depth,
+            min_tree_leaf_samples=min_tree_leaf_samples,
+        )
 
     def _whatif(self, id, X, X_feature_new, feature_name, y, alpha=0.1):
         """Get what-if data."""
@@ -269,6 +283,76 @@ class CausalManager(BaseManager):
         result = filtered[0]
         return result._whatif(X, X_feature_new, feature_name,
                               y, alpha=alpha).to_dict(orient="records")
+
+    def request_global_cohort_effects(self, id, X_test):
+        """Get global causal effects for cohort data.
+
+        :param id: The query id for finding the
+                   causal config.
+        :type id: str
+        :param X_test: The data for which the global causal effects
+                       needs to be generated.
+        :type X_test: Any
+        :return: An object of type CausalData with
+                 causal effects.
+        :rtype: CausalData
+
+        """
+        filtered = [r for r in self.get() if r.id == id]
+        if len(filtered) == 0:
+            raise ValueError(f"Failed to find causal result with ID: {id}")
+        result = filtered[0]
+        return result._global_cohort_effects(X_test)
+
+    def request_local_instance_effects(self, id, X_test):
+        """Get local causal effects for a given data point.
+
+        :param id: The query id for finding the
+                   causal config.
+        :type id: str
+        :param X_test: The data for which the local causal effects
+                       needs to be generated for a given point.
+        :type X_test: Any
+        :return: An object of type CausalData with
+                 causal effects for a given point.
+        :rtype: CausalData
+        """
+        filtered = [r for r in self.get() if r.id == id]
+
+        if len(filtered) == 0:
+            raise ValueError(f"Failed to find causal result with ID: {id}")
+
+        if not isinstance(X_test, pd.DataFrame):
+            raise UserConfigValidationException(
+                'Data is of type {0} but it must be '
+                'a pandas DataFrame.'.format(type(X_test)))
+
+        if X_test.shape[0] > 1:
+            raise UserConfigValidationException(
+                'Only one row of data is allowed for '
+                'local causal effects.')
+
+        result = filtered[0]
+        return result._local_instance_effects(X_test)
+
+    def request_global_cohort_policy(self, id, X_test):
+        """Get global causal policy for cohort data.
+
+        :param id: The query id for finding the
+                   causal config.
+        :type id: str
+        :param X_test: The data for which the causal policy
+                       needs to be generated.
+        :type X_test: Any
+        :return: An object of type CausalData with
+                 causal effects.
+        :rtype: CausalData
+        """
+        filtered = [r for r in self.get() if r.id == id]
+        if len(filtered) == 0:
+            raise ValueError(f"Failed to find causal result with ID: {id}")
+        result = filtered[0]
+        return result._global_cohort_policy(X_test)
 
     @_measure_time
     def compute(self):
@@ -343,7 +427,7 @@ class CausalManager(BaseManager):
 
                 for i in range(len(causal_config.treatment_features)):
                     policy = self._create_policy(
-                        analysis, X_test,
+                        result, X_test,
                         causal_config.treatment_features[i],
                         revised_treatment_cost[i],
                         causal_config.alpha, causal_config.max_tree_depth,
@@ -437,5 +521,6 @@ class CausalManager(BaseManager):
         inst.__dict__['_task_type'] = rai_insights.task_type
         inst.__dict__['_categorical_features'] = \
             rai_insights.categorical_features
+        inst.__dict__['_feature_metadata'] = rai_insights._feature_metadata
 
         return inst

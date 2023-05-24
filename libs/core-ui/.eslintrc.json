@@ -7,12 +7,16 @@
       "rules": {}
     },
     {
-      "files": ["*.ts", "*.tsx"],
-      "rules": {}
+      "files": ["JointDataset.ts"],
+      "rules": {
+        "max-lines": "warn"
+      }
     },
     {
-      "files": ["*.js", "*.jsx"],
-      "rules": {}
+      "files": ["**/getBubbleChartOptions.ts"],
+      "rules": {
+        "dot-notation": "off"
+      }
     }
   ]
 }

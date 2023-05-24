@@ -1,14 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IProcessedStyleSet,
-  mergeStyleSets,
-  IStyle
-} from "office-ui-fabric-react";
+import { IProcessedStyleSet, mergeStyleSets, IStyle } from "@fluentui/react";
+import { flexLgDown, fullLgDown } from "@responsible-ai/core-ui";
 
 export interface ICounterfactualChartStyles {
   chartWithAxes: IStyle;
+  chartWithLegend: IStyle;
   chartWithVertical: IStyle;
   horizontalAxis: IStyle;
   horizontalAxisWithPadding: IStyle;
@@ -18,15 +16,24 @@ export interface ICounterfactualChartStyles {
   lowerChartContainer: IStyle;
   rotatedVerticalBox: IStyle;
   verticalAxis: IStyle;
+  buttonStyle: IStyle;
 }
 
 export const counterfactualChartStyles: () => IProcessedStyleSet<ICounterfactualChartStyles> =
   () => {
     return mergeStyleSets<ICounterfactualChartStyles>({
+      buttonStyle: {
+        marginBottom: "10px",
+        marginTop: "10px",
+        paddingBottom: "10px",
+        paddingTop: "10px"
+      },
       chartWithAxes: {
+        ...fullLgDown,
         paddingTop: "30px",
         width: "80%"
       },
+      chartWithLegend: flexLgDown,
       chartWithVertical: {
         width: "100%"
       },

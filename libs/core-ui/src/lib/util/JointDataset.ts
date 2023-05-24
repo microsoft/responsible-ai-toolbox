@@ -11,10 +11,6 @@ import _ from "lodash";
 
 import { cohortKey } from "../cohortKey";
 import {
-  IMultiClassLocalFeatureImportance,
-  ISingleClassLocalFeatureImportance
-} from "../Interfaces/ExplanationInterfaces";
-import {
   IExplanationModelMetadata,
   ModelTypes
 } from "../Interfaces/IExplanationContext";
@@ -22,52 +18,16 @@ import {
   WeightVectors,
   WeightVectorOption
 } from "../Interfaces/IWeightedDropdownContext";
+import { IsBinary, IsMulticlass, IsMultilabel } from "../util/ExplanationUtils";
 
-export interface IJointDatasetArgs {
-  dataset?: any[][];
-  predictedY?: number[];
-  predictedProbabilities?: number[][];
-  trueY?: number[];
-  localExplanations?:
-    | IMultiClassLocalFeatureImportance
-    | ISingleClassLocalFeatureImportance;
-  metadata: IExplanationModelMetadata;
-}
-
-export enum ColumnCategories {
-  Outcome = "outcome",
-  Dataset = "dataset",
-  Index = "index",
-  Explanation = "explanation",
-  Cohort = "cohort",
-  None = "none"
-}
-
-export enum ClassificationEnum {
-  TrueNegative = 0,
-  FalsePositive = 1,
-  FalseNegative = 2,
-  TruePositive = 3
-}
-
-export enum MulticlassClassificationEnum {
-  Correct = 0,
-  Misclassified = 1
-}
-
-// The object that will store user-facing strings and associated metadata
-// It stores the categorical labels for any numeric bins
-export interface IJointMeta {
-  label: string;
-  abbridgedLabel: string;
-  isCategorical: boolean;
-  // used to allow user to treat integers as categorical (but switch back as convenient...)
-  treatAsCategorical?: boolean;
-  sortedCategoricalValues?: string[];
-  featureRange?: INumericRange;
-  category: ColumnCategories;
-  index?: number;
-}
+import { AxisTypes } from "./IGenericChartProps";
+import {
+  ColumnCategories,
+  IJointDatasetArgs,
+  IJointMeta,
+  MulticlassClassificationEnum,
+  IDatasetMeta
+} from "./JointDatasetUtils";
 
 // this is the single source for data, it should hold all raw data and be how data for presentation is
 // accessed. It shall apply filters to the raw table and persist the filtered table for presenting to
@@ -77,10 +37,14 @@ export interface IJointMeta {
 //
 export class JointDataset {
   public static readonly IndexLabel = "Index";
+  public static readonly AbsoluteIndexLabel = "AbsoluteIndex";
   public static readonly DataLabelRoot = "Data";
   public static readonly PredictedYLabel = "PredictedY";
   public static readonly ProbabilityYRoot = "ProbabilityClass";
   public static readonly TrueYLabel = "TrueY";
+  public static readonly ObjectDetectionPredictedYLabel =
+    "ObjectDetectionPredictedY";
+  public static readonly ObjectDetectionTrueYLabel = "ObjectDetectionTrueY";
   public static readonly DitherLabel = "Dither";
   public static readonly DitherLabel2 = "Dither2";
   public static readonly ClassificationError = "ClassificationError";
@@ -91,6 +55,7 @@ export class JointDataset {
   public static readonly ReducedLocalImportanceSortIndexRoot =
     "LocalImportanceSortIndex";
 
+  public datasetMetaData: IDatasetMeta | undefined;
   public rawLocalImportance: number[][][] | undefined;
   public metaDict: { [key: string]: IJointMeta } = {};
 
@@ -103,10 +68,12 @@ export class JointDataset {
   public predictionClassCount = 0;
   public datasetRowCount = 0;
   public localExplanationFeatureCount = 0;
+  public numLabels = 1;
 
   // these properties should only be accessed by Cohort class,
   // which enables independent filtered views of this data
   public dataDict: Array<{ [key: string]: number }> | undefined;
+  public strDataDict: Array<{ [key: string]: string }> | undefined;
   public binDict: { [key: string]: number[] | undefined } = {};
 
   private readonly _modelMeta: IExplanationModelMetadata;
@@ -119,6 +86,11 @@ export class JointDataset {
 
   public constructor(args: IJointDatasetArgs) {
     this._modelMeta = args.metadata;
+
+    if (args.featureMetaData !== undefined) {
+      this.datasetMetaData = { featureMetaData: args.featureMetaData };
+    }
+
     if (args.dataset && args.dataset.length > 0) {
       this.initializeDataDictIfNeeded(args.dataset);
       this.datasetRowCount = args.dataset.length;
@@ -171,30 +143,14 @@ export class JointDataset {
       this.hasDataset = true;
     }
     if (args.predictedY) {
-      this.initializeDataDictIfNeeded(args.predictedY);
-      args.predictedY.forEach((val, index) => {
-        if (this.dataDict) {
-          this.dataDict[index][JointDataset.PredictedYLabel] = val;
-        }
-      });
-      this.metaDict[JointDataset.PredictedYLabel] = {
-        abbridgedLabel: localization.Interpret.ExplanationScatter.predictedY,
-        category: ColumnCategories.Outcome,
-        isCategorical: args.metadata.modelType !== ModelTypes.Regression,
-        label: localization.Interpret.ExplanationScatter.predictedY,
-        sortedCategoricalValues:
-          args.metadata.modelType !== ModelTypes.Regression
-            ? args.metadata.classNames
-            : undefined,
-        treatAsCategorical: args.metadata.modelType !== ModelTypes.Regression
-      };
-      if (args.metadata.modelType === ModelTypes.Regression) {
-        this.metaDict[JointDataset.PredictedYLabel].featureRange = {
-          max: _.max(args.predictedY) || 0,
-          min: _.min(args.predictedY) || 0,
-          rangeType: RangeTypes.Numeric
-        };
-      }
+      this.updateMetaDataDict(
+        args.predictedY,
+        args.metadata,
+        JointDataset.PredictedYLabel,
+        localization.Interpret.ExplanationScatter.predictedY,
+        localization.Interpret.ExplanationScatter.predictedY,
+        args.targetColumn
+      );
       this.hasPredictedY = true;
     }
     if (args.predictedProbabilities) {
@@ -238,36 +194,24 @@ export class JointDataset {
       }
     }
     if (args.trueY) {
-      this.initializeDataDictIfNeeded(args.trueY);
-      args.trueY.forEach((val, index) => {
-        if (this.dataDict) {
-          this.dataDict[index][JointDataset.TrueYLabel] = val;
-        }
-      });
-      this.metaDict[JointDataset.TrueYLabel] = {
-        abbridgedLabel: localization.Interpret.ExplanationScatter.trueY,
-        category: ColumnCategories.Outcome,
-        isCategorical: args.metadata.modelType !== ModelTypes.Regression,
-        label: localization.Interpret.ExplanationScatter.trueY,
-        sortedCategoricalValues:
-          args.metadata.modelType !== ModelTypes.Regression
-            ? args.metadata.classNames
-            : undefined,
-        treatAsCategorical: args.metadata.modelType !== ModelTypes.Regression
-      };
-      if (args.metadata.modelType === ModelTypes.Regression) {
-        this.metaDict[JointDataset.TrueYLabel].featureRange = {
-          max: _.max(args.trueY) || 0,
-          min: _.min(args.trueY) || 0,
-          rangeType: RangeTypes.Numeric
-        };
-      }
+      this.updateMetaDataDict(
+        args.trueY,
+        args.metadata,
+        JointDataset.TrueYLabel,
+        localization.Interpret.ExplanationScatter.trueY,
+        localization.Interpret.ExplanationScatter.trueY,
+        args.targetColumn
+      );
       this.hasTrueY = true;
     }
     // include error columns if applicable
     if (this.hasPredictedY && this.hasTrueY) {
       this.dataDict?.forEach((row) => {
-        JointDataset.setErrorMetrics(row, this._modelMeta.modelType);
+        JointDataset.setErrorMetrics(
+          row,
+          this._modelMeta.modelType,
+          this.numLabels
+        );
       });
       // Set appropriate metadata
       if (args.metadata.modelType === ModelTypes.Regression && this.dataDict) {
@@ -287,7 +231,7 @@ export class JointDataset {
           sortedCategoricalValues: undefined
         };
       }
-      if (args.metadata.modelType === ModelTypes.Binary) {
+      if (IsBinary(args.metadata.modelType)) {
         this.metaDict[JointDataset.ClassificationError] = {
           abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
           category: ColumnCategories.Outcome,
@@ -302,7 +246,10 @@ export class JointDataset {
           treatAsCategorical: true
         };
       }
-      if (args.metadata.modelType === ModelTypes.Multiclass) {
+      if (
+        IsMulticlass(args.metadata.modelType) ||
+        IsMultilabel(args.metadata.modelType)
+      ) {
         this.metaDict[JointDataset.ClassificationError] = {
           abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
           category: ColumnCategories.Outcome,
@@ -334,7 +281,7 @@ export class JointDataset {
     }
   }
 
-  // creating public static methods of the class instance methonds.
+  // creating public static methods of the class instance methods.
   // This is to enable prototyping the cohort concept, where we don't have a single
   // datasource as initially envisioned but an array of them, all build off of the true datasource
   public static unwrap(
@@ -361,7 +308,7 @@ export class JointDataset {
     const result = new Array(length);
     for (let i = 0; i < length; i++) {
       const key = JointDataset.DataLabelRoot + i.toString();
-      if (metaDict[key].isCategorical) {
+      if (metaDict[key].isCategorical || metaDict[key].treatAsCategorical) {
         result[i] = metaDict[key].sortedCategoricalValues?.[row[key]];
       } else {
         result[i] = row[key];
@@ -396,7 +343,8 @@ export class JointDataset {
   // set the appropriate error value in the keyed column
   public static setErrorMetrics(
     row: { [key: string]: any },
-    modelType: ModelTypes
+    modelType: ModelTypes,
+    numLabels = 0
   ): void {
     if (modelType === ModelTypes.Regression) {
       row[JointDataset.RegressionError] = Math.abs(
@@ -404,7 +352,7 @@ export class JointDataset {
       );
       return;
     }
-    if (modelType === ModelTypes.Binary) {
+    if (IsBinary(modelType)) {
       // sum pred and 2*true to map to ints 0 - 3,
       // 0: TN
       // 1: FP
@@ -415,11 +363,28 @@ export class JointDataset {
       row[JointDataset.ClassificationError] = predictionCategory;
       return;
     }
-    if (modelType === ModelTypes.Multiclass) {
+    if (IsMulticlass(modelType)) {
       row[JointDataset.ClassificationError] =
         row[JointDataset.TrueYLabel] !== row[JointDataset.PredictedYLabel]
           ? MulticlassClassificationEnum.Misclassified
           : MulticlassClassificationEnum.Correct;
+      return;
+    }
+    if (IsMultilabel(modelType)) {
+      let misclassified = false;
+      // go over each label and check if it is misclassified
+      for (let i = 0; i < numLabels; i++) {
+        if (
+          row[JointDataset.TrueYLabel + i.toString()] !==
+          row[JointDataset.PredictedYLabel + i.toString()]
+        ) {
+          misclassified = true;
+          break;
+        }
+      }
+      row[JointDataset.ClassificationError] = misclassified
+        ? MulticlassClassificationEnum.Misclassified
+        : MulticlassClassificationEnum.Correct;
       return;
     }
   }
@@ -484,6 +449,21 @@ export class JointDataset {
     return [];
   }
 
+  public readonly getRawValue = (
+    v: number | undefined,
+    k: string
+  ): string | number | undefined => {
+    const meta = this.metaDict[k];
+    if (
+      v !== undefined &&
+      (meta.isCategorical || meta?.treatAsCategorical) &&
+      meta.sortedCategoricalValues
+    ) {
+      return meta.sortedCategoricalValues[v];
+    }
+    return v;
+  };
+
   public setTreatAsCategorical(key: string, value: boolean): void {
     const metadata = this.metaDict[key];
     metadata.treatAsCategorical = value;
@@ -505,6 +485,14 @@ export class JointDataset {
         row[key] = this.numericValuedColumnsCache[rowIndex][key];
       });
       this.addBin(key);
+    }
+  }
+
+  public setLogarithmicScaling(key: string, value: boolean): void {
+    if (value) {
+      this.metaDict[key].AxisType = AxisTypes.Logarithmic;
+    } else {
+      this.metaDict[key].AxisType = undefined;
     }
   }
 
@@ -681,9 +669,106 @@ export class JointDataset {
     });
   }
 
+  public getJointDatasetFeatureName(
+    userFeatureName: string
+  ): string | undefined {
+    // Return the joint dataset feature name for the given user feature name.
+    let jointDatasetFeatureName = undefined;
+    let isUserFeatureNameFound = false;
+    for (jointDatasetFeatureName in this.metaDict) {
+      if (
+        this.metaDict[jointDatasetFeatureName].abbridgedLabel ===
+        userFeatureName
+      ) {
+        isUserFeatureNameFound = true;
+        break;
+      }
+    }
+
+    if (isUserFeatureNameFound) {
+      return jointDatasetFeatureName;
+    }
+    return undefined;
+  }
+
+  private updateMetaDataDict(
+    values: number[] | number[][] | string[],
+    metadata: IExplanationModelMetadata,
+    labelColName: string,
+    abbridgedLabel: string,
+    label: string,
+    targetColumn?: string | string[]
+  ): void {
+    this.initializeDataDictIfNeeded(values);
+    values.forEach((val, index) => {
+      if (Array.isArray(val)) {
+        this.numLabels = val.length;
+        val.forEach((subVal, subIndex) => {
+          if (this.dataDict) {
+            this.dataDict[index][labelColName + subIndex.toString()] = subVal;
+          }
+        });
+      } else if (this.dataDict) {
+        if (typeof val !== "string") {
+          this.dataDict[index][labelColName] = val;
+        } else if (this.strDataDict) {
+          this.strDataDict[index][labelColName] = val;
+        }
+      }
+    });
+    for (let i = 0; i < this.numLabels; i++) {
+      let labelColNameKey = labelColName;
+      let abbridgedLabelValue = abbridgedLabel;
+      let labelValue = label;
+      let singleLabelValues: number[] = [];
+      if (this.numLabels > 1) {
+        const labelIdxStr = i.toString();
+        labelColNameKey += labelIdxStr;
+        abbridgedLabelValue += labelIdxStr;
+        labelValue += labelIdxStr;
+        // check if values is a 2d array
+        const indexedValues = values[i];
+        if (Array.isArray(indexedValues)) {
+          singleLabelValues = indexedValues;
+        }
+      } else if (!Array.isArray(values)) {
+        singleLabelValues = values;
+      }
+      let categoricalValues =
+        metadata.modelType !== ModelTypes.Regression
+          ? metadata.classNames
+          : undefined;
+      if (this.numLabels > 1 && Array.isArray(targetColumn)) {
+        categoricalValues = ["", targetColumn[i]];
+      }
+      this.metaDict[labelColNameKey] = {
+        abbridgedLabel: abbridgedLabelValue,
+        category: ColumnCategories.Outcome,
+        isCategorical: metadata.modelType !== ModelTypes.Regression,
+        label: labelValue,
+        sortedCategoricalValues: categoricalValues,
+        treatAsCategorical: metadata.modelType !== ModelTypes.Regression
+      };
+      if (metadata.modelType === ModelTypes.Regression) {
+        this.metaDict[labelColNameKey].featureRange = {
+          max: _.max(singleLabelValues) || 0,
+          min: _.min(singleLabelValues) || 0,
+          rangeType: RangeTypes.Numeric
+        };
+      }
+    }
+  }
+
   private initializeDataDictIfNeeded(arr: any[]): void {
     if (arr === undefined) {
       return;
+    }
+    if (this.strDataDict === undefined) {
+      this.strDataDict = Array.from({ length: arr.length }).map((_, index) => {
+        const dict = {};
+        dict[JointDataset.IndexLabel] = index;
+        return dict;
+      });
     }
     if (this.dataDict !== undefined) {
       if (this.dataDict.length !== arr.length) {

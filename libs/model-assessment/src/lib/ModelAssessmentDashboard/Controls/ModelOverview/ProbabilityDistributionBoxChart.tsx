@@ -1,58 +1,57 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme, IChoiceGroupOption, Spinner } from "@fluentui/react";
 import {
   BasicHighChart,
+  boxChartTooltipDefaultSetting,
   calculateBoxPlotDataFromErrorCohort,
   defaultModelAssessmentContext,
   ErrorCohort,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  setOutlierDataIfChanged,
+  IBoxChartState,
+  ifEnableLargeData
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
-import { getTheme, IChoiceGroupOption } from "office-ui-fabric-react";
+import _ from "lodash";
 import React from "react";
 
 interface IProbabilityDistributionBoxChartProps {
+  boxPlotState: IBoxChartState;
   selectedCohorts: ErrorCohort[];
   probabilityOption?: IChoiceGroupOption;
+  onBoxPlotStateUpdate: (boxPlotState: IBoxChartState) => void;
 }
 
-class IProbabilityDistributionBoxChartState {}
-
-export class ProbabilityDistributionBoxChart extends React.Component<
-  IProbabilityDistributionBoxChartProps,
-  IProbabilityDistributionBoxChartState
-> {
+export class ProbabilityDistributionBoxChart extends React.Component<IProbabilityDistributionBoxChartProps> {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
+  public componentDidMount(): void {
+    this.calculateBoxDataIfNeeded();
+  }
+
+  public componentDidUpdate(
+    prevProps: IProbabilityDistributionBoxChartProps
+  ): void {
+    this.calculateBoxDataIfNeeded(prevProps);
+  }
+
   public render(): React.ReactNode {
     const theme = getTheme();
-
+    if (this.props.boxPlotState.boxPlotData.length === 0) {
+      return <Spinner />;
+    }
     const selectedCohortNames = this.props.selectedCohorts.map(
       (cohort) => cohort.cohort.name
     );
 
-    const boxPlotData = this.props.selectedCohorts.map((cohort, index) => {
-      return calculateBoxPlotDataFromErrorCohort(
-        cohort,
-        index,
-        this.props.probabilityOption!.key.toString()
-      );
-    });
-    const outlierData = boxPlotData
-      .map((cohortBoxPlotData) => cohortBoxPlotData?.outliers)
-      .map((outlierProbs, cohortIndex) => {
-        return outlierProbs?.map((prob) => [cohortIndex, prob]);
-      })
-      .filter((list) => list !== undefined)
-      .reduce((list1, list2) => list1!.concat(list2!), []);
-
     return (
       <BasicHighChart
-        id={"ProbabilityDistributionBoxChart"}
+        id={"modelOverviewProbabilityDistributionBoxChart"}
         theme={theme}
         configOverride={{
           chart: {
@@ -69,18 +68,21 @@ export class ProbabilityDistributionBoxChart extends React.Component<
           },
           series: [
             {
-              data: boxPlotData.map((boxData) => boxData as PointOptionsObject),
-              fillColor: "#b2d6f2",
+              data: this.props.boxPlotState.boxPlotData.map(
+                (boxData) => boxData as PointOptionsObject
+              ),
+              fillColor: theme.semanticColors.inputBackgroundChecked,
               name: localization.ModelAssessment.ModelOverview.BoxPlot
                 .boxPlotSeriesLabel,
+              tooltip: boxChartTooltipDefaultSetting,
               type: "boxplot"
             },
             {
-              data: outlierData,
+              data: this.props.boxPlotState.outlierData,
               name: localization.ModelAssessment.ModelOverview.BoxPlot
                 .outlierLabel,
               tooltip: {
-                pointFormatter() {
+                pointFormatter(): string {
                   return `${localization.ModelAssessment.ModelOverview.BoxPlot.outlierProbability}: <b>${this.y}</b>`;
                 }
               },
@@ -91,10 +93,42 @@ export class ProbabilityDistributionBoxChart extends React.Component<
             categories: selectedCohortNames
           },
           yAxis: {
-            title: { text: this.props.probabilityOption!.text }
+            title: { text: this.props.probabilityOption?.text }
           }
         }}
       />
     );
+  }
+
+  public calculateBoxDataIfNeeded(
+    prevProps?: IProbabilityDistributionBoxChartProps
+  ): void {
+    if (
+      this.props.boxPlotState.boxPlotData.length === 0 ||
+      prevProps === undefined ||
+      !_.isEqual(prevProps.selectedCohorts, this.props.selectedCohorts) ||
+      !_.isEqual(
+        prevProps.probabilityOption?.id,
+        this.props.probabilityOption?.id
+      )
+    ) {
+      const boxPlotData = this.props.selectedCohorts.map(
+        (cohort: ErrorCohort, index: number) => {
+          return calculateBoxPlotDataFromErrorCohort(
+            cohort,
+            index,
+            this.props.probabilityOption?.key || "",
+            this.props.probabilityOption?.text,
+            this.context.requestBoxPlotDistribution,
+            ifEnableLargeData(this.context.dataset)
+          );
+        }
+      );
+      setOutlierDataIfChanged(
+        boxPlotData,
+        this.props.boxPlotState,
+        this.props.onBoxPlotStateUpdate
+      );
+    }
   }
 }

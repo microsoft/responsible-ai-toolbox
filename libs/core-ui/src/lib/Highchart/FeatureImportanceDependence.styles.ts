@@ -4,8 +4,9 @@
 import {
   IProcessedStyleSet,
   mergeStyleSets,
-  IStyle
-} from "office-ui-fabric-react";
+  IStyle,
+  getTheme
+} from "@fluentui/react";
 
 export interface IDependencePlotStyles {
   boldText: IStyle;
@@ -27,11 +28,14 @@ export interface IDependencePlotStyles {
 
 export const dependencePlotStyles: () => IProcessedStyleSet<IDependencePlotStyles> =
   () => {
+    const theme = getTheme();
+
     return mergeStyleSets<IDependencePlotStyles>({
       boldText: {
         fontWeight: "600"
       },
       chart: {
+        backgroundColor: theme.semanticColors.bodyBackground,
         width: "95%"
       },
       chartWithAxes: {

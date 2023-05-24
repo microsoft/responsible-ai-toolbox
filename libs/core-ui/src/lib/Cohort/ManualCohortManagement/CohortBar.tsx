@@ -1,16 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
 import {
   DetailsList,
   IColumn,
-  Link,
   Panel,
   SelectionMode,
   Stack,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { ICohort } from "../../Interfaces/ICohort";
@@ -20,11 +19,13 @@ import { Cohort } from "../Cohort";
 
 import { CohortEditor } from "./CohortEditor";
 import { CohortList } from "./CohortList";
+import { CohortName } from "./CohortName";
 
 export interface ICohortBarProps {
   cohorts: Cohort[];
   jointDataset: JointDataset;
   modelMetadata: IExplanationModelMetadata;
+  features: unknown[][] | undefined;
   onCohortsChange(cohorts: Cohort[]): void;
 }
 interface ICohortBarState {
@@ -90,6 +91,9 @@ export class CohortBar extends React.Component<
         {this.state?.showEditPanel &&
           (cohortForEdit ? (
             <CohortEditor
+              isFromExplanation
+              metadata={this.props.modelMetadata}
+              features={this.props.features}
               jointDataset={this.props.jointDataset}
               filterList={cohortForEdit.filterList}
               cohortName={cohortForEdit.cohortName}
@@ -187,19 +191,12 @@ export class CohortBar extends React.Component<
       return <span />;
     }
     return (
-      <Stack>
-        <Text>{cohort.name}</Text>
-        <Stack horizontal tokens={{ childrenGap: "s1" }}>
-          {index && (
-            <Link onClick={this.editCohort.bind(this, index)}>
-              {localization.Interpret.CohortBanner.editCohort}
-            </Link>
-          )}
-          <Link onClick={this.cloneAndEditCohort.bind(this, index)}>
-            {localization.Interpret.CohortBanner.duplicateCohort}
-          </Link>
-        </Stack>
-      </Stack>
+      <CohortName
+        cohort={cohort}
+        index={index}
+        cloneAndEditCohort={this.cloneAndEditCohort}
+        editCohort={this.editCohort}
+      />
     );
   };
 

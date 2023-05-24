@@ -5,6 +5,8 @@ import { ITheme } from "@fluentui/react";
 
 import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 
+import { AxisTypes } from "./IGenericChartProps";
+
 export interface IDependenceData {
   x: number;
   y: number;
@@ -15,16 +17,18 @@ export function getDependencyChartOptions(
   data: IDependenceData[],
   xLabels: string[] | undefined,
   pointColor: string,
+  logarithmicScaling: boolean,
   theme?: ITheme
 ): IHighchartsConfig {
   const colorTheme = {
     axisColor: theme?.palette.neutralPrimary,
     axisGridColor: theme?.palette.neutralLight,
-    backgroundColor: theme?.palette.white,
+    backgroundColor: theme?.semanticColors.bodyBackground,
     fontColor: theme?.semanticColors.bodyText
   };
   return {
     chart: {
+      backgroundColor: colorTheme.backgroundColor,
       type: "scatter",
       zoomType: "xy"
     },
@@ -43,7 +47,7 @@ export function getDependencyChartOptions(
         },
         tooltip: {
           headerFormat: "",
-          pointFormat: `{point.customData.template}`
+          pointFormat: "{point.customData.template}"
         }
       }
     },
@@ -57,7 +61,8 @@ export function getDependencyChartOptions(
       }
     ],
     xAxis: {
-      categories: xLabels
+      categories: xLabels,
+      type: logarithmicScaling ? AxisTypes.Logarithmic : undefined
     }
   };
 }

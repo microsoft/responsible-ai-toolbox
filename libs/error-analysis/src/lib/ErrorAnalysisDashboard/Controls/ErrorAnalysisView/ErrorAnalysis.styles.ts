@@ -6,13 +6,17 @@ import {
   mergeStyleSets,
   IProcessedStyleSet,
   getTheme
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { flexLgDown, fullLgDown, hideLgDown } from "@responsible-ai/core-ui";
 
 export interface IErrorAnalysisStyles {
+  errorAnalysisView: IStyle;
   errorAnalysis: IStyle;
   cohortInfo: IStyle;
   featureList: IStyle;
   errorAnalysisWrapper: IStyle;
+  separator: IStyle;
+  pivotLabelWrapper: IStyle;
 }
 
 export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles> =
@@ -21,7 +25,8 @@ export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles>
     return mergeStyleSets<IErrorAnalysisStyles>({
       cohortInfo: {
         overflow: "auto",
-        width: "40%"
+        width: "40%",
+        ...fullLgDown
       },
       errorAnalysis: {
         color: theme.semanticColors.bodyText,
@@ -29,9 +34,29 @@ export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles>
         padding: "0 20px 20px",
         width: "100%"
       },
-      errorAnalysisWrapper: { paddingLeft: "15px" },
+      errorAnalysisView: flexLgDown,
+      errorAnalysisWrapper: {
+        marginTop: "10px",
+        selectors: {
+          "@media screen and (max-width: 479px)": {
+            flexWrap: "wrap"
+          }
+        }
+      },
       featureList: {
-        padding: "16px 0 10px 0"
-      }
+        padding: "16px 0 10px 0",
+        selectors: {
+          "@media screen and (max-width: 479px)": {
+            paddingLeft: "15px"
+          }
+        }
+      },
+      pivotLabelWrapper: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "start",
+        padding: "0px 15px 15px"
+      },
+      separator: hideLgDown
     });
   };

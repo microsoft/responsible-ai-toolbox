@@ -3,7 +3,7 @@
 
 """Defines the Counterfactual Manager class."""
 import json
-import pickle
+import uuid
 import warnings
 from pathlib import Path
 from typing import Any, List, Optional, Union
@@ -14,19 +14,21 @@ import numpy as np
 import pandas as pd
 from dice_ml import Dice
 from dice_ml.counterfactual_explanations import CounterfactualExplanations
+from dice_ml.explainer_interfaces.explainer_base import ExplainerBase
 
+from raiutils.exceptions import UserConfigValidationException
+from raiutils.models import ModelTask
 from responsibleai._config.base_config import BaseConfig
 from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._interfaces import CounterfactualData
 from responsibleai._internal.constants import (CounterfactualManagerKeys,
-                                               ListProperties, ManagerNames)
+                                               FileFormats, ListProperties,
+                                               ManagerNames)
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.exceptions import (DuplicateManagerConfigException,
-                                      SchemaErrorException,
-                                      UserConfigValidationException)
+                                      SchemaErrorException)
 from responsibleai.managers.base_manager import BaseManager
-from responsibleai.rai_insights.constants import ModelTask
 from responsibleai.utils import _measure_time
 
 
@@ -117,6 +119,7 @@ class CounterfactualConfig(BaseConfig):
     METHOD = 'method'
     CONTINUOUS_FEATURES = 'continuous_features'
     TOTAL_CFS = 'total_CFs'
+    ID = 'id'
     DESIRED_RANGE = 'desired_range'
     DESIRED_CLASS = 'desired_class'
     PERMITTED_RANGE = 'permitted_range'
@@ -128,18 +131,23 @@ class CounterfactualConfig(BaseConfig):
     HAS_COMPUTATION_FAILED = 'has_computation_failed'
     FAILURE_REASON = 'failure_reason'
 
-    CONFIG_FILE_NAME = 'config.json'
-    RESULT_FILE_NAME = 'result.json'
-    EXPLAINER_FILE_NAME = 'explainer.pkl'
+    CONFIG_FILE_NAME = f'config{FileFormats.JSON}'
+    RESULT_FILE_NAME = f'result{FileFormats.JSON}'
+    EXPLAINER_FILE_NAME = f'explainer{FileFormats.PKL}'
 
     def __init__(self, method, continuous_features, total_CFs,
                  desired_class=CounterfactualConstants.OPPOSITE,
                  desired_range=None, permitted_range=None,
-                 features_to_vary=None, feature_importance=False):
+                 features_to_vary=None, feature_importance=False,
+                 id=None):
         super(CounterfactualConfig, self).__init__()
         self.method = method
         self.continuous_features = continuous_features
         self.total_CFs = total_CFs
+        if id is None:
+            self.id = str(uuid.uuid4())
+        else:
+            self.id = id
         self.desired_range = desired_range
         self.desired_class = desired_class
         self.permitted_range = permitted_range
@@ -178,6 +186,7 @@ class CounterfactualConfig(BaseConfig):
             CounterfactualConfig.METHOD: self.method,
             CounterfactualConfig.CONTINUOUS_FEATURES: self.continuous_features,
             CounterfactualConfig.TOTAL_CFS: self.total_CFs,
+            CounterfactualConfig.ID: self.id,
             CounterfactualConfig.DESIRED_RANGE: self.desired_range,
             CounterfactualConfig.DESIRED_CLASS: self.desired_class,
             CounterfactualConfig.PERMITTED_RANGE: self.permitted_range,
@@ -211,7 +220,8 @@ class CounterfactualConfig(BaseConfig):
             features_to_vary=cf_config[
                 CounterfactualConfig.FEATURES_TO_VARY],
             feature_importance=cf_config[
-                CounterfactualConfig.FEATURE_IMPORTANCE])
+                CounterfactualConfig.FEATURE_IMPORTANCE],
+            id=cf_config[CounterfactualConfig.ID])
 
         return counterfactual_config
 
@@ -256,36 +266,37 @@ class CounterfactualConfig(BaseConfig):
 
             for counterfactual_examples_key in cf_schema_keys:
                 file_path = (data_directory_path /
-                             (counterfactual_examples_key + '.json'))
+                             (counterfactual_examples_key + FileFormats.JSON))
                 with open(file_path, 'w') as file_path:
                     json.dump(
                         counterfactuals_dict[counterfactual_examples_key],
                         file_path)
 
-        file_path = (data_directory_path /
-                     (CounterfactualConfig.HAS_COMPUTATION_FAILED + '.json'))
+        file_path = data_directory_path / (
+            CounterfactualConfig.HAS_COMPUTATION_FAILED + FileFormats.JSON)
         with open(file_path, 'w') as file_path:
             json.dump(
                 cf_result[CounterfactualConfig.HAS_COMPUTATION_FAILED],
                 file_path)
 
         file_path = (data_directory_path /
-                     (CounterfactualConfig.FAILURE_REASON + '.json'))
+                     (CounterfactualConfig.FAILURE_REASON + FileFormats.JSON))
         with open(file_path, 'w') as file_path:
             json.dump(
                 cf_result[CounterfactualConfig.FAILURE_REASON],
                 file_path)
 
         file_path = (data_directory_path /
-                     (CounterfactualConfig.IS_COMPUTED + '.json'))
+                     (CounterfactualConfig.IS_COMPUTED + FileFormats.JSON))
         with open(file_path, 'w') as file_path:
             json.dump(
                 cf_result[CounterfactualConfig.IS_COMPUTED],
                 file_path)
 
     def load_result(self, data_directory_path):
-        metadata_file_path = (data_directory_path /
-                              (_CommonSchemaConstants.METADATA + '.json'))
+        metadata_file_path = (
+            data_directory_path /
+            (_CommonSchemaConstants.METADATA + FileFormats.JSON))
 
         if metadata_file_path.exists():
             with open(metadata_file_path, 'r') as result_file:
@@ -298,8 +309,9 @@ class CounterfactualConfig(BaseConfig):
 
             counterfactual_examples_dict = {}
             for counterfactual_examples_key in cf_schema_keys:
-                result_path = (data_directory_path /
-                               (counterfactual_examples_key + '.json'))
+                result_path = (
+                    data_directory_path /
+                    (counterfactual_examples_key + FileFormats.JSON))
                 with open(result_path, 'r') as result_file:
                     counterfactual_examples_dict[
                         counterfactual_examples_key] = json.load(result_file)
@@ -310,18 +322,21 @@ class CounterfactualConfig(BaseConfig):
         else:
             self.counterfactual_obj = None
 
-        result_path = (data_directory_path /
-                       (CounterfactualConfig.HAS_COMPUTATION_FAILED + '.json'))
+        result_path = (
+            data_directory_path /
+            (CounterfactualConfig.HAS_COMPUTATION_FAILED + FileFormats.JSON))
         with open(result_path, 'r') as result_file:
             self.has_computation_failed = json.load(result_file)
 
-        result_path = (data_directory_path /
-                       (CounterfactualConfig.FAILURE_REASON + '.json'))
+        result_path = (
+            data_directory_path /
+            (CounterfactualConfig.FAILURE_REASON + FileFormats.JSON))
         with open(result_path, 'r') as result_file:
             self.failure_reason = json.load(result_file)
 
-        result_path = (data_directory_path /
-                       (CounterfactualConfig.IS_COMPUTED + '.json'))
+        result_path = (
+            data_directory_path /
+            (CounterfactualConfig.IS_COMPUTED + FileFormats.JSON))
         with open(result_path, 'r') as result_file:
             self.is_computed = json.load(result_file)
 
@@ -329,8 +344,7 @@ class CounterfactualConfig(BaseConfig):
         file_path = (explainer_directory_path /
                      CounterfactualConfig.EXPLAINER_FILE_NAME)
         try:
-            with open(file_path, 'wb') as file_path:
-                pickle.dump(self.explainer, file_path)
+            self.explainer.serialize_explainer(file_path)
         except Exception:
             pass
 
@@ -338,8 +352,7 @@ class CounterfactualConfig(BaseConfig):
         file_path = (explainer_directory_path /
                      CounterfactualConfig.EXPLAINER_FILE_NAME)
         try:
-            with open(file_path, 'rb') as file_path:
-                self.explainer = pickle.load(file_path)
+            self.explainer = ExplainerBase.deserialize_explainer(file_path)
         except Exception:
             pass
 
@@ -392,9 +405,10 @@ class CounterfactualManager(BaseManager):
         dice_data = dice_ml.Data(dataframe=self._train,
                                  continuous_features=continuous_features,
                                  outcome_name=self._target_column)
-        model_type = CounterfactualConstants.CLASSIFIER \
-            if self._task_type == ModelTask.CLASSIFICATION else \
-            CounterfactualConstants.REGRESSOR
+        model_type = (
+            CounterfactualConstants.CLASSIFIER
+            if self._task_type == ModelTask.CLASSIFICATION else
+            CounterfactualConstants.REGRESSOR)
         dice_model = dice_ml.Model(model=self._model,
                                    backend=CounterfactualConstants.SKLEARN,
                                    model_type=model_type)
@@ -569,8 +583,7 @@ class CounterfactualManager(BaseManager):
                     jsonschema.validate(
                         json.loads(counterfactual_obj.to_json()), schema)
 
-                    cf_config.counterfactual_obj = \
-                        counterfactual_obj
+                    cf_config.counterfactual_obj = counterfactual_obj
 
                     print('Current Status: Generated {0} counterfactuals'
                           ' for {1} samples.'.format(
@@ -580,8 +593,68 @@ class CounterfactualManager(BaseManager):
                     cf_config.failure_reason = str(e)
                     raise e
 
+    def request_counterfactuals(self, query_id: str, data: Any):
+        """Return the counterfactuals for a given point.
+
+        :param query_id: The query id for finding the
+                         counterfactual config.
+        :type query_id: str
+        :param data: The data point for which the counterfactuals
+                     need to be generated.
+        :type data: Any
+        :return: An object of type CounterfactualData with
+                 counterfactuals for the given data point.
+        :rtype: CounterfactualData
+        """
+        if not isinstance(data, pd.DataFrame):
+            raise UserConfigValidationException(
+                'Data is of type {0} but it must be '
+                'a pandas DataFrame.'.format(type(data)))
+
+        if data.shape[0] > 1:
+            raise UserConfigValidationException(
+                'Only one row of data is allowed for '
+                'counterfactual generation.')
+
+        query_cf_config = None
+        for cf_config in self._counterfactual_config_list:
+            if cf_config.id == query_id:
+                query_cf_config = cf_config
+                break
+
+        if query_cf_config is None:
+            raise UserConfigValidationException(
+                'No counterfactual config found for id {0}.'.format(
+                    query_id))
+
+        if not query_cf_config.feature_importance:
+            counterfactual_obj = \
+                query_cf_config.explainer.generate_counterfactuals(
+                    data, total_CFs=query_cf_config.total_CFs,
+                    desired_class=query_cf_config.desired_class,
+                    desired_range=query_cf_config.desired_range,
+                    features_to_vary=query_cf_config.features_to_vary,
+                    permitted_range=query_cf_config.permitted_range)
+        else:
+            counterfactual_obj = \
+                query_cf_config.explainer.local_feature_importance(
+                    data,
+                    total_CFs=query_cf_config.total_CFs,
+                    desired_class=query_cf_config.desired_class,
+                    desired_range=query_cf_config.desired_range,
+                    features_to_vary=query_cf_config.features_to_vary,
+                    permitted_range=query_cf_config.permitted_range)
+
+        # Validate the serialized output against schema
+        schema = CounterfactualManager._get_counterfactual_schema(
+            version=counterfactual_obj.metadata['version'])
+        jsonschema.validate(
+            json.loads(counterfactual_obj.to_json()), schema)
+
+        return self._get_counterfactual(query_cf_config, counterfactual_obj)
+
     def get(self, failed_to_compute=False):
-        """Return the computed counterfactual examples objects or failure reason.
+        """Return computed counterfactual examples objects or failure reason.
 
         :param failed_to_compute: Get the failure reasons if counterfactual
                                   examples failed to compute.
@@ -639,12 +712,23 @@ class CounterfactualManager(BaseManager):
         :return: A array of CounterfactualData.
         :rtype: List[CounterfactualData]
         """
-        return [
-            self._get_counterfactual(i) for i in self.get()]
+        serialized_counterfactual_data_list = []
+        for counterfactual_config in self._counterfactual_config_list:
+            serialized_counterfactual_data_list.append(
+                self._get_counterfactual(counterfactual_config))
 
-    def _get_counterfactual(self, counterfactual):
+        return serialized_counterfactual_data_list
+
+    def _get_counterfactual(self, counterfactual_config,
+                            counterfactual_object=None):
         cfdata = CounterfactualData()
-        json_data = json.loads(counterfactual.to_json())
+
+        if counterfactual_object is None:
+            json_data = json.loads(
+                counterfactual_config.counterfactual_obj.to_json())
+        else:
+            json_data = json.loads(counterfactual_object.to_json())
+
         cfdata.cfs_list = json_data["cfs_list"]
         cfdata.feature_names = json_data["feature_names"]
         cfdata.feature_names_including_target = json_data[
@@ -654,6 +738,8 @@ class CounterfactualManager(BaseManager):
         cfdata.model_type = json_data["model_type"]
         cfdata.desired_class = json_data["desired_class"]
         cfdata.desired_range = json_data["desired_range"]
+        cfdata.id = counterfactual_config.id
+        cfdata.test_data = json_data["test_data"]
         return cfdata
 
     @property

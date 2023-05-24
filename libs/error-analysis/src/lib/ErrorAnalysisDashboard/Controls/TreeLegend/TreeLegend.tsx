@@ -1,14 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ErrorCohort, Metrics } from "@responsible-ai/core-ui";
+import { DefaultButton, IStackTokens, Stack, Text } from "@fluentui/react";
+import { ErrorCohort, ITelemetryEvent, Metrics } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  DefaultButton,
-  IStackTokens,
-  Stack,
-  Text
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { ColorPalette } from "../../ColorPalette";
@@ -32,6 +27,7 @@ export interface ITreeLegendProps {
   selectedCohort: ErrorCohort;
   setMetric: (metric: string) => void;
   showCohortName: boolean;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 const stackTokens: IStackTokens = { childrenGap: 5 };
@@ -56,6 +52,7 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
             <MetricSelector
               isEnabled={this.props.isEnabled}
               setMetric={this.props.setMetric}
+              telemetryHook={this.props.telemetryHook}
             />
             <DefaultButton
               className={classNames.button}
@@ -67,7 +64,7 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
               }
             />
           </Stack>
-          <Stack>
+          <Stack className={classNames.metric}>
             <Stack horizontal>
               <div className={classNames.metricBarBlack} />
               <Stack tokens={cellTokens}>
@@ -122,7 +119,7 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
               </g>
             </svg>
           </Stack>
-          <Stack>
+          <Stack className={classNames.metric}>
             <Stack horizontal>
               <div
                 className={

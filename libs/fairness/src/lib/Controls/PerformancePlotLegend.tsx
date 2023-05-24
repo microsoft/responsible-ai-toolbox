@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Stack } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import { chartColors } from "@responsible-ai/mlchartlib";
-import { Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { SharedStyles } from "../Shared.styles";
 
-import { IPerformancePlotLegendProps } from "./PerformancePlot";
+import { IPerformancePlotLegendProps } from "./IPerformancePlotLegendProps";
 import { PerformancePlotStyles } from "./PerformancePlot.styles";
 
 export class PerformancePlotLegend extends React.PureComponent<IPerformancePlotLegendProps> {

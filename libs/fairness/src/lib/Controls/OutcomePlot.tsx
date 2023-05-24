@@ -1,10 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme, Stack } from "@fluentui/react";
 import { IBounds, PredictionTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { AccessibleChart, chartColors } from "@responsible-ai/mlchartlib";
-import { getTheme, Stack } from "office-ui-fabric-react";
+import {
+  AccessibleChart,
+  chartColors,
+  IData
+} from "@responsible-ai/mlchartlib";
 import { Datum } from "plotly.js";
 import React from "react";
 
@@ -39,11 +43,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
     const barPlotlyProps = new BarPlotlyProps();
     const theme = getTheme();
     const sharedStyles = SharedStyles();
-    const outcomeKey =
-      this.props.dashboardContext.modelMetadata.PredictionType ===
-      PredictionTypes.BinaryClassification
-        ? "selection_rate"
-        : "average";
+    const outcomeKey = this.getOutcomeKey();
     const outcomeMetric = performanceOptions[outcomeKey];
 
     let outcomeChartCalloutHelpBarStrings: string[] = [];
@@ -57,45 +57,8 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.BinaryClassification
     ) {
-      barPlotlyProps.data = [
-        {
-          fillcolor: chartColors[0],
-          hoverinfo: "skip",
-          name: outcomeMetric.title,
-          orientation: "h",
-          text: this.props.metrics.outcomes.bins.map((num) =>
-            FormatMetrics.formatNumbers(num, "selection_rate", false, 2)
-          ),
-          textposition: "inside",
-          type: "bar",
-          x: this.props.metrics.outcomes.bins,
-          y: groupNamesWithBuffer
-        }
-      ];
-      if (this.props.errorPickerProps.errorBarsEnabled) {
-        barPlotlyProps.data[0].error_x = {
-          // `array` and `arrayminus` are error bounds as described in Plotly API
-          array: this.props.metrics.outcomes.binBounds?.map(
-            (binBound, index) => {
-              if (this.props.metrics.outcomes?.bins[index] !== undefined) {
-                return binBound.upper - this.props.metrics.outcomes.bins[index]; // convert from bounds to relative error
-              }
-              return 0;
-            }
-          ) || [0],
-          arrayminus: this.props.metrics.outcomes.binBounds?.map(
-            (binBound, index) => {
-              if (this.props.metrics.outcomes?.bins[index] !== undefined) {
-                return this.props.metrics.outcomes.bins[index] - binBound.lower; // convert from bounds to relative error
-              }
-              return 0;
-            }
-          ) || [0],
-          type: "data",
-          visible: true
-        };
-        barPlotlyProps.data[0].textposition = "none";
-      }
+      barPlotlyProps.data =
+        this.getBinaryClassificationData(groupNamesWithBuffer);
       if (barPlotlyProps.layout?.xaxis) {
         barPlotlyProps.layout.xaxis.tickformat = ",.0%";
       }
@@ -249,4 +212,54 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
       </Stack>
     );
   }
+  private getOutcomeKey = (): string => {
+    return this.props.dashboardContext.modelMetadata.PredictionType ===
+      PredictionTypes.BinaryClassification
+      ? "selection_rate"
+      : "average";
+  };
+  private getBinaryClassificationData = (
+    groupNamesWithBuffer: string[]
+  ): IData[] => {
+    const outcomeKey = this.getOutcomeKey();
+    const outcomeMetric = performanceOptions[outcomeKey];
+    const data: IData[] = [
+      {
+        fillcolor: chartColors[0],
+        hoverinfo: "skip",
+        name: outcomeMetric.title,
+        orientation: "h",
+        text: this.props.metrics.outcomes.bins.map((num) =>
+          FormatMetrics.formatNumbers(num, "selection_rate", false, 2)
+        ),
+        textposition: "inside",
+        type: "bar",
+        x: this.props.metrics.outcomes.bins,
+        y: groupNamesWithBuffer
+      }
+    ];
+    if (this.props.errorPickerProps.errorBarsEnabled) {
+      data[0].error_x = {
+        // `array` and `arrayminus` are error bounds as described in Plotly API
+        array: this.props.metrics.outcomes.binBounds?.map((binBound, index) => {
+          if (this.props.metrics.outcomes?.bins[index] !== undefined) {
+            return binBound.upper - this.props.metrics.outcomes.bins[index]; // convert from bounds to relative error
+          }
+          return 0;
+        }) || [0],
+        arrayminus: this.props.metrics.outcomes.binBounds?.map(
+          (binBound, index) => {
+            if (this.props.metrics.outcomes?.bins[index] !== undefined) {
+              return this.props.metrics.outcomes.bins[index] - binBound.lower; // convert from bounds to relative error
+            }
+            return 0;
+          }
+        ) || [0],
+        type: "data",
+        visible: true
+      };
+      data[0].textposition = "none";
+    }
+    return data;
+  };
 }

@@ -2,23 +2,28 @@
 // Licensed under the MIT License.
 
 import {
-  Cohort,
-  IExplanationModelMetadata,
-  ModelTypes,
-  WeightVectorOption,
-  ChartTypes,
-  LabelWithCallout
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import { Dictionary } from "lodash";
-import {
   ChoiceGroup,
   Dropdown,
   IChoiceGroupOption,
   IDropdownOption,
   Stack,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  Cohort,
+  IExplanationModelMetadata,
+  IsClassifier,
+  WeightVectorOption,
+  ChartTypes,
+  LabelWithCallout,
+  ITelemetryEvent,
+  TelemetryEventName,
+  ifEnableLargeData,
+  ModelAssessmentContext,
+  defaultModelAssessmentContext
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
+import { Dictionary } from "lodash";
 import React from "react";
 
 import { globalTabStyles } from "./GlobalExplanationTab.styles";
@@ -34,6 +39,8 @@ export interface ISidePanelProps {
   sortingSeriesIndex: number;
   cohorts: Cohort[];
   chartType: ChartTypes;
+  loading?: boolean;
+  telemetryHook?: (message: ITelemetryEvent) => void;
   onWeightChange(option: WeightVectorOption): void;
   setSortIndex(option: number): void;
   toggleActivation(index: number): void;
@@ -46,6 +53,10 @@ export class SidePanel extends React.Component<
   ISidePanelProps,
   ISidePanelState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
+
   private chartOptions: IChoiceGroupOption[] = [
     {
       key: ChartTypes.Bar,
@@ -56,6 +67,14 @@ export class SidePanel extends React.Component<
       text: localization.Interpret.FeatureImportanceWrapper.boxText
     }
   ];
+
+  private readonly largeDataChartOptions: IChoiceGroupOption[] = [
+    {
+      key: ChartTypes.Bar,
+      text: localization.Interpret.FeatureImportanceWrapper.barText
+    }
+  ];
+
   public constructor(props: ISidePanelProps) {
     super(props);
     this.state = {
@@ -67,23 +86,24 @@ export class SidePanel extends React.Component<
     return (
       <Stack className={classNames.legendAndSort}>
         <Dropdown
-          label={localization.Interpret.GlobalTab.sortBy}
+          label={localization.Interpret.GlobalTab.sortByCohort}
           selectedKey={this.props.sortingSeriesIndex}
           options={this.props.cohortSeries.map((row, rowIndex) => ({
             key: rowIndex,
             text: row.name
           }))}
           onChange={this.onSortChange}
+          disabled={this.props.loading}
         />
         <ChoiceGroup
           label={localization.Interpret.DatasetExplorer.chartType}
           selectedKey={this.props.chartType}
-          options={this.chartOptions}
+          options={this.getChartOptions()}
           onChange={this.onChartTypeChange}
           id="ChartTypeSelection"
+          disabled={this.props.loading}
         />
-        {(this.props.metadata.modelType === ModelTypes.Multiclass ||
-          this.props.metadata.modelType === ModelTypes.Binary) &&
+        {IsClassifier(this.props.metadata.modelType) &&
           this.state.weightOptions && (
             <div>
               <LabelWithCallout
@@ -91,6 +111,10 @@ export class SidePanel extends React.Component<
                   localization.Interpret.CrossClass.crossClassWeights
                 }
                 label={localization.Interpret.GlobalTab.weightOptions}
+                telemetryHook={this.props.telemetryHook}
+                calloutEventName={
+                  TelemetryEventName.FeatureImportancesCrossClassWeightsCalloutClick
+                }
               >
                 <Text>{localization.Interpret.CrossClass.overviewInfo}</Text>
                 <ul>
@@ -111,6 +135,10 @@ export class SidePanel extends React.Component<
                 options={this.state.weightOptions}
                 selectedKey={this.props.selectedWeightVector}
                 onChange={this.setWeightOption}
+                disabled={this.props.loading}
+                ariaLabel={
+                  localization.Interpret.GlobalTab.weightOptionsDropdown
+                }
               />
             </div>
           )}
@@ -137,10 +165,7 @@ export class SidePanel extends React.Component<
   };
 
   private getWeightOptions(): IDropdownOption[] | undefined {
-    if (
-      this.props.metadata.modelType === ModelTypes.Multiclass ||
-      this.props.metadata.modelType === ModelTypes.Binary
-    ) {
+    if (IsClassifier(this.props.metadata.modelType)) {
       return this.props.weightOptions.map((option) => {
         return {
           key: option,
@@ -160,4 +185,12 @@ export class SidePanel extends React.Component<
       this.props.onWeightChange(newIndex);
     }
   };
+
+  private getChartOptions(): IChoiceGroupOption[] {
+    if (ifEnableLargeData(this.context.dataset)) {
+      return this.largeDataChartOptions;
+    }
+
+    return this.chartOptions;
+  }
 }

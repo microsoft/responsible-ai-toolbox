@@ -9,7 +9,8 @@ import uuid
 from html.parser import HTMLParser
 
 from rai_core_flask import FlaskHelper  # , environment_detector
-from responsibleai.serialization_utilities import serialize_json_safe
+from raiutils.data_processing import serialize_json_safe
+from raiwidgets.interfaces import WidgetRequestResponseConstants
 
 invalid_feature_flights_error = \
     "feature_flights should be of type string. Separate multiple flights " \
@@ -103,6 +104,18 @@ class Dashboard(object):
         def visual():
             return self.load_index()
         self.add_url_rule(visual, '/', methods=["GET"])
+
+        def get_config():
+            return json.dumps({
+                WidgetRequestResponseConstants.data: self.config
+            })
+        self.add_url_rule(get_config, '/config', methods=["POST"])
+
+        def get_model_data():
+            return json.dumps({
+                WidgetRequestResponseConstants.data: self.model_data},
+                default=serialize_json_safe)
+        self.add_url_rule(get_model_data, '/model_data', methods=["POST"])
         return
 
     @staticmethod

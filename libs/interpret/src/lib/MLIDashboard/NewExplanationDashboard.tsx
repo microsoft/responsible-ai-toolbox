@@ -2,6 +2,16 @@
 // Licensed under the MIT License.
 
 import {
+  IPivotItemProps,
+  PivotItem,
+  Pivot,
+  MessageBar,
+  MessageBarType,
+  Text,
+  Stack,
+  getTheme
+} from "@fluentui/react";
+import {
   WeightVectorOption,
   Cohort,
   ModelAssessmentContext,
@@ -13,17 +23,6 @@ import {
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import {
-  IPivotItemProps,
-  PivotItem,
-  Pivot,
-  PivotLinkSize,
-  MessageBar,
-  MessageBarType,
-  Text,
-  Stack,
-  getTheme
-} from "office-ui-fabric-react";
 import React from "react";
 
 import {
@@ -89,9 +88,10 @@ export class NewExplanationDashboard extends React.PureComponent<
             this.state.cohorts[0],
             this.state.jointDataset
           ),
+          columnRanges: this.state.columnRanges,
           dataset: {} as IDataset,
-          deleteCohort: () => undefined,
-          editCohort: () => undefined,
+          deleteCohort: (): void => undefined,
+          editCohort: (): void => undefined,
           errorCohorts: this.state.cohorts.map(
             (cohort) => new ErrorCohort(cohort, this.state.jointDataset)
           ),
@@ -107,6 +107,7 @@ export class NewExplanationDashboard extends React.PureComponent<
             this.state.selectedCohort,
             this.state.jointDataset
           ),
+          setAsCategorical: this.setAsCategorical,
           shiftErrorCohort: this.shiftErrorCohort,
           telemetryHook:
             this.props.telemetryHook ||
@@ -155,6 +156,7 @@ export class NewExplanationDashboard extends React.PureComponent<
                   onCohortsChange={this.onCohortsChange}
                   jointDataset={this.state.jointDataset}
                   modelMetadata={this.state.modelMetadata}
+                  features={this.props.testData}
                 />
               </Stack.Item>
               <Stack.Item grow>
@@ -162,9 +164,10 @@ export class NewExplanationDashboard extends React.PureComponent<
                   <Pivot
                     selectedKey={this.state.activeGlobalTab}
                     onLinkClick={this.handleGlobalTabClick}
-                    linkSize={PivotLinkSize.normal}
+                    linkSize={"normal"}
                     headersOnly
                     id="DashboardPivot"
+                    overflowBehavior="menu"
                   >
                     {this.pivotItems.map((props) => (
                       <PivotItem key={props.itemKey} {...props} />
@@ -203,6 +206,17 @@ export class NewExplanationDashboard extends React.PureComponent<
       </ModelAssessmentContext.Provider>
     );
   }
+
+  private setAsCategorical = (
+    column: string,
+    treatAsCategorical: boolean
+  ): void => {
+    if (this.state.columnRanges) {
+      const ranges = this.state.columnRanges;
+      ranges[column].treatAsCategorical = treatAsCategorical;
+      this.setState({ columnRanges: ranges });
+    }
+  };
 
   private async validatePredictMethod(): Promise<void> {
     if (

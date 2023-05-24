@@ -5,10 +5,11 @@ import {
   ErrorCohort,
   JointDataset,
   IFilter,
-  ModelTypes,
+  IsClassifier,
   FilterMethods,
   Cohort,
-  IPreBuiltFilter
+  IPreBuiltFilter,
+  CohortSource
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 
@@ -31,7 +32,7 @@ export function processPreBuiltCohort(
   if (props.cohortData) {
     for (const preBuiltCohort of props.cohortData) {
       const filterList: IFilter[] = [];
-      for (const preBuiltCohortFilter of preBuiltCohort.cohort_filter_list) {
+      preBuiltCohort.cohort_filter_list.forEach((preBuiltCohortFilter) => {
         switch (preBuiltCohortFilter.column) {
           case CohortColumnNames.PredictedY: {
             const filter = translatePreBuiltCohortFilterForTarget(
@@ -93,10 +94,12 @@ export function processPreBuiltCohort(
             break;
           }
         }
-      }
+      });
       const errorCohortEntry = new ErrorCohort(
         new Cohort(preBuiltCohort.name, jointDataset, filterList),
-        jointDataset
+        jointDataset,
+        undefined,
+        CohortSource.Prebuilt
       );
       errorCohortList.push(errorCohortEntry);
     }
@@ -113,10 +116,7 @@ function translatePreBuiltCohortFilterForTarget(
   if (cohortColumnName === CohortColumnNames.TrueY) {
     filterColumnName = JointDataset.TrueYLabel;
   }
-  if (
-    jointDataset.getModelType() === ModelTypes.Multiclass ||
-    jointDataset.getModelType() === ModelTypes.Binary
-  ) {
+  if (IsClassifier(jointDataset.getModelType())) {
     const modelClasses = jointDataset.getModelClasses();
     const index = preBuiltCohortFilter.arg
       .map((modelClass) => modelClasses.indexOf(modelClass))
@@ -170,23 +170,11 @@ function translatePreBuiltCohortFilterForDataset(
   preBuiltCohortFilter: IPreBuiltFilter,
   jointDataset: JointDataset
 ): [IFilter | undefined, string | undefined] {
-  let jointDatasetFeatureName = undefined;
-  let userDatasetFeatureName = undefined;
-  for (jointDatasetFeatureName in jointDataset.metaDict) {
-    if (
-      jointDataset.metaDict[jointDatasetFeatureName].abbridgedLabel ===
-      preBuiltCohortFilter.column
-    ) {
-      userDatasetFeatureName =
-        jointDataset.metaDict[jointDatasetFeatureName].abbridgedLabel;
-      break;
-    }
-  }
+  const jointDatasetFeatureName = jointDataset.getJointDatasetFeatureName(
+    preBuiltCohortFilter.column
+  );
 
-  if (
-    jointDatasetFeatureName === undefined ||
-    userDatasetFeatureName === undefined
-  ) {
+  if (!jointDatasetFeatureName) {
     return [undefined, localization.Core.PreBuiltCohort.featureNameNotFound];
   }
 

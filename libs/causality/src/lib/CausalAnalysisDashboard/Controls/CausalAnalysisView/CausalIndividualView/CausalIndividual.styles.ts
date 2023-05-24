@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { descriptionMaxWidth } from "@responsible-ai/core-ui";
+import { IProcessedStyleSet, IStyle, mergeStyleSets } from "@fluentui/react";
 import {
-  IProcessedStyleSet,
-  IStyle,
-  mergeStyleSets
-} from "office-ui-fabric-react";
+  descriptionMaxWidth,
+  fullXlDown,
+  hideXlDown
+} from "@responsible-ai/core-ui";
 
 export interface ICausalIndividualStyles {
   aggregateChart: IStyle;
@@ -24,7 +24,8 @@ export const CausalIndividualStyles: () => IProcessedStyleSet<ICausalIndividualS
     return mergeStyleSets<ICausalIndividualStyles>({
       aggregateChart: {
         height: "100%",
-        width: "80%"
+        width: "80%",
+        ...fullXlDown
       },
       callout: {
         margin: "-5px 0 0 -15px"
@@ -38,6 +39,7 @@ export const CausalIndividualStyles: () => IProcessedStyleSet<ICausalIndividualS
         display: "inline-block",
         flex: "1",
         fontSize: 14,
+        ...hideXlDown,
         maxWidth: descriptionMaxWidth,
         textAlign: "left"
       },
@@ -51,7 +53,8 @@ export const CausalIndividualStyles: () => IProcessedStyleSet<ICausalIndividualS
       },
       individualTable: {
         marginTop: "0px !important",
-        width: "80%"
+        width: "80%",
+        ...fullXlDown
       },
       lasso: {
         display: "inline-block",

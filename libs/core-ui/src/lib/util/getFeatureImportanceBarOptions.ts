@@ -4,25 +4,24 @@
 import { ITheme } from "@fluentui/react";
 import { SeriesOptionsType } from "highcharts";
 
+import { getChartColors } from "../Highchart/ChartColors";
 import { IGlobalSeries } from "../Highchart/FeatureImportanceBar";
 import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
-
-import { FabricStyles } from "./FabricStyles";
 
 export function getFeatureImportanceBarOptions(
   sortArray: number[],
   unsortedX: string[],
   unsortedSeries: IGlobalSeries[],
   topK: number,
+  theme: ITheme,
   originX?: string[],
-  theme?: ITheme,
   onFeatureSelection?: (seriesIndex: number, featureIndex: number) => void
 ): IHighchartsConfig {
   const colorTheme = {
-    axisColor: theme?.palette.neutralPrimary,
-    axisGridColor: theme?.palette.neutralLight,
-    backgroundColor: theme?.palette.white,
-    fontColor: theme?.semanticColors.bodyText
+    axisColor: theme.palette.neutralPrimary,
+    axisGridColor: theme.palette.neutralLight,
+    backgroundColor: theme?.semanticColors.bodyBackground,
+    fontColor: theme.semanticColors.bodyText
   };
   const sortedIndexVector = sortArray;
   const xText = sortedIndexVector.map((i) => unsortedX[i]);
@@ -36,8 +35,9 @@ export function getFeatureImportanceBarOptions(
   const allData: any = [];
 
   unsortedSeries.forEach((series) => {
+    const chartColors = getChartColors(theme);
     allData.push({
-      color: FabricStyles.fabricColorPalette[series.colorIndex],
+      color: chartColors[series.colorIndex],
       customdata: sortedIndexVector.map((value, index) => {
         return {
           HoverText: xOriginText[index],
@@ -73,6 +73,7 @@ export function getFeatureImportanceBarOptions(
 
   return {
     chart: {
+      backgroundColor: colorTheme.backgroundColor,
       type: "column"
     },
     legend: {
@@ -83,7 +84,7 @@ export function getFeatureImportanceBarOptions(
         cursor: "pointer",
         point: {
           events: {
-            click() {
+            click(): void {
               if (onFeatureSelection === undefined) {
                 return;
               }

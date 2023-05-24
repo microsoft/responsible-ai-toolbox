@@ -2,12 +2,20 @@
 # Licensed under the MIT License.
 
 from enum import Enum
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Optional, Union
 
 
 class TaskType(str, Enum):
     CLASSIFICATION = 'classification'
     REGRESSION = 'regression'
+    FORECASTING = 'forecasting'
+
+
+class TabularDatasetMetadata:
+    is_large_data_scenario: bool
+    use_entire_test_data: bool
+    feature_ranges: List[Dict[str, Any]]
+    num_rows: int
 
 
 class Dataset:
@@ -20,6 +28,15 @@ class Dataset:
     class_names: List[str]
     categorical_features: List[str]
     target_column: str
+    is_large_data_scenario: bool
+    use_entire_test_data: bool
+    feature_metadata: Optional[Dict[str, Any]]
+    tabular_dataset_metadata: Optional[TabularDatasetMetadata]
+    data_balance_measures: Dict[str, Any]
+    images: Optional[List[str]]
+    index: Optional[List[str]]
+    object_detection_true_y: Optional[List]
+    object_detection_predicted_y: Optional[List]
 
 
 class BoundedCoordinates:
@@ -41,9 +58,15 @@ class FeatureImportance:
     featureNames: List[str]
 
 
+class TextFeatureImportance:
+    localExplanations: List
+    text: List[str]
+
+
 class PrecomputedExplanations:
     localFeatureImportance: FeatureImportance
     globalFeatureImportance: FeatureImportance
+    textFeatureImportance: List[TextFeatureImportance]
     ebmGlobalExplanation: EBMGlobalExplanation
     customVis: str
 
@@ -58,6 +81,13 @@ class ModelExplanationData:
     modelClass: ModelClass
     explanationMethod: str
     precomputedExplanations: PrecomputedExplanations
+
+
+class VisionExplanationData:
+    classNames: List[str]
+    images: List[str]
+    predictedY: List[str]
+    trueY: List[str]
 
 
 class ErrorAnalysisData:
@@ -139,6 +169,7 @@ class CausalData:
 
 
 class CounterfactualData:
+    id: str
     cfs_list: List[List[List[Union[float, str]]]]
     feature_names: List[str]
     feature_names_including_target: List[str]
@@ -147,6 +178,7 @@ class CounterfactualData:
     model_type: str
     desired_class: str
     desired_range: List[float]
+    test_data: List[List[Union[float, str]]]
 
 
 class RAIInsightsData:

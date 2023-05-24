@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
 import {
   IStackTokens,
   ITextFieldStyles,
@@ -13,7 +12,8 @@ import {
   DialogFooter,
   Stack,
   TextField
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import {
@@ -125,19 +125,19 @@ export class EditCohort extends React.Component<
   private updateCohortName = (
     _: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string
-  ) => {
+  ): void => {
     if (!newValue) {
       newValue = "";
     }
     this.setState({ cohortName: newValue });
   };
 
-  private deleteCohort = () => {
+  private deleteCohort = (): void => {
     this.props.onDismiss();
     this.props.onDelete(this.props.errorCohort);
   };
 
-  private editCohort = () => {
+  private editCohort = (): void => {
     this.props.onDismiss();
     const errorCohort = this.props.errorCohort;
     const savedCohort = new ErrorCohort(

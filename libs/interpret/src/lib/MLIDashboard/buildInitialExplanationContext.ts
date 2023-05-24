@@ -4,6 +4,7 @@
 import {
   Cohort,
   IMultiClassLocalFeatureImportance,
+  IsMulticlass,
   ISingleClassLocalFeatureImportance,
   WeightVectors,
   JointDataset,
@@ -13,15 +14,19 @@ import {
   WeightVectorOption
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { ModelMetadata } from "@responsible-ai/mlchartlib";
+import { IColumnRange, ModelMetadata } from "@responsible-ai/mlchartlib";
 import { Dictionary } from "lodash";
 
 import { IExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
+import { buildColumnRanges } from "./utils/buildColumnRanges";
 import { getClassLength } from "./utils/getClassLength";
 import { ValidateProperties } from "./ValidateProperties";
 
 export interface INewExplanationDashboardState {
   cohorts: Cohort[];
+  columnRanges: {
+    [key: string]: IColumnRange;
+  };
   selectedCohort: Cohort;
   activeGlobalTab: GlobalTabKeys;
   jointDataset: JointDataset;
@@ -172,6 +177,7 @@ export function buildInitialExplanationContext(
     predictedY: props.predictedY,
     trueY: props.trueY
   });
+  const columnRanges = buildColumnRanges(jointDataset);
   // consider taking filters in as param arg for programmatic users
   const cohorts = [
     new Cohort(localization.Interpret.Cohort.defaultLabel, jointDataset, [])
@@ -190,7 +196,7 @@ export function buildInitialExplanationContext(
     [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
   };
   const weightVectorOptions = [];
-  if (modelMetadata.modelType === ModelTypes.Multiclass) {
+  if (IsMulticlass(modelMetadata.modelType)) {
     weightVectorOptions.push(WeightVectors.AbsAvg);
   }
   modelMetadata.classNames.forEach((name, index) => {
@@ -203,14 +209,14 @@ export function buildInitialExplanationContext(
   return {
     activeGlobalTab: GlobalTabKeys.ExplanationTab,
     cohorts,
+    columnRanges,
     jointDataset,
     modelMetadata,
     requestPredictions: props.requestPredictions,
     selectedCohort: cohorts[0],
-    selectedWeightVector:
-      modelMetadata.modelType === ModelTypes.Multiclass
-        ? WeightVectors.AbsAvg
-        : 0,
+    selectedWeightVector: IsMulticlass(modelMetadata.modelType)
+      ? WeightVectors.AbsAvg
+      : 0,
     showingDataSizeWarning: jointDataset.datasetRowCount > rowWarningSize,
     validationWarnings: validationCheck.errorStrings,
     weightVectorLabels,

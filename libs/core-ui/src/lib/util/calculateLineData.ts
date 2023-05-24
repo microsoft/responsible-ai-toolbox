@@ -8,17 +8,22 @@ export interface IProbabilityBinCount {
   binCount: number;
 }
 
-export function calculateLinePlotDataFromErrorCohort(
+export function calculateSplinePlotDataFromErrorCohort(
   errorCohort: ErrorCohort,
-  key: string
-) {
+  key: string | undefined
+): IProbabilityBinCount[] | undefined {
   // key is the identifier for the column (e.g., probability)
+  if (!key) {
+    return undefined;
+  }
   return calculateLinePlotData(
     errorCohort.cohort.filteredData.map((dict) => dict[key])
   );
 }
 
-export function calculateLinePlotData(data: number[]) {
+export function calculateLinePlotData(
+  data: number[]
+): IProbabilityBinCount[] | undefined {
   if (data.length === 0) {
     return undefined;
   }

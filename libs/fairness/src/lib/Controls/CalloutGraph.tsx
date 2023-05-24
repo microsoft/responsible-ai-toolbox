@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ActionButton, Stack, Text, Callout } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
-import { ActionButton, Stack, Text, Callout } from "office-ui-fabric-react";
 import React from "react";
 
 import { SharedStyles } from "../Shared.styles";

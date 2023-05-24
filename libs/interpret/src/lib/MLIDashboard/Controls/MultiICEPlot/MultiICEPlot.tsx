@@ -1,17 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
+import { IComboBoxOption, IComboBox, ComboBox, Text } from "@fluentui/react";
 import {
-  JointDataset,
+  AxisConfigDialogSpinButton,
+  BasicHighChart,
+  FluentUIStyles,
   IExplanationModelMetadata,
-  FabricStyles,
-  BasicHighChart
+  JointDataset,
+  SpinButtonStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _, { toNumber } from "lodash";
-import { SpinButton, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
@@ -55,7 +56,7 @@ export class MultiICEPlot extends React.PureComponent<
       yAxes: []
     };
 
-    this.debounceFetchData = _.debounce(this.fetchData.bind(this), 500);
+    this.debounceFetchData = _.debounce(this.fetchData, 500);
   }
 
   public componentDidMount(): void {
@@ -118,71 +119,29 @@ export class MultiICEPlot extends React.PureComponent<
                 autoComplete="on"
                 options={this.state.rangeView.categoricalOptions || []}
                 onChange={this.onCategoricalRangeChanged}
-                styles={FabricStyles.defaultDropdownStyle}
-                calloutProps={FabricStyles.calloutProps}
+                styles={FluentUIStyles.defaultDropdownStyle}
+                calloutProps={FluentUIStyles.calloutProps}
               />
             )}
             {this.state.rangeView.type !== RangeTypes.Categorical && (
               <div className={classNames.parameterList}>
-                <SpinButton
-                  styles={{
-                    labelWrapper: { alignSelf: "center" },
-                    root: {
-                      display: "inline-flex",
-                      float: "right",
-                      selectors: {
-                        "> div": {
-                          maxWidth: "78px"
-                        }
-                      }
-                    },
-                    spinButtonWrapper: { maxWidth: "68px" }
-                  }}
+                <AxisConfigDialogSpinButton
                   label={localization.Interpret.WhatIfTab.minLabel}
+                  styles={SpinButtonStyles}
                   value={this.state.rangeView.min?.toString()}
-                  onIncrement={this.onMinRangeChanged.bind(this, 1)}
-                  onDecrement={this.onMinRangeChanged.bind(this, -1)}
-                  onValidate={this.onMinRangeChanged.bind(this, 0)}
+                  setNumericValue={this.onMinRangeChanged}
                 />
-                <SpinButton
-                  styles={{
-                    labelWrapper: { alignSelf: "center" },
-                    root: {
-                      display: "inline-flex",
-                      float: "right",
-                      selectors: {
-                        "> div": {
-                          maxWidth: "78px"
-                        }
-                      }
-                    },
-                    spinButtonWrapper: { maxWidth: "68px" }
-                  }}
+                <AxisConfigDialogSpinButton
                   label={localization.Interpret.WhatIfTab.maxLabel}
+                  styles={SpinButtonStyles}
                   value={this.state.rangeView.max?.toString()}
-                  onIncrement={this.onMaxRangeChanged.bind(this, 1)}
-                  onDecrement={this.onMaxRangeChanged.bind(this, -1)}
-                  onValidate={this.onMaxRangeChanged.bind(this, 0)}
+                  setNumericValue={this.onMaxRangeChanged}
                 />
-                <SpinButton
-                  styles={{
-                    labelWrapper: { alignSelf: "center" },
-                    root: {
-                      display: "inline-flex",
-                      float: "right",
-                      selectors: {
-                        "> div": {
-                          maxWidth: "78px"
-                        }
-                      }
-                    },
-                    spinButtonWrapper: { maxWidth: "68px" }
-                  }}
+                <AxisConfigDialogSpinButton
                   label={localization.Interpret.WhatIfTab.stepsLabel}
+                  styles={SpinButtonStyles}
                   value={this.state.rangeView.steps?.toString()}
-                  onIncrement={this.onStepsRangeChanged.bind(this, 1)}
-                  onDecrement={this.onStepsRangeChanged.bind(this, -1)}
-                  onValidate={this.onStepsRangeChanged.bind(this, 0)}
+                  setNumericValue={this.onStepsRangeChanged}
                 />
               </div>
             )}
@@ -225,7 +184,10 @@ export class MultiICEPlot extends React.PureComponent<
     });
   }
 
-  private onMinRangeChanged(delta: number, stringVal: string): string | void {
+  private onMinRangeChanged = (
+    delta: number,
+    stringVal: string
+  ): string | void => {
     const rangeView = _.cloneDeep(this.state.rangeView);
     if (!rangeView) {
       return;
@@ -258,9 +220,12 @@ export class MultiICEPlot extends React.PureComponent<
         this.debounceFetchData();
       }
     );
-  }
+  };
 
-  private onMaxRangeChanged(delta: number, stringVal: string): string | void {
+  private onMaxRangeChanged = (
+    delta: number,
+    stringVal: string
+  ): string | void => {
     const rangeView = _.cloneDeep(this.state.rangeView);
     if (!rangeView) {
       return;
@@ -293,9 +258,12 @@ export class MultiICEPlot extends React.PureComponent<
         this.debounceFetchData();
       }
     );
-  }
+  };
 
-  private onStepsRangeChanged(delta: number, stringVal: string): string | void {
+  private onStepsRangeChanged = (
+    delta: number,
+    stringVal: string
+  ): string | void => {
     const rangeView = _.cloneDeep(this.state.rangeView);
     if (!rangeView) {
       return;
@@ -324,7 +292,7 @@ export class MultiICEPlot extends React.PureComponent<
         this.debounceFetchData();
       }
     );
-  }
+  };
 
   private onCategoricalRangeChanged = (
     _event: React.FormEvent<IComboBox>,
@@ -372,7 +340,7 @@ export class MultiICEPlot extends React.PureComponent<
     return selectedKeys;
   };
 
-  private fetchData(): void {
+  private fetchData = (): void => {
     if (!this.props.invokeModel) {
       return;
     }
@@ -418,7 +386,7 @@ export class MultiICEPlot extends React.PureComponent<
         }
       }
     });
-  }
+  };
 
   private buildDataSpans(
     row: Array<string | number>,

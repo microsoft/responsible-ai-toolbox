@@ -10,7 +10,7 @@ env:
 
 on:
   pull_request:
-    branches: [main, postbuild]
+    branches: [main]
 
 jobs:
   ci-typescript:
@@ -18,7 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.8]
+        node-version: [12.x, 14.x, 16.x]
 
     steps:
       - uses: actions/checkout@v3

@@ -1,5 +1,8 @@
 {
-  "extends": ["plugin:@nrwl/nx/react", "../../.eslintrc.json"],
+  "globals": {
+    "JQuery": "readonly"
+  },
+  "extends": ["plugin:cypress/recommended", "../../.eslintrc"],
   "ignorePatterns": ["!**/*"],
   "overrides": [
     {
@@ -7,12 +10,10 @@
       "rules": {}
     },
     {
-      "files": ["*.ts", "*.tsx"],
-      "rules": {}
-    },
-    {
-      "files": ["*.js", "*.jsx"],
-      "rules": {}
+      "files": ["charts.ts"],
+      "rules": {
+        "cypress/no-unnecessary-waiting": "off"
+      }
     }
   ]
 }

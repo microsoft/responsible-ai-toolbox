@@ -4,18 +4,24 @@
 import { localization } from "@responsible-ai/localization";
 
 import { ModelTypes } from "../Interfaces/IExplanationContext";
+import {
+  ILabeledStatistic,
+  TotalCohortSamples
+} from "../Interfaces/IStatistic";
+import { IsBinary } from "../util/ExplanationUtils";
 
 import {
+  generateMicroMacroMetrics,
+  ImageClassificationMetrics
+} from "./ImageStatisticsUtils";
+import { JointDataset } from "./JointDataset";
+import {
   ClassificationEnum,
-  JointDataset,
   MulticlassClassificationEnum
-} from "./JointDataset";
-
-export interface ILabeledStatistic {
-  key: string;
-  label: string;
-  stat: number;
-}
+} from "./JointDatasetUtils";
+import { generateMultilabelStats } from "./MultilabelStatisticsUtils";
+import { generateObjectDetectionStats } from "./ObjectDetectionStatisticsUtils";
+import { generateQuestionAnsweringStats } from "./QuestionAnsweringStatisticsUtils";
 
 export enum BinaryClassificationMetrics {
   Accuracy = "accuracy",
@@ -56,6 +62,11 @@ const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
   const total = outcomes.length;
   return [
     {
+      key: TotalCohortSamples,
+      label: localization.Interpret.Statistics.samples,
+      stat: total
+    },
+    {
       key: BinaryClassificationMetrics.Accuracy,
       label: localization.Interpret.Statistics.accuracy,
       stat: (truePosCount + trueNegCount) / total
@@ -77,12 +88,6 @@ const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
         truePosCount / (truePosCount + 0.5 * (falsePosCount + falseNegCount))
     },
     {
-      key: BinaryClassificationMetrics.F1Score,
-      label: localization.Interpret.Statistics.f1Score,
-      stat:
-        truePosCount / (truePosCount + 0.5 * (falsePosCount + falseNegCount))
-    },
-    {
       key: BinaryClassificationMetrics.FalsePositiveRate,
       label: localization.Interpret.Statistics.fpr,
       stat: falsePosCount / (trueNegCount + falsePosCount)
@@ -95,7 +100,7 @@ const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
     {
       key: BinaryClassificationMetrics.SelectionRate,
       label: localization.Interpret.Statistics.selectionRate,
-      stat: (falseNegCount + truePosCount) / total
+      stat: (falsePosCount + truePosCount) / total
     }
   ];
 };
@@ -110,9 +115,10 @@ const generateRegressionStats: (
   errors: number[]
 ): ILabeledStatistic[] => {
   const count = trueYs.length;
-  const meanAbsoluteError = errors.reduce((prev, curr) => {
-    return Math.abs(prev) + Math.abs(curr);
-  }, 0);
+  const meanAbsoluteError =
+    errors.reduce((prev, curr) => {
+      return Math.abs(prev) + Math.abs(curr);
+    }, 0) / count;
   const residualSumOfSquares = errors.reduce((prev, curr) => {
     return prev + curr * curr;
   }, 0);
@@ -124,6 +130,11 @@ const generateRegressionStats: (
     return prev + (curr - avgY) * (curr - avgY);
   }, 0);
   return [
+    {
+      key: TotalCohortSamples,
+      label: localization.Interpret.Statistics.samples,
+      stat: count
+    },
     {
       key: RegressionMetrics.MeanAbsoluteError,
       label: localization.Interpret.Statistics.mae,
@@ -159,9 +170,78 @@ const generateMulticlassStats: (outcomes: number[]) => ILabeledStatistic[] = (
   const total = outcomes.length;
   return [
     {
+      key: TotalCohortSamples,
+      label: localization.Interpret.Statistics.samples,
+      stat: total
+    },
+    {
       key: MulticlassClassificationMetrics.Accuracy,
       label: localization.Interpret.Statistics.accuracy,
       stat: correctCount / total
+    }
+  ];
+};
+
+const generateImageStats: (
+  trueYs: number[],
+  predYs: number[]
+) => ILabeledStatistic[] = (
+  trueYs: number[],
+  predYs: number[]
+): ILabeledStatistic[] => {
+  const correctCount = predYs.filter(
+    (pred, index) => pred === trueYs[index]
+  ).length;
+  const accuracy = correctCount / predYs.length;
+  const precision = generateMicroMacroMetrics(predYs, trueYs);
+  const microP = precision.microScore;
+  const macroP = precision.macroScore;
+  const recall = generateMicroMacroMetrics(trueYs, predYs);
+  const microR = recall.microScore;
+  const macroR = recall.macroScore;
+  const microF1 = 2 * ((microP * microR) / (microP + microR)) || 0;
+  const macroF1 = 2 * ((macroP * macroR) / (macroP + macroR)) || 0;
+
+  return [
+    {
+      key: TotalCohortSamples,
+      label: localization.Interpret.Statistics.samples,
+      stat: predYs.length
+    },
+    {
+      key: ImageClassificationMetrics.Accuracy,
+      label: localization.Interpret.Statistics.accuracy,
+      stat: accuracy
+    },
+    {
+      key: ImageClassificationMetrics.MicroPrecision,
+      label: localization.Interpret.Statistics.precision,
+      stat: microP
+    },
+    {
+      key: ImageClassificationMetrics.MicroRecall,
+      label: localization.Interpret.Statistics.recall,
+      stat: microR
+    },
+    {
+      key: ImageClassificationMetrics.MicroF1,
+      label: localization.Interpret.Statistics.f1Score,
+      stat: microF1
+    },
+    {
+      key: ImageClassificationMetrics.MacroPrecision,
+      label: localization.Interpret.Statistics.precision,
+      stat: macroP
+    },
+    {
+      key: ImageClassificationMetrics.MacroRecall,
+      label: localization.Interpret.Statistics.recall,
+      stat: macroR
+    },
+    {
+      key: ImageClassificationMetrics.MacroF1,
+      label: localization.Interpret.Statistics.f1Score,
+      stat: macroF1
     }
   ];
 };
@@ -175,9 +255,18 @@ export const generateMetrics: (
   selectionIndexes: number[][],
   modelType: ModelTypes
 ): ILabeledStatistic[][] => {
+  if (
+    modelType === ModelTypes.ImageMultilabel ||
+    modelType === ModelTypes.TextMultilabel
+  ) {
+    return generateMultilabelStats(jointDataset, selectionIndexes);
+  }
+  if (modelType === ModelTypes.QuestionAnswering) {
+    return generateQuestionAnsweringStats(selectionIndexes);
+  }
+  const trueYs = jointDataset.unwrap(JointDataset.TrueYLabel);
+  const predYs = jointDataset.unwrap(JointDataset.PredictedYLabel);
   if (modelType === ModelTypes.Regression) {
-    const trueYs = jointDataset.unwrap(JointDataset.TrueYLabel);
-    const predYs = jointDataset.unwrap(JointDataset.PredictedYLabel);
     const errors = jointDataset.unwrap(JointDataset.RegressionError);
     return selectionIndexes.map((selectionArray) => {
       const trueYSubset = selectionArray.map((i) => trueYs[i]);
@@ -186,10 +275,20 @@ export const generateMetrics: (
       return generateRegressionStats(trueYSubset, predYSubset, errorsSubset);
     });
   }
+  if (modelType === ModelTypes.ImageMulticlass) {
+    return selectionIndexes.map((selectionArray) => {
+      const trueYSubset = selectionArray.map((i) => trueYs[i]);
+      const predYSubset = selectionArray.map((i) => predYs[i]);
+      return generateImageStats(trueYSubset, predYSubset);
+    });
+  }
+  if (modelType === ModelTypes.ObjectDetection) {
+    return generateObjectDetectionStats(selectionIndexes);
+  }
   const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
   return selectionIndexes.map((selectionArray) => {
     const outcomeSubset = selectionArray.map((i) => outcomes[i]);
-    if (modelType === ModelTypes.Binary) {
+    if (IsBinary(modelType)) {
       return generateBinaryStats(outcomeSubset);
     }
     // modelType === ModelTypes.Multiclass

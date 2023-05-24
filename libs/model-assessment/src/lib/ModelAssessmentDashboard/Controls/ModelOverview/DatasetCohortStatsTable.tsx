@@ -1,19 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IDropdownOption } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
-  generateMetrics,
-  JointDataset,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  ILabeledStatistic,
+  ErrorCohort
 } from "@responsible-ai/core-ui";
-import { IDropdownOption } from "office-ui-fabric-react";
 import React from "react";
 
 import { CohortStatsHeatmap } from "./CohortStatsHeatmap";
 import { generateCohortsStatsTable } from "./StatsTableUtils";
 
 interface IDatasetCohortStatsTableProps {
+  datasetBasedCohorts: ErrorCohort[];
+  labeledStatistics: ILabeledStatistic[][];
   selectableMetrics: IDropdownOption[];
   selectedMetrics: string[];
   showHeatmapColors: boolean;
@@ -30,30 +32,25 @@ export class DatasetCohortStatsTable extends React.Component<
     defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
-    // generate table contents
-    const cohortLabeledStatistics = generateMetrics(
-      this.context.jointDataset,
-      this.context.errorCohorts.map((errorCohort) =>
-        errorCohort.cohort.unwrap(JointDataset.IndexLabel)
-      ),
-      this.context.modelMetadata.modelType
-    );
-
     const items = generateCohortsStatsTable(
-      this.context.errorCohorts,
+      this.props.datasetBasedCohorts,
       this.props.selectableMetrics,
-      cohortLabeledStatistics,
+      this.props.labeledStatistics,
       this.props.selectedMetrics,
       this.props.showHeatmapColors
     ).items;
 
+    const showColors =
+      this.props.showHeatmapColors && this.props.datasetBasedCohorts.length > 1;
+
     return (
       <CohortStatsHeatmap
+        id={"modelOverviewDatasetCohortStatsTable"}
         items={items}
-        cohorts={this.context.errorCohorts}
+        cohorts={this.props.datasetBasedCohorts}
         selectableMetrics={this.props.selectableMetrics}
         selectedMetrics={this.props.selectedMetrics}
-        showColors={this.props.showHeatmapColors}
+        showColors={showColors}
       />
     );
   }

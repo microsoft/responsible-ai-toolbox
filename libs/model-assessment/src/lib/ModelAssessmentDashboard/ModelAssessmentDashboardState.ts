@@ -4,9 +4,11 @@
 import {
   IExplanationModelMetadata,
   IGenericChartProps,
-  ICohortBasedComponentState
+  ICohortBasedComponentState,
+  ModelTypes
 } from "@responsible-ai/core-ui";
 import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
+import { IColumnRange } from "@responsible-ai/mlchartlib";
 
 import { GlobalTabKeys } from "./ModelAssessmentEnums";
 
@@ -14,7 +16,11 @@ export interface IModelAssessmentDashboardState
   extends ICohortBasedComponentState {
   activeGlobalTabs: IModelAssessmentDashboardTab[];
   customPoints: Array<{ [key: string]: any }>;
+  columnRanges?: {
+    [key: string]: IColumnRange;
+  };
   modelMetadata: IExplanationModelMetadata;
+  modelType: ModelTypes;
   modelChartConfig?: IGenericChartProps;
   dataChartConfig?: IGenericChartProps;
   dependenceProps?: IGenericChartProps;
@@ -26,6 +32,7 @@ export interface IModelAssessmentDashboardState
   selectedWhatIfIndex: number | undefined;
   errorAnalysisOption: ErrorAnalysisOptions;
   saveCohortVisible: boolean;
+  onAddMessage: string;
 }
 
 export interface IModelAssessmentDashboardTab {

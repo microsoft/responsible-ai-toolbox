@@ -16,6 +16,8 @@ from responsibleai._interfaces import (CausalData, CausalPolicy,
                                        CausalPolicyGains,
                                        CausalPolicyTreeInternal,
                                        CausalPolicyTreeLeaf, ComparisonTypes)
+from responsibleai._internal.constants import (FileFormats,
+                                               SerializationAttributes)
 from responsibleai._tools.causal.causal_config import CausalConfig
 from responsibleai._tools.causal.causal_constants import ResultAttributes
 from responsibleai._tools.shared.base_result import BaseResult
@@ -63,13 +65,22 @@ class CausalResult(BaseResult['CausalResult']):
             self.local_effects is not None or \
             self.policies is not None
 
-    def _get_dashboard_object(self):
+    def _create_causal_data_object(self):
+        """Create a causal data object.
+
+        :return: An object of type CausalData.
+        :rtype: CausalData
+        """
         causal_data = CausalData()
 
         causal_data.id = self.id
         causal_data.version = self.version
-
         causal_data.config = self._get_config_object(self.config)
+
+        return causal_data
+
+    def _get_dashboard_object(self):
+        causal_data = self._create_causal_data_object()
 
         causal_data.global_effects = self.global_effects\
             .reset_index().to_dict(orient='records')
@@ -86,9 +97,112 @@ class CausalResult(BaseResult['CausalResult']):
         return self.causal_analysis.whatif(
             X, X_feature_new, feature_name, y, alpha=alpha)
 
-    def _cohort_effects(self, X_test, alpha=0.01, keep_all_levels=False):
-        return self.causal_analysis.cohort_causal_effect(
-            X_test, alpha=alpha, keep_all_levels=keep_all_levels)
+    def _global_cohort_effects(self, X_test):
+        """Get global causal effects for cohort data.
+
+        :param X_test: The data for which the causal policy
+                       needs to be generated.
+        :type X_test: Any
+        :return: An object of type CausalData with
+                 causal effects.
+        :rtype: CausalData
+        """
+        causal_data = self._create_causal_data_object()
+        causal_data.global_effects = \
+            self.causal_analysis.cohort_causal_effect(
+                X_test, alpha=self.config.alpha,
+                keep_all_levels=True).reset_index().to_dict(
+                    orient="records")
+        return causal_data
+
+    def _local_instance_effects(self, X_test):
+        """Get local causal effects for a given data point.
+
+        :param X_test: The data for which the local causal effects
+                       needs to be generated for a given point.
+        :type X_test: Any
+        :return: An object of type CausalData with
+                 causal effects for a given point.
+        :rtype: CausalData
+        """
+        causal_data = self._create_causal_data_object()
+
+        local_effects = self.causal_analysis.local_causal_effect(
+            X_test, alpha=self.config.alpha,
+            keep_all_levels=True)
+
+        local_dicts = local_effects.groupby('sample').apply(
+            lambda x: x.reset_index().to_dict(
+                orient='records')).values
+        causal_data.local_effects = [list(v) for v in local_dicts]
+
+        return causal_data
+
+    def _global_cohort_policy(self, X_test):
+        """Get global causal policy for cohort data.
+
+        :param X_test: The data for which the causal policy
+                       needs to be generated.
+        :type X_test: Any
+        :return: An object of type CausalData with
+                 causal effects.
+        :rtype: CausalData
+        """
+        causal_data = self._create_causal_data_object()
+
+        causal_config = self.config
+        if isinstance(causal_config.treatment_cost, int) and \
+                causal_config.treatment_cost == 0:
+            revised_treatment_cost = [0] * len(
+                causal_config.treatment_features)
+        else:
+            revised_treatment_cost = causal_config.treatment_cost
+
+        policies = []
+        for i in range(len(causal_config.treatment_features)):
+            policy = self._create_policy(
+                X_test,
+                causal_config.treatment_features[i],
+                revised_treatment_cost[i],
+                causal_config.alpha, causal_config.max_tree_depth,
+                causal_config.min_tree_leaf_samples)
+            policies.append(policy)
+        causal_data.policies = [self._get_policy_object(p) for p in
+                                policies]
+        return causal_data
+
+    def _create_policy(
+        self,
+        X_test,
+        treatment_feature,
+        treatment_cost,
+        alpha,
+        max_tree_depth,
+        min_tree_leaf_samples,
+    ):
+        local_policies = self.causal_analysis.individualized_policy(
+            X_test, treatment_feature,
+            treatment_costs=treatment_cost,
+            alpha=alpha)
+
+        tree = self.causal_analysis._policy_tree_output(
+            X_test, treatment_feature,
+            treatment_costs=treatment_cost,
+            max_depth=max_tree_depth,
+            min_samples_leaf=min_tree_leaf_samples,
+            alpha=alpha)
+
+        return {
+            ResultAttributes.TREATMENT_FEATURE: treatment_feature,
+            ResultAttributes.CONTROL_TREATMENT: tree.control_name,
+            ResultAttributes.LOCAL_POLICIES: local_policies,
+            ResultAttributes.POLICY_GAINS: {
+                ResultAttributes.RECOMMENDED_POLICY_GAINS:
+                    tree.policy_value,
+                ResultAttributes.TREATMENT_GAINS: tree.always_treat,
+            },
+            ResultAttributes.POLICY_TREE: tree.tree_dictionary
+        }
 
     def _get_config_object(self, config):
         config_object = CausalConfigInterface()
@@ -199,8 +313,9 @@ class CausalResult(BaseResult['CausalResult']):
     def _get_schema(cls, version: str):
         cls._validate_version(version)
 
-        schema_directory = Path(__file__).parent / 'dashboard_schemas'
-        schema_filename = f'schema_{version}.json'
+        schema_directory = Path(__file__).parent / \
+            SerializationAttributes.DASHBOARD_SCHEMAS
+        schema_filename = f'schema_{version}{FileFormats.JSON}'
         schema_filepath = schema_directory / schema_filename
         with open(schema_filepath, 'r') as f:
             return json.load(f)

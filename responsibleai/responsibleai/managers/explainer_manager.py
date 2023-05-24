@@ -10,7 +10,6 @@ from typing import Any, List, Optional
 
 import numpy as np
 import pandas as pd
-from interpret_community.common.constants import ModelTask
 from interpret_community.explanation.explanation import (
     FeatureImportanceExplanation, load_explanation, save_explanation)
 from interpret_community.mimic.mimic_explainer import MimicExplainer
@@ -20,7 +19,9 @@ from interpret_community.mimic.models.linear_model import \
     LinearExplainableModel
 from scipy.sparse import issparse
 
-from responsibleai._input_processing import _convert_to_list
+from raiutils.data_processing import convert_to_list
+from raiutils.exceptions import UserConfigValidationException
+from raiutils.models import ModelTask
 from responsibleai._interfaces import (EBMGlobalExplanation, FeatureImportance,
                                        ModelExplanationData,
                                        PrecomputedExplanations)
@@ -29,7 +30,6 @@ from responsibleai._internal.constants import (ExplanationKeys, ListProperties,
                                                ManagerNames, Metadata)
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
-from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.managers.base_manager import BaseManager
 from responsibleai.utils import _measure_time
 
@@ -41,9 +41,8 @@ U_INITIALIZATION_EXAMPLES = '_initialization_examples'
 U_EVALUATION_EXAMPLES = '_evaluation_examples'
 FEATURES = 'features'
 CATEGORICAL_FEATURES = 'categorical_features'
-META_JSON = Metadata.META_JSON
-MODEL = Metadata.MODEL
 EXPLANATION = '_explanation'
+MAXIMUM_ROWS_FOR_GLOBAL_EXPLANATIONS = 10000
 
 
 class ExplainerManager(BaseManager):
@@ -117,21 +116,22 @@ class ExplainerManager(BaseManager):
         if is_sparse and many_cols:
             self._surrogate_model = LinearExplainableModel
 
-    @_measure_time
-    def compute(self):
-        """Creates an explanation by running the explainer on the model."""
-        print("Explanations")
-        if not self._is_added:
-            return
-        if self._is_run:
-            return
+    def _compute_explanations(self, local: bool, data: Any):
+        """Compute explanations using MimicWrapper.
+
+        :param local: True if local explanations are requested
+                and False otherwise.
+        :type local: bool
+        :param data: The data point(s) for which the explanations
+                     need to be generated.
+        :type data: Any
+        :return: The computed explanations.
+        :rtype: Any
+        """
         if self._classes is not None:
             model_task = ModelTask.Classification
         else:
             model_task = ModelTask.Regression
-
-        print('Current Status: Explaining {0} features'.format(
-            len(self._features)))
 
         explainer = MimicExplainer(
             self._model,
@@ -141,7 +141,34 @@ class ExplainerManager(BaseManager):
             model_task=model_task,
             classes=self._classes,
             categorical_features=self._categorical_features)
-        self._explanation = explainer.explain_global(self._evaluation_examples)
+
+        if len(data) <= MAXIMUM_ROWS_FOR_GLOBAL_EXPLANATIONS:
+            return explainer.explain_global(data, include_local=local)
+        else:
+            warnings.warn((
+                "LARGE-DATA-SCENARIO-DETECTED: "
+                "The data is larger than the supported limit of {0}. "
+                "Computing explanations for first {0} samples only.").format(
+                    MAXIMUM_ROWS_FOR_GLOBAL_EXPLANATIONS),
+                UserWarning)
+            return explainer.explain_global(data[
+                0:MAXIMUM_ROWS_FOR_GLOBAL_EXPLANATIONS], include_local=local)
+
+    @_measure_time
+    def compute(self):
+        """Creates an explanation by running the explainer on the model."""
+
+        print("Explanations")
+        print('Current Status: Explaining {0} features'.format(
+            len(self._features)))
+        if not self._is_added:
+            return
+        if self._is_run:
+            return
+        self._explanation = self._compute_explanations(
+            local=True,
+            data=self._evaluation_examples
+        )
         self._is_run = True
 
         print('Current Status: Explained {0} features.'.format(
@@ -188,9 +215,39 @@ class ExplainerManager(BaseManager):
         :rtype: List[ModelExplanationData]
         """
         return [
-            self._get_interpret(i) for i in self.get()]
+            self._get_interpret(
+                i, self._evaluation_examples) for i in self.get()]
 
-    def _get_interpret(self, explanation):
+    def request_explanations(self, local: bool, data: Any):
+        """Return the explanations for a given point(s) .
+
+        :param local: True if local explanations are requested
+                      and False otherwise.
+        :type local: bool
+        :param data: The data point(s) for which the explanations
+                     need to be generated.
+        :type data: Any
+        :return: The explanations for the given data point(s)
+                 according to the interface specified by
+                 ModelExplanationData.
+        :rtype: ModelExplanationData
+        """
+        if not isinstance(data, pd.DataFrame):
+            raise UserConfigValidationException(
+                'Data is of type {0} but it must be '
+                'a pandas DataFrame.'.format(type(data)))
+
+        if local and data.shape[0] > 1:
+            raise UserConfigValidationException(
+                'Only one row of data is allowed for '
+                'local explanation generation.')
+
+        explanations = self._compute_explanations(
+            local=local,
+            data=data)
+        return self._get_interpret(explanations, data)
+
+    def _get_interpret(self, explanation, evaluation_examples=None):
         interpretation = ModelExplanationData()
 
         # List of explanations, key of explanation type is "explanation_type"
@@ -220,13 +277,13 @@ class ExplainerManager(BaseManager):
         if local_explanation is not None:
             try:
                 local_feature_importance = FeatureImportance()
-                local_feature_importance.scores = _convert_to_list(
+                local_feature_importance.scores = convert_to_list(
                     local_explanation["scores"])
                 if np.shape(local_feature_importance.scores)[-1] > 1000:
                     raise ValueError("Exceeds maximum number of features for "
                                      "visualization (1000). Please regenerate"
                                      " the explanation using fewer features.")
-                local_feature_importance.intercept = _convert_to_list(
+                local_feature_importance.intercept = convert_to_list(
                     local_explanation["intercept"])
                 # We can ignore perf explanation data.
                 # Note if it is added back at any point,
@@ -238,10 +295,10 @@ class ExplainerManager(BaseManager):
             except Exception as ex:
                 raise ValueError(
                     "Unsupported local explanation type") from ex
-            if self._evaluation_examples is not None:
 
-                _feature_length = self._evaluation_examples.shape[1]
-                _row_length = self._evaluation_examples.shape[0]
+            if evaluation_examples is not None:
+                _feature_length = evaluation_examples.shape[1]
+                _row_length = evaluation_examples.shape[0]
                 local_dim = np.shape(local_feature_importance.scores)
                 if len(local_dim) != 2 and len(local_dim) != 3:
                     raise ValueError(
@@ -252,7 +309,7 @@ class ExplainerManager(BaseManager):
                     raise ValueError(
                         "Shape mismatch: local explanation"
                         "length differs from dataset")
-                if(len(local_dim) == 3 and
+                if (len(local_dim) == 3 and
                    (local_dim[2] != _feature_length or
                         local_dim[1] != _row_length)):
                     raise ValueError(
@@ -261,11 +318,11 @@ class ExplainerManager(BaseManager):
         if global_explanation is not None:
             try:
                 global_feature_importance = FeatureImportance()
-                global_feature_importance.scores = _convert_to_list(
+                global_feature_importance.scores = convert_to_list(
                     global_explanation["scores"])
                 if 'intercept' in global_explanation:
                     global_feature_importance.intercept\
-                        = _convert_to_list(
+                        = convert_to_list(
                             global_explanation["intercept"])
                 interpretation.precomputedExplanations.globalFeatureImportance\
                     = global_explanation
@@ -312,7 +369,7 @@ class ExplainerManager(BaseManager):
 
             meta = {IS_RUN: self._is_run,
                     IS_ADDED: self._is_added}
-            with open(data_directory / META_JSON, 'w') as file:
+            with open(data_directory / Metadata.META_JSON, 'w') as file:
                 json.dump(meta, file)
 
     @staticmethod
@@ -337,7 +394,7 @@ class ExplainerManager(BaseManager):
                 sub_directory_name=all_cf_dirs[0])
             data_directory = directory_manager.get_data_directory()
 
-            with open(data_directory / META_JSON, 'r') as meta_file:
+            with open(data_directory / Metadata.META_JSON, 'r') as meta_file:
                 meta = meta_file.read()
             meta = json.loads(meta)
             inst.__dict__['_' + IS_RUN] = meta[IS_RUN]
@@ -353,13 +410,13 @@ class ExplainerManager(BaseManager):
             inst.__dict__['_' + IS_ADDED] = False
             inst.__dict__[EXPLANATION] = None
 
-        inst.__dict__['_' + MODEL] = rai_insights.model
+        inst.__dict__['_' + Metadata.MODEL] = rai_insights.model
         inst.__dict__['_' + CLASSES] = rai_insights._classes
         inst.__dict__['_' + CATEGORICAL_FEATURES] = \
             rai_insights.categorical_features
         target_column = rai_insights.target_column
-        train = rai_insights.train.drop(columns=[target_column])
-        test = rai_insights.test.drop(columns=[target_column])
+        train = rai_insights.get_train_data().drop(columns=[target_column])
+        test = rai_insights.get_test_data().drop(columns=[target_column])
         inst.__dict__[U_INITIALIZATION_EXAMPLES] = train
         inst.__dict__[U_EVALUATION_EXAMPLES] = test
         inst.__dict__['_' + FEATURES] = list(train.columns)

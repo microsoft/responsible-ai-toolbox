@@ -1,22 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
 import {
-  ModelTypes,
-  IGlobalExplanation,
-  ModelExplanationUtils,
-  FabricStyles
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
-import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
   IDropdownOption,
   Slider,
   Callout,
   DefaultButton,
   IconButton
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  ModelTypes,
+  IGlobalExplanation,
+  ModelExplanationUtils,
+  FluentUIStyles
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
+import _ from "lodash";
 import React from "react";
 
 import { BarChart } from "../../SharedComponents/BarChart";
@@ -78,7 +80,7 @@ export class FeatureImportanceBar extends React.PureComponent<
                   options={this.props.chartTypeOptions}
                   ariaLabel={"chart type picker"}
                   useComboBoxAsMenuWidth
-                  styles={FabricStyles.smallDropdownStyle}
+                  styles={FluentUIStyles.smallDropdownStyle}
                 />
               )}
             <div className={featureImportanceBarStyles.sliderControl}>
@@ -117,7 +119,7 @@ export class FeatureImportanceBar extends React.PureComponent<
                 options={this.sortOptions}
                 ariaLabel={"sort selector"}
                 useComboBoxAsMenuWidth
-                styles={FabricStyles.smallDropdownStyle}
+                styles={FluentUIStyles.smallDropdownStyle}
               />
             )}
           </div>

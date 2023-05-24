@@ -1,14 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IProcessedStyleSet,
-  mergeStyleSets,
-  IStyle
-} from "office-ui-fabric-react";
+import { IProcessedStyleSet, mergeStyleSets, IStyle } from "@fluentui/react";
+import { flexLgDown, fullLgDown } from "@responsible-ai/core-ui";
 
 export interface ICausalIndividualChartStyles {
   legendAndText: IStyle;
+  chart: IStyle;
   chartWithAxes: IStyle;
   chartWithVertical: IStyle;
   verticalAxis: IStyle;
@@ -16,14 +14,24 @@ export interface ICausalIndividualChartStyles {
   horizontalAxisWithPadding: IStyle;
   horizontalAxis: IStyle;
   individualChartContainer: IStyle;
+  buttonStyle: IStyle;
 }
 
 export const causalIndividualChartStyles: () => IProcessedStyleSet<ICausalIndividualChartStyles> =
   () => {
     const legendWidth = "400px";
     return mergeStyleSets<ICausalIndividualChartStyles>({
+      buttonStyle: {
+        marginBottom: "10px",
+        marginTop: "10px !important",
+        paddingBottom: "10px",
+        paddingTop: "10px",
+        width: "200px"
+      },
+      chart: flexLgDown,
       chartWithAxes: {
-        width: "80%"
+        width: "80%",
+        ...fullLgDown
       },
       chartWithVertical: {
         width: "100%"

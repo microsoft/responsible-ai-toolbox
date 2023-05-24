@@ -11,13 +11,6 @@ import { compare } from "../util/compare";
 import { JointDataset } from "../util/JointDataset";
 import { ModelExplanationUtils } from "../util/ModelExplanationUtils";
 
-export enum CohortSource {
-  None = "None",
-  TreeMap = "Tree map",
-  HeatMap = "Heat map",
-  ManuallyCreated = "Manually created"
-}
-
 export class Cohort {
   private static _cohortIndex = 0;
 
@@ -25,7 +18,7 @@ export class Cohort {
   private readonly cohortIndex: number;
   private cachedAverageImportance: number[] | undefined;
   private cachedTransposedLocalFeatureImportances: number[][] | undefined;
-  private currentSortKey: string | undefined;
+  private currentSortKey: undefined | string;
   private currentSortReversed = false;
 
   public constructor(
@@ -38,6 +31,49 @@ export class Cohort {
     this.name = name;
     Cohort._cohortIndex += 1;
     this.filteredData = this.applyFilters();
+  }
+
+  public static getLabeledFilters(
+    filters: IFilter[],
+    jointDataset: JointDataset
+  ): IFilter[] {
+    // return the filters relabeled from Data# to original label
+    const filtersRelabeled = filters
+      .filter((item) => item)
+      .map((filter: IFilter): IFilter => {
+        const label = jointDataset.metaDict[filter.column].label;
+        return {
+          arg: filter.arg,
+          column: label,
+          method: filter.method
+        };
+      });
+    return filtersRelabeled;
+  }
+
+  public static getLabeledCompositeFilters(
+    compositeFilters: ICompositeFilter[],
+    jointDataset: JointDataset
+  ): ICompositeFilter[] {
+    // return the filters relabeled from Data# to original label
+    const filtersRelabeled = compositeFilters.map(
+      (compositeFilter: ICompositeFilter): ICompositeFilter => {
+        if (compositeFilter.method) {
+          return Cohort.getLabeledFilters(
+            [compositeFilter as IFilter],
+            jointDataset
+          )[0] as ICompositeFilter;
+        }
+        return {
+          compositeFilters: Cohort.getLabeledCompositeFilters(
+            compositeFilter.compositeFilters,
+            jointDataset
+          ),
+          operation: compositeFilter.operation
+        } as ICompositeFilter;
+      }
+    );
+    return filtersRelabeled;
   }
 
   public updateFilter(filter: IFilter, index?: number): void {
@@ -166,32 +202,34 @@ export class Cohort {
   }
 
   private filterRow(
-    row: { [key: string]: number },
+    row: { [key: string]: number | string },
     filters: IFilter[]
   ): boolean {
-    return filters.every((filter) => {
-      const rowVal = row[filter.column];
-      switch (filter.method) {
-        case FilterMethods.Equal:
-          return rowVal === filter.arg[0];
-        case FilterMethods.GreaterThan:
-          return rowVal > filter.arg[0];
-        case FilterMethods.GreaterThanEqualTo:
-          return rowVal >= filter.arg[0];
-        case FilterMethods.LessThan:
-          return rowVal < filter.arg[0];
-        case FilterMethods.LessThanEqualTo:
-          return rowVal <= filter.arg[0];
-        case FilterMethods.Includes:
-          return (filter.arg as number[]).includes(rowVal);
-        case FilterMethods.Excludes:
-          return !(filter.arg as number[]).includes(rowVal);
-        case FilterMethods.InTheRangeOf:
-          return rowVal >= filter.arg[0] && rowVal <= filter.arg[1];
-        default:
-          return false;
-      }
-    });
+    return filters
+      .filter((item) => item)
+      .every((filter) => {
+        const rowVal = row[filter.column];
+        switch (filter.method) {
+          case FilterMethods.Equal:
+            return rowVal === filter.arg[0];
+          case FilterMethods.GreaterThan:
+            return rowVal > filter.arg[0];
+          case FilterMethods.GreaterThanEqualTo:
+            return rowVal >= filter.arg[0];
+          case FilterMethods.LessThan:
+            return rowVal < filter.arg[0];
+          case FilterMethods.LessThanEqualTo:
+            return rowVal <= filter.arg[0];
+          case FilterMethods.Includes:
+            return (filter.arg as number[]).includes(Number(rowVal));
+          case FilterMethods.Excludes:
+            return !(filter.arg as number[]).includes(Number(rowVal));
+          case FilterMethods.InTheRangeOf:
+            return rowVal >= filter.arg[0] && rowVal <= filter.arg[1];
+          default:
+            return false;
+        }
+      });
   }
 
   private filterRecursively(

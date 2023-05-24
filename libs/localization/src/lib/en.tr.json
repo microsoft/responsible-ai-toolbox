@@ -1,14 +1,21 @@
 {
+  "Common": {
+    "close": "Close",
+    "tooltipButton": "Tooltip button",
+    "identityFeature": "Identity feature"
+  },
   "CausalAnalysis": {
     "AggregateView": {
       "binary": "İkili tedavi: ",
-      "binaryDescription": "Bu örnekte ortalama olarak, bu özelliğin açılması, sınıf/etiket 1’in olasılığının X birim artmasına neden olur.",
+      "binaryDescription": "On average in this sample, turning on this feature will cause the probability of class/label '{0}' to increase by X units.",
+      "regressionDescription": "On average in this sample, turning on this feature will cause the predictions of the target to increase/decrease by X units.",
       "causalPoint": "Nedensel etki noktası",
       "confidenceLower": "Güvenilirlik aralığı (alt)",
       "confidenceUpper": "Güvenilirlik aralığı (üst)",
       "confoundingFeature": "Çelişkili bir özellik, hem tedavi hem de ilgili sonuç ile ilişkilidir. Çelişkili etmen, doğrudan nedensel etkinin üzerine tedaviden sonuca kadar fazladan bir bağıntı yolu oluşturur. Çelişkili özellikler ölçülmedikçe ve modele dahil edilmedikçe, bu fazladan bağıntılar nedensel etkinin tahminlerini saptırabilir. Sapma; atlanan çelişkili etmenler, tedaviler ve sonuçlar arasındaki bağıntı yönlerine bağlı olarak pozitif veya negatif olabilir.",
       "continuous": "Sürekli tedaviler: ",
-      "continuousDescription": "Bu örnekte ortalama olarak, bu özelliği 1 birim artırmak, sınıf/etiket 1’in olasılığının X birim artmasına neden olur.",
+      "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the probability of class/label '{0}' to increase by X units.",
+      "continuousRegressionDescription": "On average in this sample, increasing this feature by 1 unit will cause the predictions of the target to increase/decrease by X units.",
       "description": "Nedensel analiz, bir ürün için farklı bir fiyatlandırma stratejisi veya bir hasta için alternatif bir tedavi gibi farklı ilke seçimlerinde gerçek dünya sonuçlarının nasıl değişeceğiyle ilgili 'durum çözümlemesi' sorularını yanıtlar. Önemli bağıntı desenlerini tanımlayan model tahminlerinin aksine, bu araçlar ilgilendiğiniz sonucu doğrudan etkileyen en önemli nedensel özellikleri belirlemenize yardımcı olur. Bu modeller, diğer çelişkili özellikleri sabit tutarak bir özelliğin (genellikle “tedavi” olarak ifade edilir) nedensel etkisini tanımlar. En iyi sonuçları elde etmek için, tam veri kümesinin sonuçla ilişkili olabilecek kullanılabilir tüm özellikleri çelişkili olarak içerdiğinden emin olun.",
       "directAggregate": "% 95 güven aralığı ile her tedavinin doğrudan toplam nedensel etkisi",
       "here": "buradaki",
@@ -19,7 +26,7 @@
       "currentOutcome": "Geçerli sonuç",
       "currentTreatment": "Geçerli tedavi değeri",
       "dataRequired": "Bu sekme, bir veri noktasının seçilmesini gerektirir.",
-      "datapointIndex": "Datapoint dizini",
+      "selectedDatapoint": "Selected datapoint",
       "description": "Her nedensel etki, müşterilere hedeflenen bir yükseltme veya bireysel bir tedavi planı gibi kişiselleştirilmiş müdahale hakkında bilgi verebilir. Belirli özellikler kümesine sahip bir kişi nedensel bir özellikteki veya tedavideki değişikliğe nasıl yanıt verir?  Nedensel durum çözümlemesi aracı, belirli bir kişinin tedavi düzeyini değiştirmeniz durumunda bu kişinin gerçek dünyada edineceği sonuçlardaki marjinal değişiklikleri hesaplar. Bu analiz, bir ürün için farklı bir fiyatlandırma stratejisi veya bir hasta için alternatif tedavi gibi farklı ilke seçimlerinde gerçek dünya sonuçlarının nasıl değiştiğini anlamanızı sağlar. İlgili tedaviyi belirtin ve gerçek dünya sonucunun nasıl değişeceğini gözlemleyin.",
       "directIndividual": "% 95 güven aralığı ile her tedavinin doğrudan bireysel nedensel etkisi",
       "index": "Datapoint dizini",
@@ -45,16 +52,16 @@
       "BarTextBinary": "Yukarıda açıklanan önerilen genel tedavi ilkesi uygulanmışsa ilk çubuk, ortalama göreli kazançları gösterir. Bildirilen kazançlar, kullandığımız tedavideki sayısal değişikliği bildirir. İkinci çubuk, ikili tedavilerin açılmasıyla herkesin tedavi edilmesinden elde edilen göreli kazançları (veya zararları) gösterir.",
       "BarTextContinuous": "Yukarıda açıklanan önerilen küresel tedavi ilkesi uygulanmışsa ilk çubuk, ortalama göreli kazançları gösterir. Bildirilen kazançlar, tedavi özelliğinin örnekteki tipik tedavi boyutunun %10’u kadar artırılmasını/azaltılmasını yansıtır. İkinci çubuk, sürekli tedavilerin %10 kadar artırılmasından/azaltılmasından elde edilen göreli kazançları (veya zararları) gösterir.",
       "Description": "Bu araçlar, gelecekteki müdahaleler için ilkeler derlemeye yardımcı olur. Örneğinizin hangi bölümlerinin nedensel bir sürücüye (yani işlem) en büyük yanıtları deneyimlediğini belirleyebilir veya gelecekteki hangi veri kümelerinin en büyük işlem etkilerine sahip olacağını tanımlamak için kurallar oluşturabilirsiniz.",
-      "Left": "{0} <= {1}",
+      "Left": "{0} less than or equal to {1}",
       "Recommended": "Önerilen işlem = {0}",
-      "Right": "{0} > {1}",
+      "Right": "{0} greater than {1}",
       "SelectPolicy": "İşleme özelliğini ayarla",
       "Size": "Örnek boyutu için yorumlanabilir önerilen genel işlem ilkesi (n) = {0}",
       "Table": "Tablo, bir satır alarak ve ardından bu belirli satırın bir sütunu alınarak okunabilir.",
       "TableDescription": "Bu tabloda, geçerli veri örneğine veya diğer popülasyonlara uygulanabilecek önerilen bir tedavi ilkesini gösterilir. Tablo, kişinin seçili tedaviye yanıt verip vermemesi üzerinde en büyük etkisi olan özelliklere bağlı olarak gözlemleri veri kohortları olarak ayırmak için basit bir kural sağlar. Tabloda ayrıca, her segmente atanan geçerli veri örneğindeki veri noktalarının sayısı da belirtilir.",
       "alwaysTreat": "Her zaman ' {0} ' olarak değerlendir",
       "averageGainBinary": "{0} tedavisinin temel {1} değerine ayarlanmasından elde edilen ortalama kazanç.",
-      "averageGainContinuous": "Average gains of alternative policies over no '{0}' treatment.",
+      "averageGainContinuous": "Hiç '{0}' işlem olmamasına kıyasla alternatif ilkelerin ortalama kazanımları.",
       "header": "Bu araçlar, gelecekteki müdahaleler için ilke oluşturmaya yardımcı olur. Örneğinizin hangi bölümlerinin nedensel özelliklerdeki veya tedavilerdeki değişikliklere yönelik en büyük yanıtlarla karşılaştığını belirleyebilir ve gelecekteki hangi popülasyonların belirli müdahaleler için hedeflenmesi gerektiğini tanımlayan kurallar oluşturabilirsiniz.",
       "nSample": "n = {0}",
       "noData": "Veri yok"
@@ -69,17 +76,31 @@
       "Title": "Veri yok"
     },
     "ComparisonTypes": {
-      "lt": "{0} < {1}",
-      "lte": "{0} <= {1}",
-      "gt": "{0} > {1}",
-      "gte": "{0} >= {1}",
-      "eq": "{0} == {1}",
-      "ne": "{0} != {1}",
+      "lt": "{0} less than {1}",
+      "lte": "{0} less than or equal to {1}",
+      "gt": "{0} greater than {1}",
+      "gte": "{0} greater than or equal to {1}",
+      "eq": "{0} equal to {1}",
+      "ne": "{0} not equal to {1}",
       "in": "{0}, ({1}) kümesinde",
       "nin": "{0}, ({1}) kümesinde yok",
       "rg": "{0}, şu aralıkta: ({1})",
       "nrg": "{0}, şu aralıkta: ({1})",
       "Unknown": "bilinmiyor"
+    },
+    "ShiftCohort": {
+      "apply": "Apply",
+      "cancel": "Cancel",
+      "title": "Switch Cohort",
+      "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
+    },
+    "PreBuiltCohort": {
+      "featureNameNotFound": "Feature name not found in the dataset",
+      "notACategoricalFeature": "Feature is not categorical"
+    },
+    "EmptyCohortDialog": {
+      "title": "Dataset cohort contains no datapoints",
+      "subText": "It seems your dataset cohort contains no datapoints, adjust your filters to include at least one datapoint in your dataset cohort before saving."
     }
   },
   "Counterfactuals": {
@@ -87,19 +108,28 @@
     "EffectLowerBound": "CI_lower",
     "EffectOfTreatment": "Öneri etkisi",
     "EffectUpperBound": "CI upper",
+    "ErrorDialog": {
+      "Close": "Close",
+      "ErrorPrefix": "Error encountered: {0}",
+      "PythonError": "Python error"
+    },
     "RecommendedTreatment": "Önerilen işlem",
     "WhatIf": {
       "setValue": "Değeri Ayarla",
       "sortFeatures": "Özellik sütunlarını karşıolgusal özellik önem derecesine göre sırala",
-      "toggleToolTipBody": "Counterfactual examples generate local feature importances which indicate which top features were perturbed the most to achieve the desired class classification scenarios or desired range for regression scenarios.",
-      "toggleToolTipHeader": "Ranked counterfactual features"
+      "percentCounterfactualLocalImportance": "Percentage of counterfactuals that varied the feature",
+      "toggleToolTipBody": "Karşı olgusal örnekler, istenen sınıf sınıflandırma senaryolarını veya regresyon senaryoları için istenen aralığı elde etmek için hangi üst özelliklerin en çok bozulduğunu gösteren yerel özellik önem dereceleri üretir.",
+      "toggleToolTipHeader": "Derecelendirilmiş karşı olgusal özellikler",
+      "predictedClass": "Predicted class",
+      "predictedValue": "Predicted value"
     },
     "counterfactualEx": "{0} karşıolgusal örneği",
     "counterfactualName": "Etki değerlendirmesi karşıolgusal adı",
-    "createWhatIfCounterfactual": "Create what-if counterfactual",
+    "createWhatIfCounterfactual": "Etki değerlendirmesi karşıolgusalı oluştur",
     "createCounterfactual": "Counterfactual",
     "createOwn": "Kendi karşıolgusalınızı oluşturun:",
     "currentClass": "Geçerli sınıf",
+    "currentRange": "Current range",
     "decreaseByOne": "Değeri 1 azaltın",
     "desiredClass": "Karşıolgusal(lar) için istenen sınıf",
     "header": "Durum çözümlemesi karşıolgusalları",
@@ -111,9 +141,10 @@
     "localImportanceSelectData": "Yerel önem derecesi grafiğini görüntülemek için bir veri noktası seçin",
     "noData": "Veri yok",
     "noFeatures": "Kullanılabilir özellik yok",
-    "panelDescription": "Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. The table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking \"set values\" text under each counterfactual name. Name your counterfactual and save it.",
-    "whatIfPanelHeader": "What-if counterfactuals",
-    "panelHeader": "Counterfactuals",
+    "panelDescription": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set suggested counterfactual feature values by clicking “Set Value” text under each counterfactual name. Name your counterfactual and save it.",
+    "panelDescriptionWithoutSetValue": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples.",
+    "whatIfPanelHeader": "Etki değerlendirmesi karşıolgusalları",
+    "panelHeader": "Karşı olgusallar",
     "recommendedPolicy": "Önerilen ilke kazancı",
     "referenceDatapoint": "Başvuru veri noktası: {0} numaralı satır",
     "saveAsNew": "Yeni veri noktası olarak kaydet",
@@ -129,8 +160,14 @@
       "cohort": "Kohort",
       "defaultLabel": "Tüm veriler"
     },
+    "CohortBaseAndFilters": {
+      "globalCohortAndFilters": "Global cohort and filters",
+      "globalCohort": "Global cohort",
+      "errorExplorer": "Error explorer",
+      "filters": "Filters"
+    },
     "CohortInfo": {
-      "baseCohortInstances": "Temel kohortdaki örnekler",
+      "baseCohortInstances": "Instances in global cohort",
       "basicInformation": "Temel Bilgiler",
       "cohortInformation": "Kohort bilgileri",
       "correct": "Doğru",
@@ -149,19 +186,25 @@
       "subText": "Seçili kohort hakkında bilgi edinin. Kohort adını düzenleyin. Bu kohortu silin."
     },
     "FeatureList": {
+      "apply": "Apply",
       "features": "Özellikler",
-      "importances": "Önem dereceleri"
+      "importances": "Önem dereceleri",
+      "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
+      "staticTreeMapDescription": "View the features that were used to train the tree map. The feature importances were calculated using mutual information with the error on the true labels."
     },
     "TreeViewParameters": {
-      "maximumDepth": "Maximum depth",
-      "maximumDepthInfoText": "The maximum depth of the surrogate tree trained on errors",
-      "maximumDepthTitle": "Additional information on maximum depth",
-      "numLeaves": "Number of leaves",
-      "numLeavesInfoText": "The number of leaves of the surrogate tree trained on errors",
-      "numLeavesTitle": "Additional information on number of leaves",
-      "minDataInLeaf": "Minimum number of samples in one leaf",
-      "minDataInLeafInfoText": "The minimum number of data required to create one leaf",
-      "minDataInLeafTitle": "Additional information on minimum number of samples in one leaf"
+      "maximumDepth": "En fazla derinlik",
+      "maximumDepthInfoText": "Hatalarla eğitilen vekil ağacın maksimum derinliği",
+      "maximumDepthTitle": "Maksimum derinlik hakkında ek bilgi",
+      "numLeaves": "Yaprak sayısı",
+      "numLeavesInfoText": "Hatalarla eğitilen vekil ağacın yaprak sayısı",
+      "numLeavesTitle": "Yaprak sayısı hakkında ek bilgi",
+      "minDataInLeaf": "Bir yapraktaki en az örnek sayısı",
+      "minDataInLeafInfoText": "Bir yaprak oluşturmak için gereken en az veri sayısı",
+      "minDataInLeafTitle": "Bir yaprakta en az örnek sayısı hakkında ek bilgi"
+    },
+    "TreeLegend": {
+      "clearSelection": "Clear selection"
     },
     "FilterTooltip": {
       "correctNum": "Doğru (#): ",
@@ -188,8 +231,8 @@
       "featureList": "Özellik listesi",
       "fullscreen": "Tam ekran",
       "heatMap": "Isı haritası",
-      "saveCohort": "Kohortu kaydet",
-      "shiftCohort": "Kaydırma kohortu",
+      "newCohort": "New cohort",
+      "shiftCohort": "Switch cohort",
       "treeMap": "Ağaç harita",
       "whatIf": "Etki değerlendirmesi"
     },
@@ -199,8 +242,10 @@
       "move": "Taşı",
       "saveAs": "Yeni kohort olarak kaydet",
       "shift": "Kaydır",
-      "subText": "Açıklamanızı farklı bir haritayla yeniden başlatmak istiyor musunuz? Bunu yeni bir kohort olarak kaydedin. Aksi takdirde seçtiğiniz filtreler kaybolur.",
-      "title": "Harita kaydırma"
+      "heatTitle": "Leave tree view?",
+      "heatSubText": "Are you sure you want to leave tree view? You can save your filters as a new cohort so you can access them in Cohort settings. Otherwise your filters will be lost.",
+      "treeTitle": "Leave heatmap view?",
+      "treeSubText": "Are you sure you want to leave heatmap view? You can save your filters as a new cohort so you can access them in Cohort settings. Otherwise your filters will be lost."
     },
     "MatrixArea": {
       "clearAll": "Tümünü temizle",
@@ -208,11 +253,11 @@
       "selectAll": "Tümünü seç"
     },
     "MatrixFilter": {
-      "disabledWarning": "Error heatmap is disabled unless global cohort is switched to represent \"All data\" due to the heatmap being generated for the full dataset. Switch back to the full dataset to view the error heatmap."
+      "disabledWarning": "Genel kohort, tam veri kümesi için oluşturulan ısı haritası nedeniyle \"Tüm verileri\" temsil edecek şekilde değiştirilmediyse hata ısı haritası devre dışı bırakılır. Hata ısı haritasını görüntülemek için tam veri kümesine geri dönün."
     },
     "MatrixSummary": {
       "heatMapDescription": "Isı haritasıyla kesişen belirli özellik filtrelerine odaklanabilir ve bölünmüş hata oranlarını hesaplayabilirsiniz. Karşılaştırmak için iki veri kümesi özelliğiyle başlayın.",
-      "heatMapStaticDescription": "With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Up to two features must be selected to create a heat map via SDK before viewing the dashboard."
+      "heatMapStaticDescription": "Isı haritasıyla belirli kesişim özellik filtrelerini ve ayrılmış hata oranlarını hesaplamaya odaklanabilirsiniz. Panoyu görüntülemeden önce SDK aracılığıyla ısı haritası oluşturmak için en fazla iki özellik seçilmelidir."
     },
     "MatrixOptions": {
       "quantileBinningLabel": "Dağılım dilimi gruplaması",
@@ -225,9 +270,16 @@
       "binningThresholdTitle": "Bölme eşiği hakkında ek bilgi"
     },
     "Metrics": {
+      "accuracyScore": "Accuracy score",
+      "accuracyScoreInfo": "The accuracy score represents the ratio of correct to total instances in the data.",
+      "accuracyScoreShort": "Accuracy",
+      "accuracyScoreTitle": "Additional information on accuracy score",
       "errorRate": "Hata oranı",
       "errorRateInfo": "Hata oranı, düğümde sistemin başarısız olduğu örneklerin yüzdesini temsil eder.",
       "errorRateTitle": "Hata oranıyla ilgili ek bilgiler",
+      "f1Score": "F1 score",
+      "f1ScoreInfo": "The F1 score is the harmonic mean of the precision and recall metrics.",
+      "f1ScoreTitle": "Additional information on F1 score",
       "meanAbsoluteError": "Ortalama mutlak hata sayısı",
       "meanAbsoluteErrorInfo": "Ortalama mutlak hata, hataların toplamının ortalamasıdır.",
       "meanAbsoluteErrorShort": "Ortalama mutlak hata",
@@ -236,37 +288,46 @@
       "meanSquaredErrorInfo": "Ortalama hata karesi hataların karelerinin ortalamasıdır.",
       "meanSquaredErrorShort": "Ortalama hata karesi",
       "meanSquaredErrorTitle": "Ortalama hata karesi hakkında ek bilgiler",
-      "precision": "Precision score",
-      "precisionInfo": "The precision is the ratio of true positives over all predicted positives.",
-      "precisionShort": "Precision",
-      "precisionTitle": "Additional information on precision",
-      "recall": "Recall score",
-      "recallInfo": "The recall is the ratio of true positives over all actual positives.",
-      "recallShort": "Recall",
-      "recallTitle": "Additional information on recall",
-      "macroPrecision": "Macro averaged precision score",
-      "macroPrecisionInfo": "The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.",
-      "macroPrecisionShort": "Macro precision",
-      "macroPrecisionTitle": "Additional information on macro averaged precision",
-      "microPrecision": "Micro averaged precision score",
-      "microPrecisionInfo": "The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.",
-      "microPrecisionShort": "Micro precision",
-      "microPrecisionTitle": "Additional information on micro averaged precision",
-      "macroRecall": "Macro averaged recall score",
-      "macroRecallInfo": "The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.",
-      "macroRecallShort": "Macro recall",
-      "macroRecallTitle": "Additional information on macro averaged recall",
-      "microRecall": "Micro averaged recall score",
-      "microRecallInfo": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
-      "microRecallShort": "Micro recall",
-      "microRecallTitle": "Additional information on micro averaged recall",
+      "precision": "Duyarlık puanı",
+      "precisionInfo": "Duyarlık, gerçek pozitiflerin tüm tahmin edilen pozitiflere oranıdır.",
+      "precisionShort": "Duyarlık",
+      "precisionTitle": "Duyarlık hakkında ek bilgiler",
+      "recall": "Yakalama puanı",
+      "recallInfo": "Yakalama, gerçek pozitiflerin tüm pozitiflere oranıdır.",
+      "recallShort": "Yakalama",
+      "recallTitle": "Yakalama hakkında ek bilgi",
+      "macroPrecision": "Makro ortalama duyarlık puanı",
+      "macroPrecisionInfo": "Makro ortalama duyarlığı, sınıf başına bağımsız olarak hesaplanan ve ortalaması alınan tüm tahmin edilen pozitiflere göre gerçek pozitiflerin oranıdır.",
+      "macroPrecisionShort": "Makro duyarlık",
+      "macroPrecisionTitle": "Makro ortalama duyarlığı hakkında ek bilgi",
+      "microPrecision": "Mikro ortalama duyarlık puanı",
+      "microPrecisionInfo": "Mikro ortalama duyarlık, tüm sınıflar için toplanan tüm tahmin edilen pozitiflere göre gerçek pozitiflerin oranıdır.",
+      "microPrecisionShort": "Mikro duyarlık",
+      "microPrecisionTitle": "Mikro ortalama duyarlığı hakkında ek bilgi",
+      "macroRecall": "Makro ortalama yakalama puanı",
+      "macroRecallInfo": "Makro ortalama yakalama, sınıf başına bağımsız olarak hesaplanan ve ortalaması alınan tüm pozitiflere göre gerçek pozitiflerin oranıdır.",
+      "macroRecallShort": "Makro yakalama",
+      "macroRecallTitle": "Makro ortalamasını yakalama hakkında ek bilgi",
+      "microRecall": "Mikro ortalama yakalama puanı",
+      "microRecallInfo": "Mikro ortalama yakalama, tüm sınıflar için toplanan tüm gerçek pozitiflere göre gerçek pozitiflerin oranıdır.",
+      "microRecallShort": "Mikro yakalama",
+      "microRecallTitle": "Mikro ortalamasını yakalama hakkında ek bilgiler",
+      "macroF1Score": "Macro averaged F1 score",
+      "macroF1ScoreInfo": "The macro averaged F1 score is the harmonic mean of the macro averaged precision and recall metrics.",
+      "macroF1ScoreShort": "Macro F1 score",
+      "macroF1ScoreTitle": "Additional information on macro averaged F1 score",
+      "microF1Score": "Micro averaged F1 score",
+      "microF1ScoreInfo": "The micro averaged F1 score is the harmonic mean of the micro averaged precision and recall metrics.",
+      "microF1ScoreShort": "Micro F1 score",
+      "microF1ScoreTitle": "Additional information on micro averaged F1 score",
       "metricName": "Ölçüm adı",
       "metricValue": "Ölçüm değeri"
     },
     "MetricSelector": {
-      "selectorLabel": "Select metric"
+      "selectorLabel": "Ölçüm seçin"
     },
     "Navigation": {
+      "cohortSaved": "New cohort is saved! See Cohort list under Cohort settings.",
       "dataExplorer": "Veri gezgini",
       "errorExplorer": "Hata gezgini",
       "globalExplanation": "Genel açıklama",
@@ -280,13 +341,13 @@
       "move": "Taşı",
       "save": "Kaydet",
       "saveTitle": "Yeni kohort olarak kaydet",
-      "subText": "Save the current cohort to the cohort settings. You can revisit the saved cohort via the cohort settings.",
-      "defaultLabelCopy": "All data copy"
+      "subText": "Geçerli kohortu, kohort listesine kaydedin. Kohort ayarları aracılığıyla kaydedilmiş kohortu yeniden ziyaret edebilirsiniz.",
+      "defaultLabelCopy": "Tüm veri kopyalama"
     },
     "TreeView": {
-      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Feature list.\"",
-      "treeStaticDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on \"Feature list.\"",
-      "disabledWarning": "Error treemap is disabled unless global cohort is switched to represent \"All data\" due to the treemap being generated for the full dataset. Switch back to the full dataset to view the error treemap."
+      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Feature list.\" Use the \"select metric\" dropdown menu to learn more about your error and success nodes' performance. Please note that this metric selection will not impact the way your error tree is generated.",
+      "treeStaticDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on \"Feature list.\" Use the \"select metric\" dropdown menu to learn more about your error and success nodes' performance. Please note that this metric selection will not impact the way your error tree is generated.",
+      "disabledWarning": "Genel kohort, tam veri kümesi için oluşturulan ağaç haritası nedeniyle \"Tüm verileri\" temsil edecek şekilde değiştirilmediyse hata ağaç haritası devre dışı bırakılır. Hata ağaç haritasını görüntülemek için tam veri kümesine geri dönün."
     },
     "WhatIfPanel": {
       "whatIfHeader": "Etki değerlendirmesi"
@@ -312,13 +373,13 @@
     "instanceView": "Örnek Görünümü",
     "localExplanationView": "Yerel açıklama",
     "noFeature": "Özellik yok",
-    "treeMapDescription": "Ağaç haritasını yeniden eğitmek için aşağıdaki özellikleri seçin ve kaydedin. Özellik önem dereceleri, doğru etiketlerinde hata bulunan iki taraflı bilgiler kullanılarak hesaplanır. Ağaç haritasını eğitirken bunu kılavuz olarak kullanın.",
+    "scaleWarning": "For scale reasons of the UI explanations are randomly downsampled",
     "whatIfDatapoints": "Etki değerlendirmesi veri noktaları"
   },
   "Fairness": {
     "ValidationErrors": {
-      "missingPerformanceMetric": "No performance metric found.",
-      "missingFairnessMetric": "No fairness metric found."
+      "missingPerformanceMetric": "Performans ölçümü bulunamadı.",
+      "missingFairnessMetric": "Eşitlik ölçümü bulunamadı."
     },
     "BinDialog": {
       "cancel": "İptal",
@@ -613,12 +674,12 @@
     },
     "AxisConfigDialog": {
       "TreatAsCategorical": "Kategorik olarak değerlendir",
+      "apply": "Apply",
       "binLabel": "Verilere gruplama uygula",
       "countHelperText": "Nokta sayısının histogramı",
       "ditherLabel": "Titreşmeli",
       "groupByCohort": "Kohorta göre gruplandır",
       "numOfBins": "Bölme sayısı",
-      "select": "Seç",
       "selectClass": "Sınıf seçin",
       "selectFeature": "Özellik seçin",
       "selectFilter": "Eksen değerinizi seçin"
@@ -646,7 +707,8 @@
     },
     "Cohort": {
       "cohort": "Kohort",
-      "defaultLabel": "Tüm veriler"
+      "defaultLabel": "Tüm veriler",
+      "temporaryCohort": "Temporary cohort"
     },
     "CohortBanner": {
       "addCohort": "Yeni kohort",
@@ -657,7 +719,7 @@
       "datasetCohorts": "Veri kümesi kohortları",
       "details": "Ayrıntılar",
       "duplicateCohort": "Çoğalt",
-      "edit": "Edit",
+      "edit": "Düzenle",
       "editCohort": "Kohortu düzenle",
       "features": "{0} özellik",
       "filters": "{0} filtre",
@@ -676,14 +738,18 @@
       "cancelTitle": "Kohortu iptal et",
       "cancelYes": "Evet",
       "cohortNameError": "Kohort adı eksik",
+      "cohortNameDupError": "Cohort with same name already exists",
       "cohortNameLabel": "Veri kümesi kohortu adı",
       "cohortNamePlaceholder": "Kohortunuzu adlandırın",
-      "clearAllFilters": "Clear all filters",
-      "defaultFilterState": "Select a filter to add parameters to your dataset cohort. Filters from your current viewing cohort are pre-populated.",
+      "clearAllFilters": "Tüm filtreleri temizle",
+      "defaultFilterState": "Veri kümesi kohortunuza parametre eklemek için bir filtre seçin. Geçerli görüntüleme kohortunuzdan filtreler önceden doldurulur.",
       "delete": "Sil",
+      "invalidValueError": "Value should be between {0} and {1}",
+      "minimumGreaterThanMaximum": "Minimum value inputs must be less than maximum value inputs.",
       "noAddedFilters": "Filtre bulunamadı",
       "placeholderName": "{0} kohortu",
       "save": "Kaydet",
+      "saveAndSwitch": "Save and switch",
       "selectFilter": "Filtre seçin"
     },
     "Columns": {
@@ -696,7 +762,9 @@
       "predictedProbabilities": "Tahmin olasılıkları",
       "regressionError": "Regresyon hatası",
       "trueNegative": "Gerçek negatif",
-      "truePositive": "Doğru pozitif"
+      "truePositive": "Doğru pozitif",
+      "correctlyClassified": "Correctly classified",
+      "misclassified": "Misclassified"
     },
     "CrossClass": {
       "absoluteValInfo": "Mutlak değer ortalaması: Özelliğin tüm olası sınıflardaki önem derecesi toplamının sınıf sayısına bölümünü gösterir",
@@ -712,14 +780,15 @@
       "aggregatePlots": "Kümelenmiş çizimler",
       "chartType": "Grafik türü",
       "colorValue": "Renk değeri",
-      "helperText": "Veri kümesi istatistiklerini, öngörülen sonuç, veri kümesi özellikleri ve hata grupları gibi filtrelerle birlikte analiz etmek için veri kümesi kohortları oluşturun. Veri kümenizdeki fazla/yetersiz sunum hakkında bilgi edinin.",
+      "helperText": "Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups. Learn about the over/under presentation in your dataset.",
       "individualDatapoints": "Ayrı ayrı veri noktaları",
       "missingParameters": "Bu sekme için değerlendirme veri kümesi sağlanması gerekir.",
-      "noColor": "Yok"
+      "noColor": "Yok",
+      "datasetCohortDropdown": "Dataset cohort dropdown"
     },
     "DependencePlot": {
       "featureImportanceOf": "Şu özellik için önem derecesi:",
-      "placeholder": "Bağımlılık çizimini görüntülemek için yukarıdaki çubuk grafiğinde bulunan bir özelliğe tıklayın"
+      "placeholder": "Select a feature to show its dependence plot"
     },
     "ExplanationScatter": {
       "class": "sınıf: ",
@@ -758,14 +827,14 @@
       "violinText": "Keman"
     },
     "FilterOperations": {
-      "equals": " = {0}",
+      "equals": " equal to {0}",
       "excludes": " şunu dışlıyor: {0} ",
-      "greaterThan": " > {0}",
-      "greaterThanEquals": " >= {0}",
+      "greaterThan": " greater than {0}",
+      "greaterThanEquals": " greater than or equal to {0}",
       "inTheRangeOf": "[ {0} ]",
       "includes": " şunu içerir: {0} ",
-      "lessThan": " < {0}",
-      "lessThanEquals": " <= {0}",
+      "lessThan": " less than {0}",
+      "lessThanEquals": " less than or equal to {0}",
       "overflowFilterArgs": "{0} ve {1} öğe daha"
     },
     "Filters": {
@@ -788,7 +857,7 @@
       "helperText": "Genel model tahminlerinizi etkileyen en yüksek k önem düzeyindeki özellikleri keşfedin. Azalan özellik önceliklerini göstermek için kaydırıcıyı kullanın."
     },
     "GlobalTab": {
-      "absoluteValues": "Absolute values",
+      "absoluteValues": "View as absolute values",
       "aggregateFeatureImportance": "Kümelenmiş özellik önem derecesi",
       "collapsedHelperText": "Genel model tahminlerinizi etkileyen en yüksek k önem düzeyindeki özellikleri inceleyin.",
       "datapoint": "Datapoint",
@@ -801,12 +870,14 @@
       "helperText": "Genel model tahminlerinizi etkileyen top-k önemli özelliklerini keşfedin (genel açıklama olarak da bilinir). Azalan özellik önem derecelerini göstermek için kaydırıcıyı kullanın. Tüm kohortların özellikleri yan yana gösterilir ve göstergede kohort seçilerek devre dışı bırakılabilir. Seçili özelliğin değerlerinin tahmini nasıl etkilediği ile ilgili aşağıdaki yoğunluk çizimini görmek için grafikteki özelliklerden herhangi birine tıklayın.",
       "legendHelpText": "Gösterge öğelerine tıklayarak çizimdeki kohortları açıp kapatın.",
       "missingParameters": "Bu sekme için yerel özellik önem derecesi parametresinin sağlanması gerekir.",
-      "sortBy": "Sıralama ölçütü",
+      "sortBy": "Sort by datapoint",
       "topAtoB": "Önem derecelerine göre ilk {0} özellik",
       "viewDependencePlotFor": "Şunun için bağımlılık çizimini görüntüle:",
-      "weightOptions": "Sınıf önem derecesi ağırlıkları"
+      "weightOptions": "Sınıf önem derecesi ağırlıkları",
+      "weightOptionsDropdown": "Class importance weights dropdown"
     },
     "IcePlot": {
+      "close": "Close",
       "errorPrefix": "Hatayla karşılaşıldı: {0}",
       "featurePickerLabel": "Özellik:",
       "integerError": "Bir tamsayı olmalıdır",
@@ -819,6 +890,7 @@
       "prediction": "Tahmin",
       "predictionLabel": "Tahmin: {0}",
       "probabilityLabel": "Olasılık: {0}",
+      "pythonError": "Python error",
       "stepInputLabel": "Adımlar:",
       "submitPrompt": "ICE çizimini görüntülemek için bir aralık gönderin",
       "topLevelErrorMessage": "Parametrede hata"
@@ -840,13 +912,16 @@
     },
     "Statistics": {
       "accuracy": "Doğruluk: {0}",
-      "fnr": "Hatalı Negatif Oranları: {0}",
-      "fpr": "Hatalı Pozitif Oranları: {0}",
+      "fnr": "False negative rate: {0}",
+      "fpr": "False positive rate: {0}",
       "meanPrediction": "Ortalama tahmin {0}",
-      "mse": "MSE: {0}",
+      "mse": "Mean squared error: {0}",
       "precision": "Duyarlık: {0}",
-      "rSquared": "R-kare: {0}",
-      "recall": "Yakalama: {0}"
+      "rSquared": "R²: {0}",
+      "recall": "Yakalama: {0}",
+      "selectionRate": "Selection rate: {0}",
+      "mae": "Mean absolute error: {0}",
+      "f1Score": "F1 score: {0}"
     },
     "ValidationErrors": {
       "addFilters": "Filtre ekle",
@@ -882,7 +957,7 @@
       "dataPointInfo": "Veri noktası bilgileri",
       "deltaLabel": "Delta",
       "disclaimer": "Yasal uyarı: Bunlar birçok tahmine dayanan açıklamalardır ve tahminlerin “nedeni” değildir. Nedensel çıkarımın sağlam matematiksel temeli olmadan kullanıcıların bu araca dayalı olarak gerçek hayata yönelik karar vermeleri önerilmez.",
-      "featureImportanceGetStartedText": "Yerel önem derecesini görmek için bir nokta seçin",
+      "featureImportanceGetStartedText": "Select a datapoint in the table above to view its local feature importances",
       "featureImportanceLackingParameters": "Her özelliğin tahminleri nasıl etkilediğini görmek için yerel özellik önem derecelerini belirtin.",
       "featureImportancePlot": "Özellik önem derecesi çizimi",
       "featureValues": "Özellik değerleri",
@@ -951,6 +1026,47 @@
     "selectPoint": "Yerel açıklamasını görmek için bir nokta seçin",
     "summaryImportance": "Özet önem derecesi"
   },
+  "InterpretText": {
+    "View": {
+      "interpretibilityDashboard": "Interpretability Dashboard",
+      "importantWords": "Most Important Words",
+      "topFeatureList": "Top feature list analysis",
+      "allButton": "ALL FEATURES",
+      "negButton": "NEGATIVE FEATURES",
+      "posButton": "POSITIVE FEATURES",
+      "legendText": "Positive scalar feature importances represents the extent that the word was important towards the classification of your selected label, and negative scalar feature importances represents words that encouraged your model away from your selected label.",
+      "label": "Label",
+      "colon": ": "
+    },
+    "Legend": {
+      "featureLegend": "TEXT FEATURE LEGEND",
+      "posFeatureImportance": "POSITIVE FEATURE IMPORTANCE",
+      "negFeatureImportance": "NEGATIVE FEATURE IMPORTANCE"
+    },
+    "BarChart": {
+      "featureImportance": "FEATURE IMPORTANCE"
+    }
+  },
+  "InterpretVision": {
+    "Dashboard": {
+      "allData": "All Data",
+      "columnOne": "Title",
+      "columnTwo": "Index",
+      "columnThree": "True Y",
+      "columnFour": "Predicted Y",
+      "columnFive": "Other metadata",
+      "filter": "Filter",
+      "pageSize": "Page size: ",
+      "search": "Search",
+      "settings": "Settings",
+      "tabOptionFirst": "Image explorer view",
+      "tabOptionSecond": "Table view",
+      "tabOptionThird": "Data characteristics",
+      "thumbnailSize": "Thumbnail size",
+      "titleBarError": "Error instances",
+      "titleBarSuccess": "Success instances"
+    }
+  },
   "ModelAssessment": {
     "AddingTab": {
       "AddButtonText": "Ekle",
@@ -970,18 +1086,19 @@
     },
     "Cohort": {
       "apply": "Uygula",
+      "delete": "Delete",
       "cancel": "İptal",
       "cohortInfo": "Kohort bilgileri",
       "cohortList": "Kohort listesi",
-      "deleteCohort": "Deleting {0}?",
-      "deleteConfirm": "Are you sure you want to delete this cohort?",
+      "deleteCohort": "{0} silinsin mi?",
+      "deleteConfirm": "Bu kohortu silmek istediğinizden emin misiniz?",
       "selectCohort": "Kohort seçin",
-      "shiftCohort": "Kaydırma kohortu",
+      "shiftCohort": "Switch cohort",
       "shiftCohortDescription": "Kohort listesinden bir kohort seçin. Kohortu panoya uygulayın."
     },
     "CohortInformation": {
-      "SwitchGlobalCohort": "Switch global cohort",
-      "CreateNewCohort": "Yeni kohort oluştur",
+      "ShiftCohort": "Switch cohort",
+      "NewCohort": "New cohort",
       "DataPoints": "Veri noktası sayısı",
       "DefaultCohort": " (varsayılan)",
       "Filters": "Filtre sayısı",
@@ -994,14 +1111,16 @@
     "ComponentNames": {
       "CausalAnalysis": "Nedensel analiz",
       "Counterfactuals": "Karşı olgusallar",
+      "DataAnalysis": "Data analysis",
+      "DataBalance": "Data balance",
       "DataExplorer": "Veri gezgini",
       "ErrorAnalysis": "Hata analizi",
       "Fairness": "Eşitlik",
       "FeatureImportances": "Özellik önem dereceleri",
-      "ModelStatistics": "Model istatistikleri"
+      "ModelOverview": "Model overview"
     },
     "DashboardSettings": {
-      "Content": "Bu listede panonun düzeni gösterilir. Aşağıdaki bileşenlerde görüntülenmek üzere hata analizi bileşenini kullanarak verileri filtreleyebilirsiniz. Bileşen ekleyebilir, akışı yeniden sıralamak için bunları sürükleyip bırakabilir veya bileşenleri silebilirsiniz.",
+      "Content": "This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below.",
       "DashboardComponents": "Pano bileşenleri",
       "DataPoints": "Veri noktası sayısı",
       "DeleteDialog": {
@@ -1010,26 +1129,282 @@
         "Delete": "Sil",
         "Title": "{0} silinsin mi?"
       },
-      "Title": "Pano gezintisi"
+      "Title": "Dashboard configuration"
+    },
+    "DataBalance": {
+      "AggregateBalanceMeasures": {
+        "Callout": {
+          "Description": "Aggregate balance measures allow us to obtain a higher notion of inequality about our dataset. They are calculated on the set of our columns of interest and do not depend on the label column. These measures look at the distribution of records across all feature value combinations of our columns of interest.",
+          "Title": "What are aggregate balance measures?"
+        },
+        "Measures": {
+          "AtkinsonIndex": {
+            "Description": "The Atkinson Index is a measure of income inequality that presents the percentage of total income that a given society would have to forego in order to have more equal shares of income between its citizens. For the dataset, this represents the percentage of records that need to be dropped to have a perfectly balanced dataset with respect to the columns of interest. The index lies between 0 and 1, where smaller values of the index indicate lower levels of inequality.",
+            "Name": "Atkinson Index"
+          },
+          "TheilLIndex": {
+            "Description": "Theil's L Index is a measure of income inequality that is calculated using the Generalized Entropy Index with α = 0, and therefore it is more sensitive to differences at the lower end of the distribution. This index better captures record combinations that don't occur too often in the dataset. It is also referred to as the mean log deviation measure.",
+            "Name": "Theil Index (L)"
+          },
+          "TheilTIndex": {
+            "Description": "Theil's T Index is a measure of income inequality that is calculated using the Generalized Entropy Index with α = 1, and therefore it is more sensitive to differences at the higher end of the distribution. This index better captures record combinations that occur very often in the dataset.",
+            "Name": "Theil Index (T)"
+          }
+        },
+        "MeasuresNotComputed": "Aggregate balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
+        "Name": "Aggregate balance measures",
+        "Table": {
+          "Description": "Description",
+          "FeatureName": "Feature name",
+          "FeatureValue": "Feature value"
+        }
+      },
+      "DistributionBalanceMeasures": {
+        "Callout": {
+          "Description": "Distribution balance measures allow us to compare our data with a reference uniform distribution. These measures are calculated per column of interest and do not depend on the label column.",
+          "Title": "What are distribution balance measures?"
+        },
+        "Chart": {
+          "Axes": {
+            "DistributionMeasure": "Distribution measure",
+            "MeasureValue": "Measure value"
+          },
+          "Title1": "Comparing",
+          "Title2": "with the Uniform Distribution"
+        },
+        "Measures": {
+          "ChiSquarePValue": {
+            "Description": "The p-value of the chi-square test gives evidence against the null hypothesis that the difference in observed and expected frequencies is by random chance.",
+            "Name": "Chi-Square P-Value"
+          },
+          "ChiSquareStatistic": {
+            "Description": "The chi-square test validates the null hypothesis that the categorical data has the given frequencies when compared with the expected frequencies in each category.",
+            "Name": "Chi-Square (χ2) Statistic"
+          },
+          "CrossEntropy": {
+            "Description": "The cross-entropy, also known as log loss, between two probability distributions is a measure from information theory that computes the negative summation of our dataset's probability distribution multiplied by the log of the reference probability distribution.",
+            "Name": "Cross Entropy"
+          },
+          "InfiniteNormDistance": {
+            "Description": "The infinite norm distance, also called the Chebyshev distance or chessboard distance, is a measure which states that the distance between two vectors is the greatest of their difference along any coordinate dimension. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
+            "Name": "Infinite Norm Distance"
+          },
+          "JSDistance": {
+            "Description": "The Jensen-Shannon (JS) distance measures the similarity between two probability distributions. It is the symmetrized and smoothed version of the Kullback-Leibler (KL) divergence and the square root of the JS divergence. Its range is [0, 1], in which a measure value of 0 means the distribution is perfectly balanced.",
+            "Name": "Jensen-Shannon Distance"
+          },
+          "KLDivergence": {
+            "Description": "The Kullback-Leibler (KL) divergence is a measure of how one probability distribution is different from a second probability distribution. It represents the amount of information lost when one distribution is used to approximate the other. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
+            "Name": "Kullback-Leibler Divergence"
+          },
+          "TotalVariationDistance": {
+            "Description": "The total variation distance is equal to half the Manhattan (L1) distance between two distributions. It is computed using the summation of absolute value differences between two distributions. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
+            "Name": "Total Variation Distance"
+          },
+          "WassersteinDistance": {
+            "Description": "The Wasserstein distance is also known as the earth mover's distance, since it can be seen as the minimum amount of 'work' required to transform one distribution into another. Work is measured as the amount of distribution weight that must be moved, multiplied by the distance it has to be moved. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
+            "Name": "Wasserstein Distance"
+          }
+        },
+        "MeasuresNotComputed": "Distribution balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
+        "Name": "Distribution balance measures"
+      },
+      "FeatureBalanceMeasures": {
+        "Callout": {
+          "Description": "Feature balance measures allow us to see whether each combination of feature values is receiving the positive outcome (true prediction) at balanced probability.",
+          "Title": "What are feature balance measures?"
+        },
+        "Chart": {
+          "Axes": {
+            "ClassA": "Class A",
+            "ClassB": "Class B"
+          },
+          "Tooltip": {
+            "And": "and",
+            "ValueDescription1": "have a",
+            "ValueDescription2": "of"
+          }
+        },
+        "Description1": "Showing",
+        "Description2": "gaps on all classes of",
+        "Description3": "for label",
+        "FeaturePicker": "Feature",
+        "LabelPicker": "Positive label",
+        "MeasurePicker": "Measure",
+        "Measures": {
+          "JaccardIndex": {
+            "Description": "gap represents the difference between the Jaccard Index of Class A and Jaccard Index of Class B. Jaccard Index itself is an intersection-over-union measure and therefore has a range of [0, 1], where 0 means that the distributions are completely disjoint and 1 means they are completely identical.",
+            "Name": "Jaccard Index"
+          },
+          "KendallRankCorrelation": {
+            "Description": "(KRC) gap represents the difference between the KRC of Class A and KRC of Class B. Kendall Rank Correlation itself is a correlation statistic used to measure the ordinal association between two measured quantities, and the measure is high when observations have a similar rank and low when observations have a dissimilar rank between the two variables.",
+            "Name": "Kendall Rank Correlation"
+          },
+          "LogLikelihoodRatio": {
+            "Description": "(LLR) gap represents the difference between the LLR of Class A and LLR of Class B. Log Likelihood Ratio itself is a correlation statistic used to measure the ratio between the probability of a feature with the positive label and the probability of the positive label.",
+            "Name": "Log-Likelihood Ratio"
+          },
+          "PointwiseMutualInformation": {
+            "Description": "(PMI) gap represents the difference between the PMI of Class A and PMI of Class B. Pointwise Mutual Information itself is a entropy measure that, given Class A and Class B, quantifies the discrepancy between the probability of their coincidence given their joint distribution and their individual distributions (assuming independence).",
+            "Name": "Pointwise Mutual Information"
+          },
+          "SorensenDiceCoefficient": {
+            "Description": "(SDC) gap represents the difference between the SDC of Class A and SDC of Class B. Sørensen-Dice Coefficient itself is an intserction-over-union measure that is used to guage the similarity of two samples. It is related to the F1 score, and it equals twice the number of elements common to both sets divided by the sum of the number of elements in each set.",
+            "Name": "Sørensen-Dice Coefficient"
+          },
+          "StatisticalParity": {
+            "Description": "(SP) gap represents the difference between the SP of Class A and SP of Class B. Statistical Parity itself measures the positive rate, which is how much one class receives the positive outcome. The gap measures the difference between the two classes' positive rates. As close to 0 means both classes receive the positive outcome equally. A positive value means the first class sees the positive label more than the second class. A negative value means the opposite.",
+            "Name": "Statistical Parity"
+          },
+          "TTest": {
+            "Description": "gap represents the difference between the t-test of Class A and t-test of Class B. t-test itself is a correlation statistic used to compare the means of two groups (pairwise). The gap value is looked up on the t-distribution table to tell if the two groups are significantly different.",
+            "Name": "t-test"
+          },
+          "TTestPValue": {
+            "Description": "gap represents the statistical signifiance of the t-test gap between Class A and Class B. The t-test gap value and degrees of freedom are used to calculate the p-value.",
+            "Name": "t-test p-value"
+          }
+        },
+        "MeasuresNotComputed": "Feature balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
+        "Name": "Feature balance measures"
+      },
+      "LearnMore": "Learn more",
+      "MeasuresNotComputed": "This tab requires data balance measures to be computed for this dataset. Measures are computed when a 'classification' task type and a list of non-empty categorical features are specified."
     },
     "FeatureImportances": {
       "CorrectPredictions": "Doğru tahminler",
       "GlobalExplanation": "Kümelenmiş özellik önem derecesi",
       "IncorrectPredictions": "Yanlış tahminler",
-      "IndividualFeature": "Bir veri noktasını seçmek için tablodaki bir veri noktasına tıklayarak bunun yerel özellik önem derecesi değerlerini (yerel açıklama) ve her birinin koşullu beklenti (ICE) çizimini aşağıda görüntüleyin. 5000’den fazla veri noktası olan veri kümeleri için görünüm, kolay keşif sağlamak üzere rastgele bir alt örnektir.",
-      "LocalExplanation": "Bireysel özellik önem derecesi"
+      "IndividualFeature": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below.",
+      "LocalExplanation": "Bireysel özellik önem derecesi",
+      "SelectionCounter": "{0}/{1} datapoints selected",
+      "SelectionLimit": "Up to 5 datapoints can be selected at this time."
     },
     "MainMenu": {
-      "DashboardSettings": "Pano gezintisi",
+      "DashboardSettings": "Dashboard configuration",
       "cohortInfo": "Kohort bilgileri",
       "cohortList": "Kohort listesi",
       "cohortSettings": "Kohort ayarları",
       "createCohort": "Kohort oluştur",
-      "saveCohort": "Kohortu kaydet",
-      "shiftCohort": "Kaydırma kohortu"
+      "shiftCohort": "Switch cohort"
     },
     "Navigation": {
       "modelStatistics": "Model istatistikleri"
+    },
+    "ModelOverview": {
+      "metrics": {
+        "accuracy": {
+          "name": "Accuracy",
+          "description": "The fraction of data points classified correctly."
+        },
+        "f1Score": {
+          "name": "F1 score",
+          "description": "F1-score is the harmonic mean of precision and recall."
+        },
+        "meanAbsoluteError": {
+          "name": "Mean absolute error",
+          "description": "The average of absolute values of errors. More robust to outliers than MSE."
+        },
+        "meanSquaredError": {
+          "name": "Mean squared error",
+          "description": "The average of squared errors."
+        },
+        "precision": {
+          "name": "Precision score",
+          "description": "The fraction of data points classified correctly among those classified as 1."
+        },
+        "recall": {
+          "name": "Recall score",
+          "description": "The fraction of data points classified correctly among those whose true label is 1. Alternative names: true positive rate, sensitivity."
+        },
+        "falsePositiveRate": {
+          "name": "False positive rate",
+          "description": "The fraction of data points classified incorrectly among those whose true label is 0."
+        },
+        "falseNegativeRate": {
+          "name": "False negative rate",
+          "description": "The fraction of data points classified incorrectly among those whose true label is 1."
+        },
+        "selectionRate": {
+          "name": "Selection rate",
+          "description": "The percentage of predictions with label 1."
+        },
+        "meanPrediction": {
+          "name": "Mean prediction",
+          "description": "The average of all predictions."
+        },
+        "fairnessMetricDifference": "Difference",
+        "fairnessMetricRatio": "Ratio"
+      },
+      "metricsDropdown": "Metric(s)",
+      "notAvailable": "N/A",
+      "countColumnHeader": "Sample size",
+      "dataCohortsHeatmapHeader": "Cohorts",
+      "dataCohortsChartSelectionHeader": "Dataset cohorts",
+      "featureBasedCohortsChartSelectionHeader": "Feature cohorts",
+      "disaggregatedAnalysisHeatmapHeader": "Feature cohorts",
+      "fairnessMetricsHeatmapHeader": "Fairness metrics",
+      "featuresDropdown": "Feature(s)",
+      "metricChartDropdownSelectionHeader": "Metric",
+      "probabilityForClassSelectionHeader": "Probability for class",
+      "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
+      "featureSelectionDropdownPlaceholder": "Select features to use for a feature-based analysis.",
+      "probabilityDistributionPivotItem": "Probability distribution",
+      "metricsVisualizationsPivotItem": "Metrics visualizations",
+      "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the feature-based analysis.",
+      "tableCountTooltip": "Cohort {0} contains {1} instances.",
+      "tableMetricTooltip": "The model's {0} on cohort {1} is {2}",
+      "tableDifferenceTooltip": "The {0} difference is {1}. It is calculated by subtracting the minimum value {2} from cohort {3} from the maximum value {4} from cohort {5}.",
+      "tableRatioTooltip": "The {0} ratio is {1}. It is calculated by dividing the minimum value {2} from cohort {3} by the maximum value {4} from cohort {5}.",
+      "boxPlotPlaceholder": "Select at least one cohort to view the box plot.",
+      "chartCohortSelectionPlaceholder": "Select at least one cohort overall to view the chart.",
+      "metricSelectionButton": "Choose metric",
+      "cohortSelectionButton": "Choose cohorts",
+      "probabilityLabelSelectionButton": "Choose label",
+      "selectAllCohortsOption": "Select all",
+      "other": "Other",
+      "BoxPlot": {
+        "outlierProbability": "probability",
+        "outlierLabel": "Outliers",
+        "boxPlotSeriesLabel": "Box Plot"
+      },
+      "chartConfigApply": "Apply",
+      "chartConfigCancel": "Cancel",
+      "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
+      "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",
+      "nA": "N/A",
+      "disaggregatedAnalysisBaseCohortDisclaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
+      "disaggregatedAnalysisBaseCohortWarning": "Unlike the {0} cohort, {1} includes filters. As a consequence, it only captures a subset of the whole dataset and insights may not generalize to the full dataset.",
+      "probabilitySplineChartToggleLabel": "Use spline chart",
+      "countAxisLabel": "Count",
+      "helpMeChooseFeaturesButton": "Help me choose features",
+      "helpMeChooseMetricsButton": "Help me choose metrics",
+      "featureConfiguration": {
+        "flyoutHeader": "Choose your features",
+        "flyoutSubHeader": "Along which features would you like to evaluate your model's fairness?",
+        "flyoutDescription": "Fairness is evaluated in terms of disparities in your model's behavior. We will split your data according to values of each selected feature, and evaluate how your model's performance metrics differ across these splits.",
+        "featureColumnHeader": "Features",
+        "groupsColumnHeader": "Groups",
+        "categoricalGroupsCountRemark": "This feature has {0} unique values.",
+        "continuousGroupsCountRemark": "This feature is continuous and split into {0} bins.",
+        "continuousFeatureBinningLabel": "Change the number of bins",
+        "tooManyFeaturesSelectedWarning": "Please select only up to two features."
+      },
+      "metricConfiguration": {
+        "flyoutHeader": "Choose your metrics",
+        "flyoutSubHeader": "How would you like to measure your model's performance?",
+        "flyoutDescription": "Based on your model type, these are the recommended performance metrics. Fairness analysis or disaggregated analysis is performed by evaluating how your model's performance differs across feature subgroups.",
+        "noMetricsSelectedWarning": "Please select at least one metric.",
+        "metricNameColumnHeader": "Metric name",
+        "metricDescriptionColumnHeader": "Metric Description"
+      },
+      "cohortSelection": {
+        "flyoutHeader": "Choose cohorts",
+        "flyoutDescription": "You can choose to view dataset cohorts or feature cohorts. If feature cohorts are unavailable you need to first select one or more features in the feature cohorts view. Subsequently, feature cohorts are generated and you can select them here."
+      },
+      "topLevelDescription": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. Use the \"Dataset cohorts\" tab to investigate your model by looking at a comparative analysis of its performance across different pre-built or newly-created dataset cohorts. Use the \"Feature cohorts\" to investigate your model by looking at a comparative analysis of its performance across sensitive/non-sensitive feature subcohorts.(e.g., performance across different genders, income levels).",
+      "visualDisplayToggleLabel": "Show heatmap",
+      "featureBasedViewDescription": "Select up to two features to see the model performance breakdown across feature-based cohorts (if one feature is selected) or intersectional cohorts (if two features are selected)."
     }
   }
 }

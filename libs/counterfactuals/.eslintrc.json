@@ -7,12 +7,23 @@
       "rules": {}
     },
     {
-      "files": ["*.ts", "*.tsx"],
-      "rules": {}
+      "files": [
+        "**/getBubbleChartOptions.ts",
+        "**/CounterfactualComponent.tsx",
+        "**/LargeCounterfactualChart.tsx"
+      ],
+      "rules": {
+        "dot-notation": "off"
+      }
     },
     {
-      "files": ["*.js", "*.jsx"],
-      "rules": {}
+      "files": [
+        "**/CounterfactualComponent.tsx",
+        "**/LargeCounterfactualChart.tsx"
+      ],
+      "rules": {
+        "max-lines": "off"
+      }
     }
   ]
 }

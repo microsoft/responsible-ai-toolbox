@@ -5,14 +5,14 @@ import pytest
 from dice_ml.utils.exception import \
     UserConfigValidationException as DiceException
 
+from raiutils.exceptions import UserConfigValidationException
 from responsibleai._internal.constants import (CounterfactualManagerKeys,
                                                ListProperties, ManagerNames)
-from responsibleai.exceptions import (DuplicateManagerConfigException,
-                                      UserConfigValidationException)
+from responsibleai.exceptions import DuplicateManagerConfigException
 
 
 def verify_counterfactual_object(counterfactual_obj, feature_importance=False):
-    counterfactual_obj.cf_examples_list is not None
+    assert counterfactual_obj.cf_examples_list is not None
     if feature_importance:
         assert counterfactual_obj.local_importance is not None
         assert counterfactual_obj.summary_importance is not None
@@ -35,12 +35,19 @@ def verify_counterfactual_properties(
 def validate_counterfactual(cf_analyzer,
                             desired_class=None, desired_range=None,
                             feature_importance=False):
+    if not feature_importance:
+        min_total_CFs = 1
+        max_total_CFs = 2
+    else:
+        min_total_CFs = 10
+        max_total_CFs = 20
+
     if cf_analyzer.model is None:
         with pytest.raises(UserConfigValidationException,
                            match='Model is required for counterfactual '
                                  'example generation and feature importances'):
             cf_analyzer.counterfactual.add(
-                total_CFs=10,
+                total_CFs=min_total_CFs,
                 method='random',
                 desired_class=desired_class,
                 desired_range=desired_range,
@@ -48,7 +55,7 @@ def validate_counterfactual(cf_analyzer,
         return
 
     # Add the first configuration
-    cf_analyzer.counterfactual.add(total_CFs=10,
+    cf_analyzer.counterfactual.add(total_CFs=min_total_CFs,
                                    method='random',
                                    desired_class=desired_class,
                                    desired_range=desired_range,
@@ -65,14 +72,14 @@ def validate_counterfactual(cf_analyzer,
 
     # Add a duplicate configuration
     with pytest.raises(DuplicateManagerConfigException):
-        cf_analyzer.counterfactual.add(total_CFs=10,
+        cf_analyzer.counterfactual.add(total_CFs=min_total_CFs,
                                        method='random',
                                        desired_class=desired_class,
                                        desired_range=desired_range,
                                        feature_importance=feature_importance)
 
     # Add the second configuration
-    cf_analyzer.counterfactual.add(total_CFs=20,
+    cf_analyzer.counterfactual.add(total_CFs=max_total_CFs,
                                    method='random',
                                    desired_class=desired_class,
                                    desired_range=desired_range,

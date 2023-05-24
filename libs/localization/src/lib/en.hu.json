@@ -1,14 +1,21 @@
 {
+  "Common": {
+    "close": "Close",
+    "tooltipButton": "Tooltip button",
+    "identityFeature": "Identity feature"
+  },
   "CausalAnalysis": {
     "AggregateView": {
       "binary": "Bináris kezelések: ",
-      "binaryDescription": "Ebben a mintában ennek a jellemzőnek a bekapcsolása hatására az 1. osztály/címke X egységgel való növekedésének valószínűsége történik.",
+      "binaryDescription": "On average in this sample, turning on this feature will cause the probability of class/label '{0}' to increase by X units.",
+      "regressionDescription": "On average in this sample, turning on this feature will cause the predictions of the target to increase/decrease by X units.",
       "causalPoint": "Okozati hatáspont",
       "confidenceLower": "Megbízhatósági intervallum (alsó)",
       "confidenceUpper": "Megbízhatósági intervallum (felső)",
       "confoundingFeature": "Egy zavaró jellemző mind a kezeléssel, mind a vizsgálni kívánt eredménnyel korrelációban van. A zavaró tényező a közvetlen okozati hatás mellett létrehoz egy további korrelációs útvonalat a kezelés és az eredmény között. Ha a modellben nem mérik, és nem veszik figyelembe a zavaró jellemzőket, ezek a további korrelációk torzíthatják az okozati hatásra vonatkozó becsléseket. A torzítás pozitív vagy negatív is lehet, a kihagyott zavaró tényezők, a kezelés és az eredmények közötti korrelációk irányától függően.",
       "continuous": "Folyamatos kezelések: ",
-      "continuousDescription": "Ebben a mintában ennek a jellemzőnek 1 egységgel való növelése hatására az 1. osztály/címke X egységgel való növekedésének valószínűsége történik.",
+      "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the probability of class/label '{0}' to increase by X units.",
+      "continuousRegressionDescription": "On average in this sample, increasing this feature by 1 unit will cause the predictions of the target to increase/decrease by X units.",
       "description": "Az okozati elemzés olyan, „mi lett volna, ha” jellegű kérdésekre ad választ, amelyek azt firtatják, hogyan változtak volna a tényleges eredmények más szabályzat választásakor, például más díjszabási stratégia követésekor egy termékre vonatkozóan, vagy eltérő kezelést alkalmazásakor egy betegre. A fontos korrelációs minták azonosítására szolgáló modell-előrejelzésektől eltérően ezek az eszközök segítenek azonosítani azokat a legfontosabb okozati jellemzőket, amelyek közvetlenül befolyásolják a vizsgálni kívánt eredményt. Ezek a modellek meghatározzák egy adott jellemző okozati hatását, (jellemzően „kezelésként” hivatkoznak rá) miközben állandó értéken tartják az egyéb zavaró jellemzőket. A legjobb eredmények eléréséért bizonyosodjon meg arról, hogy az egész adathalmaz tartalmazza az összes olyan elérhető jellemzőt, amely esetleg zavaró tényezőként áll összefüggésben az eredménnyel.",
       "directAggregate": "Az egyes kezelések közvetlen összesített okozati hatása 95%-os konfidencia-intervallummal",
       "here": "itt",
@@ -19,7 +26,7 @@
       "currentOutcome": "Jelenlegi eredmény",
       "currentTreatment": "Aktuális kezelési érték",
       "dataRequired": "Ehhez a laphoz ki kell jelölni egy adatpontot.",
-      "datapointIndex": "Adatpontindex",
+      "selectedDatapoint": "Selected datapoint",
       "description": "Az egyéni okozati hatások személyre szabott beavatkozásokat, például célzott promóciót, vagy egy személyre szabott kezelési tervet nyújthatnak az ügyfeleknek. Hogyan reagálna egy adott funkciókészlettel rendelkező személy az okozati funkció vagy kezelés változására?  Az okozati lehetőségelemzési eszköz kiszámítja egy adott személy valós eredményeinek marginális változásait, ha megváltoztatja a kezelés szintjét. Ez az elemzés lehetővé teszi annak megértését, hogy a valós eredmények hogyan változtak volna a különböző szabályzati döntések alapján, például egy termék eltérő díjszabási stratégiája vagy egy páciens alternatív kezelése esetén. Adja meg az érdeklődési körök kezelését, és figyelje meg hogyan változna a valós eredmény.",
       "directIndividual": "Az egyes kezelések közvetlen önálló okozati hatása 95%-os konfidencia-intervallummal",
       "index": "Adatpontindex",
@@ -45,16 +52,16 @@
       "BarTextBinary": "Az első sáv átlagos relatív nyereséget jelez, ha a fent leírt ajánlott globális kezelési szabályzatot alkalmazták. A jelentett nyereséget tartalmazó jelentés a felhasznált kezelés numerikus változását jelenti. A második sáv a bináris kezelések bekapcsolásával kapcsolatos relatív nyereséget (vagy veszteséget) jelzi, azzal, hogy mindenkit kezelnek.",
       "BarTextContinuous": "Az első sáv átlagos relatív nyereséget jelez, ha a fent leírt ajánlott globális kezelési szabályzatot alkalmazták. A jelentett nyereség a minta tipikus kezelési méretének 10%-val tükrözi a kezelési funkció növekedését/csökkentését. A második sáv a relatív nyereséget (vagy veszteséget) jelöli a 10%-al növekvő/csökkenő folyamatos kezelésből.",
       "Description": "Ezek az eszközök segítenek a jövőbeli beavatkozásokra vonatkozó szabályok kialakításában. Azonosíthatja, hogy a minta mely részei reagálnak a legnagyobb mértékben egy ok-okozati tényezőre (pl. kezelésre), vagy szabályokat alkothat annak meghatározására, hogy a jövőben mely adathalmazoknak lesznek a legnagyobb kezelési hatásai.",
-      "Left": "{0} <= {1}",
+      "Left": "{0} less than or equal to {1}",
       "Recommended": "Ajánlott kezelés = {0}",
-      "Right": "{0} > {1}",
+      "Right": "{0} greater than {1}",
       "SelectPolicy": "Kezelési funkció beállítása",
       "Size": "Értelmezhető globális kezelési szabályzat a mintamérethez (n) = {0}",
       "Table": "A táblázat olvasható úgy, hogy vesz egy sort, majd az adott sor egyik oszlopát.",
       "TableDescription": "Ez a táblázat egy ajánlott kezelési szabályzatot mutat be, amely alkalmazható az aktuális adatmintára vagy más populációkra. A táblázat egy egyszerű szabályt biztosít a megfigyelések adat kohorszokra való szegmentálásához azon jellemzők alapján, amelyek a legnagyobb hatással vannak arra, hogy az adott egyén reagál-e a kiválasztott kezelésre. A táblázat az egyes szegmensekhez rendelt aktuális adatmintában szereplő adatpontok számát is meghatározza.",
       "alwaysTreat": "A(z) „{0}“ kezelése mindig",
       "averageGainBinary": "A(z) {0} kezelés átlagos nyeresége a(z) {1} alapértékre állításával.",
-      "averageGainContinuous": "Average gains of alternative policies over no '{0}' treatment.",
+      "averageGainContinuous": "Az alternatív szabályzatok átlagos nyeresége a(z) {0} kezelési móddal szemben.",
       "header": "Ezek az eszközök segítenek a jövőbeli beavatkozásokhoz szükséges szabályzatok létrehozásában. Beazonosíthatja, hogy a minta mely részeinél vannak legnagyobb válaszok az okozati jellemzők vagy kezelések esetében és hozzon létre szabályokat ahhoz, hogy mely jövőbeli populációk legyenek megcélozva egyes beavatkozásoknál.",
       "nSample": "n = {0}",
       "noData": "Nincs adat"
@@ -69,17 +76,31 @@
       "Title": "Nincs adat"
     },
     "ComparisonTypes": {
-      "lt": "{0} < {1}",
-      "lte": "{0} <= {1}",
-      "gt": "{0} > {1}",
-      "gte": "{0} >= {1}",
-      "eq": "{0} == {1}",
-      "ne": "{0} != {1}",
+      "lt": "{0} less than {1}",
+      "lte": "{0} less than or equal to {1}",
+      "gt": "{0} greater than {1}",
+      "gte": "{0} greater than or equal to {1}",
+      "eq": "{0} equal to {1}",
+      "ne": "{0} not equal to {1}",
       "in": "{0} szerepel a(z) ({1}) halmazban",
       "nin": "{0} nem szerepel a(z) ({1}) halmazban",
       "rg": "{0} a következő tartományban: ({1})",
       "nrg": "{0} a következő tartományban: ({1})",
       "Unknown": "ismeretlen"
+    },
+    "ShiftCohort": {
+      "apply": "Apply",
+      "cancel": "Cancel",
+      "title": "Switch Cohort",
+      "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
+    },
+    "PreBuiltCohort": {
+      "featureNameNotFound": "Feature name not found in the dataset",
+      "notACategoricalFeature": "Feature is not categorical"
+    },
+    "EmptyCohortDialog": {
+      "title": "Dataset cohort contains no datapoints",
+      "subText": "It seems your dataset cohort contains no datapoints, adjust your filters to include at least one datapoint in your dataset cohort before saving."
     }
   },
   "Counterfactuals": {
@@ -87,19 +108,28 @@
     "EffectLowerBound": "CI_alsó",
     "EffectOfTreatment": "Az ajánlás hatása",
     "EffectUpperBound": "CI_felső",
+    "ErrorDialog": {
+      "Close": "Close",
+      "ErrorPrefix": "Error encountered: {0}",
+      "PythonError": "Python error"
+    },
     "RecommendedTreatment": "Ajánlott kezelés",
     "WhatIf": {
       "setValue": "Érték megadása",
       "sortFeatures": "A jellemző oszlopainak rendezése alternatív jellemzőfontosság alapján",
-      "toggleToolTipBody": "Counterfactual examples generate local feature importances which indicate which top features were perturbed the most to achieve the desired class classification scenarios or desired range for regression scenarios.",
-      "toggleToolTipHeader": "Ranked counterfactual features"
+      "percentCounterfactualLocalImportance": "Percentage of counterfactuals that varied the feature",
+      "toggleToolTipBody": "Az ellenpéldák helyi jellemzőfontosságokat generálnak, amelyek jelzik, hogy a kívánt osztályba sorolási forgatókönyvek vagy a kívánt tartomány elérése érdekében mely legfontosabb jellemzőket perturbálták a leginkább a regressziós forgatókönyvek esetében.",
+      "toggleToolTipHeader": "Rangsorolt ellenpélda-jellemzők",
+      "predictedClass": "Predicted class",
+      "predictedValue": "Predicted value"
     },
     "counterfactualEx": "Ellenpélda {0}",
     "counterfactualName": "Lehetőségelemzési ellenpélda neve",
-    "createWhatIfCounterfactual": "Create what-if counterfactual",
-    "createCounterfactual": "Counterfactual",
+    "createWhatIfCounterfactual": "Lehetőségelemzési ellenpélda létrehozása",
+    "createCounterfactual": "Ellenpélda",
     "createOwn": "Hozza létre a saját ellenpéldáját:",
     "currentClass": "Aktuális osztály",
+    "currentRange": "Current range",
     "decreaseByOne": "Érték csökkentése 1-gyel",
     "desiredClass": "Az ellenpéldák kívánt osztálya",
     "header": "Lehetőségelemzési ellenpéldák",
@@ -111,9 +141,10 @@
     "localImportanceSelectData": "Adatpont kiválasztása a helyi fontossági diagram megjelenítéséhez",
     "noData": "Nincs adat",
     "noFeatures": "Nem érhetők el szolgáltatások",
-    "panelDescription": "Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. The table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking \"set values\" text under each counterfactual name. Name your counterfactual and save it.",
-    "whatIfPanelHeader": "What-if counterfactuals",
-    "panelHeader": "Counterfactuals",
+    "panelDescription": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set suggested counterfactual feature values by clicking “Set Value” text under each counterfactual name. Name your counterfactual and save it.",
+    "panelDescriptionWithoutSetValue": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples.",
+    "whatIfPanelHeader": "Lehetőségelemzési ellenpéldák",
+    "panelHeader": "Ellenpéldák",
     "recommendedPolicy": "Ajánlott szabályzat-gyarapodás",
     "referenceDatapoint": "Törzsadatpont: {0} sor",
     "saveAsNew": "Mentés új adatpontként",
@@ -129,8 +160,14 @@
       "cohort": "Kohorsz",
       "defaultLabel": "Minden adat"
     },
+    "CohortBaseAndFilters": {
+      "globalCohortAndFilters": "Global cohort and filters",
+      "globalCohort": "Global cohort",
+      "errorExplorer": "Error explorer",
+      "filters": "Filters"
+    },
     "CohortInfo": {
-      "baseCohortInstances": "Példányok az alap kohorszban",
+      "baseCohortInstances": "Instances in global cohort",
       "basicInformation": "Alapvető adatok",
       "cohortInformation": "Kohorsz adatai",
       "correct": "Javítás",
@@ -149,19 +186,25 @@
       "subText": "Megtekintheti a kijelölt kohorszra vonatkozó tudnivalókat, szerkesztheti a kohorsz nevét, illetve törölheti ezt a kohorszt."
     },
     "FeatureList": {
+      "apply": "Apply",
       "features": "Jellemzők",
-      "importances": "Fontosságok"
+      "importances": "Fontosságok",
+      "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
+      "staticTreeMapDescription": "View the features that were used to train the tree map. The feature importances were calculated using mutual information with the error on the true labels."
     },
     "TreeViewParameters": {
-      "maximumDepth": "Maximum depth",
-      "maximumDepthInfoText": "The maximum depth of the surrogate tree trained on errors",
-      "maximumDepthTitle": "Additional information on maximum depth",
-      "numLeaves": "Number of leaves",
-      "numLeavesInfoText": "The number of leaves of the surrogate tree trained on errors",
-      "numLeavesTitle": "Additional information on number of leaves",
-      "minDataInLeaf": "Minimum number of samples in one leaf",
-      "minDataInLeafInfoText": "The minimum number of data required to create one leaf",
-      "minDataInLeafTitle": "Additional information on minimum number of samples in one leaf"
+      "maximumDepth": "Maximális mélység",
+      "maximumDepthInfoText": "A hibákra betanított helyettesítő fa maximális mélysége",
+      "maximumDepthTitle": "További információ a maximális mélységről",
+      "numLeaves": "Levelek száma",
+      "numLeavesInfoText": "A hibákra betanított helyettesítő fa leveleinek száma",
+      "numLeavesTitle": "További információ a levelek számáról",
+      "minDataInLeaf": "Minták minimális száma egy levélben",
+      "minDataInLeafInfoText": "Egy levél létrehozásához szükséges adatok minimális száma",
+      "minDataInLeafTitle": "További információ az egy levélben található minták minimális számáról"
+    },
+    "TreeLegend": {
+      "clearSelection": "Clear selection"
     },
     "FilterTooltip": {
       "correctNum": "Helyes (#): ",
@@ -188,8 +231,8 @@
       "featureList": "Jellemzőlista",
       "fullscreen": "Teljes képernyő",
       "heatMap": "Intenzitástérkép",
-      "saveCohort": "Kohorsz mentése",
-      "shiftCohort": "Kohorszváltás",
+      "newCohort": "New cohort",
+      "shiftCohort": "Switch cohort",
       "treeMap": "Faszerkezetes térkép",
       "whatIf": "Lehetőségelemzés"
     },
@@ -199,8 +242,10 @@
       "move": "Áthelyezés",
       "saveAs": "Mentés új kohorszként",
       "shift": "Váltás",
-      "subText": "Újra szeretné kezdeni a felderítést egy másik térképpel? Mentse új kohorszként. Ellenkező esetben a kiválasztott szűrők elvesznek.",
-      "title": "Térképváltás"
+      "heatTitle": "Leave tree view?",
+      "heatSubText": "Are you sure you want to leave tree view? You can save your filters as a new cohort so you can access them in Cohort settings. Otherwise your filters will be lost.",
+      "treeTitle": "Leave heatmap view?",
+      "treeSubText": "Are you sure you want to leave heatmap view? You can save your filters as a new cohort so you can access them in Cohort settings. Otherwise your filters will be lost."
     },
     "MatrixArea": {
       "clearAll": "Az összes törlése",
@@ -208,11 +253,11 @@
       "selectAll": "Az összes kijelölése"
     },
     "MatrixFilter": {
-      "disabledWarning": "Error heatmap is disabled unless global cohort is switched to represent \"All data\" due to the heatmap being generated for the full dataset. Switch back to the full dataset to view the error heatmap."
+      "disabledWarning": "A hibák intenzitástérképe le van tiltva, kivéve, ha a globális kohorsz „Minden adat” értékre van állítva a teljes adatkészlethez generált intenzitástérkép miatt. A hibák intenzitástérképének megtekintéséhez váltson vissza a teljes adatkészletre."
     },
     "MatrixSummary": {
       "heatMapDescription": "Az intenzitástérképpel adott szakaszok közötti szűrőkre összpontosíthat, és kiszámíthatja a nem összesített hibaarányokat. Kezdje két összehasonlítható adathalmaz-jellemzővel.",
-      "heatMapStaticDescription": "With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Up to two features must be selected to create a heat map via SDK before viewing the dashboard."
+      "heatMapStaticDescription": "Az intenzitástérképpel adott metszeti jellemzőszűrőkre összpontosíthat, és kiszámíthatja a nem összesített hibaarányokat. Az irányítópult megtekintése előtt legfeljebb két jellemzőt kell kiválasztani ahhoz, hogy intenzitástérképet lehessen létrehozni az SDK-n keresztül."
     },
     "MatrixOptions": {
       "quantileBinningLabel": "Kvantilis dobozolás",
@@ -225,9 +270,16 @@
       "binningThresholdTitle": "További információk a kvantálási küszöbről"
     },
     "Metrics": {
+      "accuracyScore": "Accuracy score",
+      "accuracyScoreInfo": "The accuracy score represents the ratio of correct to total instances in the data.",
+      "accuracyScoreShort": "Accuracy",
+      "accuracyScoreTitle": "Additional information on accuracy score",
       "errorRate": "Hibaarány",
       "errorRateInfo": "A hibaarány a csomópont azon példányainak százalékos arányát jelzi, amelyeknél a rendszer meghibásodott.",
       "errorRateTitle": "További információ a hibaarányról",
+      "f1Score": "F1 score",
+      "f1ScoreInfo": "The F1 score is the harmonic mean of the precision and recall metrics.",
+      "f1ScoreTitle": "Additional information on F1 score",
       "meanAbsoluteError": "Átlagos abszolút hiba",
       "meanAbsoluteErrorInfo": "Az átlagos abszolút hiba a hibák összegének átlaga.",
       "meanAbsoluteErrorShort": "Átlagos abs. hiba",
@@ -236,37 +288,46 @@
       "meanSquaredErrorInfo": "Az átlagos négyzetes hiba a hibák négyzetének átlaga.",
       "meanSquaredErrorShort": "Átlagos sq. hiba",
       "meanSquaredErrorTitle": "További információ az átlagos négyzetes hibáról",
-      "precision": "Precision score",
-      "precisionInfo": "The precision is the ratio of true positives over all predicted positives.",
-      "precisionShort": "Precision",
-      "precisionTitle": "Additional information on precision",
-      "recall": "Recall score",
-      "recallInfo": "The recall is the ratio of true positives over all actual positives.",
-      "recallShort": "Recall",
-      "recallTitle": "Additional information on recall",
-      "macroPrecision": "Macro averaged precision score",
-      "macroPrecisionInfo": "The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.",
-      "macroPrecisionShort": "Macro precision",
-      "macroPrecisionTitle": "Additional information on macro averaged precision",
-      "microPrecision": "Micro averaged precision score",
-      "microPrecisionInfo": "The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.",
-      "microPrecisionShort": "Micro precision",
-      "microPrecisionTitle": "Additional information on micro averaged precision",
-      "macroRecall": "Macro averaged recall score",
-      "macroRecallInfo": "The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.",
-      "macroRecallShort": "Macro recall",
-      "macroRecallTitle": "Additional information on macro averaged recall",
-      "microRecall": "Micro averaged recall score",
-      "microRecallInfo": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
-      "microRecallShort": "Micro recall",
-      "microRecallTitle": "Additional information on micro averaged recall",
+      "precision": "Pontossági pontszám",
+      "precisionInfo": "A pontosság a valós pozitívok aránya az összes előre jelzett pozitív értékhez képest.",
+      "precisionShort": "Pontosság",
+      "precisionTitle": "További információ a pontosságról",
+      "recall": "Felidézési pontszám",
+      "recallInfo": "A felidézés a valós pozitívok arányát adja meg az összes tényleges pozitív értékhez képest.",
+      "recallShort": "Felidézés",
+      "recallTitle": "További információ a felidézésről",
+      "macroPrecision": "Makroátlagos pontossági pontszám",
+      "macroPrecisionInfo": "A makroátlagos pontosság az osztályonként egymástól függetlenül kiszámított és átlagolt előre jelzett pozitívok arányát adja meg.",
+      "macroPrecisionShort": "Makropontosság",
+      "macroPrecisionTitle": "További információ a makroátlagos pontosságáról",
+      "microPrecision": "Mikroátlagos pontossági pontszám",
+      "microPrecisionInfo": "A mikroátlagolt pontosság az összes osztályra vonatkozóan összesített előre jelzett pozitívok arányát adja meg.",
+      "microPrecisionShort": "Mikropontosság",
+      "microPrecisionTitle": "További információ a mikroátlagos pontosságáról",
+      "macroRecall": "Makroátlagos felidézési pontszám",
+      "macroRecallInfo": "A makroátlagos felidézés az osztályonként egymástól függetlenül kiszámított és átlagolt valós pozitívok arányát adja meg.",
+      "macroRecallShort": "Makrofelidézés",
+      "macroRecallTitle": "További információ a makroátlagos felidézésről",
+      "microRecall": "Mikroátlagos felidézési pontszám",
+      "microRecallInfo": "A mikroátlagolt felidézés az összes osztályra vonatkozóan összesített valós pozitívok arányát adja meg.",
+      "microRecallShort": "Mikrofelidézés",
+      "microRecallTitle": "További információ a mikroátlagos felidézésről",
+      "macroF1Score": "Macro averaged F1 score",
+      "macroF1ScoreInfo": "The macro averaged F1 score is the harmonic mean of the macro averaged precision and recall metrics.",
+      "macroF1ScoreShort": "Macro F1 score",
+      "macroF1ScoreTitle": "Additional information on macro averaged F1 score",
+      "microF1Score": "Micro averaged F1 score",
+      "microF1ScoreInfo": "The micro averaged F1 score is the harmonic mean of the micro averaged precision and recall metrics.",
+      "microF1ScoreShort": "Micro F1 score",
+      "microF1ScoreTitle": "Additional information on micro averaged F1 score",
       "metricName": "Metrika neve",
       "metricValue": "Metrikaérték"
     },
     "MetricSelector": {
-      "selectorLabel": "Select metric"
+      "selectorLabel": "Metrika kiválasztása"
     },
     "Navigation": {
+      "cohortSaved": "New cohort is saved! See Cohort list under Cohort settings.",
       "dataExplorer": "Adatkezelő",
       "errorExplorer": "Hibakezelő",
       "globalExplanation": "Globális értelmezés",
@@ -280,13 +341,13 @@
       "move": "Áthelyezés",
       "save": "Mentés",
       "saveTitle": "Mentés új kohorszként",
-      "subText": "Save the current cohort to the cohort settings. You can revisit the saved cohort via the cohort settings.",
-      "defaultLabelCopy": "All data copy"
+      "subText": "Az aktuális kohorszt mentheti a kohorszbeállításokba. A mentett kohorszokat a kohorszbeállításokon keresztül is ellenőrizheti.",
+      "defaultLabelCopy": "Minden adatmásolás"
     },
     "TreeView": {
-      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Feature list.\"",
-      "treeStaticDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on \"Feature list.\"",
-      "disabledWarning": "Error treemap is disabled unless global cohort is switched to represent \"All data\" due to the treemap being generated for the full dataset. Switch back to the full dataset to view the error treemap."
+      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Feature list.\" Use the \"select metric\" dropdown menu to learn more about your error and success nodes' performance. Please note that this metric selection will not impact the way your error tree is generated.",
+      "treeStaticDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on \"Feature list.\" Use the \"select metric\" dropdown menu to learn more about your error and success nodes' performance. Please note that this metric selection will not impact the way your error tree is generated.",
+      "disabledWarning": "A hibák fatérképe le van tiltva, kivéve, ha a globális kohorsz „Minden adat” értékre van állítva a teljes adatkészlethez generált fatérkép miatt. A hibák fatérképének megtekintéséhez váltson vissza a teljes adatkészletre."
     },
     "WhatIfPanel": {
       "whatIfHeader": "Lehetőségelemzés"
@@ -312,13 +373,13 @@
     "instanceView": "Példánynézet",
     "localExplanationView": "Helyi értelmezés",
     "noFeature": "Nincs jellemző",
-    "treeMapDescription": "A fatérkép újratanítása: jelölje ki és mentse az alábbi jellemzőket. A jellemző fontosságának kiszámítása kölcsönös információk alapján történt, a valódi címkéken lévő hibával. Kérjük, használja útmutatóként a fatérkép betanításához.",
+    "scaleWarning": "For scale reasons of the UI explanations are randomly downsampled",
     "whatIfDatapoints": "Lehetőségelemzési adatpontok"
   },
   "Fairness": {
     "ValidationErrors": {
-      "missingPerformanceMetric": "No performance metric found.",
-      "missingFairnessMetric": "No fairness metric found."
+      "missingPerformanceMetric": "Nem található teljesítménymetrika.",
+      "missingFairnessMetric": "Nem található semlegességi metrika."
     },
     "BinDialog": {
       "cancel": "Mégse",
@@ -613,12 +674,12 @@
     },
     "AxisConfigDialog": {
       "TreatAsCategorical": "Kezelés kategorikusként",
+      "apply": "Apply",
       "binLabel": "Kvantálás alkalmazása az adatokra",
       "countHelperText": "A pontok számának hisztogramja",
       "ditherLabel": "Simítandó",
       "groupByCohort": "Csoportosítás kohorsz alapján",
       "numOfBins": "Dobozok száma",
-      "select": "Kiválasztás",
       "selectClass": "Osztály kijelölése",
       "selectFeature": "Jellemző kiválasztása",
       "selectFilter": "A tengelyérték kiválasztása"
@@ -646,7 +707,8 @@
     },
     "Cohort": {
       "cohort": "Kohorsz",
-      "defaultLabel": "Minden adat"
+      "defaultLabel": "Minden adat",
+      "temporaryCohort": "Temporary cohort"
     },
     "CohortBanner": {
       "addCohort": "Új kohorsz",
@@ -657,7 +719,7 @@
       "datasetCohorts": "Adathalmaz kohorszai",
       "details": "Részletek",
       "duplicateCohort": "Másolat",
-      "edit": "Edit",
+      "edit": "Szerkesztés",
       "editCohort": "Kohorsz szerkesztése",
       "features": "{0} jellemző",
       "filters": "{0} szűrő",
@@ -676,14 +738,18 @@
       "cancelTitle": "Kohorsz érvénytelenítése",
       "cancelYes": "Igen",
       "cohortNameError": "Hiányzik a kohorsznév",
+      "cohortNameDupError": "Cohort with same name already exists",
       "cohortNameLabel": "Adathalmaz kohorszának neve",
       "cohortNamePlaceholder": "Adja meg a kohorsz nevét",
-      "clearAllFilters": "Clear all filters",
-      "defaultFilterState": "Select a filter to add parameters to your dataset cohort. Filters from your current viewing cohort are pre-populated.",
+      "clearAllFilters": "Minden szűrő kikapcsolása",
+      "defaultFilterState": "Válasszon ki egy szűrőt, hogy paramétereket adjon hozzá az adatkészlet-kohorszhoz. A jelenleg megtekintett kohorsz szűrői előre ki vannak töltve.",
       "delete": "Törlés",
+      "invalidValueError": "Value should be between {0} and {1}",
+      "minimumGreaterThanMaximum": "Minimum value inputs must be less than maximum value inputs.",
       "noAddedFilters": "Nincsenek szűrők",
       "placeholderName": "Kohorsz: {0}",
       "save": "Mentés",
+      "saveAndSwitch": "Save and switch",
       "selectFilter": "Szűrő kiválasztása"
     },
     "Columns": {
@@ -696,7 +762,9 @@
       "predictedProbabilities": "Előrejelzési valószínűségek",
       "regressionError": "Regressziós hiba",
       "trueNegative": "Valós negatív",
-      "truePositive": "Valós pozitív"
+      "truePositive": "Valós pozitív",
+      "correctlyClassified": "Correctly classified",
+      "misclassified": "Misclassified"
     },
     "CrossClass": {
       "absoluteValInfo": "Az abszolút érték átlaga: a jellemzőfontosság összege az összes lehetséges osztályra vonatkoztatva, osztva az osztályok számával",
@@ -712,14 +780,15 @@
       "aggregatePlots": "Aggregált ábrák",
       "chartType": "Diagramtípus",
       "colorValue": "Színérték",
-      "helperText": "Adathalmaz-kohorszokat hozhat létre az adathalmazok statisztikáinak elemzéséhez olyan szűrők mentén, mint az előrejelzett eredmény, az adathalmaz jellemzői és a hibacsoportok. További információ az adathalmaz túl-/alulbesorolásáról.",
+      "helperText": "Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups. Learn about the over/under presentation in your dataset.",
       "individualDatapoints": "Egyéni adatpontok",
       "missingParameters": "Ehhez a laphoz meg kell adni egy kiértékelési adathalmazt.",
-      "noColor": "Nincs"
+      "noColor": "Nincs",
+      "datasetCohortDropdown": "Dataset cohort dropdown"
     },
     "DependencePlot": {
       "featureImportanceOf": "A következő jellemzőfontossága:",
-      "placeholder": "Kattintson a fenti oszlopdiagram egyik jellemzőjére a függőségi ábra megjelenítéséhez"
+      "placeholder": "Select a feature to show its dependence plot"
     },
     "ExplanationScatter": {
       "class": "osztály: ",
@@ -758,14 +827,14 @@
       "violinText": "Violin"
     },
     "FilterOperations": {
-      "equals": " = {0}",
+      "equals": " equal to {0}",
       "excludes": " kizárja a következőt: {0} ",
-      "greaterThan": " > {0}",
-      "greaterThanEquals": " >= {0}",
+      "greaterThan": " greater than {0}",
+      "greaterThanEquals": " greater than or equal to {0}",
       "inTheRangeOf": "[ {0} ]",
       "includes": " Tartalmazza a következőt: {0} ",
-      "lessThan": " < {0}",
-      "lessThanEquals": " <= {0}",
+      "lessThan": " less than {0}",
+      "lessThanEquals": " less than or equal to {0}",
       "overflowFilterArgs": "{0} és további {1}"
     },
     "Filters": {
@@ -788,10 +857,10 @@
       "helperText": "Áttekintheti a modell egészére kiható k számú legfontosabb jellemzőt. A csúszka segítségével megtekintheti a jellemzőfontosságokat csökkenő sorrendben."
     },
     "GlobalTab": {
-      "absoluteValues": "Absolute values",
+      "absoluteValues": "View as absolute values",
       "aggregateFeatureImportance": "Aggregált jellemzőfontosság",
       "collapsedHelperText": "A modell általános előrejelzéseire kiható k legfontosabb jellemző ismertetése.",
-      "datapoint": "Datapoint",
+      "datapoint": "Adatpont",
       "datasetCohortSelector": "Adathalmazkohorsz kiválasztása",
       "datasetCohorts": "Adathalmaz kohorszai",
       "datasetRequired": "A függőségi ábrák megkövetelik a kiértékelési adathalmazt és a helyi jellemzőfontossági tömböt.",
@@ -801,12 +870,14 @@
       "helperText": "Ismerje meg azokat a legfontosabb funkciókat, amelyek hatással vannak a modell általános előrejelzésére (más néven globális magyarázat). A csúszka segítségével megjelenítheti a jellemzők fontosságát csökkenő sorrendben. Minden kohorszfunkció fontossága egymás mellett jelenik meg, és a jelmagyarázatban a kohorsz kiválasztásával kapcsolható ki. Kattintson a gráf bármelyik funkciójára, és alább egy sűrűségdiagramot tekinthet meg, amely azt mutatja, hogy a kiválasztott jellemző értékei hogyan befolyásolják az előrejelzést.",
       "legendHelpText": "A jelmagyarázat elemeire kattintva be- és kikapcsolhatja a kohorszokat a diagramon.",
       "missingParameters": "Ezen a lapon meg kell adni a helyi jellemzőfontossági paramétert.",
-      "sortBy": "Rendezési szempont",
+      "sortBy": "Sort by datapoint",
       "topAtoB": "A legfontosabb {0} funkció fontosságuk szerint",
       "viewDependencePlotFor": "A következő függőségi ábrájának megtekintése:",
-      "weightOptions": "Osztály fontossági súlyozása"
+      "weightOptions": "Osztály fontossági súlyozása",
+      "weightOptionsDropdown": "Class importance weights dropdown"
     },
     "IcePlot": {
+      "close": "Close",
       "errorPrefix": "Hiba történt: {0}",
       "featurePickerLabel": "Jellemző:",
       "integerError": "Egész számnak kell lennie",
@@ -819,6 +890,7 @@
       "prediction": "Előrejelzés",
       "predictionLabel": "Előrejelzés: {0}",
       "probabilityLabel": "Valószínűség: {0}",
+      "pythonError": "Python error",
       "stepInputLabel": "Lépések:",
       "submitPrompt": "Adja meg az ICE-ábrán megtekinteni kívánt tartományt",
       "topLevelErrorMessage": "Hiba a paraméterben"
@@ -840,13 +912,16 @@
     },
     "Statistics": {
       "accuracy": "Pontosság: {0}",
-      "fnr": "Hamis negatív arány: {0}",
-      "fpr": "Hamis pozitív arány: {0}",
+      "fnr": "False negative rate: {0}",
+      "fpr": "False positive rate: {0}",
       "meanPrediction": "Előrejelzési átlag: {0}",
-      "mse": "MSE: {0}",
+      "mse": "Mean squared error: {0}",
       "precision": "Precizitás: {0}",
-      "rSquared": "R-négyzet: {0}",
-      "recall": "Visszahívás: {0}"
+      "rSquared": "R²: {0}",
+      "recall": "Visszahívás: {0}",
+      "selectionRate": "Selection rate: {0}",
+      "mae": "Mean absolute error: {0}",
+      "f1Score": "F1 score: {0}"
     },
     "ValidationErrors": {
       "addFilters": "Szűrők hozzáadása",
@@ -882,7 +957,7 @@
       "dataPointInfo": "Adatpont adatai",
       "deltaLabel": "Különbözet",
       "disclaimer": "Jogi nyilatkozat: ezek az értelmezések számos közelítésen alapulnak, és nem az előrejelzések okai. Az ok-okozati megállapítás szigorú matematikai szilárdsága nélkül nem tanácsoljuk a felhasználóknak, hogy erre az eszközre alapozva hozzanak valós döntéseket.",
-      "featureImportanceGetStartedText": "A helyi fontosság megjelenítéséhez válassza ki a kívánt pontot",
+      "featureImportanceGetStartedText": "Select a datapoint in the table above to view its local feature importances",
       "featureImportanceLackingParameters": "Adja meg a helyi jellemzőfontosságokat, ha meg szeretné tekinteni, hogy az egyes jellemzők hogyan befolyásolják a különálló előrejelzéseket.",
       "featureImportancePlot": "Jellemzőfontosság ábrázolása",
       "featureValues": "Jellemző értékei",
@@ -951,6 +1026,47 @@
     "selectPoint": "A helyi magyarázat megjelenítéséhez válassza ki a kívánt pontot",
     "summaryImportance": "Összegzés fontossága"
   },
+  "InterpretText": {
+    "View": {
+      "interpretibilityDashboard": "Interpretability Dashboard",
+      "importantWords": "Most Important Words",
+      "topFeatureList": "Top feature list analysis",
+      "allButton": "ALL FEATURES",
+      "negButton": "NEGATIVE FEATURES",
+      "posButton": "POSITIVE FEATURES",
+      "legendText": "Positive scalar feature importances represents the extent that the word was important towards the classification of your selected label, and negative scalar feature importances represents words that encouraged your model away from your selected label.",
+      "label": "Label",
+      "colon": ": "
+    },
+    "Legend": {
+      "featureLegend": "TEXT FEATURE LEGEND",
+      "posFeatureImportance": "POSITIVE FEATURE IMPORTANCE",
+      "negFeatureImportance": "NEGATIVE FEATURE IMPORTANCE"
+    },
+    "BarChart": {
+      "featureImportance": "FEATURE IMPORTANCE"
+    }
+  },
+  "InterpretVision": {
+    "Dashboard": {
+      "allData": "All Data",
+      "columnOne": "Title",
+      "columnTwo": "Index",
+      "columnThree": "True Y",
+      "columnFour": "Predicted Y",
+      "columnFive": "Other metadata",
+      "filter": "Filter",
+      "pageSize": "Page size: ",
+      "search": "Search",
+      "settings": "Settings",
+      "tabOptionFirst": "Image explorer view",
+      "tabOptionSecond": "Table view",
+      "tabOptionThird": "Data characteristics",
+      "thumbnailSize": "Thumbnail size",
+      "titleBarError": "Error instances",
+      "titleBarSuccess": "Success instances"
+    }
+  },
   "ModelAssessment": {
     "AddingTab": {
       "AddButtonText": "Hozzáadás",
@@ -970,18 +1086,19 @@
     },
     "Cohort": {
       "apply": "Alkalmaz",
+      "delete": "Delete",
       "cancel": "Mégse",
       "cohortInfo": "Kohorsz adatai",
       "cohortList": "Kohorszlista",
-      "deleteCohort": "Deleting {0}?",
-      "deleteConfirm": "Are you sure you want to delete this cohort?",
+      "deleteCohort": "Törli a következőt: {0}?",
+      "deleteConfirm": "Biztos, hogy törli a kohorszt?",
       "selectCohort": "Kohorsz kiválasztása",
-      "shiftCohort": "Kohorszváltás",
+      "shiftCohort": "Switch cohort",
       "shiftCohortDescription": "Válasszon ki egy kohorszt a kohorszok listájából. Alakalmazza a kohorszt az irányítópultra."
     },
     "CohortInformation": {
-      "SwitchGlobalCohort": "Switch global cohort",
-      "CreateNewCohort": "Új kohorsz létrehozása",
+      "ShiftCohort": "Switch cohort",
+      "NewCohort": "New cohort",
       "DataPoints": "Adatpontok száma",
       "DefaultCohort": " (alapértelmezett)",
       "Filters": "Szűrők száma",
@@ -994,14 +1111,16 @@
     "ComponentNames": {
       "CausalAnalysis": "Okozati elemzés",
       "Counterfactuals": "Ellenpéldák",
+      "DataAnalysis": "Data analysis",
+      "DataBalance": "Data balance",
       "DataExplorer": "Adatkezelő",
       "ErrorAnalysis": "Hibaelemzés",
       "Fairness": "Semlegesség",
       "FeatureImportances": "Jellemzőfontosságok",
-      "ModelStatistics": "Modell statisztikái"
+      "ModelOverview": "Model overview"
     },
     "DashboardSettings": {
-      "Content": "Ez a lista az irányítópult elrendezését mutatja. A hibaelemzési összetevőt használva szűrni tudja az alatta lévő összetevőkben megtekinthető adatokat. Hozzáadhat összetevőket, húzással átrendezheti a folyamatot, vagy törölhet összetevőket.",
+      "Content": "This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below.",
       "DashboardComponents": "Irányítópult-összetevők",
       "DataPoints": "Adatpontok száma",
       "DeleteDialog": {
@@ -1010,26 +1129,282 @@
         "Delete": "Törlés",
         "Title": "Törli a következőt: {0}?"
       },
-      "Title": "Navigáció az irányítópulton"
+      "Title": "Dashboard configuration"
+    },
+    "DataBalance": {
+      "AggregateBalanceMeasures": {
+        "Callout": {
+          "Description": "Aggregate balance measures allow us to obtain a higher notion of inequality about our dataset. They are calculated on the set of our columns of interest and do not depend on the label column. These measures look at the distribution of records across all feature value combinations of our columns of interest.",
+          "Title": "What are aggregate balance measures?"
+        },
+        "Measures": {
+          "AtkinsonIndex": {
+            "Description": "The Atkinson Index is a measure of income inequality that presents the percentage of total income that a given society would have to forego in order to have more equal shares of income between its citizens. For the dataset, this represents the percentage of records that need to be dropped to have a perfectly balanced dataset with respect to the columns of interest. The index lies between 0 and 1, where smaller values of the index indicate lower levels of inequality.",
+            "Name": "Atkinson Index"
+          },
+          "TheilLIndex": {
+            "Description": "Theil's L Index is a measure of income inequality that is calculated using the Generalized Entropy Index with α = 0, and therefore it is more sensitive to differences at the lower end of the distribution. This index better captures record combinations that don't occur too often in the dataset. It is also referred to as the mean log deviation measure.",
+            "Name": "Theil Index (L)"
+          },
+          "TheilTIndex": {
+            "Description": "Theil's T Index is a measure of income inequality that is calculated using the Generalized Entropy Index with α = 1, and therefore it is more sensitive to differences at the higher end of the distribution. This index better captures record combinations that occur very often in the dataset.",
+            "Name": "Theil Index (T)"
+          }
+        },
+        "MeasuresNotComputed": "Aggregate balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
+        "Name": "Aggregate balance measures",
+        "Table": {
+          "Description": "Description",
+          "FeatureName": "Feature name",
+          "FeatureValue": "Feature value"
+        }
+      },
+      "DistributionBalanceMeasures": {
+        "Callout": {
+          "Description": "Distribution balance measures allow us to compare our data with a reference uniform distribution. These measures are calculated per column of interest and do not depend on the label column.",
+          "Title": "What are distribution balance measures?"
+        },
+        "Chart": {
+          "Axes": {
+            "DistributionMeasure": "Distribution measure",
+            "MeasureValue": "Measure value"
+          },
+          "Title1": "Comparing",
+          "Title2": "with the Uniform Distribution"
+        },
+        "Measures": {
+          "ChiSquarePValue": {
+            "Description": "The p-value of the chi-square test gives evidence against the null hypothesis that the difference in observed and expected frequencies is by random chance.",
+            "Name": "Chi-Square P-Value"
+          },
+          "ChiSquareStatistic": {
+            "Description": "The chi-square test validates the null hypothesis that the categorical data has the given frequencies when compared with the expected frequencies in each category.",
+            "Name": "Chi-Square (χ2) Statistic"
+          },
+          "CrossEntropy": {
+            "Description": "The cross-entropy, also known as log loss, between two probability distributions is a measure from information theory that computes the negative summation of our dataset's probability distribution multiplied by the log of the reference probability distribution.",
+            "Name": "Cross Entropy"
+          },
+          "InfiniteNormDistance": {
+            "Description": "The infinite norm distance, also called the Chebyshev distance or chessboard distance, is a measure which states that the distance between two vectors is the greatest of their difference along any coordinate dimension. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
+            "Name": "Infinite Norm Distance"
+          },
+          "JSDistance": {
+            "Description": "The Jensen-Shannon (JS) distance measures the similarity between two probability distributions. It is the symmetrized and smoothed version of the Kullback-Leibler (KL) divergence and the square root of the JS divergence. Its range is [0, 1], in which a measure value of 0 means the distribution is perfectly balanced.",
+            "Name": "Jensen-Shannon Distance"
+          },
+          "KLDivergence": {
+            "Description": "The Kullback-Leibler (KL) divergence is a measure of how one probability distribution is different from a second probability distribution. It represents the amount of information lost when one distribution is used to approximate the other. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
+            "Name": "Kullback-Leibler Divergence"
+          },
+          "TotalVariationDistance": {
+            "Description": "The total variation distance is equal to half the Manhattan (L1) distance between two distributions. It is computed using the summation of absolute value differences between two distributions. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
+            "Name": "Total Variation Distance"
+          },
+          "WassersteinDistance": {
+            "Description": "The Wasserstein distance is also known as the earth mover's distance, since it can be seen as the minimum amount of 'work' required to transform one distribution into another. Work is measured as the amount of distribution weight that must be moved, multiplied by the distance it has to be moved. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
+            "Name": "Wasserstein Distance"
+          }
+        },
+        "MeasuresNotComputed": "Distribution balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
+        "Name": "Distribution balance measures"
+      },
+      "FeatureBalanceMeasures": {
+        "Callout": {
+          "Description": "Feature balance measures allow us to see whether each combination of feature values is receiving the positive outcome (true prediction) at balanced probability.",
+          "Title": "What are feature balance measures?"
+        },
+        "Chart": {
+          "Axes": {
+            "ClassA": "Class A",
+            "ClassB": "Class B"
+          },
+          "Tooltip": {
+            "And": "and",
+            "ValueDescription1": "have a",
+            "ValueDescription2": "of"
+          }
+        },
+        "Description1": "Showing",
+        "Description2": "gaps on all classes of",
+        "Description3": "for label",
+        "FeaturePicker": "Feature",
+        "LabelPicker": "Positive label",
+        "MeasurePicker": "Measure",
+        "Measures": {
+          "JaccardIndex": {
+            "Description": "gap represents the difference between the Jaccard Index of Class A and Jaccard Index of Class B. Jaccard Index itself is an intersection-over-union measure and therefore has a range of [0, 1], where 0 means that the distributions are completely disjoint and 1 means they are completely identical.",
+            "Name": "Jaccard Index"
+          },
+          "KendallRankCorrelation": {
+            "Description": "(KRC) gap represents the difference between the KRC of Class A and KRC of Class B. Kendall Rank Correlation itself is a correlation statistic used to measure the ordinal association between two measured quantities, and the measure is high when observations have a similar rank and low when observations have a dissimilar rank between the two variables.",
+            "Name": "Kendall Rank Correlation"
+          },
+          "LogLikelihoodRatio": {
+            "Description": "(LLR) gap represents the difference between the LLR of Class A and LLR of Class B. Log Likelihood Ratio itself is a correlation statistic used to measure the ratio between the probability of a feature with the positive label and the probability of the positive label.",
+            "Name": "Log-Likelihood Ratio"
+          },
+          "PointwiseMutualInformation": {
+            "Description": "(PMI) gap represents the difference between the PMI of Class A and PMI of Class B. Pointwise Mutual Information itself is a entropy measure that, given Class A and Class B, quantifies the discrepancy between the probability of their coincidence given their joint distribution and their individual distributions (assuming independence).",
+            "Name": "Pointwise Mutual Information"
+          },
+          "SorensenDiceCoefficient": {
+            "Description": "(SDC) gap represents the difference between the SDC of Class A and SDC of Class B. Sørensen-Dice Coefficient itself is an intserction-over-union measure that is used to guage the similarity of two samples. It is related to the F1 score, and it equals twice the number of elements common to both sets divided by the sum of the number of elements in each set.",
+            "Name": "Sørensen-Dice Coefficient"
+          },
+          "StatisticalParity": {
+            "Description": "(SP) gap represents the difference between the SP of Class A and SP of Class B. Statistical Parity itself measures the positive rate, which is how much one class receives the positive outcome. The gap measures the difference between the two classes' positive rates. As close to 0 means both classes receive the positive outcome equally. A positive value means the first class sees the positive label more than the second class. A negative value means the opposite.",
+            "Name": "Statistical Parity"
+          },
+          "TTest": {
+            "Description": "gap represents the difference between the t-test of Class A and t-test of Class B. t-test itself is a correlation statistic used to compare the means of two groups (pairwise). The gap value is looked up on the t-distribution table to tell if the two groups are significantly different.",
+            "Name": "t-test"
+          },
+          "TTestPValue": {
+            "Description": "gap represents the statistical signifiance of the t-test gap between Class A and Class B. The t-test gap value and degrees of freedom are used to calculate the p-value.",
+            "Name": "t-test p-value"
+          }
+        },
+        "MeasuresNotComputed": "Feature balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
+        "Name": "Feature balance measures"
+      },
+      "LearnMore": "Learn more",
+      "MeasuresNotComputed": "This tab requires data balance measures to be computed for this dataset. Measures are computed when a 'classification' task type and a list of non-empty categorical features are specified."
     },
     "FeatureImportances": {
       "CorrectPredictions": "Helyes előrejelzések",
       "GlobalExplanation": "Aggregált jellemzőfontosság",
       "IncorrectPredictions": "Helytelen előrejelzések",
-      "IndividualFeature": "Jelöljön ki egy adatpontot. Ehhez kattintson egy adatpontra (vagy több adatpontra) a táblázatban a helyi jellemzőfontossági értékek (helyi magyarázat) és az egyéni feltételes várakozási (ICE) diagram megtekintéséhez. Az 5000-nél több adatponttal rendelkező adathalmazok esetében a nézet egy véletlenszerű részminta, amely megkönnyíti a feltárást.",
-      "LocalExplanation": "Egyéni jellemzőfontosság"
+      "IndividualFeature": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below.",
+      "LocalExplanation": "Egyéni jellemzőfontosság",
+      "SelectionCounter": "{0}/{1} datapoints selected",
+      "SelectionLimit": "Up to 5 datapoints can be selected at this time."
     },
     "MainMenu": {
-      "DashboardSettings": "Navigáció az irányítópulton",
+      "DashboardSettings": "Dashboard configuration",
       "cohortInfo": "Kohorsz adatai",
       "cohortList": "Kohorszlista",
       "cohortSettings": "Kohorsz beállításai",
       "createCohort": "Kohorsz létrehozása",
-      "saveCohort": "Kohorsz mentése",
-      "shiftCohort": "Kohorszváltás"
+      "shiftCohort": "Switch cohort"
     },
     "Navigation": {
       "modelStatistics": "Modell statisztikái"
+    },
+    "ModelOverview": {
+      "metrics": {
+        "accuracy": {
+          "name": "Accuracy",
+          "description": "The fraction of data points classified correctly."
+        },
+        "f1Score": {
+          "name": "F1 score",
+          "description": "F1-score is the harmonic mean of precision and recall."
+        },
+        "meanAbsoluteError": {
+          "name": "Mean absolute error",
+          "description": "The average of absolute values of errors. More robust to outliers than MSE."
+        },
+        "meanSquaredError": {
+          "name": "Mean squared error",
+          "description": "The average of squared errors."
+        },
+        "precision": {
+          "name": "Precision score",
+          "description": "The fraction of data points classified correctly among those classified as 1."
+        },
+        "recall": {
+          "name": "Recall score",
+          "description": "The fraction of data points classified correctly among those whose true label is 1. Alternative names: true positive rate, sensitivity."
+        },
+        "falsePositiveRate": {
+          "name": "False positive rate",
+          "description": "The fraction of data points classified incorrectly among those whose true label is 0."
+        },
+        "falseNegativeRate": {
+          "name": "False negative rate",
+          "description": "The fraction of data points classified incorrectly among those whose true label is 1."
+        },
+        "selectionRate": {
+          "name": "Selection rate",
+          "description": "The percentage of predictions with label 1."
+        },
+        "meanPrediction": {
+          "name": "Mean prediction",
+          "description": "The average of all predictions."
+        },
+        "fairnessMetricDifference": "Difference",
+        "fairnessMetricRatio": "Ratio"
+      },
+      "metricsDropdown": "Metric(s)",
+      "notAvailable": "N/A",
+      "countColumnHeader": "Sample size",
+      "dataCohortsHeatmapHeader": "Cohorts",
+      "dataCohortsChartSelectionHeader": "Dataset cohorts",
+      "featureBasedCohortsChartSelectionHeader": "Feature cohorts",
+      "disaggregatedAnalysisHeatmapHeader": "Feature cohorts",
+      "fairnessMetricsHeatmapHeader": "Fairness metrics",
+      "featuresDropdown": "Feature(s)",
+      "metricChartDropdownSelectionHeader": "Metric",
+      "probabilityForClassSelectionHeader": "Probability for class",
+      "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
+      "featureSelectionDropdownPlaceholder": "Select features to use for a feature-based analysis.",
+      "probabilityDistributionPivotItem": "Probability distribution",
+      "metricsVisualizationsPivotItem": "Metrics visualizations",
+      "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the feature-based analysis.",
+      "tableCountTooltip": "Cohort {0} contains {1} instances.",
+      "tableMetricTooltip": "The model's {0} on cohort {1} is {2}",
+      "tableDifferenceTooltip": "The {0} difference is {1}. It is calculated by subtracting the minimum value {2} from cohort {3} from the maximum value {4} from cohort {5}.",
+      "tableRatioTooltip": "The {0} ratio is {1}. It is calculated by dividing the minimum value {2} from cohort {3} by the maximum value {4} from cohort {5}.",
+      "boxPlotPlaceholder": "Select at least one cohort to view the box plot.",
+      "chartCohortSelectionPlaceholder": "Select at least one cohort overall to view the chart.",
+      "metricSelectionButton": "Choose metric",
+      "cohortSelectionButton": "Choose cohorts",
+      "probabilityLabelSelectionButton": "Choose label",
+      "selectAllCohortsOption": "Select all",
+      "other": "Other",
+      "BoxPlot": {
+        "outlierProbability": "probability",
+        "outlierLabel": "Outliers",
+        "boxPlotSeriesLabel": "Box Plot"
+      },
+      "chartConfigApply": "Apply",
+      "chartConfigCancel": "Cancel",
+      "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
+      "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",
+      "nA": "N/A",
+      "disaggregatedAnalysisBaseCohortDisclaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
+      "disaggregatedAnalysisBaseCohortWarning": "Unlike the {0} cohort, {1} includes filters. As a consequence, it only captures a subset of the whole dataset and insights may not generalize to the full dataset.",
+      "probabilitySplineChartToggleLabel": "Use spline chart",
+      "countAxisLabel": "Count",
+      "helpMeChooseFeaturesButton": "Help me choose features",
+      "helpMeChooseMetricsButton": "Help me choose metrics",
+      "featureConfiguration": {
+        "flyoutHeader": "Choose your features",
+        "flyoutSubHeader": "Along which features would you like to evaluate your model's fairness?",
+        "flyoutDescription": "Fairness is evaluated in terms of disparities in your model's behavior. We will split your data according to values of each selected feature, and evaluate how your model's performance metrics differ across these splits.",
+        "featureColumnHeader": "Features",
+        "groupsColumnHeader": "Groups",
+        "categoricalGroupsCountRemark": "This feature has {0} unique values.",
+        "continuousGroupsCountRemark": "This feature is continuous and split into {0} bins.",
+        "continuousFeatureBinningLabel": "Change the number of bins",
+        "tooManyFeaturesSelectedWarning": "Please select only up to two features."
+      },
+      "metricConfiguration": {
+        "flyoutHeader": "Choose your metrics",
+        "flyoutSubHeader": "How would you like to measure your model's performance?",
+        "flyoutDescription": "Based on your model type, these are the recommended performance metrics. Fairness analysis or disaggregated analysis is performed by evaluating how your model's performance differs across feature subgroups.",
+        "noMetricsSelectedWarning": "Please select at least one metric.",
+        "metricNameColumnHeader": "Metric name",
+        "metricDescriptionColumnHeader": "Metric Description"
+      },
+      "cohortSelection": {
+        "flyoutHeader": "Choose cohorts",
+        "flyoutDescription": "You can choose to view dataset cohorts or feature cohorts. If feature cohorts are unavailable you need to first select one or more features in the feature cohorts view. Subsequently, feature cohorts are generated and you can select them here."
+      },
+      "topLevelDescription": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. Use the \"Dataset cohorts\" tab to investigate your model by looking at a comparative analysis of its performance across different pre-built or newly-created dataset cohorts. Use the \"Feature cohorts\" to investigate your model by looking at a comparative analysis of its performance across sensitive/non-sensitive feature subcohorts.(e.g., performance across different genders, income levels).",
+      "visualDisplayToggleLabel": "Show heatmap",
+      "featureBasedViewDescription": "Select up to two features to see the model performance breakdown across feature-based cohorts (if one feature is selected) or intersectional cohorts (if two features are selected)."
     }
   }
 }

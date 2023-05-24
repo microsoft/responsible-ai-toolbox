@@ -1,15 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { DefaultButton, PrimaryButton } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { DefaultButton, PrimaryButton } from "office-ui-fabric-react";
 import React from "react";
 
 import { WizardFooterStyles } from "./WizardFooter.styles";
 
 export interface IWizardFooterProps {
-  onNext: () => void;
-  onPrevious?: () => void;
+  nextTabKey: string;
+  previousTabKey?: string;
+  onSetTab: (key: string) => void;
 }
 
 export class WizardFooter extends React.PureComponent<IWizardFooterProps> {
@@ -20,16 +21,26 @@ export class WizardFooter extends React.PureComponent<IWizardFooterProps> {
         <PrimaryButton
           className={styles.next}
           text={localization.Fairness.Footer.next}
-          onClick={this.props.onNext}
+          onClick={this.onNext}
         />
-        {!!this.props.onPrevious && (
+        {!!this.props.previousTabKey && (
           <DefaultButton
             className={styles.back}
             text={localization.Fairness.Footer.back}
-            onClick={this.props.onPrevious}
+            onClick={this.onPrevious}
           />
         )}
       </div>
     );
   }
+
+  private onNext = (): void => {
+    this.props.onSetTab(this.props.nextTabKey);
+  };
+
+  private onPrevious = (): void => {
+    if (this.props.previousTabKey) {
+      this.props.onSetTab(this.props.previousTabKey);
+    }
+  };
 }

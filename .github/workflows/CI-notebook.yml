@@ -2,16 +2,18 @@ name: CI Notebooks
 
 on:
   push:
-    branches: [main, postbuild]
+    branches: [main]
   pull_request:
-    branches: [main, postbuild]
+    branches: [main]
 
 jobs:
   ci-notebook:
+    env:
+      node-version: 16.x
     strategy:
       matrix:
         operatingSystem: [ubuntu-latest, windows-latest]
-        pythonVersion: [3.6, 3.7, 3.8, 3.9]
+        pythonVersion: [3.6, 3.7, 3.8, 3.9, "3.10"]
 
     runs-on: ${{ matrix.operatingSystem }}
 
@@ -23,11 +25,21 @@ jobs:
           auto-update-conda: true
           python-version: ${{ matrix.pythonVersion }}
 
-      - name: build typescript
+      - name: Use Node.js ${{ env.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node-version }}
+
+      - name: Install yarn
+        run: npm install yarn -g
+
+      - name: Install yarn dependencies
         run: |
           yarn config set network-timeout 300000
-          yarn install
-          yarn buildall
+          yarn install --frozen-lock-file
+
+      - name: Build Typescript
+        run: yarn buildall
 
       - if: ${{ matrix.operatingSystem != 'macos-latest' }}
         name: Install pytorch on non-MacOS
@@ -44,9 +56,9 @@ jobs:
       - name: Setup tools
         shell: bash -l {0}
         run: |
-          python -m pip install --upgrade pip~=21.3
+          python -m pip install --upgrade pip
           pip install --upgrade setuptools
-          pip install --upgrade pip-tools
+          pip install --upgrade "pip-tools<=6.13.0"
 
       - name: Install dependencies
         shell: bash -l {0}

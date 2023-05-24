@@ -6,7 +6,7 @@ import {
   mergeStyleSets,
   IProcessedStyleSet,
   getTheme
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
 export interface IFeatureImportanceStyles {
   container: IStyle;
@@ -25,10 +25,17 @@ export const featureImportanceTabStyles: () => IProcessedStyleSet<IFeatureImport
         padding: "16px 24px 16px 40px"
       },
       tabs: {
-        display: "flex",
-        flexDirection: "row",
         justifyContent: "start",
-        padding: "0px 30px"
+        padding: "0px 30px",
+        selectors: {
+          "[role='tablist'].ms-Pivot": {
+            display: "flex",
+            flexWrap: "wrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap"
+          }
+        }
       }
     });
   };

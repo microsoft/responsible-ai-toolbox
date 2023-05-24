@@ -4,7 +4,7 @@
 import {
   IOfficeFabricProps,
   IModelExplanationData,
-  ITelemetryMessage,
+  ITelemetryEvent,
   IDataset,
   IErrorAnalysisData,
   ICausalAnalysisData,
@@ -12,7 +12,10 @@ import {
   ICausalWhatIfData,
   IErrorAnalysisTreeNode,
   IErrorAnalysisMatrix,
-  IPreBuiltCohort
+  IHighchartBoxData,
+  IPreBuiltCohort,
+  IHighchartBubbleSDKClusterData,
+  ILocalExplanations
 } from "@responsible-ai/core-ui";
 import { IStringsParam } from "@responsible-ai/error-analysis";
 
@@ -63,9 +66,101 @@ export interface IModelAssessmentDashboardProps
     target: unknown[],
     abortSignal: AbortSignal
   ) => Promise<ICausalWhatIfData[]>;
+  requestBoxPlotDistribution?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<IHighchartBoxData>;
+  requestGlobalCausalEffects?: (
+    id: string,
+    filter: unknown[],
+    compositeFilter: unknown[],
+    abortSignal: AbortSignal
+  ) => Promise<ICausalAnalysisData>;
+  requestGlobalCausalPolicy?: (
+    id: string,
+    filter: unknown[],
+    compositeFilter: unknown[],
+    abortSignal: AbortSignal
+  ) => Promise<ICausalAnalysisData>;
+  requestDatasetAnalysisBarChart?: (
+    filter: unknown[],
+    compositeFilter: unknown[],
+    columnNameX: string,
+    treatColumnXAsCategorical: boolean,
+    columnNameY: string,
+    treatColumnYAsCategorical: boolean,
+    numBins: number,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
+  requestDatasetAnalysisBoxChart?: (
+    filter: unknown[],
+    compositeFilter: unknown[],
+    columnNameX: string,
+    columnNameY: string,
+    numBins: number,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
+  requestGlobalExplanations?: (
+    filter: unknown[],
+    compositeFilter: unknown[],
+    abortSignal: AbortSignal
+  ) => Promise<any>;
+  requestMetrics?: (
+    filter: unknown[],
+    compositeFilter: unknown[],
+    metric: string,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
+  requestExp?: (
+    index: number | number[],
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
+  requestObjectDetectionMetrics?: (
+    selectionIndexes: number[][],
+    aggregateMethod: string,
+    className: string,
+    iouThresh: number,
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
+  requestQuestionAnsweringMetrics?: (
+    selectionIndexes: number[][],
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
+  requestBubblePlotData?: (
+    filter: unknown[],
+    compositeFilter: unknown[],
+    xAxis: string,
+    yAxis: string,
+    abortSignal: AbortSignal
+  ) => Promise<IHighchartBubbleSDKClusterData>;
+  requestLocalCounterfactuals?: (
+    counterfactualsId: string,
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<ICounterfactualData>;
+  requestLocalExplanations?: (
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<ILocalExplanations>;
+  requestLocalCausalEffects?: (
+    causalId: string,
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<ICausalAnalysisData>;
+  requestTestDataRow?: (
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   localUrl?: string;
-
-  telemetryHook?: (message: ITelemetryMessage) => void;
+  requestForecast?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
+  requestSplinePlotDistribution?: (
+    request: any,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 
   // TODO figure out how to persist starting tab for fairness
   startingTabIndex?: number;

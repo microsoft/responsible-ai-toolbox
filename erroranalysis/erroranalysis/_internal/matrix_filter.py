@@ -17,10 +17,12 @@ from erroranalysis._internal.constants import (DIFF, PRED_Y, ROW_INDEX, TRUE_Y,
 from erroranalysis._internal.metrics import (get_ordered_classes,
                                              is_multi_agg_metric,
                                              metric_to_func)
+from raiutils.exceptions import UserConfigValidationException
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 CATEGORY1 = 'category1'
 CATEGORY2 = 'category2'
+CONVERT_DTYPES = 'convert_dtypes'
 COUNT = 'count'
 FALSE_COUNT = 'falseCount'
 INTERVAL_MIN = 'intervalMin'
@@ -40,29 +42,66 @@ ZERO_BIN_TOL = 0.01
 
 
 def compute_json_matrix(analyzer, features, filters, composite_filters):
+    """Compute a matrix of metrics for a given set of features.
+
+    :param analyzer: The error analyzer.
+    :type analyzer: BaseAnalyzer
+    :param features: A list of one or two feature names to compute metrics for.
+    :type features: list
+    :param filters: A list of filters to apply to the data.
+    :type filters: list
+    :param composite_filters: A list of composite filters to apply to the data.
+    :type composite_filters: list
+    :return: A dictionary representation of the computed matrix which can be
+        saved to JSON.
+    :rtype: dict
+    """
     # Note: this is for backcompat for older versions
     # of raiwidgets pypi package
-    compute_matrix(analyzer, features, filters, composite_filters)
+    return compute_matrix(analyzer, features, filters, composite_filters)
 
 
-def compute_matrix(analyzer, features, filters, composite_filters,
-                   quantile_binning=False, num_bins=BIN_THRESHOLD):
+def compute_matrix_on_dataset(analyzer, features, dataset,
+                              quantile_binning=False, num_bins=BIN_THRESHOLD):
+    """Compute a matrix of metrics for a given set of feature names.
+
+    The filters and composite filters are used to filter the data
+    prior to computing the matrix.
+
+    :param analyzer: The error analyzer.
+    :type analyzer: BaseAnalyzer
+    :param features: A list of one or two feature names to compute metrics for.
+    :type features: list
+    :param dataset: The dataset on which matrix view needs to be computed.
+        The dataset should have the feature columns and the columns
+        'true_y' and 'index'. The 'true_y' column should have the true
+        target values corresponding to the test data. The 'index'
+        column should have the indices. If the analyzer is of type
+        PredictionsAnalyzer, then the dataset should include the column
+        'pred_y' which will hold the predictions.
+    :type dataset: pd.DataFrame
+    :param quantile_binning: Whether to use quantile binning.
+    :type quantile_binning: bool
+    :param num_bins: The number of bins to use for quantile binning.
+    :type num_bins: int
+    :return: A dictionary representation of the computed matrix which can be
+        saved to JSON.
+    :rtype: dict
+    """
     if num_bins <= 0:
         raise ValueError(
             'Number of bins parameter must be greater than 0 for the heatmap')
     if features[0] is None and features[1] is None:
         raise ValueError(
             'One or two features must be specified to compute the heat map')
-    filtered_df = filter_from_cohort(analyzer,
-                                     filters,
-                                     composite_filters)
-    true_y = filtered_df[TRUE_Y]
+
+    true_y = dataset[TRUE_Y]
     dropped_cols = [TRUE_Y, ROW_INDEX]
     is_model_analyzer = hasattr(analyzer, 'model')
     if not is_model_analyzer:
-        pred_y = filtered_df[PRED_Y]
+        pred_y = dataset[PRED_Y]
         dropped_cols.append(PRED_Y)
-    input_data = filtered_df.drop(columns=dropped_cols)
+    input_data = dataset.drop(columns=dropped_cols)
     is_pandas = isinstance(analyzer.dataset, pd.DataFrame)
     metric = analyzer.metric
     if is_pandas:
@@ -71,16 +110,11 @@ def compute_matrix(analyzer, features, filters, composite_filters,
         input_data = input_data.to_numpy()
     if is_model_analyzer:
         pred_y = analyzer.model.predict(input_data)
-    if is_model_analyzer:
-        if analyzer.model_task == ModelTask.CLASSIFICATION:
-            diff = analyzer.model.predict(input_data) != true_y
-        else:
-            diff = analyzer.model.predict(input_data) - true_y
+
+    if analyzer.model_task == ModelTask.CLASSIFICATION:
+        diff = pred_y != true_y
     else:
-        if analyzer.model_task == ModelTask.CLASSIFICATION:
-            diff = pred_y != true_y
-        else:
-            diff = pred_y - true_y
+        diff = pred_y - true_y
     if not isinstance(diff, np.ndarray):
         diff = np.array(diff)
     if not isinstance(pred_y, np.ndarray):
@@ -91,12 +125,20 @@ def compute_matrix(analyzer, features, filters, composite_filters,
     for feature in features:
         if feature is None:
             continue
+        if feature not in analyzer.feature_names:
+            msg = 'Feature {} not found in dataset. Existing features: {}'
+            raise UserConfigValidationException(
+                msg.format(feature, analyzer.feature_names))
         indexes.append(analyzer.feature_names.index(feature))
     if is_pandas:
         input_data = input_data.to_numpy()
     dataset_sub_features = input_data[:, indexes]
     dataset_sub_names = np.array(analyzer.feature_names)[np.array(indexes)]
     df = pd.DataFrame(dataset_sub_features, columns=dataset_sub_names)
+    # Fix for newer versions of pandas where qcut fails for object dtypes.
+    # Note this bug appears in newer versions of pandas+numpy but
+    # convert_dtypes method only exists in pandas>1.1.4.
+    df = convert_dtypes(df)
     df_err = df.copy()
     df_err[DIFF] = diff
     if metric == Metrics.ERROR_RATE:
@@ -104,6 +146,7 @@ def compute_matrix(analyzer, features, filters, composite_filters,
     else:
         df_err[TRUE_Y] = true_y
         df_err[PRED_Y] = pred_y
+    df_err = convert_dtypes(df_err)
     # construct matrix
     matrix = []
     if len(dataset_sub_names) == 2:
@@ -204,7 +247,7 @@ def compute_matrix(analyzer, features, filters, composite_filters,
             # fix counts to include skipped categories
             fix_counts = []
             counts_idx = 0
-            for idx, catdf in enumerate(cutdf.cat.categories):
+            for idx, _ in enumerate(cutdf.cat.categories):
                 if idx not in catn:
                     fix_counts.append(0)
                 else:
@@ -239,7 +282,7 @@ def compute_matrix(analyzer, features, filters, composite_filters,
             cutdf_err['metric_values'] = list(zip(df_err[TRUE_Y],
                                                   df_err[PRED_Y]))
             grouped = cutdf_err.groupby([feat1])
-            agg_func = {'metric_values': aggfunc._agg_func_triplet}
+            agg_func = {'metric_values': aggfunc._agg_func_grouped}
             counts_err = grouped.agg(agg_func)
             counts_err = counts_err.values.ravel()
         matrix = matrix_1d(categories, val_err, counts,
@@ -247,7 +290,94 @@ def compute_matrix(analyzer, features, filters, composite_filters,
     return matrix
 
 
+def compute_matrix(analyzer, features, filters, composite_filters,
+                   quantile_binning=False, num_bins=BIN_THRESHOLD):
+    """Compute a matrix of metrics for a given set of feature names.
+
+    The filters and composite filters are used to filter the data
+    prior to computing the matrix.
+
+    :param analyzer: The error analyzer.
+    :type analyzer: BaseAnalyzer
+    :param features: A list of one or two feature names to compute metrics for.
+    :type features: list
+    :param filters: A list of filters to apply to the data.
+    :type filters: list
+    :param composite_filters: A list of composite filters to apply to the data.
+    :type composite_filters: list
+    :param quantile_binning: Whether to use quantile binning.
+    :type quantile_binning: bool
+    :param num_bins: The number of bins to use for quantile binning.
+    :type num_bins: int
+    :return: A dictionary representation of the computed matrix which can be
+        saved to JSON.
+    :rtype: dict
+
+    :Example:
+
+    An example of running compute_matrix with a filter and a composite
+    filter:
+
+    >>> from erroranalysis._internal.error_analyzer import ModelAnalyzer
+    >>> from erroranalysis._internal.matrix_filter import (
+    ...     compute_matrix)
+    >>> from erroranalysis._internal.constants import ModelTask
+    >>> from sklearn.datasets import load_breast_cancer
+    >>> from sklearn.model_selection import train_test_split
+    >>> from sklearn import svm
+    >>> breast_cancer_data = load_breast_cancer()
+    >>> feature_names = breast_cancer_data.feature_names
+    >>> X_train, X_test, y_train, y_test = train_test_split(
+    ...     breast_cancer_data.data, breast_cancer_data.target,
+    ...     test_size=0.5, random_state=0)
+    >>> categorical_features = []
+    >>> clf = svm.SVC(gamma=0.001, C=100., probability=True,
+    ...               random_state=777)
+    >>> model = clf.fit(X_train, y_train)
+    >>> model_task = ModelTask.CLASSIFICATION
+    >>> analyzer = ModelAnalyzer(model, X_test, y_test, feature_names,
+    ...                          categorical_features, model_task=model_task)
+    >>> filters = [{'arg': [23.85], 'column': 'mean radius',
+    ...             'method': 'less and equal'}]
+    >>> composite_filters = [{'compositeFilters':
+    ...                      [{'compositeFilters':
+    ...                       [{'arg': [13.45, 22.27],
+    ...                         'column': 'mean radius',
+    ...                         'method': 'in the range of'},
+    ...                        {'arg': [10.88, 24.46],
+    ...                         'column': 'mean texture',
+    ...                         'method': 'in the range of'}],
+    ...                        'operation': 'and'}],
+    ...                      'operation': 'or'}]
+    >>> matrix = compute_matrix(analyzer, ['mean radius', 'mean texture'],
+    ...                         filters, composite_filters)
+    """
+    filtered_df = filter_from_cohort(analyzer,
+                                     filters,
+                                     composite_filters)
+    return compute_matrix_on_dataset(analyzer, features, filtered_df,
+                                     quantile_binning, num_bins)
+
+
+def convert_dtypes(df):
+    """Converts the dtypes of the dataframe to the most efficient type.
+
+    :param df: The dataframe to convert.
+    :type df: pandas.DataFrame
+    :return: The converted dataframe.
+    :rtype: pandas.DataFrame
+    """
+    if hasattr(df, CONVERT_DTYPES):
+        df = df.convert_dtypes()
+    return df
+
+
 def warn_duplicate_edges(feat):
+    """Alert user that a feature has too many duplicate values for bins.
+
+    :param feat: The feature name.
+    :type feat: str
+    """
     warnings.warn(("Removing duplicate bin edges for "
                    "quantile binning of feature {}"
                    ". There are too many "
@@ -256,6 +386,22 @@ def warn_duplicate_edges(feat):
 
 
 def bin_data(df, feat, bins, quantile_binning=False):
+    """Bins the input data for the specified feature and binning method.
+
+    Uses equal width, quantile binning or specified custom bins. Custom
+    bins is used when bins is an IntervalIndex instead of a constant number.
+
+    :param df: The pandas Series to bin.
+    :type df: pd.Series
+    :param feat: The feature name to bin.
+    :type feat: str
+    :param bins: The number of bins or the specified bins.
+    :type bins: int or pd.IntervalIndex
+    :param quantile_binning: Whether to use quantile binning.
+    :type quantile_binning: bool
+    :returns: The binned DataFrame.
+    :rtype: pd.DataFrame
+    """
     feat_col = df[feat]
     # Note: if column is empty pd.qcut raises error but pd.cut does not
     # and just returns the correct binned data and bins if retbins=True.
@@ -263,7 +409,10 @@ def bin_data(df, feat, bins, quantile_binning=False):
     # so the same categories are used.
     is_bins_constant = not isinstance(bins, pd.IntervalIndex)
     if not is_bins_constant:
-        bin_indexes = bins.get_indexer(feat_col)
+        if feat_col.empty:
+            bin_indexes = np.array([])
+        else:
+            bin_indexes = bins.get_indexer(np.array(feat_col))
         cat = pd.Categorical.from_codes(bin_indexes,
                                         categories=bins,
                                         ordered=True)
@@ -296,46 +445,129 @@ def bin_data(df, feat, bins, quantile_binning=False):
         bindf = bin_data(df, feat, bindf.cat.categories, quantile_binning)
         return bindf
     else:
-        return pd.cut(feat_col, bins, precision=PRECISION)
+        cut_df = pd.cut(feat_col, bins, precision=PRECISION)
+        return adjust_bin_max_edge(cut_df, feat_col)
+
+
+def adjust_bin_max_edge(cut_df, feat_col):
+    """Adjusts the max bin edge to account for floating point precision.
+
+    Adjustment only done when the max bin edge is less than the max value.
+
+    :param cut_df: The binned DataFrame.
+    :type cut_df: pd.DataFrame
+    :param feat_col: The feature column to adjust the bins for.
+    :type feat_col: pd.Series
+    """
+    bins = cut_df.cat.categories
+    max_bin = bins[-1]
+    max_val = feat_col.max()
+    if max_bin.right < max_val:
+        adj_cat = bins.copy()
+        max_bin = pd.Interval(left=max_bin.left, right=max_val,
+                              closed=max_bin.closed)
+        adj_cat = adj_cat[:-1].append(pd.IntervalIndex([max_bin]))
+        cut_df = cut_df.cat.rename_categories(adj_cat)
+    return cut_df
 
 
 class _BaseAggFunc(ABC):
+    """Base class for aggregation functions."""
     def __init__(self, aggfunc):
+        """Initialize the aggregation function.
+
+        :param aggfunc: The aggregation function.
+        :type aggfunc: callable
+        """
         self.aggfunc = aggfunc
 
     @abstractmethod
     def _agg_func_pair(self, pair):
+        """Aggregate a pair of values.
+
+        :param pair: The pair of values.
+        :type pair: tuple
+        :returns: The aggregated values.
+        :rtype: numpy.ndarray
+        """
         pass
 
     @abstractmethod
-    def _agg_func_triplet(self, pair):
+    def _agg_func_grouped(self, pair):
+        """Aggregate grouped pair of values.
+
+        :param pair: The grouped pair of values.
+        :type pair: tuple
+        :returns: The aggregated values.
+        :rtype: numpy.ndarray
+        """
         pass
 
     @abstractmethod
     def _fill_na_value(self):
+        """Specifies what value should be used to replace the missing value.
+
+        :returns: The replacement value for the missing value.
+        :rtype: any
+        """
         pass
 
 
 class _AggFunc(_BaseAggFunc):
+    """Aggregation function for a single metric."""
     def __init__(self, aggfunc):
+        """Initialize the aggregation function.
+
+        :param aggfunc: The aggregation function.
+        :type aggfunc: callable
+        """
         super(_AggFunc, self).__init__(aggfunc)
 
     def _agg_func_pair(self, pair):
+        """Aggregate a pair of values.
+
+        :param pair: The pair of values.
+        :type pair: tuple
+        :returns: The aggregated values.
+        :rtype: numpy.ndarray
+        """
         true_y, pred_y = zip(*pair.values.tolist())
         return self.aggfunc(true_y, pred_y)
 
-    def _agg_func_triplet(self, pair):
+    def _agg_func_grouped(self, pair):
+        """Aggregate grouped pair of values.
+
+        :param pair: The grouped pair of values.
+        :type pair: tuple
+        :returns: The aggregated values.
+        :rtype: numpy.ndarray
+        """
         if pair.empty:
             return 0
         (true_y, pred_y) = zip(*pair.values.tolist())
         return self.aggfunc(true_y, pred_y)
 
     def _fill_na_value(self):
+        """Specifies what value should be used to replace the missing value.
+
+        :returns: The replacement value for the missing value.
+        :rtype: int
+        """
         return 0
 
 
 class _MultiMetricAggFunc(_BaseAggFunc):
+    """Aggregation function for multiple metrics."""
     def __init__(self, aggfunc, labels, metric):
+        """Initialize the aggregation function.
+
+        :param aggfunc: The aggregation function.
+        :type aggfunc: callable
+        :param labels: The labels.
+        :type labels: list
+        :param metric: The metric.
+        :type metric: str
+        """
         super(_MultiMetricAggFunc, self).__init__(aggfunc)
         self.num_labels = len(labels)
         if self.num_labels == 2:
@@ -346,6 +578,17 @@ class _MultiMetricAggFunc(_BaseAggFunc):
         self.metric = metric
 
     def _multi_metric_result(self, true_y, pred_y):
+        """Calculates multiple metrics including precision and recall.
+
+        :param true_y: The true labels.
+        :type true_y: numpy.ndarray
+        :param pred_y: The predicted labels.
+        :type pred_y: numpy.ndarray
+        :returns: Multiple metrics as a tuple, including the
+            aggregated metric, TP, FP, FN, TN for the confusion
+            matrix and error count.
+        :rtype: (int, list, list, list, list, int)
+        """
         pred_y = np.array(pred_y)
         true_y = np.array(true_y)
         conf_matrix = multilabel_confusion_matrix(true_y, pred_y,
@@ -368,16 +611,35 @@ class _MultiMetricAggFunc(_BaseAggFunc):
                 tn_sum.tolist(), error)
 
     def _agg_func_pair(self, pair):
+        """Aggregate a pair of values.
+
+        :param pair: The pair of values.
+        :type pair: tuple
+        :returns: The aggregated values.
+        :rtype: numpy.ndarray
+        """
         true_y, pred_y = zip(*pair.values.tolist())
         return self._multi_metric_result(true_y, pred_y)
 
-    def _agg_func_triplet(self, pair):
+    def _agg_func_grouped(self, pair):
+        """Aggregate grouped pair of values.
+
+        :param pair: The grouped pair of values.
+        :type pair: tuple
+        :returns: The aggregated values.
+        :rtype: numpy.ndarray
+        """
         if pair.empty:
             return self._fill_na_value()
         (true_y, pred_y) = zip(*pair.values.tolist())
         return self._multi_metric_result(true_y, pred_y)
 
     def _fill_na_value(self):
+        """Specifies what value should be used to replace the missing value.
+
+        :returns: The replacement value for the missing value.
+        :rtype: (int, list, list, list, list, int)
+        """
         zero_array = [0]
         if self.num_labels > 2:
             zero_array = zero_array * self.num_labels
@@ -386,6 +648,23 @@ class _MultiMetricAggFunc(_BaseAggFunc):
 
 def matrix_2d(categories1, categories2, matrix_counts,
               matrix_err_counts, metric):
+    """Constructs a 2D matrix.
+
+    The matrix is in a dictionary format which can then be saved to JSON.
+
+    :param categories1: The categories for the first selected feature.
+    :type categories1: list
+    :param categories2: The categories for the second selected feature.
+    :type categories2: list
+    :param matrix_counts: The matrix counts.
+    :type matrix_counts: numpy.ndarray
+    :param matrix_err_counts: The matrix error counts.
+    :type matrix_err_counts: numpy.ndarray
+    :param metric: The calculated metric.
+    :type metric: str
+    :returns: The 2D matrix dictionary.
+    :rtype: dict
+    """
     matrix = []
     category1 = []
     category1_min_interval = []
@@ -477,6 +756,23 @@ def matrix_2d(categories1, categories2, matrix_counts,
 
 def matrix_1d(categories, values_err, counts, counts_err,
               metric):
+    """Constructs a 1D matrix.
+
+    The matrix is in a dictionary format which can then be saved to JSON.
+
+    :param categories: The categories for the selected feature.
+    :type categories: list
+    :param values_err: The error values for the selected feature.
+    :type values_err: list
+    :param counts: The counts for the selected feature.
+    :type counts: list
+    :param counts_err: The error counts for the selected feature.
+    :type counts_err: list
+    :param metric: The calculated metric.
+    :type metric: str
+    :returns: The 1D matrix dictionary.
+    :rtype: dict
+    """
     matrix = []
     matrix_row = []
     for col_idx in reversed(range(len(categories))):
@@ -546,6 +842,15 @@ def matrix_1d(categories, values_err, counts, counts_err,
 
 
 def fill_matrix_nulls(matrix, null_value):
+    """Fills null values in the matrix with a given value.
+
+    :param matrix: The matrix to fill.
+    :type matrix: list
+    :param null_value: The value to fill null values with.
+    :type null_value: int
+    :returns: The filled matrix.
+    :rtype: numpy.ndarray
+    """
     idx_arrays = np.where(matrix.isnull())
     idx_tuples = list(zip(idx_arrays[0], idx_arrays[1]))
     for tuple in idx_tuples:
@@ -553,6 +858,13 @@ def fill_matrix_nulls(matrix, null_value):
 
 
 def get_py_value(value):
+    """Returns the python value of the given numpy value.
+
+    :param value: The numpy value to get the corresponding python value of.
+    :type value: str
+    :returns: The python value of the given numpy value.
+    :rtype: any
+    """
     if isinstance(value, np.generic):
         return value.item()
     return value

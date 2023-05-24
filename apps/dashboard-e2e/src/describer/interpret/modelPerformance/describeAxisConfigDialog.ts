@@ -23,10 +23,7 @@ export function describeAxisConfigDialog(): void {
           .invoke("text")
           .then((text1) => {
             cy.get(`#AxisConfigPanel label:contains(${text1})`).click();
-            cy.get("#AxisConfigPanel")
-              .find("button")
-              .contains("Select")
-              .click();
+            cy.get("#AxisConfigPanel").find("button").contains("Apply").click();
             cy.get(
               '#OverallMetricChart div[class*="rotatedVerticalBox"] button:eq(0)'
             ).contains(text1);
@@ -53,10 +50,7 @@ export function describeAxisConfigDialog(): void {
           .invoke("text")
           .then((text1) => {
             cy.get(`#AxisConfigPanel label:contains(${text1})`).click();
-            cy.get("#AxisConfigPanel")
-              .find("button")
-              .contains("Select")
-              .click();
+            cy.get("#AxisConfigPanel").find("button").contains("Apply").click();
             cy.get(
               '#OverallMetricChart div[class*="horizontalAxis"] button:eq(0)'
             ).contains(text1);

@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { visit } from "../../../../util/visit";
 import { Locators } from "../Constants";
-import {
-  IModelAssessmentData,
-  RAINotebookNames
-} from "../IModelAssessmentData";
-import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
+import { modelAssessmentDatasets } from "../datasets/modelAssessmentDatasets";
+import { IModelAssessmentData } from "../IModelAssessmentData";
 
 import { describeAggregateCausalAffects } from "./describeAggregateCausalAffects";
 
@@ -17,17 +15,8 @@ export function describeCausalAnalysis(
   name?: keyof typeof modelAssessmentDatasets
 ): void {
   describe(testName, () => {
-    let fileName: string;
     before(() => {
-      if (name) {
-        const hosts = Cypress.env().hosts;
-        const hostDetails = hosts.find((obj: { file: string }) => {
-          fileName = RAINotebookNames[name];
-          return obj.file === fileName;
-        });
-        cy.task("log", hostDetails.host);
-        cy.visit(hostDetails.host);
-      }
+      visit(name);
       cy.get("#ModelAssessmentDashboard").should("exist");
     });
 

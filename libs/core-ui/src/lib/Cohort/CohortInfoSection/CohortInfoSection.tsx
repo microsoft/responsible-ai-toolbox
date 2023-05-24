@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { DefaultButton, Stack, Text } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { DefaultButton, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import {
@@ -10,6 +10,7 @@ import {
   IModelAssessmentContext,
   ModelAssessmentContext
 } from "../../Context/ModelAssessmentContext";
+import { isAllDataErrorCohort } from "../allDataCohortUtils";
 
 export interface ICohortInfoSectionProps {
   toggleShiftCohortVisibility: () => void;
@@ -26,10 +27,7 @@ export class CohortInfoSection extends React.PureComponent<ICohortInfoSectionPro
     // add (default) if it's the default cohort
     let cohortInfoTitle =
       localization.ModelAssessment.CohortInformation.GlobalCohort + cohortName;
-    if (
-      currentCohort.cohort.filters.length === 0 &&
-      currentCohort.cohort.name === localization.Interpret.Cohort.defaultLabel
-    ) {
+    if (isAllDataErrorCohort(currentCohort, true)) {
       cohortInfoTitle +=
         localization.ModelAssessment.CohortInformation.DefaultCohort;
     }

@@ -2,13 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  CohortEditorFilterList,
-  defaultModelAssessmentContext,
-  ErrorCohort,
-  ModelAssessmentContext
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
   IDropdownOption,
   PrimaryButton,
   DefaultButton,
@@ -17,13 +10,24 @@ import {
   DialogType,
   DialogFooter,
   Dropdown
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  CohortEditorFilterList,
+  DatasetTaskType,
+  defaultModelAssessmentContext,
+  ErrorCohort,
+  isAllDataErrorCohort,
+  ModelAssessmentContext,
+  translateToNewFilters
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 export interface IShiftCohortProps {
   onDismiss: () => void;
   onApply: (selectedCohort: ErrorCohort) => void;
   defaultCohort?: ErrorCohort;
+  showAllDataCohort: boolean;
 }
 
 export interface IShiftCohortState {
@@ -42,7 +46,10 @@ export class ShiftCohort extends React.Component<
 
   public componentDidMount(): void {
     const savedCohorts = this.context.errorCohorts.filter(
-      (errorCohort) => !errorCohort.isTemporary
+      (errorCohort) =>
+        !errorCohort.isTemporary &&
+        (this.props.showAllDataCohort ||
+          !isAllDataErrorCohort(errorCohort, true))
     );
     const options: IDropdownOption[] = savedCohorts.map(
       (savedCohort: ErrorCohort, index: number) => {
@@ -70,15 +77,28 @@ export class ShiftCohort extends React.Component<
     if (!this.state) {
       return React.Fragment;
     }
-    const filters =
+    const legacyFilters =
       this.state.savedCohorts[this.state.selectedCohort].cohort.filters;
+    const filters = translateToNewFilters(
+      legacyFilters,
+      this.context.dataset.feature_names
+    );
+    let localizationBase;
+    if (
+      this.context &&
+      this.context.dataset.task_type === DatasetTaskType.Forecasting
+    ) {
+      localizationBase = localization.Forecasting.TimeSeries;
+    } else {
+      localizationBase = localization.ModelAssessment.Cohort;
+    }
     return (
       <Dialog
         hidden={false}
         onDismiss={this.props.onDismiss}
         dialogContentProps={{
-          subText: localization.ModelAssessment.Cohort.shiftCohortDescription,
-          title: localization.ModelAssessment.Cohort.shiftCohort,
+          subText: localizationBase.shiftCohortDescription,
+          title: localizationBase.shiftCohort,
           type: DialogType.close
         }}
         modalProps={{
@@ -93,8 +113,8 @@ export class ShiftCohort extends React.Component<
         maxWidth={1000}
       >
         <Dropdown
-          placeholder={localization.ModelAssessment.Cohort.selectCohort}
-          label={localization.ModelAssessment.Cohort.cohortList}
+          placeholder={localizationBase.selectCohort}
+          label={localizationBase.cohortList}
           selectedKey={this.state.selectedCohort}
           options={this.state.options}
           onChange={this.onChange}
@@ -110,11 +130,11 @@ export class ShiftCohort extends React.Component<
         <DialogFooter>
           <PrimaryButton
             onClick={this.shiftCohort}
-            text={localization.ModelAssessment.Cohort.apply}
+            text={localizationBase.apply}
           />
           <DefaultButton
             onClick={this.props.onDismiss}
-            text={localization.ModelAssessment.Cohort.cancel}
+            text={localizationBase.cancel}
           />
         </DialogFooter>
       </Dialog>

@@ -5,6 +5,7 @@ export * from "./lib/ErrorAnalysisDashboard/ErrorAnalysisDashboard";
 export * from "./lib/ErrorAnalysisDashboard/ErrorAnalysisDashboard.styles";
 export * from "./lib/ErrorAnalysisDashboard/ErrorAnalysisEnums";
 export * from "./lib/ErrorAnalysisDashboard/ModelExplanationUtils";
+export * from "./lib/ErrorAnalysisDashboard/Controls/InfoCallout/InfoCallout";
 export * from "./lib/ErrorAnalysisDashboard/Controls/Matrix/MatrixFilterState";
 export * from "./lib/ErrorAnalysisDashboard/Controls/TreeViewRenderer/TreeViewState";
 export * from "./lib/ErrorAnalysisDashboard/Interfaces/IErrorAnalysisDashboardProps";
