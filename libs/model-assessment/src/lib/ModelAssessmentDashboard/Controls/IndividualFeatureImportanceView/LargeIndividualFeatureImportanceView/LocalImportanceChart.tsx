@@ -33,7 +33,6 @@ export interface ILocalImportanceChartProps {
   weightOptions: WeightVectorOption[];
   weightLabels: Dictionary<string>;
   modelType: ModelTypes;
-  isBubbleChartDataLoading?: boolean;
   onWeightChange: (option: WeightVectorOption) => void;
 }
 
@@ -78,9 +77,6 @@ export class LocalImportanceChart extends React.PureComponent<
 
   public render(): React.ReactNode {
     const classNames = localImportanceChartStyles();
-    if (this.props.isBubbleChartDataLoading) {
-      return <React.Fragment />;
-    }
     if (this.props.rowNumber === undefined) {
       return (
         <MissingParametersPlaceholder>
