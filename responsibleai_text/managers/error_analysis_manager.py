@@ -4,7 +4,7 @@
 """Defines the Error Analysis Manager class."""
 
 import json
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Union
 
 import jsonschema
 import numpy as np
@@ -19,6 +19,7 @@ from responsibleai.managers.error_analysis_manager import \
 from responsibleai.managers.error_analysis_manager import as_error_config
 
 from responsibleai_text.common.constants import ModelTask
+from responsibleai_text.utils.feature_extractors import get_text_columns
 
 LABELS = 'labels'
 
@@ -67,7 +68,9 @@ class WrappedIndexPredictorModel:
         self.is_multilabel = is_multilabel
         self.task_type = task_type
         if self.task_type in [ModelTask.TEXT_CLASSIFICATION, ModelTask.MULTILABEL_TEXT_CLASSIFICATION]:
-            self.predictions = self.model.predict(self.dataset.iloc[:, 0].tolist())
+            dataset = self.dataset.iloc[:, 0].tolist()
+            self.predictions = self.model.predict(dataset)
+            self.predict_proba = self.model.predict_proba(dataset)
         elif self.task_type == ModelTask.QUESTION_ANSWERING:
             self.predictions = self.model.predict(self.dataset.loc[:, ['context', 'questions']])
             self.predictions = np.array(self.predictions)
@@ -86,8 +89,6 @@ class WrappedIndexPredictorModel:
                 # concatenate all predicted labels into a single string
                 predictions_joined.append(','.join(pred_labels))
             self.predictions = np.array(predictions_joined)
-        if self.task_type != ModelTask.QUESTION_ANSWERING:
-            self.predict_proba = self.model.predict_proba(self.dataset.iloc[:, 0].tolist())
 
     def predict(self, X):
         """Predict the class labels for the provided data.
@@ -124,6 +125,7 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
 
     def __init__(self, model: Any, dataset: pd.DataFrame,
                  ext_dataset: pd.DataFrame, target_column: str,
+                 text_column: Optional[Union[str, List]],
                  task_type: str, classes: Optional[List] = None,
                  categorical_features: Optional[List[str]] = None):
         """Creates an ErrorAnalysisManager object.
@@ -140,6 +142,9 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
         :param target_column: The name of the label column or list of columns.
             This is a list of columns for multilabel models.
         :type target_column: str or list[str]
+        :param text_column: The name of the text column or list of columns.
+            This is a list of columns for question answering models.
+        :type text_column: str or list[str]
         :param task_type: The task to run.
         :type task_type: str
         :param classes: Class names as a list of strings.
@@ -164,8 +169,8 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
             target_column = LABELS
             is_multilabel = True
         index_predictor = ErrorAnalysisManager._create_index_predictor(
-            model, dataset, target_column, is_multilabel, task_type,
-            index_classes)
+            model, dataset, target_column, text_column, is_multilabel,
+            task_type, index_classes)
         if categorical_features is None:
             categorical_features = []
         super(ErrorAnalysisManager, self).__init__(
@@ -174,7 +179,8 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
 
     @staticmethod
     def _create_index_predictor(model, dataset, target_column,
-                                is_multilabel, task_type, classes=None):
+                                text_column, is_multilabel,
+                                task_type, classes=None):
         """Creates a wrapped predictor that uses index to retrieve text data.
 
         :param model: The model to analyze errors on.
@@ -186,6 +192,9 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
         :param target_column: The name of the label column or list of columns.
             This is a list of columns for multilabel models.
         :type target_column: str or list[str]
+        :param text_column: The name of the text column or list of columns.
+            This is a list of columns for question answering models.
+        :type text_column: str or list[str]
         :param is_multilabel: Whether the model is multilabel.
         :type is_multilabel: bool
         :param task_type: The task to run.
@@ -198,6 +207,7 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
         :rtype: WrappedIndexPredictorModel
         """
         dataset = dataset.drop(columns=[target_column])
+        dataset = get_text_columns(dataset, text_column)
         index_predictor = WrappedIndexPredictorModel(
             model, dataset, is_multilabel, task_type, classes)
         return index_predictor
@@ -274,9 +284,10 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
             true_y = index_dataset[target_column]
         inst.__dict__['_true_y'] = true_y
         inst.__dict__['_task_type'] = rai_insights.task_type
+        text_column = rai_insights._text_column
         index_predictor = ErrorAnalysisManager._create_index_predictor(
-            wrapped_model, index_dataset, target_column, is_multilabel,
-            rai_insights.task_type, index_classes)
+            wrapped_model, index_dataset, target_column, text_column,
+            is_multilabel, rai_insights.task_type, index_classes)
         inst.__dict__['_analyzer'] = ModelAnalyzer(index_predictor,
                                                    dataset,
                                                    true_y,
