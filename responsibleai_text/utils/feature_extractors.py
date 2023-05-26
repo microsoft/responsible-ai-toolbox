@@ -134,7 +134,45 @@ def append_metadata_values(start_meta_index, text_dataset, i,
     return extracted_features
 
 
+def get_text_columns(text_dataset: pd.DataFrame,
+                     text_column: Optional[Union[str, List]]):
+    """Get the text columns for prediction.
+
+    :param text_dataset: The text dataset.
+    :type text_dataset: pd.DataFrame
+    :param text_column: The name of the text column or list of columns.
+    :type text_column: str or list[str]
+    :return: The text columns for prediction.
+    :rtype: pd.DataFrame
+    """
+    text_exists = not not text_column
+    num_cols = len(text_dataset.columns)
+    is_list = isinstance(text_column, list)
+    text_cols = len(text_column) if is_list else 1
+    # Drop metadata columns before calling predict
+    if text_exists and num_cols - text_cols > 0:
+        if not is_list:
+            text_column = [text_column]
+        text_dataset = text_dataset[text_column]
+    return text_dataset
+
+
 def add_extracted_features_for_sentence(sentence, extracted_features, task_type=None, sentence_type=None):
+    """Add the extracted features for a sentence.
+
+    Note this also modifies the input array in-place.
+
+    :param sentence: The sentence to extract features from.
+    :type sentence: str
+    :param extracted_features: The list of extracted features.
+    :type extracted_features: list
+    :param task_type: The type of task to be performed.
+    :type task_type: str
+    :param sentence_type: The type of sentence to be processed.
+    :type sentence_type: str
+    :return: The list of extracted features.
+    :rtype: list
+    """
     global nlp
     if nlp is None:
         nlp = spacy.load("en_core_web_sm")
@@ -168,6 +206,13 @@ def add_extracted_features_for_sentence(sentence, extracted_features, task_type=
 
 
 def get_question_type(qtext):
+    """Get the question type.
+
+    :param qtext: The question text.
+    :type qtext: str
+    :return: The question type.
+    :rtype: str
+    """
     if re.search(r'\b\A(can|could|will|would|have|has|do|does|did|is|are|was|may|might)\s',
                  qtext, re.I):
         return "YES/NO"
@@ -201,6 +246,13 @@ def get_question_type(qtext):
 
 
 def get_parse_tree_depth(root):
+    """Get the parse tree depth.
+
+    :param root: The root of the parse tree.
+    :type root: spacy.tokens.token.Token
+    :return: The parse tree depth.
+    :rtype: int
+    """
     if not list(root.children):
         return 1
     else:
@@ -208,7 +260,13 @@ def get_parse_tree_depth(root):
 
 
 def get_average_depth(doc):
+    """Get the average parse tree depth.
 
+    :param doc: The document to process.
+    :type doc: spacy.tokens.doc.Doc
+    :return: The average parse tree depth.
+    :rtype: float
+    """
     roots = []
     for each in doc.sents:
         roots.append([token for token in each if token.head == token][0])
@@ -219,7 +277,13 @@ def get_average_depth(doc):
 
 
 def get_max_depth(doc):
+    """Get the maximum parse tree depth.
 
+    :param doc: The document to process.
+    :type doc: spacy.tokens.doc.Doc
+    :return: The maximum parse tree depth.
+    :rtype: int
+    """
     roots = []
     for each in doc.sents:
         roots.append([token for token in each if token.head == token][0])
@@ -228,6 +292,15 @@ def get_max_depth(doc):
 
 
 def get_context_overlap(context, question):
+    """Get the context overlap.
+
+    :param context: The context.
+    :type context: str
+    :param question: The question.
+    :type question: str
+    :return: The context overlap.
+    :rtype: float
+    """
     global nlp
     if nlp is None:
         nlp = spacy.load("en_core_web_sm")

@@ -28,6 +28,9 @@ EMOTION = 'emotion'
 COVID19_EVENTS_LABELS = ["event1", "event2", "event3", "event4",
                          "event5", "event6", "event7", "event8"]
 COVID19_EVENTS_MODEL_NAME = "covid19_events_model"
+BLBOOKSGENRE_MODEL_NAME = "blbooksgenre_model"
+NUM_BLBOOKSGENRE_LABELS = 2
+BLBOOKS_LABEL = 'label'
 
 
 class TextClassificationPipelineSerializer(object):
@@ -102,6 +105,28 @@ def load_covid19_emergency_event_dataset(with_metadata=False):
     return dataset
 
 
+def load_blbooks_genre_dataset():
+    config_kwargs = {"name": "annotated_raw"}
+    dataset = datasets.load_dataset("blbooksgenre", split="train",
+                                    **config_kwargs)
+    grouping_col = 'BL record ID'
+    columns = {"text": dataset["Title"],
+               BLBOOKS_LABEL: dataset["annotator_genre"],
+               "Date of publication": dataset["Date of publication"],
+               "annotator_country": dataset["annotator_country"],
+               "annotator_place_pub": dataset["annotator_place_pub"],
+               "annotated": dataset["annotated"],
+               grouping_col: dataset[grouping_col]}
+    dataset = pd.DataFrame(columns)
+    # drop duplicate rows
+    g = dataset.groupby(['BL record ID'])
+    dataset = g.first().sort_index().reset_index().drop_duplicates()
+    dataset = dataset[dataset.label != 1].reset_index(drop=True)
+    dataset = dataset.drop(columns=grouping_col)
+    print(dataset)
+    return dataset
+
+
 def create_text_classification_pipeline():
     # load the model and tokenizer
     tokenizer = AutoTokenizer.from_pretrained(
@@ -120,21 +145,21 @@ def create_question_answering_pipeline():
     return pipeline('question-answering')
 
 
-class FetchCovid19Model(object):
-    def __init__(self):
-        pass
+class FetchModel(object):
+    def __init__(self, model_name):
+        self.model_name = model_name
 
     def fetch(self):
-        zipfilename = COVID19_EVENTS_MODEL_NAME + '.zip'
+        zipfilename = self.model_name + '.zip'
         url = ('https://publictestdatasets.blob.core.windows.net/models/' +
-               COVID19_EVENTS_MODEL_NAME + '.zip')
+               self.model_name + '.zip')
         urlretrieve(url, zipfilename)
         with zipfile.ZipFile(zipfilename, 'r') as unzip:
-            unzip.extractall(COVID19_EVENTS_MODEL_NAME)
+            unzip.extractall(self.model_name)
 
 
 def create_multilabel_pipeline():
-    fetcher = FetchCovid19Model()
+    fetcher = FetchModel(COVID19_EVENTS_MODEL_NAME)
     action_name = "Model download"
     err_msg = "Failed to download model"
     max_retries = 4
@@ -154,6 +179,29 @@ def create_multilabel_pipeline():
     tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
     device = -1
     # build a pipeline object to do predictions
+    pred = pipeline(
+        "text-classification",
+        model=model,
+        tokenizer=tokenizer,
+        device=device,
+        return_all_scores=True
+    )
+    return pred
+
+
+def create_blbooks_pipeline():
+    fetcher = FetchModel(BLBOOKSGENRE_MODEL_NAME)
+    action_name = "Model download"
+    err_msg = "Failed to download model"
+    max_retries = 4
+    retry_delay = 60
+    retry_function(fetcher.fetch, action_name, err_msg,
+                   max_retries=max_retries,
+                   retry_delay=retry_delay)
+    model = AutoModelForSequenceClassification.from_pretrained(
+        BLBOOKSGENRE_MODEL_NAME, num_labels=NUM_BLBOOKSGENRE_LABELS)
+    tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
+    device = -1
     pred = pipeline(
         "text-classification",
         model=model,
