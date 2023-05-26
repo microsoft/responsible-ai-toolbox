@@ -28,7 +28,8 @@ from responsibleai_text.common.constants import ModelTask
 from responsibleai_text.managers.error_analysis_manager import \
     ErrorAnalysisManager
 from responsibleai_text.managers.explainer_manager import ExplainerManager
-from responsibleai_text.utils.feature_extractors import extract_features
+from responsibleai_text.utils.feature_extractors import (extract_features,
+                                                         get_text_columns)
 
 module_logger = logging.getLogger(__name__)
 module_logger.setLevel(logging.INFO)
@@ -58,6 +59,7 @@ _TIME_SERIES_ID_FEATURES = 'time_series_id_features'
 _CATEGORICAL_FEATURES = 'categorical_features'
 _DROPPED_FEATURES = 'dropped_features'
 _QUESTION_TYPE = 'question_type'
+_TEXT_COLUMN = '_text_column'
 
 
 def _feature_metadata_from_dict(feature_meta_dict):
@@ -113,7 +115,8 @@ class RAITextInsights(RAIBaseInsights):
                  classes: Optional[np.ndarray] = None,
                  serializer: Optional[Any] = None,
                  maximum_rows_for_test: int = 5000,
-                 feature_metadata: Optional[FeatureMetadata] = None):
+                 feature_metadata: Optional[FeatureMetadata] = None,
+                 text_column: Optional[Union[str, List]] = None):
         """Creates an RAITextInsights object.
 
         :param model: The model to compute RAI insights for.
@@ -141,6 +144,10 @@ class RAITextInsights(RAIBaseInsights):
         :param feature_metadata: Feature metadata for the dataset
             to identify different kinds of features.
         :type feature_metadata: Optional[FeatureMetadata]
+        :param text_column: The name of the optional text column(s).
+            If not provided, and there is additional feature metadata, then
+            an exception will be raised.
+        :type text_column: str or list[str]
         """
         # drop index as this can cause issues later like when copying
         # target column below from test dataset to _ext_test_df
@@ -150,6 +157,7 @@ class RAITextInsights(RAIBaseInsights):
             feature_metadata = FeatureMetadata()
         feature_metadata = _add_extra_metadata_features(
             task_type, feature_metadata)
+        self._text_column = text_column
         self._feature_metadata = feature_metadata
         self._wrapped_model = wrap_model(model, test, task_type)
         self._validate_rai_insights_input_parameters(
@@ -157,7 +165,8 @@ class RAITextInsights(RAIBaseInsights):
             target_column=target_column, task_type=task_type,
             classes=classes,
             serializer=serializer,
-            maximum_rows_for_test=maximum_rows_for_test)
+            maximum_rows_for_test=maximum_rows_for_test,
+            text_column=self._text_column)
         self._classes = RAITextInsights._get_classes(
             task_type=task_type,
             test=test,
@@ -190,8 +199,8 @@ class RAITextInsights(RAIBaseInsights):
             self._classes)
         self._error_analysis_manager = ErrorAnalysisManager(
             self._wrapped_model, self.test, self._ext_test_df,
-            self.target_column, self.task_type, self._classes,
-            self._feature_metadata.categorical_features)
+            self.target_column, self._text_column, self.task_type,
+            self._classes, self._feature_metadata.categorical_features)
         self._managers = [self._explainer_manager,
                           self._error_analysis_manager]
 
@@ -234,7 +243,8 @@ class RAITextInsights(RAIBaseInsights):
                 'The serializer should be serializable via pickle')
 
     def _validate_model(self, model: Any, test: pd.DataFrame,
-                        target_column: Union[str, List], task_type: str):
+                        target_column: Union[str, List], task_type: str,
+                        text_column: Optional[Union[str, List]]):
         """Validate the model.
 
         :param model: The model to validate.
@@ -247,12 +257,18 @@ class RAITextInsights(RAIBaseInsights):
         :param task_type: The task to run, can be `classification` or
             `regression`.
         :type task_type: str
+        :param text_column: The name of the optional text column(s).
+            If not provided, and there is additional feature metadata, then
+            an exception will be raised.
+        :type text_column: str or list[str]
         """
         if not isinstance(target_column, list):
             target_column = [target_column]
         # Pick one row from test data
         small_test_data = test.iloc[0:1].drop(
-            target_column, axis=1).iloc[0]
+            target_column, axis=1)
+        small_test_data = get_text_columns(small_test_data, text_column)
+        small_test_data = small_test_data.iloc[0]
         if task_type != ModelTask.QUESTION_ANSWERING:
             small_test_data = small_test_data.tolist()
         # Call the model
@@ -269,7 +285,8 @@ class RAITextInsights(RAIBaseInsights):
             target_column: Union[str, List], task_type: str,
             classes: np.ndarray,
             serializer,
-            maximum_rows_for_test: int):
+            maximum_rows_for_test: int,
+            text_column: Optional[Union[str, List]]):
         """Validate the inputs for the RAITextInsights constructor.
 
         :param model: The model to compute RAI insights for.
@@ -352,6 +369,20 @@ class RAITextInsights(RAIBaseInsights):
                         target_column)
                 )
 
+        if text_column:
+            if task_type == ModelTask.QUESTION_ANSWERING.value:
+                if not isinstance(text_column, list):
+                    raise UserConfigValidationException(
+                        'The text_column should be a list for question answering')
+                text_columns_set = set(text_column)
+                if not text_columns_set.issubset(set(test.columns)):
+                    raise UserConfigValidationException(
+                        'The list of text_column(s) should be in test data')
+            else:
+                if text_column not in test.columns:
+                    raise UserConfigValidationException(
+                        'The text_column should be in test data')
+
         if classes is not None and task_type == ModelTask.TEXT_CLASSIFICATION:
             if len(set(test[target_column].unique()) -
                     set(classes)) != 0:
@@ -361,7 +392,7 @@ class RAITextInsights(RAIBaseInsights):
 
         if model is not None:
             self._validate_model(model, test, target_column,
-                                 task_type)
+                                 task_type, text_column)
 
     def get_filtered_test_data(self, filters, composite_filters,
                                include_original_columns_only=False,
@@ -466,25 +497,27 @@ class RAITextInsights(RAIBaseInsights):
         with open(data_path, 'w') as file:
             json.dump(data, file, default=serialize_json_safe)
 
-    def _get_test_without_target(self, is_classification_task):
-        """Get the test data without the target column.
+    def _get_test_text_data(self, is_classification_task):
+        """Get the test data without the target and metadata columns.
 
         :param is_classification_task: Whether the task is a
             classification task.
         :type is_classification_task: bool
-        :return: The test data without the target column.
-        :rtype: pandas.DataFrame
+        :return: The test data without the target and metadata columns.
+        :rtype: pandas.DataFrame or list[str]
         """
         if is_classification_task:
             target_column = self.target_column
             if not isinstance(target_column, list):
                 target_column = [target_column]
-            dataset = self.test.drop(
-                target_column, axis=1).iloc[:, 0].tolist()
+            dataset = self.test.drop(target_column, axis=1)
         elif self.task_type == ModelTask.QUESTION_ANSWERING:
             dataset = self.test.drop([self.target_column], axis=1)
         else:
             raise ValueError("Unknown task type: {}".format(self.task_type))
+        dataset = get_text_columns(dataset, self._text_column)
+        if is_classification_task:
+            dataset = dataset.iloc[:, 0].tolist()
         return dataset
 
     @property
@@ -511,7 +544,7 @@ class RAITextInsights(RAIBaseInsights):
         dashboard_dataset.class_names = convert_to_list(
             self._classes)
         is_classification_task = self._is_classification_task
-        dataset = self._get_test_without_target(is_classification_task)
+        dataset = self._get_test_text_data(is_classification_task)
 
         predicted_y = None
         if dataset is not None and self._wrapped_model is not None:
@@ -599,7 +632,7 @@ class RAITextInsights(RAIBaseInsights):
         if self.model is None:
             return
         is_classification_task = self._is_classification_task
-        test_without_target_column = self._get_test_without_target(
+        test_without_target_column = self._get_test_text_data(
             is_classification_task)
         predict_output = self._wrapped_model.predict(
             test_without_target_column)
@@ -629,6 +662,7 @@ class RAITextInsights(RAIBaseInsights):
             _TASK_TYPE: self.task_type,
             _CLASSES: classes,
             _FEATURE_METADATA: feature_metadata_dict,
+            _TEXT_COLUMN: self._text_column
         }
         with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)
@@ -649,6 +683,10 @@ class RAITextInsights(RAIBaseInsights):
         inst.__dict__[_TARGET_COLUMN] = meta[_TARGET_COLUMN]
         inst.__dict__[_TASK_TYPE] = meta[_TASK_TYPE]
         inst.__dict__[_PREDICT_OUTPUT] = None
+        text_column = None
+        if _TEXT_COLUMN in meta:
+            text_column = meta[_TEXT_COLUMN]
+        inst.__dict__[_TEXT_COLUMN] = text_column
         classes = meta[_CLASSES]
 
         inst.__dict__['_' + _CLASSES] = RAITextInsights._get_classes(
