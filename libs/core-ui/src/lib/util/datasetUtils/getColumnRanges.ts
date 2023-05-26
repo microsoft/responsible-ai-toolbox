@@ -17,6 +17,7 @@ export function getColumnRanges(
 ): {
   [key: string]: IColumnRange;
 } {
+  console.log("!!dataset: ", dataset);
   const ranges = {};
   // get dataset features' range
   dataset.feature_names.forEach((feature) => {
@@ -78,6 +79,7 @@ function getDatasetFeatureRange(
     (item) => item === column
   );
   const featureVector = dataset.features.map((row) => row[featureIndex]);
+  console.log("!!featureVectr, ", featureVector);
   const isCategorical = dataset.categorical_features.includes(column);
   return isCategorical
     ? {
@@ -90,6 +92,35 @@ function getDatasetFeatureRange(
         rangeType: featureVector.every((val) => Number.isInteger(val))
           ? RangeTypes.Integer
           : RangeTypes.Numeric,
+        sortedUniqueValues: (_.uniq(featureVector) as number[]).sort((a, b) => {
+          return a - b;
+        })
+      } as IColumnRange);
+}
+
+function getDatasetFeatureRangeForLargeData(
+  dataset: IDataset,
+  column: string
+): IColumnRange {
+  const featureRange = dataset.tabular_dataset_metadata?.feature_ranges.find(
+    (obj) => {
+      return obj.column_name === column;
+    }
+  );
+  console.log("!!featureRange, ", featureRange);
+  const rangeType = featureRange?.range_type;
+  return rangeType === "categorical"
+    ? {
+        rangeType: RangeTypes.Categorical,
+        sortedUniqueValues: _.uniq(featureRange?.unique_values).sort()
+      }
+    : ({
+        max: _.max(featureRange?.max_value) || 0,
+        min: _.min(featureRange?.min_value) || 0,
+        rangeType:
+          featureRange?.range_type === "integer"
+            ? RangeTypes.Integer
+            : RangeTypes.Numeric,
         sortedUniqueValues: (_.uniq(featureVector) as number[]).sort((a, b) => {
           return a - b;
         })

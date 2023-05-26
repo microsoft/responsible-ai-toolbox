@@ -156,10 +156,10 @@ export function getModelTypeFromExplanation(
   }
 }
 
-export function ifEnableLargeData(dataset: IDataset): boolean {
-  if (dataset?.is_large_data_scenario && dataset?.use_entire_test_data) {
-    return dataset.is_large_data_scenario && dataset.use_entire_test_data;
-  }
+export function ifEnableLargeData(_dataset: IDataset): boolean {
+  // if (dataset?.is_large_data_scenario && dataset?.use_entire_test_data) {
+  //   return dataset.is_large_data_scenario && dataset.use_entire_test_data;
+  // }
   return false;
 }
 
