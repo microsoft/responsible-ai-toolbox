@@ -1,13 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`FairnessWizardV1 should render successfully 1`] = `
-<div
-  style={
-    Object {
-      "backgroundColor": "#ffffff",
-    }
-  }
->
+<Fragment>
   <AppHeader
     application="modelAssessment"
     dataset="adultCensusIncomeData"
@@ -22,6 +16,7 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
     key="1"
     style={
       Object {
+        "backgroundColor": "#ffffff",
         "height": "calc(100% - 70px)",
         "minHeight": "500px",
         "width": "calc(100%-20px)",
@@ -18904,5 +18899,5 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
     push={true}
     to="/modelAssessment/adultCensusIncomeData/1%20-%20light/en/1/"
   />
-</div>
+</Fragment>
 `;
