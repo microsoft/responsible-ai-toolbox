@@ -8,8 +8,8 @@ import _ from "lodash";
 import { DatasetCohortColumns } from "../../DatasetCohortColumns";
 import { IDataset } from "../../Interfaces/IDataset";
 import { ModelTypes } from "../../Interfaces/IExplanationContext";
-import { IsBinary, IsMulticlass } from "../ExplanationUtils";
 import { ifEnableLargeData } from "../buildInitialContext";
+import { IsBinary, IsMulticlass } from "../ExplanationUtils";
 
 // TODO: these ranges should come from backend, it does not make sense to calculate at FE for big data
 export function getColumnRanges(

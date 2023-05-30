@@ -15,16 +15,16 @@ import { localization } from "@responsible-ai/localization";
 import { IColumnRange, RangeTypes } from "@responsible-ai/mlchartlib";
 import React from "react";
 
-import { IFilter } from "../../Interfaces/IFilter";
-import { FluentUIStyles } from "../../util/FluentUIStyles";
-
-import { maxLength } from "./CohortEditorPanelContentUtils";
-import { NoneCategoricalFilterOptions } from "./NoneCategoricalFilterOptions";
-import { ifEnableLargeData } from "../../util/buildInitialContext";
 import {
   ModelAssessmentContext,
   defaultModelAssessmentContext
 } from "../../Context/ModelAssessmentContext";
+import { IFilter } from "../../Interfaces/IFilter";
+import { ifEnableLargeData } from "../../util/buildInitialContext";
+import { FluentUIStyles } from "../../util/FluentUIStyles";
+
+import { maxLength } from "./CohortEditorPanelContentUtils";
+import { NoneCategoricalFilterOptions } from "./NoneCategoricalFilterOptions";
 
 export interface ICohortEditorFilterProps {
   featureNames: string[];
