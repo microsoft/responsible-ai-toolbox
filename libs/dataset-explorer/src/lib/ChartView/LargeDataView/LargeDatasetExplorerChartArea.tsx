@@ -27,6 +27,7 @@ export interface ILargeDatasetExplorerChartAreaProps {
   highChartConfigOverride?: any;
   isBubbleChartDataLoading?: boolean;
   bubbleChartErrorMessage?: string;
+  isAggregatePlotLoading?: boolean;
   onXSet: (value: ISelectorConfig) => void;
   onYSet: (value: ISelectorConfig) => void;
 }
@@ -43,6 +44,7 @@ export class LargeDatasetExplorerChartArea extends React.PureComponent<ILargeDat
       selectedCohortIndex,
       isBubbleChartRendered,
       isBubbleChartDataLoading,
+      isAggregatePlotLoading,
       highChartConfigOverride,
       bubbleChartErrorMessage,
       onXSet,
@@ -96,7 +98,7 @@ export class LargeDatasetExplorerChartArea extends React.PureComponent<ILargeDat
                       chartProps.yAxis.property
                     ].label
                   }
-                  disabled={isBubbleChartDataLoading}
+                  disabled={isBubbleChartDataLoading || isAggregatePlotLoading}
                   removeCount={!isHistogramOrBoxChart}
                 />
               </Stack.Item>
@@ -112,7 +114,9 @@ export class LargeDatasetExplorerChartArea extends React.PureComponent<ILargeDat
                       )}
                 </MissingParametersPlaceholder>
               )}
-              {!isBubbleChartDataLoading && canRenderChart ? (
+              {!isAggregatePlotLoading &&
+              !isBubbleChartDataLoading &&
+              canRenderChart ? (
                 <BasicHighChart
                   configOverride={highChartConfigOverride}
                   theme={getTheme()}
@@ -147,7 +151,7 @@ export class LargeDatasetExplorerChartArea extends React.PureComponent<ILargeDat
               this.context.jointDataset.metaDict[chartProps.xAxis.property]
                 .label
             }
-            disabled={isBubbleChartDataLoading}
+            disabled={isBubbleChartDataLoading || isAggregatePlotLoading}
             removeCount={!isHistogramOrBoxChart}
           />
         </Stack.Item>

@@ -18,7 +18,8 @@ from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
 from raiutils.exceptions import UserConfigValidationException
 from raiutils.models import Forecasting, ModelTask, SKLearn
-from responsibleai._interfaces import Dataset, RAIInsightsData
+from responsibleai._interfaces import (Dataset, RAIInsightsData,
+                                       TabularDatasetMetadata)
 from responsibleai._internal._forecasting_wrappers import _wrap_model
 from responsibleai._internal.constants import (FileFormats, ManagerNames,
                                                Metadata,
@@ -234,7 +235,7 @@ class RAIInsights(RAIBaseInsights):
         self._feature_columns = \
             test.drop(columns=[target_column]).columns.tolist()
         self._feature_ranges = RAIInsights._get_feature_ranges(
-            test=test,
+            test=(self._large_test if self._large_test is not None else test),
             categorical_features=self.categorical_features,
             feature_columns=self._feature_columns,
             datetime_features=self._feature_metadata.datetime_features)
@@ -575,6 +576,15 @@ class RAIInsights(RAIBaseInsights):
                 "identified as categorical features: "
                 f"{non_categorical_or_time_string_columns}")
 
+        list_of_feature_having_missing_values = []
+        for feature in test.columns.tolist():
+            if np.any(test[feature].isnull()):
+                list_of_feature_having_missing_values.append(feature)
+        if len(list_of_feature_having_missing_values) > 0:
+            warnings.warn(
+                f"Features {list_of_feature_having_missing_values} "
+                "have missing values in test data")
+
         self._validate_feature_metadata(
             feature_metadata, train, task_type, model, target_column)
 
@@ -913,6 +923,16 @@ class RAIInsights(RAIBaseInsights):
         dashboard_dataset.is_large_data_scenario = \
             True if self._large_test is not None else False
         dashboard_dataset.use_entire_test_data = False
+
+        dashboard_dataset.tabular_dataset_metadata = TabularDatasetMetadata()
+        dashboard_dataset.tabular_dataset_metadata.is_large_data_scenario = \
+            True if self._large_test is not None else False
+        dashboard_dataset.tabular_dataset_metadata.use_entire_test_data = False
+        dashboard_dataset.tabular_dataset_metadata.num_rows = \
+            len(self._large_test) \
+            if self._large_test is not None else len(self.test)
+        dashboard_dataset.tabular_dataset_metadata.feature_ranges = \
+            self._feature_ranges
 
         if self._feature_metadata is not None:
             dashboard_dataset.feature_metadata = \

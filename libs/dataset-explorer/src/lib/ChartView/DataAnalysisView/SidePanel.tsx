@@ -41,6 +41,7 @@ export interface ISidePanelProps {
   dataset: IDataset;
   disabled?: boolean;
   isBubbleChartRendered?: boolean;
+  loading?: boolean;
   onChartPropChange: (p: IGenericChartProps) => void;
   setIsRevertButtonClicked?: (status: boolean) => void;
 }
@@ -86,7 +87,7 @@ export class SidePanel extends React.Component<
           selectedKey={this.props.chartProps.chartType}
           options={this.chartOptions}
           onChange={this.onChartTypeChange}
-          disabled={this.props.disabled}
+          disabled={this.props.disabled || this.props.loading}
         />
         {this.displayAxisConfigDialog() && this.props.chartProps.colorAxis && (
           <AxisConfigDialog

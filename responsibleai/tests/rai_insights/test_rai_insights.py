@@ -5,7 +5,6 @@ import os
 import pickle
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from uuid import UUID
 
 import numpy as np
 import pandas as pd
@@ -25,6 +24,7 @@ from rai_test_utils.models.model_utils import (create_models_classification,
                                                create_models_regression)
 from rai_test_utils.models.sklearn import \
     create_complex_classification_pipeline
+from rai_test_utils.utilities import is_valid_uuid
 from raiutils.models import ModelTask
 from responsibleai import RAIInsights
 from responsibleai._internal.constants import (ManagerNames,
@@ -325,7 +325,7 @@ def validate_component_state_directory(path, manager_type):
     all_component_paths = os.listdir(path / manager_type)
     for component_path in all_component_paths:
         # Test if the component directory has UUID structure
-        UUID(component_path, version=4)
+        is_valid_uuid(component_path)
         dm = DirectoryManager(path / manager_type, component_path)
 
         config_path = dm.get_config_directory()

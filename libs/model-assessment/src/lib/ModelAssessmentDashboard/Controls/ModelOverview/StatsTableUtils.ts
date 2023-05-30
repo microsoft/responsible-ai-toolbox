@@ -12,9 +12,9 @@ import {
   MulticlassClassificationMetrics,
   MultilabelMetrics,
   ObjectDetectionMetrics,
+  QuestionAnsweringMetrics,
   RegressionMetrics,
-  TotalCohortSamples,
-  QuestionAnsweringMetrics
+  TotalCohortSamples
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
@@ -465,6 +465,14 @@ export function getSelectableMetrics(
             .description,
         key: QuestionAnsweringMetrics.BleuScore,
         text: localization.ModelAssessment.ModelOverview.metrics.bleuScore.name
+      },
+
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.bertScore
+            .description,
+        key: QuestionAnsweringMetrics.BertScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.bertScore.name
       },
       {
         description:

@@ -245,10 +245,14 @@ export class TableList extends React.Component<
   ): React.ReactNode => {
     const classNames = visionExplanationDashboardStyles();
 
-    const value =
+    let value =
       item && column && column.fieldName
         ? item[column.fieldName as keyof IVisionListItem]
         : "";
+    // Handle multilabel case for trueY and predictedY
+    if (value && Array.isArray(value)) {
+      value = value.join(", ");
+    }
 
     const image =
       item && column && column.fieldName === "image"

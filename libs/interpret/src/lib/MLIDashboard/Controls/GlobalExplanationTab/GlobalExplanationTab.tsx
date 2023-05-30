@@ -76,6 +76,7 @@ interface IGlobalExplanationTabState {
   cohortSeries: IGlobalSeries[];
   logarithmicScaling: boolean;
   selectedCohort: Cohort;
+  loading?: boolean;
 }
 
 export class GlobalExplanationTab extends React.PureComponent<
@@ -191,25 +192,28 @@ export class GlobalExplanationTab extends React.PureComponent<
             {localization.Interpret.GlobalTab.helperText}
           </Text>
         </Stack.Item>
-        <Stack.Item className={classNames.topK}>
-          <div id="TopKSliderContainer">
-            <Slider
-              label={localization.formatString(
-                localization.Interpret.GlobalTab.topAtoB,
-                this.state.topK
-              )}
-              ariaLabel={
-                localization.Interpret.AggregateImportance.topKFeatures
-              }
-              max={this.context.jointDataset.localExplanationFeatureCount}
-              min={1}
-              step={1}
-              value={this.state.topK}
-              onChange={this.setTopK}
-              showValue={false}
-            />
-          </div>
-        </Stack.Item>
+        {!this.state.loading && (
+          <Stack.Item className={classNames.topK}>
+            <div id="TopKSliderContainer">
+              <Slider
+                label={localization.formatString(
+                  localization.Interpret.GlobalTab.topAtoB,
+                  this.state.topK
+                )}
+                ariaLabel={
+                  localization.Interpret.AggregateImportance.topKFeatures
+                }
+                max={this.context.jointDataset.localExplanationFeatureCount}
+                min={1}
+                step={1}
+                value={this.state.topK}
+                onChange={this.setTopK}
+                showValue={false}
+                disabled={this.state.loading}
+              />
+            </div>
+          </Stack.Item>
+        )}
         <Stack.Item className={classNames.chartCallout}>
           {this.explainerCalloutInfo && (
             <LabelWithCallout
@@ -254,6 +258,7 @@ export class GlobalExplanationTab extends React.PureComponent<
                 topK={this.state.topK}
                 onFeatureSelection={this.onFeatureSelection}
                 selectedFeatureIndex={this.state.selectedFeatureIndex}
+                loading={this.state.loading}
               />
             </Stack.Item>
             <Stack.Item>
@@ -272,6 +277,7 @@ export class GlobalExplanationTab extends React.PureComponent<
                 onChartTypeChange={this.onChartTypeChange}
                 chartType={this.state.chartType}
                 telemetryHook={this.props.telemetryHook}
+                loading={this.state.loading}
               />
             </Stack.Item>
           </Stack>
@@ -474,14 +480,19 @@ export class GlobalExplanationTab extends React.PureComponent<
   }
 
   private async getGlobalSeries(): Promise<void> {
+    this.setState({
+      loading: true
+    });
     const globalExplanationsSDKValue = await this.getCohortSeriesSDK();
     if (globalExplanationsSDKValue) {
       this.setState({
-        cohortSeries: globalExplanationsSDKValue
+        cohortSeries: globalExplanationsSDKValue,
+        loading: false
       });
     } else {
       this.setState({
-        cohortSeries: this.getGlobalSeriesUI()
+        cohortSeries: this.getGlobalSeriesUI(),
+        loading: false
       });
     }
   }

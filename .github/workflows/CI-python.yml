@@ -7,7 +7,6 @@ on:
     branches: [main]
     paths:
       - "erroranalysis/**"
-      - "rai_core_flask/**"
       - "rai_test_utils/**"
       - "raiutils/**"
       - "responsibleai/**"
@@ -43,10 +42,6 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.pythonVersion }}
-
-      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
-        name: Use Homebrew to install libomp on MacOS for lightgbm
-        run: brew install https://publictestdatasets.blob.core.windows.net/data/libomp-11.1.0.catalina.bottle.tar.gz
 
       - name: Setup tools
         run: |
@@ -92,7 +87,7 @@ jobs:
       - if: ${{ (matrix.operatingSystem == 'windows-latest') && (matrix.pythonVersion == '3.8') }}
         name: Upload to codecov
         id: codecovupload1
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ${{ matrix.packageDirectory }}
@@ -106,7 +101,7 @@ jobs:
       - if: ${{ (steps.codecovupload1.outcome == 'failure') && (matrix.pythonVersion == '3.8') && (matrix.operatingSystem == 'windows-latest') }}
         name: Retry upload to codecov
         id: codecovupload2
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ${{ matrix.packageDirectory }}

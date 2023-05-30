@@ -58,8 +58,7 @@ export interface ITabsViewProps {
   ) => Promise<any[]>;
   requestQuestionAnsweringMetrics?: (
     selectionIndexes: number[][],
-    trueY: string[],
-    predictedY: string[]
+    abortSignal: AbortSignal
   ) => Promise<any[]>;
   requestDebugML?: (
     request: any[],
