@@ -89,11 +89,6 @@ export class CohortEditorPanelContent extends React.PureComponent<
 
   public render(): React.ReactNode {
     const styles = cohortEditorStyles();
-    console.log(
-      "!!dataset: ",
-      this.props.dataset,
-      this.props.dataset.tabular_dataset_metadata
-    );
     return (
       <Stack tokens={{ childrenGap: "l1" }}>
         <Stack.Item>

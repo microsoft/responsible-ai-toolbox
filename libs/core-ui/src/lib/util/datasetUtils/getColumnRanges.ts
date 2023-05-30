@@ -9,6 +9,7 @@ import { DatasetCohortColumns } from "../../DatasetCohortColumns";
 import { IDataset } from "../../Interfaces/IDataset";
 import { ModelTypes } from "../../Interfaces/IExplanationContext";
 import { IsBinary, IsMulticlass } from "../ExplanationUtils";
+import { ifEnableLargeData } from "../buildInitialContext";
 
 // TODO: these ranges should come from backend, it does not make sense to calculate at FE for big data
 export function getColumnRanges(
@@ -17,11 +18,12 @@ export function getColumnRanges(
 ): {
   [key: string]: IColumnRange;
 } {
-  console.log("!!dataset: ", dataset);
   const ranges = {};
   // get dataset features' range
   dataset.feature_names.forEach((feature) => {
-    const range = getDatasetFeatureRange(dataset, feature);
+    const range = ifEnableLargeData(dataset)
+      ? getDatasetFeatureRangeForLargeData(dataset, feature)
+      : getDatasetFeatureRange(dataset, feature);
     ranges[feature] = range;
   });
   const indexRange = getIndexFeatureRange(dataset);
@@ -79,7 +81,6 @@ function getDatasetFeatureRange(
     (item) => item === column
   );
   const featureVector = dataset.features.map((row) => row[featureIndex]);
-  console.log("!!featureVectr, ", featureVector);
   const isCategorical = dataset.categorical_features.includes(column);
   return isCategorical
     ? {
@@ -107,23 +108,18 @@ function getDatasetFeatureRangeForLargeData(
       return obj.column_name === column;
     }
   );
-  console.log("!!featureRange, ", featureRange);
   const rangeType = featureRange?.range_type;
   return rangeType === "categorical"
     ? {
         rangeType: RangeTypes.Categorical,
-        sortedUniqueValues: _.uniq(featureRange?.unique_values).sort()
+        sortedUniqueValues: featureRange?.unique_values.sort()
       }
     : ({
-        max: _.max(featureRange?.max_value) || 0,
-        min: _.min(featureRange?.min_value) || 0,
-        rangeType:
-          featureRange?.range_type === "integer"
-            ? RangeTypes.Integer
-            : RangeTypes.Numeric,
-        sortedUniqueValues: (_.uniq(featureVector) as number[]).sort((a, b) => {
-          return a - b;
-        })
+        max: featureRange?.max_value || 0,
+        min: featureRange?.min_value || 0,
+        rangeType: Number.isInteger(featureRange?.max_value)
+          ? RangeTypes.Integer
+          : RangeTypes.Numeric
       } as IColumnRange);
 }
 
