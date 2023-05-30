@@ -31,6 +31,7 @@ from responsibleai._internal.constants import (ExplanationKeys, ListProperties,
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.managers.base_manager import BaseManager
+from responsibleai.utils import _measure_time
 
 SPARSE_NUM_FEATURES_THRESHOLD = 1000
 IS_RUN = 'is_run'
@@ -153,8 +154,13 @@ class ExplainerManager(BaseManager):
             return explainer.explain_global(data[
                 0:MAXIMUM_ROWS_FOR_GLOBAL_EXPLANATIONS], include_local=local)
 
+    @_measure_time
     def compute(self):
         """Creates an explanation by running the explainer on the model."""
+
+        print("Explanations")
+        print('Current Status: Explaining {0} features'.format(
+            len(self._features)))
         if not self._is_added:
             return
         if self._is_run:
@@ -164,6 +170,9 @@ class ExplainerManager(BaseManager):
             data=self._evaluation_examples
         )
         self._is_run = True
+
+        print('Current Status: Explained {0} features.'.format(
+              len(self._features)))
 
     def get(self):
         """Get the computed explanation.
