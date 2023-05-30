@@ -65,12 +65,20 @@ export function getColumnRanges(
 }
 
 function getIndexFeatureRange(dataset: IDataset): IColumnRange {
-  return {
-    max: dataset.features.length - 1,
-    min: 0,
-    rangeType: RangeTypes.Integer,
-    sortedUniqueValues: [...new Array(dataset.features.length).keys()]
-  };
+  return !ifEnableLargeData(dataset)
+    ? {
+        max: dataset.features.length - 1,
+        min: 0,
+        rangeType: RangeTypes.Integer,
+        sortedUniqueValues: [...new Array(dataset.features.length).keys()]
+      }
+    : ({
+        max: dataset.tabular_dataset_metadata?.num_rows
+          ? dataset.tabular_dataset_metadata?.num_rows - 1
+          : 0,
+        min: 0,
+        rangeType: RangeTypes.Integer
+      } as IColumnRange);
 }
 
 function getDatasetFeatureRange(
