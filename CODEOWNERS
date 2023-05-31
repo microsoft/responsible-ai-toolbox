@@ -1,44 +1,47 @@
 # Error analysis package
-/erroranalysis @gaugup @imatiach-msft @RubyZ10 @vinuthakaranth @tongyu-microsoft @xuke444 @hawestra
+
+/erroranalysis @gaugup @hawestra @imatiach-msft @kicha0 @romanlutz @RubyZ10 @tongyu-microsoft @vinuthakaranth @xuke444 @ziqi-ma
 
 # Responsible AI widgets package
-/raiwidgets @imatiach-msft @xuke444 @romanlutz @RubyZ10 @vinuthakaranth @tongyu-microsoft @hawestra
+
+/raiwidgets @gaugup @hawestra @imatiach-msft @kicha0 @romanlutz @RubyZ10 @tongyu-microsoft @vinuthakaranth @xuke444 @ziqi-ma
 
 # Responsible AI SDK package
-/responsibleai @gaugup @imatiach-msft @xuke444 @kicha0 @RubyZ10 @vinuthakaranth @tongyu-microsoft @hawestra
+
+/responsibleai @gaugup @hawestra @imatiach-msft @kicha0 @romanlutz @RubyZ10 @tongyu-microsoft @vinuthakaranth @xuke444 @ziqi-ma
 
 # App
-/apps @tongyu-microsoft @romanlutz @vinuthakaranth @xuke444 @RubyZ10 @hawestra
+
+/apps @gaugup @hawestra @imatiach-msft @kicha0 @romanlutz @RubyZ10 @tongyu-microsoft @vinuthakaranth @xuke444 @ziqi-ma
 
 #causal ui
-/libs/causality @tongyu-microsoft @romanlutz @vinuthakaranth @xuke444 @RubyZ10 @hawestra
+/libs/causality @gaugup @hawestra @imatiach-msft @kicha0 @romanlutz @RubyZ10 @tongyu-microsoft @vinuthakaranth @xuke444 @ziqi-ma
 
 #counterfactuals ui
-/libs/counterfactuals @tongyu-microsoft @romanlutz @vinuthakaranth @xuke444 @RubyZ10 @hawestra
+/libs/counterfactuals @gaugup @hawestra @imatiach-msft @kicha0 @romanlutz @RubyZ10 @tongyu-microsoft @vinuthakaranth @xuke444 @ziqi-ma
 
 #dataset-explorer ui
-/libs/dataset-explorer @romanlutz @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10 @hawestra
+/libs/dataset-explorer @gaugup @hawestra @imatiach-msft @kicha0 @romanlutz @RubyZ10 @tongyu-microsoft @vinuthakaranth @xuke444 @ziqi-ma
 
 #error-analysis ui
-/libs/error-analysis @romanlutz @imatiach-msft @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10 @hawestra
+/libs/error-analysis @gaugup @hawestra @imatiach-msft @kicha0 @romanlutz @RubyZ10 @tongyu-microsoft @vinuthakaranth @xuke444 @ziqi-ma
 
 #fairness ui
-/libs/fairness @romanlutz @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10 @hawestra
+/libs/fairness @gaugup @hawestra @imatiach-msft @kicha0 @romanlutz @RubyZ10 @tongyu-microsoft @vinuthakaranth @xuke444 @ziqi-ma
 
 #interpret ui
-/libs/interpret @romanlutz @gaugup @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10 @hawestra
+/libs/interpret @gaugup @hawestra @imatiach-msft @kicha0 @romanlutz @RubyZ10 @tongyu-microsoft @vinuthakaranth @xuke444 @ziqi-ma
 
 #interpret-text ui
-/libs/interpret-text @imatiach-msft @gaugup @tongyu-microsoft @xuke444 @RubyZ10 @vinuthakaranth @hawestra
+/libs/interpret-text @gaugup @hawestra @imatiach-msft @kicha0 @romanlutz @RubyZ10 @tongyu-microsoft @vinuthakaranth @xuke444 @ziqi-ma
 
-#interpret-vision ui
-/libs/interpret-vision @imatiach-msft @gaugup @tongyu-microsoft @xuke444 @RubyZ10 @vinuthakaranth @hawestra
+#interpret-vision ui@gaugup @hawestra @imatiach-msft @kicha0 @romanlutz @RubyZ10 @tongyu-microsoft @vinuthakaranth @xuke444 @ziqi-ma
 
 #model-assessment ui
-/libs/model-assessment @romanlutz @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10 @hawestra
+/libs/model-assessment @gaugup @hawestra @imatiach-msft @kicha0 @romanlutz @RubyZ10 @tongyu-microsoft @vinuthakaranth @xuke444 @ziqi-ma
 
 #e2e tests
-/libs/e2e @vinuthakaranth @tongyu-microsoft @romanlutz @imatiach-msft @RubyZ10 @xuke444 @hawestra
+/libs/e2e @gaugup @hawestra @imatiach-msft @kicha0 @romanlutz @RubyZ10 @tongyu-microsoft @vinuthakaranth @xuke444 @ziqi-ma
 
 #core ui
-/libs/core-ui @imatiach-msft @tongyu-microsoft @xuke444 @RubyZ10 @vinuthakaranth @romanlutz @hawestra
+/libs/core-ui @gaugup @hawestra @imatiach-msft @kicha0 @romanlutz @RubyZ10 @tongyu-microsoft @vinuthakaranth @xuke444 @ziqi-ma
