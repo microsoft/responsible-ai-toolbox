@@ -22,6 +22,7 @@ from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.managers.base_manager import BaseManager
+from responsibleai.utils import _measure_time
 
 
 class CausalManager(BaseManager):
@@ -353,9 +354,12 @@ class CausalManager(BaseManager):
         result = filtered[0]
         return result._global_cohort_policy(X_test)
 
+    @_measure_time
     def compute(self):
         """Computes the causal effects by running the causal
            configuration."""
+        print("Causal Effects")
+        print('Current Status: Generating Causal Effects.')
         is_classification = self._task_type == ModelTask.CLASSIFICATION
         for result in self._results:
             causal_config = result.config
@@ -431,6 +435,7 @@ class CausalManager(BaseManager):
                     result.policies.append(policy)
 
                 result._validate_schema()
+        print('Current Status: Finished generating causal effects.')
 
     def get(self):
         """Get the computed causal insights."""

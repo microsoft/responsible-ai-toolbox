@@ -33,6 +33,7 @@ import React from "react";
 
 import { tableViewStyles } from "./TableView.styles";
 import { generateOnRenderDetailsHeader } from "./TableViewDetailsHeader";
+import { onRenderGroupHeader } from "./TableViewGroupHeader";
 import { ITableViewProps } from "./TableViewProps";
 import { IITableViewState, ITableViewTableState } from "./TableViewState";
 
@@ -206,6 +207,10 @@ export class TableView extends React.Component<
               }
             }
           },
+          onRenderHeader:
+            selectionMode === SelectionMode.multiple
+              ? onRenderGroupHeader()
+              : undefined,
           showEmptyGroups: true
         }}
         selectionMode={selectionMode}
@@ -216,7 +221,6 @@ export class TableView extends React.Component<
 
   private updateItems(): ITableViewTableState {
     let groups: IGroup[] | undefined;
-
     let filteredDataRows: Array<{ [key: string]: number }> = [];
     // assume classifier by default, otherwise regressor
     if (
@@ -263,7 +267,6 @@ export class TableView extends React.Component<
       ];
     }
     filteredDataRows = this.props.selectedCohort.cohort.filteredData;
-
     const numRows: number = filteredDataRows.length;
     const indices = filteredDataRows.map(
       (row: { [key: string]: string | number }) => {
@@ -278,7 +281,6 @@ export class TableView extends React.Component<
       () => false, // don't filter any items
       indices
     );
-
     const numCols: number = this.props.jointDataset.datasetFeatureCount;
     const featureNames: string[] = this.props.features;
     const viewedCols: number = Math.min(numCols, featureNames.length);
@@ -288,7 +290,6 @@ export class TableView extends React.Component<
       this.props.jointDataset,
       false
     );
-
     return {
       columns,
       groups,
