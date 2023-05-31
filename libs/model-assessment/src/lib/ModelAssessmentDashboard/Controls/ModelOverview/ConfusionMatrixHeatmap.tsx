@@ -198,7 +198,7 @@ export class ConfusionMatrixHeatmap extends React.Component<
                         color: theme.palette.black,
                         enabled: true,
                         style: {
-                          textOutline: "none"
+                          color: theme.semanticColors.bodyText
                         }
                       },
                       type: "heatmap"

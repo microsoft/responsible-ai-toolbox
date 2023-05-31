@@ -106,7 +106,7 @@ export class FairnessMetricTable extends React.Component<
                   color: theme.semanticColors.bodyText,
                   enabled: true,
                   style: {
-                    textOutline: "none"
+                    color: theme.semanticColors.bodyText
                   }
                 },
                 name: "Metrics",
