@@ -8,6 +8,7 @@ import _ from "lodash";
 import { DatasetCohortColumns } from "../../DatasetCohortColumns";
 import { IDataset } from "../../Interfaces/IDataset";
 import { ModelTypes } from "../../Interfaces/IExplanationContext";
+import { ifEnableLargeData } from "../buildInitialContext";
 import { IsBinary, IsMulticlass } from "../ExplanationUtils";
 
 // TODO: these ranges should come from backend, it does not make sense to calculate at FE for big data
@@ -20,7 +21,9 @@ export function getColumnRanges(
   const ranges = {};
   // get dataset features' range
   dataset.feature_names.forEach((feature) => {
-    const range = getDatasetFeatureRange(dataset, feature);
+    const range = ifEnableLargeData(dataset)
+      ? getDatasetFeatureRangeForLargeData(dataset, feature)
+      : getDatasetFeatureRange(dataset, feature);
     ranges[feature] = range;
   });
   const indexRange = getIndexFeatureRange(dataset);
@@ -62,12 +65,20 @@ export function getColumnRanges(
 }
 
 function getIndexFeatureRange(dataset: IDataset): IColumnRange {
-  return {
-    max: dataset.features.length - 1,
-    min: 0,
-    rangeType: RangeTypes.Integer,
-    sortedUniqueValues: [...new Array(dataset.features.length).keys()]
-  };
+  return !ifEnableLargeData(dataset)
+    ? {
+        max: dataset.features.length - 1,
+        min: 0,
+        rangeType: RangeTypes.Integer,
+        sortedUniqueValues: [...new Array(dataset.features.length).keys()]
+      }
+    : ({
+        max: dataset.tabular_dataset_metadata?.num_rows
+          ? dataset.tabular_dataset_metadata?.num_rows - 1
+          : 0,
+        min: 0,
+        rangeType: RangeTypes.Integer
+      } as IColumnRange);
 }
 
 function getDatasetFeatureRange(
@@ -93,6 +104,30 @@ function getDatasetFeatureRange(
         sortedUniqueValues: (_.uniq(featureVector) as number[]).sort((a, b) => {
           return a - b;
         })
+      } as IColumnRange);
+}
+
+function getDatasetFeatureRangeForLargeData(
+  dataset: IDataset,
+  column: string
+): IColumnRange {
+  const featureRange = dataset.tabular_dataset_metadata?.feature_ranges.find(
+    (obj) => {
+      return obj.column_name === column;
+    }
+  );
+  const rangeType = featureRange?.range_type;
+  return rangeType === "categorical"
+    ? {
+        rangeType: RangeTypes.Categorical,
+        sortedUniqueValues: featureRange?.unique_values.sort()
+      }
+    : ({
+        max: featureRange?.max_value || 0,
+        min: featureRange?.min_value || 0,
+        rangeType: Number.isInteger(featureRange?.max_value)
+          ? RangeTypes.Integer
+          : RangeTypes.Numeric
       } as IColumnRange);
 }
 

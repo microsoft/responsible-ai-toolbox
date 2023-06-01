@@ -123,21 +123,23 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
           }
           setIsRevertButtonClicked={this.setIsRevertButtonClicked}
         />
-        <LocalImportanceChart
-          rowNumber={this.state.selectedPointsIndexes[0]}
-          data={this.state.localExplanationsData}
-          isLocalExplanationsDataLoading={
-            this.state.isLocalExplanationsDataLoading
-          }
-          localExplanationsErrorMessage={
-            this.state.localExplanationsErrorMessage
-          }
-          selectedWeightVector={this.props.selectedWeightVector}
-          onWeightChange={this.props.onWeightChange}
-          weightOptions={this.props.weightOptions}
-          weightLabels={this.props.weightLabels}
-          modelType={this.props.modelType}
-        />
+        {!this.state.isBubbleChartDataLoading && (
+          <LocalImportanceChart
+            rowNumber={this.state.selectedPointsIndexes[0]}
+            data={this.state.localExplanationsData}
+            isLocalExplanationsDataLoading={
+              this.state.isLocalExplanationsDataLoading
+            }
+            localExplanationsErrorMessage={
+              this.state.localExplanationsErrorMessage
+            }
+            selectedWeightVector={this.props.selectedWeightVector}
+            onWeightChange={this.props.onWeightChange}
+            weightOptions={this.props.weightOptions}
+            weightLabels={this.props.weightLabels}
+            modelType={this.props.modelType}
+          />
+        )}
       </Stack>
     );
   }
