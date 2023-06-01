@@ -55,7 +55,7 @@ export async function calculateBubblePlotDataFromErrorCohort(
       telemetryHook?.({
         level: TelemetryLevels.Trace,
         message: eventName,
-        type: TelemetryEventName.BubblePlotDataFetchedSuccessfully
+        type: TelemetryEventName.BubblePlotDataFetchSuccess
       });
       return getBubbleChartOptions(
         bubbleChartData.clusters,
@@ -77,7 +77,8 @@ export async function calculateBubblePlotDataFromErrorCohort(
         telemetryHook?.({
           level: TelemetryLevels.Error,
           message: eventName,
-          type: TelemetryEventName.BubblePlotDataFetchFailed
+          type: TelemetryEventName.BubblePlotDataFetchError,
+          context: error
         });
         return error;
       }

@@ -294,7 +294,8 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     });
     const localExplanationsData = await getLocalExplanationsFromSDK(
       absoluteIndex,
-      this.context.requestLocalExplanations
+      this.context.requestLocalExplanations,
+      this.props.telemetryHook
     );
     if (
       typeof localExplanationsData === "object" &&
