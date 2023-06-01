@@ -95,6 +95,7 @@ export * from "./lib/Interfaces/IModelExplanationData";
 export * from "./lib/Interfaces/IConfusionMatrixData";
 export * from "./lib/Interfaces/IVisionModelExplanationData";
 export * from "./lib/Interfaces/IWeightedDropdownContext";
+export * from "./lib/Interfaces/ITokenDropdownContext";
 export * from "./lib/Interfaces/IFilter";
 export * from "./lib/Interfaces/IPreBuiltFilter";
 export * from "./lib/Interfaces/ICohort";
