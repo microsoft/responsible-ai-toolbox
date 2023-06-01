@@ -190,7 +190,8 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       this.state.isLocalExplanationsDataLoading,
       this.context.requestBubblePlotData,
       this.selectPointFromChartLargeData,
-      this.onBubbleClick
+      this.onBubbleClick,
+      this.props.telemetryHook
     );
     if (
       datasetBubblePlotConfigOverride &&

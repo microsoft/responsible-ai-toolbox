@@ -369,10 +369,12 @@ export class LargeDatasetExplorerTab extends React.Component<
       false,
       false,
       true,
+      TelemetryEventName.DataAnalysisBubblePlotDataFetch,
       this.context.requestBubblePlotData,
       undefined,
       this.onBubbleClick,
-      undefined
+      undefined,
+      this.props.telemetryHook
     );
   };
 

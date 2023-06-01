@@ -350,10 +350,12 @@ export class LargeCounterfactualChart extends React.PureComponent<
       this.props.isCounterfactualsDataLoading,
       true,
       false,
+      TelemetryEventName.CounterfactualsBubblePlotDataFetch,
       this.context.requestBubblePlotData,
       this.selectPointFromChartLargeData,
       this.onBubbleClick,
-      this.props.onIndexSeriesUpdated
+      this.props.onIndexSeriesUpdated,
+      this.props.telemetryHook
     );
   }
 

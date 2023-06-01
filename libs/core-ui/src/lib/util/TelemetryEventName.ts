@@ -60,5 +60,13 @@ export enum TelemetryEventName {
   IndividualCausalSelectedDatapointUpdatedFromDropdown = "RAI_IndividualCausalSelectedDatapointUpdatedFromDropdown",
   CausalTreatmentPolicyTabClick = "RAI_CausalTreatmentPolicyTabClick",
   CausalTreatmentPolicyNewTreatmentFeatureSelected = "RAI_CausalTreatmentPolicyNewTreatmentFeatureSelected",
-  LocalCausalEffectsFetchError = "LocalCausalEffectsFetchError"
+  LocalCausalEffectsFetchError = "LocalCausalEffectsFetchError",
+  // Big data
+  CounterfactualsBubblePlotDataFetch = "CounterfactualsBubblePlotDataFetch",
+  CausalBubblePlotDataFetch = "CausalBubblePlotDataFetch",
+  FeatureImportanceBubblePlotDataFetch = "FeatureImportanceBubblePlotDataFetch",
+  DataAnalysisBubblePlotDataFetch = "DataAnalysisBubblePlotDataFetch",
+  IndividualDataAnalysisBubblePlotDataFetch = "IndividualDataAnalysisBubblePlotDataFetch",
+  BubblePlotDataFetchFailed = "BubblePlotDataFetchFailed",
+  BubblePlotDataFetchedSuccessfully = "BubblePlotDataFetchedSuccessfully"
 }

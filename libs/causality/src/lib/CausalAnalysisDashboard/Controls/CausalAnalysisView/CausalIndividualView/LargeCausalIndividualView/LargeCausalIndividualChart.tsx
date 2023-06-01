@@ -200,7 +200,8 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       this.state.isLocalCausalDataLoading,
       this.context.requestBubblePlotData,
       this.selectPointFromChartLargeData,
-      this.onBubbleClick
+      this.onBubbleClick,
+      this.props.telemetryHook
     );
     if (
       datasetBubbleConfigOverride &&
