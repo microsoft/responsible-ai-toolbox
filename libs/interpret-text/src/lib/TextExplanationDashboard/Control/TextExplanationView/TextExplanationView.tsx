@@ -10,13 +10,12 @@ import {
   Stack,
   Text
 } from "@fluentui/react";
-//import { WeightVectorOption, WeightVectors } from "@responsible-ai/core-ui";
-import { WeightVectors } from "@responsible-ai/core-ui";
-import { TokenImportance } from "@responsible-ai/interpret";
+import { WeightVectorOption, WeightVectors } from "@responsible-ai/core-ui";
+import { ClassImportanceWeights, TokenImportance } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-import { RadioKeys, Utils } from "../../CommonUtils";
+import { RadioKeys, QAExplanationType, Utils } from "../../CommonUtils";
 import { ITextExplanationViewProps } from "../../Interfaces/IExplanationViewProps";
 import { BarChart } from "../BarChart/BarChart";
 import { TextFeatureLegend } from "../TextFeatureLegend/TextFeatureLegend";
@@ -37,6 +36,7 @@ export interface ITextExplanationViewState {
   selectedToken: number;
   tokenIndexes: number[];
   text: string[];
+  isQA: boolean // temporal flag for identifying QA
 }
 
 const options: IChoiceGroupOption[] = [
@@ -51,10 +51,10 @@ const options: IChoiceGroupOption[] = [
 const qaOptions: IChoiceGroupOption[] = [
   /*
    * Creates the choices for the QA prediction radio button(local testing)
-   * TODO: move keys to CommonUtils, and text to localization.InterpretText.View.*
+   * TODO: move text under localization.InterpretText.View
    */
-  { key: "starting", text: "STARTING POSITION" },
-  { key: "ending", text: "ENDING POSITION" },
+  { key: QAExplanationType.Start, text: "STARTING POSITION" },
+  { key: QAExplanationType.End, text: "ENDING POSITION" },
 ];
 
 const componentStackTokens: IStackTokens = {
@@ -74,6 +74,8 @@ export class TextExplanationView extends React.PureComponent<
      */
     super(props);
     
+    const isQA = false; // FIXME: temporally hardcode the flag, should use prop instead
+
     const importances = this.computeImportancesForAllTokens(
       this.props.dataSummary.localExplanations,
     );
@@ -91,7 +93,8 @@ export class TextExplanationView extends React.PureComponent<
       radio: RadioKeys.All,
       qaRadio: "starting",
       text: this.props.dataSummary.text,
-      topK
+      topK,
+      isQA
     };
   }
 
@@ -101,17 +104,18 @@ export class TextExplanationView extends React.PureComponent<
       this.props.dataSummary.localExplanations !==
         prevProps.dataSummary.localExplanations
     ) {
-      // TODO: this should be conditionally disabled (when we're explaining QA)
-      //this.updateImportances(this.props.selectedWeightVector);
-
-      this.setState({  //update token dropdown
-        tokenIndexes: Array.from(this.props.dataSummary.text, (_, index) => index),
-        selectedToken: 0
-      },
-      () => {
-        this.updateTokenImportances();
-        this.updateSingleTokenImportances();
-      })
+      if (this.state.isQA) {
+        this.setState({  //update token dropdown
+          tokenIndexes: Array.from(this.props.dataSummary.text, (_, index) => index),
+          selectedToken: 0
+        },
+        () => {
+          this.updateTokenImportances();
+          this.updateSingleTokenImportances();
+        })
+      } else {
+        this.updateImportances(this.props.selectedWeightVector);
+      }
     }
   }
 
@@ -134,7 +138,7 @@ export class TextExplanationView extends React.PureComponent<
           <Stack.Item grow className={classNames.chartRight}>
             <Stack tokens={componentStackTokens}>
               
-              {/* TODO: this item should be conditionally disabled (when we're explaining QA)
+              { !this.state.isQA  && ( // classfication
               <Stack.Item>
                 <Text variant={"xLarge"}>
                   {localization.InterpretText.View.label +
@@ -145,9 +149,9 @@ export class TextExplanationView extends React.PureComponent<
                     )}
                 </Text>
               </Stack.Item>
-              */}
+              )}
 
-              {/* TODO: this should be conditionally enabled (when we're explaining QA)*/}
+              { this.state.isQA && ( // select starting/ending for QA
               <Stack.Item id="TextChoiceGroup">
                   <ChoiceGroup
                     defaultSelectedKey="starting"
@@ -156,6 +160,7 @@ export class TextExplanationView extends React.PureComponent<
                     required
                   />
               </Stack.Item>
+              )}
 
               <Stack.Item>
                 <Label>{localization.InterpretText.View.importantWords}</Label>
@@ -172,8 +177,17 @@ export class TextExplanationView extends React.PureComponent<
                 />
               </Stack.Item>
 
-              {/* TODO: this should be conditionally disabled (when we're explaining QA)
-              <Stack.Item>
+              { this.state.isQA?            
+               (<Stack.Item>
+                <TokenImportance
+                  onTokenChange={this.onSelectedTokenChange}
+                  selectedToken={this.state.selectedToken}
+                  tokenOptions={this.state.tokenIndexes}
+                  tokenLabels={this.state.text}
+                />
+              </Stack.Item>)
+              :
+              (<Stack.Item>
                 <ClassImportanceWeights
                   onWeightChange={this.onWeightVectorChange}
                   selectedWeightVector={this.props.selectedWeightVector}
@@ -181,16 +195,8 @@ export class TextExplanationView extends React.PureComponent<
                   weightLabels={this.props.weightLabels}
                 />
               </Stack.Item>
-              */}
-
-              <Stack.Item>
-                <TokenImportance
-                  onTokenChange={this.onSelectedTokenChange}
-                  selectedToken={this.state.selectedToken}
-                  tokenOptions={this.state.tokenIndexes}
-                  tokenLabels={this.state.text}
-                />
-              </Stack.Item>
+              )
+              }
 
               {this.props.selectedWeightVector !== WeightVectors.AbsAvg && (
                 <Stack.Item id="TextChoiceGroup">
@@ -220,9 +226,8 @@ export class TextExplanationView extends React.PureComponent<
               radio={this.state.radio}
             />
           </Stack.Item>
-          <Stack.Item align="end">
-          </Stack.Item>
 
+          { this.state.isQA && (
           <Stack.Item
             align="stretch"
             grow
@@ -239,6 +244,8 @@ export class TextExplanationView extends React.PureComponent<
               radio={this.state.radio}
             />
           </Stack.Item>
+          )}
+
           <Stack.Item align="end">
             <TextFeatureLegend />
           </Stack.Item>
@@ -248,12 +255,10 @@ export class TextExplanationView extends React.PureComponent<
     );
   }
 
-  /* TODO: move the func back when conditional rendering is ready (commented for passing build)
   private onWeightVectorChange = (weightOption: WeightVectorOption): void => {
     this.updateImportances(weightOption);
     this.props.onWeightChange(weightOption);
   };
-  */
 
   private onSelectedTokenChange = (newIndex: number): void => {
 
@@ -264,7 +269,6 @@ export class TextExplanationView extends React.PureComponent<
       });
   };
 
-  /* TODO: move the func back when conditional rendering is ready (commented for passing build)
   private updateImportances(weightOption: WeightVectorOption): void {
     const importances = this.computeImportancesForWeightVector(
       this.props.dataSummary.localExplanations,
@@ -280,7 +284,7 @@ export class TextExplanationView extends React.PureComponent<
       topK
     });
   }
-  */
+
 
   // for QA
   private updateTokenImportances(): void {
@@ -317,7 +321,6 @@ export class TextExplanationView extends React.PureComponent<
     );
   }
 
-  /* TODO: move the func back when conditional rendering is ready (commented for passing build)
   private computeImportancesForWeightVector(
     importances: number[][],
     weightVector: WeightVectorOption
@@ -336,7 +339,6 @@ export class TextExplanationView extends React.PureComponent<
       (perClassImportances) => perClassImportances[weightVector as number]
     );
   }
-  */
 
   private computeImportancesForAllTokens(
     importances: number[][]
@@ -378,13 +380,13 @@ export class TextExplanationView extends React.PureComponent<
     }
   };
 
-  // TODO: add logic for switching explanation data 
   private switchQAprediction = (
     _event?: React.FormEvent,
     item?: IChoiceGroupOption
   ): void => {
     /*
      * switch to the target predictions(starting or ending)
+     * TODO: add logic for switching explanation data 
      */
     if (item?.key !== undefined) {
       this.setState({ qaRadio: item.key });
