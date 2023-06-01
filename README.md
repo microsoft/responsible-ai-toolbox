@@ -140,3 +140,6 @@ Tools within the Responsible AI Toolbox can also be used with AI models offered 
 - [Tong Yu](https://github.com/tongyu-microsoft)
 - [Ruby Zhu](https://github.com/RubyZ10)
 - [Mehrnoosh Sameki](https://github.com/mesameki)
+- [Hannah Westra](https://github.com/hawestra)
+- [Ziqi Ma](https://github.com/ziqi-ma)
+- [Kin Chan](https://github.com/kicha0)
