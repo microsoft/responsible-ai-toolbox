@@ -18,3 +18,13 @@ class TestRAIInsightsGetFeatureRanges:
         assert len(feature_ranges) == 2
         assert 'Category' == feature_ranges[0]['column_name']
         assert 'Numerical' == feature_ranges[1]['column_name']
+        
+    def test_get_feature_range_raises_value_error_on_failed_min_max_float_cast(self):
+        data = {'col1': ['A', 'B', 'C', '50']}
+        
+        df = pd.DataFrame(data)
+        
+        with pytest.raises(ValueError, match='Unable to convert min or max value'):
+            feature_ranges = RAIInsights._get_feature_ranges(
+                df, [], ['col1'])
+
