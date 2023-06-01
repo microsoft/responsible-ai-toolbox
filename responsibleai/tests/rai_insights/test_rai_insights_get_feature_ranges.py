@@ -4,6 +4,7 @@
 import pandas as pd
 import pytest
 
+from raiutils.exceptions import SystemErrorException
 from responsibleai.rai_insights import RAIInsights
 
 
@@ -25,6 +26,6 @@ class TestRAIInsightsGetFeatureRanges:
 
         df = pd.DataFrame(data)
 
-        with pytest.raises(ValueError,
+        with pytest.raises(SystemErrorException,
                            match='Unable to convert min or max value'):
             RAIInsights._get_feature_ranges(df, [], ['col1'])
