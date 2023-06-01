@@ -3,6 +3,7 @@
 
 import {
   ComboBox,
+  getTheme,
   IComboBox,
   IComboBoxOption,
   Icon,
@@ -20,6 +21,8 @@ import {
 import { FluentUIStyles, IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
+import { CanvasTools } from "vott-ct";
+import { RegionData } from "vott-ct/lib/js/CanvasTools/Core/RegionData";
 
 import {
   generateSelectableObjectDetectionIndexes,
@@ -69,6 +72,7 @@ export class FlyoutObjectDetection extends React.Component<
       selectableObjectIndexes: []
     };
   }
+
   public componentDidMount(): void {
     const item = this.props.item;
     if (!item) {
@@ -82,6 +86,7 @@ export class FlyoutObjectDetection extends React.Component<
     );
     this.setState({ item, metadata, selectableObjectIndexes });
   }
+
   public componentDidUpdate(prevProps: IFlyoutProps): void {
     if (prevProps !== this.props) {
       const item = this.props.item;
@@ -100,6 +105,70 @@ export class FlyoutObjectDetection extends React.Component<
       });
     }
   }
+
+  public drawBoundingBoxes(image: HTMLElement): void {
+    const theme = getTheme();
+
+    // initialize CanvasTools-vott editor
+    const editorContainer = document.getElementById("editorDiv") as HTMLDivElement;
+    var editor = new CanvasTools.Editor(editorContainer).api;
+
+    // Adding image to editor
+    editor.addContentSource(image);
+    editor.AS.setSelectionMode(2);
+
+    // Initialize canvastool constants
+    const Color = CanvasTools.Core.Colors.Color;
+    const LABColor = CanvasTools.Core.Colors.LABColor; // what is labcolor?
+
+    const predictedY = this.state.item?.odPredictedY;
+    const trueY = this.state.item?.odTrueY;
+
+    // Drawing bounding boxes for each predicted object
+    if (Array.isArray(predictedY) && Array.isArray(predictedY[0])) {
+      for (let oidx = 0; oidx < predictedY.length; oidx++) {
+
+        // Creating box region
+        let predObject = predictedY[oidx] as number[]
+        let predBox = new RegionData(predObject[1], predObject[2], predObject[3]-predObject[1], predObject[4]-predObject[2]);
+
+        // Retrieving label for annotation above the box
+        let className = this.context.dataset.class_names[predObject[0]-1]
+        let confidenceScore = (predObject[5] * 100).toString()
+
+        // Initializing bounding box tag
+        const predTag = new CanvasTools.Core.Tag(className + "(" + confidenceScore + "%)",
+                                                 new Color(theme.palette.magenta)) // Object(95%)
+        const predTagDesc = new CanvasTools.Core.TagsDescriptor([predTag]);
+
+        // Drawing bounding box with vott
+        editor.RM.addRegion(oidx, predBox, predTagDesc);
+      }
+    }
+
+    // Drawing bounding boxes for each ground truth object
+    if (Array.isArray(trueY) && Array.isArray(trueY[0])) {
+      for (let oidx = 0; oidx < trueY.length; oidx++) {
+
+        // Creating box region
+        let gtObject = trueY[oidx] as number[]
+        let gtBox = new RegionData(gtObject[1], gtObject[2], gtObject[3]-gtObject[1], gtObject[4]-gtObject[2]);
+
+        // Retrieving label for annotation above the box
+        let className = this.context.dataset.class_names[gtObject[0]-1]
+        let confidenceScore = (gtObject[5] * 100).toString()
+
+        // Initializing bounding box tag
+        const gtTag = new CanvasTools.Core.Tag(className + "(" + confidenceScore + "%)",
+                                                 new Color(theme.palette.magenta)) // Object(95%)
+        const gtTagDesc = new CanvasTools.Core.TagsDescriptor([gtTag]);
+
+        // Drawing bounding box with vott
+        editor.RM.addRegion(oidx, gtBox, gtTagDesc);
+      }
+    }
+  }
+
   public render(): React.ReactNode {
     const { isOpen } = this.props;
     const item = this.state.item;
@@ -109,6 +178,10 @@ export class FlyoutObjectDetection extends React.Component<
     const classNames = flyoutStyles();
     const predictedY = getJoinedLabelString(item?.predictedY);
     const trueY = getJoinedLabelString(item?.trueY);
+
+    const image = document.getElementById("image");
+    this.drawBoundingBoxes(image);
+
     return (
       <FocusZone>
         <Panel
@@ -202,10 +275,17 @@ export class FlyoutObjectDetection extends React.Component<
                   </Stack.Item>
                   <Stack.Item className={classNames.imageContainer}>
                     <Image
+                      id="image"
                       src={`data:image/jpg;base64,${item?.image}`}
                       className={classNames.image}
                       imageFit={ImageFit.contain}
                     />
+                    <div id="canvasToolsDiv">
+                        <div id="toolbarDiv"></div>
+                        <div id="selectionDiv">
+                            <div id="editorDiv"></div>
+                        </div>
+                    </div>
                   </Stack.Item>
                 </Stack>
               </Stack.Item>
