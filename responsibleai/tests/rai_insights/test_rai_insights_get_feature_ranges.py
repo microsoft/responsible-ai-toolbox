@@ -19,7 +19,7 @@ class TestRAIInsightsGetFeatureRanges:
         assert 'Category' == feature_ranges[0]['column_name']
         assert 'Numerical' == feature_ranges[1]['column_name']
         
-    def test_get_feature_range_raises_value_error_on_failed_min_max_float_cast(self):
+    def test_invalid_float_cast_raises_value_error(self):
         data = {'col1': ['A', 'B', 'C', '50']}
         
         df = pd.DataFrame(data)
