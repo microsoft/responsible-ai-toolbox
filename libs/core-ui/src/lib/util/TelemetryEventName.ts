@@ -67,7 +67,6 @@ export enum TelemetryEventName {
   CausalBubblePlotDataFetch = "CausalBubblePlotDataFetch",
   FeatureImportanceBubblePlotDataFetch = "FeatureImportanceBubblePlotDataFetch",
   DataAnalysisBubblePlotDataFetch = "DataAnalysisBubblePlotDataFetch",
-  IndividualDataAnalysisBubblePlotDataFetch = "IndividualDataAnalysisBubblePlotDataFetch",
   BubblePlotDataFetchError = "BubblePlotDataFetchError",
   BubblePlotDataFetchSuccess = "BubblePlotDataFetchSuccess",
   LocalExplanationsFetchSuccess = "LocalExplanationsFetchSuccess",
