@@ -104,17 +104,17 @@ export class ConfusionMatrixHeatmap extends React.Component<
     }
 
     const theme = getTheme();
+    const confusionMatrixLocString =
+      localization.ModelAssessment.ModelOverview.confusionMatrix;
     let classSelectionErrorMessage: string | undefined;
     if (this.state.selectedClasses.length < this.minDisplayableClasses) {
       classSelectionErrorMessage = localization.formatString(
-        localization.ModelAssessment.ModelOverview.confusionMatrix
-          .confusionMatrixClassMinSelectionError,
+        confusionMatrixLocString.confusionMatrixClassMinSelectionError,
         this.minDisplayableClasses
       );
     } else if (this.state.selectedClasses.length > this.maxDisplayableClasses) {
       classSelectionErrorMessage = localization.formatString(
-        localization.ModelAssessment.ModelOverview.confusionMatrix
-          .confusionMatrixClassMaxSelectionError,
+        confusionMatrixLocString.confusionMatrixClassMaxSelectionError,
         this.maxDisplayableClasses
       );
     }
@@ -126,8 +126,7 @@ export class ConfusionMatrixHeatmap extends React.Component<
             <ComboBox
               id="confusionMatrixCohortDropdown"
               label={
-                localization.ModelAssessment.ModelOverview.confusionMatrix
-                  .confusionMatrixCohortSelectionLabel
+                confusionMatrixLocString.confusionMatrixCohortSelectionLabel
               }
               selectedKey={selectedCohort.cohort.getCohortID()}
               options={this.context.errorCohorts.map(
@@ -146,12 +145,10 @@ export class ConfusionMatrixHeatmap extends React.Component<
             <ComboBox
               id="confusionMatrixClassDropdown"
               placeholder={
-                localization.ModelAssessment.ModelOverview.confusionMatrix
-                  .confusionMatrixClassSelectionDefaultPlaceholder
+                confusionMatrixLocString.confusionMatrixClassSelectionDefaultPlaceholder
               }
               label={
-                localization.ModelAssessment.ModelOverview.confusionMatrix
-                  .confusionMatrixClassSelectionLabel
+                confusionMatrixLocString.confusionMatrixClassSelectionLabel
               }
               selectedKey={this.state.selectedClasses}
               options={this.state.allClasses.map((category: string) => {
@@ -199,7 +196,10 @@ export class ConfusionMatrixHeatmap extends React.Component<
                       data: confusionMatrix,
                       dataLabels: {
                         color: theme.palette.black,
-                        enabled: true
+                        enabled: true,
+                        style: {
+                          color: theme.semanticColors.bodyText
+                        }
                       },
                       type: "heatmap"
                     }
@@ -231,14 +231,14 @@ export class ConfusionMatrixHeatmap extends React.Component<
                       style: {
                         fontWeight: "bold"
                       },
-                      text: `${localization.ModelAssessment.ModelOverview.confusionMatrix.confusionMatrixXAxisLabel}`
+                      text: `${confusionMatrixLocString.confusionMatrixXAxisLabel}`
                     }
                   },
                   yAxis: {
                     categories: this.state.selectedClasses,
                     reversed: true,
                     title: {
-                      text: `<b>${localization.ModelAssessment.ModelOverview.confusionMatrix.confusionMatrixYAxisLabel}</b>`
+                      text: `<b>${confusionMatrixLocString.confusionMatrixYAxisLabel}</b>`
                     }
                   }
                 }}
