@@ -61,7 +61,7 @@ export enum TelemetryEventName {
   CausalTreatmentPolicyTabClick = "RAI_CausalTreatmentPolicyTabClick",
   CausalTreatmentPolicyNewTreatmentFeatureSelected = "RAI_CausalTreatmentPolicyNewTreatmentFeatureSelected",
   LocalCausalEffectsFetchError = "LocalCausalEffectsFetchError",
-  LocalCausalEffectsFetchSuccess = "LocalCausalEffectsFetchError",
+  LocalCausalEffectsFetchSuccess = "LocalCausalEffectsFetchSuccess",
   // Big data
   CounterfactualsBubblePlotDataFetch = "CounterfactualsBubblePlotDataFetch",
   CausalBubblePlotDataFetch = "CausalBubblePlotDataFetch",

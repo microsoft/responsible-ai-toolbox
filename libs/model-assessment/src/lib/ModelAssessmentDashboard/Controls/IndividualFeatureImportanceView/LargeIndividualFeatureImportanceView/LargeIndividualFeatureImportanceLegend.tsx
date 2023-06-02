@@ -54,7 +54,7 @@ export class LargeIndividualFeatureImportanceLegend extends React.PureComponent<
 
   private onRevertButtonClick = (): void => {
     this.props.telemetryHook?.({
-      level: TelemetryLevels.Trace,
+      level: TelemetryLevels.ButtonClick,
       type: TelemetryEventName.ViewBubblePlotButtonClicked
     });
     this.props.setIsRevertButtonClicked(true);

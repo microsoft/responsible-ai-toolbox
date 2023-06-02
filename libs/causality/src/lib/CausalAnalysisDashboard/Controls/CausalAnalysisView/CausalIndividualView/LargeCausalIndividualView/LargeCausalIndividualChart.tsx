@@ -152,7 +152,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
 
   private onRevertButtonClick = (): void => {
     this.props.telemetryHook?.({
-      level: TelemetryLevels.Trace,
+      level: TelemetryLevels.ButtonClick,
       type: TelemetryEventName.ViewBubblePlotButtonClicked
     });
     this.setState({ isRevertButtonClicked: true });

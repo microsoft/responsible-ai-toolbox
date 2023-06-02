@@ -186,7 +186,7 @@ export class SidePanel extends React.Component<
 
   private onRevertButtonClick = (): void => {
     this.props.telemetryHook?.({
-      level: TelemetryLevels.Trace,
+      level: TelemetryLevels.ButtonClick,
       type: TelemetryEventName.ViewBubblePlotButtonClicked
     });
     this.props.setIsRevertButtonClicked &&
