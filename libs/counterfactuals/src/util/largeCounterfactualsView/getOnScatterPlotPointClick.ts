@@ -35,9 +35,9 @@ export async function getLocalCounterfactualsFromSDK(
     return result;
   } catch (error) {
     telemetryHook?.({
+      context: error,
       level: TelemetryLevels.Error,
-      type: TelemetryEventName.LocalCounterfactualsFetchError,
-      context: error
+      type: TelemetryEventName.LocalCounterfactualsFetchError
     });
     return error;
   }

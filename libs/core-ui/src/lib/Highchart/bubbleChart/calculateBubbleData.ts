@@ -75,10 +75,10 @@ export async function calculateBubblePlotDataFromErrorCohort(
     } catch (error) {
       if (error) {
         telemetryHook?.({
+          context: error,
           level: TelemetryLevels.Error,
           message: eventName,
-          type: TelemetryEventName.BubblePlotDataFetchError,
-          context: error
+          type: TelemetryEventName.BubblePlotDataFetchError
         });
         return error;
       }

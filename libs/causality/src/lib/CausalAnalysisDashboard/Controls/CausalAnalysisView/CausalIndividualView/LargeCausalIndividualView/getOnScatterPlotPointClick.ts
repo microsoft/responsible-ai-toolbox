@@ -32,9 +32,9 @@ export async function getLocalCausalFromSDK(
     return result;
   } catch (error) {
     telemetryHook?.({
+      context: error,
       level: TelemetryLevels.Error,
-      type: TelemetryEventName.LocalCausalEffectsFetchError,
-      context: error
+      type: TelemetryEventName.LocalCausalEffectsFetchError
     });
     return error;
   }

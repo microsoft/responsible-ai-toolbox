@@ -29,9 +29,9 @@ export async function getLocalExplanationsFromSDK(
     return result;
   } catch (error) {
     telemetryHook?.({
+      context: error,
       level: TelemetryLevels.Error,
-      type: TelemetryEventName.LocalExplanationsFetchError,
-      context: error
+      type: TelemetryEventName.LocalExplanationsFetchError
     });
     return error;
   }
