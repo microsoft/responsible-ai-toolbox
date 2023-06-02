@@ -5,7 +5,10 @@ import { Stack, DefaultButton } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  ifEnableLargeData
+  ifEnableLargeData,
+  TelemetryLevels,
+  TelemetryEventName,
+  ITelemetryEvent
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -17,6 +20,7 @@ export interface ILargeIndividualFeatureImportanceLegendProps {
   isLocalExplanationsLoading?: boolean;
   isBubbleChartDataLoading?: boolean;
   setIsRevertButtonClicked: (status: boolean) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export class LargeIndividualFeatureImportanceLegend extends React.PureComponent<ILargeIndividualFeatureImportanceLegendProps> {
@@ -49,6 +53,10 @@ export class LargeIndividualFeatureImportanceLegend extends React.PureComponent<
   }
 
   private onRevertButtonClick = (): void => {
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.ViewBubblePlotButtonClicked
+    });
     this.props.setIsRevertButtonClicked(true);
   };
 }
