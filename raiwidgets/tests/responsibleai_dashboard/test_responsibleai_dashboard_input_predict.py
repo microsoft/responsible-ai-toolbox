@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import pytest
-from common_utils import CheckResponsibleAIDashboardInputTestResult
+from .common_utils import CheckResponsibleAIDashboardInputTestResult
 
 from raiwidgets.responsibleai_dashboard_input import \
     ResponsibleAIDashboardInput
