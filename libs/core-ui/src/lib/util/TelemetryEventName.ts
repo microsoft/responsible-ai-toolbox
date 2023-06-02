@@ -73,5 +73,6 @@ export enum TelemetryEventName {
   LocalExplanationsFetchSuccess = "LocalExplanationsFetchSuccess",
   LocalExplanationsFetchError = "LocalExplanationsFetchError",
   LocalCounterfactualsFetchSuccess = "LocalCounterfactualsFetchSuccess",
-  LocalCounterfactualsFetchError = "LocalCounterfactualsFetchError"
+  LocalCounterfactualsFetchError = "LocalCounterfactualsFetchError",
+  ViewBubblePlotButtonClicked = "ViewBubblePlotButtonClicked"
 }

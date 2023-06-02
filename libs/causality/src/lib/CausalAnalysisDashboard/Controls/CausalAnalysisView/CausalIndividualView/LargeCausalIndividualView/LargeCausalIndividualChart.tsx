@@ -17,7 +17,9 @@ import {
   ICausalAnalysisData,
   getInitialClusterState,
   getScatterOption,
-  IClusterData
+  IClusterData,
+  TelemetryLevels,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -149,6 +151,10 @@ export class LargeCausalIndividualChart extends React.PureComponent<
   }
 
   private onRevertButtonClick = (): void => {
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.Trace,
+      type: TelemetryEventName.ViewBubblePlotButtonClicked
+    });
     this.setState({ isRevertButtonClicked: true });
   };
 

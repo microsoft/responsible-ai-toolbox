@@ -178,6 +178,7 @@ export class LargeDatasetExplorerTab extends React.Component<
                   this.state.isAggregatePlotLoading ||
                   this.state.isBubbleChartDataLoading
                 }
+                telemetryHook={this.props.telemetryHook}
               />
             </Stack.Item>
           </Stack>

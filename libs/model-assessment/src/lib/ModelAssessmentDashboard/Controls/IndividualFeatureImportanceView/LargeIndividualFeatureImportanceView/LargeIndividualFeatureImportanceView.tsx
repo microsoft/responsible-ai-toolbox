@@ -122,6 +122,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
             this.state.isLocalExplanationsDataLoading
           }
           setIsRevertButtonClicked={this.setIsRevertButtonClicked}
+          telemetryHook={this.props.telemetryHook}
         />
         {!this.state.isBubbleChartDataLoading && (
           <LocalImportanceChart
