@@ -16,7 +16,8 @@ import pandas as pd
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
-from raiutils.exceptions import UserConfigValidationException
+from raiutils.exceptions import (SystemErrorException,
+                                 UserConfigValidationException)
 from raiutils.models import Forecasting, ModelTask, SKLearn
 from responsibleai._interfaces import (Dataset, RAIInsightsData,
                                        TabularDatasetMetadata)
@@ -1279,8 +1280,18 @@ class RAIInsights(RAIBaseInsights):
                 res_object[_MIN_VALUE] = test[col].min()
                 res_object[_MAX_VALUE] = test[col].max()
             else:
-                min_value = float(test[col].min())
-                max_value = float(test[col].max())
+                col_min = test[col].min()
+                col_max = test[col].max()
+                try:
+                    min_value = float(col_min)
+                    max_value = float(col_max)
+                except Exception as e:
+                    raise SystemErrorException(
+                        "Unable to convert min or max value "
+                        f"of feature column {col} to float. "
+                        f"min value of {col} is of type {type(col_min)} and "
+                        f"max value of {col} is of type {type(col_max)} "
+                        f"Original Excepton: {e}")
                 res_object[_RANGE_TYPE] = "integer"
                 res_object[_MIN_VALUE] = min_value
                 res_object[_MAX_VALUE] = max_value
