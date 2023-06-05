@@ -7,7 +7,7 @@ import {
   IComboBox,
   IComboBoxOption,
   Icon,
-  Image,
+  Image as ImageTag,
   ImageFit,
   List,
   Panel,
@@ -18,9 +18,9 @@ import {
   Spinner,
   Separator
 } from "@fluentui/react";
-import { FluentUIStyles, IVisionListItem } from "@responsible-ai/core-ui";
+import { FluentUIStyles, IDataset, IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import React from "react";
+import * as React from "react";
 import { CanvasTools } from "vott-ct";
 import { RegionData } from "vott-ct/lib/js/CanvasTools/Core/RegionData";
 
@@ -38,6 +38,7 @@ import {
 } from "./Flyout.styles";
 
 export interface IFlyoutProps {
+  dataset: IDataset;
   explanations: Map<number, Map<number, string>>;
   isOpen: boolean;
   item: IVisionListItem | undefined;
@@ -52,6 +53,7 @@ export interface IFlyoutState {
   metadata: Array<Array<string | number | boolean>> | undefined;
   selectableObjectIndexes: IComboBoxOption[];
   odSelectedKey: string;
+  imageCallback?: HTMLImageElement;
 }
 
 const stackTokens = {
@@ -63,6 +65,7 @@ export class FlyoutObjectDetection extends React.Component<
   IFlyoutProps,
   IFlyoutState
 > {
+  protected editorCallback?: HTMLDivElement;
   public constructor(props: IFlyoutProps) {
     super(props);
     this.state = {
@@ -106,34 +109,51 @@ export class FlyoutObjectDetection extends React.Component<
     }
   }
 
-  public drawBoundingBoxes(image: HTMLElement): void {
+  private readonly callbackRef = (editorCallback: HTMLDivElement) => (this.editorCallback = editorCallback);
+  private readonly imageRef = (imageCallback: HTMLImageElement) => (this.setState({ imageCallback: imageCallback }));
+
+  public drawBoundingBoxes(item: IVisionListItem, imageElement: HTMLImageElement): void {
+
+    // if canvastools editor doesn't exist
+    if (!this.editorCallback) {
+      return;
+    }
+
+    // Where to establish <script src="ct.js"></script>??
     const theme = getTheme();
 
     // initialize CanvasTools-vott editor
-    const editorContainer = document.getElementById("editorDiv") as HTMLDivElement;
-    var editor = new CanvasTools.Editor(editorContainer).api;
+    var editor = new CanvasTools.Editor(this.editorCallback); // store as an instance variable
+
 
     // Adding image to editor
-    editor.addContentSource(image);
+    imageElement.addEventListener("load", (e) => {
+      editor.addContentSource(e.target as HTMLImageElement);
+    }); // Is the image path mandatory?
     editor.AS.setSelectionMode(2);
 
     // Initialize canvastool constants
     const Color = CanvasTools.Core.Colors.Color;
-    const LABColor = CanvasTools.Core.Colors.LABColor; // what is labcolor?
+    // const LABColor = CanvasTools.Core.Colors.LABColor; // what is labcolor?
 
-    const predictedY = this.state.item?.odPredictedY;
-    const trueY = this.state.item?.odTrueY;
+    if (!this.props.dataset.object_detection_predicted_y || !this.props.dataset.object_detection_true_y || !this.props.dataset.class_names) {
+      return;
+    }
+
+    const predictedY : number[][] = this.props.dataset.object_detection_predicted_y[item.index]; // this.state.item?.odPredictedY;
+    const trueY : number[][]  = this.props.dataset.object_detection_true_y[item.index]; // this.state.item?.odTrueY;
 
     // Drawing bounding boxes for each predicted object
-    if (Array.isArray(predictedY) && Array.isArray(predictedY[0])) {
+    if (predictedY) {
       for (let oidx = 0; oidx < predictedY.length; oidx++) {
 
         // Creating box region
-        let predObject = predictedY[oidx] as number[]
+        let predObject = predictedY[oidx]
         let predBox = new RegionData(predObject[1], predObject[2], predObject[3]-predObject[1], predObject[4]-predObject[2]);
 
         // Retrieving label for annotation above the box
-        let className = this.context.dataset.class_names[predObject[0]-1]
+        this.props.dataset.object_detection_predicted_y
+        let className = this.props.dataset.class_names[predObject[0]-1]
         let confidenceScore = (predObject[5] * 100).toString()
 
         // Initializing bounding box tag
@@ -142,12 +162,12 @@ export class FlyoutObjectDetection extends React.Component<
         const predTagDesc = new CanvasTools.Core.TagsDescriptor([predTag]);
 
         // Drawing bounding box with vott
-        editor.RM.addRegion(oidx, predBox, predTagDesc);
+        editor.RM.addRegion(oidx.toString(), predBox, predTagDesc);
       }
     }
 
     // Drawing bounding boxes for each ground truth object
-    if (Array.isArray(trueY) && Array.isArray(trueY[0])) {
+    if (trueY) {
       for (let oidx = 0; oidx < trueY.length; oidx++) {
 
         // Creating box region
@@ -155,16 +175,14 @@ export class FlyoutObjectDetection extends React.Component<
         let gtBox = new RegionData(gtObject[1], gtObject[2], gtObject[3]-gtObject[1], gtObject[4]-gtObject[2]);
 
         // Retrieving label for annotation above the box
-        let className = this.context.dataset.class_names[gtObject[0]-1]
-        let confidenceScore = (gtObject[5] * 100).toString()
+        let className = this.props.dataset.class_names[gtObject[0]-1]
 
         // Initializing bounding box tag
-        const gtTag = new CanvasTools.Core.Tag(className + "(" + confidenceScore + "%)",
-                                                 new Color(theme.palette.magenta)) // Object(95%)
+        const gtTag = new CanvasTools.Core.Tag(className, new Color(theme.palette.magenta)) // Object(95%)
         const gtTagDesc = new CanvasTools.Core.TagsDescriptor([gtTag]);
 
         // Drawing bounding box with vott
-        editor.RM.addRegion(oidx, gtBox, gtTagDesc);
+        editor.RM.addRegion(oidx.toString(), gtBox, gtTagDesc);
       }
     }
   }
@@ -179,8 +197,21 @@ export class FlyoutObjectDetection extends React.Component<
     const predictedY = getJoinedLabelString(item?.predictedY);
     const trueY = getJoinedLabelString(item?.trueY);
 
-    const image = document.getElementById("image");
-    this.drawBoundingBoxes(image);
+    // const image = document.getElementById("image"); // on mount lifecycle function that attaches loaded callback on image
+
+    // either built in react ref system, after load, set state on component, in render check local state, then draw bb
+    // render should be okay calling multiple times
+
+    // react.createref - created once | creating mutable object, store in class component, pass downstream to imagetag
+    // inside imagetag, set ref (should get rerendered)
+    // if imgref.current - HTML image reference, then draw bb
+    // may not access DOM directly in React
+
+    // new Image(), src, onload, then successful state and image reference - passed to canvas editor
+
+    if (this.state.imageCallback) {
+      this.drawBoundingBoxes(item, this.state.imageCallback);
+    }
 
     return (
       <FocusZone>
@@ -274,17 +305,17 @@ export class FlyoutObjectDetection extends React.Component<
                     </Stack>
                   </Stack.Item>
                   <Stack.Item className={classNames.imageContainer}>
-                    <Image
+                    <ImageTag
                       id="image"
                       src={`data:image/jpg;base64,${item?.image}`}
                       className={classNames.image}
                       imageFit={ImageFit.contain}
+                      ref={this.imageRef}
                     />
                     <div id="canvasToolsDiv">
-                        <div id="toolbarDiv"></div>
-                        <div id="selectionDiv">
-                            <div id="editorDiv"></div>
-                        </div>
+                      <div id="selectionDiv">
+                          <div ref={this.callbackRef} id="editorDiv"/>
+                      </div>
                     </div>
                   </Stack.Item>
                 </Stack>
@@ -335,7 +366,7 @@ export class FlyoutObjectDetection extends React.Component<
                     +this.state.odSelectedKey.slice(ExcessLabelLen)
                   ] ? (
                     <Stack.Item>
-                      <Image
+                      <ImageTag
                         src={`data:image/jpg;base64,${this.props.explanations
                           .get(item.index)
                           ?.get(

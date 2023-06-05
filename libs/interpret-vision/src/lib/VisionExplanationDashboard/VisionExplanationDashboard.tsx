@@ -94,6 +94,7 @@ export class VisionExplanationDashboard extends React.Component<
         </Stack.Item>
         <Stack.Item>
           <FlyoutObjectDetection
+            dataset={this.context.dataset}
             explanations={this.state.computedExplanations}
             isOpen={this.state.panelOpen}
             item={this.state.selectedItem}
