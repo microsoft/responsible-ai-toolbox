@@ -121,10 +121,20 @@ export class TextExplanationView extends React.PureComponent<
 
   public render(): React.ReactNode {
     const classNames = textExplanationDashboardStyles();
+    const qaDescription = 'The left text box and the bar chart display the predictions of the model.' + 
+    'The right textbox shows the feature importance associated with a selected token. Positive feature '  +
+    'importances represent the extent that the words were important towards marking the selected token' + 
+    'as the starting/ending position of the answer.'
+
     return (
       <Stack>
         <Stack tokens={componentStackTokens} horizontal>
-          <Text>{localization.InterpretText.View.legendText}</Text>
+          {
+            this.state.isQA?
+            <Text>{qaDescription}</Text> :
+            <Text>{localization.InterpretText.View.legendText}</Text>
+          }
+          
         </Stack>
         <Stack tokens={componentStackTokens} horizontal>
           <Stack.Item grow disableShrink>
@@ -345,13 +355,13 @@ export class TextExplanationView extends React.PureComponent<
   ): number[] {
     /*
      * sum the tokens importance
-     * TODO: add base values
+     * TODO: add base values?
      */
-    const sumImportances = importances.map((row) =>
-        row.reduce((a, b): number => {
-          return (a + b);
-        }, 0)
+
+    const sumImportances = importances[0].map((_, index) =>
+      importances.reduce((sum, row) => sum + row[index], 0)
     );
+
     return sumImportances;
   }
 
