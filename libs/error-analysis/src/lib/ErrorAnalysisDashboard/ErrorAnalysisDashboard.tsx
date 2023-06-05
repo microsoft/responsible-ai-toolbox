@@ -284,7 +284,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         0,
         CohortSource.None,
         false,
-        metricStats
+        metricStats,
+        true
       )
     ];
     const weightVectorLabels = {
