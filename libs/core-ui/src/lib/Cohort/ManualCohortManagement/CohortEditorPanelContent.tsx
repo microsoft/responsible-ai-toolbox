@@ -56,12 +56,6 @@ export interface ICohortEditorPanelContentState {
   filtersMessage?: string;
 }
 
-export const filterArgRetainableList = [
-  DatasetCohortColumns.PredictedY,
-  DatasetCohortColumns.TrueY,
-  DatasetCohortColumns.ClassificationError
-];
-
 export class CohortEditorPanelContent extends React.PureComponent<
   ICohortEditorPanelContentProps,
   ICohortEditorPanelContentState
@@ -118,6 +112,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
           onOpenedFilterUpdated={this.onOpenedFilterUpdated}
           onSelectedFilterCategoryUpdated={this.onSelectedFilterCategoryUpdated}
           setFilterMessage={this.setFilterMessage}
+          setDefaultStateForKey={this.setDefaultStateForKey}
         />
         <Stack.Item>
           <CohortEditorFilterList
@@ -200,30 +195,30 @@ export class CohortEditorPanelContent extends React.PureComponent<
     this.setDefaultStateForKey(property);
   };
 
-  private setDefaultStateForKey(key: string): void {
+  private setDefaultStateForKey = (key: string): void => {
     const filter = this.getFilterValue(key);
     this.setState({
       openedFilter: filter
     });
-  }
+  };
 
   private getFilterValue(key: string): IFilter {
     const filter: IFilter = { column: key } as IFilter;
     const range = this.props.columnRanges
       ? this.props.columnRanges[key]
       : undefined;
+    const arg = this.getPreviousFilterArgValue(key);
     if (
       range?.rangeType === RangeTypes.Categorical ||
       range?.treatAsCategorical
     ) {
-      const arg = this.getPreviousFilterArgValue(key);
       filter.method = FilterMethods.Includes;
       filter.arg = arg ?? [
         ...new Array(range.sortedUniqueValues.length).keys()
       ];
     } else {
       filter.method = FilterMethods.LessThan;
-      filter.arg = [range?.max || Number.MAX_SAFE_INTEGER];
+      filter.arg = arg ?? [range?.max || Number.MAX_SAFE_INTEGER];
     }
     return filter;
   }
@@ -231,9 +226,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
   private getPreviousFilterArgValue(key: string): number[] | undefined {
     let arg;
     // only execute this if in edit mode
-    // On duplication retained arg is shown only for filters in filterArgRetainableList
     this.props.disableEditName &&
-      filterArgRetainableList.includes(key as DatasetCohortColumns) &&
       this.props.filters?.forEach((filter) => {
         if (filter.column === key) {
           arg = filter.arg;
