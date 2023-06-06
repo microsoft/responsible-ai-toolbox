@@ -12,8 +12,8 @@ export const fridgeObjectDetection: IDataset = {
   features: [
     [96.30899737412763],
     [95.32630225415797],
-    [1003762680516188],
-    [92000130390912],
+    [100.3762680516188],
+    [92.000130390912],
     [95.33849179841164]
   ],
   images: fridgeObjectDetectionImages,

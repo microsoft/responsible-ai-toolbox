@@ -8,7 +8,6 @@ import {
   IComboBoxOption,
   Icon,
   Image as ImageTag,
-  ImageFit,
   List,
   Panel,
   PanelType,
@@ -111,7 +110,6 @@ export class FlyoutObjectDetection extends React.Component<
   }
 
   private readonly callbackRef = (editorCallback: HTMLDivElement) => (this.setState({ editorCallback: editorCallback }));
-  private readonly imageRef = (imageCallback: HTMLImageElement) => (this.setState({ imageCallback: imageCallback }));
 
   public loadImageFromBase64(base64String: string, editor: Editor) { // onReady is a function/callable
     const image = new Image();
@@ -122,80 +120,78 @@ export class FlyoutObjectDetection extends React.Component<
     image.src = `data:image/jpg;base64,${base64String}`;
   }
 
-  public drawBoundingBoxes(item: IVisionListItem): void { // , imageElement: HTMLImageElement
+  public drawBoundingBoxes(item: IVisionListItem): void {
 
-    // if canvastools editor doesn't exist
+    // Stops if the div container for the canvastools editor doesn't exist
     if (!this.state.editorCallback) {
       return;
     }
+    // Removes any pre-existimg images due to previous render calls
+    this.state.editorCallback.innerHTML = "";
 
-    // Where to establish <script src="ct.js"></script>??
-    const theme = getTheme();
-
-    // initialize CanvasTools-vott editor
+    // Initializes CanvasTools-vott editor
     var editor = new CanvasTools.Editor(this.state.editorCallback); // store as an instance variable
     editor.enablePathRegions(true);
 
-
-    // Adding image to editor
+    // Adds image to editor
     this.loadImageFromBase64(item.image, editor);
 
-    // Is the below block needed?
-    editor.AS.show();
-    editor.RM.focus()
-
-    // Initialize canvastool constants
+    // Initialize color constants
     const Color = CanvasTools.Core.Colors.Color;
-    // const LABColor = CanvasTools.Core.Colors.LABColor; // what is labcolor?
+    const theme = getTheme();
 
-    if (!this.props.dataset.object_detection_predicted_y || !this.props.dataset.object_detection_true_y || !this.props.dataset.class_names) {
+    // Ensuring object detection labels are populated
+    if (!this.props.dataset.object_detection_predicted_y
+        || !this.props.dataset.object_detection_true_y
+        || !this.props.dataset.class_names) {
       return;
     }
 
-    const predictedY : number[][] = this.props.dataset.object_detection_predicted_y[item.index]; // this.state.item?.odPredictedY;
-    const trueY : number[][]  = this.props.dataset.object_detection_true_y[item.index]; // this.state.item?.odTrueY;
+    // Retrieving labels for the image in the Flyout
+    const predictedY : number[][] = this.props.dataset.object_detection_predicted_y[item.index];
+    const trueY : number[][]  = this.props.dataset.object_detection_true_y[item.index];
 
-    // Drawing bounding boxes for each predicted object
-    if (predictedY) {
-      for (let oidx = 0; oidx < predictedY.length; oidx++) {
+    // Draws bounding boxes for each predicted object
+    for (let oidx = 0; oidx < predictedY.length; oidx++) {
 
-        // Creating box region
-        let predObject = predictedY[oidx]
-        let predBox = new RegionData(predObject[1], predObject[2], predObject[3]-predObject[1], predObject[4]-predObject[2]);
+      // Creating box region
+      let predObject = predictedY[oidx]
+      let predBox = new RegionData(predObject[1], predObject[2],
+                                   predObject[3]-predObject[1],
+                                   predObject[4]-predObject[2]);
 
-        // Retrieving label for annotation above the box
-        this.props.dataset.object_detection_predicted_y
-        let className = this.props.dataset.class_names[predObject[0]-1]
-        let confidenceScore = (predObject[5] * 100).toString()
+      // Retrieving label for annotation above the box
+      this.props.dataset.object_detection_predicted_y
+      let className = this.props.dataset.class_names[predObject[0]-1]
+      let confidenceScore = (predObject[5] * 100).toString()
 
-        // Initializing bounding box tag
-        const predTag = new CanvasTools.Core.Tag(className + "(" + confidenceScore + "%)", // Object(95%)
-                                                 new Color(theme.palette.magenta))
-        const predTagDesc = new CanvasTools.Core.TagsDescriptor([predTag]);
+      // Initializing bounding box tag
+      const predTag = new CanvasTools.Core.Tag(className + "(" + confidenceScore + "%)", // Object(95%)
+                                               new Color(theme.palette.magenta))
+      const predTagDesc = new CanvasTools.Core.TagsDescriptor([predTag]);
 
-        // Drawing bounding box with vott
-        editor.RM.addRegion(oidx.toString(), predBox, predTagDesc);
-      }
+      // Drawing bounding box with vott
+      editor.RM.addRegion(oidx.toString(), predBox, predTagDesc);
     }
 
     // Drawing bounding boxes for each ground truth object
-    if (trueY) {
-      for (let oidx = 0; oidx < trueY.length; oidx++) {
+    for (let oidx = 0; oidx < trueY.length; oidx++) {
 
-        // Creating box region
-        let gtObject = trueY[oidx] as number[]
-        let gtBox = new RegionData(gtObject[1], gtObject[2], gtObject[3]-gtObject[1], gtObject[4]-gtObject[2]);
+      // Creating box region
+      let gtObject = trueY[oidx] as number[]
+      let gtBox = new RegionData(gtObject[1], gtObject[2],
+                                 gtObject[3]-gtObject[1],
+                                 gtObject[4]-gtObject[2]);
 
-        // Retrieving label for annotation above the box
-        let className = this.props.dataset.class_names[gtObject[0]-1]
+      // Retrieving label for annotation above the box
+      let className = this.props.dataset.class_names[gtObject[0]-1]
 
-        // Initializing bounding box tag
-        const gtTag = new CanvasTools.Core.Tag(className, new Color(theme.palette.magenta)) // Object(95%)
-        const gtTagDesc = new CanvasTools.Core.TagsDescriptor([gtTag]);
+      // Initializing bounding box tag
+      const gtTag = new CanvasTools.Core.Tag(className, new Color(theme.palette.blueMid)) // Object(95%)
+      const gtTagDesc = new CanvasTools.Core.TagsDescriptor([gtTag]);
 
-        // Drawing bounding box with vott
-        editor.RM.addRegion(oidx.toString(), gtBox, gtTagDesc);
-      }
+      // Drawing bounding box with vott
+      editor.RM.addRegion(oidx.toString(), gtBox, gtTagDesc);
     }
   }
 
@@ -209,21 +205,7 @@ export class FlyoutObjectDetection extends React.Component<
     const predictedY = getJoinedLabelString(item?.predictedY);
     const trueY = getJoinedLabelString(item?.trueY);
 
-    // const image = document.getElementById("image"); // on mount lifecycle function that attaches loaded callback on image
-
-    // either built in react ref system, after load, set state on component, in render check local state, then draw bb
-    // render should be okay calling multiple times
-
-    // react.createref - created once | creating mutable object, store in class component, pass downstream to imagetag
-    // inside imagetag, set ref (should get rerendered)
-    // if imgref.current - HTML image reference, then draw bb
-    // may not access DOM directly in React
-
-    // new Image(), src, onload, then successful state and image reference - passed to canvas editor
-
-    if (this.state.imageCallback) { // this.state.editorCallback?
-      this.drawBoundingBoxes(item); // , this.state.imageCallback
-    }
+    this.drawBoundingBoxes(item);
 
     return (
       <FocusZone>
@@ -317,18 +299,11 @@ export class FlyoutObjectDetection extends React.Component<
                     </Stack>
                   </Stack.Item>
                   <Stack.Item className={classNames.imageContainer}>
-                    <ImageTag
-                      id="image"
-                      src={`data:image/jpg;base64,${item?.image}`}
-                      className={classNames.image}
-                      imageFit={ImageFit.contain}
-                      ref={this.imageRef}
-                    />
-                    <div id="canvasToolsDiv">
-                      <div id="selectionDiv">
+                    <Stack.Item id="canvasToolsDiv">
+                      <Stack.Item id="selectionDiv">
                           <div ref={this.callbackRef} id="editorDiv"/>
-                      </div>
-                    </div>
+                      </Stack.Item>
+                    </Stack.Item>
                   </Stack.Item>
                 </Stack>
               </Stack.Item>

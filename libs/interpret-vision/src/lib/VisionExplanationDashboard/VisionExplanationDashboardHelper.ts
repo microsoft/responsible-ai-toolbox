@@ -74,7 +74,7 @@ export function preprocessData(
   const trueY = mapClassNames(dataSummary.true_y, classNames);
 
   const features = dataSummary.features?.map((featuresArr) => {
-    return featuresArr[0] as number;
+    return Number((featuresArr[0] as number).toFixed(2));
   });
 
   const fieldNames = dataSummary.feature_names;
