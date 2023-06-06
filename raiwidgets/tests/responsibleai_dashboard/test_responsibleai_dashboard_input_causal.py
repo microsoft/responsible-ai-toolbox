@@ -2,10 +2,11 @@
 # Licensed under the MIT License.
 
 import pytest
-from common_utils import CheckResponsibleAIDashboardInputTestResult
 
 from raiwidgets.responsibleai_dashboard_input import \
     ResponsibleAIDashboardInput
+
+from .common_utils import CheckResponsibleAIDashboardInputTestResult
 
 
 @pytest.mark.parametrize("with_model", [True, False])
