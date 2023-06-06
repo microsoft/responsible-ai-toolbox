@@ -22,6 +22,7 @@ import { FluentUIStyles, IDataset, IVisionListItem } from "@responsible-ai/core-
 import { localization } from "@responsible-ai/localization";
 import * as React from "react";
 import { CanvasTools } from "vott-ct";
+import { Editor } from "vott-ct/lib/js/CanvasTools/CanvasTools.Editor";
 import { RegionData } from "vott-ct/lib/js/CanvasTools/Core/RegionData";
 
 import {
@@ -54,6 +55,7 @@ export interface IFlyoutState {
   selectableObjectIndexes: IComboBoxOption[];
   odSelectedKey: string;
   imageCallback?: HTMLImageElement;
+  editorCallback?: HTMLDivElement;
 }
 
 const stackTokens = {
@@ -65,7 +67,6 @@ export class FlyoutObjectDetection extends React.Component<
   IFlyoutProps,
   IFlyoutState
 > {
-  protected editorCallback?: HTMLDivElement;
   public constructor(props: IFlyoutProps) {
     super(props);
     this.state = {
@@ -109,13 +110,22 @@ export class FlyoutObjectDetection extends React.Component<
     }
   }
 
-  private readonly callbackRef = (editorCallback: HTMLDivElement) => (this.editorCallback = editorCallback);
+  private readonly callbackRef = (editorCallback: HTMLDivElement) => (this.setState({ editorCallback: editorCallback }));
   private readonly imageRef = (imageCallback: HTMLImageElement) => (this.setState({ imageCallback: imageCallback }));
 
-  public drawBoundingBoxes(item: IVisionListItem, imageElement: HTMLImageElement): void {
+  public loadImageFromBase64(base64String: string, editor: Editor) { // onReady is a function/callable
+    const image = new Image();
+    image.addEventListener("load", (e) => {
+        editor.addContentSource(e.target as HTMLImageElement);
+        editor.AS.setSelectionMode(2);
+    });
+    image.src = `data:image/jpg;base64,${base64String}`;
+  }
+
+  public drawBoundingBoxes(item: IVisionListItem): void { // , imageElement: HTMLImageElement
 
     // if canvastools editor doesn't exist
-    if (!this.editorCallback) {
+    if (!this.state.editorCallback) {
       return;
     }
 
@@ -123,14 +133,16 @@ export class FlyoutObjectDetection extends React.Component<
     const theme = getTheme();
 
     // initialize CanvasTools-vott editor
-    var editor = new CanvasTools.Editor(this.editorCallback); // store as an instance variable
+    var editor = new CanvasTools.Editor(this.state.editorCallback); // store as an instance variable
+    editor.enablePathRegions(true);
 
 
     // Adding image to editor
-    imageElement.addEventListener("load", (e) => {
-      editor.addContentSource(e.target as HTMLImageElement);
-    }); // Is the image path mandatory?
-    editor.AS.setSelectionMode(2);
+    this.loadImageFromBase64(item.image, editor);
+
+    // Is the below block needed?
+    editor.AS.show();
+    editor.RM.focus()
 
     // Initialize canvastool constants
     const Color = CanvasTools.Core.Colors.Color;
@@ -157,8 +169,8 @@ export class FlyoutObjectDetection extends React.Component<
         let confidenceScore = (predObject[5] * 100).toString()
 
         // Initializing bounding box tag
-        const predTag = new CanvasTools.Core.Tag(className + "(" + confidenceScore + "%)",
-                                                 new Color(theme.palette.magenta)) // Object(95%)
+        const predTag = new CanvasTools.Core.Tag(className + "(" + confidenceScore + "%)", // Object(95%)
+                                                 new Color(theme.palette.magenta))
         const predTagDesc = new CanvasTools.Core.TagsDescriptor([predTag]);
 
         // Drawing bounding box with vott
@@ -209,8 +221,8 @@ export class FlyoutObjectDetection extends React.Component<
 
     // new Image(), src, onload, then successful state and image reference - passed to canvas editor
 
-    if (this.state.imageCallback) {
-      this.drawBoundingBoxes(item, this.state.imageCallback);
+    if (this.state.imageCallback) { // this.state.editorCallback?
+      this.drawBoundingBoxes(item); // , this.state.imageCallback
     }
 
     return (
