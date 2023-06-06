@@ -265,7 +265,7 @@ class RAIInsights(RAIBaseInsights):
             return self.categorical_features
         else:
             return list(set(self.categorical_features) -
-                            set(dropped_features))
+                        set(dropped_features))
 
     def get_train_data(self):
         """Returns the training dataset after dropping
@@ -379,7 +379,8 @@ class RAIInsights(RAIBaseInsights):
         dropped_features = self._feature_metadata.dropped_features
         self._causal_manager = CausalManager(
             self.get_train_data(), self.get_test_data(), self.target_column,
-            self.task_type, self.get_categorical_features_after_drop(), self._feature_metadata)
+            self.task_type, self.get_categorical_features_after_drop(),
+            self._feature_metadata)
 
         self._counterfactual_manager = CounterfactualManager(
             model=self.model, train=self.get_train_data(),
