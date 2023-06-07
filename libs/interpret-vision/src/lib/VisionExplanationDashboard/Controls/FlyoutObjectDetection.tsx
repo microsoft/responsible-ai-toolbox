@@ -130,7 +130,7 @@ export class FlyoutObjectDetection extends React.Component<
     this.state.editorCallback.innerHTML = "";
 
     // Initializes CanvasTools-vott editor
-    var editor = new CanvasTools.Editor(this.state.editorCallback); // store as an instance variable
+    var editor = new CanvasTools.Editor(this.state.editorCallback);
 
     // Adds image to editor
     this.loadImageFromBase64(item.image, editor);
@@ -156,19 +156,19 @@ export class FlyoutObjectDetection extends React.Component<
       // Creating box region
       let predObject = predictedY[oidx]
       let predBox = RegionData.BuildRectRegionData(
-        predObject[1], predObject[2],
+        predObject[1],
+        predObject[2],
         predObject[3]-predObject[1],
         predObject[4]-predObject[2]
       );
 
       // Retrieving label for annotation above the box
-      this.props.dataset.object_detection_predicted_y
-      let className = this.props.dataset.class_names[predObject[0]-1]
-      let confidenceScore = (predObject[5] * 100).toString()
+      let className = this.props.dataset.class_names[predObject[0]-1];
+      let confidenceScore = (predObject[5] * 100).toFixed(2);
 
       // Initializing bounding box tag
       const predTag = new CanvasTools.Core.Tag(className + "(" + confidenceScore + "%)", // Object(95%)
-                                               new Color(theme.palette.magenta))
+                                               new Color(theme.palette.magenta));
       const predTagDesc = new CanvasTools.Core.TagsDescriptor([predTag]);
 
       // Drawing bounding box with vott
@@ -181,7 +181,8 @@ export class FlyoutObjectDetection extends React.Component<
       // Creating box region
       let gtObject = trueY[oidx] as number[]
       let gtBox = RegionData.BuildRectRegionData(
-        gtObject[1], gtObject[2],
+        gtObject[1],
+        gtObject[2],
         gtObject[3]-gtObject[1],
         gtObject[4]-gtObject[2]
       );
@@ -190,7 +191,7 @@ export class FlyoutObjectDetection extends React.Component<
       let className = this.props.dataset.class_names[gtObject[0]-1]
 
       // Initializing bounding box tag
-      const gtTag = new CanvasTools.Core.Tag(className, new Color(theme.palette.blueMid)) // Object(95%)
+      const gtTag = new CanvasTools.Core.Tag(className, new Color(theme.palette.magentaDark)) // Object(95%)
       const gtTagDesc = new CanvasTools.Core.TagsDescriptor([gtTag]);
 
       // Drawing bounding box with vott
