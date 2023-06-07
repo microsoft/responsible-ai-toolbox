@@ -129,9 +129,11 @@ class TestRAIInsights(object):
             categorical_features = categorical_features + ['is_adult']
 
         X_train = data_train.drop([target_name], axis=1)
+        X_train_after_drop = X_train.drop(columns=['race'])
 
         model = create_complex_classification_pipeline(
-            X_train, y_train, continuous_features, categorical_features)
+            X_train_after_drop, y_train, continuous_features,
+            categorical_features)
         manager_args = {
             ManagerParams.TREATMENT_FEATURES: ['age', 'hours_per_week'],
             ManagerParams.DESIRED_CLASS: 'opposite',
