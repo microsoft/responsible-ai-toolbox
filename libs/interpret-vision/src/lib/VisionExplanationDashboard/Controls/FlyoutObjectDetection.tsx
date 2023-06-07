@@ -3,7 +3,6 @@
 
 import {
   ComboBox,
-  getTheme,
   IComboBox,
   IComboBoxOption,
   Icon,
@@ -22,7 +21,6 @@ import { localization } from "@responsible-ai/localization";
 import * as React from "react";
 import { CanvasTools } from "vott-ct";
 import { Editor } from "vott-ct/lib/js/CanvasTools/CanvasTools.Editor";
-import { RegionData } from "vott-ct/lib/js/CanvasTools/Core/RegionData";
 
 import {
   generateSelectableObjectDetectionIndexes,
@@ -101,6 +99,16 @@ export class FlyoutObjectDetection extends React.Component<
         localization.InterpretVision.Dashboard.prefix,
         item
       );
+
+      if (this.state.editorCallback) {
+        // Initializes CanvasTools-vott editor
+        var editor = new CanvasTools.Editor(this.state.editorCallback);
+
+        // Adds image to editor
+        this.state.editorCallback.innerHTML = "";
+        this.loadImageFromBase64(item.image, editor);
+      }
+
       this.setState({
         item: this.props.item,
         metadata,
@@ -109,7 +117,7 @@ export class FlyoutObjectDetection extends React.Component<
     }
   }
 
-  private readonly callbackRef = (editorCallback: HTMLDivElement) => (this.setState({ editorCallback: editorCallback }));
+  private readonly callbackRef = (editorCallback: HTMLDivElement) => (this.setState( {editorCallback: editorCallback} ));
 
   public loadImageFromBase64(base64String: string, editor: Editor) { // onReady is a function/callable
     const image = new Image();
@@ -118,85 +126,6 @@ export class FlyoutObjectDetection extends React.Component<
         editor.AS.setSelectionMode(2);
     });
     image.src = `data:image/jpg;base64,${base64String}`;
-  }
-
-  public drawBoundingBoxes(item: IVisionListItem): void {
-
-    // Stops if the div container for the canvastools editor doesn't exist
-    if (!this.state.editorCallback) {
-      return;
-    }
-    // Removes any pre-existimg images due to previous render calls
-    this.state.editorCallback.innerHTML = "";
-
-    // Initializes CanvasTools-vott editor
-    var editor = new CanvasTools.Editor(this.state.editorCallback);
-
-    // Adds image to editor
-    this.loadImageFromBase64(item.image, editor);
-
-    // Initialize color constants
-    const Color = CanvasTools.Core.Colors.Color;
-    const theme = getTheme();
-
-    // Ensuring object detection labels are populated
-    if (!this.props.dataset.object_detection_predicted_y
-        || !this.props.dataset.object_detection_true_y
-        || !this.props.dataset.class_names) {
-      return;
-    }
-
-    // Retrieving labels for the image in the Flyout
-    const predictedY : number[][] = this.props.dataset.object_detection_predicted_y[item.index];
-    const trueY : number[][]  = this.props.dataset.object_detection_true_y[item.index];
-
-    // Draws bounding boxes for each predicted object
-    for (let oidx = 0; oidx < predictedY.length; oidx++) {
-
-      // Creating box region
-      let predObject = predictedY[oidx]
-      let predBox = RegionData.BuildRectRegionData(
-        predObject[1],
-        predObject[2],
-        predObject[3]-predObject[1],
-        predObject[4]-predObject[2]
-      );
-
-      // Retrieving label for annotation above the box
-      let className = this.props.dataset.class_names[predObject[0]-1];
-      let confidenceScore = (predObject[5] * 100).toFixed(2);
-
-      // Initializing bounding box tag
-      const predTag = new CanvasTools.Core.Tag(className + "(" + confidenceScore + "%)", // Object(95%)
-                                               new Color(theme.palette.magenta));
-      const predTagDesc = new CanvasTools.Core.TagsDescriptor([predTag]);
-
-      // Drawing bounding box with vott
-      editor.RM.addRegion(oidx.toString(), predBox, predTagDesc);
-    }
-
-    // Drawing bounding boxes for each ground truth object
-    for (let oidx = 0; oidx < trueY.length; oidx++) {
-
-      // Creating box region
-      let gtObject = trueY[oidx] as number[]
-      let gtBox = RegionData.BuildRectRegionData(
-        gtObject[1],
-        gtObject[2],
-        gtObject[3]-gtObject[1],
-        gtObject[4]-gtObject[2]
-      );
-
-      // Retrieving label for annotation above the box
-      let className = this.props.dataset.class_names[gtObject[0]-1]
-
-      // Initializing bounding box tag
-      const gtTag = new CanvasTools.Core.Tag(className, new Color(theme.palette.magentaDark)) // Object(95%)
-      const gtTagDesc = new CanvasTools.Core.TagsDescriptor([gtTag]);
-
-      // Drawing bounding box with vott
-      editor.RM.addRegion(oidx.toString(), gtBox, gtTagDesc);
-    }
   }
 
   public render(): React.ReactNode {
@@ -209,7 +138,17 @@ export class FlyoutObjectDetection extends React.Component<
     const predictedY = getJoinedLabelString(item?.predictedY);
     const trueY = getJoinedLabelString(item?.trueY);
 
-    this.drawBoundingBoxes(item);
+    if (this.state.editorCallback) {
+      // Removes any pre-existimg images due to previous render calls
+      this.state.editorCallback.innerHTML = "";
+
+      // Initializes CanvasTools-vott editor
+      var editor = new CanvasTools.Editor(this.state.editorCallback);
+
+      // Adds image to editor
+      this.loadImageFromBase64(item.image, editor);
+
+    }
 
     return (
       <FocusZone>
