@@ -40,7 +40,7 @@ export function generateSelectableObjectDetectionIndexes(
   const selectableObjectIndexes: IComboBoxOption[] = [];
   if (temp) {
     for (let i = 0; i < Object.values(temp).length; i++) {
-      const className = item?.predictedY[i]; 
+      const className = item?.predictedY[i];
       selectableObjectIndexes.push({
         key: prefix + String(i),
         text: String(i) + String(": ") + className
