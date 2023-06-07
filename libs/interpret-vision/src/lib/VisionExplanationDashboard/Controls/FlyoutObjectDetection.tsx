@@ -131,7 +131,6 @@ export class FlyoutObjectDetection extends React.Component<
 
     // Initializes CanvasTools-vott editor
     var editor = new CanvasTools.Editor(this.state.editorCallback); // store as an instance variable
-    editor.enablePathRegions(true);
 
     // Adds image to editor
     this.loadImageFromBase64(item.image, editor);
@@ -156,9 +155,11 @@ export class FlyoutObjectDetection extends React.Component<
 
       // Creating box region
       let predObject = predictedY[oidx]
-      let predBox = new RegionData(predObject[1], predObject[2],
-                                   predObject[3]-predObject[1],
-                                   predObject[4]-predObject[2]);
+      let predBox = RegionData.BuildRectRegionData(
+        predObject[1], predObject[2],
+        predObject[3]-predObject[1],
+        predObject[4]-predObject[2]
+      );
 
       // Retrieving label for annotation above the box
       this.props.dataset.object_detection_predicted_y
@@ -179,9 +180,11 @@ export class FlyoutObjectDetection extends React.Component<
 
       // Creating box region
       let gtObject = trueY[oidx] as number[]
-      let gtBox = new RegionData(gtObject[1], gtObject[2],
-                                 gtObject[3]-gtObject[1],
-                                 gtObject[4]-gtObject[2]);
+      let gtBox = RegionData.BuildRectRegionData(
+        gtObject[1], gtObject[2],
+        gtObject[3]-gtObject[1],
+        gtObject[4]-gtObject[2]
+      );
 
       // Retrieving label for annotation above the box
       let className = this.props.dataset.class_names[gtObject[0]-1]
