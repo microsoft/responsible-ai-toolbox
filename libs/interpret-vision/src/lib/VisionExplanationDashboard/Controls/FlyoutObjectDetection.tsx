@@ -51,7 +51,6 @@ export interface IFlyoutState {
   metadata: Array<Array<string | number | boolean>> | undefined;
   selectableObjectIndexes: IComboBoxOption[];
   odSelectedKey: string;
-  imageCallback?: HTMLImageElement;
   editorCallback?: HTMLDivElement;
 }
 
@@ -64,6 +63,8 @@ export class FlyoutObjectDetection extends React.Component<
   IFlyoutProps,
   IFlyoutState
 > {
+  protected editorCallback?: HTMLDivElement;
+  editor!: Editor;
   public constructor(props: IFlyoutProps) {
     super(props);
     this.state = {
@@ -99,16 +100,6 @@ export class FlyoutObjectDetection extends React.Component<
         localization.InterpretVision.Dashboard.prefix,
         item
       );
-
-      if (this.state.editorCallback) {
-        // Initializes CanvasTools-vott editor
-        var editor = new CanvasTools.Editor(this.state.editorCallback);
-
-        // Adds image to editor
-        this.state.editorCallback.innerHTML = "";
-        this.loadImageFromBase64(item.image, editor);
-      }
-
       this.setState({
         item: this.props.item,
         metadata,
@@ -117,7 +108,18 @@ export class FlyoutObjectDetection extends React.Component<
     }
   }
 
-  private readonly callbackRef = (editorCallback: HTMLDivElement) => (this.setState( {editorCallback: editorCallback} ));
+  private readonly callbackRef = (editorCallback: HTMLDivElement) => {
+    // Ensures non-null editor to close the Flyout
+    if (!editorCallback) {
+      return;
+    }
+    // Initializes CanvasTools-vott editor
+    this.editor = new CanvasTools.Editor(editorCallback);
+    // Adds image to editor
+    if (this.state.item) {
+      this.loadImageFromBase64(this.state.item.image, this.editor);
+    }
+  };
 
   public loadImageFromBase64(base64String: string, editor: Editor) { // onReady is a function/callable
     const image = new Image();
@@ -130,25 +132,13 @@ export class FlyoutObjectDetection extends React.Component<
 
   public render(): React.ReactNode {
     const { isOpen } = this.props;
-    const item = this.state.item;
+    const item = this.props.item; // state.item is undefined during 1st execution
     if (!item) {
       return <div />;
     }
     const classNames = flyoutStyles();
     const predictedY = getJoinedLabelString(item?.predictedY);
     const trueY = getJoinedLabelString(item?.trueY);
-
-    if (this.state.editorCallback) {
-      // Removes any pre-existimg images due to previous render calls
-      this.state.editorCallback.innerHTML = "";
-
-      // Initializes CanvasTools-vott editor
-      var editor = new CanvasTools.Editor(this.state.editorCallback);
-
-      // Adds image to editor
-      this.loadImageFromBase64(item.image, editor);
-
-    }
 
     return (
       <FocusZone>

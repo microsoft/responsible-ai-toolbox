@@ -93,7 +93,7 @@ export class VisionExplanationDashboard extends React.Component<
           />
         </Stack.Item>
         <Stack.Item>
-          <FlyoutObjectDetection
+          {this.state.panelOpen && (<FlyoutObjectDetection
             dataset={this.context.dataset}
             explanations={this.state.computedExplanations}
             isOpen={this.state.panelOpen}
@@ -102,7 +102,7 @@ export class VisionExplanationDashboard extends React.Component<
             otherMetadataFieldNames={this.state.otherMetadataFieldNames}
             callback={this.onPanelClose}
             onChange={this.onItemSelectObjectDetection}
-          />
+          />)}
         </Stack.Item>
       </Stack>
     ) : (
