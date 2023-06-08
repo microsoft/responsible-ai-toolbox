@@ -18,7 +18,6 @@ import {
   ErrorCohort,
   getCohortFilterCount,
   IModelAssessmentContext,
-  isAllDataErrorCohort,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -296,8 +295,7 @@ export class CohortList extends React.Component<
     const allItems = this.context.errorCohorts
       .filter(
         (errorCohort: ErrorCohort) =>
-          this.props.showAllDataCohort ||
-          !isAllDataErrorCohort(errorCohort, true)
+          this.props.showAllDataCohort || !errorCohort.isAllDataCohort
       )
       .filter((errorCohort: ErrorCohort) => !errorCohort.isTemporary)
       .map((errorCohort: ErrorCohort, index: number) => {

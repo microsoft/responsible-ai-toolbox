@@ -26,7 +26,8 @@ export class DatasetCohort {
     },
     public source: CohortSource = CohortSource.None,
     public isTemporary: boolean = false,
-    cohortStats: MetricCohortStats | undefined = undefined
+    cohortStats: MetricCohortStats | undefined = undefined,
+    public isAllDataCohort: boolean = false
   ) {
     this.name = name;
     this.selectedIndexes = this.applyFilters();
