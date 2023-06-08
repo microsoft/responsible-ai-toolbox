@@ -63,8 +63,8 @@ export class FlyoutObjectDetection extends React.Component<
   IFlyoutProps,
   IFlyoutState
 > {
+  public editor!: Editor;
   protected editorCallback?: HTMLDivElement;
-  editor!: Editor;
   public constructor(props: IFlyoutProps) {
     super(props);
     this.state = {
@@ -108,20 +108,7 @@ export class FlyoutObjectDetection extends React.Component<
     }
   }
 
-  private readonly callbackRef = (editorCallback: HTMLDivElement) => {
-    // Ensures non-null editor to close the Flyout
-    if (!editorCallback) {
-      return;
-    }
-    // Initializes CanvasTools-vott editor
-    this.editor = new CanvasTools.Editor(editorCallback);
-    // Adds image to editor
-    if (this.state.item) {
-      this.loadImageFromBase64(this.state.item.image, this.editor);
-    }
-  };
-
-  public loadImageFromBase64(base64String: string, editor: Editor) { // onReady is a function/callable
+  public loadImageFromBase64(base64String: string, editor: Editor): void { // onReady is a function/callable
     const image = new Image();
     image.addEventListener("load", (e) => {
         editor.addContentSource(e.target as HTMLImageElement);
@@ -326,6 +313,18 @@ export class FlyoutObjectDetection extends React.Component<
         // Remove "Object: " from labels. We only want index
         this.props.onChange(this.state.item, +item.key.slice(ExcessLabelLen));
       }
+    }
+  };
+  private readonly callbackRef = (editorCallback: HTMLDivElement): void => {
+    // Ensures non-null editor to close the Flyout
+    if (!editorCallback) {
+      return;
+    }
+    // Initializes CanvasTools-vott editor
+    this.editor = new CanvasTools.Editor(editorCallback);
+    // Adds image to editor
+    if (this.state.item) {
+      this.loadImageFromBase64(this.state.item.image, this.editor);
     }
   };
 }
