@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 import pytest
 from tests.causal_manager_validator import validate_causal
-from tests.common_utils import create_adult_income_dataset, create_iris_data
+from tests.common_utils import create_iris_data
 from tests.counterfactual_manager_validator import validate_counterfactual
 from tests.error_analysis_validator import (setup_error_analysis,
                                             validate_error_analysis)
@@ -116,14 +116,17 @@ class TestRAIInsights(object):
                                               ManagerNames.EXPLAINER,
                                               ManagerNames.COUNTERFACTUAL])
     @pytest.mark.parametrize('add_boolean', [True, False])
-    def test_rai_insights_binary_mixed_types(self, manager_type, add_boolean):
+    def test_rai_insights_binary_mixed_types(
+            self, manager_type, add_boolean, adult_data):
 
         data_train, data_test, y_train, y_test, categorical_features, \
             continuous_features, target_name, classes, \
             feature_columns, feature_range_keys = \
-            create_adult_income_dataset()
+            adult_data
 
         if add_boolean:
+            data_train = data_train.copy()
+            data_test = data_test.copy()
             data_train['is_adult'] = data_train['age'] >= 18
             data_test['is_adult'] = data_test['age'] >= 18
             categorical_features = categorical_features + ['is_adult']
