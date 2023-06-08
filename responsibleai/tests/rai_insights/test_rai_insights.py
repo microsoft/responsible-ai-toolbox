@@ -132,11 +132,14 @@ class TestRAIInsights(object):
             categorical_features = categorical_features + ['is_adult']
 
         X_train = data_train.drop([target_name], axis=1)
-        X_train_after_drop = X_train.drop(columns=['race'])
+        dropped_feature = 'education'
+        X_train_after_drop = X_train.drop([dropped_feature], axis=1)
+        categorical_features_after_drop = categorical_features.copy()
+        categorical_features_after_drop.remove(dropped_feature)
 
         model = create_complex_classification_pipeline(
             X_train_after_drop, y_train, continuous_features,
-            categorical_features)
+            categorical_features_after_drop)
         manager_args = {
             ManagerParams.TREATMENT_FEATURES: ['age', 'hours_per_week'],
             ManagerParams.DESIRED_CLASS: 'opposite',
@@ -144,7 +147,7 @@ class TestRAIInsights(object):
         }
 
         feature_metadata = FeatureMetadata(
-            dropped_features=['race'])
+            dropped_features=[dropped_feature])
         run_rai_insights(model, data_train, data_test, target_name,
                          categorical_features,
                          manager_type, manager_args,
@@ -279,7 +282,8 @@ def run_rai_insights(model, train_data, test_data, target_column,
 
         validate_rai_insights(
             rai_insights, train_data, test_data,
-            target_column, task_type, categorical_features)
+            target_column, task_type, categorical_features,
+            feature_metadata)
 
         if manager_type == ManagerNames.ERROR_ANALYSIS:
             validate_error_analysis(rai_insights)
