@@ -21,7 +21,7 @@ import { FluentUIStyles, IDataset, IVisionListItem } from "@responsible-ai/core-
 import { localization } from "@responsible-ai/localization";
 import * as React from "react";
 import { CanvasTools } from "vott-ct";
-import { Editor } from "vott-ct/lib/js/CanvasTools/CanvasTools.Editor";
+import type { Editor } from "vott-ct/lib/js/CanvasTools/CanvasTools.Editor";
 import { RegionData } from "vott-ct/lib/js/CanvasTools/Core/RegionData";
 
 import {
@@ -109,7 +109,7 @@ export class FlyoutObjectDetection extends React.Component<
     }
   }
 
-  private readonly callbackRef = (editorCallback: HTMLDivElement) => (this.setState({ editorCallback: editorCallback }));
+  private readonly callbackRef = (editorCallback: HTMLDivElement) => (this.setState({ editorCallback }));
 
   public loadImageFromBase64(base64String: string, editor: Editor) { // onReady is a function/callable
     const image = new Image();
@@ -118,6 +118,9 @@ export class FlyoutObjectDetection extends React.Component<
         editor.AS.setSelectionMode(2);
     });
     image.src = `data:image/jpg;base64,${base64String}`;
+    // image.onload = () => {
+    //   return [image.naturalWidth, image.naturalHeight];
+    // }
   }
 
   public drawBoundingBoxes(item: IVisionListItem): void {
@@ -130,7 +133,11 @@ export class FlyoutObjectDetection extends React.Component<
     this.state.editorCallback.innerHTML = "";
 
     // Initializes CanvasTools-vott editor
-    var editor = new CanvasTools.Editor(this.state.editorCallback);
+    const editor = new CanvasTools.Editor(this.state.editorCallback);
+    editor.RM.freeze();
+
+    const [frameWidth, frameHeight] = editor.getFrameSize;
+    const scaleCoordinate = (coordinate: number, imageDim: number, frameDim: number): number => coordinate / imageDim * frameDim;
 
     // Adds image to editor
     this.loadImageFromBase64(item.image, editor);
@@ -151,52 +158,52 @@ export class FlyoutObjectDetection extends React.Component<
     const trueY : number[][]  = this.props.dataset.object_detection_true_y[item.index];
 
     // Draws bounding boxes for each predicted object
-    for (let oidx = 0; oidx < predictedY.length; oidx++) {
+    for (const [oidx, predObject] of predictedY.entries()) {
 
       // Creating box region
-      let predObject = predictedY[oidx]
-      let predBox = RegionData.BuildRectRegionData(
-        predObject[1],
-        predObject[2],
-        predObject[3]-predObject[1],
-        predObject[4]-predObject[2]
+      const predBox = RegionData.BuildRectRegionData(
+        scaleCoordinate(predObject[1], 499, frameWidth),
+        scaleCoordinate(predObject[2], 666, frameHeight),
+        scaleCoordinate(predObject[3]-predObject[1], 499, frameWidth),
+        scaleCoordinate(predObject[4]-predObject[2], 666, frameHeight)
       );
 
       // Retrieving label for annotation above the box
-      let className = this.props.dataset.class_names[predObject[0]-1];
-      let confidenceScore = (predObject[5] * 100).toFixed(2);
+      const className = this.props.dataset.class_names[predObject[0]-1];
+      const confidenceScore = (predObject[5] * 100).toFixed(2);
 
       // Initializing bounding box tag
-      const predTag = new CanvasTools.Core.Tag(className + "(" + confidenceScore + "%)", // Object(95%)
-                                               new Color(theme.palette.magenta));
+      const predTag = new CanvasTools.Core.Tag(`${oidx  }.${className  }(${  confidenceScore  }%)`, // Object(95%)
+                                               new Color(theme.palette.magenta)); // TODO: change color contrast!
       const predTagDesc = new CanvasTools.Core.TagsDescriptor([predTag]);
 
       // Drawing bounding box with vott
-      editor.RM.addRegion(oidx.toString(), predBox, predTagDesc);
+      editor.RM.addRectRegion(oidx.toString(), predBox, predTagDesc);
     }
 
     // Drawing bounding boxes for each ground truth object
-    for (let oidx = 0; oidx < trueY.length; oidx++) {
+    for (const [oidx, element] of trueY.entries()) {
 
       // Creating box region
-      let gtObject = trueY[oidx] as number[]
-      let gtBox = RegionData.BuildRectRegionData(
-        gtObject[1],
-        gtObject[2],
-        gtObject[3]-gtObject[1],
-        gtObject[4]-gtObject[2]
+      const gtObject = element as number[]
+      const gtBox = RegionData.BuildRectRegionData(
+        scaleCoordinate(gtObject[1], 499, frameWidth),
+        scaleCoordinate(gtObject[2], 666, frameHeight),
+        scaleCoordinate(gtObject[3]-gtObject[1], 499, frameWidth),
+        scaleCoordinate(gtObject[4]-gtObject[2], 666, frameHeight)
       );
 
       // Retrieving label for annotation above the box
-      let className = this.props.dataset.class_names[gtObject[0]-1]
+      const className = this.props.dataset.class_names[gtObject[0]-1]
 
       // Initializing bounding box tag
       const gtTag = new CanvasTools.Core.Tag(className, new Color(theme.palette.magentaDark)) // Object(95%)
       const gtTagDesc = new CanvasTools.Core.TagsDescriptor([gtTag]);
 
       // Drawing bounding box with vott
-      editor.RM.addRegion(oidx.toString(), gtBox, gtTagDesc);
+      editor.RM.addRectRegion(oidx.toString(), gtBox, gtTagDesc);
     }
+    editor.RM.freeze();
   }
 
   public render(): React.ReactNode {
