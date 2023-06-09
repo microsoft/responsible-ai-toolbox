@@ -132,19 +132,26 @@ class TestRAIInsights(object):
             categorical_features = categorical_features + ['is_adult']
 
         X_train = data_train.drop([target_name], axis=1)
+        dropped_feature = 'education'
+        X_train_after_drop = X_train.drop([dropped_feature], axis=1)
+        categorical_features_after_drop = categorical_features.copy()
+        categorical_features_after_drop.remove(dropped_feature)
 
         model = create_complex_classification_pipeline(
-            X_train, y_train, continuous_features, categorical_features)
+            X_train_after_drop, y_train, continuous_features,
+            categorical_features_after_drop)
         manager_args = {
             ManagerParams.TREATMENT_FEATURES: ['age', 'hours_per_week'],
             ManagerParams.DESIRED_CLASS: 'opposite',
             ManagerParams.FEATURE_IMPORTANCE: False
         }
 
+        feature_metadata = FeatureMetadata(
+            dropped_features=[dropped_feature])
         run_rai_insights(model, data_train, data_test, target_name,
                          categorical_features,
                          manager_type, manager_args,
-                         classes=classes)
+                         classes=classes, feature_metadata=feature_metadata)
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
                                               ManagerNames.ERROR_ANALYSIS,
@@ -236,8 +243,8 @@ def run_rai_insights(model, train_data, test_data, target_column,
     elif manager_type == ManagerNames.ERROR_ANALYSIS:
         setup_error_analysis(rai_insights)
 
-    validate_rai_insights(rai_insights, train_data, test_data,
-                          target_column, task_type, categorical_features)
+    validate_rai_insights(rai_insights, train_data, test_data, target_column,
+                          task_type, categorical_features, feature_metadata)
 
     if manager_type == ManagerNames.CAUSAL:
         treatment_features = manager_args.get(ManagerParams.TREATMENT_FEATURES)
@@ -275,7 +282,8 @@ def run_rai_insights(model, train_data, test_data, target_column,
 
         validate_rai_insights(
             rai_insights, train_data, test_data,
-            target_column, task_type, categorical_features)
+            target_column, task_type, categorical_features,
+            feature_metadata)
 
         if manager_type == ManagerNames.ERROR_ANALYSIS:
             validate_error_analysis(rai_insights)
@@ -359,7 +367,8 @@ def validate_rai_insights(
     test_data,
     target_column,
     task_type,
-    categorical_features
+    categorical_features,
+    feature_metadata=None
 ):
 
     pd.testing.assert_frame_equal(rai_insights.train, train_data)
@@ -376,6 +385,19 @@ def validate_rai_insights(
     assert len(rai_insights._category_dictionary) == expected_length
     for ind_data in rai_insights._string_ind_data:
         assert len(ind_data) == expected_length
+
+    if feature_metadata is not None:
+        if feature_metadata.dropped_features is not None and \
+                categorical_features is not None:
+            assert len(rai_insights.get_categorical_features_after_drop()) == \
+                len(categorical_features) - \
+                len(feature_metadata.dropped_features)
+    else:
+        if categorical_features is not None:
+            assert len(rai_insights.get_categorical_features_after_drop()) == \
+                len(categorical_features)
+        else:
+            assert len(rai_insights.get_categorical_features_after_drop()) == 0
 
     if rai_insights.model is None:
         assert rai_insights._predict_output is None
