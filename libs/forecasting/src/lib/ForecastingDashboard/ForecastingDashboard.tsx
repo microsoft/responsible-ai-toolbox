@@ -11,7 +11,6 @@ import {
 import {
   defaultModelAssessmentContext,
   featureColumnsExist,
-  isAllDataErrorCohort,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -51,7 +50,7 @@ export class ForecastingDashboard extends React.Component<
 
   public componentDidMount(): void {
     const timeSeries = this.context.errorCohorts.filter(
-      (cohort) => !isAllDataErrorCohort(cohort)
+      (cohort) => !cohort.isAllDataCohort
     );
     const dropdownOptions: IDropdownOption[] = timeSeries.map((cohort) => {
       return {
@@ -87,7 +86,7 @@ export class ForecastingDashboard extends React.Component<
     // "All data" cohort selected, so no particular time series selected yet.
     // Special case: if there's only 1 time series then it is selected by default.
     const noCohortSelected =
-      isAllDataErrorCohort(this.context.baseErrorCohort) &&
+      this.context.baseErrorCohort.isAllDataCohort &&
       this.state.timeSeriesOptions.length > 1;
 
     const cohortTransformations =
@@ -122,7 +121,7 @@ export class ForecastingDashboard extends React.Component<
                 options={this.state.timeSeriesOptions}
                 onChange={this.onChangeCohort}
                 selectedKey={
-                  isAllDataErrorCohort(this.context.baseErrorCohort)
+                  this.context.baseErrorCohort.isAllDataCohort
                     ? undefined
                     : this.context.baseErrorCohort.cohort.getCohortID()
                 }

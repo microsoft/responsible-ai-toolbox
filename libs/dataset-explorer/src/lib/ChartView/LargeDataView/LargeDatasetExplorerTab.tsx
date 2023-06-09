@@ -178,6 +178,7 @@ export class LargeDatasetExplorerTab extends React.Component<
                   this.state.isAggregatePlotLoading ||
                   this.state.isBubbleChartDataLoading
                 }
+                telemetryHook={this.props.telemetryHook}
               />
             </Stack.Item>
           </Stack>
@@ -369,10 +370,12 @@ export class LargeDatasetExplorerTab extends React.Component<
       false,
       false,
       true,
+      TelemetryEventName.DataAnalysisBubblePlotDataFetch,
       this.context.requestBubblePlotData,
       undefined,
       this.onBubbleClick,
-      undefined
+      undefined,
+      this.props.telemetryHook
     );
   };
 

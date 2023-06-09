@@ -90,7 +90,8 @@ export function buildInitialModelAssessmentContext(
     0,
     CohortSource.None,
     false,
-    metricStats
+    metricStats,
+    true
   );
   let errorCohortList: ErrorCohort[] = [defaultErrorCohort];
   const [preBuiltErrorCohortList] = processPreBuiltCohort(props, jointDataset);
@@ -110,7 +111,8 @@ export function buildInitialModelAssessmentContext(
     columnRanges,
     CohortSource.None,
     false,
-    metricStats
+    metricStats,
+    true
   );
   const datasetCohorts = [defaultDatasetCohort].concat(
     preBuiltDatasetCohortList
