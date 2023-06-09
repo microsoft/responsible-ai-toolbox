@@ -5,8 +5,10 @@ import pytest
 
 from rai_test_utils.datasets.tabular import (
     create_adult_census_data, create_binary_classification_dataset,
-    create_cancer_data, create_diabetes_data, create_housing_data,
-    create_iris_data, create_simple_titanic_data, create_wine_data)
+    create_cancer_data, create_complex_titanic_data, create_diabetes_data,
+    create_energy_data, create_housing_data, create_iris_data, create_msx_data,
+    create_multiclass_classification_dataset, create_reviews_data,
+    create_simple_titanic_data, create_timeseries_data, create_wine_data)
 
 
 class TestDataUtils:
@@ -89,3 +91,53 @@ class TestDataUtils:
         assert y_train is not None
         assert y_test is not None
         assert feature_names is not None
+
+    def test_create_timeseries_data(self):
+        X_train, y_train = create_timeseries_data(
+            sample_cnt_per_grain=10,
+            time_column_name='time',
+            target_column_name='target',
+        )
+        assert X_train is not None
+        assert y_train is not None
+
+    def test_create_msx_data(self):
+        X_train, X_test, y_train, y_test = \
+            create_msx_data(test_size=0.2)
+        assert X_train is not None
+        assert X_test is not None
+        assert y_train is not None
+        assert y_test is not None
+
+    def test_create_energy_data(self):
+        X_train, X_test, y_train, y_test, feature_names = \
+            create_energy_data()
+        assert X_train is not None
+        assert X_test is not None
+        assert y_train is not None
+        assert y_test is not None
+        assert feature_names is not None
+
+    def test_create_complex_titanic_data(self):
+        X_train, X_test, y_train, y_test = create_complex_titanic_data()
+        assert X_train is not None
+        assert X_test is not None
+        assert y_train is not None
+        assert y_test is not None
+
+    def test_create_multiclass_classification_dataset(self):
+        X_train, X_test, y_train, y_test, classes = \
+            create_multiclass_classification_dataset()
+        assert X_train is not None
+        assert X_test is not None
+        assert y_train is not None
+        assert y_test is not None
+        assert classes is not None
+
+    def test_create_reviews_data(self):
+        X_train, X_test, y_train, y_test = \
+            create_reviews_data(test_size=0.2)
+        assert X_train is not None
+        assert X_test is not None
+        assert y_train is not None
+        assert y_test is not None
