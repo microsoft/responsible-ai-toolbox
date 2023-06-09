@@ -5,10 +5,11 @@ import numpy as np
 import pandas as pd
 import shap
 from pandas import read_csv
-from sklearn.datasets import (fetch_california_housing, load_breast_cancer,
-                              load_diabetes, load_iris, load_wine,
+from sklearn.datasets import (load_breast_cancer, load_iris, load_wine,
                               make_classification)
 from sklearn.model_selection import train_test_split
+
+from rai_test_utils.utilities import retrieve_dataset
 
 
 def create_iris_data(append_special_characters=False):
@@ -110,23 +111,6 @@ def create_cancer_data(return_dataframe=False):
     return X_train, X_test, y_train, y_test, feature_names, classes
 
 
-def create_diabetes_data():
-    """Create Diabetes dataset for regression.
-
-    return: Tuple of X_train, X_test, y_train, y_test, feature_names.
-    rtype: Tuple of numpy.ndarray, numpy.ndarray, numpy.ndarray,
-           numpy.ndarray, list
-    """
-    diabetes_data = load_diabetes()
-    X = diabetes_data.data
-    y = diabetes_data.target
-    feature_names = diabetes_data.feature_names
-
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=0)
-    return X_train, X_test, y_train, y_test, feature_names
-
-
 def create_binary_classification_dataset(n_samples=100):
     """Create a binary classification dataset.
 
@@ -148,6 +132,35 @@ def create_binary_classification_dataset(n_samples=100):
     X_train = pd.DataFrame(X_train, columns=feature_names)
     X_test = pd.DataFrame(X_test, columns=feature_names)
     return X_train, y_train, X_test, y_test, classes
+
+
+def create_multiclass_classification_dataset(
+        num_classes=5, num_features=20, num_informative=4):
+    """Create a multiclass classification dataset.
+
+    param num_classes: Number of classes.
+    type num_classes: int
+    param num_features: Number of features.
+    type num_features: int
+    param num_informative: Number of informative features.
+    type num_informative: int
+    return: Tuple of X_train, y_train, X_test, y_test, classes.
+    rtype: Tuple of pandas.DataFrame, pandas.DataFrame, numpy.ndarray,
+              numpy.ndarray, list
+    """
+    X, y = make_classification(n_classes=num_classes,
+                               n_features=num_features,
+                               n_informative=num_informative)
+
+    # Split data into train and test
+    x_train, x_test, y_train, y_test = train_test_split(X,
+                                                        y,
+                                                        test_size=0.2,
+                                                        random_state=0)
+    classes = np.unique(y_train).tolist()
+
+    return pd.DataFrame(x_train), y_train, pd.DataFrame(x_test), y_test, \
+        classes
 
 
 def create_simple_titanic_data():
@@ -176,27 +189,54 @@ def create_simple_titanic_data():
     return X_train, X_test, y_train, y_test, num_features, cat_features
 
 
-def create_housing_data(create_small_dataset=True):
-    """Create California housing dataset for regression.
+def create_complex_titanic_data():
+    """Create complex Titanic dataset for classification.
 
-    param create_small_dataset: Whether to create a small dataset or not.
-    type create_small_dataset: bool
-    return: Tuple of x_train, x_test, y_train, y_test, feature_names.
-    rtype: Tuple of numpy.ndarray, numpy.ndarray, numpy.ndarray,
-           numpy.ndarray, list
+    return: Tuple of X_train, X_test, y_train, y_test.
+    rtype: Tuple of pd.DataFrame, pd.DataFrame, numpy.ndarray, numpy.ndarray
     """
-    # Import California housing dataset
-    housing = fetch_california_housing()
-    # Split data into train and test
-    if create_small_dataset:
-        x_train, x_test, y_train, y_test = train_test_split(housing.data,
-                                                            housing.target,
-                                                            train_size=500,
-                                                            test_size=50,
-                                                            random_state=7)
-    else:
-        x_train, x_test, y_train, y_test = train_test_split(housing.data,
-                                                            housing.target,
-                                                            test_size=0.2,
-                                                            random_state=7)
-    return x_train, x_test, y_train, y_test, housing.feature_names
+    titanic_url = (
+        'https://raw.githubusercontent.com/amueller/'
+        'scipy-2017-sklearn/091d371/notebooks/datasets/titanic3.csv')
+    data = read_csv(titanic_url)
+    X = data.drop('survived', axis=1)
+    y = data['survived']
+
+    return train_test_split(X, y, test_size=0.2, random_state=42)
+
+
+def create_msx_data(test_size):
+    """Create msx dataset for classification.
+
+    param test_size: Size of the test dataset.
+    type test_size: float
+    return: Tuple of X_train, X_test, y_train, y_test.
+    rtype: Tuple of sparse matrix, sparse matrix, sparse matrix, sparse matrix
+    """
+    sparse_matrix = retrieve_dataset('msx_transformed_2226.npz')
+    sparse_matrix_x = sparse_matrix[:, :sparse_matrix.shape[1] - 2]
+    sparse_matrix_y = sparse_matrix[:, (sparse_matrix.shape[1] - 2):(
+        sparse_matrix.shape[1] - 1)]
+    return train_test_split(sparse_matrix_x, sparse_matrix_y,
+                            test_size=test_size, random_state=7)
+
+
+def create_reviews_data(test_size):
+    """Create reviews dataset for sentiment analysis.
+
+    param test_size: Size of the test dataset.
+    type test_size: float
+    return: Tuple of X_train, X_test, y_train, y_test.
+    rtype: Tuple of list, list, list, list
+    """
+    reviews_data = retrieve_dataset('reviews.json')
+    papers = reviews_data['paper']
+    reviews = []
+    evaluation = []
+    for paper in papers:
+        if paper['review'] is None or not paper['review']:
+            continue
+        reviews.append(paper['review'][0]['text'])
+        evaluation.append(paper['review'][0]['evaluation'])
+    return train_test_split(
+        reviews, evaluation, test_size=test_size, random_state=7)
