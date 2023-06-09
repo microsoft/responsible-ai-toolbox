@@ -7,6 +7,7 @@ import React from "react";
 
 import { Cohort } from "../Cohort/Cohort";
 import { ErrorCohort } from "../Cohort/ErrorCohort";
+import { DatasetCohort } from "../DatasetCohort";
 import {
   ICausalAnalysisData,
   ICausalWhatIfData
@@ -38,6 +39,7 @@ export interface IModelAssessmentContext {
   errorCohorts: ErrorCohort[];
   readonly baseErrorCohort: ErrorCohort;
   readonly selectedErrorCohort: ErrorCohort;
+  datasetCohorts?: DatasetCohort[];
 
   // jointDataset and modelMetadata should eventually be removed.
   // Instead, dataset and modelExplanationData should suffice.
@@ -171,6 +173,7 @@ export const defaultModelAssessmentContext: IModelAssessmentContext = {
   baseErrorCohort: {} as ErrorCohort,
   columnRanges: {},
   dataset: {} as IDataset,
+  datasetCohorts: [],
   deleteCohort: () => undefined,
   editCohort: () => undefined,
   errorCohorts: [],
