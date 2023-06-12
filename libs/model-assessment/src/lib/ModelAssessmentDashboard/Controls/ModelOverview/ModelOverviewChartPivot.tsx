@@ -181,8 +181,8 @@ export class ModelOverviewChartPivot extends React.Component<
           />
         </PivotItem>
         {!ifEnableLargeData(this.context.dataset) &&
-          (this.context.modelMetadata.modelType === ModelTypes.Binary ||
-            this.context.modelMetadata.modelType === ModelTypes.Multiclass) && (
+          (IsBinary(this.context.modelMetadata.modelType) ||
+            IsMulticlass(this.context.modelMetadata.modelType)) && (
             <PivotItem
               headerText={
                 localization.ModelAssessment.ModelOverview
