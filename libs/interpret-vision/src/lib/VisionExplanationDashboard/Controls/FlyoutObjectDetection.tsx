@@ -203,6 +203,8 @@ export class FlyoutObjectDetection extends React.Component<
       // Drawing bounding box with vott
       editor.RM.addRectRegion(oidx.toString(), gtBox, gtTagDesc);
     }
+    // editor.freeze()
+    // editor.disable();
     editor.RM.freeze();
   }
 
