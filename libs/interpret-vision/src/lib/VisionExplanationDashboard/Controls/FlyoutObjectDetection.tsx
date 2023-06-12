@@ -290,7 +290,7 @@ export class FlyoutObjectDetection extends React.Component<
     // Ensures non-null editor to close the Flyout
     if (!editorCallback) { return; }
     // Initializes vott editor & adds image to it
-    var editor = new CanvasTools.Editor(editorCallback);
+    const editor = new CanvasTools.Editor(editorCallback);
     if (this.state.item) {
       FlyoutODUtils.loadImageFromBase64(this.state.item.image, editor);
     }
