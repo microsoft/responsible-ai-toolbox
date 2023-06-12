@@ -106,5 +106,12 @@ export const fridgeObjectDetection: IDataset = {
     [0, 1, 0, 1],
     [1, 0, 1, 0],
     [0, 1, 0, 1]
+  ],
+  imageDimensions: [
+    [499, 666],
+    [499, 666],
+    [499, 666],
+    [499, 666],
+    [499, 666]
   ]
 };
