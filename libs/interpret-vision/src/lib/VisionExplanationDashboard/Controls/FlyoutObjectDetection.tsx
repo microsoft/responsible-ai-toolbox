@@ -20,7 +20,6 @@ import { FluentUIStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import * as React from "react";
 import { CanvasTools } from "vott-ct";
-import { Editor } from "vott-ct/lib/js/CanvasTools/CanvasTools.Editor";
 
 import {
   generateSelectableObjectDetectionIndexes,
@@ -34,21 +33,13 @@ import {
   explanationImage,
   explanationImageWidth
 } from "./Flyout.styles";
-import {
-  ExcessLabelLen,
-  IFlyoutProps,
-  IFlyoutState,
-  loadImageFromBase64,
-  stackTokens
-} from "./FlyoutObjectDetectionUtils";
+import * as FlyoutODUtils from "./FlyoutObjectDetectionUtils";
 
 export class FlyoutObjectDetection extends React.Component<
-  IFlyoutProps,
-  IFlyoutState
+  FlyoutODUtils.IFlyoutProps,
+  FlyoutODUtils.IFlyoutState
 > {
-  public editor!: Editor;
-  protected editorCallback?: HTMLDivElement;
-  public constructor(props: IFlyoutProps) {
+  public constructor(props: FlyoutODUtils.IFlyoutProps) {
     super(props);
     this.state = {
       item: undefined,
@@ -72,7 +63,7 @@ export class FlyoutObjectDetection extends React.Component<
     this.setState({ item, metadata, selectableObjectIndexes });
   }
 
-  public componentDidUpdate(prevProps: IFlyoutProps): void {
+  public componentDidUpdate(prevProps: FlyoutODUtils.IFlyoutProps): void {
     if (prevProps !== this.props) {
       const item = this.props.item;
       if (!item) {
@@ -112,7 +103,7 @@ export class FlyoutObjectDetection extends React.Component<
           type={PanelType.large}
           className={classNames.mainContainer}
         >
-          <Stack tokens={stackTokens.medium} horizontal>
+          <Stack tokens={FlyoutODUtils.stackTokens.medium} horizontal>
             <Stack>
               <Stack.Item>
                 <Separator className={classNames.separator} />
@@ -120,13 +111,13 @@ export class FlyoutObjectDetection extends React.Component<
               <Stack.Item>
                 <Stack
                   horizontal
-                  tokens={stackTokens.medium}
+                  tokens={FlyoutODUtils.stackTokens.medium}
                   horizontalAlign="space-around"
                   verticalAlign="center"
                 >
                   <Stack.Item>
                     <Stack
-                      tokens={stackTokens.large}
+                      tokens={FlyoutODUtils.stackTokens.large}
                       horizontalAlign="start"
                       verticalAlign="start"
                     >
@@ -244,14 +235,18 @@ export class FlyoutObjectDetection extends React.Component<
                 }
                 <Stack>
                   {!this.props.loadingExplanation[item.index][
-                    +this.state.odSelectedKey.slice(ExcessLabelLen)
+                    +this.state.odSelectedKey.slice(
+                      FlyoutODUtils.ExcessLabelLen
+                    )
                   ] ? (
                     <Stack.Item>
                       <ImageTag
                         src={`data:image/jpg;base64,${this.props.explanations
                           .get(item.index)
                           ?.get(
-                            +this.state.odSelectedKey.slice(ExcessLabelLen)
+                            +this.state.odSelectedKey.slice(
+                              FlyoutODUtils.ExcessLabelLen
+                            )
                           )}`}
                         width={explanationImageWidth}
                         style={explanationImage}
@@ -284,21 +279,20 @@ export class FlyoutObjectDetection extends React.Component<
     if (typeof item?.key === "string") {
       this.setState({ odSelectedKey: item?.key });
       if (this.state.item !== undefined) {
-        // Remove "Object: " from labels. We only want index
-        this.props.onChange(this.state.item, +item.key.slice(ExcessLabelLen));
+        this.props.onChange(
+          this.state.item,
+          +item.key.slice(FlyoutODUtils.ExcessLabelLen)
+        );
       }
     }
   };
   private readonly callbackRef = (editorCallback: HTMLDivElement): void => {
     // Ensures non-null editor to close the Flyout
-    if (!editorCallback) {
-      return;
-    }
-    // Initializes CanvasTools-vott editor
-    this.editor = new CanvasTools.Editor(editorCallback);
-    // Adds image to editor
+    if (!editorCallback) { return; }
+    // Initializes vott editor & adds image to it
+    var editor = new CanvasTools.Editor(editorCallback);
     if (this.state.item) {
-      loadImageFromBase64(this.state.item.image, this.editor);
+      FlyoutODUtils.loadImageFromBase64(this.state.item.image, editor);
     }
   };
 }
