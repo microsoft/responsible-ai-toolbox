@@ -162,12 +162,11 @@ export class FlyoutObjectDetection extends React.Component<
     // Draws bounding boxes for each predicted object
     for (const [oidx, predObject] of predictedY.entries()) {
 
-      // if (!this.props.dataset.imageDimensions) {
-      //   break;
-      // }
+      if (!this.props.dataset.imageDimensions) {
+        break;
+      }
 
-      // let [imageWidth, imageHeight] = this.props.dataset.imageDimensions[oidx];
-      let [imageWidth, imageHeight] = [499, 666];
+      let [imageWidth, imageHeight] = this.props.dataset.imageDimensions[oidx];
 
       // Creating box region
       const predBox = RegionData.BuildRectRegionData(
@@ -193,12 +192,11 @@ export class FlyoutObjectDetection extends React.Component<
     // Drawing bounding boxes for each ground truth object
     for (const [oidx, element] of trueY.entries()) {
 
-      // if (!this.props.dataset.imageDimensions) {
-      //   break;
-      // }
+      if (!this.props.dataset.imageDimensions) {
+        break;
+      }
 
-      // let [imageWidth, imageHeight] = this.props.dataset.imageDimensions[oidx];
-      let [imageWidth, imageHeight] = [499, 666];
+      let [imageWidth, imageHeight] = this.props.dataset.imageDimensions[oidx];
 
       // Creating box region
       const gtObject = element as number[]
