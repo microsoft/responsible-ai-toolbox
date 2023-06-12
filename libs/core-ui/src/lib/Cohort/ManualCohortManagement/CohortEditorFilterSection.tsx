@@ -28,6 +28,7 @@ export interface ICohortEditorFilterSectionProps {
   onOpenedFilterUpdated: (openedFilter?: IFilter) => void;
   onSelectedFilterCategoryUpdated: (selectedFilterCategory?: string) => void;
   setFilterMessage: (filtersMessage: string) => void;
+  setDefaultStateForKey: (key: string) => void;
 }
 
 export interface ICohortEditorFilterSectionState {
@@ -125,7 +126,7 @@ export class CohortEditorFilterSection extends React.PureComponent<
   ): void => {
     if (typeof item?.key === "string") {
       const property = item.key;
-      this.setDefaultStateForKey(property);
+      this.props.setDefaultStateForKey(property);
     }
   };
 
@@ -252,29 +253,6 @@ export class CohortEditorFilterSection extends React.PureComponent<
       method: this.props.openedFilter.method
     });
   };
-
-  private setDefaultStateForKey(key: string): void {
-    const filter = this.getFilterValue(key);
-    this.props.onOpenedFilterUpdated(filter);
-  }
-
-  private getFilterValue(key: string): IFilter {
-    const filter: IFilter = { column: key } as IFilter;
-    const range = this.context.columnRanges
-      ? this.context.columnRanges[key]
-      : undefined;
-    if (
-      range?.rangeType === RangeTypes.Categorical ||
-      range?.treatAsCategorical
-    ) {
-      filter.method = FilterMethods.Includes;
-      filter.arg = [...new Array(range.sortedUniqueValues.length).keys()];
-    } else {
-      filter.method = FilterMethods.LessThan;
-      filter.arg = [range?.max || Number.MAX_SAFE_INTEGER];
-    }
-    return filter;
-  }
 
   private updateFilter(filter: IFilter, index: number): void {
     const filters = [...this.props.filters];
