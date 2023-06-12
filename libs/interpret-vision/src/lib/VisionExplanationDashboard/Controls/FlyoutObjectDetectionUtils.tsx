@@ -7,36 +7,40 @@ import { localization } from "@responsible-ai/localization";
 import { Editor } from "vott-ct/lib/js/CanvasTools/CanvasTools.Editor";
 
 export interface IFlyoutProps {
-    dataset: IDataset;
-    explanations: Map<number, Map<number, string>>;
-    isOpen: boolean;
-    item: IVisionListItem | undefined;
-    loadingExplanation: boolean[][];
-    otherMetadataFieldNames: string[];
-    callback: () => void;
-    onChange: (item: IVisionListItem, index: number) => void;
-  }
-  
-  export interface IFlyoutState {
-    item: IVisionListItem | undefined;
-    metadata: Array<Array<string | number | boolean>> | undefined;
-    selectableObjectIndexes: IComboBoxOption[];
-    odSelectedKey: string;
-    editorCallback?: HTMLDivElement;
-  }
-  
-export const stackTokens = {
-large: { childrenGap: "l2" },
-medium: { childrenGap: "l1" }
-};
-export const ExcessLabelLen = localization.InterpretVision.Dashboard.prefix.length;
-
-export function loadImageFromBase64(base64String: string, editor: Editor): void { // onReady is a function/callable
-    const image = new Image();
-    image.addEventListener("load", (e) => {
-        editor.addContentSource(e.target as HTMLImageElement);
-        editor.AS.setSelectionMode(2);
-    });
-    image.src = `data:image/jpg;base64,${base64String}`;
+  dataset: IDataset;
+  explanations: Map<number, Map<number, string>>;
+  isOpen: boolean;
+  item: IVisionListItem | undefined;
+  loadingExplanation: boolean[][];
+  otherMetadataFieldNames: string[];
+  callback: () => void;
+  onChange: (item: IVisionListItem, index: number) => void;
 }
 
+export interface IFlyoutState {
+  item: IVisionListItem | undefined;
+  metadata: Array<Array<string | number | boolean>> | undefined;
+  selectableObjectIndexes: IComboBoxOption[];
+  odSelectedKey: string;
+  editorCallback?: HTMLDivElement;
+}
+
+export const stackTokens = {
+  large: { childrenGap: "l2" },
+  medium: { childrenGap: "l1" }
+};
+export const ExcessLabelLen =
+  localization.InterpretVision.Dashboard.prefix.length;
+
+export function loadImageFromBase64(
+  base64String: string,
+  editor: Editor
+): void {
+  // onReady is a function/callable
+  const image = new Image();
+  image.addEventListener("load", (e) => {
+    editor.addContentSource(e.target as HTMLImageElement);
+    editor.AS.setSelectionMode(2);
+  });
+  image.src = `data:image/jpg;base64,${base64String}`;
+}

@@ -34,7 +34,13 @@ import {
   explanationImage,
   explanationImageWidth
 } from "./Flyout.styles";
-import { ExcessLabelLen, IFlyoutProps, IFlyoutState, loadImageFromBase64, stackTokens } from "./FlyoutObjectDetectionUtils";
+import {
+  ExcessLabelLen,
+  IFlyoutProps,
+  IFlyoutState,
+  loadImageFromBase64,
+  stackTokens
+} from "./FlyoutObjectDetectionUtils";
 
 export class FlyoutObjectDetection extends React.Component<
   IFlyoutProps,
@@ -189,7 +195,7 @@ export class FlyoutObjectDetection extends React.Component<
                   <Stack.Item className={classNames.imageContainer}>
                     <Stack.Item id="canvasToolsDiv">
                       <Stack.Item id="selectionDiv">
-                          <div ref={this.callbackRef} id="editorDiv"/>
+                        <div ref={this.callbackRef} id="editorDiv" />
                       </Stack.Item>
                     </Stack.Item>
                   </Stack.Item>
