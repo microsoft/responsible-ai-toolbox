@@ -157,15 +157,24 @@ export class FlyoutObjectDetection extends React.Component<
     const predictedY : number[][] = this.props.dataset.object_detection_predicted_y[item.index];
     const trueY : number[][]  = this.props.dataset.object_detection_true_y[item.index];
 
+    // TODO: CREATE 2 FUNCTIONS!
+
     // Draws bounding boxes for each predicted object
     for (const [oidx, predObject] of predictedY.entries()) {
 
+      // if (!this.props.dataset.imageDimensions) {
+      //   break;
+      // }
+
+      // let [imageWidth, imageHeight] = this.props.dataset.imageDimensions[oidx];
+      let [imageWidth, imageHeight] = [499, 666];
+
       // Creating box region
       const predBox = RegionData.BuildRectRegionData(
-        scaleCoordinate(predObject[1], 499, frameWidth),
-        scaleCoordinate(predObject[2], 666, frameHeight),
-        scaleCoordinate(predObject[3]-predObject[1], 499, frameWidth),
-        scaleCoordinate(predObject[4]-predObject[2], 666, frameHeight)
+        scaleCoordinate(predObject[1], imageWidth, frameWidth),
+        scaleCoordinate(predObject[2], imageHeight, frameHeight),
+        scaleCoordinate(predObject[3]-predObject[1], imageWidth, frameWidth),
+        scaleCoordinate(predObject[4]-predObject[2], imageHeight, frameHeight)
       );
 
       // Retrieving label for annotation above the box
@@ -184,13 +193,20 @@ export class FlyoutObjectDetection extends React.Component<
     // Drawing bounding boxes for each ground truth object
     for (const [oidx, element] of trueY.entries()) {
 
+      // if (!this.props.dataset.imageDimensions) {
+      //   break;
+      // }
+
+      // let [imageWidth, imageHeight] = this.props.dataset.imageDimensions[oidx];
+      let [imageWidth, imageHeight] = [499, 666];
+
       // Creating box region
       const gtObject = element as number[]
       const gtBox = RegionData.BuildRectRegionData(
-        scaleCoordinate(gtObject[1], 499, frameWidth),
-        scaleCoordinate(gtObject[2], 666, frameHeight),
-        scaleCoordinate(gtObject[3]-gtObject[1], 499, frameWidth),
-        scaleCoordinate(gtObject[4]-gtObject[2], 666, frameHeight)
+        scaleCoordinate(gtObject[1], imageWidth, frameWidth),
+        scaleCoordinate(gtObject[2], imageHeight, frameHeight),
+        scaleCoordinate(gtObject[3]-gtObject[1], imageWidth, frameWidth),
+        scaleCoordinate(gtObject[4]-gtObject[2], imageHeight, frameHeight)
       );
 
       // Retrieving label for annotation above the box
