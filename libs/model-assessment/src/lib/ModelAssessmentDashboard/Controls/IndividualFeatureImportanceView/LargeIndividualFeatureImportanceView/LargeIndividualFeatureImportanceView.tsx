@@ -122,6 +122,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
             this.state.isLocalExplanationsDataLoading
           }
           setIsRevertButtonClicked={this.setIsRevertButtonClicked}
+          telemetryHook={this.props.telemetryHook}
         />
         {!this.state.isBubbleChartDataLoading && (
           <LocalImportanceChart
@@ -190,7 +191,8 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       this.state.isLocalExplanationsDataLoading,
       this.context.requestBubblePlotData,
       this.selectPointFromChartLargeData,
-      this.onBubbleClick
+      this.onBubbleClick,
+      this.props.telemetryHook
     );
     if (
       datasetBubblePlotConfigOverride &&
@@ -293,7 +295,8 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     });
     const localExplanationsData = await getLocalExplanationsFromSDK(
       absoluteIndex,
-      this.context.requestLocalExplanations
+      this.context.requestLocalExplanations,
+      this.props.telemetryHook
     );
     if (
       typeof localExplanationsData === "object" &&

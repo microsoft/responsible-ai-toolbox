@@ -16,7 +16,8 @@ import pandas as pd
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
-from raiutils.exceptions import UserConfigValidationException
+from raiutils.exceptions import (SystemErrorException,
+                                 UserConfigValidationException)
 from raiutils.models import Forecasting, ModelTask, SKLearn
 from responsibleai._interfaces import (Dataset, RAIInsightsData,
                                        TabularDatasetMetadata)
@@ -259,6 +260,14 @@ class RAIInsights(RAIBaseInsights):
         self._initialize_managers()
         self._try_add_data_balance()
 
+    def get_categorical_features_after_drop(self):
+        dropped_features = self._feature_metadata.dropped_features
+        if dropped_features is None:
+            return self.categorical_features
+        else:
+            return list(set(self.categorical_features) -
+                        set(dropped_features))
+
     def get_train_data(self):
         """Returns the training dataset after dropping
         features if any were configured to be dropped.
@@ -371,7 +380,8 @@ class RAIInsights(RAIBaseInsights):
         dropped_features = self._feature_metadata.dropped_features
         self._causal_manager = CausalManager(
             self.get_train_data(), self.get_test_data(), self.target_column,
-            self.task_type, self.categorical_features, self._feature_metadata)
+            self.task_type, self.get_categorical_features_after_drop(),
+            self._feature_metadata)
 
         self._counterfactual_manager = CounterfactualManager(
             model=self.model, train=self.get_train_data(),
@@ -393,7 +403,7 @@ class RAIInsights(RAIBaseInsights):
             self.model, self.get_train_data(), self.get_test_data(),
             self.target_column,
             self._classes,
-            categorical_features=self.categorical_features)
+            self.get_categorical_features_after_drop())
 
         self._managers = [self._causal_manager,
                           self._counterfactual_manager,
@@ -880,10 +890,11 @@ class RAIInsights(RAIBaseInsights):
             true_y = self.test[self.target_column]
 
         X_test = test_data.drop(columns=[self.target_column])
+        X_test_after_drop = self.get_test_data(X_test)
         filter_data_with_cohort = FilterDataWithCohortFilters(
             model=self.model,
-            dataset=X_test,
-            features=X_test.columns,
+            dataset=X_test_after_drop,
+            features=X_test_after_drop.columns,
             categorical_features=self.categorical_features,
             categories=self._categories,
             true_y=true_y,
@@ -1279,8 +1290,18 @@ class RAIInsights(RAIBaseInsights):
                 res_object[_MIN_VALUE] = test[col].min()
                 res_object[_MAX_VALUE] = test[col].max()
             else:
-                min_value = float(test[col].min())
-                max_value = float(test[col].max())
+                col_min = test[col].min()
+                col_max = test[col].max()
+                try:
+                    min_value = float(col_min)
+                    max_value = float(col_max)
+                except Exception as e:
+                    raise SystemErrorException(
+                        "Unable to convert min or max value "
+                        f"of feature column {col} to float. "
+                        f"min value of {col} is of type {type(col_min)} and "
+                        f"max value of {col} is of type {type(col_max)} "
+                        f"Original Excepton: {e}")
                 res_object[_RANGE_TYPE] = "integer"
                 res_object[_MIN_VALUE] = min_value
                 res_object[_MAX_VALUE] = max_value

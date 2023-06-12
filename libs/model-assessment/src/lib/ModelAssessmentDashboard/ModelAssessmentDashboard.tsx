@@ -63,6 +63,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           columnRanges: this.state.columnRanges,
           counterfactualData: this.props.counterfactualData?.[0],
           dataset: this.props.dataset,
+          datasetCohorts: this.state.datasetCohorts,
           deleteCohort: this.deleteCohort,
           editCohort: this.editCohort,
           errorAnalysisData: this.props.errorAnalysisData?.[0],
