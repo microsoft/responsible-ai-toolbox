@@ -16,7 +16,7 @@ import {
   Spinner,
   Separator
 } from "@fluentui/react";
-import { FluentUIStyles, IDataset, IVisionListItem } from "@responsible-ai/core-ui";
+import { FluentUIStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import * as React from "react";
 import { CanvasTools } from "vott-ct";
@@ -34,31 +34,8 @@ import {
   explanationImage,
   explanationImageWidth
 } from "./Flyout.styles";
+import { ExcessLabelLen, IFlyoutProps, IFlyoutState, loadImageFromBase64, stackTokens } from "./FlyoutObjectDetectionUtils";
 
-export interface IFlyoutProps {
-  dataset: IDataset;
-  explanations: Map<number, Map<number, string>>;
-  isOpen: boolean;
-  item: IVisionListItem | undefined;
-  loadingExplanation: boolean[][];
-  otherMetadataFieldNames: string[];
-  callback: () => void;
-  onChange: (item: IVisionListItem, index: number) => void;
-}
-
-export interface IFlyoutState {
-  item: IVisionListItem | undefined;
-  metadata: Array<Array<string | number | boolean>> | undefined;
-  selectableObjectIndexes: IComboBoxOption[];
-  odSelectedKey: string;
-  editorCallback?: HTMLDivElement;
-}
-
-const stackTokens = {
-  large: { childrenGap: "l2" },
-  medium: { childrenGap: "l1" }
-};
-const ExcessLabelLen = localization.InterpretVision.Dashboard.prefix.length;
 export class FlyoutObjectDetection extends React.Component<
   IFlyoutProps,
   IFlyoutState
@@ -106,15 +83,6 @@ export class FlyoutObjectDetection extends React.Component<
         selectableObjectIndexes
       });
     }
-  }
-
-  public loadImageFromBase64(base64String: string, editor: Editor): void { // onReady is a function/callable
-    const image = new Image();
-    image.addEventListener("load", (e) => {
-        editor.addContentSource(e.target as HTMLImageElement);
-        editor.AS.setSelectionMode(2);
-    });
-    image.src = `data:image/jpg;base64,${base64String}`;
   }
 
   public render(): React.ReactNode {
@@ -324,7 +292,7 @@ export class FlyoutObjectDetection extends React.Component<
     this.editor = new CanvasTools.Editor(editorCallback);
     // Adds image to editor
     if (this.state.item) {
-      this.loadImageFromBase64(this.state.item.image, this.editor);
+      loadImageFromBase64(this.state.item.image, this.editor);
     }
   };
 }
