@@ -3,7 +3,6 @@
 
 import {
   ComboBox,
-  getTheme,
   IComboBox,
   IComboBoxOption,
   Icon,
@@ -17,12 +16,10 @@ import {
   Spinner,
   Separator
 } from "@fluentui/react";
-import { FluentUIStyles, IDataset, IVisionListItem } from "@responsible-ai/core-ui";
+import { FluentUIStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import * as React from "react";
 import { CanvasTools } from "vott-ct";
-import type { Editor } from "vott-ct/lib/js/CanvasTools/CanvasTools.Editor";
-import { RegionData } from "vott-ct/lib/js/CanvasTools/Core/RegionData";
 
 import {
   generateSelectableObjectDetectionIndexes,
@@ -36,37 +33,13 @@ import {
   explanationImage,
   explanationImageWidth
 } from "./Flyout.styles";
+import * as FlyoutODUtils from "./FlyoutObjectDetectionUtils";
 
-export interface IFlyoutProps {
-  dataset: IDataset;
-  explanations: Map<number, Map<number, string>>;
-  isOpen: boolean;
-  item: IVisionListItem | undefined;
-  loadingExplanation: boolean[][];
-  otherMetadataFieldNames: string[];
-  callback: () => void;
-  onChange: (item: IVisionListItem, index: number) => void;
-}
-
-export interface IFlyoutState {
-  item: IVisionListItem | undefined;
-  metadata: Array<Array<string | number | boolean>> | undefined;
-  selectableObjectIndexes: IComboBoxOption[];
-  odSelectedKey: string;
-  imageCallback?: HTMLImageElement;
-  editorCallback?: HTMLDivElement;
-}
-
-const stackTokens = {
-  large: { childrenGap: "l2" },
-  medium: { childrenGap: "l1" }
-};
-const ExcessLabelLen = localization.InterpretVision.Dashboard.prefix.length;
 export class FlyoutObjectDetection extends React.Component<
-  IFlyoutProps,
-  IFlyoutState
+  FlyoutODUtils.IFlyoutProps,
+  FlyoutODUtils.IFlyoutState
 > {
-  public constructor(props: IFlyoutProps) {
+  public constructor(props: FlyoutODUtils.IFlyoutProps) {
     super(props);
     this.state = {
       item: undefined,
@@ -90,7 +63,7 @@ export class FlyoutObjectDetection extends React.Component<
     this.setState({ item, metadata, selectableObjectIndexes });
   }
 
-  public componentDidUpdate(prevProps: IFlyoutProps): void {
+  public componentDidUpdate(prevProps: FlyoutODUtils.IFlyoutProps): void {
     if (prevProps !== this.props) {
       const item = this.props.item;
       if (!item) {
@@ -109,112 +82,6 @@ export class FlyoutObjectDetection extends React.Component<
     }
   }
 
-  private readonly callbackRef = (editorCallback: HTMLDivElement) => (this.setState({ editorCallback }));
-
-  public loadImageFromBase64(base64String: string, editor: Editor) { // onReady is a function/callable
-    const image = new Image();
-    image.addEventListener("load", (e) => {
-        editor.addContentSource(e.target as HTMLImageElement);
-        editor.AS.setSelectionMode(2);
-    });
-    image.src = `data:image/jpg;base64,${base64String}`;
-  }
-
-  public drawBoundingBoxes(item: IVisionListItem): void {
-
-    // Stops if the div container for the canvastools editor doesn't exist
-    if (!this.state.editorCallback) {
-      return;
-    }
-    // Removes any pre-existimg images due to previous render calls
-    this.state.editorCallback.innerHTML = "";
-
-    // Initializes CanvasTools-vott editor
-    const editor = new CanvasTools.Editor(this.state.editorCallback);
-
-    const [frameWidth, frameHeight] = editor.getFrameSize;
-    const scaleCoordinate = (coordinate: number, imageDim: number, frameDim: number): number => coordinate / imageDim * frameDim;
-
-    // Adds image to editor
-    this.loadImageFromBase64(item.image, editor);
-
-    // Initialize color constants
-    const Color = CanvasTools.Core.Colors.Color;
-    const theme = getTheme();
-
-    // Ensuring object detection labels are populated
-    if (!this.props.dataset.object_detection_predicted_y
-        || !this.props.dataset.object_detection_true_y
-        || !this.props.dataset.class_names) {
-      return;
-    }
-
-    // Retrieving labels for the image in the Flyout
-    const predictedY : number[][] = this.props.dataset.object_detection_predicted_y[item.index];
-    const trueY : number[][]  = this.props.dataset.object_detection_true_y[item.index];
-
-    // TODO: CREATE 2 FUNCTIONS!
-
-    // Draws bounding boxes for each predicted object
-    for (const [oidx, predObject] of predictedY.entries()) {
-
-      if (!this.props.dataset.imageDimensions) {
-        break;
-      }
-
-      let [imageWidth, imageHeight] = this.props.dataset.imageDimensions[oidx];
-
-      // Creating box region
-      const predBox = RegionData.BuildRectRegionData(
-        scaleCoordinate(predObject[1], imageWidth, frameWidth),
-        scaleCoordinate(predObject[2], imageHeight, frameHeight),
-        scaleCoordinate(predObject[3]-predObject[1], imageWidth, frameWidth),
-        scaleCoordinate(predObject[4]-predObject[2], imageHeight, frameHeight)
-      );
-
-      // Retrieving label for annotation above the box
-      const className = this.props.dataset.class_names[predObject[0]-1];
-      const confidenceScore = (predObject[5] * 100).toFixed(2);
-
-      // Initializing bounding box tag
-      const predTag = new CanvasTools.Core.Tag(`${oidx  }.${className  }(${  confidenceScore  }%)`, // Object(95%)
-                                               new Color(theme.palette.magenta)); // TODO: change color contrast!
-      const predTagDesc = new CanvasTools.Core.TagsDescriptor([predTag]);
-
-      // Drawing bounding box with vott
-      editor.RM.addRectRegion(oidx.toString(), predBox, predTagDesc);
-    }
-
-    // Drawing bounding boxes for each ground truth object
-    for (const [oidx, element] of trueY.entries()) {
-
-      if (!this.props.dataset.imageDimensions) {
-        break;
-      }
-
-      let [imageWidth, imageHeight] = this.props.dataset.imageDimensions[oidx];
-
-      // Creating box region
-      const gtObject = element as number[]
-      const gtBox = RegionData.BuildRectRegionData(
-        scaleCoordinate(gtObject[1], imageWidth, frameWidth),
-        scaleCoordinate(gtObject[2], imageHeight, frameHeight),
-        scaleCoordinate(gtObject[3]-gtObject[1], imageWidth, frameWidth),
-        scaleCoordinate(gtObject[4]-gtObject[2], imageHeight, frameHeight)
-      );
-
-      // Retrieving label for annotation above the box
-      const className = this.props.dataset.class_names[gtObject[0]-1]
-
-      // Initializing bounding box tag
-      const gtTag = new CanvasTools.Core.Tag(className, new Color(theme.palette.magentaDark)) // Object(95%)
-      const gtTagDesc = new CanvasTools.Core.TagsDescriptor([gtTag]);
-
-      // Drawing bounding box with vott
-      editor.RM.addRectRegion(oidx.toString(), gtBox, gtTagDesc);
-    }
-  }
-
   public render(): React.ReactNode {
     const { isOpen } = this.props;
     const item = this.state.item;
@@ -224,8 +91,6 @@ export class FlyoutObjectDetection extends React.Component<
     const classNames = flyoutStyles();
     const predictedY = getJoinedLabelString(item?.predictedY);
     const trueY = getJoinedLabelString(item?.trueY);
-
-    this.drawBoundingBoxes(item);
 
     return (
       <FocusZone>
@@ -238,7 +103,7 @@ export class FlyoutObjectDetection extends React.Component<
           type={PanelType.large}
           className={classNames.mainContainer}
         >
-          <Stack tokens={stackTokens.medium} horizontal>
+          <Stack tokens={FlyoutODUtils.stackTokens.medium} horizontal>
             <Stack>
               <Stack.Item>
                 <Separator className={classNames.separator} />
@@ -246,13 +111,13 @@ export class FlyoutObjectDetection extends React.Component<
               <Stack.Item>
                 <Stack
                   horizontal
-                  tokens={stackTokens.medium}
+                  tokens={FlyoutODUtils.stackTokens.medium}
                   horizontalAlign="space-around"
                   verticalAlign="center"
                 >
                   <Stack.Item>
                     <Stack
-                      tokens={stackTokens.large}
+                      tokens={FlyoutODUtils.stackTokens.large}
                       horizontalAlign="start"
                       verticalAlign="start"
                     >
@@ -321,7 +186,7 @@ export class FlyoutObjectDetection extends React.Component<
                   <Stack.Item className={classNames.imageContainer}>
                     <Stack.Item id="canvasToolsDiv">
                       <Stack.Item id="selectionDiv">
-                          <div ref={this.callbackRef} id="editorDiv"/>
+                        <div ref={this.callbackRef} id="editorDiv" />
                       </Stack.Item>
                     </Stack.Item>
                   </Stack.Item>
@@ -370,14 +235,18 @@ export class FlyoutObjectDetection extends React.Component<
                 }
                 <Stack>
                   {!this.props.loadingExplanation[item.index][
-                    +this.state.odSelectedKey.slice(ExcessLabelLen)
+                    +this.state.odSelectedKey.slice(
+                      FlyoutODUtils.ExcessLabelLen
+                    )
                   ] ? (
                     <Stack.Item>
                       <ImageTag
                         src={`data:image/jpg;base64,${this.props.explanations
                           .get(item.index)
                           ?.get(
-                            +this.state.odSelectedKey.slice(ExcessLabelLen)
+                            +this.state.odSelectedKey.slice(
+                              FlyoutODUtils.ExcessLabelLen
+                            )
                           )}`}
                         width={explanationImageWidth}
                         style={explanationImage}
@@ -410,9 +279,26 @@ export class FlyoutObjectDetection extends React.Component<
     if (typeof item?.key === "string") {
       this.setState({ odSelectedKey: item?.key });
       if (this.state.item !== undefined) {
-        // Remove "Object: " from labels. We only want index
-        this.props.onChange(this.state.item, +item.key.slice(ExcessLabelLen));
+        this.props.onChange(
+          this.state.item,
+          +item.key.slice(FlyoutODUtils.ExcessLabelLen)
+        );
       }
     }
+  };
+  private readonly callbackRef = (editorCallback: HTMLDivElement): void => {
+    // Ensures non-null editor to close the Flyout
+    if (!editorCallback) {
+      return;
+    }
+    const editor = new CanvasTools.Editor(editorCallback);
+    const loadImage = async (): Promise<void> => {
+      if (this.state.item) {
+        // this.state.item.image is base64 encoded string
+        await FlyoutODUtils.loadImageFromBase64(this.state.item.image, editor);
+        FlyoutODUtils.drawBoundingBoxes(this.state.item, editorCallback, editor, this.props.dataset);
+      }
+    };
+    loadImage();
   };
 }
