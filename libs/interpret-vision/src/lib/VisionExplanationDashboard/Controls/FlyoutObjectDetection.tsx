@@ -292,8 +292,12 @@ export class FlyoutObjectDetection extends React.Component<
       return;
     }
     const editor = new CanvasTools.Editor(editorCallback);
-    if (this.state.item) {
-      FlyoutODUtils.loadImageFromBase64(this.state.item.image, editor);
-    }
+    const loadImage = async () => {
+      if (this.state.item) {
+        await FlyoutODUtils.loadImageFromBase64(this.state.item.image, editor);
+      }
+    };
+    loadImage();
   };
+  // eslint-disable-next-line max-lines
 }

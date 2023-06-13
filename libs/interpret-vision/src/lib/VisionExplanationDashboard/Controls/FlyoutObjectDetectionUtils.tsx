@@ -35,12 +35,17 @@ export const ExcessLabelLen =
 export function loadImageFromBase64(
   base64String: string,
   editor: Editor
-): void {
-  // onReady is a function/callable
-  const image = new Image();
-  image.addEventListener("load", (e) => {
-    editor.addContentSource(e.target as HTMLImageElement);
-    editor.AS.setSelectionMode(2);
-  });
-  image.src = `data:image/jpg;base64,${base64String}`;
+): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.addEventListener("load", (e) => {
+        editor.addContentSource(e.target as HTMLImageElement);
+        editor.AS.setSelectionMode(2);
+        resolve(image);
+      });
+    image.onerror = () => {
+        reject(new Error("Failed to load image"))
+    };
+    image.src = `data:image/jpg;base64,${base64String}`;
+  })
 }
