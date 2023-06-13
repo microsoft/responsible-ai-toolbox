@@ -84,7 +84,7 @@ export class FlyoutObjectDetection extends React.Component<
 
   public render(): React.ReactNode {
     const { isOpen } = this.props;
-    const item = this.props.item; // state.item is undefined during 1st execution
+    const item = this.state.item;
     if (!item) {
       return <div />;
     }
