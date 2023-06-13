@@ -6,8 +6,10 @@ import { FluentUIStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import * as React from "react";
 import { CanvasTools } from "vott-ct";
+
 import * as FlyoutStyles from "../utils/FlyoutUtils";
 import { getJoinedLabelString } from "../utils/labelUtils";
+
 import {
   flyoutStyles,
   explanationImage,
@@ -112,7 +114,9 @@ export class FlyoutObjectDetection extends React.Component<
                         horizontalAlign="center"
                         verticalAlign="center"
                       >
-                        <FluentUI.Stack.Item className={classNames.iconContainer}>
+                        <FluentUI.Stack.Item
+                          className={classNames.iconContainer}
+                        >
                           <FluentUI.Icon
                             iconName={
                               predictedY !== trueY ? "Cancel" : "Checkmark"
@@ -189,7 +193,9 @@ export class FlyoutObjectDetection extends React.Component<
                     {localization.InterpretVision.Dashboard.panelInformation}
                   </FluentUI.Text>
                 </FluentUI.Stack.Item>
-                <FluentUI.Stack.Item className={classNames.featureListContainer}>
+                <FluentUI.Stack.Item
+                  className={classNames.featureListContainer}
+                >
                   <FluentUI.List
                     items={this.state.metadata}
                     onRenderCell={FlyoutStyles.onRenderCell}
