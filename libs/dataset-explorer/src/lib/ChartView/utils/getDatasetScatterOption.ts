@@ -25,6 +25,9 @@ export function getDatasetScatterOption(
           headerFormat: "",
           pointFormat: "{point.customData.template}"
         }
+      },
+      series: {
+        turboThreshold: 0
       }
     },
     series: dataSeries,
