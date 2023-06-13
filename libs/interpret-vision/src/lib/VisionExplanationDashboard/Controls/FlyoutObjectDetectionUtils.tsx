@@ -43,9 +43,9 @@ export function loadImageFromBase64(
         editor.AS.setSelectionMode(2);
         resolve(image);
       });
-    image.onerror = () => {
+    image.addEventListener("error", () => {
         reject(new Error("Failed to load image"))
-    };
+    });
     image.src = `data:image/jpg;base64,${base64String}`;
   })
 }
