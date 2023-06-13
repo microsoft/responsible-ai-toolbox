@@ -118,9 +118,6 @@ export class FlyoutObjectDetection extends React.Component<
         editor.AS.setSelectionMode(2);
     });
     image.src = `data:image/jpg;base64,${base64String}`;
-    // image.onload = () => {
-    //   return [image.naturalWidth, image.naturalHeight];
-    // }
   }
 
   public drawBoundingBoxes(item: IVisionListItem): void {
@@ -134,7 +131,6 @@ export class FlyoutObjectDetection extends React.Component<
 
     // Initializes CanvasTools-vott editor
     const editor = new CanvasTools.Editor(this.state.editorCallback);
-    editor.RM.freeze();
 
     const [frameWidth, frameHeight] = editor.getFrameSize;
     const scaleCoordinate = (coordinate: number, imageDim: number, frameDim: number): number => coordinate / imageDim * frameDim;
@@ -217,7 +213,6 @@ export class FlyoutObjectDetection extends React.Component<
       // Drawing bounding box with vott
       editor.RM.addRectRegion(oidx.toString(), gtBox, gtTagDesc);
     }
-    editor.RM.freeze();
   }
 
   public render(): React.ReactNode {
