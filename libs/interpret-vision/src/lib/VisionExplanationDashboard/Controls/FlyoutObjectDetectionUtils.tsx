@@ -6,6 +6,7 @@ import { IDataset, IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { CanvasTools } from "vott-ct";
 import { Editor } from "vott-ct/lib/js/CanvasTools/CanvasTools.Editor";
+import { Color } from "vott-ct/lib/js/CanvasTools/Core/Colors/Color";
 import { RegionData } from "vott-ct/lib/js/CanvasTools/Core/RegionData";
 
 export interface IFlyoutProps {
@@ -52,6 +53,40 @@ export function loadImageFromBase64(
   });
 }
 
+export function drawBox(
+    editor: Editor,
+    dataset: IDataset,
+    imageDim: [number, number],
+    objectLabel: number[],
+    annotation: string,
+    colorCode: string,
+    boxId: string
+): void {
+    if (!dataset.imageDimensions) {
+    return;
+    }
+
+    const [frameWidth, frameHeight] = editor.getFrameSize;
+    const [imageWidth, imageHeight] = imageDim;
+    const scaleCoordinate = (coordinate: number, imageDim: number, frameDim: number): number => coordinate / imageDim * frameDim;
+
+    // Creating box region
+    const predBox = RegionData.BuildRectRegionData(
+        scaleCoordinate(objectLabel[1], imageWidth, frameWidth),
+        scaleCoordinate(objectLabel[2], imageHeight, frameHeight),
+        scaleCoordinate(objectLabel[3]-objectLabel[1], imageWidth, frameWidth),
+        scaleCoordinate(objectLabel[4]-objectLabel[2], imageHeight, frameHeight)
+    );
+
+    // Initializing bounding box tag
+    const predTag = new CanvasTools.Core.Tag(annotation, // Object(95%)
+                                            new Color(colorCode)); // TODO: change color contrast!
+    const predTagDesc = new CanvasTools.Core.TagsDescriptor([predTag]);
+
+    // Drawing bounding box with vott
+    editor.RM.addRectRegion(boxId, predBox, predTagDesc);
+}
+
 export function drawBoundingBoxes(
     item: IVisionListItem,
     editorCallback: HTMLDivElement,
@@ -64,11 +99,6 @@ export function drawBoundingBoxes(
       return;
     }
 
-    const [frameWidth, frameHeight] = editor.getFrameSize;
-    const scaleCoordinate = (coordinate: number, imageDim: number, frameDim: number): number => coordinate / imageDim * frameDim;
-
-    // Initialize color constants
-    const Color = CanvasTools.Core.Colors.Color;
     const theme = getTheme();
 
     // Ensuring object detection labels are populated
@@ -82,7 +112,18 @@ export function drawBoundingBoxes(
     const predictedY : number[][] = dataset.object_detection_predicted_y[item.index];
     const trueY : number[][]  = dataset.object_detection_true_y[item.index];
 
-    // TODO: CREATE 2 FUNCTIONS!
+    // Drawing bounding boxes for each ground truth object
+    for (const [oidx, gtObject] of trueY.entries()) {
+
+        if (!dataset.imageDimensions) {
+            break;
+        }
+
+        // Retrieving label for annotation above the box
+        const annotation: string = dataset.class_names[gtObject[0]-1];
+
+        drawBox(editor, dataset, dataset.imageDimensions[oidx], gtObject, annotation, theme.palette.green, oidx.toString());
+      }
 
     // Draws bounding boxes for each predicted object
     for (const [oidx, predObject] of predictedY.entries()) {
@@ -91,55 +132,11 @@ export function drawBoundingBoxes(
         break;
       }
 
-      let [imageWidth, imageHeight] = dataset.imageDimensions[oidx];
-
-      // Creating box region
-      const predBox = RegionData.BuildRectRegionData(
-        scaleCoordinate(predObject[1], imageWidth, frameWidth),
-        scaleCoordinate(predObject[2], imageHeight, frameHeight),
-        scaleCoordinate(predObject[3]-predObject[1], imageWidth, frameWidth),
-        scaleCoordinate(predObject[4]-predObject[2], imageHeight, frameHeight)
-      );
-
       // Retrieving label for annotation above the box
-      const className = dataset.class_names[predObject[0]-1];
-      const confidenceScore = (predObject[5] * 100).toFixed(2);
+      const className: string = dataset.class_names[predObject[0]-1];
+      const confidenceScore: string = (predObject[5] * 100).toFixed(2);
+      const annotation: string = `${oidx  }.${className  }(${  confidenceScore  }%)`;
 
-      // Initializing bounding box tag
-      const predTag = new CanvasTools.Core.Tag(`${oidx  }.${className  }(${  confidenceScore  }%)`, // Object(95%)
-                                               new Color(theme.palette.magenta)); // TODO: change color contrast!
-      const predTagDesc = new CanvasTools.Core.TagsDescriptor([predTag]);
-
-      // Drawing bounding box with vott
-      editor.RM.addRectRegion(oidx.toString(), predBox, predTagDesc);
-    }
-
-    // Drawing bounding boxes for each ground truth object
-    for (const [oidx, element] of trueY.entries()) {
-
-      if (!dataset.imageDimensions) {
-        break;
-      }
-
-      let [imageWidth, imageHeight] = dataset.imageDimensions[oidx];
-
-      // Creating box region
-      const gtObject = element as number[]
-      const gtBox = RegionData.BuildRectRegionData(
-        scaleCoordinate(gtObject[1], imageWidth, frameWidth),
-        scaleCoordinate(gtObject[2], imageHeight, frameHeight),
-        scaleCoordinate(gtObject[3]-gtObject[1], imageWidth, frameWidth),
-        scaleCoordinate(gtObject[4]-gtObject[2], imageHeight, frameHeight)
-      );
-
-      // Retrieving label for annotation above the box
-      const className = dataset.class_names[gtObject[0]-1]
-
-      // Initializing bounding box tag
-      const gtTag = new CanvasTools.Core.Tag(className, new Color(theme.palette.magentaDark)) // Object(95%)
-      const gtTagDesc = new CanvasTools.Core.TagsDescriptor([gtTag]);
-
-      // Drawing bounding box with vott
-      editor.RM.addRectRegion(oidx.toString(), gtBox, gtTagDesc);
+      drawBox(editor, dataset, dataset.imageDimensions[oidx], predObject, annotation, theme.palette.magenta, oidx.toString());
     }
   }
