@@ -15,9 +15,7 @@
       "rules": {}
     },
     {
-      "files": [
-        "FlyoutObjectDetection.tsx"
-      ],
+      "files": ["FlyoutObjectDetection.tsx"],
       "rules": {
         "max-lines": "warn"
       }

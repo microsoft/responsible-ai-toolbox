@@ -39,13 +39,13 @@ export function loadImageFromBase64(
   return new Promise((resolve, reject) => {
     const image = new Image();
     image.addEventListener("load", (e) => {
-        editor.addContentSource(e.target as HTMLImageElement);
-        editor.AS.setSelectionMode(2);
-        resolve(image);
-      });
+      editor.addContentSource(e.target as HTMLImageElement);
+      editor.AS.setSelectionMode(2);
+      resolve(image);
+    });
     image.addEventListener("error", () => {
-        reject(new Error("Failed to load image"))
+      reject(new Error("Failed to load image"));
     });
     image.src = `data:image/jpg;base64,${base64String}`;
-  })
+  });
 }
