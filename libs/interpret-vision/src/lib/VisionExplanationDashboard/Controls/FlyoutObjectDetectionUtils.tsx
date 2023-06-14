@@ -79,8 +79,8 @@ export function drawBox(
     );
 
     // Initializing bounding box tag
-    const predTag = new CanvasTools.Core.Tag(annotation, // Object(95%)
-                                            new Color(colorCode)); // TODO: change color contrast!
+    const predTag = new CanvasTools.Core.Tag(annotation,
+                                            new Color(colorCode));
     const predTagDesc = new CanvasTools.Core.TagsDescriptor([predTag]);
 
     // Drawing bounding box with vott
@@ -135,7 +135,7 @@ export function drawBoundingBoxes(
       // Retrieving label for annotation above the box
       const className: string = dataset.class_names[predObject[0]-1];
       const confidenceScore: string = (predObject[5] * 100).toFixed(2);
-      const annotation: string = `${oidx  }.${className  }(${  confidenceScore  }%)`;
+      const annotation = `${oidx  }.${className  }(${  confidenceScore  }%)`;
 
       drawBox(editor, dataset, dataset.imageDimensions[oidx], predObject, annotation, theme.palette.magenta, oidx.toString());
     }
