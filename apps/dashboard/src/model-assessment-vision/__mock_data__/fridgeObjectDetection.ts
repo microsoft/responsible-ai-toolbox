@@ -16,6 +16,13 @@ export const fridgeObjectDetection: IDataset = {
     [92.000130390912],
     [95.33849179841164]
   ],
+  imageDimensions: [
+    [499, 666],
+    [499, 666],
+    [499, 666],
+    [499, 666],
+    [499, 666]
+  ],
   images: fridgeObjectDetectionImages,
   object_detection_predicted_y: [
     [
@@ -106,12 +113,5 @@ export const fridgeObjectDetection: IDataset = {
     [0, 1, 0, 1],
     [1, 0, 1, 0],
     [0, 1, 0, 1]
-  ],
-  imageDimensions: [
-    [499, 666],
-    [499, 666],
-    [499, 666],
-    [499, 666],
-    [499, 666]
   ]
 };

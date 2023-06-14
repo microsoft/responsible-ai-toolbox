@@ -56,6 +56,7 @@ export function loadImageFromBase64(
 export function drawBox(
     editor: Editor,
     dataset: IDataset,
+    scaleFactor: (coordinate: number, imageScale: number, frameScale: number) => number,
     imageDim: [number, number],
     objectLabel: number[],
     annotation: string,
@@ -68,14 +69,13 @@ export function drawBox(
 
     const [frameWidth, frameHeight] = editor.getFrameSize;
     const [imageWidth, imageHeight] = imageDim;
-    const scaleCoordinate = (coordinate: number, imageDim: number, frameDim: number): number => coordinate / imageDim * frameDim;
 
     // Creating box region
     const predBox = RegionData.BuildRectRegionData(
-        scaleCoordinate(objectLabel[1], imageWidth, frameWidth),
-        scaleCoordinate(objectLabel[2], imageHeight, frameHeight),
-        scaleCoordinate(objectLabel[3]-objectLabel[1], imageWidth, frameWidth),
-        scaleCoordinate(objectLabel[4]-objectLabel[2], imageHeight, frameHeight)
+        scaleFactor(objectLabel[1], imageWidth, frameWidth),
+        scaleFactor(objectLabel[2], imageHeight, frameHeight),
+        scaleFactor(objectLabel[3]-objectLabel[1], imageWidth, frameWidth),
+        scaleFactor(objectLabel[4]-objectLabel[2], imageHeight, frameHeight)
     );
 
     // Initializing bounding box tag
@@ -112,6 +112,8 @@ export function drawBoundingBoxes(
     const predictedY : number[][] = dataset.object_detection_predicted_y[item.index];
     const trueY : number[][]  = dataset.object_detection_true_y[item.index];
 
+    const scaleCoordinate = (coordinate: number, imageDim: number, frameDim: number): number => coordinate / imageDim * frameDim;
+
     // Drawing bounding boxes for each ground truth object
     for (const [oidx, gtObject] of trueY.entries()) {
 
@@ -122,7 +124,7 @@ export function drawBoundingBoxes(
         // Retrieving label for annotation above the box
         const annotation: string = dataset.class_names[gtObject[0]-1];
 
-        drawBox(editor, dataset, dataset.imageDimensions[oidx], gtObject, annotation, theme.palette.green, oidx.toString());
+        drawBox(editor, dataset, scaleCoordinate, dataset.imageDimensions[oidx], gtObject, annotation, theme.palette.green, oidx.toString());
       }
 
     // Draws bounding boxes for each predicted object
@@ -137,6 +139,6 @@ export function drawBoundingBoxes(
       const confidenceScore: string = (predObject[5] * 100).toFixed(2);
       const annotation = `${oidx  }.${className  }(${  confidenceScore  }%)`;
 
-      drawBox(editor, dataset, dataset.imageDimensions[oidx], predObject, annotation, theme.palette.magenta, oidx.toString());
+      drawBox(editor, dataset, scaleCoordinate, dataset.imageDimensions[oidx], predObject, annotation, theme.palette.magenta, oidx.toString());
     }
   }
