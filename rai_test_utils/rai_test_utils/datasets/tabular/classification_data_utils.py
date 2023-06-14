@@ -157,9 +157,11 @@ def create_multiclass_classification_dataset(
                                                         y,
                                                         test_size=0.2,
                                                         random_state=0)
+    feature_names = ["col" + str(i) for i in list(range(x_train.shape[1]))]
     classes = np.unique(y_train).tolist()
 
-    return pd.DataFrame(x_train), y_train, pd.DataFrame(x_test), y_test, \
+    return pd.DataFrame(x_train, columns=feature_names), y_train, \
+        pd.DataFrame(x_test, columns=feature_names), y_test, \
         classes
 
 
