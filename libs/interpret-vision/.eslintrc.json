@@ -13,12 +13,6 @@
     {
       "files": ["*.js", "*.jsx"],
       "rules": {}
-    },
-    {
-      "files": ["FlyoutObjectDetection.tsx"],
-      "rules": {
-        "max-lines": "warn"
-      }
     }
   ]
 }
