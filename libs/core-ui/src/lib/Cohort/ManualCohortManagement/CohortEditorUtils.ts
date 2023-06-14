@@ -78,37 +78,7 @@ export function translateToLegacyFilters(
   return legacyFilters;
 }
 
-function translateToLegacyFilter(
-  filter: IFilter,
-  featureNames: string[]
-): IFilter | undefined {
-  const column = filter.column;
-  if (column === DatasetCohortColumns.Index) {
-    return translateFilter(filter, JointDataset.IndexLabel);
-  }
-  if (column === DatasetCohortColumns.PredictedY) {
-    return translateFilter(filter, JointDataset.PredictedYLabel);
-  }
-  if (column === DatasetCohortColumns.TrueY) {
-    return translateFilter(filter, JointDataset.TrueYLabel);
-  }
-  if (column === DatasetCohortColumns.ClassificationError) {
-    return translateFilter(filter, JointDataset.ClassificationError);
-  }
-  if (column === DatasetCohortColumns.RegressionError) {
-    return translateFilter(filter, JointDataset.RegressionError);
-  }
-  const index = featureNames.findIndex((item) => item === column);
-  if (index > -1) {
-    return translateFilter(
-      filter,
-      JointDataset.DataLabelRoot + index.toString()
-    );
-  }
-  return undefined;
-}
-
-function translateToNewFilter(
+export function translateToNewFilter(
   legacyFilter: IFilter,
   featureNames?: string[]
 ): IFilter | undefined {
@@ -135,6 +105,36 @@ function translateToNewFilter(
   }
   if (legacyColumn === JointDataset.RegressionError) {
     return translateFilter(legacyFilter, DatasetCohortColumns.RegressionError);
+  }
+  return undefined;
+}
+
+function translateToLegacyFilter(
+  filter: IFilter,
+  featureNames: string[]
+): IFilter | undefined {
+  const column = filter.column;
+  if (column === DatasetCohortColumns.Index) {
+    return translateFilter(filter, JointDataset.IndexLabel);
+  }
+  if (column === DatasetCohortColumns.PredictedY) {
+    return translateFilter(filter, JointDataset.PredictedYLabel);
+  }
+  if (column === DatasetCohortColumns.TrueY) {
+    return translateFilter(filter, JointDataset.TrueYLabel);
+  }
+  if (column === DatasetCohortColumns.ClassificationError) {
+    return translateFilter(filter, JointDataset.ClassificationError);
+  }
+  if (column === DatasetCohortColumns.RegressionError) {
+    return translateFilter(filter, JointDataset.RegressionError);
+  }
+  const index = featureNames.findIndex((item) => item === column);
+  if (index > -1) {
+    return translateFilter(
+      filter,
+      JointDataset.DataLabelRoot + index.toString()
+    );
   }
   return undefined;
 }
