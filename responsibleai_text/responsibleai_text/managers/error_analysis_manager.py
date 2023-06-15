@@ -9,15 +9,15 @@ from typing import Any, List, Optional, Union
 import jsonschema
 import numpy as np
 import pandas as pd
+from ml_wrappers import wrap_model
+
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.error_report import as_error_report
-from ml_wrappers import wrap_model
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.managers.error_analysis_manager import \
     ErrorAnalysisManager as BaseErrorAnalysisManager
 from responsibleai.managers.error_analysis_manager import as_error_config
-
 from responsibleai_text.common.constants import ModelTask
 from responsibleai_text.utils.feature_extractors import get_text_columns
 
@@ -37,7 +37,7 @@ def _concat_labels_column(dataset, target_column, classes):
     :rtype: list
     """
     labels = []
-    for index, row in dataset[target_column].iterrows():
+    for _, row in dataset[target_column].iterrows():
         row_idxs = range(len(row))
         pred_classes = [classes[i] for i in row_idxs if row[i]]
         labels.append(','.join(pred_classes))
@@ -67,12 +67,15 @@ class WrappedIndexPredictorModel:
         self.classes = classes
         self.is_multilabel = is_multilabel
         self.task_type = task_type
-        if self.task_type in [ModelTask.TEXT_CLASSIFICATION, ModelTask.MULTILABEL_TEXT_CLASSIFICATION]:
+        classif_tasks = [ModelTask.TEXT_CLASSIFICATION,
+                         ModelTask.MULTILABEL_TEXT_CLASSIFICATION]
+        if self.task_type in classif_tasks:
             dataset = self.dataset.iloc[:, 0].tolist()
             self.predictions = self.model.predict(dataset)
             self.predict_proba = self.model.predict_proba(dataset)
         elif self.task_type == ModelTask.QUESTION_ANSWERING:
-            self.predictions = self.model.predict(self.dataset.loc[:, ['context', 'questions']])
+            self.predictions = self.model.predict(
+                self.dataset.loc[:, ['context', 'questions']])
             self.predictions = np.array(self.predictions)
         else:
             raise ValueError("Unknown task type: {}".format(self.task_type))

@@ -9,9 +9,9 @@ from typing import List, Optional, Union
 import pandas as pd
 import spacy
 from negspacy.termsets import termset
-from nlp_feature_extractors import attribute_extractors as exts
 from tqdm import tqdm
 
+from nlp_feature_extractors import attribute_extractors as exts
 from responsibleai_text.common.constants import (ModelTask,
                                                  QuestionAnsweringFields)
 
@@ -85,12 +85,16 @@ def extract_features(text_dataset: pd.DataFrame,
         for i, row in tqdm(text_features.iterrows()):
             extracted_features = []
             add_extracted_features_for_sentence(
-                row[QuestionAnsweringFields.CONTEXT], extracted_features, task_type)
+                row[QuestionAnsweringFields.CONTEXT], extracted_features,
+                task_type)
             add_extracted_features_for_sentence(
-                row[QuestionAnsweringFields.QUESTIONS], extracted_features, task_type, sentence_type="QUESTION")
+                row[QuestionAnsweringFields.QUESTIONS], extracted_features,
+                task_type, sentence_type="QUESTION")
 
-            context_overlap = get_context_overlap(context=row[QuestionAnsweringFields.CONTEXT],
-                                                  question=row[QuestionAnsweringFields.QUESTIONS])
+            context = row[QuestionAnsweringFields.CONTEXT]
+            question = row[QuestionAnsweringFields.QUESTIONS]
+            context_overlap = get_context_overlap(context=context,
+                                                  question=question)
             extracted_features.append(context_overlap)
             # append all other metadata features
             append_metadata_values(start_meta_index, text_dataset, i,
@@ -157,7 +161,8 @@ def get_text_columns(text_dataset: pd.DataFrame,
     return text_dataset
 
 
-def add_extracted_features_for_sentence(sentence, extracted_features, task_type=None, sentence_type=None):
+def add_extracted_features_for_sentence(sentence, extracted_features,
+                                        task_type=None, sentence_type=None):
     """Add the extracted features for a sentence.
 
     Note this also modifies the input array in-place.
@@ -213,11 +218,12 @@ def get_question_type(qtext):
     :return: The question type.
     :rtype: str
     """
-    if re.search(r'\b\A(can|could|will|would|have|has|do|does|did|is|are|was|may|might)\s',
-                 qtext, re.I):
+    if re.search(r'\b\A(can|could|will|would|have|has' +
+                 r'|do|does|did|is|are|was|may|might)\s', qtext, re.I):
         return "YES/NO"
     elif re.search(r'\b\A(what|which)(\'s|\'re)?\s+(\w+)', qtext, re.I):
-        nextword = re.search(r'\b\A(what|which)(\'s|\'re)?\s+(\w+)', qtext, re.I).group(3)
+        nextword = re.search(r'\b\A(what|which)(\'s|\'re)?\s+(\w+)',
+                             qtext, re.I).group(3)
         if nextword in ["year", "month", "date", "day"]:
             return "WHEN"
         else:
@@ -229,14 +235,16 @@ def get_question_type(qtext):
     elif re.search(r'\bwhere(\'s|\'re)?\s', qtext, re.I):
         return "WHERE"
     elif re.search(r'\bhow(\'s|\'re)?\s', qtext, re.I):
-        nextword = re.search(r'\b(how)(\'s|\'re)?\s(\w+)', qtext, re.I).group(3)
+        nextword = re.search(r'\b(how)(\'s|\'re)?\s(\w+)',
+                             qtext, re.I).group(3)
         if nextword in ["many", "much", "long", "old", "often"]:
             return "NUMBER"
         else:
             return "HOW"
     elif re.search(r'\bwhen(\'s|\'re)?\s', qtext, re.I):
         return "WHEN"
-    elif re.search(r'\b(in|on|at|by|for|to|from|during|within)\s+(what|which)\s+(year|month|day|date|time)\s',
+    elif re.search(r'\b(in|on|at|by|for|to|from|during|within)' +
+                   r'\s+(what|which)\s+(year|month|day|date|time)\s',
                    qtext, re.I):
         return "WHEN"
     elif re.search(r'\bto\swhom\s', qtext, re.I):
@@ -273,7 +281,7 @@ def get_average_depth(doc):
 
     parse_tree_depths = [get_parse_tree_depth(root) for root in roots]
 
-    return sum(parse_tree_depths)/len(parse_tree_depths)
+    return sum(parse_tree_depths) / len(parse_tree_depths)
 
 
 def get_max_depth(doc):
@@ -289,6 +297,17 @@ def get_max_depth(doc):
         roots.append([token for token in each if token.head == token][0])
 
     return max([get_parse_tree_depth(root) for root in roots])
+
+
+def is_base_token(token):
+    """Check if the token is a base token.
+
+    :param token: The token.
+    :type token: spacy.tokens.token.Token
+    :return: True if the token is a base token, False otherwise.
+    :rtype: bool
+    """
+    return not token.is_stop and not token.is_punct
 
 
 def get_context_overlap(context, question):
@@ -309,12 +328,12 @@ def get_context_overlap(context, question):
     doc_c = nlp(context)
 
     # get tokens in base form
-    tokens_q = set([token.lemma_ for token in doc_q if not token.is_stop and not token.is_punct])
-    tokens_c = set([token.lemma_ for token in doc_c if not token.is_stop and not token.is_punct])
+    tokens_q = set([token.lemma_ for token in doc_q if is_base_token(token)])
+    tokens_c = set([token.lemma_ for token in doc_c if is_base_token(token)])
 
     intersection = tokens_q.intersection(tokens_c)
 
-    # the size of the intersection token set /  the size of the question token set
+    # size of intersection token set / size of question token set
     overlap_ratio = len(intersection) / len(tokens_q)
 
     return round(overlap_ratio, 3)

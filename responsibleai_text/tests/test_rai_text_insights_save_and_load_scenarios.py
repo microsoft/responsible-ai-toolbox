@@ -15,9 +15,9 @@ from common_text_utils import (COVID19_EVENTS_LABELS, EMOTION,
                                load_covid19_emergency_event_dataset,
                                load_emotion_dataset)
 from rai_text_insights_validator import validate_rai_text_insights
+
 from responsibleai._internal.constants import ManagerNames
 from responsibleai.feature_metadata import FeatureMetadata
-
 from responsibleai_text import ModelTask, RAITextInsights
 
 
