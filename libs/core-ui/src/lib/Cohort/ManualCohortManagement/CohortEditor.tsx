@@ -215,15 +215,17 @@ export class CohortEditor extends React.PureComponent<
         this.state.filters,
         featureNames
       );
-      const newDatasetCohort = new DatasetCohort(
-        this.state.cohortName,
-        this.context.dataset,
-        this.state.filters,
-        this.state.compositeFilters,
-        this.context.modelType,
-        this.context.columnRanges,
-        CohortSource.ManuallyCreated
-      );
+      const newDatasetCohort = this.props.isFromExplanation
+        ? undefined
+        : new DatasetCohort(
+            this.state.cohortName,
+            this.context.dataset,
+            this.state.filters,
+            this.state.compositeFilters,
+            this.context.modelType,
+            this.context.columnRanges,
+            CohortSource.ManuallyCreated
+          );
       const newCohort = new Cohort(
         this.state.cohortName,
         this.props.jointDataset,
