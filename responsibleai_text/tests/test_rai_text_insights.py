@@ -10,8 +10,8 @@ from common_text_utils import (ANSWERS, BLBOOKS_LABEL, COVID19_EVENTS_LABELS,
                                load_covid19_emergency_event_dataset,
                                load_emotion_dataset, load_squad_dataset)
 from rai_text_insights_validator import validate_rai_text_insights
-from responsibleai.feature_metadata import FeatureMetadata
 
+from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai_text import ModelTask, RAITextInsights
 
 
