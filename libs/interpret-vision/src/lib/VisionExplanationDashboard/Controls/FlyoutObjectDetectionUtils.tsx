@@ -90,6 +90,7 @@ export function drawBox(
   editor.RM.addRectRegion(boxId, predBox, predTagDesc);
 }
 
+// Scales the box coordinate for correct relative position in the CanvasTools frame
 export const scaleCoordinate = (
   coordinate: number,
   imageDim: number,
@@ -128,9 +129,10 @@ export function drawBoundingBoxes(
     if (!dataset.imageDimensions) {
       break;
     }
+    const objectLabelIndex = gtObject[0] - 1;
 
     // Retrieving label for annotation above the box
-    const annotation: string = dataset.class_names[gtObject[0] - 1];
+    const annotation: string = dataset.class_names[objectLabelIndex];
 
     drawBox(
       editor,
@@ -149,9 +151,10 @@ export function drawBoundingBoxes(
     if (!dataset.imageDimensions) {
       break;
     }
+    const objectLabelIndex = predObject[0] - 1;
 
     // Retrieving label for annotation above the box
-    const className: string = dataset.class_names[predObject[0] - 1];
+    const className: string = dataset.class_names[objectLabelIndex];
     const confidenceScore: string = (predObject[5] * 100).toFixed(2);
     const annotation = `${oidx}.${className}(${confidenceScore}%)`;
 
