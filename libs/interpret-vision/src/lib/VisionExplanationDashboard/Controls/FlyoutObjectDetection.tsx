@@ -278,7 +278,6 @@ export class FlyoutObjectDetection extends React.Component<
     }
   };
   private readonly callbackRef = (editorCallback: HTMLDivElement): void => {
-    // Ensures non-null editor to close the Flyout
     if (!editorCallback) {
       return;
     }
@@ -287,7 +286,12 @@ export class FlyoutObjectDetection extends React.Component<
       if (this.state.item) {
         // this.state.item.image is base64 encoded string
         await FlyoutODUtils.loadImageFromBase64(this.state.item.image, editor);
-        FlyoutODUtils.drawBoundingBoxes(this.state.item, editorCallback, editor, this.props.dataset);
+        FlyoutODUtils.drawBoundingBoxes(
+          this.state.item,
+          editorCallback,
+          editor,
+          this.props.dataset
+        );
       }
     };
     loadImage();

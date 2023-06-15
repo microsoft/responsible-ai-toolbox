@@ -54,91 +54,116 @@ export function loadImageFromBase64(
 }
 
 export function drawBox(
-    editor: Editor,
-    dataset: IDataset,
-    scaleFactor: (coordinate: number, imageScale: number, frameScale: number) => number,
-    imageDim: [number, number],
-    objectLabel: number[],
-    annotation: string,
-    colorCode: string,
-    boxId: string
+  editor: Editor,
+  dataset: IDataset,
+  scaleFactor: (
+    coordinate: number,
+    imageScale: number,
+    frameScale: number
+  ) => number,
+  imageDim: [number, number],
+  objectLabel: number[],
+  annotation: string,
+  colorCode: string,
+  boxId: string
 ): void {
-    if (!dataset.imageDimensions) {
+  if (!dataset.imageDimensions) {
     return;
-    }
+  }
 
-    const [frameWidth, frameHeight] = editor.getFrameSize;
-    const [imageWidth, imageHeight] = imageDim;
+  const [frameWidth, frameHeight] = editor.getFrameSize;
+  const [imageWidth, imageHeight] = imageDim;
 
-    // Creating box region
-    const predBox = RegionData.BuildRectRegionData(
-        scaleFactor(objectLabel[1], imageWidth, frameWidth),
-        scaleFactor(objectLabel[2], imageHeight, frameHeight),
-        scaleFactor(objectLabel[3]-objectLabel[1], imageWidth, frameWidth),
-        scaleFactor(objectLabel[4]-objectLabel[2], imageHeight, frameHeight)
-    );
+  // Creating box region
+  const predBox = RegionData.BuildRectRegionData(
+    scaleFactor(objectLabel[1], imageWidth, frameWidth),
+    scaleFactor(objectLabel[2], imageHeight, frameHeight),
+    scaleFactor(objectLabel[3] - objectLabel[1], imageWidth, frameWidth),
+    scaleFactor(objectLabel[4] - objectLabel[2], imageHeight, frameHeight)
+  );
 
-    // Initializing bounding box tag
-    const predTag = new CanvasTools.Core.Tag(annotation,
-                                            new Color(colorCode));
-    const predTagDesc = new CanvasTools.Core.TagsDescriptor([predTag]);
+  // Initializing bounding box tag
+  const predTag = new CanvasTools.Core.Tag(annotation, new Color(colorCode));
+  const predTagDesc = new CanvasTools.Core.TagsDescriptor([predTag]);
 
-    // Drawing bounding box with vott
-    editor.RM.addRectRegion(boxId, predBox, predTagDesc);
+  // Drawing bounding box with vott
+  editor.RM.addRectRegion(boxId, predBox, predTagDesc);
 }
 
+export const scaleCoordinate = (
+  coordinate: number,
+  imageDim: number,
+  frameDim: number
+): number => (coordinate / imageDim) * frameDim;
+
 export function drawBoundingBoxes(
-    item: IVisionListItem,
-    editorCallback: HTMLDivElement,
-    editor: Editor,
-    dataset: IDataset
-    ): void {
-
-    // Stops if the div container for the canvastools editor doesn't exist
-    if (!editorCallback) {
-      return;
-    }
-
-    const theme = getTheme();
-
-    // Ensuring object detection labels are populated
-    if (!dataset.object_detection_predicted_y
-        || !dataset.object_detection_true_y
-        || !dataset.class_names) {
-      return;
-    }
-
-    // Retrieving labels for the image in the Flyout
-    const predictedY : number[][] = dataset.object_detection_predicted_y[item.index];
-    const trueY : number[][]  = dataset.object_detection_true_y[item.index];
-
-    const scaleCoordinate = (coordinate: number, imageDim: number, frameDim: number): number => coordinate / imageDim * frameDim;
-
-    // Drawing bounding boxes for each ground truth object
-    for (const [oidx, gtObject] of trueY.entries()) {
-
-        if (!dataset.imageDimensions) {
-            break;
-        }
-
-        // Retrieving label for annotation above the box
-        const annotation: string = dataset.class_names[gtObject[0]-1];
-
-        drawBox(editor, dataset, scaleCoordinate, dataset.imageDimensions[oidx], gtObject, annotation, theme.palette.green, oidx.toString());
-      }
-
-    // Draws bounding boxes for each predicted object
-    for (const [oidx, predObject] of predictedY.entries()) {
-
-      if (!dataset.imageDimensions) {
-        break;
-      }
-
-      // Retrieving label for annotation above the box
-      const className: string = dataset.class_names[predObject[0]-1];
-      const confidenceScore: string = (predObject[5] * 100).toFixed(2);
-      const annotation = `${oidx  }.${className  }(${  confidenceScore  }%)`;
-
-      drawBox(editor, dataset, scaleCoordinate, dataset.imageDimensions[oidx], predObject, annotation, theme.palette.magenta, oidx.toString());
-    }
+  item: IVisionListItem,
+  editorCallback: HTMLDivElement,
+  editor: Editor,
+  dataset: IDataset
+): void {
+  // Stops if the div container for the canvastools editor doesn't exist
+  if (!editorCallback) {
+    return;
   }
+
+  const theme = getTheme();
+
+  // Ensuring object detection labels are populated
+  if (
+    !dataset.object_detection_predicted_y ||
+    !dataset.object_detection_true_y ||
+    !dataset.class_names
+  ) {
+    return;
+  }
+
+  // Retrieving labels for the image in the Flyout
+  const predictedY: number[][] =
+    dataset.object_detection_predicted_y[item.index];
+  const trueY: number[][] = dataset.object_detection_true_y[item.index];
+
+  // Drawing bounding boxes for each ground truth object
+  for (const [oidx, gtObject] of trueY.entries()) {
+    if (!dataset.imageDimensions) {
+      break;
+    }
+
+    // Retrieving label for annotation above the box
+    const annotation: string = dataset.class_names[gtObject[0] - 1];
+
+    drawBox(
+      editor,
+      dataset,
+      scaleCoordinate,
+      dataset.imageDimensions[oidx],
+      gtObject,
+      annotation,
+      theme.palette.green,
+      oidx.toString()
+    );
+  }
+
+  // Draws bounding boxes for each predicted object
+  for (const [oidx, predObject] of predictedY.entries()) {
+    if (!dataset.imageDimensions) {
+      break;
+    }
+
+    // Retrieving label for annotation above the box
+    const className: string = dataset.class_names[predObject[0] - 1];
+    const confidenceScore: string = (predObject[5] * 100).toFixed(2);
+    const annotation = `${oidx}.${className}(${confidenceScore}%)`;
+
+    drawBox(
+      editor,
+      dataset,
+      scaleCoordinate,
+      dataset.imageDimensions[oidx],
+      predObject,
+      annotation,
+      theme.palette.magenta,
+      oidx.toString()
+    );
+  }
+}
