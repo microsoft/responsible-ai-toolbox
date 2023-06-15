@@ -25,6 +25,7 @@ import { ModelOverviewMetricChart } from "./ModelOverviewMetricChart";
 import { ProbabilityDistributionChart } from "./ProbabilityDistributionChart";
 import { RegressionDistributionChart } from "./RegressionDistributionChart";
 import { getSelectableMetrics } from "./StatsTableUtils";
+import { AUCChart } from "./AUCChart";
 
 interface IModelOverviewChartPivotProps {
   allCohorts: ErrorCohort[];
@@ -121,6 +122,7 @@ export class ModelOverviewChartPivot extends React.Component<
           return element.text;
         })
     );
+    console.log(this.props.selectedMetrics);
 
     return (
       <Pivot
@@ -190,6 +192,17 @@ export class ModelOverviewChartPivot extends React.Component<
               }
             >
               <ConfusionMatrixHeatmap />
+            </PivotItem>
+          )}
+        {!ifEnableLargeData(this.context.dataset) &&
+          (IsBinary(this.context.modelMetadata.modelType) ||
+            IsMulticlass(this.context.modelMetadata.modelType)) && (
+            <PivotItem
+              headerText={
+                localization.ModelAssessment.ModelOverview.AUCPivotItem
+              }
+            >
+              <AUCChart />
             </PivotItem>
           )}
       </Pivot>

@@ -1818,6 +1818,7 @@
       "regressionDistributionPivotItem": "Target distribution",
       "metricsVisualizationsPivotItem": "Metrics visualizations",
       "confusionMatrixPivotItem": "Confusion matrix",
+      "AUCPivotItem": "AUC Chart",
       "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the feature-based analysis.",
       "tableCountTooltip": "Cohort {0} contains {1} instances.",
       "tableMetricTooltip": "The model's {0} on cohort {1} is {2}",

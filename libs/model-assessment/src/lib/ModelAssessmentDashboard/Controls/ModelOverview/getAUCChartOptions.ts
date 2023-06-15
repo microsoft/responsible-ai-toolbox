@@ -4,7 +4,7 @@
 import { ITheme } from "@fluentui/react";
 import { SeriesOptionsType } from "highcharts";
 
-import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
+import { IHighchartsConfig } from "@responsible-ai/core-ui";
 
 export function getAUCChartOptions(
   data: SeriesOptionsType[],

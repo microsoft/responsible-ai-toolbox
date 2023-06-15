@@ -3,7 +3,6 @@
 
 import { Text } from "@fluentui/react";
 import {
-  AUCChart,
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
@@ -39,7 +38,6 @@ export class ModelPerformanceTab extends React.PureComponent<ModelPerformanceTab
           </Text>
         </div>
         <OverallMetricChart />
-        <AUCChart />
       </div>
     );
   }
