@@ -13,8 +13,9 @@ from typing import Any, List, Optional, Union
 
 import numpy as np
 import pandas as pd
-from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from ml_wrappers import wrap_model
+
+from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from raiutils.data_processing import convert_to_list, serialize_json_safe
 from raiutils.models import SKLearn, is_classifier
 from responsibleai._interfaces import Dataset, RAIInsightsData
@@ -23,7 +24,6 @@ from responsibleai._internal.constants import (ManagerNames, Metadata,
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
-
 from responsibleai_text.common.constants import ModelTask
 from responsibleai_text.managers.error_analysis_manager import \
     ErrorAnalysisManager
@@ -373,7 +373,8 @@ class RAITextInsights(RAIBaseInsights):
             if task_type == ModelTask.QUESTION_ANSWERING.value:
                 if not isinstance(text_column, list):
                     raise UserConfigValidationException(
-                        'The text_column should be a list for question answering')
+                        'The text_column should be a list for question ' +
+                        'answering')
                 text_columns_set = set(text_column)
                 if not text_columns_set.issubset(set(test.columns)):
                     raise UserConfigValidationException(
@@ -756,7 +757,16 @@ class RAITextInsights(RAIBaseInsights):
         return inst
 
     def normalize_text(self, s):
-        """Removing articles and punctuation, and standardizing whitespace are all typical text processing steps."""
+        """Normalize the text.
+
+        Removing articles and punctuation, and standardizing whitespace
+        are all typical text processing steps.
+
+        :param s: The text to normalize.
+        :type s: str
+        :return: The normalized text.
+        :rtype: str
+        """
         import re
         import string
 
@@ -780,7 +790,8 @@ class RAITextInsights(RAIBaseInsights):
         pred_tokens = self.normalize_text(prediction).split()
         truth_tokens = self.normalize_text(truth).split()
 
-        # if either the prediction or the truth is no-answer then f1 = 1 if they agree, 0 otherwise
+        # if either the prediction or the truth is no-answer
+        # then f1 = 1 if they agree, 0 otherwise
         if len(pred_tokens) == 0 or len(truth_tokens) == 0:
             return int(pred_tokens == truth_tokens)
 
@@ -807,23 +818,30 @@ class RAITextInsights(RAIBaseInsights):
                                   in cohort_indices]
             f1_score = []
             for cohort_index in cohort_indices:
-                f1_score.append(self.compute_f1(predicted_y[cohort_index], true_y[cohort_index]))
+                f1_score.append(self.compute_f1(predicted_y[cohort_index],
+                                                true_y[cohort_index]))
             try:
                 exact_match = evaluate.load('exact_match')
-                exact_match_results = exact_match.compute(predictions=predicted_y_cohort, references=true_y_cohort)
+                exact_match_results = exact_match.compute(
+                    predictions=predicted_y_cohort, references=true_y_cohort)
                 rouge = evaluate.load('rouge')
-                rouge_results = rouge.compute(predictions=predicted_y_cohort, references=true_y_cohort)
+                rouge_results = rouge.compute(
+                    predictions=predicted_y_cohort, references=true_y_cohort)
                 bleu = evaluate.load('bleu')
-                bleu_results = bleu.compute(predictions=predicted_y_cohort, references=true_y_cohort)
+                bleu_results = bleu.compute(
+                    predictions=predicted_y_cohort, references=true_y_cohort)
                 meteor = evaluate.load('meteor')
-                meteor_results = meteor.compute(predictions=predicted_y_cohort, references=true_y_cohort)
+                meteor_results = meteor.compute(
+                    predictions=predicted_y_cohort, references=true_y_cohort)
                 bert_score = evaluate.load('bertscore')
-                bert_score_results = bert_score.compute(predictions=predicted_y_cohort, references=true_y_cohort,
-                                                        model_type="distilbert-base-uncased")
+                bert_score_results = bert_score.compute(
+                    predictions=predicted_y_cohort, references=true_y_cohort,
+                    model_type="distilbert-base-uncased")
                 bert_f1_score = np.mean(bert_score_results['f1'])
-                all_cohort_metrics.append([exact_match_results['exact_match'], np.mean(f1_score),
-                                           meteor_results['meteor'], bleu_results['bleu'], bert_f1_score,
-                                           rouge_results['rougeL']])
+                all_cohort_metrics.append(
+                    [exact_match_results['exact_match'], np.mean(f1_score),
+                     meteor_results['meteor'], bleu_results['bleu'],
+                     bert_f1_score, rouge_results['rougeL']])
             except ValueError:
                 all_cohort_metrics.append([0, 0, 0, 0, 0, 0])
         return all_cohort_metrics

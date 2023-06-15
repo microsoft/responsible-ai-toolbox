@@ -12,6 +12,7 @@ from typing import Any, List, Optional
 import numpy as np
 import pandas as pd
 import shap
+
 from raiutils.data_processing import convert_to_list
 from responsibleai._interfaces import (FeatureImportance, ModelExplanationData,
                                        PrecomputedExplanations,
@@ -23,7 +24,6 @@ from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.managers.base_manager import BaseManager
-
 from responsibleai_text.common.constants import (ModelTask,
                                                  QuestionAnsweringFields,
                                                  Tokens)

@@ -6,10 +6,10 @@ import zipfile
 
 import datasets
 import pandas as pd
-from raiutils.common.retries import retry_function
 from transformers import (AutoModelForSequenceClassification, AutoTokenizer,
                           pipeline)
 
+from raiutils.common.retries import retry_function
 from responsibleai_text.common.constants import QuestionAnsweringFields
 
 try:
