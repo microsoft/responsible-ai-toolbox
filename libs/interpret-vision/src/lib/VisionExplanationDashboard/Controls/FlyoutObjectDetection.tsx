@@ -284,7 +284,14 @@ export class FlyoutObjectDetection extends React.Component<
     const editor = new CanvasTools.Editor(editorCallback);
     const loadImage = async (): Promise<void> => {
       if (this.state.item) {
+        // this.state.item.image is base64 encoded string
         await FlyoutODUtils.loadImageFromBase64(this.state.item.image, editor);
+        FlyoutODUtils.drawBoundingBoxes(
+          this.state.item,
+          editorCallback,
+          editor,
+          this.props.dataset
+        );
       }
     };
     loadImage();
