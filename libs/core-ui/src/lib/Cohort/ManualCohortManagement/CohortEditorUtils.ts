@@ -88,23 +88,19 @@ export function translateToNewFilter(
     const newColumn = featureNames[Number(index)];
     return translateFilter(legacyFilter, newColumn);
   }
-  if (legacyColumn === JointDataset.IndexLabel) {
-    return translateFilter(legacyFilter, DatasetCohortColumns.Index);
-  }
-  if (legacyColumn === JointDataset.PredictedYLabel) {
-    return translateFilter(legacyFilter, DatasetCohortColumns.PredictedY);
-  }
-  if (legacyColumn === JointDataset.TrueYLabel) {
-    return translateFilter(legacyFilter, DatasetCohortColumns.TrueY);
-  }
-  if (legacyColumn === JointDataset.ClassificationError) {
-    return translateFilter(
-      legacyFilter,
+  const columnMap = new Map<string, string>([
+    [JointDataset.IndexLabel, DatasetCohortColumns.Index],
+    [JointDataset.PredictedYLabel, DatasetCohortColumns.PredictedY],
+    [JointDataset.TrueYLabel, DatasetCohortColumns.TrueY],
+    [
+      JointDataset.ClassificationError,
       DatasetCohortColumns.ClassificationError
-    );
-  }
-  if (legacyColumn === JointDataset.RegressionError) {
-    return translateFilter(legacyFilter, DatasetCohortColumns.RegressionError);
+    ],
+    [JointDataset.RegressionError, DatasetCohortColumns.RegressionError]
+  ]);
+  if (columnMap.has(legacyColumn)) {
+    const label = columnMap.get(legacyColumn);
+    return label ? translateFilter(legacyFilter, label) : undefined;
   }
   return undefined;
 }
@@ -114,20 +110,19 @@ function translateToLegacyFilter(
   featureNames: string[]
 ): IFilter | undefined {
   const column = filter.column;
-  if (column === DatasetCohortColumns.Index) {
-    return translateFilter(filter, JointDataset.IndexLabel);
-  }
-  if (column === DatasetCohortColumns.PredictedY) {
-    return translateFilter(filter, JointDataset.PredictedYLabel);
-  }
-  if (column === DatasetCohortColumns.TrueY) {
-    return translateFilter(filter, JointDataset.TrueYLabel);
-  }
-  if (column === DatasetCohortColumns.ClassificationError) {
-    return translateFilter(filter, JointDataset.ClassificationError);
-  }
-  if (column === DatasetCohortColumns.RegressionError) {
-    return translateFilter(filter, JointDataset.RegressionError);
+  const columnMap = new Map<string, string>([
+    [DatasetCohortColumns.Index, JointDataset.IndexLabel],
+    [DatasetCohortColumns.PredictedY, JointDataset.PredictedYLabel],
+    [DatasetCohortColumns.TrueY, JointDataset.TrueYLabel],
+    [
+      DatasetCohortColumns.ClassificationError,
+      JointDataset.ClassificationError
+    ],
+    [DatasetCohortColumns.RegressionError, JointDataset.RegressionError]
+  ]);
+  if (columnMap.has(column)) {
+    const label = columnMap.get(column);
+    return label ? translateFilter(filter, label) : undefined;
   }
   const index = featureNames.findIndex((item) => item === column);
   if (index > -1) {
