@@ -191,36 +191,26 @@ class TestRAIInsightsValidations:
                 categorical_features=['not_a_feature'])
 
     def test_validate_multi_classification_continuous_target_column(self):
-        train_data = {
+        raw_data = {
             'Column1': [10, 20, 90, 40, 50],
             'Column2': [10, 20, 90, 40, 50],
             'Target': [.1, .2, .9, .4, .5]
         }
-        train = pd.DataFrame(train_data)
-
-        test_data = {
-            'Column1': [10, 20, 100, 40, 50],
-            'Column2': [10, 20, 90, 40, 50],
-            'Target': [.1, .2, .9, .4, .5]
-        }
-        test = pd.DataFrame(test_data)
-        X_train = train.drop(columns=['Target'])
-        y_train = train['Target'].values
-        X_test = test.drop(columns=['Target'])
-        y_test = test['Target'].values
-
-        model = create_lightgbm_classifier(X_train, y_train)
-        X_train[TARGET] = y_train
-        X_test[TARGET] = y_test
+        data = pd.DataFrame(raw_data)
+        X_data = data.drop(columns=['Target'])
+        X_data[TARGET]= data['Target'].values
+        # use valid target data to create the model
+        y_train = np.array([1, 1, 2, 0, 1])
+        model = create_lightgbm_classifier(X_data, y_train)
 
         with pytest.raises(
                 UserConfigValidationException,
                 match="Target column type must not "
-                        "be continuous for multiclass scenario"):
+                "be continuous for multiclass scenario"):
             RAIInsights(
                 model=model,
-                train=X_train,
-                test=X_test,
+                train=X_data,
+                test=X_data,
                 target_column=TARGET,
                 task_type='classification')
 
