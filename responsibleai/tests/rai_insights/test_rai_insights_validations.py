@@ -199,6 +199,7 @@ class TestRAIInsightsValidations:
         data = pd.DataFrame(raw_data)
         X_data = data.drop(columns=['Target'])
         X_data[TARGET]= data['Target'].values
+
         # use valid target data to create the model
         y_train = np.array([1, 1, 2, 0, 1])
         model = create_lightgbm_classifier(X_data, y_train)

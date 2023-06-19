@@ -571,11 +571,10 @@ class RAIInsights(RAIBaseInsights):
         is_multiclass = len(np.unique(
             train[target_column].values).tolist()) > 2
         if (is_multiclass and task_type == ModelTask.CLASSIFICATION and
-            train[target_column].dtype == "float64"):
+                train[target_column].dtype == "float64"):
             raise UserConfigValidationException(
                 "Target column type must not be continuous "
                 "for multiclass scenario")
-
         # Check if any features exist that are not numeric, datetime, or
         # categorical.
         train_features = train.drop(columns=[target_column]).columns
