@@ -24,22 +24,20 @@ A dedicated Flask endpoint `requestObjectDetectionMetrics` is triggered by the d
 
 This python module contains the implementation for the surfaced metrics (Mean Average Precision, Average Precision, and Average Recall) - Mean-Average-Precision (mAP) — PyTorch-Metrics 0.11.4 documentation (torchmetrics.readthedocs.io)
 
-
 ### Endpoint:
 
 Typescript: requestObjectDetectionMetrics
 Python: compute_object_detection_metrics
 
-| Input | Type |
-| :-----------: | :------------: |
-| Selection indexes | 2D list with each list <br> specifying indices of the images <br> included in that cohort |
-| Aggregate Method (egs - ‘Macro’, ‘Micro’) |    Value 5     |
-| Class name |    str     |
-| IoU threshold |    float     |
+|                   Input                   |                                           Type                                            |
+| :---------------------------------------: | :---------------------------------------------------------------------------------------: |
+|             Selection indexes             | 2D list with each list <br> specifying indices of the images <br> included in that cohort |
+| Aggregate Method (egs - ‘Macro’, ‘Micro’) |                                          Value 5                                          |
+|                Class name                 |                                            str                                            |
+|               IoU threshold               |                                           float                                           |
 
-| Output | Type |
-| :-----------: | :------------: |
+|                    Output                     |                                          Type                                          |
+| :-------------------------------------------: | :------------------------------------------------------------------------------------: |
 | Metrics as displayed in the <br> below table. | 2D List (where each <br> list has cohort-based metrics <br> [MAP, class-AP, class-AR]) |
 
 The metrics function on the python side is defined in `responsibleai_dashboard_input.py` and invoked in `responsibleai_dashboard.py`.
-
