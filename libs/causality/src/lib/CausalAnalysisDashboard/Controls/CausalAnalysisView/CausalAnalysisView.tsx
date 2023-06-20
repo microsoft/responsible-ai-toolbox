@@ -180,7 +180,7 @@ export class CausalAnalysisView extends React.PureComponent<
     return globalCausalEffects?.sort((d1, d2) => d2.point - d1.point);
   }
 
-  private getPolicyElement(): any {
+  private getPolicyElement(): React.ReactNode {
     if (!this.state.isCausalPolicyDataLoading) {
       return (
         <TreatmentView
