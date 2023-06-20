@@ -23,7 +23,9 @@ export interface ICohortBasedComponentState {
   cohorts: ErrorCohort[];
   selectedCohort: ErrorCohort;
   jointDataset: JointDataset;
+  baseDatasetCohort?: DatasetCohort;
   datasetCohorts?: DatasetCohort[];
+  selectedDatasetCohort?: DatasetCohort;
 }
 
 export abstract class CohortBasedComponent<
