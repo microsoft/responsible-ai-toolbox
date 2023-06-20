@@ -838,7 +838,9 @@
       "rowIndex": "Row index",
       "absoluteIndex": "Absolute index",
       "xValue": "X-value",
-      "yValue": "Y-value"
+      "yValue": "Y-value",
+      "Ideal": "Ideal",
+      "Random": "Random"
     },
     "Cohort": {
       "_cohort.comment": "a subset of the data is called a cohort",

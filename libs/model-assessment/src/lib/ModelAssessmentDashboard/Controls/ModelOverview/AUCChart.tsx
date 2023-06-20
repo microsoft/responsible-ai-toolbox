@@ -13,9 +13,10 @@ import {
   BasicHighChart,
   ErrorCohort,
   FluentUIStyles,
+  ILabeledStatistic,
   ITelemetryEvent,
   ModelAssessmentContext,
-  // calculateAUCData,
+  calculateAUCData,
   defaultModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -25,6 +26,7 @@ import { getAUCChartOptions } from "./getAUCChartOptions";
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 
 interface IAUCChartProps {
+  cohortStats: ILabeledStatistic[][];
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
@@ -36,13 +38,12 @@ export class AUCChart extends React.PureComponent<
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
-  // public constructor(props: Record<string, never> = {}) {
-  //   super(props);
-
-  //   this.state = {
-  //     selectedCohort: 0
-  //   };
-  // }
+  public constructor(props: IAUCChartProps) {
+    super(props);
+    this.state = {
+      selectedCohort: 0
+    };
+  }
   public render(): React.ReactNode {
     const theme = getTheme();
     const classNames = modelOverviewChartStyles();
@@ -57,29 +58,25 @@ export class AUCChart extends React.PureComponent<
     if (this.context.dataset.true_y.length !== yLength) {
       return React.Fragment;
     }
-    // const allData = calculateAUCData(
-    //   this.state.selectedCohort ?? 0,
-    //   this.context
-    // );
-    const plotData = getAUCChartOptions([], theme);
+    const allData = calculateAUCData(this.props.cohortStats);
+    const plotData = getAUCChartOptions(allData, theme);
 
-    // let selectedCohort = this.context.errorCohorts.find(
-    //   (errorCohort) =>
-    //     errorCohort.cohort.getCohortID() === this.state.selectedCohort
-    // );
-    // if (selectedCohort === undefined) {
-    //   // if previously selected cohort does not exist use globally selected cohort
-    //   selectedCohort = this.context.errorCohorts[0];
-    // }
+    let selectedCohort = this.context.errorCohorts.find(
+      (errorCohort) =>
+        errorCohort.cohort.getCohortID() === this.state.selectedCohort
+    );
+    if (selectedCohort === undefined) {
+      // if previously selected cohort does not exist use globally selected cohort
+      selectedCohort = this.context.baseErrorCohort;
+    }
     const aucLocString = localization.ModelAssessment.ModelOverview.AUCChart;
-    console.log(aucLocString.aucCohortSelectionLabel);
     return (
       <Stack id="modelOverviewAUCChart">
         <StackItem className={classNames.dropdown}>
           <ComboBox
             id="AUCCohortDropdown"
             label={aucLocString.aucCohortSelectionLabel}
-            selectedKey={0}
+            selectedKey={selectedCohort.cohort.getCohortID()}
             options={this.context.errorCohorts.map(
               (errorCohort: ErrorCohort) => {
                 return {
