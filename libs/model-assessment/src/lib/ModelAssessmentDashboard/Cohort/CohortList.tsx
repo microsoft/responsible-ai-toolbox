@@ -11,6 +11,7 @@ import {
 import {
   Cohort,
   CohortEditor,
+  DatasetCohort,
   defaultModelAssessmentContext,
   ErrorCohort,
   getCohortFilterCount,
@@ -200,8 +201,12 @@ export class CohortList extends React.Component<
     return allItems;
   }
 
-  private saveEditedCohort = (cohort: Cohort, switchNew?: boolean): void => {
-    this.context.editCohort(cohort, switchNew);
+  private saveEditedCohort = (
+    cohort: Cohort,
+    datasetCohort?: DatasetCohort,
+    switchNew?: boolean
+  ): void => {
+    this.context.editCohort(cohort, datasetCohort, switchNew);
     this.toggleEditPanel();
   };
 

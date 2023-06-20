@@ -40,6 +40,8 @@ export interface IModelAssessmentContext {
   readonly baseErrorCohort: ErrorCohort;
   readonly selectedErrorCohort: ErrorCohort;
   datasetCohorts?: DatasetCohort[];
+  readonly baseDatasetCohort?: DatasetCohort;
+  readonly selectedDatasetCohort?: DatasetCohort;
 
   // jointDataset and modelMetadata should eventually be removed.
   // Instead, dataset and modelExplanationData should suffice.
@@ -162,8 +164,16 @@ export interface IModelAssessmentContext {
     abortSignal: AbortSignal
   ) => Promise<number[]>;
   shiftErrorCohort(cohort: ErrorCohort): void;
-  addCohort(cohort: Cohort, switchNew?: boolean): void;
-  editCohort(cohort: Cohort, switchNew?: boolean): void;
+  addCohort(
+    cohort: Cohort,
+    datasetCohort?: DatasetCohort,
+    switchNew?: boolean
+  ): void;
+  editCohort(
+    cohort: Cohort,
+    datasetCohort?: DatasetCohort,
+    switchNew?: boolean
+  ): void;
   deleteCohort(cohort: ErrorCohort): void;
   setAsCategorical?(column: string, treatAsCategorical: boolean): void;
 }

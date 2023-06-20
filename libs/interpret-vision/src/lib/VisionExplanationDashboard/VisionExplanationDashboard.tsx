@@ -155,6 +155,7 @@ export class VisionExplanationDashboard extends React.Component<
   public addCohortWrapper = (name: string, switchCohort: boolean): void => {
     this.context.addCohort(
       getCohort(name, this.state.selectedIndices, this.context.jointDataset),
+      undefined,
       switchCohort
     );
   };
