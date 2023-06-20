@@ -1,33 +1,51 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getTheme } from "@fluentui/react";
-import { PointOptionsObject, SeriesOptionsType } from "highcharts";
+import {
+  ComboBox,
+  IComboBox,
+  IComboBoxOption,
+  Stack,
+  StackItem,
+  getTheme
+} from "@fluentui/react";
+import {
+  BasicHighChart,
+  ErrorCohort,
+  FluentUIStyles,
+  ITelemetryEvent,
+  ModelAssessmentContext,
+  // calculateAUCData,
+  defaultModelAssessmentContext
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-import {
-  ModelAssessmentContext,
-  defaultModelAssessmentContext
-} from "../../../../../../core-ui/src/lib/Context/ModelAssessmentContext";
-import { BasicHighChart } from "../../../../../../core-ui/src/lib/Highchart/BasicHighChart";
 import { getAUCChartOptions } from "./getAUCChartOptions";
-import { ITelemetryEvent } from "../../../../../../core-ui/src/lib/util/ITelemetryEvent";
-// import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
-import { JointDataset, calculateAUCData } from "@responsible-ai/core-ui";
+import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 
 interface IAUCChartProps {
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
-export class AUCChart extends React.PureComponent<IAUCChartProps> {
+export class AUCChart extends React.PureComponent<
+  IAUCChartProps,
+  { selectedCohort?: number }
+> {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
+  // public constructor(props: Record<string, never> = {}) {
+  //   super(props);
+
+  //   this.state = {
+  //     selectedCohort: 0
+  //   };
+  // }
   public render(): React.ReactNode {
     const theme = getTheme();
-    // const classNames = modelOverviewChartStyles();
-    const plotData = getAUCChartOptions(this.getStaticROCData(), theme);
+    const classNames = modelOverviewChartStyles();
 
     if (
       this.context.dataset.predicted_y === undefined ||
@@ -39,55 +57,57 @@ export class AUCChart extends React.PureComponent<IAUCChartProps> {
     if (this.context.dataset.true_y.length !== yLength) {
       return React.Fragment;
     }
+    // const allData = calculateAUCData(
+    //   this.state.selectedCohort ?? 0,
+    //   this.context
+    // );
+    const plotData = getAUCChartOptions([], theme);
 
-    // TODO: select cohort from dropdown like confusion matrix
-    let selectedCohort = this.context.baseErrorCohort;
-    const AUCData = calculateAUCData(
-      selectedCohort.cohort.unwrap(JointDataset.TrueYLabel),
-      selectedCohort.cohort.unwrap(JointDataset.PredictedYLabel),
-      []
-    );
-    const AUCPoints: PointOptionsObject[] = [];
-    const selectedLabels: string[] = [];
-    AUCData?.AUCData.forEach((row, rowIdx) =>
-      row.forEach((count, colIdx) => {
-        AUCPoints.push({
-          value: count,
-          x: colIdx,
-          y: rowIdx
-        });
-      })
-    );
-    if (AUCData) {
-      selectedLabels.push(...AUCData.selectedLabels);
-    }
-
+    // let selectedCohort = this.context.errorCohorts.find(
+    //   (errorCohort) =>
+    //     errorCohort.cohort.getCohortID() === this.state.selectedCohort
+    // );
+    // if (selectedCohort === undefined) {
+    //   // if previously selected cohort does not exist use globally selected cohort
+    //   selectedCohort = this.context.errorCohorts[0];
+    // }
+    const aucLocString = localization.ModelAssessment.ModelOverview.AUCChart;
+    console.log(aucLocString.aucCohortSelectionLabel);
     return (
-      <BasicHighChart configOverride={plotData} theme={theme} id="AUCChart" />
+      <Stack id="modelOverviewAUCChart">
+        <StackItem className={classNames.dropdown}>
+          <ComboBox
+            id="AUCCohortDropdown"
+            label={aucLocString.aucCohortSelectionLabel}
+            selectedKey={0}
+            options={this.context.errorCohorts.map(
+              (errorCohort: ErrorCohort) => {
+                return {
+                  key: errorCohort.cohort.getCohortID(),
+                  text: errorCohort.cohort.name
+                };
+              }
+            )}
+            onChange={this.onSelectCohort}
+            styles={FluentUIStyles.limitedSizeMenuDropdown}
+          />
+        </StackItem>
+        <StackItem className={classNames.chart}>
+          <BasicHighChart
+            configOverride={plotData}
+            theme={theme}
+            id="AUCChart"
+          />
+        </StackItem>
+      </Stack>
     );
   }
-
-  private getStaticROCData(): SeriesOptionsType[] {
-    return [
-      {
-        data: [
-          { x: 0, y: 0 },
-          { x: 0, y: 1 },
-          { x: 1, y: 1 }
-        ],
-        // TODO: localize
-        name: "Ideal",
-        type: "line"
-      },
-      {
-        data: [
-          { x: 0, y: 0 },
-          { x: 1, y: 1 }
-        ],
-        // TODO: localize
-        name: "Random",
-        type: "line"
-      }
-    ];
-  }
+  private onSelectCohort = (
+    _: React.FormEvent<IComboBox>,
+    item?: IComboBoxOption
+  ): void => {
+    if (item) {
+      this.setState({ selectedCohort: Number(item.key) });
+    }
+  };
 }

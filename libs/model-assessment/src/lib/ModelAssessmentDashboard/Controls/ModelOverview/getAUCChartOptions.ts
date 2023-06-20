@@ -2,9 +2,8 @@
 // Licensed under the MIT License.
 
 import { ITheme } from "@fluentui/react";
-import { SeriesOptionsType } from "highcharts";
-
 import { IHighchartsConfig } from "@responsible-ai/core-ui";
+import { SeriesOptionsType } from "highcharts";
 
 export function getAUCChartOptions(
   data: SeriesOptionsType[],

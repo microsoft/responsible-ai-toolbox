@@ -19,13 +19,13 @@ import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import React from "react";
 
+import { AUCChart } from "./AUCChart";
 import { ConfusionMatrixHeatmap } from "./ConfusionMatrixHeatmap";
 import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewMetricChart } from "./ModelOverviewMetricChart";
 import { ProbabilityDistributionChart } from "./ProbabilityDistributionChart";
 import { RegressionDistributionChart } from "./RegressionDistributionChart";
 import { getSelectableMetrics } from "./StatsTableUtils";
-import { AUCChart } from "./AUCChart";
 
 interface IModelOverviewChartPivotProps {
   allCohorts: ErrorCohort[];
@@ -122,7 +122,6 @@ export class ModelOverviewChartPivot extends React.Component<
           return element.text;
         })
     );
-    console.log(this.props.selectedMetrics);
 
     return (
       <Pivot

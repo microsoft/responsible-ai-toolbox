@@ -1,56 +1,63 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IAUCData } from "../Interfaces/IAUCData";
+import { SeriesOptionsType } from "highcharts";
+
+import { generateMetricsList } from "../components/OverallMetricChartUtils";
+import { IModelAssessmentContext } from "../Context/ModelAssessmentContext";
+import { ModelTypes } from "../Interfaces/IExplanationContext";
+
+import { generateDefaultChartAxes } from "./generateDefaultChartAxes";
+import { ChartTypes } from "./IGenericChartProps";
+
+function getStaticROCData(): SeriesOptionsType[] {
+  return [
+    {
+      data: [
+        { x: 0, y: 0 },
+        { x: 0, y: 1 },
+        { x: 1, y: 1 }
+      ],
+      // TODO: localize
+      name: "Ideal",
+      type: "line"
+    },
+    {
+      data: [
+        { x: 0, y: 0 },
+        { x: 1, y: 1 }
+      ],
+      // TODO: localize
+      name: "Random",
+      type: "line"
+    }
+  ];
+}
 
 export function calculateAUCData(
-  yTrue: number[],
-  yPred: number[],
-  allLabels: string[]
-): IAUCData | undefined {
-  if (
-    yTrue.length !== yPred.length ||
-    !yTrue.concat(yPred).every((el) => el < allLabels.length)
-  ) {
-    return undefined;
-  }
-  // false positive rate is x
-  // true positive rate is y
-  // https://github.com/scikit-learn/scikit-learn/blob/2a2772a87b6c772dc3b8292bcffb990ce27515a8/sklearn/metrics/_ranking.py#L50
-
-  // use ROC to get fpr and tpr
-  // https://github.com/scikit-learn/scikit-learn/blob/2a2772a87b6c772dc3b8292bcffb990ce27515a8/sklearn/metrics/_ranking.py#L933
-
-  // const selectedLabelSet = new Set<string>(
-  //   selectedLabels !== undefined ? selectedLabels : allLabels
-  // );
-
-  const labelMap = new Map<number, number>();
-
-  // Inspired from sklearn
-  // https://github.com/scikit-learn/scikit-learn/blob/8694eb00f8a3c0dede331fe60c0415bfaafef631/sklearn/metrics/_classification.py#L335
-  // let idx = 0;
-  // allLabels.forEach((element, index) => {
-  //   if (selectedLabelSet.has(element)) {
-  //     labelMap.set(index, idx);
-  //     idx += 1;
-  //   }
-  // });
-
-  const data: number[][] = new Array(labelMap.size)
-    .fill(0)
-    .map(() => new Array(labelMap.size).fill(0));
-
-  yTrue.forEach((element, index) => {
-    const trueIdx = labelMap.get(element);
-    const predIdx = labelMap.get(yPred[index]);
-    if (trueIdx !== undefined && predIdx !== undefined) {
-      data[trueIdx][predIdx] += 1;
-    }
+  selectedCohort: number,
+  context: IModelAssessmentContext
+): SeriesOptionsType[] {
+  const chartProps = generateDefaultChartAxes(
+    context.jointDataset,
+    ChartTypes.Scatter
+  );
+  const metricsList = generateMetricsList(
+    context,
+    selectedCohort,
+    ModelTypes.Binary,
+    chartProps
+  );
+  const data = metricsList.map((metricList) => {
+    return { x: metricList[5].stat, y: metricList[3].stat };
   });
-
-  return {
-    AUCData: data,
-    selectedLabels: [...labelMap.keys()].map((idx) => allLabels[idx])
-  };
+  const allData = [
+    {
+      data,
+      name: "AUC",
+      type: "line"
+    },
+    ...getStaticROCData()
+  ];
+  return allData as SeriesOptionsType[];
 }
