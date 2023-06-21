@@ -206,8 +206,8 @@ class TestRAIInsightsValidations:
 
         with pytest.raises(
                 UserConfigValidationException,
-                match="Target column type must not "
-                "be continuous for multiclass scenario"):
+                match="Target column type must not be continuous "
+                "for classification scenario."):
             RAIInsights(
                 model=model,
                 train=X_data,
