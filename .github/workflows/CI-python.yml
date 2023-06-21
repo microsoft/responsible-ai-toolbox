@@ -15,6 +15,7 @@ on:
 jobs:
   ci-python:
     strategy:
+      fail-fast: false
       matrix:
         packageDirectory:
           ["responsibleai", "erroranalysis", "raiutils", "rai_test_utils"]
