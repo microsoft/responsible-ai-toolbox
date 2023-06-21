@@ -52,7 +52,8 @@ class TestCohortFilter(object):
                                       filters=filters)
 
     def test_cohort_filter_predicted_y(self):
-        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         filters = [{'arg': [2],
                     'column': 'Predicted Y',
                     'method': 'includes'}]
@@ -74,7 +75,8 @@ class TestCohortFilter(object):
                                       filters=filters)
 
     def test_cohort_filter_true_y(self):
-        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         filters = [{'arg': [2],
                     'column': 'True Y',
                     'method': 'includes'}]
@@ -96,7 +98,8 @@ class TestCohortFilter(object):
                                       filters=filters)
 
     def test_cohort_filter_less(self):
-        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         filters = [{'arg': [2.8],
                     'column': SEPAL_WIDTH,
                     'method': 'less'}]
