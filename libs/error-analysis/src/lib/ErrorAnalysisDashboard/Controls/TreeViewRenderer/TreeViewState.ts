@@ -33,6 +33,7 @@ export interface ITreeViewRendererState {
   request?: AbortController;
   nodeDetail: INodeDetail;
   selectedNode: any;
+  hoverPathId: string | undefined;
   transform: any;
   treeNodes: any[];
   root?: HierarchyPointNode<ITreeNode>;
@@ -72,6 +73,7 @@ export function createInitialTreeViewState(
   errorAnalysisData: IErrorAnalysisData | undefined
 ): ITreeViewRendererState {
   return {
+    hoverPathId: undefined,
     isErrorMetric: true,
     maxDepth: errorAnalysisData?.maxDepth ?? 4,
     metric: errorAnalysisData?.metric ?? Metrics.ErrorRate,

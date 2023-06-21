@@ -5,11 +5,11 @@ import { Stack } from "@fluentui/react";
 import { IVisionListItem, ErrorCohort } from "@responsible-ai/core-ui";
 import React from "react";
 
+import { visionExplanationDashboardStyles } from "../VisionExplanationDashboard.styles";
 import {
   TitleBarOptions,
   VisionDatasetExplorerTabOptions
-} from "../VisionExplanationDashboard";
-import { visionExplanationDashboardStyles } from "../VisionExplanationDashboard.styles";
+} from "../VisionExplanationDashboardHelper";
 
 import { DataCharacteristics } from "./DataCharacteristics";
 import { ImageList } from "./ImageList";
@@ -33,15 +33,37 @@ export interface ITabsViewProps {
   setSelectedCohort: (cohort: ErrorCohort) => void;
 }
 
+export interface ITabViewState {
+  items: IVisionListItem[];
+}
+
 const stackTokens = {
   childrenGap: "l1"
 };
 
-export class TabsView extends React.Component<ITabsViewProps> {
+export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
+  public constructor(props: ITabsViewProps) {
+    super(props);
+    this.state = {
+      items: this.props.errorInstances.concat(...this.props.successInstances)
+    };
+  }
+
+  public componentDidUpdate(prevProps: ITabsViewProps): void {
+    if (
+      this.props.errorInstances !== prevProps.errorInstances ||
+      this.props.successInstances !== prevProps.successInstances
+    ) {
+      this.setState({
+        items: this.props.errorInstances.concat(...this.props.successInstances)
+      });
+    }
+  }
+
   public render(): React.ReactNode {
     const classNames = visionExplanationDashboardStyles();
     switch (this.props.selectedKey) {
-      case VisionDatasetExplorerTabOptions.DataCharacteristics:
+      case VisionDatasetExplorerTabOptions.ClassView:
         return (
           <Stack
             className={classNames.mainContainer}
@@ -49,11 +71,10 @@ export class TabsView extends React.Component<ITabsViewProps> {
           >
             <Stack.Item style={{ width: "100%" }}>
               <DataCharacteristics
-                data={this.props.errorInstances.concat(
-                  ...this.props.successInstances
-                )}
+                items={this.state.items}
                 imageDim={this.props.imageDim}
                 numRows={this.props.numRows}
+                searchValue={this.props.searchValue}
                 selectItem={this.props.onItemSelect}
               />
             </Stack.Item>
@@ -92,7 +113,7 @@ export class TabsView extends React.Component<ITabsViewProps> {
                 </Stack.Item>
                 <Stack.Item className={classNames.imageListContainer}>
                   <ImageList
-                    data={this.props.errorInstances}
+                    items={this.props.errorInstances}
                     imageDim={this.props.imageDim}
                     searchValue={this.props.searchValue}
                     selectItem={this.props.onItemSelect}
@@ -108,7 +129,7 @@ export class TabsView extends React.Component<ITabsViewProps> {
                 </Stack.Item>
                 <Stack.Item className={classNames.imageListContainer}>
                   <ImageList
-                    data={this.props.successInstances}
+                    items={this.props.successInstances}
                     imageDim={this.props.imageDim}
                     searchValue={this.props.searchValue}
                     selectItem={this.props.onItemSelect}

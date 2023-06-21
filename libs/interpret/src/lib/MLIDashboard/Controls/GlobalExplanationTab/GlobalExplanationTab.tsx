@@ -10,7 +10,8 @@ import {
   Text,
   Link,
   Slider,
-  Stack
+  Stack,
+  Toggle
 } from "@fluentui/react";
 import {
   Cohort,
@@ -28,9 +29,12 @@ import {
   FeatureImportanceBar,
   ITelemetryEvent,
   TelemetryEventName,
-  TelemetryLevels
+  TelemetryLevels,
+  getFeatureNamesAfterDrop,
+  ifEnableLargeData
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import { RangeTypes } from "@responsible-ai/mlchartlib";
 import { Dictionary } from "lodash";
 import React from "react";
 
@@ -70,6 +74,9 @@ interface IGlobalExplanationTabState {
   globalBarSettings?: IGlobalBarSettings;
   dependenceProps?: IGenericChartProps;
   cohortSeries: IGlobalSeries[];
+  logarithmicScaling: boolean;
+  selectedCohort: Cohort;
+  loading?: boolean;
 }
 
 export class GlobalExplanationTab extends React.PureComponent<
@@ -85,6 +92,7 @@ export class GlobalExplanationTab extends React.PureComponent<
     : undefined;
 
   private depPlot = React.createRef<HTMLDivElement>();
+  private readonly featureIndexMap = new Map<number, number>();
 
   private defaultMinK = 4;
 
@@ -98,6 +106,8 @@ export class GlobalExplanationTab extends React.PureComponent<
     this.state = {
       chartType: ChartTypes.Bar,
       cohortSeries: [],
+      logarithmicScaling: false,
+      selectedCohort: this.props.cohorts[initialCohortIndex],
       selectedCohortIndex: initialCohortIndex,
       seriesIsActive: this.props.cohorts.map(() => true),
       sortArray: [],
@@ -117,9 +127,8 @@ export class GlobalExplanationTab extends React.PureComponent<
       ].calculateAverageImportance()
     ).reverse();
 
-    const cohortSeries = this.getGlobalSeries();
+    this.getGlobalSeries();
     this.setState({
-      cohortSeries,
       globalBarSettings: this.getDefaultSettings(),
       sortArray
     });
@@ -130,7 +139,7 @@ export class GlobalExplanationTab extends React.PureComponent<
       this.props.cohorts !== prevProps.cohorts ||
       this.props.selectedWeightVector !== prevProps.selectedWeightVector
     ) {
-      this.updateIncludedCohortsOnCohortEdit();
+      this.updateIncludedCohortsOnCohortEdit(prevProps.cohorts);
     }
   }
 
@@ -152,11 +161,29 @@ export class GlobalExplanationTab extends React.PureComponent<
     const featureOptions: IDropdownOption[] = [];
     for (let i = 0; i < this.context.jointDataset.datasetFeatureCount; i++) {
       const key = JointDataset.DataLabelRoot + i.toString();
-      featureOptions.push({
-        key,
-        text: this.context.jointDataset.metaDict[key].label
-      });
+      if (
+        !this.context.jointDataset.datasetMetaData?.featureMetaData?.dropped_features?.includes(
+          this.context.jointDataset.metaDict[key].label
+        )
+      ) {
+        this.featureIndexMap.set(featureOptions.length, i);
+        featureOptions.push({
+          key,
+          text: this.context.jointDataset.metaDict[key].label
+        });
+      }
     }
+    const selectedMeta = this.state.dependenceProps?.xAxis.property
+      ? this.context.jointDataset.metaDict[
+          this.state.dependenceProps?.xAxis.property
+        ]
+      : undefined;
+
+    const featureNames = getFeatureNamesAfterDrop(
+      this.context.modelMetadata.featureNames,
+      this.context.jointDataset.datasetMetaData?.featureMetaData
+        ?.dropped_features
+    );
 
     return (
       <Stack horizontal={false} className={classNames.page}>
@@ -165,25 +192,28 @@ export class GlobalExplanationTab extends React.PureComponent<
             {localization.Interpret.GlobalTab.helperText}
           </Text>
         </Stack.Item>
-        <Stack.Item className={classNames.topK}>
-          <div id="TopKSliderContainer">
-            <Slider
-              label={localization.formatString(
-                localization.Interpret.GlobalTab.topAtoB,
-                this.state.topK
-              )}
-              ariaLabel={
-                localization.Interpret.AggregateImportance.topKFeatures
-              }
-              max={this.context.jointDataset.localExplanationFeatureCount}
-              min={1}
-              step={1}
-              value={this.state.topK}
-              onChange={this.setTopK}
-              showValue={false}
-            />
-          </div>
-        </Stack.Item>
+        {!this.state.loading && (
+          <Stack.Item className={classNames.topK}>
+            <div id="TopKSliderContainer">
+              <Slider
+                label={localization.formatString(
+                  localization.Interpret.GlobalTab.topAtoB,
+                  this.state.topK
+                )}
+                ariaLabel={
+                  localization.Interpret.AggregateImportance.topKFeatures
+                }
+                max={this.context.jointDataset.localExplanationFeatureCount}
+                min={1}
+                step={1}
+                value={this.state.topK}
+                onChange={this.setTopK}
+                showValue={false}
+                disabled={this.state.loading}
+              />
+            </div>
+          </Stack.Item>
+        )}
         <Stack.Item className={classNames.chartCallout}>
           {this.explainerCalloutInfo && (
             <LabelWithCallout
@@ -220,14 +250,15 @@ export class GlobalExplanationTab extends React.PureComponent<
                 ]}
                 sortArray={this.state.sortArray}
                 chartType={this.state.chartType}
-                unsortedX={this.context.modelMetadata.featureNamesAbridged}
-                originX={this.context.modelMetadata.featureNames}
+                unsortedX={featureNames}
+                originX={featureNames}
                 unsortedSeries={this.getActiveCohortSeries(
                   this.state.seriesIsActive
                 )}
                 topK={this.state.topK}
                 onFeatureSelection={this.onFeatureSelection}
                 selectedFeatureIndex={this.state.selectedFeatureIndex}
+                loading={this.state.loading}
               />
             </Stack.Item>
             <Stack.Item>
@@ -246,6 +277,7 @@ export class GlobalExplanationTab extends React.PureComponent<
                 onChartTypeChange={this.onChartTypeChange}
                 chartType={this.state.chartType}
                 telemetryHook={this.props.telemetryHook}
+                loading={this.state.loading}
               />
             </Stack.Item>
           </Stack>
@@ -257,95 +289,127 @@ export class GlobalExplanationTab extends React.PureComponent<
             </MissingParametersPlaceholder>
           </Stack.Item>
         )}
-        {this.context.jointDataset.hasDataset && (
-          <>
-            <Stack.Item className={classNames.chartCallout}>
-              <LabelWithCallout
-                label={localization.Interpret.Charts.howToRead}
-                calloutTitle={
-                  localization.Interpret.GlobalTab.dependencePlotTitle
-                }
-                type="button"
-                telemetryHook={this.props.telemetryHook}
-                calloutEventName={
-                  TelemetryEventName.FeatureImportancesHowToReadChartCalloutClick
-                }
-              >
-                <Text>
-                  {localization.Interpret.GlobalTab.dependencePlotHelperText}
-                </Text>
-              </LabelWithCallout>
-            </Stack.Item>
-            <Stack.Item>
-              <Stack
-                horizontal
-                className={classNames.dependencePlotChartContainer}
-              >
-                <Stack.Item className={classNames.chartLeftPart}>
-                  <div
-                    id="DependencePlot"
-                    className={classNames.secondaryChartAndLegend}
-                    ref={this.depPlot}
-                  >
-                    <FeatureImportanceDependence
-                      chartProps={this.state.dependenceProps}
-                      cohortIndex={this.state.selectedCohortIndex}
-                      cohort={
-                        this.props.cohorts[this.state.selectedCohortIndex]
-                      }
-                      jointDataset={this.context.jointDataset}
-                      metadata={this.context.modelMetadata}
-                      selectedWeight={this.props.selectedWeightVector}
-                      selectedWeightLabel={
-                        this.props.weightLabels[this.props.selectedWeightVector]
-                      }
-                    />
-                  </div>
-                </Stack.Item>
-                <Stack.Item className={classNames.legendAndSort}>
-                  {featureOptions && (
-                    <ComboBox
-                      id="DependencePlotFeatureSelection"
-                      label={
-                        localization.Interpret.GlobalTab.viewDependencePlotFor
-                      }
-                      options={featureOptions}
-                      allowFreeform={false}
-                      autoComplete="on"
-                      placeholder={
-                        localization.Interpret.GlobalTab
-                          .dependencePlotFeatureSelectPlaceholder
-                      }
-                      selectedKey={this.state.dependenceProps?.xAxis.property}
-                      onChange={this.onXSet}
-                      calloutProps={FluentUIStyles.calloutProps}
-                    />
-                  )}
-                  {cohortOptions && (
-                    <Dropdown
-                      label={
-                        localization.Interpret.GlobalTab.datasetCohortSelector
-                      }
-                      options={cohortOptions}
-                      selectedKey={this.state.selectedCohortIndex}
-                      onChange={this.setSelectedCohort}
-                    />
-                  )}
-                </Stack.Item>
-              </Stack>
-            </Stack.Item>
-          </>
-        )}
+        {!ifEnableLargeData(this.context.dataset) &&
+          this.context.jointDataset.hasDataset && (
+            <>
+              <Stack.Item className={classNames.chartCallout}>
+                <LabelWithCallout
+                  label={localization.Interpret.Charts.howToRead}
+                  calloutTitle={
+                    localization.Interpret.GlobalTab.dependencePlotTitle
+                  }
+                  type="button"
+                  telemetryHook={this.props.telemetryHook}
+                  calloutEventName={
+                    TelemetryEventName.FeatureImportancesHowToReadChartCalloutClick
+                  }
+                >
+                  <Text>
+                    {localization.Interpret.GlobalTab.dependencePlotHelperText}
+                  </Text>
+                </LabelWithCallout>
+              </Stack.Item>
+              <Stack.Item>
+                <Stack
+                  horizontal
+                  className={classNames.dependencePlotChartContainer}
+                >
+                  <Stack.Item className={classNames.chartLeftPart}>
+                    <div
+                      id="DependencePlot"
+                      className={classNames.secondaryChartAndLegend}
+                      ref={this.depPlot}
+                    >
+                      <FeatureImportanceDependence
+                        chartProps={this.state.dependenceProps}
+                        cohortIndex={this.state.selectedCohortIndex}
+                        cohort={this.state.selectedCohort}
+                        jointDataset={this.context.jointDataset}
+                        logarithmicScaling={this.state.logarithmicScaling}
+                        metadata={this.context.modelMetadata}
+                        selectedWeight={this.props.selectedWeightVector}
+                        selectedWeightLabel={
+                          this.props.weightLabels[
+                            this.props.selectedWeightVector
+                          ]
+                        }
+                      />
+                    </div>
+                  </Stack.Item>
+                  <Stack.Item className={classNames.legendAndSort}>
+                    {featureOptions && (
+                      <ComboBox
+                        id="DependencePlotFeatureSelection"
+                        label={
+                          localization.Interpret.GlobalTab.viewDependencePlotFor
+                        }
+                        options={featureOptions}
+                        allowFreeform={false}
+                        autoComplete="on"
+                        placeholder={
+                          localization.Interpret.GlobalTab
+                            .dependencePlotFeatureSelectPlaceholder
+                        }
+                        selectedKey={this.state.dependenceProps?.xAxis.property}
+                        onChange={this.onXSet}
+                        calloutProps={FluentUIStyles.calloutProps}
+                      />
+                    )}
+                    {cohortOptions && (
+                      <Dropdown
+                        label={
+                          localization.Interpret.GlobalTab.datasetCohortSelector
+                        }
+                        options={cohortOptions}
+                        selectedKey={this.state.selectedCohortIndex}
+                        onChange={this.setSelectedCohort}
+                      />
+                    )}
+                    {featureOptions &&
+                      (selectedMeta?.featureRange?.rangeType ===
+                        RangeTypes.Integer ||
+                        selectedMeta?.featureRange?.rangeType ===
+                          RangeTypes.Numeric) && (
+                        <Toggle
+                          key="logarithmic-scaling-toggle"
+                          label={
+                            localization.Interpret.AxisConfigDialog
+                              .logarithmicScaling
+                          }
+                          inlineLabel
+                          checked={this.state.logarithmicScaling}
+                          onChange={this.setLogarithmicScaling}
+                        />
+                      )}
+                  </Stack.Item>
+                </Stack>
+              </Stack.Item>
+            </>
+          )}
       </Stack>
     );
   }
+
+  private readonly setLogarithmicScaling = (
+    _ev?: React.FormEvent<HTMLElement>,
+    checked?: boolean
+  ): void => {
+    if (checked === undefined || checked === this.state.logarithmicScaling) {
+      return;
+    }
+    this.setState({ logarithmicScaling: checked });
+  };
 
   private setSelectedCohort = (
     _event: React.FormEvent,
     item?: IDropdownOption
   ): void => {
     if (item?.key !== undefined) {
-      this.setState({ selectedCohortIndex: item.key as number });
+      const idx = item.key as number;
+      this.setState({
+        selectedCohort: this.props.cohorts[idx],
+        selectedCohortIndex: idx
+      });
     }
   };
 
@@ -365,7 +429,46 @@ export class GlobalExplanationTab extends React.PureComponent<
     });
   };
 
-  private getGlobalSeries(): IGlobalSeries[] {
+  private async getCohortSeriesSDK(): Promise<IGlobalSeries[] | undefined> {
+    if (
+      ifEnableLargeData(this.context.dataset) &&
+      this.context.requestGlobalExplanations
+    ) {
+      const allCohortGlobalExplanations: any[] = [];
+      let cohortIndex = 0;
+
+      for (const cohort of this.props.cohorts) {
+        const filtersRelabeled = Cohort.getLabeledFilters(
+          cohort.filters,
+          this.context.jointDataset
+        );
+        const compositeFiltersRelabeled = Cohort.getLabeledCompositeFilters(
+          cohort.compositeFilters,
+          this.context.jointDataset
+        );
+
+        const result = await this.context.requestGlobalExplanations(
+          filtersRelabeled,
+          compositeFiltersRelabeled,
+          new AbortController().signal
+        );
+
+        allCohortGlobalExplanations.push({
+          colorIndex: cohortIndex,
+          name: cohort.name,
+          unsortedAggregateY:
+            result.precomputedExplanations.globalFeatureImportance.scores
+        });
+
+        cohortIndex += 1;
+      }
+      return allCohortGlobalExplanations;
+    }
+
+    return undefined;
+  }
+
+  private getGlobalSeriesUI(): IGlobalSeries[] {
     return this.props.cohorts.map((cohort, i) => {
       return {
         colorIndex: i,
@@ -374,6 +477,24 @@ export class GlobalExplanationTab extends React.PureComponent<
         unsortedIndividualY: cohort.transposedLocalFeatureImportances()
       };
     });
+  }
+
+  private async getGlobalSeries(): Promise<void> {
+    this.setState({
+      loading: true
+    });
+    const globalExplanationsSDKValue = await this.getCohortSeriesSDK();
+    if (globalExplanationsSDKValue) {
+      this.setState({
+        cohortSeries: globalExplanationsSDKValue,
+        loading: false
+      });
+    } else {
+      this.setState({
+        cohortSeries: this.getGlobalSeriesUI(),
+        loading: false
+      });
+    }
   }
 
   // This can probably be done cheaper by passing the active array to the charts, and zeroing
@@ -390,14 +511,30 @@ export class GlobalExplanationTab extends React.PureComponent<
     return this.state.cohortSeries.filter((_series, idx) => activeArray[idx]);
   }
 
-  private updateIncludedCohortsOnCohortEdit(): void {
+  private updateIncludedCohortsOnCohortEdit(prevCohorts: Cohort[]): void {
     let selectedCohortIndex = this.state.selectedCohortIndex;
-    if (selectedCohortIndex >= this.props.cohorts.length) {
-      selectedCohortIndex = 0;
+    // find the cohort idx that was removed
+    if (prevCohorts.length > this.props.cohorts.length) {
+      let idx = 0;
+      for (const cohort of prevCohorts) {
+        if (cohort === this.props.cohorts[idx]) {
+          idx++;
+        } else {
+          break;
+        }
+      }
+      // if the deleted cohort was earlier sequentially than the current selected index
+      // adjust the selected index. If the deleted cohort was the selected index, reset
+      // to 0
+      if (idx < selectedCohortIndex) {
+        selectedCohortIndex--;
+      } else if (idx === selectedCohortIndex) {
+        selectedCohortIndex = 0;
+      }
     }
     const seriesIsActive: boolean[] = this.props.cohorts.map(() => true);
+    this.getGlobalSeries();
     this.setState({
-      cohortSeries: this.getGlobalSeries(),
       selectedCohortIndex,
       seriesIsActive
     });
@@ -428,8 +565,11 @@ export class GlobalExplanationTab extends React.PureComponent<
     if (typeof item?.key === "string") {
       const key = item.key;
       const index = this.context.jointDataset.metaDict[key].index;
-      if (index !== undefined) {
-        this.handleFeatureSelection(this.state.selectedCohortIndex, index);
+      for (const i of this.featureIndexMap.keys()) {
+        if (index && this.featureIndexMap.get(i) === index) {
+          this.handleFeatureSelection(this.state.selectedCohortIndex, i);
+          break;
+        }
       }
     }
   };
@@ -456,8 +596,10 @@ export class GlobalExplanationTab extends React.PureComponent<
     cohortIndex: number,
     featureIndex: number
   ): void => {
+    const featureIndexBeforeDrop =
+      this.featureIndexMap.get(featureIndex) ?? featureIndex;
     // set to dependence plot initially, can be changed if other feature importances available
-    const xKey = JointDataset.DataLabelRoot + featureIndex.toString();
+    const xKey = JointDataset.DataLabelRoot + featureIndexBeforeDrop.toString();
     const xIsDithered =
       this.context.jointDataset.metaDict[xKey]?.treatAsCategorical;
     const yKey =
@@ -478,8 +620,9 @@ export class GlobalExplanationTab extends React.PureComponent<
     };
     this.setState({
       dependenceProps: chartProps,
+      selectedCohort: this.props.cohorts[cohortIndex],
       selectedCohortIndex: cohortIndex,
-      selectedFeatureIndex: featureIndex
+      selectedFeatureIndex: featureIndexBeforeDrop
     });
     // some how scroll does not work in studio under certain reslution
     // put a manual timeout to handle the issue

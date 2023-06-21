@@ -1,13 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FluentUIStyles } from "@responsible-ai/core-ui";
+import { getTheme } from "@fluentui/react";
+import { FluentUIStyles, IGenericChartProps } from "@responsible-ai/core-ui";
 import { WhatIfConstants } from "@responsible-ai/interpret";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 
 export function getCounterfactualChartOptions(
   plotlyProperty: IPlotlyProperty,
-  onClickHandler?: (data: any) => void
+  onClickHandler?: (data: any) => void,
+  chartProps?: IGenericChartProps
 ): any {
   let template = "";
   const data = plotlyProperty.data.map((series, seriesIndex) => {
@@ -45,8 +47,10 @@ export function getCounterfactualChartOptions(
       showInLegend: false
     };
   });
+  const theme = getTheme();
   return {
     chart: {
+      backgroundColor: theme.semanticColors.bodyBackground,
       type: "scatter",
       zoomType: "xy"
     },
@@ -71,6 +75,12 @@ export function getCounterfactualChartOptions(
         turboThreshold: 0
       }
     },
-    series
+    series,
+    xAxis: {
+      type: chartProps?.xAxis.type
+    },
+    yAxis: {
+      type: chartProps?.yAxis.type
+    }
   };
 }

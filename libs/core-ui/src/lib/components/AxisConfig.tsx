@@ -17,6 +17,11 @@ export interface IAxisConfigProps {
   canBin: boolean;
   mustBin: boolean;
   canDither: boolean;
+  allowTreatAsCategorical: boolean;
+  hideDroppedFeatures?: boolean;
+  allowLogarithmicScaling?: boolean;
+  disabled?: boolean;
+  removeCount?: boolean;
   onAccept: (newConfig: ISelectorConfig) => void;
 }
 
@@ -41,6 +46,7 @@ export class AxisConfig extends React.PureComponent<
           onClick={this.setOpen}
           text={this.props.buttonText}
           title={this.props.buttonTitle}
+          disabled={this.props.disabled}
         />
         {this.state.dialogOpen && (
           <AxisConfigDialog
@@ -49,7 +55,11 @@ export class AxisConfig extends React.PureComponent<
             selectedColumn={this.props.selectedColumn}
             canBin={this.props.canBin}
             mustBin={this.props.mustBin}
+            removeCount={this.props.removeCount}
+            allowTreatAsCategorical={this.props.allowTreatAsCategorical}
+            allowLogarithmicScaling={this.props.allowLogarithmicScaling}
             canDither={this.props.canDither}
+            hideDroppedFeatures={this.props.hideDroppedFeatures}
             onAccept={this.onAccept}
           />
         )}

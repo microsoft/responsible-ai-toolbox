@@ -3,19 +3,26 @@
 
 import { IconButton, TooltipHost, TooltipOverflowMode } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { roundDecimal } from "@responsible-ai/mlchartlib";
+import { RangeTypes, roundDecimal } from "@responsible-ai/mlchartlib";
 import React from "react";
 
+import {
+  defaultModelAssessmentContext,
+  ModelAssessmentContext
+} from "../../Context/ModelAssessmentContext";
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
-import { JointDataset } from "../../util/JointDataset";
+
+import { getColumnLabel } from "./FilterListUtils";
 
 export interface IFilterListProps {
   filters: IFilter[];
-  jointDataset: JointDataset;
   editFilter?(index: number): void;
   removeFilter?(index: number): void;
 }
 export class FilterList extends React.Component<IFilterListProps> {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
   private filterMethodLabels: { [key in FilterMethods]: string } = {
     [FilterMethods.Equal]: localization.Interpret.FilterOperations.equals,
     [FilterMethods.GreaterThan]:
@@ -31,44 +38,59 @@ export class FilterList extends React.Component<IFilterListProps> {
       localization.Interpret.FilterOperations.inTheRangeOf
   };
   public render(): React.ReactNode {
-    return this.props.filters.map((filter, index) => {
-      return (
-        <div key={index}>
-          {this.setFilterLabel(filter)}
-          {this.props.editFilter && (
-            <IconButton
-              id={`editFilerBtn-${index}`}
-              iconProps={{ iconName: "Edit" }}
-              onClick={(): void => this.props.editFilter?.(index)}
-              ariaLabel={localization.Common.editButton}
-            />
-          )}
-          {this.props.removeFilter && (
-            <IconButton
-              id={`removeFilterBtn-${index}`}
-              iconProps={{ iconName: "Clear" }}
-              onClick={(): void => this.props.removeFilter?.(index)}
-              ariaLabel={localization.Common.close}
-            />
-          )}
-        </div>
-      );
-    });
+    return this.props.filters
+      .filter((item) => item)
+      .map((filter, index) => {
+        return (
+          <div key={index}>
+            {this.setFilterLabel(filter)}
+            {this.props.editFilter && (
+              <IconButton
+                id={`editFilerBtn-${index}`}
+                iconProps={{ iconName: "Edit" }}
+                onClick={(): void => this.props.editFilter?.(index)}
+                ariaLabel={localization.Common.editButton}
+              />
+            )}
+            {this.props.removeFilter && (
+              <IconButton
+                id={`removeFilterBtn-${index}`}
+                iconProps={{ iconName: "Clear" }}
+                onClick={(): void => this.props.removeFilter?.(index)}
+                ariaLabel={localization.Common.close}
+              />
+            )}
+          </div>
+        );
+      });
   }
 
   private setFilterLabel(filter: IFilter): React.ReactNode {
-    const selectedFilter = this.props.jointDataset.metaDict[filter.column];
+    const abbridgedLabel = getColumnLabel(
+      filter.column,
+      this.context.columnRanges
+    );
+    let isCategorical;
+    let sortedCategoricalValues: string[] | undefined;
+
+    const range = this.context.columnRanges
+      ? this.context.columnRanges[filter.column]
+      : undefined;
+    if (
+      range?.rangeType === RangeTypes.Categorical ||
+      range?.treatAsCategorical
+    ) {
+      isCategorical = true;
+      sortedCategoricalValues = range.sortedUniqueValues.map((v) => String(v));
+    }
+
     let stringArgs;
     let label = "";
-
-    if (
-      selectedFilter.isCategorical ||
-      this.props.jointDataset.metaDict[filter.column]?.treatAsCategorical
-    ) {
+    if (isCategorical) {
       const selectedValues: string[] = [];
       const filterArgs = filter.arg;
       filterArgs.forEach((element) => {
-        const value = selectedFilter.sortedCategoricalValues?.[element];
+        const value = sortedCategoricalValues?.[element];
         if (value) {
           selectedValues.push(value);
         }
@@ -92,13 +114,13 @@ export class FilterList extends React.Component<IFilterListProps> {
 
     if (filter.method === FilterMethods.InTheRangeOf) {
       // example: Age [30,40]
-      label = `${selectedFilter.abbridgedLabel} ${localization.formatString(
+      label = `${abbridgedLabel} ${localization.formatString(
         localization.Interpret.FilterOperations.inTheRangeOf,
         stringArgs
       )}`;
     } else {
       // example: Age < 30
-      label = `${selectedFilter.abbridgedLabel} ${localization.formatString(
+      label = `${abbridgedLabel} ${localization.formatString(
         this.filterMethodLabels[filter.method],
         stringArgs
       )}`;

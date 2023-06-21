@@ -4,6 +4,7 @@
 import { Pivot, PivotItem, Stack, MessageBar } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
+  ErrorCohort,
   ICausalAnalysisData,
   ITelemetryEvent,
   ModelAssessmentContext,
@@ -19,6 +20,7 @@ import { CausalAnalysisView } from "./Controls/CausalAnalysisView/CausalAnalysis
 
 export interface ICausalInsightsTabProps {
   data: ICausalAnalysisData;
+  newCohort: ErrorCohort;
   telemetryHook?: (message: ITelemetryEvent) => void;
   onPivotChange?: (option: CausalAnalysisOptions) => void;
 }
@@ -49,13 +51,15 @@ export class CausalInsightsTab extends React.PureComponent<
         className={classNames.container}
       >
         <Stack.Item>
-          <MessageBar>
-            {localization.CausalAnalysis.MainMenu.cohortInfo}
-          </MessageBar>
+          <MessageBar>{this.getCausalMessage()}</MessageBar>
         </Stack.Item>
         <Stack.Item>
           <Stack>
-            <Pivot onLinkClick={this.onViewTypeChange} overflowBehavior="menu">
+            <Pivot
+              onLinkClick={this.onViewTypeChange}
+              overflowBehavior="menu"
+              className={classNames.tabs}
+            >
               <PivotItem
                 itemKey={CausalAnalysisOptions.Aggregate}
                 headerText={localization.CausalAnalysis.MainMenu.aggregate}
@@ -75,6 +79,7 @@ export class CausalInsightsTab extends React.PureComponent<
           <CausalAnalysisView
             viewOption={this.state.viewOption}
             data={this.props.data}
+            newCohort={this.props.newCohort}
             telemetryHook={this.props.telemetryHook}
           />
         </Stack.Item>
@@ -105,9 +110,16 @@ export class CausalInsightsTab extends React.PureComponent<
       case CausalAnalysisOptions.Individual:
         return TelemetryEventName.IndividualCausalTabClick;
       case CausalAnalysisOptions.Treatment:
-        return TelemetryEventName.CasualTreatmentPolicyTabClick;
+        return TelemetryEventName.CausalTreatmentPolicyTabClick;
       default:
         return TelemetryEventName.AggregateCausalTabClick;
     }
   };
+
+  private getCausalMessage(): string {
+    if (!this.context.requestGlobalCausalEffects) {
+      return localization.CausalAnalysis.MainMenu.cohortInfo;
+    }
+    return `The current causal effects are for cohort: ${this.props.newCohort.cohort.name}`;
+  }
 }

@@ -7,15 +7,16 @@ require you to agree to a Contributor License Agreement (CLA) declaring that
 you have the right to, and actually do, grant us the rights to use your
 contribution. For details, visit <https://cla.opensource.microsoft.com>.
 
+Before contributing, please check that you have the correct configurations of
+(1) Contributor License Agreement and (2) GPG key.
+
+(1) Contributor License Agreement
 When you submit a pull request, a CLA bot will automatically determine whether
 you need to provide a CLA and decorate the PR appropriately (e.g., status
 check, comment). Simply follow the instructions provided by the bot. You will
 only need to do this once across all repos using our CLA.
 
-If you have previously committed changes that were not signed follow
-[these steps](https://dev.to/jrushlow/oops-i-forgot-to-sign-my-commit-from-last-monday-2jke)
-to sign them retroactively after setting up your GPG key as described in the
-[GitHub documentation](https://docs.github.com/en/github/authenticating-to-github/managing-commit-signature-verification).
+(2) GPG Key
 
 Setting up a GPG key has three stages:
 
@@ -25,6 +26,13 @@ Setting up a GPG key has three stages:
 
 Note that the `GitBash` shell installed by Git on Windows already has GPG
 installed, so there is no need to install GPG separately.
+
+Please also make sure to set email in git config (git config --global user.email "MY_NAME@example.com") which should be the same email linked to the PGP Key.
+
+If you have previously committed changes that were not signed follow
+[these steps](https://dev.to/jrushlow/oops-i-forgot-to-sign-my-commit-from-last-monday-2jke)
+to sign them retroactively after setting up your GPG key as described in the
+[GitHub documentation](https://docs.github.com/en/github/authenticating-to-github/managing-commit-signature-verification).
 
 ## Code of conduct
 
@@ -53,6 +61,9 @@ All pull requests need to abide by the following criteria to be accepted:
 First ensure you have
 [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 installed (which in turn may require installing `node`).
+
+This repository is tested with node 14.x, 15.x and 16.x, so using the latest 16.x version is recommended.
+
 Using npm you can install `yarn` as follows:
 
 ```
@@ -88,11 +99,17 @@ Web Development Server is listening at http://localhost:4200/
 at which point you can follow the link to your browser and select the
 dashboard and version of your choice.
 
+### Linting
+
 To check for linting issues and auto-apply fixes where possible run
 
 ```
 yarn lintfix
 ```
+
+You could also use [prettier](https://prettier.io/docs/en/install.html) to lint your files. Once you have installed prettier using `yarn`, you could use `yarn prettier --write .` to lint files in a particular directory.
+
+### Building
 
 To build a specific app run
 
@@ -112,7 +129,7 @@ once.
 2. `cd responsible-ai-toolbox`
 3. `yarn install`
 4. `yarn build`
-5. To execute tests run `yarn e2eall`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible using `yarn e2e --watch`.
+5. To execute tests run `yarn e2e`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible using `yarn e2e --watch`.
 
 cypress window will open locally - select test file to run the tests
 
@@ -122,11 +139,24 @@ cypress window will open locally - select test file to run the tests
 2. `cd responsible-ai-toolbox` (It is recommended to create a new virtual environment and install the dependencies)
 3. `yarn install`
 4. `yarn buildall` or `yarn build widget`
-5. `pip install -e responsibleai` to install responsibleai locally.
-6. `pip install -e raiwidgets` to install raiwidgets locally.
+5. `pip install -e raiwidgets` to install raiwidgets locally.
+6. `pip install -e responsibleai` to install responsibleai locally.
+
+   If there are changes to other python packages, you will want to install them locally as well:
+
+   `pip install -e raiutils`
+
+   `pip install -e erroranalysis`
+
+   `pip install -e rai_core_flask`
+
+   `pip install -e nlp_feature_extractors` if using the RAI Text Dashboard locally.
+
+   If there are no changes to them, then raiwidgets install will pick up the latest versions released on pypi.
+
 7. `pip install jupyter`
 8. `cd notebooks\responsibleaidashboard`
-9. To execute tests run `yarn e2e-widget`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible using `yarn e2e-widget --watch`.
+9. To execute tests run `yarn e2e-widget`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible by running the notebook manually and using `yarn e2e-widget -w --host {host} -n {notebook}` where host is where RAI widget runs on (printed in notebook output) and notebook is the name of the notebook you are running. Eg: `yarn e2e-widget -w --host 5000 -n responsibleaidashboard-census-classification-model-debugging`
 
 Cypress window will open locally - select test file to run the tests.
 
@@ -160,14 +190,17 @@ For any new change, which involves changing any of the python SDK components and
 3. You should commit all your current set of changes for SDK and UX using `git commit`.
 4. Clean all untracked files using `git clean -fdx`
 5. Run `yarn install` and `yarn buildall` to build the UX changes.
-6. Run `pip install -e responsibleai` to install responsibleai locally.
-7. Run `pip install -e raiwidgets` to install raiwidgets locally.
+6. Run `pip install -e raiwidgets` to install raiwidgets locally.
+7. Run `pip install -e responsibleai` to install responsibleai locally.
 8. Run `pip install -e erroranalysis` to install erroranalysis locally.
 9. Run `pip install -e rai_core_flask` to install rai_core_flask locally.
-10. Install `jupyter` using `pip install jupyter`
-11. Open any notebook using python SDK and any widget from `responsible-ai-toolbox` and test your changes.
+10. Run `pip install -e raiutils` to install raiutils locally.
+11. Run `pip install -e nlp_feature_extractors` to install nlp_feature_extractors locally if using the RAI Text Dashboard.
+12. Run `pip install -e rai_test_utils` to install rai_test_utils locally.
+13. Install `jupyter` using `pip install jupyter`
+14. Open any notebook using python SDK and any widget from `responsible-ai-toolbox` and test your changes.
 
-The steps from 3 to 11 need to be repeated if you incrementally change UI or SDK.
+The steps from 3 to 14 need to be repeated if you incrementally change UI or SDK.
 
 ### Debugging
 

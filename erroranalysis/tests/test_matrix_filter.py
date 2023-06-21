@@ -4,19 +4,11 @@
 import numpy as np
 import pandas as pd
 import pytest
-from common_utils import (create_adult_census_data,
-                          create_binary_classification_dataset,
-                          create_cancer_data, create_diabetes_data,
-                          create_housing_data, create_iris_data,
-                          create_kneighbors_classifier,
-                          create_models_classification,
-                          create_models_regression, create_simple_titanic_data,
-                          create_titanic_pipeline, create_wine_data)
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
-from erroranalysis._internal.constants import (PRED_Y, ROW_INDEX, TRUE_Y,
-                                               MatrixParams, Metrics,
-                                               ModelTask, f1_metrics,
+from erroranalysis._internal.constants import (ARG, COLUMN, METHOD, PRED_Y,
+                                               ROW_INDEX, TRUE_Y, MatrixParams,
+                                               Metrics, ModelTask, f1_metrics,
                                                metric_to_display_name,
                                                precision_metrics,
                                                recall_metrics)
@@ -26,10 +18,19 @@ from erroranalysis._internal.matrix_filter import (CATEGORY1, CATEGORY2, COUNT,
                                                    INTERVAL_MAX, INTERVAL_MIN,
                                                    MATRIX, METRIC_NAME,
                                                    METRIC_VALUE, TN, TP,
-                                                   VALUES)
+                                                   VALUES, bin_data)
 from erroranalysis._internal.metrics import (get_ordered_classes,
                                              is_multi_agg_metric,
                                              metric_to_func)
+from rai_test_utils.datasets.tabular import (
+    create_adult_census_data, create_binary_classification_dataset,
+    create_cancer_data, create_diabetes_data, create_housing_data,
+    create_iris_data, create_simple_titanic_data, create_wine_data)
+from rai_test_utils.models.model_utils import (create_models_classification,
+                                               create_models_regression)
+from rai_test_utils.models.sklearn import (create_kneighbors_classifier,
+                                           create_titanic_pipeline)
+from raiutils.exceptions import UserConfigValidationException
 
 TOLERANCE = 1e-5
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
@@ -50,9 +51,9 @@ class TestMatrixFilter(object):
         # cohort was chosen in tree view
         X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
 
-        filters = [{'arg': [2.85],
-                    'column': feature_names[1],
-                    'method': 'less and equal'}]
+        filters = [{ARG: [2.85],
+                    COLUMN: feature_names[1],
+                    METHOD: 'less and equal'}]
 
         model_task = ModelTask.CLASSIFICATION
         run_error_analyzer_on_models(X_train, y_train, X_test,
@@ -67,9 +68,9 @@ class TestMatrixFilter(object):
         X_train = pd.DataFrame(X_train, columns=feature_names)
         X_test = pd.DataFrame(X_test, columns=feature_names)
 
-        filters = [{'arg': [2.85],
-                    'column': feature_names[1],
-                    'method': 'less and equal'}]
+        filters = [{ARG: [2.85],
+                    COLUMN: feature_names[1],
+                    METHOD: 'less and equal'}]
 
         model_task = ModelTask.CLASSIFICATION
         run_error_analyzer_on_models(X_train, y_train, X_test,
@@ -222,24 +223,24 @@ class TestMatrixFilter(object):
 
         composite_filters = [{'compositeFilters':
                              [{'compositeFilters':
-                              [{'arg': [11.364, 13.182],
-                                'column': 'mean radius',
-                                'method': 'in the range of'}],
+                              [{ARG: [11.364, 13.182],
+                                COLUMN: 'mean radius',
+                                METHOD: 'in the range of'}],
                                'operation': 'and'},
                               {'compositeFilters':
-                               [{'arg': [13.182, 15],
-                                 'column': 'mean radius',
-                                 'method': 'in the range of'}],
+                               [{ARG: [13.182, 15],
+                                 COLUMN: 'mean radius',
+                                 METHOD: 'in the range of'}],
                                'operation': 'and'},
                               {'compositeFilters':
-                               [{'arg': [15, 16.817],
-                                 'column': 'mean radius',
-                                 'method': 'in the range of'}],
+                               [{ARG: [15, 16.817],
+                                 COLUMN: 'mean radius',
+                                 METHOD: 'in the range of'}],
                                'operation': 'and'},
                               {'compositeFilters':
-                               [{'arg': [16.817, 18.635],
-                                 'column': 'mean radius',
-                                 'method': 'in the range of'}],
+                               [{ARG: [16.817, 18.635],
+                                 COLUMN: 'mean radius',
+                                 METHOD: 'in the range of'}],
                                'operation': 'and'}],
                              'operation': 'or'}]
 
@@ -293,12 +294,12 @@ class TestMatrixFilter(object):
     def test_matrix_filter_housing_filters(self):
         X_train, X_test, y_train, y_test, feature_names = create_housing_data()
 
-        filters = [{'arg': [600],
-                    'column': 'Population',
-                    'method': 'less and equal'},
-                   {'arg': [6],
-                    'column': 'AveRooms',
-                    'method': 'greater'}]
+        filters = [{ARG: [600],
+                    COLUMN: 'Population',
+                    METHOD: 'less and equal'},
+                   {ARG: [6],
+                    COLUMN: 'AveRooms',
+                    METHOD: 'greater'}]
 
         model_task = ModelTask.REGRESSION
         run_error_analyzer_on_models(X_train, y_train, X_test,
@@ -309,7 +310,7 @@ class TestMatrixFilter(object):
         # Test quantile binning on CRIM feature in california housing dataset,
         # which errored out due to first category not fitting into bins
         (X_train, X_test, y_train, y_test,
-            feature_names) = create_housing_data(test_size=0.5)
+            feature_names) = create_housing_data()
 
         model_task = ModelTask.REGRESSION
         matrix_features = ['Population']
@@ -332,6 +333,39 @@ class TestMatrixFilter(object):
         run_error_analyzer_on_models(X_train, y_train, X_test,
                                      y_test, feature_names, model_task,
                                      matrix_features=matrix_features)
+
+    def test_matrix_filter_titanic_object_dtype_quantile(self):
+        (X_train, X_test, y_train, y_test, numeric,
+            categorical) = create_simple_titanic_data()
+        feature_names = categorical + numeric
+        matrix_features = [numeric[0], numeric[1]]
+        clf = create_titanic_pipeline(X_train, y_train)
+        categorical_features = categorical
+        run_error_analyzer(clf, X_test, y_test, feature_names,
+                           categorical_features,
+                           matrix_features=matrix_features,
+                           quantile_binning=True,
+                           model_task=ModelTask.CLASSIFICATION)
+
+    def test_bin_data_max_over_left_bound(self):
+        max_val = 0.9479200000000001
+        # Test bin_data when max value is over right bound of last bin
+        df = pd.DataFrame({'a': [0.49928, 0.53104, 0.40528, 0.876,
+                                 0.912, max_val]})
+        feat1 = 'a'
+        binned_data = bin_data(df, feat1, 2)
+        assert binned_data.cat.categories[1].right == max_val
+
+    def test_matrix_filter_with_invalid_feature_names(self):
+        X_train, X_test, y_train, y_test, feature_names = create_housing_data()
+
+        # Test with invalid feature names
+        model_task = ModelTask.REGRESSION
+        err = "not found in dataset. Existing features"
+        with pytest.raises(UserConfigValidationException, match=err):
+            run_error_analyzer_on_models(X_train, y_train, X_test,
+                                         y_test, feature_names, model_task,
+                                         matrix_features=['invalid_feature'])
 
 
 def run_error_analyzer_on_models(X_train,
@@ -387,12 +421,15 @@ def run_error_analyzer(model,
         features = [feature_names[0], feature_names[1]]
     else:
         features = matrix_features
+
+    # Validate compute_matrix_on_dataset() output
     matrix = error_analyzer.compute_matrix(features,
                                            filters,
                                            composite_filters,
                                            quantile_binning=quantile_binning,
                                            num_bins=num_bins)
-    validation_data = X_test
+    validation_data = X_test.copy()
+    y_test_validation = y_test
     if filters is not None or composite_filters is not None:
         validation_data = filter_from_cohort(error_analyzer,
                                              filters,
@@ -408,8 +445,39 @@ def run_error_analyzer(model,
                                                metric,
                                                model,
                                                validation_data,
-                                               y_test)
+                                               y_test_validation)
     validate_matrix(matrix,
+                    expected_count,
+                    expected_error,
+                    features,
+                    metric=metric)
+
+    # Validate compute_matrix_on_dataset() output
+    dataset = X_test.copy()
+    if not isinstance(dataset, pd.DataFrame):
+        dataset = pd.DataFrame(data=dataset, columns=feature_names)
+    dataset[TRUE_Y] = y_test
+    dataset[ROW_INDEX] = np.arange(0, len(y_test))
+
+    new_matrix = error_analyzer.compute_matrix_on_dataset(
+        features, dataset,
+        quantile_binning=quantile_binning,
+        num_bins=num_bins)
+    expected_count = len(dataset)
+    metric = error_analyzer.metric
+
+    if not isinstance(X_test, pd.DataFrame):
+        dataset = dataset.drop(columns=[TRUE_Y, ROW_INDEX]).values
+    else:
+        dataset = dataset.drop(columns=[TRUE_Y, ROW_INDEX])
+
+    expected_error = get_expected_metric_error(
+        error_analyzer,
+        metric,
+        model,
+        dataset,
+        y_test)
+    validate_matrix(new_matrix,
                     expected_count,
                     expected_error,
                     features,

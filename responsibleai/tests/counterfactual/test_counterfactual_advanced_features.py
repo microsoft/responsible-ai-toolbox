@@ -6,13 +6,15 @@ import os
 
 import pytest
 
+from rai_test_utils.models.lightgbm import create_lightgbm_classifier
+from raiutils.exceptions import UserConfigValidationException
 from responsibleai import RAIInsights
 from responsibleai._interfaces import CounterfactualData
+from responsibleai._internal.constants import FileFormats
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
-from responsibleai.exceptions import UserConfigValidationException
 
-from ..common_utils import create_iris_data, create_lightgbm_classifier
+from ..common_utils import create_iris_data
 
 
 class TestCounterfactualAdvancedFeatures(object):
@@ -138,8 +140,9 @@ class TestCounterfactualAdvancedFeatures(object):
             directory_manager = DirectoryManager(
                 parent_directory_path=counterfactual_path,
                 sub_directory_name=counterfactual_config_dir)
-            explainer_pkl_path = \
-                directory_manager.get_generators_directory() / "explainer.pkl"
+            explainer_pkl_path = (
+                directory_manager.get_generators_directory() /
+                ("explainer" + FileFormats.PKL))
             os.remove(explainer_pkl_path)
 
         with pytest.warns(UserWarning,
@@ -236,6 +239,13 @@ class TestCounterfactualAdvancedFeatures(object):
         assert hasattr(counterfactual_data_list[0], 'local_importance')
         assert hasattr(counterfactual_data_list[0], 'summary_importance')
         assert hasattr(counterfactual_data_list[0], 'model_type')
+        assert hasattr(counterfactual_data_list[0], 'test_data')
+        assert len(counterfactual_data_list[
+            0].feature_names_including_target) == \
+            len(counterfactual_data_list[0].test_data[0][0])
+        assert len(counterfactual_data_list[
+            0].feature_names_including_target) == \
+            len(counterfactual_data_list[0].cfs_list[0][0])
 
     def test_counterfactual_manager_get_data(self):
         X_train, X_test, y_train, y_test, feature_names, _ = \

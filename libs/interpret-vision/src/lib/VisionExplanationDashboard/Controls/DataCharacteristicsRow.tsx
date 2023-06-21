@@ -13,6 +13,8 @@ import {
 import { IVisionListItem } from "@responsible-ai/core-ui";
 import React from "react";
 
+import { getJoinedLabelString } from "../utils/labelUtils";
+
 import { dataCharacteristicsStyles } from "./DataCharacteristics.styles";
 import { DataCharacteristicsHeader } from "./DataCharacteristicsHeader";
 
@@ -27,7 +29,6 @@ export interface IDataCharacteristicsRowProps {
   showBackArrow: boolean[];
   totalListLength: number;
   onRenderCell: (item?: IVisionListItem | undefined) => JSX.Element;
-  processData: () => void;
   loadPrevItems: (index: number) => () => void;
   loadNextItems: (index: number) => () => void;
   getPageHeight: () => number;
@@ -53,16 +54,6 @@ const leftArrow: IIconProps = {
 };
 
 export class DataCharacteristicsRow extends React.Component<IDataCharacteristicsRowProps> {
-  /*
-  public componentDidUpdate(prevProps: IDataCharacteristicsRowProps): void {
-    if (
-      prevProps.labelType !== this.props.labelType ||
-      prevProps.list !== this.props.list
-    ) {
-      this.setState({ list: [...this.props.list] });
-    }
-  }
-*/
   public render(): React.ReactNode {
     const classNames = dataCharacteristicsStyles();
     const {
@@ -83,6 +74,8 @@ export class DataCharacteristicsRow extends React.Component<IDataCharacteristics
     const listContainerStyle = mergeStyles(classNames.listContainer, {
       height: imageDim + 30
     });
+    const predictedY = this.props.list[0].predictedY;
+    const key = getJoinedLabelString(predictedY);
     return (
       <Stack>
         <Stack.Item>
@@ -104,7 +97,7 @@ export class DataCharacteristicsRow extends React.Component<IDataCharacteristics
             )}
             <Stack.Item className={listContainerStyle}>
               <List
-                key={this.props.list[0].predictedY}
+                key={key}
                 items={list}
                 onRenderCell={onRenderCell}
                 getPageHeight={getPageHeight}

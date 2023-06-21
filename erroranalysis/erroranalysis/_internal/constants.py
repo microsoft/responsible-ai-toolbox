@@ -96,6 +96,9 @@ class Metrics(str, Enum):
     FALSE_POSITIVE_RATE = 'false_positive_rate'
     FALSE_NEGATIVE_RATE = 'false_negative_rate'
     SELECTION_RATE = 'selection_rate'
+    MEAN_AVERAGE_PRECISION = 'mean_average_precision'
+    AVERAGE_PRECISION = 'average_precision'
+    AVERAGE_RECALL = 'average_recall'
 
 
 class MetricKeys(str, Enum):
@@ -119,6 +122,16 @@ class TreeNode(str, Enum):
     """
     METRIC_NAME = MetricKeys.METRIC_NAME.value
     METRIC_VALUE = MetricKeys.METRIC_VALUE.value
+
+
+class ErrorCorrelationMethods(str, Enum):
+    """Provide the supported error correlation methods.
+
+    The supported methods are 'mutual_info', 'ebm' and 'gbm_shap'.
+    """
+    MUTUAL_INFO = 'mutual_info'
+    EBM = 'ebm'
+    GBM_SHAP = 'gbm_shap'
 
 
 metric_to_display_name = {

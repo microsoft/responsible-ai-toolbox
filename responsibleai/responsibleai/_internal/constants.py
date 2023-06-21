@@ -19,6 +19,20 @@ class Metadata(object):
 
     META_JSON = 'meta.json'
     MODEL = 'model'
+    TRAIN = 'train'
+    TEST = 'test'
+    TASK_TYPE = 'task_type'
+    TARGET_COLUMN = 'target_column'
+    CLASSES = 'classes'
+    FEATURE_COLUMNS = 'feature_columns'
+    FEATURE_METADATA = 'feature_metadata'
+    FEATURE_RANGES = 'feature_ranges'
+    CATEGORICAL_FEATURES = 'categorical_features'
+    CATEGORIES = 'categories'
+    CATEGORY_DICTIONARY = 'category_dictionary'
+    CATEGORICAL_INDEXES = 'categorical_indexes'
+    STRING_IND_DATA = 'string_ind_data'
+    NUMBER_LARGE_TEST_SAMPLES = 'number_large_test_samples'
 
 
 class ListProperties(object):
@@ -83,14 +97,42 @@ class SerializationAttributes:
 
     # File structure
     RESULTS_DIRECTORY = 'results'
+    PREDICTIONS_DIRECTORY = 'predictions'
+    DATA_DIRECTORY = 'data'
+    DASHBOARD_SCHEMAS = 'dashboard_schemas'
 
     # Metadata keys
     ID_KEY = 'id'
     VERSION_KEY = 'version'
 
-    # Metadata filnames
+    # Metadata filenames
     ID_FILENAME = 'id.json'
     VERSION_FILENAME = 'version.json'
+    META_JSON = 'meta.json'
+    RAI_VERSION_JSON = 'rai_version.json'
 
     # Dashboard filenames
     DASHBOARD_FILENAME = 'dashboard.json'
+
+    # Model filenames
+    MODEL_PKL = 'model.pkl'
+
+    # Prediction filenames
+    PREDICT_JSON = "predict.json"
+    FORECAST_JSON = "forecast.json"
+    PREDICT_PROBA_JSON = "predict_proba.json"
+    FORECAST_QUANTILES_JSON = "forecast_quantiles.json"
+    LARGE_PREDICT_JSON = "large_predict.json"
+    LARGE_FORECAST_JSON = "large_forecast.json"
+    LARGE_PREDICT_PROBA_JSON = "large_predict_proba.json"
+    LARGE_FORECAST_QUANTILES_JSON = "large_forecast_quantiles.json"
+
+    # Data filenames
+    LARGE_TEST_JSON = "large_test.json"
+
+
+class FileFormats:
+    """Constants relating to file formats."""
+    JSON = '.json'
+    PKL = '.pkl'
+    TXT = '.txt'

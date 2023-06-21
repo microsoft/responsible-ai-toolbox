@@ -4,16 +4,10 @@
 import time
 from enum import Enum
 
+import numpy as np
 import pandas as pd
 import pytest
-from common_utils import (create_adult_census_data,
-                          create_binary_classification_dataset,
-                          create_cancer_data, create_diabetes_data,
-                          create_iris_data, create_kneighbors_classifier,
-                          create_models_classification,
-                          create_simple_titanic_data,
-                          create_sklearn_random_forest_regressor,
-                          create_titanic_pipeline, replicate_dataset)
+from common_utils import replicate_dataset
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (ARG, COLUMN, COMPOSITE_FILTERS,
@@ -22,12 +16,22 @@ from erroranalysis._internal.constants import (ARG, COLUMN, COMPOSITE_FILTERS,
                                                SPLIT_FEATURE, SPLIT_INDEX,
                                                TRUE_Y, CohortFilterMethods,
                                                CohortFilterOps, Metrics,
-                                               ModelTask)
+                                               ModelTask, regression_metrics)
 from erroranalysis._internal.error_analyzer import (ModelAnalyzer,
                                                     PredictionsAnalyzer)
 from erroranalysis._internal.surrogate_error_tree import (
-    TreeSide, cache_subtree_features, create_surrogate_model,
-    get_categorical_info, get_max_split_index, traverse)
+    TreeSide, cache_subtree_features, compute_error_tree,
+    create_surrogate_model, get_categorical_info, get_max_split_index,
+    traverse)
+from rai_test_utils.datasets.tabular import (
+    create_adult_census_data, create_binary_classification_dataset,
+    create_cancer_data, create_diabetes_data, create_iris_data,
+    create_simple_titanic_data)
+from rai_test_utils.models.model_utils import create_models_classification
+from rai_test_utils.models.sklearn import (
+    create_kneighbors_classifier, create_sklearn_random_forest_regressor,
+    create_titanic_pipeline)
+from raiutils.exceptions import UserConfigValidationException
 
 SIZE = 'size'
 PARENTID = 'parentId'
@@ -62,11 +66,23 @@ class TestSurrogateErrorTree(object):
     def test_surrogate_error_tree_int_categorical(self, analyzer_type):
         X_train, X_test, y_train, y_test, categorical_features = \
             create_adult_census_data()
-
         model = create_kneighbors_classifier(X_train, y_train)
 
         run_error_analyzer(model, X_test, y_test, list(X_train.columns),
                            analyzer_type, categorical_features)
+
+    @pytest.mark.parametrize('analyzer_type', [AnalyzerType.MODEL,
+                                               AnalyzerType.PREDICTIONS])
+    def test_surrogate_error_tree_categorical_filtered(self, analyzer_type):
+        X_train, X_test, y_train, y_test, categorical_features = \
+            create_adult_census_data()
+        model = create_kneighbors_classifier(X_train, y_train)
+        filters = [{ARG: [40],
+                    COLUMN: 'Age',
+                    METHOD: 'less and equal'}]
+        run_error_analyzer(model, X_test, y_test, list(X_train.columns),
+                           analyzer_type, categorical_features,
+                           filters=filters)
 
     def test_large_data_surrogate_error_tree(self):
         # validate tree trains quickly for large data
@@ -266,6 +282,16 @@ class TestSurrogateErrorTree(object):
         assert ('Column string_index of type string is incorrectly treated '
                 'as numeric with threshold value') in str(ve.value)
 
+    def test_surrogate_error_tree_with_invalid_feature_names(self):
+        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
+
+        model = create_kneighbors_classifier(X_train, y_train)
+        err = "not found in dataset. Existing features"
+        with pytest.raises(UserConfigValidationException, match=err):
+            run_error_analyzer(model, X_test, y_test, feature_names,
+                               AnalyzerType.MODEL,
+                               tree_features=['invalid_feature'])
+
 
 def run_error_analyzer(model, X_test, y_test, feature_names,
                        analyzer_type, categorical_features=None,
@@ -290,11 +316,13 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
                                              model_task=model_task)
     if tree_features is None:
         tree_features = feature_names
+
+    # Validate compute_error_tree() output
     tree = error_analyzer.compute_error_tree(
         tree_features, filters, composite_filters,
         max_depth=max_depth, num_leaves=num_leaves,
         min_child_samples=min_child_samples)
-    validation_data = X_test
+    validation_data = X_test.copy()
     if filters is not None or composite_filters is not None:
         validation_data = filter_from_cohort(error_analyzer,
                                              filters,
@@ -304,7 +332,56 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
             TRUE_Y, ROW_INDEX, PRED_Y])
         if not isinstance(X_test, pd.DataFrame):
             validation_data = validation_data.values
-    validation_data_len = len(validation_data)
+    is_regression_task = error_analyzer.model_task == ModelTask.REGRESSION
+    model_task_na = error_analyzer.model_task is None
+    is_regression_metric = error_analyzer.metric in regression_metrics
+    is_regression_metric = model_task_na and is_regression_metric
+    is_regression = is_regression_task or is_regression_metric
+    validate_error_tree(tree, len(validation_data), min_child_samples,
+                        is_regression)
+
+    # validate wrapper method compute_error_tree() output
+    new_tree = compute_error_tree(
+        error_analyzer, tree_features, filters, composite_filters,
+        max_depth=max_depth, num_leaves=num_leaves,
+        min_child_samples=min_child_samples)
+    validate_error_tree(new_tree, len(validation_data),
+                        min_child_samples, is_regression)
+
+    # Validate compute_error_tree_on_dataset() output
+    if len(validation_data) > 0:
+        dataset = X_test.copy()
+        if not isinstance(dataset, pd.DataFrame):
+            dataset = pd.DataFrame(data=dataset, columns=tree_features)
+        dataset[TRUE_Y] = y_test
+        dataset[ROW_INDEX] = np.arange(0, len(y_test))
+        if analyzer_type == AnalyzerType.PREDICTIONS:
+            dataset[PRED_Y] = model.predict(X_test)
+    else:
+        if isinstance(tree_features, np.ndarray):
+            tree_features_list = tree_features.tolist()
+        else:
+            tree_features_list = tree_features
+        if analyzer_type == AnalyzerType.PREDICTIONS:
+            dataset = pd.DataFrame(
+                data=[],
+                columns=tree_features_list + [TRUE_Y, ROW_INDEX, PRED_Y])
+        else:
+            dataset = pd.DataFrame(
+                data=[],
+                columns=tree_features_list + [TRUE_Y, ROW_INDEX])
+
+    new_tree = error_analyzer.compute_error_tree_on_dataset(
+        tree_features, pd.concat([dataset, dataset]),
+        max_depth=max_depth, num_leaves=num_leaves,
+        min_child_samples=min_child_samples)
+
+    validate_error_tree(new_tree, len(pd.concat([dataset, dataset])),
+                        min_child_samples, is_regression)
+
+
+def validate_error_tree(tree, validation_data_len, min_child_samples,
+                        is_regression):
     assert tree is not None
     assert len(tree) > 0
     assert ERROR in tree[0]
@@ -315,6 +392,8 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
     assert tree[0][SIZE] == validation_data_len
     for node in tree:
         assert node[SIZE] >= min(min_child_samples, validation_data_len)
+        if not is_regression:
+            assert isinstance(node[ERROR], int)
 
 
 def validate_traversed_tree(tree, tree_dict, max_split_index,

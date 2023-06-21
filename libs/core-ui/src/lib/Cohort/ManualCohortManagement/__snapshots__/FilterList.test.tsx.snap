@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterList Should filter out undefined filter 1`] = `
+Array [
+  <div
+    key="0"
+  >
+    <StyledTooltipHostBase
+      content="alcohol  less than 12.09"
+      onTooltipToggle={[Function]}
+      overflowMode={1}
+    >
+      alcohol  less than 12.09
+    </StyledTooltipHostBase>
+  </div>,
+  <div
+    key="1"
+  >
+    <StyledTooltipHostBase
+      content="ash  greater than 2.5"
+      onTooltipToggle={[Function]}
+      overflowMode={1}
+    >
+      ash  greater than 2.5
+    </StyledTooltipHostBase>
+  </div>,
+]
+`;
+
+exports[`FilterList Should render 1`] = `
+Array [
+  <div
+    key="0"
+  >
+    <StyledTooltipHostBase
+      content="alcohol  less than 12.09"
+      onTooltipToggle={[Function]}
+      overflowMode={1}
+    >
+      alcohol  less than 12.09
+    </StyledTooltipHostBase>
+  </div>,
+  <div
+    key="1"
+  >
+    <StyledTooltipHostBase
+      content="ash  greater than 2.5"
+      onTooltipToggle={[Function]}
+      overflowMode={1}
+    >
+      ash  greater than 2.5
+    </StyledTooltipHostBase>
+  </div>,
+]
+`;

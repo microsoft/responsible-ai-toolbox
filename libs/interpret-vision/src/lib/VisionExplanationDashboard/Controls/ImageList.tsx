@@ -14,18 +14,19 @@ import {
 import { IVisionListItem } from "@responsible-ai/core-ui";
 import React from "react";
 
+import { ISearchable } from "../Interfaces/ISearchable";
+import { getFilteredDataFromSearch } from "../utils/getFilteredData";
+import { getJoinedLabelString } from "../utils/labelUtils";
+
 import { imageListStyles } from "./ImageList.styles";
 
-export interface IImageListProps {
-  data: IVisionListItem[];
+export interface IImageListProps extends ISearchable {
+  items: IVisionListItem[];
   imageDim: number;
-  searchValue: string;
   selectItem: (item: IVisionListItem) => void;
 }
 
 export interface IImageListState {
-  data: IVisionListItem[];
-  filter: string;
   filteredItems: IVisionListItem[];
 }
 
@@ -48,47 +49,21 @@ export class ImageList extends React.Component<
     super(props);
     this.columnCount = 0;
     this.rowHeight = 0;
+
+    const filteredItems: IVisionListItem[] = this.getFilteredItems();
     this.state = {
-      data: [],
-      filter: this.props.searchValue.toLowerCase(),
-      filteredItems: []
+      filteredItems
     };
   }
 
-  public static getDerivedStateFromProps(
-    props: IImageListProps,
-    state: IImageListState
-  ): Partial<IImageListState> {
-    if (props.data !== state.data && props.data.length > 0) {
-      return {
-        filter: "",
-        filteredItems: props.data
-      };
+  public componentDidUpdate(prevProps: IImageListProps): void {
+    if (
+      this.props.items !== prevProps.items ||
+      this.props.searchValue !== prevProps.searchValue
+    ) {
+      const filteredItems: IVisionListItem[] = this.getFilteredItems();
+      this.setState({ filteredItems });
     }
-
-    const searchVal = props.searchValue.toLowerCase();
-    if (searchVal.length === 0) {
-      return {
-        filter: searchVal,
-        filteredItems: state.data
-      };
-    }
-    if (searchVal !== state.filter) {
-      return {
-        filter: searchVal,
-        filteredItems: state.data.filter(
-          (item) =>
-            item.predictedY.toLowerCase().includes(searchVal) ||
-            item.trueY.toLowerCase().includes(searchVal)
-        )
-      };
-    }
-    return state;
-  }
-
-  public componentDidMount(): void {
-    const data = this.props.data;
-    this.setState({ data, filteredItems: data });
   }
 
   public render(): React.ReactNode {
@@ -108,6 +83,15 @@ export class ImageList extends React.Component<
     );
   }
 
+  private getFilteredItems(): IVisionListItem[] {
+    const searchValue = this.props.searchValue.toLowerCase();
+    let filteredItems: IVisionListItem[] = this.props.items;
+    if (searchValue.length > 0) {
+      filteredItems = getFilteredDataFromSearch(searchValue, filteredItems);
+    }
+    return filteredItems;
+  }
+
   private onRenderCell = (
     item?: IVisionListItem | undefined
   ): React.ReactNode => {
@@ -115,6 +99,11 @@ export class ImageList extends React.Component<
     if (!item) {
       return;
     }
+    const itemPredY = item?.predictedY;
+    const predictedY = getJoinedLabelString(itemPredY);
+    const itemTrueY = item?.trueY;
+    const trueY = getJoinedLabelString(itemTrueY);
+    const alt = predictedY;
 
     return (
       <Stack
@@ -139,7 +128,7 @@ export class ImageList extends React.Component<
           >
             <Image
               {...imageProps}
-              alt={item?.predictedY}
+              alt={alt}
               src={`data:image/jpg;base64,${item?.image}`}
               onClick={this.callbackWrapper(item)}
               width={this.props.imageDim}
@@ -148,18 +137,15 @@ export class ImageList extends React.Component<
           </Stack.Item>
           <Stack.Item
             className={
-              item?.predictedY === item?.trueY
+              predictedY === trueY
                 ? classNames.successIndicator
                 : classNames.errorIndicator
             }
             style={{
-              left: ImagePadding,
-              maxWidth: this.props.imageDim
+              left: ImagePadding
             }}
           >
-            <Text className={classNames.labelPredicted}>
-              {item?.predictedY}
-            </Text>
+            <Text className={classNames.labelPredicted}>{predictedY}</Text>
           </Stack.Item>
           <Stack.Item
             className={classNames.labelContainer}
@@ -175,7 +161,7 @@ export class ImageList extends React.Component<
               className={classNames.label}
               style={{ width: this.props.imageDim - 20 }}
             >
-              {item?.trueY}
+              {trueY}
             </Text>
           </Stack.Item>
         </Stack.Item>

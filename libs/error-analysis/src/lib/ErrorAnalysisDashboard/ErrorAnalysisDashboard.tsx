@@ -22,7 +22,6 @@ import {
   isThreeDimArray,
   JointDataset,
   IExplanationModelMetadata,
-  ModelTypes,
   WeightVectors,
   CohortInfoPanel,
   CohortListPanel,
@@ -41,7 +40,10 @@ import {
   IFilter,
   WeightVectorOption,
   EditCohort,
-  ShiftCohort
+  ShiftCohort,
+  IsBinary,
+  IsMulticlass,
+  IsMultilabel
 } from "@responsible-ai/core-ui";
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
 import { GlobalExplanationTab } from "@responsible-ai/interpret";
@@ -199,9 +201,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         props.precomputedExplanations,
         props.probabilityY
       );
-    } else if (modelType === ModelTypes.Binary) {
+    } else if (IsBinary(modelType)) {
       classLength = 2;
-    } else if (modelType === ModelTypes.Multiclass) {
+    } else if (IsMulticlass(modelType) || IsMultilabel(modelType)) {
       classLength = new Set(
         [...(props.trueY || [])].concat(props.predictedY || [])
       ).size;
@@ -282,14 +284,15 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         0,
         CohortSource.None,
         false,
-        metricStats
+        metricStats,
+        true
       )
     ];
     const weightVectorLabels = {
       [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
     };
     const weightVectorOptions = [];
-    if (modelMetadata.modelType === ModelTypes.Multiclass) {
+    if (IsMulticlass(modelMetadata.modelType)) {
       weightVectorOptions.push(WeightVectors.AbsAvg);
     }
     modelMetadata.classNames.forEach((name, index) => {
@@ -333,10 +336,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       predictionTab: PredictionTabKeys.CorrectPredictionTab,
       selectedCohort: cohorts[0],
       selectedFeatures,
-      selectedWeightVector:
-        modelMetadata.modelType === ModelTypes.Multiclass
-          ? WeightVectors.AbsAvg
-          : 0,
+      selectedWeightVector: IsMulticlass(modelMetadata.modelType)
+        ? WeightVectors.AbsAvg
+        : 0,
       selectedWhatIfIndex: undefined,
       showMessageBar: false,
       viewType: ViewTypeKeys.ErrorAnalysisView,
@@ -558,6 +560,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                       linkSize={"normal"}
                       headersOnly
                       styles={{ root: classNames.pivotLabelWrapper }}
+                      overflowBehavior="menu"
                     >
                       {this.pivotItems.map((props) => (
                         <PivotItem key={props.itemKey} {...props} />

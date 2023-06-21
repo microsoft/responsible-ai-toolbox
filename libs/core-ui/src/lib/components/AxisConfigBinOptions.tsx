@@ -1,19 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Checkbox, Text } from "@fluentui/react";
+import { Stack, Text, Toggle } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
+import { RangeTypes } from "@responsible-ai/mlchartlib";
 import React from "react";
 
-import { ISelectorConfig } from "../util/IGenericChartProps";
+import { AxisTypes, ISelectorConfig } from "../util/IGenericChartProps";
 import { JointDataset } from "../util/JointDataset";
+import { IJointMeta } from "../util/JointDatasetUtils";
 
+import { axisConfigBinOptionsStyles } from "./AxisConfigBinOptions.styles";
 import { AxisConfigDialogSpinButton } from "./AxisConfigDialogSpinButton";
 import {
   allowUserInteract,
   getBinCountForProperty,
-  getMaxValue,
-  getMinValue
+  metaDescription
 } from "./AxisConfigDialogUtils";
 
 export interface IAxisConfigBinOptionsProps {
@@ -25,79 +27,135 @@ export interface IAxisConfigBinOptionsProps {
   minHistCols: number;
   mustBin: boolean;
   selectedBinCount?: number;
+  allowTreatAsCategorical: boolean;
+  allowLogarithmicScaling?: boolean;
   selectedColumn: ISelectorConfig;
   onBinCountUpdated: (binCount?: number) => void;
+  onEnableLogarithmicScaling: (checked?: boolean | undefined) => void;
   onSelectedColumnUpdated: (selectedColumn: ISelectorConfig) => void;
+  onSetAsCategorical: (checked?: boolean | undefined) => void;
 }
 
 export class AxisConfigBinOptions extends React.PureComponent<IAxisConfigBinOptionsProps> {
   public render(): React.ReactNode {
     const selectedMeta =
       this.props.jointDataset.metaDict[this.props.selectedColumn.property];
-    const minVal = getMinValue(selectedMeta);
-    const maxVal = getMaxValue(selectedMeta);
-    return selectedMeta?.treatAsCategorical ? (
-      <>
-        <Text variant={"small"}>
-          {`${localization.formatString(
-            localization.Interpret.Filters.uniqueValues,
-            selectedMeta.sortedCategoricalValues?.length
-          )}`}
-        </Text>
-        {this.props.canDither && (
-          <Checkbox
-            key={this.props.selectedColumn.property}
-            label={localization.Interpret.AxisConfigDialog.ditherLabel}
-            checked={this.props.selectedColumn.options.dither}
-            onChange={this.ditherChecked}
+    const selectedColumnDesc = metaDescription(selectedMeta);
+    const styles = axisConfigBinOptionsStyles();
+    return (
+      <Stack>
+        {selectedMeta.treatAsCategorical ? (
+          <Stack.Item className={styles.hideMinMax}>&nbsp;</Stack.Item>
+        ) : (
+          <Stack.Item className={styles.minMax}>
+            <Text variant="small" nowrap block>
+              {selectedColumnDesc.minDescription}
+            </Text>
+            <Text variant="small" nowrap block>
+              {selectedColumnDesc.maxDescription}
+            </Text>
+          </Stack.Item>
+        )}
+        {this.displayLogarithmicToggle(selectedMeta) && (
+          <Toggle
+            key="logarithmic-toggle"
+            label={localization.Interpret.AxisConfigDialog.logarithmicScaling}
+            inlineLabel
+            checked={selectedMeta.AxisType === AxisTypes.Logarithmic}
+            onChange={this.enableLogarithmicScaling}
           />
         )}
-      </>
-    ) : (
-      <>
-        <Text variant={"small"} nowrap block>
-          {localization.formatString(
-            localization.Interpret.Filters.min,
-            minVal
-          )}
-        </Text>
-        <Text variant={"small"} nowrap block>
-          {localization.formatString(
-            localization.Interpret.Filters.max,
-            maxVal
-          )}
-        </Text>
-        {this.props.canBin && !this.props.mustBin && (
-          <Checkbox
-            key={this.props.selectedColumn.property}
-            label={localization.Interpret.AxisConfigDialog.binLabel}
-            checked={this.props.selectedColumn.options.bin}
-            onChange={this.shouldBinClicked}
+        {this.displayCategoricalToggle(selectedMeta) && (
+          <Toggle
+            key="categorical-toggle"
+            label={localization.Interpret.AxisConfigDialog.TreatAsCategorical}
+            inlineLabel
+            checked={selectedMeta.treatAsCategorical}
+            onChange={this.setAsCategorical}
           />
         )}
-        {(this.props.mustBin || this.props.selectedColumn.options.bin) &&
-          this.props.selectedBinCount !== undefined && (
-            <AxisConfigDialogSpinButton
-              label={localization.Interpret.AxisConfigDialog.numOfBins}
-              max={this.props.maxHistCols}
-              min={this.props.minHistCols}
-              setNumericValue={this.setNumericValue}
-              value={this.props.selectedBinCount.toString()}
-            />
-          )}
-        {!(this.props.mustBin || this.props.selectedColumn.options.bin) &&
-          this.props.canDither &&
-          allowUserInteract(this.props.selectedColumn.property) && (
-            <Checkbox
-              key={this.props.selectedColumn.property}
-              label={localization.Interpret.AxisConfigDialog.ditherLabel}
-              checked={this.props.selectedColumn.options.dither}
-              onChange={this.ditherChecked}
-            />
-          )}
-      </>
+        {selectedMeta?.treatAsCategorical ? (
+          <>
+            <Text variant="small">
+              {selectedColumnDesc.categoricalDescription}
+            </Text>
+            {this.props.canDither && this.getDitherToggle()}
+          </>
+        ) : (
+          <>
+            {this.props.canBin && !this.props.mustBin && (
+              <Toggle
+                key="bin-toggle"
+                label={localization.Interpret.AxisConfigDialog.binLabel}
+                inlineLabel
+                checked={this.props.selectedColumn.options.bin}
+                onChange={this.shouldBinClicked}
+              />
+            )}
+            {(this.props.mustBin || this.props.selectedColumn.options.bin) &&
+              this.props.selectedBinCount !== undefined && (
+                <AxisConfigDialogSpinButton
+                  label={localization.Interpret.AxisConfigDialog.numOfBins}
+                  max={this.props.maxHistCols}
+                  min={this.props.minHistCols}
+                  setNumericValue={this.setNumericValue}
+                  value={this.props.selectedBinCount.toString()}
+                />
+              )}
+            {!(this.props.mustBin || this.props.selectedColumn.options.bin) &&
+              this.props.canDither &&
+              allowUserInteract(this.props.selectedColumn.property) &&
+              this.getDitherToggle()}
+          </>
+        )}
+      </Stack>
     );
   }
+
+  private getDitherToggle = (): JSX.Element => {
+    return (
+      <Toggle
+        key="dither-toggle"
+        label={localization.Interpret.AxisConfigDialog.ditherLabel}
+        inlineLabel
+        checked={this.props.selectedColumn.options.dither}
+        onChange={this.ditherChecked}
+      />
+    );
+  };
+
+  private displayLogarithmicToggle = (selectedMeta: IJointMeta): boolean => {
+    const allowLogarithmicScaling = this.props.allowLogarithmicScaling ?? true;
+    return (
+      (selectedMeta.featureRange?.rangeType === RangeTypes.Integer ||
+        selectedMeta.featureRange?.rangeType === RangeTypes.Numeric) &&
+      allowLogarithmicScaling &&
+      allowUserInteract(this.props.selectedColumn.property)
+    );
+  };
+
+  private displayCategoricalToggle = (selectedMeta: IJointMeta): boolean => {
+    return (
+      selectedMeta.featureRange?.rangeType === RangeTypes.Integer &&
+      this.props.allowTreatAsCategorical &&
+      allowUserInteract(this.props.selectedColumn.property)
+    );
+  };
+
+  private readonly setAsCategorical = (
+    _ev?: React.FormEvent<HTMLElement>,
+    checked?: boolean
+  ): void => {
+    this.props.onSetAsCategorical(checked);
+    this.forceUpdate();
+  };
+
+  private readonly enableLogarithmicScaling = (
+    _ev?: React.FormEvent<HTMLElement>,
+    checked?: boolean
+  ): void => {
+    this.props.onEnableLogarithmicScaling(checked);
+  };
 
   private readonly shouldBinClicked = (
     _ev?: React.FormEvent<HTMLElement>,
@@ -113,7 +171,8 @@ export class AxisConfigBinOptions extends React.PureComponent<IAxisConfigBinOpti
         options: {
           bin: checked
         },
-        property
+        property,
+        type: this.props.jointDataset.metaDict[property]?.AxisType
       });
     } else {
       const binCount = getBinCountForProperty(
@@ -126,7 +185,8 @@ export class AxisConfigBinOptions extends React.PureComponent<IAxisConfigBinOpti
         options: {
           bin: checked
         },
-        property
+        property,
+        type: this.props.jointDataset.metaDict[property]?.AxisType
       });
     }
   };
@@ -139,7 +199,9 @@ export class AxisConfigBinOptions extends React.PureComponent<IAxisConfigBinOpti
       options: {
         dither: checked
       },
-      property: this.props.selectedColumn.property
+      property: this.props.selectedColumn.property,
+      type: this.props.jointDataset.metaDict[this.props.selectedColumn.property]
+        ?.AxisType
     });
   };
 

@@ -12,17 +12,15 @@ from typing import Any, Optional
 
 import pandas as pd
 
-from responsibleai._internal.constants import Metadata
+import responsibleai
+from raiutils.exceptions import UserConfigValidationException
+from responsibleai._internal.constants import (FileFormats, Metadata,
+                                               SerializationAttributes)
 
-_DATA = 'data'
 _DTYPES = 'dtypes'
-_TRAIN = 'train'
-_TEST = 'test'
-_MODEL = Metadata.MODEL
-_MODEL_PKL = _MODEL + '.pkl'
+_MODEL_PKL = Metadata.MODEL + FileFormats.PKL
 _SERIALIZER = 'serializer'
 _MANAGERS = 'managers'
-_JSON_EXTENSION = '.json'
 
 
 class RAIBaseInsights(ABC):
@@ -31,7 +29,7 @@ class RAIBaseInsights(ABC):
     This class is abstract and should not be instantiated.
     """
 
-    def __init__(self, model: Optional[Any], train: pd.DataFrame,
+    def __init__(self, model: Optional[Any], train: Optional[pd.DataFrame],
                  test: pd.DataFrame, target_column: str, task_type: str,
                  serializer: Optional[Any] = None):
         """Creates an RAIBaseInsights object.
@@ -41,8 +39,11 @@ class RAIBaseInsights(ABC):
             or function that accepts a 2d ndarray.
         :type model: object
         :param train: The training dataset including the label column.
+            This parameter is optional as some extending downstream classes
+            may not require it.
         :type train: pandas.DataFrame
         :param test: The test dataset including the label column.
+            Note this parameter is always required.
         :type test: pandas.DataFrame
         :param target_column: The name of the label column.
         :type target_column: str
@@ -63,7 +64,6 @@ class RAIBaseInsights(ABC):
         self.target_column = target_column
         self.task_type = task_type
         self._serializer = serializer
-        self._initialize_managers()
 
     @abstractmethod
     def _initialize_managers(self):
@@ -139,21 +139,29 @@ class RAIBaseInsights(ABC):
         :param path: The directory path to save the RAIBaseInsights to.
         :type path: str
         """
-        data_directory = Path(path) / _DATA
+        data_directory = Path(path) / SerializationAttributes.DATA_DIRECTORY
         data_directory.mkdir(parents=True, exist_ok=True)
-        dtypes = self.train.dtypes.astype(str).to_dict()
-        self._write_to_file(data_directory /
-                            (_TRAIN + _DTYPES + _JSON_EXTENSION),
-                            json.dumps(dtypes))
-        self._write_to_file(data_directory / (_TRAIN + _JSON_EXTENSION),
-                            self.train.to_json(orient='split'))
+        if self.train is not None:
+            dtypes = self.train.dtypes.astype(str).to_dict()
+            self._write_to_file(data_directory /
+                                (Metadata.TRAIN + _DTYPES + FileFormats.JSON),
+                                json.dumps(dtypes))
+            self._write_to_file(data_directory /
+                                (Metadata.TRAIN + FileFormats.JSON),
+                                self.train.to_json(orient='split'))
 
         dtypes = self.test.dtypes.astype(str).to_dict()
         self._write_to_file(data_directory /
-                            (_TEST + _DTYPES + _JSON_EXTENSION),
+                            (Metadata.TEST + _DTYPES + FileFormats.JSON),
                             json.dumps(dtypes))
-        self._write_to_file(data_directory / (_TEST + _JSON_EXTENSION),
+        self._write_to_file(data_directory /
+                            (Metadata.TEST + FileFormats.JSON),
                             self.test.to_json(orient='split'))
+
+        self._write_to_file(Path(path) /
+                            (SerializationAttributes.RAI_VERSION_JSON),
+                            json.dumps(
+                                {"responsibleai": responsibleai.__version__}))
 
     @abstractmethod
     def _save_metadata(self, path):
@@ -183,11 +191,16 @@ class RAIBaseInsights(ABC):
                 has_setstate = hasattr(self.model, '__setstate__')
                 has_getstate = hasattr(self.model, '__getstate__')
                 if not (has_setstate and has_getstate):
-                    raise ValueError(
-                        "Model must be picklable or a custom serializer must"
-                        " be specified")
-            with open(top_dir / _MODEL_PKL, 'wb') as file:
-                pickle.dump(self.model, file)
+                    warnings.warn(
+                        "Model does not have __setstate__ and " +
+                        "__getstate__, pickle may fail")
+            try:
+                with open(top_dir / _MODEL_PKL, 'wb') as file:
+                    pickle.dump(self.model, file)
+            except Exception as e:
+                raise UserConfigValidationException(
+                    "Model must be picklable or a custom serializer must"
+                    " be specified") from e
 
     def _save_managers(self, path):
         """Save the state of individual managers.
@@ -221,19 +234,25 @@ class RAIBaseInsights(ABC):
         :param path: The directory path to data location.
         :type path: str
         """
-        data_directory = Path(path) / _DATA
+        data_directory = Path(path) / SerializationAttributes.DATA_DIRECTORY
+        train_data_json = data_directory / (Metadata.TRAIN + FileFormats.JSON)
+        if train_data_json.exists():
+            train_dtypes_path = (Metadata.TRAIN + _DTYPES + FileFormats.JSON)
+            train_dtypes_json = data_directory / train_dtypes_path
+            with open(train_dtypes_json, 'r') as file:
+                types = json.load(file)
+            with open(train_data_json, 'r') as file:
+                train = pd.read_json(file, dtype=types, orient='split')
+        else:
+            train = None
+        inst.__dict__[Metadata.TRAIN] = train
         with open(data_directory /
-                  (_TRAIN + _DTYPES + _JSON_EXTENSION), 'r') as file:
+                  (Metadata.TEST + _DTYPES + FileFormats.JSON), 'r') as file:
             types = json.load(file)
-        with open(data_directory / (_TRAIN + _JSON_EXTENSION), 'r') as file:
-            train = pd.read_json(file, dtype=types, orient='split')
-        inst.__dict__[_TRAIN] = train
-        with open(data_directory /
-                  (_TEST + _DTYPES + _JSON_EXTENSION), 'r') as file:
-            types = json.load(file)
-        with open(data_directory / (_TEST + _JSON_EXTENSION), 'r') as file:
+        with open(data_directory / (Metadata.TEST + FileFormats.JSON),
+                  'r') as file:
             test = pd.read_json(file, dtype=types, orient='split')
-        inst.__dict__[_TEST] = test
+        inst.__dict__[Metadata.TEST] = test
 
     @staticmethod
     def _load_model(inst, path):
@@ -247,25 +266,24 @@ class RAIBaseInsights(ABC):
         top_dir = Path(path)
         serializer_path = top_dir / _SERIALIZER
         model_load_err = ('ERROR-LOADING-USER-MODEL: '
-                          'There was an error loading the user model. '
-                          'Some of RAI dashboard features may not work.')
+                          'There was an error loading the user model.')
         if serializer_path.exists():
             try:
                 with open(serializer_path, 'rb') as file:
                     serializer = pickle.load(file)
                 inst.__dict__['_' + _SERIALIZER] = serializer
-                inst.__dict__[_MODEL] = serializer.load(top_dir)
-            except Exception:
+                inst.__dict__[Metadata.MODEL] = serializer.load(top_dir)
+            except Exception as e:
                 warnings.warn(model_load_err)
-                inst.__dict__[_MODEL] = None
+                raise e
         else:
             inst.__dict__['_' + _SERIALIZER] = None
             try:
                 with open(top_dir / _MODEL_PKL, 'rb') as file:
-                    inst.__dict__[_MODEL] = pickle.load(file)
-            except Exception:
+                    inst.__dict__[Metadata.MODEL] = pickle.load(file)
+            except Exception as e:
                 warnings.warn(model_load_err)
-                inst.__dict__[_MODEL] = None
+                raise e
 
     @staticmethod
     def _load_managers(inst, path, manager_map):

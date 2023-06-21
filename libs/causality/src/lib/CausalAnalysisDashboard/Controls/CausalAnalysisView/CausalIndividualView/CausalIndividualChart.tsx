@@ -137,6 +137,8 @@ export class CausalIndividualChart extends React.PureComponent<
                       canDither={
                         this.state.chartProps.chartType === ChartTypes.Scatter
                       }
+                      allowTreatAsCategorical
+                      hideDroppedFeatures
                       onAccept={this.onYSet}
                     />
                   </div>
@@ -145,6 +147,7 @@ export class CausalIndividualChart extends React.PureComponent<
                   <BasicHighChart
                     configOverride={getIndividualChartOptions(
                       plotlyProps,
+                      this.state.chartProps,
                       this.selectPointFromChart
                     )}
                     theme={getTheme()}
@@ -183,6 +186,8 @@ export class CausalIndividualChart extends React.PureComponent<
                   canDither={
                     this.state.chartProps.chartType === ChartTypes.Scatter
                   }
+                  allowTreatAsCategorical
+                  hideDroppedFeatures
                   onAccept={this.onXSet}
                 />
               </div>

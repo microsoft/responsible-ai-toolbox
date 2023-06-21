@@ -3,8 +3,8 @@
 
 import {
   IExplanationModelMetadata,
-  ModelTypes,
-  ModelExplanationUtils
+  ModelExplanationUtils,
+  IsMulticlass
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty, PlotlyThemes } from "@responsible-ai/mlchartlib";
@@ -166,7 +166,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
           sortedIndexVector,
           singleSeries,
           this.props.modelMetadata.featureNames,
-          this.props.modelMetadata.modelType === ModelTypes.Multiclass
+          IsMulticlass(this.props.modelMetadata.modelType)
             ? this.props.modelMetadata.classNames[classIndex]
             : undefined,
           this.props.additionalRowData
@@ -177,7 +177,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
           text.unshift(
             ...BarChart.buildInterceptTooltip(
               this.props.intercept[classIndex],
-              this.props.modelMetadata.modelType === ModelTypes.Multiclass
+              IsMulticlass(this.props.modelMetadata.modelType)
                 ? this.props.modelMetadata.classNames[classIndex]
                 : undefined
             )
@@ -187,10 +187,9 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
         const orientation = "v";
         baseSeries.data.push({
           hoverinfo: "text",
-          name:
-            this.props.modelMetadata.modelType === ModelTypes.Multiclass
-              ? this.props.modelMetadata.classNames[classIndex]
-              : "",
+          name: IsMulticlass(this.props.modelMetadata.modelType)
+            ? this.props.modelMetadata.classNames[classIndex]
+            : "",
           orientation,
           text,
           type: "bar",

@@ -4,6 +4,7 @@
 """Defines the Data Balance Manager class."""
 
 import json
+import warnings
 from pathlib import Path
 from typing import Dict, List
 
@@ -12,7 +13,8 @@ import pandas as pd
 
 from responsibleai._interfaces import TaskType
 from responsibleai._internal.constants import DataBalanceManagerKeys as Keys
-from responsibleai._internal.constants import ListProperties, ManagerNames
+from responsibleai._internal.constants import (FileFormats, ListProperties,
+                                               ManagerNames)
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.databalanceanalysis import (AggregateBalanceMeasures,
@@ -22,9 +24,9 @@ from responsibleai.databalanceanalysis.data_balance_utils import (
     prepare_df, transform_measures_to_dict)
 from responsibleai.managers.base_manager import BaseManager
 
-DATA_JSON = "data.json"
-MANAGER_JSON = "manager.json"
-MEASURES_JSON = "measures.json"
+DATA_JSON = f"data{FileFormats.JSON}"
+MANAGER_JSON = f"manager{FileFormats.JSON}"
+MEASURES_JSON = f"measures{FileFormats.JSON}"
 
 
 class DataBalanceManager(BaseManager):
@@ -157,30 +159,35 @@ class DataBalanceManager(BaseManager):
         if not self._is_added:
             return
 
-        self._validate()
+        try:
+            self._validate()
 
-        self._df = prepare_df(df=self._df)
+            self._df = prepare_df(df=self._df)
 
-        feature_balance_measures = {}
-        for pos_label in self._classes:
-            feature_balance_measures[pos_label] = FeatureBalanceMeasures(
-                cols_of_interest=self._cols_of_interest,
-                label_col=self._target_column,
-                pos_label=pos_label,
+            feature_balance_measures = {}
+            for pos_label in self._classes:
+                feature_balance_measures[pos_label] = FeatureBalanceMeasures(
+                    cols_of_interest=self._cols_of_interest,
+                    label_col=self._target_column,
+                    pos_label=pos_label,
+                ).measures(dataset=self._df)
+
+            distribution_balance_measures = DistributionBalanceMeasures(
+                cols_of_interest=self._cols_of_interest
+            ).measures(dataset=self._df)
+            aggregate_balance_measures = AggregateBalanceMeasures(
+                cols_of_interest=self._cols_of_interest
             ).measures(dataset=self._df)
 
-        distribution_balance_measures = DistributionBalanceMeasures(
-            cols_of_interest=self._cols_of_interest
-        ).measures(dataset=self._df)
-        aggregate_balance_measures = AggregateBalanceMeasures(
-            cols_of_interest=self._cols_of_interest
-        ).measures(dataset=self._df)
-
-        self._set_data_balance_measures(
-            feature_balance_measures=feature_balance_measures,
-            distribution_balance_measures=distribution_balance_measures,
-            aggregate_balance_measures=aggregate_balance_measures,
-        )
+            self._set_data_balance_measures(
+                feature_balance_measures=feature_balance_measures,
+                distribution_balance_measures=distribution_balance_measures,
+                aggregate_balance_measures=aggregate_balance_measures,
+            )
+        except Exception as e:
+            warnings.warn(
+                f"Failed to compute data balance measures due to {e!r}."
+            )
 
     def _set_data_balance_measures(
         self,

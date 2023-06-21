@@ -29,25 +29,29 @@ export class TreatmentTableSection extends React.Component<ITreatmentTableSectio
     }
     return (
       <Stack horizontal={false} grow tokens={{ childrenGap: "l1" }}>
-        <Label>
-          {localization.formatString(
-            localization.CausalAnalysis.TreatmentPolicy.Size,
-            this.props.data?.local_policies?.length
-          )}
-        </Label>
-        <Stack tokens={{ padding: "l1" }} className={styles.tableWrapper}>
-          <Stack.Item className={styles.leftTable}>
-            <TreatmentTable data={this.props.data.policy_tree} />
-          </Stack.Item>
-          <Stack.Item className={styles.tableDescription}>
-            <Text variant={"medium"} className={styles.label}>
-              {localization.CausalAnalysis.TreatmentPolicy.TableDescription}
-            </Text>
-            <Text variant={"medium"} className={styles.label}>
-              {localization.CausalAnalysis.TreatmentPolicy.Table}
-            </Text>
-          </Stack.Item>
-        </Stack>
+        <Stack.Item>
+          <Label>
+            {localization.formatString(
+              localization.CausalAnalysis.TreatmentPolicy.Size,
+              this.props.data?.local_policies?.length
+            )}
+          </Label>
+        </Stack.Item>
+        <Stack.Item>
+          <Stack tokens={{ padding: "l1" }} className={styles.tableWrapper}>
+            <Stack.Item className={styles.leftTable}>
+              <TreatmentTable data={this.props.data.policy_tree} />
+            </Stack.Item>
+            <Stack.Item className={styles.tableDescription}>
+              <Text variant={"medium"} className={styles.label}>
+                {localization.CausalAnalysis.TreatmentPolicy.TableDescription}
+              </Text>
+              <Text variant={"medium"} className={styles.label}>
+                {localization.CausalAnalysis.TreatmentPolicy.Table}
+              </Text>
+            </Stack.Item>
+          </Stack>
+        </Stack.Item>
       </Stack>
     );
   }

@@ -130,7 +130,7 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
         paddingTop: "5px"
       },
       predictedLink: {
-        color: theme.palette.blue
+        color: theme.palette.themeDark
       },
       saveDescription: {
         color: theme.semanticColors.buttonTextDisabled,

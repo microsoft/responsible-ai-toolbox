@@ -18,23 +18,22 @@ import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { ISearchable } from "../Interfaces/ISearchable";
+import { getFilteredDataFromSearch } from "../utils/getFilteredData";
 import { visionExplanationDashboardStyles } from "../VisionExplanationDashboard.styles";
 
-export interface ITableListProps {
+export interface ITableListProps extends ISearchable {
   addCohort: (name: string, switchCohort: boolean) => void;
   errorInstances: IVisionListItem[];
   successInstances: IVisionListItem[];
   imageDim: number;
   otherMetadataFieldNames: string[];
   pageSize: number;
-  searchValue: string;
   selectItem: (item: IVisionListItem) => void;
   updateSelectedIndices: (indices: number[]) => void;
 }
 
 export interface ITableListState {
-  items: IVisionListItem[];
-  filter: string;
   filteredGroups: IGroup[];
   filteredItems: IVisionListItem[];
   groups: IGroup[];
@@ -53,94 +52,47 @@ export class TableList extends React.Component<
     });
     this.state = {
       columns: [],
-      filter: this.props.searchValue.toLowerCase(),
       filteredGroups: [],
       filteredItems: [],
-      groups: [],
-      items: []
+      groups: []
     };
   }
 
-  public static getDerivedStateFromProps(
-    props: ITableListProps,
-    state: ITableListState
-  ): Partial<ITableListState> {
-    const searchVal = props.searchValue.toLowerCase();
-    if (searchVal !== state.filter && searchVal.length === 0) {
-      let items: IVisionListItem[] = [];
+  public componentDidUpdate(prevProps: ITableListProps): void {
+    if (
+      this.props.errorInstances !== prevProps.errorInstances ||
+      this.props.successInstances !== prevProps.successInstances ||
+      this.props.searchValue !== prevProps.searchValue
+    ) {
+      const filteredItems: IVisionListItem[] = this.getFilteredItems();
+      const searchVal = this.props.searchValue.toLowerCase();
+      if (searchVal.length === 0) {
+        const groups: IGroup[] = this.getGroups();
 
-      items = items.concat(props.successInstances);
-      items = items.concat(props.errorInstances);
-
-      const groups: IGroup[] = [
-        {
-          count: props.successInstances.length,
-          key: "success",
-          level: 0,
-          name: localization.InterpretVision.Dashboard.titleBarSuccess,
-          startIndex: 0
-        },
-        {
-          count: props.errorInstances.length,
-          key: "error",
-          level: 0,
-          name: localization.InterpretVision.Dashboard.titleBarError,
-          startIndex: props.successInstances.length
-        }
-      ];
-
-      return {
-        filter: searchVal,
-        filteredGroups: groups,
-        filteredItems: items
-      };
+        this.setState({
+          filteredGroups: groups,
+          filteredItems
+        });
+      } else {
+        const filteredGroups: IGroup[] = this.getFilteredGroups(
+          filteredItems,
+          this.state.groups
+        );
+        this.setState({
+          filteredGroups,
+          filteredItems
+        });
+      }
     }
-    if (searchVal !== state.filter) {
-      const groups = state.groups;
-      const filteredItems = state.items.filter(
-        (item) =>
-          item.predictedY.toLowerCase().includes(searchVal) ||
-          item.trueY.toLowerCase().includes(searchVal)
-      );
-      const filteredSuccessInstances = filteredItems.filter(
-        (item) => item.predictedY === item.trueY
-      );
-
-      groups[0].count = filteredSuccessInstances.length;
-      groups[1].startIndex = filteredSuccessInstances.length;
-      groups[1].count = filteredItems.length - filteredSuccessInstances.length;
-
-      return {
-        filter: searchVal,
-        filteredGroups: groups,
-        filteredItems
-      };
-    }
-    return {};
   }
 
   public componentDidMount(): void {
-    let items: IVisionListItem[] = [];
-
-    items = items.concat(this.props.successInstances);
-    items = items.concat(this.props.errorInstances);
-
-    const groups: IGroup[] = [
-      {
-        count: this.props.successInstances.length,
-        key: "success",
-        level: 0,
-        name: localization.InterpretVision.Dashboard.titleBarSuccess,
-        startIndex: 0
-      },
-      {
-        count: this.props.errorInstances.length,
-        key: "error",
-        level: 0,
-        name: localization.InterpretVision.Dashboard.titleBarError,
-        startIndex: this.props.successInstances.length
-      }
-    ];
+    const filteredItems: IVisionListItem[] = this.getFilteredItems();
+    const groups: IGroup[] = this.getGroups();
+    const filteredGroups: IGroup[] = this.getFilteredGroups(
+      filteredItems,
+      groups
+    );
 
     const columns: IColumn[] = [
       {
@@ -189,10 +141,9 @@ export class TableList extends React.Component<
     });
     this.setState({
       columns,
-      filteredGroups: groups,
-      filteredItems: items,
-      groups,
-      items
+      filteredGroups,
+      filteredItems,
+      groups
     });
   }
 
@@ -222,6 +173,57 @@ export class TableList extends React.Component<
     );
   }
 
+  private getFilteredItems(): IVisionListItem[] {
+    let items: IVisionListItem[] = [];
+
+    items = items.concat(this.props.successInstances);
+    items = items.concat(this.props.errorInstances);
+    const searchValue = this.props.searchValue.toLowerCase();
+    if (searchValue.length === 0) {
+      return items;
+    }
+    const filteredItems = getFilteredDataFromSearch(searchValue, items);
+    return filteredItems;
+  }
+
+  private getGroups(): IGroup[] {
+    const groups: IGroup[] = [
+      {
+        count: this.props.successInstances.length,
+        key: "success",
+        level: 0,
+        name: localization.InterpretVision.Dashboard.titleBarSuccess,
+        startIndex: 0
+      },
+      {
+        count: this.props.errorInstances.length,
+        key: "error",
+        level: 0,
+        name: localization.InterpretVision.Dashboard.titleBarError,
+        startIndex: this.props.successInstances.length
+      }
+    ];
+    return groups;
+  }
+
+  private getFilteredGroups(
+    filteredItems: IVisionListItem[],
+    groups: IGroup[]
+  ): IGroup[] {
+    const searchValue = this.props.searchValue.toLowerCase();
+    if (searchValue.length === 0) {
+      return groups;
+    }
+    const filteredSuccessInstances = filteredItems.filter(
+      (item) => item.predictedY === item.trueY
+    );
+    groups[0].count = filteredSuccessInstances.length;
+    groups[1].startIndex = filteredSuccessInstances.length;
+    groups[1].count = filteredItems.length - filteredSuccessInstances.length;
+
+    return groups;
+  }
+
   private onRenderDetailsHeader = (
     props: IDetailsHeaderProps | undefined
   ): React.ReactElement => {
@@ -243,10 +245,14 @@ export class TableList extends React.Component<
   ): React.ReactNode => {
     const classNames = visionExplanationDashboardStyles();
 
-    const value =
+    let value =
       item && column && column.fieldName
         ? item[column.fieldName as keyof IVisionListItem]
         : "";
+    // Handle multilabel case for trueY and predictedY
+    if (value && Array.isArray(value)) {
+      value = value.join(", ");
+    }
 
     const image =
       item && column && column.fieldName === "image"

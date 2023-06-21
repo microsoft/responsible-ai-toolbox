@@ -9,6 +9,8 @@ import numpy as np
 import pandas as pd
 from econml.solutions.causal_analysis import CausalAnalysis
 
+from raiutils.exceptions import UserConfigValidationException
+from raiutils.models import ModelTask
 from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._internal.constants import (CausalManagerKeys,
                                                ListProperties, ManagerNames)
@@ -18,9 +20,9 @@ from responsibleai._tools.causal.causal_constants import (DefaultParams,
 from responsibleai._tools.causal.causal_result import CausalResult
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
-from responsibleai.exceptions import UserConfigValidationException
+from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.managers.base_manager import BaseManager
-from responsibleai.rai_insights.constants import ModelTask
+from responsibleai.utils import _measure_time
 
 
 class CausalManager(BaseManager):
@@ -32,7 +34,8 @@ class CausalManager(BaseManager):
         test: pd.DataFrame,
         target_column: str,
         task_type: str,
-        categorical_features: Optional[List[str]]
+        categorical_features: Optional[List[str]],
+        feature_metadata: Optional[FeatureMetadata] = None
     ):
         """Construct a CausalManager for generating causal analyses
             from a dataset.
@@ -48,6 +51,10 @@ class CausalManager(BaseManager):
         :type task_type: str
         :param categorical_features: All categorical feature names.
         :type categorical_features: list
+        :param feature_metadata: Feature metadata for the train/test
+                                 dataset to identify different kinds
+                                 of features in the dataset.
+        :type feature_metadata: FeatureMetadata
         """
         self._train = train
         self._test = test
@@ -57,6 +64,7 @@ class CausalManager(BaseManager):
         self._categorical_features = categorical_features
         if categorical_features is None:
             self._categorical_features = []
+        self._feature_metadata = feature_metadata
 
         self._results = []
 
@@ -150,6 +158,21 @@ class CausalManager(BaseManager):
         :param random_state: Controls the randomness of the estimator.
         :type random_state: int or RandomState or None
         """
+        if not isinstance(treatment_features, list):
+            raise UserConfigValidationException(
+                "Expecting a list for treatment_features but got {0}".format(
+                    type(treatment_features)))
+        if len(treatment_features) == 0:
+            raise UserConfigValidationException(
+                "Please specify at least one feature in "
+                "treatment_features list")
+        for feature in treatment_features:
+            if self._feature_metadata and \
+                    self._feature_metadata.dropped_features and \
+                    feature in set(self._feature_metadata.dropped_features):
+                message = ("'{}' in treatment_features has been dropped "
+                           "during training the model").format(feature)
+                raise UserConfigValidationException(message)
         difference_set = set(treatment_features) - set(self._train.columns)
         if len(difference_set) > 0:
             message = ("Feature names in treatment_features do "
@@ -331,9 +354,12 @@ class CausalManager(BaseManager):
         result = filtered[0]
         return result._global_cohort_policy(X_test)
 
+    @_measure_time
     def compute(self):
         """Computes the causal effects by running the causal
            configuration."""
+        print("Causal Effects")
+        print('Current Status: Generating Causal Effects.')
         is_classification = self._task_type == ModelTask.CLASSIFICATION
         for result in self._results:
             causal_config = result.config
@@ -409,6 +435,7 @@ class CausalManager(BaseManager):
                     result.policies.append(policy)
 
                 result._validate_schema()
+        print('Current Status: Finished generating causal effects.')
 
     def get(self):
         """Get the computed causal insights."""
@@ -494,5 +521,6 @@ class CausalManager(BaseManager):
         inst.__dict__['_task_type'] = rai_insights.task_type
         inst.__dict__['_categorical_features'] = \
             rai_insights.categorical_features
+        inst.__dict__['_feature_metadata'] = rai_insights._feature_metadata
 
         return inst

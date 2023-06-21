@@ -1,39 +1,40 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Icon, IDetailsGroupDividerProps, Stack } from "@fluentui/react";
+import {
+  GroupHeader,
+  IDetailsGroupDividerProps,
+  IRenderFunction,
+  Stack
+} from "@fluentui/react";
 import React from "react";
 
 import { tableViewStyles } from "./TableView.styles";
 
-export const onToggleCollapse = (props?: IDetailsGroupDividerProps) => {
-  return (): void => {
-    if (props?.group && props?.onToggleCollapse) {
-      props?.onToggleCollapse(props.group);
+export function onRenderGroupHeader(): IRenderFunction<IDetailsGroupDividerProps> {
+  const onRender: IRenderFunction<IDetailsGroupDividerProps> = (props) => {
+    if (!props) {
+      return <Stack />;
     }
-  };
-};
-
-export const onRenderGroupHeader = (
-  props?: IDetailsGroupDividerProps
-): React.ReactElement => {
-  const classNames = tableViewStyles();
-  const iconName = props?.group?.isCollapsed
-    ? "ChevronRightMed"
-    : "ChevronDownMed";
-  return (
-    <Stack className={classNames.header} horizontal>
-      <Icon
-        ariaLabel="expand collapse group"
-        className={classNames.chevronButton}
-        iconName={iconName}
-        onClick={onToggleCollapse(props)}
+    const onToggleSelectGroup: () => void = () => {
+      if (props.onToggleCollapse && props.group) {
+        props.onToggleCollapse(props.group);
+      }
+    };
+    const classNames = tableViewStyles();
+    return (
+      <GroupHeader
+        {...props}
+        styles={{
+          check: { display: "none" },
+          title: {
+            fontSize: "14px"
+          }
+        }}
+        className={classNames.groupHeader}
+        onToggleSelectGroup={onToggleSelectGroup}
       />
-      <span className={classNames.headerTitle}>{props?.group?.name}</span>
-      &nbsp;
-      <span className={classNames.headerCount}>
-        {`(${props?.group?.count})`}
-      </span>
-    </Stack>
-  );
-};
+    );
+  };
+  return onRender;
+}

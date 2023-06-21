@@ -11,8 +11,6 @@ import { precomputedBinaryWithError } from "../fairness/__mock_data__/precompute
 import { probability } from "../fairness/__mock_data__/probability";
 import { regression } from "../fairness/__mock_data__/regression";
 import { regressionWithError } from "../fairness/__mock_data__/regressionWithError";
-import { emotionLongDoc } from "../interpret-text/__mock_data__/emotionLongDoc";
-import { newsgroupBinaryData } from "../interpret-text/__mock_data__/newsgroupBinaryData";
 import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data__/bostonData";
 import { bostonDataGlobal } from "../interpret/__mock_data__/bostonDataGlobal";
@@ -31,11 +29,9 @@ import { irisGlobal } from "../interpret/__mock_data__/irisGlobal";
 import { irisNoData } from "../interpret/__mock_data__/irisNoData";
 import { irisNoFeatures } from "../interpret/__mock_data__/irisNoFeatures";
 import { largeFeatureCount } from "../interpret/__mock_data__/largeFeatureCount";
-import {
-  emotion,
-  emotionModelExplanationData
-} from "../model-assessment-text/__mock_data__/emotion";
-import { visionData } from "../model-assessment-vision/__mock_data__/visionData";
+import { mockForecastingData } from "../model-assessment-forecasting/__mock_data__/mockForecastingData";
+import { mockForecastingDataNoFeatures } from "../model-assessment-forecasting/__mock_data__/mockForecastingDataNoFeatures";
+import { mockForecastingDataSingleTimeSeries } from "../model-assessment-forecasting/__mock_data__/mockForecastingDataSingleTimeSeries";
 import {
   adultCensusWithFairnessDataset,
   adultCensusWithFairnessModelExplanationData,
@@ -85,6 +81,8 @@ import {
   IModelAssessmentSetting,
   IModelAssessmentDataSet
 } from "./applicationInterfaces";
+import { textApplications } from "./textApplications";
+import { visionApplications } from "./visionApplications";
 
 export const applicationKeys = <const>[
   "interpret",
@@ -93,7 +91,8 @@ export const applicationKeys = <const>[
   "errorAnalysis",
   "modelAssessment",
   "modelAssessmentText",
-  "modelAssessmentVision"
+  "modelAssessmentVision",
+  "modelAssessmentForecasting"
 ];
 
 export type IApplications = {
@@ -107,6 +106,8 @@ export type IApplications = {
   modelAssessmentText: IModelAssessmentSetting &
     IDataSet<IModelAssessmentDataSet>;
   modelAssessmentVision: IModelAssessmentSetting &
+    IDataSet<IModelAssessmentDataSet>;
+  modelAssessmentForecasting: IModelAssessmentSetting &
     IDataSet<IModelAssessmentDataSet>;
 };
 
@@ -125,7 +126,7 @@ export const applications: IApplications = <const>{
         data: breastCancerData
       }
     },
-    versions: { "1": 1, "2:Static-View": 2, "3:Live-Debug": 3 }
+    versions: { "1": 1, "2:Static-View": 2 }
   },
   fairness: {
     datasets: {
@@ -173,13 +174,7 @@ export const applications: IApplications = <const>{
     },
     versions: { "Version-1": 1, "Version-2": 2 }
   },
-  interpretText: {
-    datasets: {
-      emotionLongDoc: { data: emotionLongDoc },
-      newsgroupBinaryData: { data: newsgroupBinaryData }
-    },
-    versions: { "Version-1": 1 }
-  },
+  interpretText: textApplications.interpretText,
   modelAssessment: {
     datasets: {
       adultCensusIncomeData: {
@@ -247,32 +242,23 @@ export const applications: IApplications = <const>{
     },
     versions: { "1": 1, "2:Static-View": 2 }
   },
-  modelAssessmentText: {
+  modelAssessmentForecasting: {
     datasets: {
-      emotion: {
-        classDimension: 3,
-        dataset: emotion,
-        modelExplanationData: [emotionModelExplanationData]
+      restaurants: {
+        classDimension: 1,
+        dataset: mockForecastingData
+      } as IModelAssessmentDataSet,
+      restaurantsNoFeatures: {
+        classDimension: 1,
+        dataset: mockForecastingDataNoFeatures
+      },
+      restaurantsSingleTimeSeries: {
+        classDimension: 1,
+        dataset: mockForecastingDataSingleTimeSeries
       } as IModelAssessmentDataSet
     },
     versions: { "1": 1, "2:Static-View": 2 }
   },
-  modelAssessmentVision: {
-    datasets: {
-      visionModelExplanationData: {
-        classDimension: 3,
-        dataset: {
-          categorical_features: visionData.categorical_features,
-          class_names: visionData.class_names,
-          feature_names: visionData.feature_names,
-          features: visionData.features,
-          images: visionData.images,
-          predicted_y: visionData.predicted_y,
-          task_type: visionData.task_type,
-          true_y: visionData.true_y
-        }
-      } as IModelAssessmentDataSet
-    },
-    versions: { "1": 1, "2:Static-View": 2 }
-  }
+  modelAssessmentText: textApplications.modelAssessmentText,
+  modelAssessmentVision: visionApplications.modelAssessmentVision
 };

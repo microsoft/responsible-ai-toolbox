@@ -375,6 +375,7 @@ export class WhatIfTab extends React.PureComponent<
                     selectedColumn={this.state.chartProps.yAxis}
                     canBin={false}
                     mustBin={false}
+                    allowTreatAsCategorical
                     canDither={
                       this.state.chartProps.chartType === ChartTypes.Scatter
                     }
@@ -403,6 +404,7 @@ export class WhatIfTab extends React.PureComponent<
                     canDither={
                       this.state.chartProps.chartType === ChartTypes.Scatter
                     }
+                    allowTreatAsCategorical
                     onAccept={this.onXSet}
                     onCancel={this.setXClose}
                   />
@@ -952,7 +954,7 @@ export class WhatIfTab extends React.PureComponent<
     const plotlyProps = _.cloneDeep(WhatIfConstants.basePlotlyProperties);
     plotlyProps.data[0].hoverinfo = "all";
     const indexes = cohort.unwrap(JointDataset.IndexLabel);
-    plotlyProps.data[0].type = chartProps.chartType;
+    plotlyProps.data[0].type = chartProps.chartType as ChartTypes;
     plotlyProps.data[0].mode = PlotlyMode.Markers;
     plotlyProps.data[0].marker = {
       color: indexes.map((rowIndex) => {
@@ -1044,7 +1046,7 @@ export class WhatIfTab extends React.PureComponent<
   }
 
   private generateDataTrace(
-    dictionary: Array<{ [key: string]: number }>,
+    dictionary: Array<{ [key: string]: string | number }>,
     chartProps: IGenericChartProps,
     trace: IData
   ): void {

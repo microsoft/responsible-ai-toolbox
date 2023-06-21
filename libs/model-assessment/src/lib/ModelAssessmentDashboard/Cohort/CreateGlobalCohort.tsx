@@ -4,6 +4,7 @@
 import {
   Cohort,
   CohortEditor,
+  DatasetCohort,
   defaultModelAssessmentContext,
   IModelAssessmentContext,
   ModelAssessmentContext
@@ -23,6 +24,8 @@ export class CreateGlobalCohort extends React.Component<ICreateGlobalCohortProps
     return (
       this.props.visible && (
         <CohortEditor
+          isFromExplanation={false}
+          dataset={this.context.dataset}
           jointDataset={this.context.jointDataset}
           filterList={this.context.baseErrorCohort.cohort.filters}
           cohortName={`${localization.Interpret.Cohort.cohort} ${(
@@ -39,8 +42,12 @@ export class CreateGlobalCohort extends React.Component<ICreateGlobalCohortProps
     );
   }
 
-  private addCohort = (cohort: Cohort, switchNew?: boolean): void => {
-    this.context.addCohort(cohort, switchNew);
+  private addCohort = (
+    cohort: Cohort,
+    datasetCohort?: DatasetCohort,
+    switchNew?: boolean
+  ): void => {
+    this.context.addCohort(cohort, datasetCohort, switchNew);
     this.props.onDismiss();
   };
 

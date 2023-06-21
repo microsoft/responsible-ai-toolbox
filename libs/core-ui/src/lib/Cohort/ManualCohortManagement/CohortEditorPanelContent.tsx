@@ -9,9 +9,14 @@ import {
   IChoiceGroupOption
 } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
+import { IColumnRange, RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import React, { FormEvent } from "react";
 
+import { Announce } from "../../components/Announce";
+import { DatasetCohortColumns } from "../../DatasetCohortColumns";
+import { IDataset } from "../../Interfaces/IDataset";
+import { IExplanationModelMetadata } from "../../Interfaces/IExplanationContext";
 import {
   FilterMethods,
   ICompositeFilter,
@@ -22,13 +27,20 @@ import { JointDataset } from "../../util/JointDataset";
 import { cohortEditorStyles } from "./CohortEditor.styles";
 import { CohortEditorFilterList } from "./CohortEditorFilterList";
 import { CohortEditorFilterSection } from "./CohortEditorFilterSection";
+import { getColumnItems } from "./CohortEditorPanelContentUtils";
 
 export interface ICohortEditorPanelContentProps {
+  columnRanges?: {
+    [key: string]: IColumnRange;
+  };
+  dataset: IDataset;
+  isFromExplanation: boolean;
   cohortName?: string;
   compositeFilters: ICompositeFilter[];
   disableEditName?: boolean;
   existingCohortNames?: string[];
-  filterList?: IFilter[];
+  features?: unknown[][];
+  metadata?: IExplanationModelMetadata;
   filters: IFilter[];
   isNewCohort: boolean;
   jointDataset: JointDataset;
@@ -41,40 +53,26 @@ export interface ICohortEditorPanelContentState {
   filterIndex?: number;
   openedFilter?: IFilter;
   selectedFilterCategory?: string;
+  filtersMessage?: string;
 }
 
 export class CohortEditorPanelContent extends React.PureComponent<
   ICohortEditorPanelContentProps,
   ICohortEditorPanelContentState
 > {
-  private readonly leftItems: IChoiceGroupOption[] = [
-    JointDataset.IndexLabel,
-    JointDataset.DataLabelRoot,
-    JointDataset.PredictedYLabel,
-    JointDataset.TrueYLabel,
-    JointDataset.ClassificationError,
-    JointDataset.RegressionError
-  ].reduce((previousValue: IChoiceGroupOption[], key: string) => {
-    const metaVal = this.props.jointDataset.metaDict[key];
-    if (
-      key === JointDataset.DataLabelRoot &&
-      this.props.jointDataset.hasDataset
-    ) {
-      previousValue.push({ key, text: "Dataset" });
-      return previousValue;
-    }
-    if (metaVal === undefined) {
-      return previousValue;
-    }
-    previousValue.push({ key, text: metaVal.abbridgedLabel });
-    return previousValue;
-  }, []);
+  private readonly leftItems = getColumnItems(
+    this.props.columnRanges,
+    this.props.isFromExplanation
+      ? this.props.features
+      : this.props.dataset.features
+  );
   private _isInitialized = false;
 
   public constructor(props: ICohortEditorPanelContentProps) {
     super(props);
     this.state = {
-      filterIndex: this.props.filterList?.length || 0,
+      filterIndex: this.props.filters?.length || 0,
+      filtersMessage: "",
       openedFilter: this.getFilterValue(
         this.leftItems[0] && this.leftItems[0].key
       ),
@@ -113,6 +111,8 @@ export class CohortEditorPanelContent extends React.PureComponent<
           openedFilter={this.state.openedFilter}
           onOpenedFilterUpdated={this.onOpenedFilterUpdated}
           onSelectedFilterCategoryUpdated={this.onSelectedFilterCategoryUpdated}
+          setFilterMessage={this.setFilterMessage}
+          setDefaultStateForKey={this.setDefaultStateForKey}
         />
         <Stack.Item>
           <CohortEditorFilterList
@@ -128,6 +128,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
           <Link className={styles.clearFilter} onClick={this.clearAllFilters}>
             {localization.Interpret.CohortEditor.clearAllFilters}
           </Link>
+          <Announce message={this.state.filtersMessage} />
         </Stack.Item>
       </Stack>
     );
@@ -144,6 +145,14 @@ export class CohortEditorPanelContent extends React.PureComponent<
   private clearAllFilters = (): void => {
     this.props.onCompositeFiltersUpdated([]);
     this.props.onFiltersUpdated([]);
+    this.setState({ filterIndex: 0 });
+    this.setFilterMessage(localization.Interpret.CohortEditor.noFiltersApplied);
+  };
+
+  private setFilterMessage = (filtersMessage?: string): void => {
+    this.setState({
+      filtersMessage
+    });
   };
 
   private getErrorMessage = (): string | undefined => {
@@ -178,36 +187,59 @@ export class CohortEditorPanelContent extends React.PureComponent<
     if (!this._isInitialized) {
       return;
     }
-    if (property === JointDataset.DataLabelRoot) {
-      property += "0";
+    if (property === DatasetCohortColumns.Dataset) {
+      property = this.props.isFromExplanation
+        ? this.props.metadata?.featureNames[0] || ""
+        : this.props.dataset.feature_names[0];
     }
     this.setDefaultStateForKey(property);
   };
 
-  private setDefaultStateForKey(key: string): void {
+  private setDefaultStateForKey = (key: string): void => {
     const filter = this.getFilterValue(key);
     this.setState({
       openedFilter: filter
     });
-  }
+  };
 
   private getFilterValue(key: string): IFilter {
     const filter: IFilter = { column: key } as IFilter;
-    const meta = this.props.jointDataset.metaDict[key];
-    if (meta?.treatAsCategorical && meta.sortedCategoricalValues) {
+    const range = this.props.columnRanges
+      ? this.props.columnRanges[key]
+      : undefined;
+    const arg = this.getPreviousFilterArgValue(key);
+    if (
+      range?.rangeType === RangeTypes.Categorical ||
+      range?.treatAsCategorical
+    ) {
       filter.method = FilterMethods.Includes;
-      filter.arg = [...new Array(meta.sortedCategoricalValues.length).keys()];
+      filter.arg = arg ?? [
+        ...new Array(range.sortedUniqueValues.length).keys()
+      ];
     } else {
       filter.method = FilterMethods.LessThan;
-      filter.arg = [meta.featureRange?.max || Number.MAX_SAFE_INTEGER];
+      filter.arg = arg ?? [range?.max || Number.MAX_SAFE_INTEGER];
     }
     return filter;
+  }
+
+  private getPreviousFilterArgValue(key: string): number[] | undefined {
+    let arg;
+    // only execute this if in edit mode
+    this.props.disableEditName &&
+      this.props.filters?.forEach((filter) => {
+        if (filter.column === key) {
+          arg = filter.arg;
+        }
+      });
+    return arg;
   }
 
   private removeFilter = (index: number): void => {
     const filters = [...this.props.filters];
     filters.splice(index, 1);
     this.props.onFiltersUpdated(filters);
+    this.setState({ filterIndex: filters.length });
   };
 
   private removeCompositeFilter = (index: number): void => {

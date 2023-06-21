@@ -10,7 +10,6 @@ from typing import Any, List, Optional
 
 import numpy as np
 import pandas as pd
-from interpret_community.common.constants import ModelTask
 from interpret_community.explanation.explanation import (
     FeatureImportanceExplanation, load_explanation, save_explanation)
 from interpret_community.mimic.mimic_explainer import MimicExplainer
@@ -21,6 +20,8 @@ from interpret_community.mimic.models.linear_model import \
 from scipy.sparse import issparse
 
 from raiutils.data_processing import convert_to_list
+from raiutils.exceptions import UserConfigValidationException
+from raiutils.models import ModelTask
 from responsibleai._interfaces import (EBMGlobalExplanation, FeatureImportance,
                                        ModelExplanationData,
                                        PrecomputedExplanations)
@@ -29,8 +30,8 @@ from responsibleai._internal.constants import (ExplanationKeys, ListProperties,
                                                ManagerNames, Metadata)
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
-from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.managers.base_manager import BaseManager
+from responsibleai.utils import _measure_time
 
 SPARSE_NUM_FEATURES_THRESHOLD = 1000
 IS_RUN = 'is_run'
@@ -40,9 +41,8 @@ U_INITIALIZATION_EXAMPLES = '_initialization_examples'
 U_EVALUATION_EXAMPLES = '_evaluation_examples'
 FEATURES = 'features'
 CATEGORICAL_FEATURES = 'categorical_features'
-META_JSON = Metadata.META_JSON
-MODEL = Metadata.MODEL
 EXPLANATION = '_explanation'
+MAXIMUM_ROWS_FOR_GLOBAL_EXPLANATIONS = 10000
 
 
 class ExplainerManager(BaseManager):
@@ -141,10 +141,26 @@ class ExplainerManager(BaseManager):
             model_task=model_task,
             classes=self._classes,
             categorical_features=self._categorical_features)
-        return explainer.explain_global(data, include_local=local)
 
+        if len(data) <= MAXIMUM_ROWS_FOR_GLOBAL_EXPLANATIONS:
+            return explainer.explain_global(data, include_local=local)
+        else:
+            warnings.warn((
+                "LARGE-DATA-SCENARIO-DETECTED: "
+                "The data is larger than the supported limit of {0}. "
+                "Computing explanations for first {0} samples only.").format(
+                    MAXIMUM_ROWS_FOR_GLOBAL_EXPLANATIONS),
+                UserWarning)
+            return explainer.explain_global(data[
+                0:MAXIMUM_ROWS_FOR_GLOBAL_EXPLANATIONS], include_local=local)
+
+    @_measure_time
     def compute(self):
         """Creates an explanation by running the explainer on the model."""
+
+        print("Explanations")
+        print('Current Status: Explaining {0} features'.format(
+            len(self._features)))
         if not self._is_added:
             return
         if self._is_run:
@@ -154,6 +170,9 @@ class ExplainerManager(BaseManager):
             data=self._evaluation_examples
         )
         self._is_run = True
+
+        print('Current Status: Explained {0} features.'.format(
+              len(self._features)))
 
     def get(self):
         """Get the computed explanation.
@@ -290,7 +309,7 @@ class ExplainerManager(BaseManager):
                     raise ValueError(
                         "Shape mismatch: local explanation"
                         "length differs from dataset")
-                if(len(local_dim) == 3 and
+                if (len(local_dim) == 3 and
                    (local_dim[2] != _feature_length or
                         local_dim[1] != _row_length)):
                     raise ValueError(
@@ -350,7 +369,7 @@ class ExplainerManager(BaseManager):
 
             meta = {IS_RUN: self._is_run,
                     IS_ADDED: self._is_added}
-            with open(data_directory / META_JSON, 'w') as file:
+            with open(data_directory / Metadata.META_JSON, 'w') as file:
                 json.dump(meta, file)
 
     @staticmethod
@@ -375,7 +394,7 @@ class ExplainerManager(BaseManager):
                 sub_directory_name=all_cf_dirs[0])
             data_directory = directory_manager.get_data_directory()
 
-            with open(data_directory / META_JSON, 'r') as meta_file:
+            with open(data_directory / Metadata.META_JSON, 'r') as meta_file:
                 meta = meta_file.read()
             meta = json.loads(meta)
             inst.__dict__['_' + IS_RUN] = meta[IS_RUN]
@@ -391,13 +410,13 @@ class ExplainerManager(BaseManager):
             inst.__dict__['_' + IS_ADDED] = False
             inst.__dict__[EXPLANATION] = None
 
-        inst.__dict__['_' + MODEL] = rai_insights.model
+        inst.__dict__['_' + Metadata.MODEL] = rai_insights.model
         inst.__dict__['_' + CLASSES] = rai_insights._classes
         inst.__dict__['_' + CATEGORICAL_FEATURES] = \
             rai_insights.categorical_features
         target_column = rai_insights.target_column
-        train = rai_insights.train.drop(columns=[target_column])
-        test = rai_insights.test.drop(columns=[target_column])
+        train = rai_insights.get_train_data().drop(columns=[target_column])
+        test = rai_insights.get_test_data().drop(columns=[target_column])
         inst.__dict__[U_INITIALIZATION_EXAMPLES] = train
         inst.__dict__[U_EVALUATION_EXAMPLES] = test
         inst.__dict__['_' + FEATURES] = list(train.columns)

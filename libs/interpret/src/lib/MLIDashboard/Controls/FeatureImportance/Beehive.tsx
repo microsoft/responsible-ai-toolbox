@@ -12,6 +12,8 @@ import {
 } from "@fluentui/react";
 import {
   IExplanationContext,
+  IsBinary,
+  IsMulticlass,
   ModelTypes,
   ModelExplanationUtils,
   FluentUIStyles
@@ -234,7 +236,7 @@ export class Beehive extends React.PureComponent<
         "layout.xaxis.tickvals",
         sortVector.map((_, index) => index)
       );
-      if (explanationContext.modelMetadata.modelType === ModelTypes.Binary) {
+      if (IsBinary(explanationContext.modelMetadata.modelType)) {
         _.set(
           plotlyProps,
           "layout.yaxis.title",
@@ -460,6 +462,8 @@ export class Beehive extends React.PureComponent<
         plotlyProps,
         this.props.selectedRow
       );
+      const modelMetadata =
+        this.props.dashboardContext.explanationContext.modelMetadata;
       return (
         <div className={beehiveStyles.aggregateChart}>
           <div className={beehiveStyles.topControls}>
@@ -510,8 +514,7 @@ export class Beehive extends React.PureComponent<
                 }
                 max={Math.min(
                   Beehive.maxFeatures,
-                  this.props.dashboardContext.explanationContext.modelMetadata
-                    .featureNames.length
+                  modelMetadata.featureNames.length
                 )}
                 min={1}
                 step={1}
@@ -520,8 +523,7 @@ export class Beehive extends React.PureComponent<
                 showValue
               />
             </div>
-            {this.props.dashboardContext.explanationContext.modelMetadata
-              .modelType === ModelTypes.Multiclass && (
+            {IsMulticlass(modelMetadata.modelType) && (
               <div>
                 <div className={beehiveStyles.selectorLabel}>
                   <span>{localization.Interpret.CrossClass.label}</span>
@@ -641,6 +643,8 @@ export class Beehive extends React.PureComponent<
     if (this.state.calloutContent) {
       this.onDismiss();
     } else {
+      const modelMetadata =
+        this.props.dashboardContext.explanationContext.modelMetadata;
       const calloutContent = (
         <div>
           <span>
@@ -649,8 +653,7 @@ export class Beehive extends React.PureComponent<
                 .globalImportanceExplanation
             }
           </span>
-          {this.props.dashboardContext.explanationContext.modelMetadata
-            .modelType === ModelTypes.Multiclass && (
+          {IsMulticlass(modelMetadata.modelType) && (
             <span>
               {
                 localization.Interpret.FeatureImportanceWrapper

@@ -3,13 +3,13 @@
 pytest==7.0.1
 pytest-cov
 pytest-mock==3.6.1
-requests==2.25.1
 
 requirements-parser==0.2.0
 
 wheel
 
 fairlearn==0.6.0
+ml-wrappers>=0.4.0
 
 # Jupyter dependency that fails with python 3.6
 pywinpty==2.0.2; python_version <= '3.6' and sys_platform == 'win32'

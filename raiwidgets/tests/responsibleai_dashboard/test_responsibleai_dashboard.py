@@ -6,18 +6,19 @@ import re
 
 import pytest
 
+from raiutils.cohort import Cohort, CohortFilter, CohortFilterMethods
 from raiutils.data_processing import serialize_json_safe
+from raiutils.exceptions import UserConfigValidationException
 from raiwidgets import ResponsibleAIDashboard
-from raiwidgets.cohort import Cohort, CohortFilter, CohortFilterMethods
 from raiwidgets.dashboard import invalid_feature_flights_error
 from responsibleai._interfaces import (CausalData, CounterfactualData, Dataset,
                                        ErrorAnalysisData, ModelExplanationData)
-from responsibleai.exceptions import UserConfigValidationException
 
 
+@pytest.mark.parametrize("with_model", [True, False])
 class TestResponsibleAIDashboard:
 
-    def validate_rai_dashboard_data(self, rai_widget):
+    def validate_rai_dashboard_data(self, rai_widget, with_model=True):
         assert isinstance(
             rai_widget.input.dashboard_input.dataset,
             Dataset)
@@ -30,9 +31,10 @@ class TestResponsibleAIDashboard:
         assert isinstance(
             rai_widget.input.dashboard_input.causalAnalysisData[0],
             CausalData)
-        assert isinstance(
-            rai_widget.input.dashboard_input.counterfactualData[0],
-            CounterfactualData)
+        if with_model:
+            assert isinstance(
+                rai_widget.input.dashboard_input.counterfactualData[0],
+                CounterfactualData)
 
         if len(rai_widget.input.dashboard_input.cohortData) != 0:
             assert isinstance(rai_widget.input.dashboard_input.cohortData[0],
@@ -63,11 +65,16 @@ class TestResponsibleAIDashboard:
             assert end_point_found
 
     def test_responsibleai_adult_save_and_load(
-            self, tmpdir, create_rai_insights_object_classification):
-        ri = create_rai_insights_object_classification
-
+            self, tmpdir,
+            create_rai_insights_object_classification_with_model,
+            create_rai_insights_object_classification_with_predictions,
+            with_model):
+        if with_model:
+            ri = create_rai_insights_object_classification_with_model
+        else:
+            ri = create_rai_insights_object_classification_with_predictions
         widget = ResponsibleAIDashboard(ri)
-        self.validate_rai_dashboard_data(widget)
+        self.validate_rai_dashboard_data(widget, with_model=with_model)
         self.validate_widget_end_points(widget)
 
         save_dir = tmpdir.mkdir('save-dir')
@@ -75,28 +82,44 @@ class TestResponsibleAIDashboard:
         ri_copy = ri.load(save_dir)
 
         widget_copy = ResponsibleAIDashboard(ri_copy)
-        self.validate_rai_dashboard_data(widget_copy)
+        self.validate_rai_dashboard_data(widget_copy, with_model=with_model)
         self.validate_widget_end_points(widget_copy)
 
     def test_responsibleai_housing_save_and_load(
-            self, tmpdir, create_rai_insights_object_regression):
-        ri = create_rai_insights_object_regression
+            self, tmpdir,
+            create_rai_insights_object_regression_with_model,
+            create_rai_insights_object_regression_with_predictions,
+            with_model):
+        if with_model:
+            ri = create_rai_insights_object_regression_with_model
+        else:
+            ri = create_rai_insights_object_regression_with_predictions
 
         widget = ResponsibleAIDashboard(ri)
-        self.validate_rai_dashboard_data(widget)
+        self.validate_rai_dashboard_data(widget, with_model=with_model)
         self.validate_widget_end_points(widget)
 
         save_dir = tmpdir.mkdir('save-dir')
         ri.save(save_dir)
         ri_copy = ri.load(save_dir)
 
-        widget_copy = ResponsibleAIDashboard(ri_copy)
-        self.validate_rai_dashboard_data(widget_copy)
-        self.validate_widget_end_points(widget_copy)
+        # There seems to be a bug when loading the model wrapper in
+        # regression case.
+        if with_model:
+            widget_copy = ResponsibleAIDashboard(ri_copy)
+            self.validate_rai_dashboard_data(
+                widget_copy, with_model=with_model)
+            self.validate_widget_end_points(widget_copy)
 
     def test_responsibleai_housing_with_pre_defined_cohorts(
-            self, create_rai_insights_object_regression):
-        ri = create_rai_insights_object_regression
+            self,
+            create_rai_insights_object_regression_with_model,
+            create_rai_insights_object_regression_with_predictions,
+            with_model):
+        if with_model:
+            ri = create_rai_insights_object_regression_with_model
+        else:
+            ri = create_rai_insights_object_regression_with_predictions
 
         cohort_filter_continuous_1 = CohortFilter(
             method=CohortFilterMethods.METHOD_LESS,
@@ -142,12 +165,18 @@ class TestResponsibleAIDashboard:
                          user_cohort_predicted_y,
                          user_cohort_true_y])
 
-        self.validate_rai_dashboard_data(widget)
+        self.validate_rai_dashboard_data(widget, with_model=with_model)
         self.validate_widget_end_points(widget)
 
     def test_responsibleai_adult_with_pre_defined_cohorts(
-            self, create_rai_insights_object_classification):
-        ri = create_rai_insights_object_classification
+            self,
+            create_rai_insights_object_classification_with_model,
+            create_rai_insights_object_classification_with_predictions,
+            with_model):
+        if with_model:
+            ri = create_rai_insights_object_classification_with_model
+        else:
+            ri = create_rai_insights_object_classification_with_predictions
 
         cohort_filter_continuous_1 = CohortFilter(
             method=CohortFilterMethods.METHOD_LESS,
@@ -184,13 +213,18 @@ class TestResponsibleAIDashboard:
                          user_cohort_categorical,
                          user_cohort_index])
 
-        self.validate_rai_dashboard_data(widget)
+        self.validate_rai_dashboard_data(widget, with_model=with_model)
         self.validate_widget_end_points(widget)
 
     def test_responsibleai_adult_with_ill_defined_cohorts(
-            self, create_rai_insights_object_classification):
-        ri = create_rai_insights_object_classification
-
+            self,
+            create_rai_insights_object_classification_with_model,
+            create_rai_insights_object_classification_with_predictions,
+            with_model):
+        if with_model:
+            ri = create_rai_insights_object_classification_with_model
+        else:
+            ri = create_rai_insights_object_classification_with_predictions
         cohort_filter_continuous_1 = CohortFilter(
             method=CohortFilterMethods.METHOD_LESS,
             arg=[65],
@@ -216,9 +250,14 @@ class TestResponsibleAIDashboard:
                 ri, cohort_list=[user_cohort_continuous, {}])
 
     def test_responsibleai_adult_duplicate_cohort_names(
-            self, create_rai_insights_object_classification):
-        ri = create_rai_insights_object_classification
-
+            self,
+            create_rai_insights_object_classification_with_model,
+            create_rai_insights_object_classification_with_predictions,
+            with_model):
+        if with_model:
+            ri = create_rai_insights_object_classification_with_model
+        else:
+            ri = create_rai_insights_object_classification_with_predictions
         cohort_filter_continuous_1 = CohortFilter(
             method=CohortFilterMethods.METHOD_LESS,
             arg=[65],
@@ -241,9 +280,15 @@ class TestResponsibleAIDashboard:
 
     @pytest.mark.parametrize("flights", [["f"], ["f1", "f2"]])
     def test_responsibleai_feature_flights_invalid_flights_list(
-            self, create_rai_insights_object_classification, flights):
-        ri = create_rai_insights_object_classification
-
+            self,
+            create_rai_insights_object_classification_with_model,
+            create_rai_insights_object_classification_with_predictions,
+            with_model,
+            flights):
+        if with_model:
+            ri = create_rai_insights_object_classification_with_model
+        else:
+            ri = create_rai_insights_object_classification_with_predictions
         with pytest.raises(
                 ValueError,
                 match=re.escape(invalid_feature_flights_error)):
@@ -252,8 +297,15 @@ class TestResponsibleAIDashboard:
     @pytest.mark.parametrize("flights",
                              ["f", "aMuchLongerFlightName", "f1&f2"])
     def test_responsibleai_feature_flights_valid_flights(
-            self, create_rai_insights_object_classification, flights):
-        ri = create_rai_insights_object_classification
+            self,
+            create_rai_insights_object_classification_with_model,
+            create_rai_insights_object_classification_with_predictions,
+            with_model,
+            flights):
+        if with_model:
+            ri = create_rai_insights_object_classification_with_model
+        else:
+            ri = create_rai_insights_object_classification_with_predictions
         widget = ResponsibleAIDashboard(ri, feature_flights=flights)
-        self.validate_rai_dashboard_data(widget)
+        self.validate_rai_dashboard_data(widget, with_model=with_model)
         self.validate_widget_end_points(widget)

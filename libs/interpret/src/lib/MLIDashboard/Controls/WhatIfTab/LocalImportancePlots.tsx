@@ -20,6 +20,8 @@ import {
 } from "@fluentui/react";
 import {
   IExplanationModelMetadata,
+  IsClassifier,
+  IsMulticlass,
   ModelTypes,
   WeightVectorOption,
   JointDataset,
@@ -30,7 +32,8 @@ import {
   FeatureImportanceBar,
   ITelemetryEvent,
   TelemetryLevels,
-  TelemetryEventName
+  TelemetryEventName,
+  getFeatureNamesAfterDrop
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -150,16 +153,19 @@ export class LocalImportancePlots extends React.Component<
             this.props.weightLabels[this.props.selectedWeightVector]
           );
         }
+        const featureNames = getFeatureNamesAfterDrop(
+          this.props.metadata.featureNames,
+          this.props.jointDataset.datasetMetaData?.featureMetaData
+            ?.dropped_features
+        );
         secondaryPlot = (
           <div className={classNames.featureImportanceArea}>
             <div className={classNames.featureImportanceControls}>
-              <Text variant="medium" className={classNames.sliderLabel}>
-                {localization.formatString(
+              <Slider
+                label={localization.formatString(
                   localization.Interpret.GlobalTab.topAtoB,
                   this.state.topK
                 )}
-              </Text>
-              <Slider
                 className={classNames.startingK}
                 ariaLabel={
                   localization.Interpret.AggregateImportance.topKFeatures
@@ -178,7 +184,7 @@ export class LocalImportancePlots extends React.Component<
                 yAxisLabels={yAxisLabels}
                 chartType={ChartTypes.Bar}
                 sortArray={this.state.sortArray}
-                unsortedX={this.props.metadata.featureNamesAbridged}
+                unsortedX={featureNames}
                 unsortedSeries={this.props.includedFeatureImportance}
                 topK={this.state.topK}
               />
@@ -195,6 +201,7 @@ export class LocalImportancePlots extends React.Component<
                       options={featureImportanceSortOptions}
                       selectedKey={this.state.sortingSeriesIndex}
                       onChange={this.setSortIndex}
+                      ariaLabel={localization.Interpret.GlobalTab.sortBy}
                     />
                   </Stack.Item>
                   <Stack.Item className={classNames.absoluteValueToggle}>
@@ -207,8 +214,7 @@ export class LocalImportancePlots extends React.Component<
                   </Stack.Item>
                 </Stack>
 
-                {(this.props.metadata.modelType === ModelTypes.Multiclass ||
-                  this.props.metadata.modelType === ModelTypes.Binary) && (
+                {IsClassifier(this.props.metadata.modelType) && (
                   <div>
                     <ClassImportanceWeights
                       onWeightChange={this.props.onWeightChange}
@@ -305,7 +311,7 @@ export class LocalImportancePlots extends React.Component<
                 calloutProps={FluentUIStyles.calloutProps}
                 styles={FluentUIStyles.limitedSizeMenuDropdown}
               />
-              {this.props.metadata.modelType === ModelTypes.Multiclass && (
+              {IsMulticlass(this.props.metadata.modelType) && (
                 <ComboBox
                   autoComplete={"on"}
                   className={classNames.iceClassSelection}
@@ -346,6 +352,7 @@ export class LocalImportancePlots extends React.Component<
               styles={{
                 flexContainer: classNames.choiceGroupFlexContainer
               }}
+              className={classNames.choiceGroupLabel}
               options={secondaryPlotChoices}
               selectedKey={this.state.secondaryChartChoice}
               onChange={this.setSecondaryChart}

@@ -1,10 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme } from "@fluentui/react";
+import { IGenericChartProps } from "@responsible-ai/core-ui";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 
 export function getIndividualChartOptions(
   plotlyProperty: IPlotlyProperty,
+  chartProps?: IGenericChartProps,
   onClickHandler?: (data: any) => void
 ): any {
   let template = "";
@@ -38,8 +41,10 @@ export function getIndividualChartOptions(
       name: ""
     };
   });
+  const theme = getTheme();
   return {
     chart: {
+      backgroundColor: theme.semanticColors.bodyBackground,
       type: "scatter",
       zoomType: "xy"
     },
@@ -60,9 +65,16 @@ export function getIndividualChartOptions(
               onClickHandler(this);
             }
           }
-        }
+        },
+        turboThreshold: 0
       }
     },
-    series
+    series,
+    xAxis: {
+      type: chartProps?.xAxis.type
+    },
+    yAxis: {
+      type: chartProps?.yAxis.type
+    }
   };
 }

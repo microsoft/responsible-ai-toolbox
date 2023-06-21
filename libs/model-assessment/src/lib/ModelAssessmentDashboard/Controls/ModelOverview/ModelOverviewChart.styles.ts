@@ -5,6 +5,8 @@ import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
 import { flexMdDown, noPaddingMdDown } from "@responsible-ai/core-ui";
 
 export interface IModelOverviewChartStyles {
+  dropdown: IStyle;
+  dropdownText: IStyle;
   horizontalAxis: IStyle;
   horizontalAxisNoExtraLeftPadding: IStyle;
   chart: IStyle;
@@ -19,6 +21,7 @@ export const modelOverviewChartStyles: () => IProcessedStyleSet<IModelOverviewCh
   () => {
     return mergeStyleSets<IModelOverviewChartStyles>({
       chart: {
+        overflowX: "auto",
         width: "100%"
       },
       chartConfigDropdown: {
@@ -28,6 +31,13 @@ export const modelOverviewChartStyles: () => IProcessedStyleSet<IModelOverviewCh
         paddingLeft: "10px"
       },
       cohortSelectionButton: {
+        padding: "15px"
+      },
+      dropdown: {
+        padding: "15px",
+        width: "300px"
+      },
+      dropdownText: {
         padding: "15px"
       },
       horizontalAxis: {

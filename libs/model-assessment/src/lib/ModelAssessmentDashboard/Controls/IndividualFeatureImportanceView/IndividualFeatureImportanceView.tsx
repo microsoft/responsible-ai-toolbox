@@ -4,6 +4,7 @@
 import { IObjectWithKey, Label, Stack, Text } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
+  getFeatureNamesAfterDrop,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { TableView } from "@responsible-ai/dataset-explorer";
@@ -40,20 +41,34 @@ export class IndividualFeatureImportanceView extends React.Component<
       !!this.context.modelExplanationData?.precomputedExplanations
         ?.textFeatureImportance;
     const classNames = individualFeatureImportanceStyles();
+    const featureNames = getFeatureNamesAfterDrop(
+      this.context.modelMetadata.featureNames,
+      this.context.jointDataset.datasetMetaData?.featureMetaData
+        ?.dropped_features
+    );
+
     return (
-      <Stack tokens={verticalComponentTokens}>
-        <Stack horizontal tokens={horizontalComponentTokens}>
+      <Stack
+        tokens={verticalComponentTokens}
+        id="IndividualFeatureImportanceView"
+      >
+        <Stack
+          horizontal
+          tokens={horizontalComponentTokens}
+          verticalAlign="center"
+        >
           <Label className={classNames.boldText}>
             {
               localization.ModelAssessment.IndividualFeatureImportanceView
                 .SmallInstanceSelection
             }
           </Label>
-          <Text variant="large">
-            {
-              localization.ModelAssessment.IndividualFeatureImportanceView
-                .SmallTableText
-            }
+          <Text variant="medium">
+            {hasTextImportances
+              ? localization.ModelAssessment.FeatureImportances
+                  .IndividualFeatureText
+              : localization.ModelAssessment.FeatureImportances
+                  .IndividualFeatureTabular}
           </Text>
         </Stack>
         <TableView
@@ -63,11 +78,10 @@ export class IndividualFeatureImportanceView extends React.Component<
           modelType={this.props.modelType}
           onAllSelectedItemsChange={this.onAllSubsetSelectedItemsChange}
           telemetryHook={this.props.telemetryHook}
-          subsetSelectedItems={this.props.allSelectedItems}
         />
         {!hasTextImportances && (
           <TabularLocalImportancePlots
-            features={this.context.modelMetadata.featureNames}
+            features={featureNames}
             jointDataset={this.context.jointDataset}
             invokeModel={this.props.invokeModel}
             selectedWeightVector={this.props.selectedWeightVector}
@@ -83,7 +97,7 @@ export class IndividualFeatureImportanceView extends React.Component<
         {hasTextImportances && (
           <TextLocalImportancePlots
             jointDataset={this.context.jointDataset}
-            selectedItems={this.props.allSelectedItems}
+            selectedItems={this.state.allSubsetSelectedItems}
             selectedWeightVector={this.props.selectedWeightVector}
             weightOptions={this.props.weightOptions}
             weightLabels={this.props.weightLabels}

@@ -14,11 +14,15 @@ import {
 } from "@responsible-ai/causality";
 import {
   WeightVectorOption,
-  ModelTypes,
   WeightVectors,
   ModelAssessmentContext,
   defaultModelAssessmentContext,
-  IModelAssessmentContext
+  IModelAssessmentContext,
+  IsClassifier,
+  DatasetTaskType,
+  featureColumnsExist,
+  dataBalanceExperienceFlight,
+  isFlightActive
 } from "@responsible-ai/core-ui";
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import {
@@ -34,16 +38,13 @@ import {
   MatrixFilter,
   TreeViewRenderer
 } from "@responsible-ai/error-analysis";
+import { ForecastingDashboard as ForecastingTab } from "@responsible-ai/forecasting";
 import { VisionExplanationDashboard as VisionTab } from "@responsible-ai/interpret-vision";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
 import * as React from "react";
 
 import { AddTabButton } from "../../AddTabButton";
-import {
-  isFlightActive,
-  dataBalanceExperienceFlight
-} from "../../FeatureFlights";
 import { GlobalTabKeys } from "../../ModelAssessmentEnums";
 import {
   FeatureImportancesTab,
@@ -91,7 +92,7 @@ export class TabsView extends React.PureComponent<
       [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
     };
     const weightVectorOptions = [];
-    if (props.modelMetadata.modelType === ModelTypes.Multiclass) {
+    if (IsClassifier(props.modelMetadata.modelType)) {
       weightVectorOptions.push(WeightVectors.AbsAvg);
     }
     props.modelMetadata.classNames.forEach((name, index) => {
@@ -112,14 +113,16 @@ export class TabsView extends React.PureComponent<
       mapShiftErrorAnalysisOption: ErrorAnalysisOptions.TreeMap,
       mapShiftVisible: false,
       selectedFeatures: props.dataset.feature_names,
-      selectedWeightVector:
-        props.modelMetadata.modelType === ModelTypes.Multiclass
-          ? WeightVectors.AbsAvg
-          : 0,
+      selectedWeightVector: IsClassifier(props.modelMetadata.modelType)
+        ? WeightVectors.AbsAvg
+        : 0,
       weightVectorLabels,
       weightVectorOptions
     };
-    if (this.props.requestImportances) {
+    if (
+      this.props.requestImportances &&
+      this.context.dataset.task_type !== DatasetTaskType.Forecasting
+    ) {
       this.props
         .requestImportances([], new AbortController().signal)
         .then((result) => {
@@ -132,21 +135,21 @@ export class TabsView extends React.PureComponent<
     const disabledView =
       this.props.requestDebugML === undefined &&
       this.props.requestMatrix === undefined &&
-      this.props.baseCohort.cohort.name !==
-        localization.ErrorAnalysis.Cohort.defaultLabel;
+      !this.props.baseCohort.isAllDataCohort;
     const classNames = tabsViewStyles();
     return (
-      <Stack tokens={{ padding: "l1" }}>
+      <Stack className={classNames.stackStyle}>
         {this.props.activeGlobalTabs[0]?.key !==
-          GlobalTabKeys.ErrorAnalysisTab && (
-          <Stack.Item className={classNames.buttonSection}>
-            <AddTabButton
-              tabIndex={0}
-              onAdd={this.props.addTab}
-              availableTabs={this.props.addTabDropdownOptions}
-            />
-          </Stack.Item>
-        )}
+          GlobalTabKeys.ErrorAnalysisTab &&
+          this.context.dataset.task_type !== DatasetTaskType.Forecasting && (
+            <Stack.Item className={classNames.buttonSection}>
+              <AddTabButton
+                tabIndex={0}
+                onAdd={this.props.addTab}
+                availableTabs={this.props.addTabDropdownOptions}
+              />
+            </Stack.Item>
+          )}
         {this.props.activeGlobalTabs.map((t, i) => (
           <>
             <Stack.Item
@@ -175,16 +178,38 @@ export class TabsView extends React.PureComponent<
                         true_y: this.props.dataset.true_y
                       }}
                       requestExp={this.props.requestExp}
+                      requestObjectDetectionMetrics={
+                        this.props.requestObjectDetectionMetrics
+                      }
                       cohorts={this.props.cohorts}
                       setSelectedCohort={this.props.setSelectedCohort}
                       selectedCohort={this.props.selectedCohort}
                     />
                   </>
                 )}
+              {t.key === GlobalTabKeys.ForecastingTab && (
+                <>
+                  <Text
+                    variant={"xxLarge"}
+                    className={classNames.sectionHeader}
+                    id="forecastingHeader"
+                  >
+                    {featureColumnsExist(
+                      this.context.dataset.feature_names,
+                      this.context.dataset.feature_metadata
+                    )
+                      ? localization.Forecasting.whatIfForecastingHeader
+                      : localization.Forecasting.forecastHeader}
+                  </Text>
+                  <ForecastingTab />
+                </>
+              )}
               {t.key === GlobalTabKeys.ErrorAnalysisTab &&
+                this.context.dataset.task_type !==
+                  DatasetTaskType.Forecasting &&
                 this.props.errorAnalysisData?.[0] && (
                   <>
-                    <h3
+                    <Stack
                       className={classNames.sectionHeader}
                       id="errorAnalysisHeader"
                     >
@@ -213,7 +238,7 @@ export class TabsView extends React.PureComponent<
                           }
                         />
                       </div>
-                    </h3>
+                    </Stack>
                     <ErrorAnalysisViewTab
                       disabledView={disabledView}
                       tree={this.props.errorAnalysisData[0].tree}
@@ -254,7 +279,7 @@ export class TabsView extends React.PureComponent<
                 )}
               {t.key === GlobalTabKeys.ModelOverviewTab && (
                 <>
-                  <h3 className={classNames.sectionHeader}>
+                  <Stack className={classNames.sectionHeader}>
                     <Text variant={"xxLarge"} id="modelStatisticsHeader">
                       {
                         localization.ModelAssessment.ComponentNames
@@ -273,13 +298,13 @@ export class TabsView extends React.PureComponent<
                         }
                       />
                     </div>
-                  </h3>
+                  </Stack>
                   <ModelOverview telemetryHook={this.props.telemetryHook} />
                 </>
               )}
               {t.key === GlobalTabKeys.DataAnalysisTab && (
                 <>
-                  <h3 className={classNames.sectionHeader}>
+                  <Stack className={classNames.sectionHeader}>
                     <Text variant={"xxLarge"} id="dataAnalysisHeader">
                       {localization.ModelAssessment.ComponentNames.DataAnalysis}
                     </Text>
@@ -307,7 +332,7 @@ export class TabsView extends React.PureComponent<
                         />
                       </div>
                     )}
-                  </h3>
+                  </Stack>
                   <DataAnalysisTab
                     telemetryHook={this.props.telemetryHook}
                     showDataBalanceExperience={isFlightActive(
@@ -322,7 +347,7 @@ export class TabsView extends React.PureComponent<
               {t.key === GlobalTabKeys.FeatureImportancesTab &&
                 this.props.modelExplanationData?.[0] && (
                   <>
-                    <h3 className={classNames.sectionHeader}>
+                    <Stack className={classNames.sectionHeader}>
                       <Text variant={"xxLarge"} id="featureImportanceHeader">
                         {
                           localization.ModelAssessment.ComponentNames
@@ -341,7 +366,7 @@ export class TabsView extends React.PureComponent<
                           />
                         </div>
                       )}
-                    </h3>
+                    </Stack>
                     <FeatureImportancesTab
                       allSelectedItems={this.state.allSelectedItems}
                       modelMetadata={this.props.modelMetadata}
@@ -359,7 +384,7 @@ export class TabsView extends React.PureComponent<
               {t.key === GlobalTabKeys.CausalAnalysisTab &&
                 this.props.causalAnalysisData?.[0] && (
                   <>
-                    <h3
+                    <Stack
                       className={classNames.sectionHeader}
                       id="causalAnalysisHeader"
                     >
@@ -392,9 +417,10 @@ export class TabsView extends React.PureComponent<
                           }
                         />
                       </div>
-                    </h3>
+                    </Stack>
                     <CausalInsightsTab
                       data={this.props.causalAnalysisData?.[0]}
+                      newCohort={this.props.selectedCohort}
                       telemetryHook={this.props.telemetryHook}
                       onPivotChange={this.onCausalAnalysisOptionChange}
                     />
@@ -404,7 +430,7 @@ export class TabsView extends React.PureComponent<
               {t.key === GlobalTabKeys.CounterfactualsTab &&
                 this.props.counterfactualData?.[0] && (
                   <>
-                    <h3 className={classNames.sectionHeader}>
+                    <Stack className={classNames.sectionHeader}>
                       <Text variant={"xxLarge"}>
                         {
                           localization.ModelAssessment.ComponentNames
@@ -420,7 +446,7 @@ export class TabsView extends React.PureComponent<
                           title={localization.Common.infoTitle}
                         />
                       </div>
-                    </h3>
+                    </Stack>
                     <CounterfactualsTab
                       data={this.props.counterfactualData?.[0]}
                       telemetryHook={this.props.telemetryHook}
@@ -428,13 +454,15 @@ export class TabsView extends React.PureComponent<
                   </>
                 )}
             </Stack.Item>
-            <Stack.Item className={classNames.buttonSection}>
-              <AddTabButton
-                tabIndex={i + 1}
-                onAdd={this.props.addTab}
-                availableTabs={this.props.addTabDropdownOptions}
-              />
-            </Stack.Item>
+            {this.context.dataset.task_type !== DatasetTaskType.Forecasting && (
+              <Stack.Item className={classNames.buttonSection}>
+                <AddTabButton
+                  tabIndex={i + 1}
+                  onAdd={this.props.addTab}
+                  availableTabs={this.props.addTabDropdownOptions}
+                />
+              </Stack.Item>
+            )}
           </>
         ))}
         {this.state.mapShiftVisible && (

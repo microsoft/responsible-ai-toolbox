@@ -3,9 +3,9 @@ const fs = require("fs");
 const path = require("path");
 const _ = require("lodash");
 const commander = require("commander");
-const { start } = require("repl");
 const { exit } = require("process");
 
+const nxPath = path.join(__dirname, "../node_modules/@nrwl/cli/bin/nx.js");
 const baseDir = path.join(__dirname, "../notebooks/responsibleaidashboard");
 const filePrefix = "responsibleaidashboard-";
 // Please add notebook name into 'fileNames' array only when you are adding e2e tests to that notebook.
@@ -18,8 +18,47 @@ const fileNames = [
   "responsibleaidashboard-housing-decision-making",
   "responsibleaidashboard-multiclass-dnn-model-debugging"
 ];
-const hostReg = /^ResponsibleAI started at (http:\/\/localhost:\d+)$/m;
+const notebookHostReg = /^ResponsibleAI started at (http:\/\/localhost:\d+)$/m;
+const serveHostReg = /Web Development Server is listening at\s+(.*)$/m;
 const timeout = 3600;
+
+/**
+ *
+ * @param {string} host
+ * @returns {Promise<string>}
+ */
+async function serve(host) {
+  console.log(`Running nx serve`);
+  const timer = setTimeout(() => {
+    throw new Error(`serve timeout.`);
+  }, timeout * 1000);
+  const nbProcess = spawn("node", [nxPath, "serve", "widget"], {
+    cwd: path.join(__dirname, ".."),
+    env: {
+      NX_based_url: host
+    }
+  });
+  nbProcess.on("exit", () => {
+    throw new Error(`Failed to run serve`);
+  });
+  return new Promise((resolve) => {
+    let stdout = "";
+    const handleOutput = (data) => {
+      const message = data.toString();
+      stdout += message;
+      console.log(message);
+      if (serveHostReg.test(stdout)) {
+        clearTimeout(timer);
+        resolve(serveHostReg.exec(stdout)[1]);
+      }
+    };
+    nbProcess.stdout.on("data", handleOutput);
+    nbProcess.stderr.on("data", handleOutput);
+    nbProcess.stdout.on("error", (error) => {
+      throw error;
+    });
+  });
+}
 
 /**
  *
@@ -41,9 +80,9 @@ async function runNotebook(name) {
       const message = data.toString();
       stdout += message;
       console.log(message);
-      if (hostReg.test(stdout)) {
+      if (notebookHostReg.test(stdout)) {
         clearTimeout(timer);
-        resolve(hostReg.exec(stdout)[1]);
+        resolve(notebookHostReg.exec(stdout)[1]);
       }
     };
     nbProcess.stdout.on("data", handleOutput);
@@ -141,7 +180,7 @@ function convertNotebooks(notebook, flights) {
 /**
  * @returns {Host[]}
  */
-async function runNotebooks(selectedNotebook) {
+async function runNotebooks(selectedNotebook, host) {
   let files = fs
     .readdirSync(baseDir)
     .filter((f) => f.startsWith(filePrefix) && f.endsWith(".py"));
@@ -151,16 +190,20 @@ async function runNotebooks(selectedNotebook) {
   });
   if (selectedNotebook) {
     const nbFileName = `${selectedNotebook}.py`;
-    console.log(`Should only run ${nbFileName}`);
-    files = files.filter((f) => f === nbFileName);
-    if (files.length === 0) {
-      console.log(`Could not find any matching notebook for ${nbFileName}.`);
-      exit(1);
+    if (host) {
+      files = [nbFileName];
+    } else {
+      console.log(`Should only run ${nbFileName}`);
+      files = files.filter((f) => f === nbFileName);
+      if (files.length === 0) {
+        console.log(`Could not find any matching notebook for ${nbFileName}.`);
+        exit(1);
+      }
     }
   }
   const hosts = [];
   for (const f of files) {
-    const host = await runNotebook(f);
+    host = host || (await runNotebook(f));
     hosts.push({ file: f, host: host });
     console.log(`file: ${f}, host: ${host}`);
   }
@@ -180,8 +223,7 @@ function writeCypressSettings(hosts) {
   );
 }
 
-function e2e(watch, selectedNotebook, flights) {
-  const nxPath = path.join(__dirname, "../node_modules/@nrwl/cli/bin/nx.js");
+function e2e(watch, selectedNotebook, flights, host) {
   console.log(`Running e2e for notebook ${selectedNotebook}`);
   let notebookArgs = [];
   if (selectedNotebook) {
@@ -233,6 +275,10 @@ async function main() {
   commander
     .option("-w, --watch", "Watch mode")
     .option("--skipgen", "Skip notebook generation")
+    .option(
+      "--host [host]",
+      "Skip notebook running and use host provided to run e2e: use full url 'http://localhost:5000' or port number"
+    )
     .option("-n, --notebook [notebook]", "Run specific notebook")
     .option(
       "-f, --flights [flights]",
@@ -241,7 +287,15 @@ async function main() {
     .parse(process.argv)
     .outputHelp();
   const skipgen = commander.opts().skipgen;
+  const watch = commander.opts().watch;
+  let host = commander.opts().host;
+  if (host && !isNaN(parseInt(host))) {
+    host = `http://localhost:${host}`;
+  }
   const notebook = commander.opts().notebook;
+  if (host && !notebook) {
+    throw new Error("Notebook is required when host is specified.");
+  }
   let flights = commander.opts().flights;
   console.log("Checking flights: " + flights);
   if (flights?.toString() === "true") {
@@ -250,10 +304,18 @@ async function main() {
     console.log("setting flights to undefined!!!");
   }
   checkIfAllNotebooksHaveTests();
-  if (skipgen === undefined || !skipgen) {
+  if (!skipgen && !host) {
     convertNotebooks(notebook, flights);
+  } else {
+    console.log("Skipping converting notebooks", skipgen, host);
   }
-  const hosts = await runNotebooks(notebook);
+
+  if (host && watch) {
+    host = await serve(host);
+  }
+  console.log(`Running watch mode on ${host}`);
+
+  const hosts = await runNotebooks(notebook, host);
   writeCypressSettings(hosts);
   for (var fileName of fileNames) {
     if (notebook && fileName !== notebook) {
@@ -262,7 +324,7 @@ async function main() {
       );
       continue;
     }
-    e2e(commander.opts().watch, fileName, flights);
+    e2e(watch, fileName, flights, host);
   }
   process.exit(0);
 }

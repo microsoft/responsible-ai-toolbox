@@ -6,16 +6,16 @@ import {
   ICommandBarItemProps,
   IContextualMenuItem
 } from "@fluentui/react";
-import { Language } from "@responsible-ai/localization";
 import {
   featureFlights,
   featureFlightSeparator,
   parseFeatureFlights
-} from "@responsible-ai/model-assessment";
+} from "@responsible-ai/core-ui";
+import { Language } from "@responsible-ai/localization";
 import React from "react";
 
 import { applications, IApplications } from "./applications";
-import { IAppSetting, noFlights } from "./IAppSetting";
+import { IAppSetting } from "./IAppSetting";
 import { themes } from "./themes";
 
 export interface IAppHeaderProps extends Required<IAppSetting> {
@@ -100,11 +100,7 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
             featureFlights,
             this.onFeatureFlightSelect,
             true,
-            parseFeatureFlights(
-              this.props.featureFlights === noFlights
-                ? ""
-                : this.props.featureFlights
-            )
+            parseFeatureFlights(this.props.featureFlights)
           )
         },
         text: `Feature flights - ${this.props.featureFlights}`
@@ -184,37 +180,18 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
     _ev?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
     item?: IContextualMenuItem
   ): boolean {
-    if (item?.data) {
-      // item.checked means it was checked before the click
-      if (item.checked) {
-        if (this.props.featureFlights.includes(item.data)) {
-          // need to remove flight
-          const previousFlights = parseFeatureFlights(
-            this.props.featureFlights
-          );
-          const newFlights = previousFlights.filter(
-            (flight) => flight !== item.data
-          );
-          this.props.onSettingChanged(
-            field,
-            newFlights.length === 0
-              ? noFlights
-              : newFlights.join(featureFlightSeparator)
-          );
-        }
-      } else if (!this.props.featureFlights.includes(item.data)) {
-        // need to add flight
-        this.props.onSettingChanged(
-          field,
-          this.props.featureFlights === noFlights
-            ? item.data
-            : this.props.featureFlights.concat(
-                featureFlightSeparator,
-                item.data
-              )
-        );
-      }
+    if (!item?.data) {
+      return true;
     }
+
+    let flights = parseFeatureFlights(this.props.featureFlights);
+    // item.checked means it was checked before the click
+    if (item.checked) {
+      flights = flights.filter((flight) => flight !== item.data);
+    } else {
+      flights.push(item.data);
+    }
+    this.props.onSettingChanged(field, flights.join(featureFlightSeparator));
     return true;
   }
 }

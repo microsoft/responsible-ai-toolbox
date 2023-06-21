@@ -14,7 +14,6 @@ import {
 } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
-  getCausalDisplayFeatureName,
   ICausalAnalysisSingleData,
   ModelAssessmentContext,
   nameof
@@ -23,8 +22,10 @@ import { localization } from "@responsible-ai/localization";
 import { isEqual } from "lodash";
 import React from "react";
 
+import { getCausalDisplayFeatureName } from "./getCausalDisplayFeatureName";
+
 export interface ICausalAggregateTableProps {
-  data: ICausalAnalysisSingleData[];
+  data?: ICausalAnalysisSingleData[];
 }
 
 export class CausalAggregateTable extends React.PureComponent<ICausalAggregateTableProps> {
@@ -99,17 +100,18 @@ export class CausalAggregateTable extends React.PureComponent<ICausalAggregateTa
         name: localization.ModelAssessment.CausalAnalysis.Table.ciUpper
       }
     ];
-    const items = this.props.data.map((d) => {
-      const roundedData = {};
-      Object.entries(d).forEach(([key, value]) => {
-        if (typeof value === "number") {
-          roundedData[key] = value.toExponential(3);
-        } else {
-          roundedData[key] = value;
-        }
-      });
-      return roundedData;
-    });
+    const items =
+      this.props.data?.map((d) => {
+        const roundedData = {};
+        Object.entries(d).forEach(([key, value]) => {
+          if (typeof value === "number") {
+            roundedData[key] = value.toExponential(3);
+          } else {
+            roundedData[key] = value;
+          }
+        });
+        return roundedData;
+      }) ?? [];
     return (
       <DetailsList
         items={items}

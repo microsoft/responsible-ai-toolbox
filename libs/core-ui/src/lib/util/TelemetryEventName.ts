@@ -44,6 +44,7 @@ export enum TelemetryEventName {
   FeatureImportancesWhatDoValuesMeanCalloutClick = "RAI_FeatureImportancesWhatDoValuesMeanCalloutClick",
   FeatureImportancesCrossClassWeightsCalloutClick = "RAI_FeatureImportancesCrossClassWeightsCalloutClick",
   FeatureImportancesHowToReadChartCalloutClick = "RAI_FeatureImportancesHowToReadChartCalloutClick",
+  FeatureImportancesNewDatapointSelectedFromChart = "RAI_FeatureImportancesNewDatapointSelectedFromChart",
   // Counterfactual
   CounterfactualNewDatapointSelectedFromChart = "RAI_CounterfactualNewDatapointSelectedFromChart",
   CounterfactualNewDatapointSelectedFromDropdown = "RAI_CounterfactualNewDatapointSelectedFromDropdown",
@@ -57,6 +58,20 @@ export enum TelemetryEventName {
   IndividualCausalWhyIncludeConfoundingFeaturesCalloutClick = "RAI_IndividualCausalWhyIncludeConfoundingFeaturesCalloutClick",
   IndividualCausalSelectedDatapointUpdatedFromChart = "RAI_IndividualCausalSelectedDatapointUpdatedFromChart",
   IndividualCausalSelectedDatapointUpdatedFromDropdown = "RAI_IndividualCausalSelectedDatapointUpdatedFromDropdown",
-  CasualTreatmentPolicyTabClick = "RAI_CasualTreatmentPolicyTabClick",
-  CasualTreatmentPolicyNewTreatmentFeatureSelected = "RAI_CasualTreatmentPolicyNewTreatmentFeatureSelected"
+  CausalTreatmentPolicyTabClick = "RAI_CausalTreatmentPolicyTabClick",
+  CausalTreatmentPolicyNewTreatmentFeatureSelected = "RAI_CausalTreatmentPolicyNewTreatmentFeatureSelected",
+  LocalCausalEffectsFetchError = "LocalCausalEffectsFetchError",
+  LocalCausalEffectsFetchSuccess = "LocalCausalEffectsFetchSuccess",
+  // Big data
+  CounterfactualsBubblePlotDataFetch = "CounterfactualsBubblePlotDataFetch",
+  CausalBubblePlotDataFetch = "CausalBubblePlotDataFetch",
+  FeatureImportanceBubblePlotDataFetch = "FeatureImportanceBubblePlotDataFetch",
+  DataAnalysisBubblePlotDataFetch = "DataAnalysisBubblePlotDataFetch",
+  BubblePlotDataFetchError = "BubblePlotDataFetchError",
+  BubblePlotDataFetchSuccess = "BubblePlotDataFetchSuccess",
+  LocalExplanationsFetchSuccess = "LocalExplanationsFetchSuccess",
+  LocalExplanationsFetchError = "LocalExplanationsFetchError",
+  LocalCounterfactualsFetchSuccess = "LocalCounterfactualsFetchSuccess",
+  LocalCounterfactualsFetchError = "LocalCounterfactualsFetchError",
+  ViewBubblePlotButtonClicked = "ViewBubblePlotButtonClicked"
 }

@@ -16,6 +16,7 @@ export interface IErrorAnalysisStyles {
   featureList: IStyle;
   errorAnalysisWrapper: IStyle;
   separator: IStyle;
+  pivotLabelWrapper: IStyle;
 }
 
 export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles> =
@@ -34,9 +35,27 @@ export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles>
         width: "100%"
       },
       errorAnalysisView: flexLgDown,
-      errorAnalysisWrapper: { marginTop: "10px", paddingLeft: "15px" },
+      errorAnalysisWrapper: {
+        marginTop: "10px",
+        selectors: {
+          "@media screen and (max-width: 479px)": {
+            flexWrap: "wrap"
+          }
+        }
+      },
       featureList: {
-        padding: "16px 0 10px 0"
+        padding: "16px 0 10px 0",
+        selectors: {
+          "@media screen and (max-width: 479px)": {
+            paddingLeft: "15px"
+          }
+        }
+      },
+      pivotLabelWrapper: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "start",
+        padding: "0px 15px 15px"
       },
       separator: hideLgDown
     });

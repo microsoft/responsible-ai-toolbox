@@ -9,7 +9,14 @@ export enum ModelTypes {
   Regression = "regression",
   Binary = "binary",
   Multiclass = "multiclass",
-  Image = "image"
+  ImageBinary = "imagebinary",
+  ImageMulticlass = "imagemulticlass",
+  ImageMultilabel = "imagemultilabel",
+  TextBinary = "textbinary",
+  TextMulticlass = "textmulticlass",
+  TextMultilabel = "textmultilabel",
+  ObjectDetection = "objectdetection",
+  QuestionAnswering = "questionanswering"
 }
 
 export interface IExplanationContext {

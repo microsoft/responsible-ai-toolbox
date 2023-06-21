@@ -5,13 +5,13 @@ import { getTheme, Stack, Text } from "@fluentui/react";
 import {
   BasicHighChart,
   defaultModelAssessmentContext,
-  getTreatmentBarChartOptions,
   ICausalPolicy,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { getTreatmentBarChartOptions } from "./getTreatmentBarChartOptions";
 import { TreatmentTableStyles } from "./TreatmentTable.styles";
 
 export interface ITreatmentBarChartSectionProps {

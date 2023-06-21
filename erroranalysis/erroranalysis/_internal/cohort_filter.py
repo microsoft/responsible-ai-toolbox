@@ -16,7 +16,7 @@ from erroranalysis._internal.utils import is_spark
 
 MODEL = 'model'
 CLASSIFICATION_OUTCOME = 'Classification outcome'
-REGRESSION_ERROR = 'Error'
+REGRESSION_ERROR = 'Regression error'
 
 
 def filter_from_cohort(analyzer, filters, composite_filters,
@@ -52,7 +52,8 @@ def filter_from_cohort(analyzer, filters, composite_filters,
         categories=analyzer.categories,
         true_y=analyzer.true_y,
         pred_y=pred_y,
-        model_task=analyzer.model_task)
+        model_task=analyzer.model_task,
+        classes=analyzer.classes)
 
     return filter_data_with_cohort.filter_data_from_cohort(
         filters=filters,
@@ -462,6 +463,9 @@ class FilterDataWithCohortFilters:
         is_categorical = False
         if categorical_features:
             is_categorical = colname in categorical_features
+        is_label = False
+        if colname == TRUE_Y or colname == PRED_Y:
+            is_label = True
         for arg in filter[ARG]:
             if is_categorical:
                 cat_idx = categorical_features.index(colname)
@@ -469,6 +473,12 @@ class FilterDataWithCohortFilters:
                     arg_val = "'{}'".format(str(categories[cat_idx][arg]))
                 else:
                     arg_val = "{}".format(str(categories[cat_idx][arg]))
+            elif is_label and self.classes is not None:
+                class_value = self.classes[arg]
+                format_str = "{}"
+                if isinstance(class_value, str):
+                    format_str = "'{}'"
+                arg_val = format_str.format(str(self.classes[arg]))
             else:
                 arg_val = arg
             bounds.append("`{}`{}{}".format(colname, operator, arg_val))

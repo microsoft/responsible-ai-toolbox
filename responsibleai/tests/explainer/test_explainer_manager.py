@@ -1,13 +1,15 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import pandas as pd
 import pytest
 
+from rai_test_utils.models.lightgbm import create_lightgbm_classifier
+from raiutils.exceptions import UserConfigValidationException
 from responsibleai._interfaces import ModelExplanationData
-from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.rai_insights import RAIInsights
 
-from ..common_utils import create_iris_data, create_lightgbm_classifier
+from ..common_utils import create_iris_data
 
 
 class TestExplainerManager:
@@ -46,6 +48,17 @@ class TestExplainerManager:
         global_explanations = \
             rai_insights.explainer.request_explanations(
                 local=False, data=X_test.drop(['target'], axis=1).iloc[0:10])
+        self.verify_explanations(global_explanations, is_global=True)
+
+        with pytest.warns(
+                UserWarning,
+                match="LARGE-DATA-SCENARIO-DETECTED: "
+                      "The data is larger than the supported limit of 10000. "
+                      "Computing explanations for first 10000 samples only."):
+            global_explanations = \
+                rai_insights.explainer.request_explanations(
+                    local=False,
+                    data=pd.concat([X_test] * 400).drop(['target'], axis=1))
         self.verify_explanations(global_explanations, is_global=True)
 
     def test_explainer_manager_request_local_explanations(self):

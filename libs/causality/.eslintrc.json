@@ -7,12 +7,10 @@
       "rules": {}
     },
     {
-      "files": ["*.ts", "*.tsx"],
-      "rules": {}
-    },
-    {
-      "files": ["*.js", "*.jsx"],
-      "rules": {}
+      "files": ["**/LargeCausalIndividualChart.tsx"],
+      "rules": {
+        "max-lines": "off"
+      }
     }
   ]
 }

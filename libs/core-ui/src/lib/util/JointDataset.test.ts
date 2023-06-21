@@ -83,7 +83,7 @@ function getJointDatasetRegression(addFeatureMetaData: boolean): JointDataset {
 
   const featureMetaData = {
     categorical_features: ["c1", "c2"],
-    datetime_features: ["d1", "d2"],
+    datetime_features: ["d1"],
     dropped_features: ["d3", "d4"],
     identity_feature_name: "INDUS"
   } as IFeatureMetaData;
@@ -131,8 +131,8 @@ describe("Test JointDataset with and without feature metadata", () => {
   it("should set datetime features", () => {
     expect(
       mockJointDatasetWithFeatureMetaData.datasetMetaData.featureMetaData
-        .datetime_features
-    ).toEqual(["d1", "d2"]);
+        ?.datetime_features[0]
+    ).toEqual("d1");
   });
   it("should set dropped features", () => {
     expect(

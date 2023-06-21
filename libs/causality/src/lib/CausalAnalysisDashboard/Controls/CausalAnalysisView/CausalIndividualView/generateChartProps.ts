@@ -8,7 +8,8 @@ import {
   FluentUIStyles,
   getPrimaryChartColor,
   IGenericChartProps,
-  JointDataset
+  JointDataset,
+  OtherChartTypes
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IData, IPlotlyProperty, PlotlyMode } from "@responsible-ai/mlchartlib";
@@ -29,7 +30,7 @@ export function generatePlotlyProps(
   const theme = getTheme();
   plotlyProps.data[0].hoverinfo = "all";
   const indexes = cohort.unwrap(JointDataset.IndexLabel);
-  plotlyProps.data[0].type = chartProps.chartType;
+  plotlyProps.data[0].type = chartProps.chartType as ChartTypes;
   plotlyProps.data[0].mode = PlotlyMode.Markers;
   plotlyProps.data[0].marker = {
     color: indexes.map((rowIndex) => {
@@ -202,12 +203,13 @@ function generateDataTrace(
 }
 
 export function generateDefaultChartAxes(
-  jointDataset: JointDataset
+  jointDataset: JointDataset,
+  chartType?: ChartTypes | OtherChartTypes
 ): IGenericChartProps | undefined {
   const yKey = `${JointDataset.DataLabelRoot}0`;
   const yIsDithered = jointDataset.metaDict[yKey]?.treatAsCategorical;
   const chartProps: IGenericChartProps = {
-    chartType: ChartTypes.Scatter,
+    chartType: chartType ?? ChartTypes.Scatter,
     xAxis: {
       options: {},
       property: jointDataset.hasPredictedProbabilities

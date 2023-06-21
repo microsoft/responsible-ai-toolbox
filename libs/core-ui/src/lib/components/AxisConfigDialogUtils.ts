@@ -1,11 +1,38 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption } from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
+
 import { JointDataset } from "../util/JointDataset";
 import { ColumnCategories, IJointMeta } from "../util/JointDatasetUtils";
 
+export interface IAxisValueDescription {
+  minDescription: string;
+  maxDescription: string;
+  categoricalDescription: string;
+}
+
+export function metaDescription(metaVal: IJointMeta): IAxisValueDescription {
+  const minVal = getMinValue(metaVal);
+  const maxVal = getMaxValue(metaVal);
+  const minDescription = localization.formatString(
+    localization.Interpret.Filters.min,
+    minVal
+  );
+  const maxDescription = localization.formatString(
+    localization.Interpret.Filters.max,
+    maxVal
+  );
+  const categoricalDescription = localization.formatString(
+    localization.Interpret.Filters.uniqueValues,
+    metaVal?.sortedCategoricalValues?.length
+  );
+  return { categoricalDescription, maxDescription, minDescription };
+}
+
 export function getMinValue(selectedMeta: IJointMeta): number | string {
-  if (selectedMeta?.treatAsCategorical || !selectedMeta.featureRange) {
+  if (selectedMeta?.treatAsCategorical || !selectedMeta?.featureRange) {
     return 0;
   }
   if (Number.isInteger(selectedMeta.featureRange.min)) {
@@ -15,7 +42,7 @@ export function getMinValue(selectedMeta: IJointMeta): number | string {
 }
 
 export function getMaxValue(selectedMeta: IJointMeta): number | string {
-  if (selectedMeta?.treatAsCategorical || !selectedMeta.featureRange) {
+  if (selectedMeta?.treatAsCategorical || !selectedMeta?.featureRange) {
     return 0;
   }
   if (Number.isInteger(selectedMeta.featureRange.max)) {
@@ -54,4 +81,59 @@ export function getBinCountForProperty(
         : defaultBinCount;
   }
   return binCount;
+}
+
+export function constructClassArray(
+  jointDataset: JointDataset
+): IComboBoxOption[] {
+  return new Array(jointDataset.predictionClassCount)
+    .fill(0)
+    .map((_, index) => {
+      const key = JointDataset.ProbabilityYRoot + index.toString();
+      return {
+        key,
+        text: jointDataset.metaDict[key].abbridgedLabel
+      };
+    });
+}
+
+export function constructDataArray(
+  jointDataset: JointDataset,
+  hideDroppedFeatures: boolean | undefined,
+  droppedFeatureSet: Set<string>
+): IComboBoxOption[] {
+  return new Array(jointDataset.datasetFeatureCount)
+    .fill(0)
+    .map((_, index) => {
+      const key = JointDataset.DataLabelRoot + index.toString();
+      return {
+        key,
+        text: jointDataset.metaDict[key].abbridgedLabel
+      };
+    })
+    .filter((item) => {
+      if (hideDroppedFeatures) {
+        return !droppedFeatureSet.has(item.text);
+      }
+      return true;
+    });
+}
+
+export function constructMultilabelArray(
+  jointDataset: JointDataset,
+  label: string
+): IComboBoxOption[] {
+  const multilabelPredictedYArray = [];
+  if (jointDataset.numLabels > 1) {
+    multilabelPredictedYArray.push(
+      ...new Array(jointDataset.numLabels).fill(0).map((_, index) => {
+        const key = label + index.toString();
+        return {
+          key,
+          text: jointDataset.metaDict[key].abbridgedLabel
+        };
+      })
+    );
+  }
+  return multilabelPredictedYArray;
 }

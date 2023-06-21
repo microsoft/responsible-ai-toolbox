@@ -19,9 +19,12 @@ from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
                                                error_metrics, f1_metrics,
                                                metric_to_display_name,
                                                precision_metrics,
-                                               recall_metrics)
+                                               recall_metrics,
+                                               regression_metrics)
 from erroranalysis._internal.metrics import get_ordered_classes, metric_to_func
+from erroranalysis._internal.process_categoricals import process_categoricals
 from erroranalysis._internal.utils import is_spark
+from raiutils.exceptions import UserConfigValidationException
 
 # imports required for pyspark support
 try:
@@ -96,6 +99,84 @@ def compute_json_error_tree(analyzer,
                               min_child_samples)
 
 
+def compute_error_tree_on_dataset(
+        analyzer,
+        features,
+        dataset,
+        max_depth=DEFAULT_MAX_DEPTH,
+        num_leaves=DEFAULT_NUM_LEAVES,
+        min_child_samples=DEFAULT_MIN_CHILD_SAMPLES):
+    """Computes the error tree for the given dataset.
+
+    :param analyzer: The error analyzer containing the categorical
+        features and categories for the full dataset.
+    :type analyzer: BaseAnalyzer
+    :param features: The features to train the surrogate model on.
+    :type features: numpy.ndarray or pandas.DataFrame
+    :param dataset: The dataset on which matrix view needs to be computed.
+        The dataset should have the feature columns and the columns
+        'true_y' and 'index'. The 'true_y' column should have the true
+        target values corresponding to the test data. The 'index'
+        column should have the indices. If the analyzer is of type
+        PredictionsAnalyzer, then the dataset should include the column
+        'pred_y' which will hold the predictions.
+    :type dataset: pd.DataFrame
+    :param max_depth: The maximum depth of the surrogate tree trained
+        on errors.
+    :type max_depth: int
+    :param num_leaves: The number of leaves of the surrogate tree
+        trained on errors.
+    :type num_leaves: int
+    :param min_child_samples: The minimal number of data required to
+        create one leaf.
+    :return: The tree representation as a list of nodes.
+    :rtype: list[dict[str, str]]
+    """
+    if max_depth is None:
+        max_depth = DEFAULT_MAX_DEPTH
+    if num_leaves is None:
+        num_leaves = DEFAULT_NUM_LEAVES
+    if min_child_samples is None:
+        min_child_samples = DEFAULT_MIN_CHILD_SAMPLES
+
+    if dataset.shape[0] == 0:
+        return create_empty_node(analyzer.metric)
+    is_model_analyzer = hasattr(analyzer, MODEL)
+    indexes = []
+    for feature in features:
+        if feature not in analyzer.feature_names:
+            msg = 'Feature {} not found in dataset. Existing features: {}'
+            raise UserConfigValidationException(
+                msg.format(feature, analyzer.feature_names))
+        indexes.append(analyzer.feature_names.index(feature))
+    dataset_sub_names = np.array(analyzer.feature_names)[np.array(indexes)]
+    dataset_sub_names = list(dataset_sub_names)
+    if not is_spark(dataset):
+        booster, dataset_indexed_df, cat_info = get_surrogate_booster_local(
+            dataset, analyzer, is_model_analyzer, indexes,
+            dataset_sub_names, max_depth, num_leaves, min_child_samples)
+        cat_ind_reindexed, categories_reindexed = cat_info
+    else:
+        booster, dataset_indexed_df = get_surrogate_booster_pyspark(
+            dataset, analyzer, max_depth, num_leaves, min_child_samples)
+        cat_ind_reindexed = []
+        categories_reindexed = []
+    dumped_model = booster.dump_model()
+    tree_structure = dumped_model["tree_info"][0]['tree_structure']
+    max_split_index = get_max_split_index(tree_structure) + 1
+    cache_subtree_features(tree_structure, dataset_sub_names)
+    tree = traverse(dataset_indexed_df,
+                    tree_structure,
+                    max_split_index,
+                    (categories_reindexed,
+                     cat_ind_reindexed),
+                    [],
+                    dataset_sub_names,
+                    metric=analyzer.metric,
+                    classes=analyzer.classes)
+    return tree
+
+
 def compute_error_tree(analyzer,
                        features,
                        filters,
@@ -165,46 +246,17 @@ def compute_error_tree(analyzer,
     ...                           filters, composite_filters)
     """
     # Fit a surrogate model on errors
-    if max_depth is None:
-        max_depth = DEFAULT_MAX_DEPTH
-    if num_leaves is None:
-        num_leaves = DEFAULT_NUM_LEAVES
-    if min_child_samples is None:
-        min_child_samples = DEFAULT_MIN_CHILD_SAMPLES
     filtered_df = filter_from_cohort(analyzer,
                                      filters,
                                      composite_filters)
-    if filtered_df.shape[0] == 0:
-        return create_empty_node(analyzer.metric)
-    indexes = []
-    for feature in features:
-        indexes.append(analyzer.feature_names.index(feature))
-    dataset_sub_names = np.array(analyzer.feature_names)[np.array(indexes)]
-    dataset_sub_names = list(dataset_sub_names)
-    if not is_spark(filtered_df):
-        booster, filtered_indexed_df, cat_info = get_surrogate_booster_local(
-            filtered_df, analyzer, indexes,
-            dataset_sub_names, max_depth, num_leaves, min_child_samples)
-        cat_ind_reindexed, categories_reindexed = cat_info
-    else:
-        booster, filtered_indexed_df = get_surrogate_booster_pyspark(
-            filtered_df, analyzer, max_depth, num_leaves, min_child_samples)
-        cat_ind_reindexed = []
-        categories_reindexed = []
-    dumped_model = booster.dump_model()
-    tree_structure = dumped_model["tree_info"][0]['tree_structure']
-    max_split_index = get_max_split_index(tree_structure) + 1
-    cache_subtree_features(tree_structure, dataset_sub_names)
-    tree = traverse(filtered_indexed_df,
-                    tree_structure,
-                    max_split_index,
-                    (categories_reindexed,
-                     cat_ind_reindexed),
-                    [],
-                    dataset_sub_names,
-                    metric=analyzer.metric,
-                    classes=analyzer.classes)
-    return tree
+    return compute_error_tree_on_dataset(
+        analyzer,
+        features,
+        filtered_df,
+        max_depth=max_depth,
+        num_leaves=num_leaves,
+        min_child_samples=min_child_samples
+    )
 
 
 def get_surrogate_booster_local(filtered_df, analyzer,
@@ -238,10 +290,8 @@ def get_surrogate_booster_local(filtered_df, analyzer,
         scored dataset.
     :rtype: (Booster, pandas.DataFrame, (list[str], list[int]))
     """
-    row_index = filtered_df[ROW_INDEX]
     true_y = filtered_df[TRUE_Y]
     pred_y = filtered_df[PRED_Y]
-
     dropped_cols = [TRUE_Y, ROW_INDEX, PRED_Y]
     input_data = filtered_df.drop(columns=dropped_cols)
 
@@ -249,7 +299,7 @@ def get_surrogate_booster_local(filtered_df, analyzer,
     if is_pandas:
         true_y = true_y.to_numpy()
     else:
-        input_data = input_data.to_numpy()
+        input_data = input_data.to_numpy(copy=True)
 
     if analyzer.model_task == ModelTask.CLASSIFICATION:
         diff = pred_y != true_y
@@ -262,12 +312,20 @@ def get_surrogate_booster_local(filtered_df, analyzer,
     if not isinstance(true_y, np.ndarray):
         true_y = np.array(true_y)
     if is_pandas:
-        input_data = input_data.to_numpy()
+        input_data = input_data.to_numpy(copy=True)
 
     if analyzer.categorical_features:
         # Inplace replacement of columns
+        if len(input_data) != len(analyzer.string_indexed_data):
+            _, _, _, string_indexed_data = \
+                process_categoricals(
+                    all_feature_names=analyzer._feature_names,
+                    categorical_features=analyzer._categorical_features,
+                    dataset=input_data)
+        else:
+            string_indexed_data = analyzer.string_indexed_data
         for idx, c_i in enumerate(analyzer.categorical_indexes):
-            input_data[:, c_i] = analyzer.string_indexed_data[row_index, idx]
+            input_data[:, c_i] = string_indexed_data[:, idx]
     dataset_sub_features = input_data[:, indexes]
 
     categorical_info = get_categorical_info(analyzer,
@@ -542,7 +600,7 @@ def filter_to_used_features(df, tree):
     """
     features = tree[CACHED_SUBTREE_FEATURES]
     features = features.union({PRED_Y, TRUE_Y, DIFF})
-    return df[features]
+    return df[list(features)]
 
 
 def cache_subtree_features(tree, feature_names, parent=None):
@@ -730,10 +788,12 @@ def node_to_dict(df, tree, nodeid, categories, json,
         node_name = str(feature_names[tree[SPLIT_FEATURE]])
     else:
         node_name = None
+    is_regression_metric = metric in regression_metrics
     json.append(get_json_node(arg, condition, error, nodeid, method,
                               node_name, parentid, p_node_name,
                               total, success, metric_name,
-                              metric_value, is_error_metric))
+                              metric_value, is_error_metric,
+                              is_regression_metric))
     return json, df
 
 
@@ -827,11 +887,10 @@ def compute_metrics_local(df, metric, total, classes):
                                             pred_y, metric)
         success = total - error
     else:
-        error = int(df[DIFF].sum())
-        if total == 0:
-            metric_value = 0
-        else:
-            metric_value = error / total
+        func = metric_to_func[metric]
+        diff = df[DIFF]
+        metric_value = func(None, None, diff)
+        error = metric_value * total
         success = total - error
     return metric_value, success, error
 
@@ -845,14 +904,17 @@ def create_empty_node(metric):
     :rtype: dict
     """
     metric_name = metric_to_display_name[metric]
+    is_regression_metric = metric in regression_metrics
     is_error_metric = metric in error_metrics
     return [get_json_node(None, None, 0, 0, None, None, None,
-                          None, 0, 0, metric_name, 0, is_error_metric)]
+                          None, 0, 0, metric_name, 0, is_error_metric,
+                          is_regression_metric)]
 
 
 def get_json_node(arg, condition, error, nodeid, method, node_name,
                   parentid, p_node_name, total, success, metric_name,
-                  metric_value, is_error_metric):
+                  metric_value, is_error_metric,
+                  is_regression_metric):
     """Get the JSON node for the tree.
 
     :param arg: The arg for the node.
@@ -860,7 +922,8 @@ def get_json_node(arg, condition, error, nodeid, method, node_name,
     :param condition: The condition for the node.
     :type condition: str
     :param error: The error for the node.
-    :type error: int
+        Can be int for classification or float for regression.
+    :type error: int or float
     :param nodeid: The node id for the node.
     :type nodeid: int
     :param method: The method for the node.
@@ -881,14 +944,20 @@ def get_json_node(arg, condition, error, nodeid, method, node_name,
     :type metric_value: float
     :param is_error_metric: Whether the metric is an error metric.
     :type is_error_metric: bool
+    :param is_regression_metric: Whether the metric is a regression metric.
+    :type is_regression_metric: bool
     :return: The JSON node.
     :rtype: dict
     """
+    if is_regression_metric:
+        error = float(error)
+    else:
+        error = int(error)
     return {
         "arg": arg,
         "badFeaturesRowCount": 0,  # Note: remove this eventually
         "condition": condition,
-        "error": float(error),
+        "error": error,
         "id": int(nodeid),
         METHOD: method,
         "nodeIndex": int(nodeid),

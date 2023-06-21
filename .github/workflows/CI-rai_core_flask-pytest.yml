@@ -1,0 +1,127 @@
+name: CI rai_core_flask
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    paths:
+      - "rai_core_flask/**"
+      - ".github/workflows/CI-rai_core_flask-pytest.yml"
+
+jobs:
+  ci-python:
+    strategy:
+      # keep running remaining matrix jobs even if one fails
+      # to avoid having to rerun all jobs several times
+      fail-fast: false
+      matrix:
+        operatingSystem:
+          [ubuntu-20.04, ubuntu-latest, macos-latest, windows-latest]
+        pythonVersion: ["3.6", "3.7", "3.8", "3.9", "3.10"]
+        exclude:
+          - operatingSystem: macos-latest
+            pythonVersion: "3.9"
+          - operatingSystem: ubuntu-20.04
+            pythonVersion: "3.7"
+          - operatingSystem: ubuntu-20.04
+            pythonVersion: "3.8"
+          - operatingSystem: ubuntu-20.04
+            pythonVersion: "3.9"
+          - operatingSystem: ubuntu-20.04
+            pythonVersion: "3.10"
+          - operatingSystem: ubuntu-latest
+            pythonVersion: "3.6"
+          - operatingSystem: ubuntu-latest
+            pythonVersion: "3.9"
+          - operatingSystem: windows-latest
+            pythonVersion: "3.8"
+
+    runs-on: ${{ matrix.operatingSystem }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.pythonVersion }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.pythonVersion }}
+
+      - name: Setup tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade setuptools
+          pip install --upgrade "pip-tools<=6.13.0"
+
+      - name: Pip compile
+        run: |
+          pip-compile requirements-dev.txt -o requirements-dev-comp.txt
+          cat requirements-dev-comp.txt
+        working-directory: rai_core_flask
+
+      - name: Upload requirements
+        uses: actions/upload-artifact@v3
+        with:
+          name: requirements-dev-comp.txt
+          path: rai_core_flask/requirements-dev-comp.txt
+
+      - name: Install dependencies
+        run: |
+          pip-sync requirements-dev-comp.txt
+        working-directory: rai_core_flask
+
+      - name: Install package
+        run: |
+          pip install -v -e .
+        working-directory: rai_core_flask
+
+      - name: Run tests
+        run: |
+          pytest --durations=10 --doctest-modules --junitxml=junit/test-results.xml --cov=rai_core_flask --cov-report=xml --cov-report=html
+        working-directory: rai_core_flask
+
+      - name: Upload code coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          name: rai_core_flask-code-coverage-results
+          path: rai_core_flask/htmlcov
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}
+
+      - if: ${{ (matrix.operatingSystem == 'windows-latest') && (matrix.pythonVersion == '3.8') }}
+        name: Upload to codecov
+        id: codecovupload1
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: rai_core_flask
+          env_vars: OS,PYTHON
+          fail_ci_if_error: false
+          files: ./rai_core_flask/coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          verbose: true
+
+      - if: ${{ (steps.codecovupload1.outcome == 'failure') && (matrix.pythonVersion == '3.8') && (matrix.operatingSystem == 'windows-latest') }}
+        name: Retry upload to codecov
+        id: codecovupload2
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: rai_core_flask
+          env_vars: OS,PYTHON
+          fail_ci_if_error: false
+          files: ./rai_core_flask/coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          verbose: true
+
+      - name: Set codecov status
+        if: ${{ (matrix.pythonVersion == '3.8') && (matrix.operatingSystem == 'windows-latest') }}
+        shell: bash
+        run: |
+          if ${{ (steps.codecovupload1.outcome == 'success') || (steps.codecovupload2.outcome == 'success') }} ; then
+            echo fine
+          else
+            exit 1
+          fi

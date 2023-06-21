@@ -235,9 +235,14 @@ export function createJsonImportancesGenerator(
   };
 }
 
-export function createPredictionsRequestGenerator(classDimension?: 1 | 2 | 3) {
+export function createPredictionsRequestGenerator(
+  classDimension?: 1 | 2 | 3
+): ((data: any[], signal: AbortSignal) => Promise<any[]>) | undefined {
+  if (!classDimension) {
+    return undefined;
+  }
   return (data: any[], signal: AbortSignal): Promise<any[]> => {
-    return !classDimension || classDimension === 1
+    return classDimension === 1
       ? generateRandomScore(data, signal)
       : generateRandomProbs(classDimension, data, signal);
   };

@@ -44,10 +44,13 @@ export interface ICounterfactualChartProps {
     index?: number,
     value?: string
   ) => void;
-  setTemporaryPointToCopyOfDatasetPoint: (index: number) => void;
+  setTemporaryPointToCopyOfDatasetPoint: (
+    index: number,
+    absoluteIndex?: number
+  ) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
   togglePanel: () => void;
-  toggleSelectionOfPoint: (index?: number) => void;
+  toggleSelectionOfPoint: (index?: number) => number[];
 }
 
 export interface ICounterfactualChartState {
@@ -111,7 +114,9 @@ export class CounterfactualChart extends React.PureComponent<
             selectedColumn={this.props.chartProps.yAxis}
             canBin={false}
             mustBin={false}
+            allowTreatAsCategorical
             canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
+            hideDroppedFeatures
             onAccept={this.onYSet}
             onCancel={this.setYClose}
           />
@@ -132,7 +137,9 @@ export class CounterfactualChart extends React.PureComponent<
               this.props.chartProps.chartType === ChartTypes.Histogram ||
               this.props.chartProps.chartType === ChartTypes.Box
             }
+            allowTreatAsCategorical
             canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
+            hideDroppedFeatures
             onAccept={this.onXSet}
             onCancel={this.setXClose}
           />
@@ -161,7 +168,8 @@ export class CounterfactualChart extends React.PureComponent<
                 <BasicHighChart
                   configOverride={getCounterfactualChartOptions(
                     plotlyProps,
-                    this.selectPointFromChart
+                    this.selectPointFromChart,
+                    this.props.chartProps
                   )}
                   theme={getTheme()}
                   id="CounterfactualChart"

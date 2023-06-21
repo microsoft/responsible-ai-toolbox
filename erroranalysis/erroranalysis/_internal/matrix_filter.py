@@ -17,10 +17,12 @@ from erroranalysis._internal.constants import (DIFF, PRED_Y, ROW_INDEX, TRUE_Y,
 from erroranalysis._internal.metrics import (get_ordered_classes,
                                              is_multi_agg_metric,
                                              metric_to_func)
+from raiutils.exceptions import UserConfigValidationException
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 CATEGORY1 = 'category1'
 CATEGORY2 = 'category2'
+CONVERT_DTYPES = 'convert_dtypes'
 COUNT = 'count'
 FALSE_COUNT = 'falseCount'
 INTERVAL_MIN = 'intervalMin'
@@ -59,8 +61,8 @@ def compute_json_matrix(analyzer, features, filters, composite_filters):
     return compute_matrix(analyzer, features, filters, composite_filters)
 
 
-def compute_matrix(analyzer, features, filters, composite_filters,
-                   quantile_binning=False, num_bins=BIN_THRESHOLD):
+def compute_matrix_on_dataset(analyzer, features, dataset,
+                              quantile_binning=False, num_bins=BIN_THRESHOLD):
     """Compute a matrix of metrics for a given set of feature names.
 
     The filters and composite filters are used to filter the data
@@ -70,10 +72,14 @@ def compute_matrix(analyzer, features, filters, composite_filters,
     :type analyzer: BaseAnalyzer
     :param features: A list of one or two feature names to compute metrics for.
     :type features: list
-    :param filters: A list of filters to apply to the data.
-    :type filters: list
-    :param composite_filters: A list of composite filters to apply to the data.
-    :type composite_filters: list
+    :param dataset: The dataset on which matrix view needs to be computed.
+        The dataset should have the feature columns and the columns
+        'true_y' and 'index'. The 'true_y' column should have the true
+        target values corresponding to the test data. The 'index'
+        column should have the indices. If the analyzer is of type
+        PredictionsAnalyzer, then the dataset should include the column
+        'pred_y' which will hold the predictions.
+    :type dataset: pd.DataFrame
     :param quantile_binning: Whether to use quantile binning.
     :type quantile_binning: bool
     :param num_bins: The number of bins to use for quantile binning.
@@ -81,45 +87,6 @@ def compute_matrix(analyzer, features, filters, composite_filters,
     :return: A dictionary representation of the computed matrix which can be
         saved to JSON.
     :rtype: dict
-
-    :Example:
-
-    An example of running compute_matrix with a filter and a composite
-    filter:
-
-    >>> from erroranalysis._internal.error_analyzer import ModelAnalyzer
-    >>> from erroranalysis._internal.matrix_filter import (
-    ...     compute_matrix)
-    >>> from erroranalysis._internal.constants import ModelTask
-    >>> from sklearn.datasets import load_breast_cancer
-    >>> from sklearn.model_selection import train_test_split
-    >>> from sklearn import svm
-    >>> breast_cancer_data = load_breast_cancer()
-    >>> feature_names = breast_cancer_data.feature_names
-    >>> X_train, X_test, y_train, y_test = train_test_split(
-    ...     breast_cancer_data.data, breast_cancer_data.target,
-    ...     test_size=0.5, random_state=0)
-    >>> categorical_features = []
-    >>> clf = svm.SVC(gamma=0.001, C=100., probability=True,
-    ...               random_state=777)
-    >>> model = clf.fit(X_train, y_train)
-    >>> model_task = ModelTask.CLASSIFICATION
-    >>> analyzer = ModelAnalyzer(model, X_test, y_test, feature_names,
-    ...                          categorical_features, model_task=model_task)
-    >>> filters = [{'arg': [23.85], 'column': 'mean radius',
-    ...             'method': 'less and equal'}]
-    >>> composite_filters = [{'compositeFilters':
-    ...                      [{'compositeFilters':
-    ...                       [{'arg': [13.45, 22.27],
-    ...                         'column': 'mean radius',
-    ...                         'method': 'in the range of'},
-    ...                        {'arg': [10.88, 24.46],
-    ...                         'column': 'mean texture',
-    ...                         'method': 'in the range of'}],
-    ...                        'operation': 'and'}],
-    ...                      'operation': 'or'}]
-    >>> matrix = compute_matrix(analyzer, ['mean radius', 'mean texture'],
-    ...                         filters, composite_filters)
     """
     if num_bins <= 0:
         raise ValueError(
@@ -127,13 +94,11 @@ def compute_matrix(analyzer, features, filters, composite_filters,
     if features[0] is None and features[1] is None:
         raise ValueError(
             'One or two features must be specified to compute the heat map')
-    filtered_df = filter_from_cohort(analyzer,
-                                     filters,
-                                     composite_filters)
-    true_y = filtered_df[TRUE_Y]
-    pred_y = filtered_df[PRED_Y]
+
+    true_y = dataset[TRUE_Y]
+    pred_y = dataset[PRED_Y]
     dropped_cols = [TRUE_Y, ROW_INDEX, PRED_Y]
-    input_data = filtered_df.drop(columns=dropped_cols)
+    input_data = dataset.drop(columns=dropped_cols)
 
     is_pandas = isinstance(analyzer.dataset, pd.DataFrame)
     metric = analyzer.metric
@@ -157,12 +122,20 @@ def compute_matrix(analyzer, features, filters, composite_filters,
     for feature in features:
         if feature is None:
             continue
+        if feature not in analyzer.feature_names:
+            msg = 'Feature {} not found in dataset. Existing features: {}'
+            raise UserConfigValidationException(
+                msg.format(feature, analyzer.feature_names))
         indexes.append(analyzer.feature_names.index(feature))
     if is_pandas:
         input_data = input_data.to_numpy()
     dataset_sub_features = input_data[:, indexes]
     dataset_sub_names = np.array(analyzer.feature_names)[np.array(indexes)]
     df = pd.DataFrame(dataset_sub_features, columns=dataset_sub_names)
+    # Fix for newer versions of pandas where qcut fails for object dtypes.
+    # Note this bug appears in newer versions of pandas+numpy but
+    # convert_dtypes method only exists in pandas>1.1.4.
+    df = convert_dtypes(df)
     df_err = df.copy()
     df_err[DIFF] = diff
     if metric == Metrics.ERROR_RATE:
@@ -170,6 +143,7 @@ def compute_matrix(analyzer, features, filters, composite_filters,
     else:
         df_err[TRUE_Y] = true_y
         df_err[PRED_Y] = pred_y
+    df_err = convert_dtypes(df_err)
     # construct matrix
     matrix = []
     if len(dataset_sub_names) == 2:
@@ -313,6 +287,88 @@ def compute_matrix(analyzer, features, filters, composite_filters,
     return matrix
 
 
+def compute_matrix(analyzer, features, filters, composite_filters,
+                   quantile_binning=False, num_bins=BIN_THRESHOLD):
+    """Compute a matrix of metrics for a given set of feature names.
+
+    The filters and composite filters are used to filter the data
+    prior to computing the matrix.
+
+    :param analyzer: The error analyzer.
+    :type analyzer: BaseAnalyzer
+    :param features: A list of one or two feature names to compute metrics for.
+    :type features: list
+    :param filters: A list of filters to apply to the data.
+    :type filters: list
+    :param composite_filters: A list of composite filters to apply to the data.
+    :type composite_filters: list
+    :param quantile_binning: Whether to use quantile binning.
+    :type quantile_binning: bool
+    :param num_bins: The number of bins to use for quantile binning.
+    :type num_bins: int
+    :return: A dictionary representation of the computed matrix which can be
+        saved to JSON.
+    :rtype: dict
+
+    :Example:
+
+    An example of running compute_matrix with a filter and a composite
+    filter:
+
+    >>> from erroranalysis._internal.error_analyzer import ModelAnalyzer
+    >>> from erroranalysis._internal.matrix_filter import (
+    ...     compute_matrix)
+    >>> from erroranalysis._internal.constants import ModelTask
+    >>> from sklearn.datasets import load_breast_cancer
+    >>> from sklearn.model_selection import train_test_split
+    >>> from sklearn import svm
+    >>> breast_cancer_data = load_breast_cancer()
+    >>> feature_names = breast_cancer_data.feature_names
+    >>> X_train, X_test, y_train, y_test = train_test_split(
+    ...     breast_cancer_data.data, breast_cancer_data.target,
+    ...     test_size=0.5, random_state=0)
+    >>> categorical_features = []
+    >>> clf = svm.SVC(gamma=0.001, C=100., probability=True,
+    ...               random_state=777)
+    >>> model = clf.fit(X_train, y_train)
+    >>> model_task = ModelTask.CLASSIFICATION
+    >>> analyzer = ModelAnalyzer(model, X_test, y_test, feature_names,
+    ...                          categorical_features, model_task=model_task)
+    >>> filters = [{'arg': [23.85], 'column': 'mean radius',
+    ...             'method': 'less and equal'}]
+    >>> composite_filters = [{'compositeFilters':
+    ...                      [{'compositeFilters':
+    ...                       [{'arg': [13.45, 22.27],
+    ...                         'column': 'mean radius',
+    ...                         'method': 'in the range of'},
+    ...                        {'arg': [10.88, 24.46],
+    ...                         'column': 'mean texture',
+    ...                         'method': 'in the range of'}],
+    ...                        'operation': 'and'}],
+    ...                      'operation': 'or'}]
+    >>> matrix = compute_matrix(analyzer, ['mean radius', 'mean texture'],
+    ...                         filters, composite_filters)
+    """
+    filtered_df = filter_from_cohort(analyzer,
+                                     filters,
+                                     composite_filters)
+    return compute_matrix_on_dataset(analyzer, features, filtered_df,
+                                     quantile_binning, num_bins)
+
+
+def convert_dtypes(df):
+    """Converts the dtypes of the dataframe to the most efficient type.
+
+    :param df: The dataframe to convert.
+    :type df: pandas.DataFrame
+    :return: The converted dataframe.
+    :rtype: pandas.DataFrame
+    """
+    if hasattr(df, CONVERT_DTYPES):
+        df = df.convert_dtypes()
+    return df
+
+
 def warn_duplicate_edges(feat):
     """Alert user that a feature has too many duplicate values for bins.
 
@@ -332,8 +388,8 @@ def bin_data(df, feat, bins, quantile_binning=False):
     Uses equal width, quantile binning or specified custom bins. Custom
     bins is used when bins is an IntervalIndex instead of a constant number.
 
-    :param df: The DataFrame to bin.
-    :type df: pd.DataFrame
+    :param df: The pandas Series to bin.
+    :type df: pd.Series
     :param feat: The feature name to bin.
     :type feat: str
     :param bins: The number of bins or the specified bins.
@@ -350,7 +406,10 @@ def bin_data(df, feat, bins, quantile_binning=False):
     # so the same categories are used.
     is_bins_constant = not isinstance(bins, pd.IntervalIndex)
     if not is_bins_constant:
-        bin_indexes = bins.get_indexer(feat_col)
+        if feat_col.empty:
+            bin_indexes = np.array([])
+        else:
+            bin_indexes = bins.get_indexer(np.array(feat_col))
         cat = pd.Categorical.from_codes(bin_indexes,
                                         categories=bins,
                                         ordered=True)
@@ -383,7 +442,30 @@ def bin_data(df, feat, bins, quantile_binning=False):
         bindf = bin_data(df, feat, bindf.cat.categories, quantile_binning)
         return bindf
     else:
-        return pd.cut(feat_col, bins, precision=PRECISION)
+        cut_df = pd.cut(feat_col, bins, precision=PRECISION)
+        return adjust_bin_max_edge(cut_df, feat_col)
+
+
+def adjust_bin_max_edge(cut_df, feat_col):
+    """Adjusts the max bin edge to account for floating point precision.
+
+    Adjustment only done when the max bin edge is less than the max value.
+
+    :param cut_df: The binned DataFrame.
+    :type cut_df: pd.DataFrame
+    :param feat_col: The feature column to adjust the bins for.
+    :type feat_col: pd.Series
+    """
+    bins = cut_df.cat.categories
+    max_bin = bins[-1]
+    max_val = feat_col.max()
+    if max_bin.right < max_val:
+        adj_cat = bins.copy()
+        max_bin = pd.Interval(left=max_bin.left, right=max_val,
+                              closed=max_bin.closed)
+        adj_cat = adj_cat[:-1].append(pd.IntervalIndex([max_bin]))
+        cut_df = cut_df.cat.rename_categories(adj_cat)
+    return cut_df
 
 
 class _BaseAggFunc(ABC):

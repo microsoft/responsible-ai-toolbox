@@ -3,6 +3,7 @@
 
 import { Panel, PanelType, Stack, Text } from "@fluentui/react";
 import {
+  DatasetTaskType,
   defaultModelAssessmentContext,
   IModelAssessmentContext,
   ModelAssessmentContext
@@ -17,6 +18,8 @@ import { CreateGlobalCohortButton } from "./CreateGlobalCohortButton";
 export interface ICohortSettingsPanelProps {
   isOpen: boolean;
   onDismiss: () => void;
+  allowCohortEditing: boolean;
+  showAllDataCohort: boolean;
 }
 
 export class CohortSettingsPanel extends React.PureComponent<ICohortSettingsPanelProps> {
@@ -24,39 +27,49 @@ export class CohortSettingsPanel extends React.PureComponent<ICohortSettingsPane
   public context: IModelAssessmentContext = defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
+    let localizationBase;
+    if (
+      this.context &&
+      this.context.dataset.task_type === DatasetTaskType.Forecasting
+    ) {
+      localizationBase = localization.Forecasting.TimeSeriesSettings;
+    } else {
+      localizationBase = localization.ModelAssessment.CohortSettings;
+    }
     return (
       <Panel
-        headerText={
-          localization.ModelAssessment.CohortSettings.CohortSettingsTitle
-        }
+        headerText={localizationBase.CohortSettingsTitle}
         isOpen={this.props.isOpen}
         // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
         closeButtonAriaLabel="Close"
         isBlocking={false}
         onDismiss={this.props.onDismiss}
         type={PanelType.medium}
+        id={"CohortSettingsPanel"}
       >
         <Stack horizontal={false} tokens={{ childrenGap: 20 }}>
           <Stack.Item>
-            <Text>
-              {
-                localization.ModelAssessment.CohortSettings
-                  .CohortSettingsDescription
-              }
-            </Text>
+            <Text>{localizationBase.CohortSettingsDescription}</Text>
           </Stack.Item>
           <Stack.Item>
             <Stack horizontal tokens={{ childrenGap: 25 }}>
               <Stack.Item>
-                <ChangeGlobalCohortButton />
+                <ChangeGlobalCohortButton
+                  showAllDataCohort={this.props.showAllDataCohort}
+                />
               </Stack.Item>
-              <Stack.Item>
-                <CreateGlobalCohortButton />
-              </Stack.Item>
+              {this.props.allowCohortEditing && (
+                <Stack.Item>
+                  <CreateGlobalCohortButton />
+                </Stack.Item>
+              )}
             </Stack>
           </Stack.Item>
           <Stack.Item>
-            <CohortList enableEditing />
+            <CohortList
+              enableEditing={this.props.allowCohortEditing}
+              showAllDataCohort={this.props.showAllDataCohort}
+            />
           </Stack.Item>
         </Stack>
       </Panel>

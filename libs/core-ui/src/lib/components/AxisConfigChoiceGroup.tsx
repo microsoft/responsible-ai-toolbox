@@ -10,7 +10,10 @@ import { ISelectorConfig } from "../util/IGenericChartProps";
 import { JointDataset } from "../util/JointDataset";
 import { ColumnCategories } from "../util/JointDatasetUtils";
 
-import { getBinCountForProperty } from "./AxisConfigDialogUtils";
+import {
+  getBinCountForProperty,
+  metaDescription
+} from "./AxisConfigDialogUtils";
 
 export interface IAxisConfigChoiceGroupProps {
   canBin: boolean;
@@ -20,13 +23,14 @@ export interface IAxisConfigChoiceGroupProps {
   mustBin: boolean;
   orderedGroupTitles: ColumnCategories[];
   selectedFilterGroup?: string;
+  removeCount?: boolean;
   onBinCountUpdated: (binCount?: number) => void;
   onSelectedColumnUpdated: (selectedColumn: ISelectorConfig) => void;
   onSelectedFilterGroupUpdated: (selectedFilterGroup?: string) => void;
 }
 
-export class AxisConfigChoiceGroup extends React.PureComponent<IAxisConfigChoiceGroupProps> {
-  private readonly leftItems = [
+function getLeftItems(removeCount?: boolean): string[] {
+  const leftItems = [
     cohortKey,
     JointDataset.IndexLabel,
     JointDataset.DataLabelRoot,
@@ -36,46 +40,95 @@ export class AxisConfigChoiceGroup extends React.PureComponent<IAxisConfigChoice
     JointDataset.RegressionError,
     JointDataset.ProbabilityYRoot,
     ColumnCategories.None
-  ].reduce((previousValue: Array<{ key: string; title: string }>, key) => {
-    const metaVal = this.props.jointDataset.metaDict[key];
-    if (
-      key === JointDataset.DataLabelRoot &&
-      this.props.orderedGroupTitles.includes(ColumnCategories.Dataset) &&
-      this.props.jointDataset.hasDataset
-    ) {
-      previousValue.push({
-        key,
-        title: localization.Interpret.Columns.dataset
-      });
-      return previousValue;
-    }
-    if (
-      key === JointDataset.ProbabilityYRoot &&
-      this.props.orderedGroupTitles.includes(ColumnCategories.Outcome) &&
-      this.props.jointDataset.hasPredictedProbabilities
-    ) {
-      previousValue.push({
-        key,
-        title: localization.Interpret.Columns.predictedProbabilities
-      });
-      return previousValue;
-    }
-    if (
-      metaVal === undefined ||
-      !this.props.orderedGroupTitles.includes(metaVal.category)
-    ) {
-      return previousValue;
-    }
+  ];
+  if (removeCount) {
+    leftItems.pop();
+  }
+  return leftItems;
+}
 
-    previousValue.push({ key, title: metaVal.abbridgedLabel });
-    return previousValue;
-  }, []);
+export class AxisConfigChoiceGroup extends React.PureComponent<IAxisConfigChoiceGroupProps> {
+  private readonly leftItems = getLeftItems(this.props.removeCount).reduce(
+    (
+      previousValue: Array<{
+        key: string;
+        title: string;
+        ariaLabel?: string;
+      }>,
+      key
+    ) => {
+      const metaVal = this.props.jointDataset.metaDict[key];
+      let ariaLabel = metaVal?.abbridgedLabel;
+      if (key === ColumnCategories.None) {
+        ariaLabel += localization.Interpret.AxisConfigDialog.countHelperText;
+      } else {
+        const metaDesc = metaDescription(metaVal);
+        ariaLabel += metaVal?.treatAsCategorical
+          ? metaDesc.categoricalDescription
+          : metaDesc.minDescription + metaDesc.maxDescription;
+      }
+
+      if (
+        key === JointDataset.DataLabelRoot &&
+        this.props.orderedGroupTitles.includes(ColumnCategories.Dataset) &&
+        this.props.jointDataset.hasDataset
+      ) {
+        previousValue.push({
+          key,
+          title: localization.Interpret.Columns.dataset
+        });
+        return previousValue;
+      }
+      if (
+        key === JointDataset.ProbabilityYRoot &&
+        this.props.orderedGroupTitles.includes(ColumnCategories.Outcome) &&
+        this.props.jointDataset.hasPredictedProbabilities
+      ) {
+        previousValue.push({
+          key,
+          title: localization.Interpret.Columns.predictedProbabilities
+        });
+        return previousValue;
+      }
+      if (
+        key === JointDataset.PredictedYLabel &&
+        this.props.jointDataset.numLabels > 1
+      ) {
+        previousValue.push({
+          key,
+          title: localization.Interpret.Columns.predictedLabels
+        });
+        return previousValue;
+      }
+      if (
+        key === JointDataset.TrueYLabel &&
+        this.props.jointDataset.numLabels > 1
+      ) {
+        previousValue.push({
+          key,
+          title: localization.Interpret.Columns.trueLabels
+        });
+        return previousValue;
+      }
+      if (
+        metaVal === undefined ||
+        !this.props.orderedGroupTitles.includes(metaVal.category)
+      ) {
+        return previousValue;
+      }
+
+      previousValue.push({ ariaLabel, key, title: metaVal.abbridgedLabel });
+      return previousValue;
+    },
+    []
+  );
 
   public render(): React.ReactNode {
     return (
       <ChoiceGroup
         label={localization.Interpret.AxisConfigDialog.selectFilter}
         options={this.leftItems.map((i) => ({
+          ariaLabel: i.ariaLabel,
           key: i.key,
           text: i.title
         }))}
@@ -99,7 +152,8 @@ export class AxisConfigChoiceGroup extends React.PureComponent<IAxisConfigChoice
       options: {
         dither
       },
-      property
+      property,
+      type: this.props.jointDataset.metaDict[property]?.AxisType
     });
   };
 
@@ -118,13 +172,17 @@ export class AxisConfigChoiceGroup extends React.PureComponent<IAxisConfigChoice
         options: {
           dither: false
         },
-        property
+        property,
+        type: this.props.jointDataset.metaDict[property]?.AxisType
       });
       return;
     }
     if (
       property === JointDataset.DataLabelRoot ||
-      property === JointDataset.ProbabilityYRoot
+      property === JointDataset.ProbabilityYRoot ||
+      (this.props.jointDataset.numLabels > 1 &&
+        (property === JointDataset.TrueYLabel ||
+          property === JointDataset.PredictedYLabel))
     ) {
       property += "0";
     }

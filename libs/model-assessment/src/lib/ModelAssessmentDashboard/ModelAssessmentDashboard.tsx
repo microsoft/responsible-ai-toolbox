@@ -11,7 +11,9 @@ import {
   SaveCohort,
   defaultTheme,
   TelemetryLevels,
-  TelemetryEventName
+  TelemetryEventName,
+  Announce,
+  DatasetCohort
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -25,6 +27,7 @@ import { modelAssessmentDashboardStyles } from "./ModelAssessmentDashboard.style
 import { IModelAssessmentDashboardProps } from "./ModelAssessmentDashboardProps";
 import { IModelAssessmentDashboardState } from "./ModelAssessmentDashboardState";
 import { GlobalTabKeys } from "./ModelAssessmentEnums";
+import { addTabMessage } from "./utils/addTabMessage";
 
 export class ModelAssessmentDashboard extends CohortBasedComponent<
   IModelAssessmentDashboardProps,
@@ -56,10 +59,13 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       <ModelAssessmentContext.Provider
         value={{
           addCohort: this.addCohort,
+          baseDatasetCohort: this.state.baseDatasetCohort,
           baseErrorCohort: this.state.baseCohort,
           causalAnalysisData: this.props.causalAnalysisData?.[0],
+          columnRanges: this.state.columnRanges,
           counterfactualData: this.props.counterfactualData?.[0],
           dataset: this.props.dataset,
+          datasetCohorts: this.state.datasetCohorts,
           deleteCohort: this.deleteCohort,
           editCohort: this.editCohort,
           errorAnalysisData: this.props.errorAnalysisData?.[0],
@@ -75,12 +81,34 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
             : undefined,
           modelMetadata: this.state.modelMetadata,
           requestBoxPlotDistribution: this.props.requestBoxPlotDistribution,
+          requestBubblePlotData: this.props.requestBubblePlotData,
           requestCausalWhatIf: this.props.requestCausalWhatIf,
+          requestDatasetAnalysisBarChart:
+            this.props.requestDatasetAnalysisBarChart,
+          requestDatasetAnalysisBoxChart:
+            this.props.requestDatasetAnalysisBoxChart,
           requestExp: this.props.requestExp,
+          requestForecast: this.props.requestForecast,
+          requestGlobalCausalEffects: this.props.requestGlobalCausalEffects,
+          requestGlobalCausalPolicy: this.props.requestGlobalCausalPolicy,
+          requestGlobalExplanations: this.props.requestGlobalExplanations,
+          requestLocalCausalEffects: this.props.requestLocalCausalEffects,
+          requestLocalCounterfactuals: this.props.requestLocalCounterfactuals,
+          requestLocalExplanations: this.props.requestLocalExplanations,
           requestLocalFeatureExplanations:
             this.props.requestLocalFeatureExplanations,
+          requestMetrics: this.props.requestMetrics,
+          requestObjectDetectionMetrics:
+            this.props.requestObjectDetectionMetrics,
           requestPredictions: this.props.requestPredictions,
+          requestQuestionAnsweringMetrics:
+            this.props.requestQuestionAnsweringMetrics,
+          requestSplinePlotDistribution:
+            this.props.requestSplinePlotDistribution,
+          requestTestDataRow: this.props.requestTestDataRow,
+          selectedDatasetCohort: this.state.selectedDatasetCohort,
           selectedErrorCohort: this.state.selectedCohort,
+          setAsCategorical: this.setAsCategorical,
           shiftErrorCohort: this.shiftErrorCohort,
           telemetryHook:
             this.props.telemetryHook ||
@@ -111,7 +139,13 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               dataset={this.props.dataset}
               onClearCohortSelectionClick={this.clearCohortSelection}
               requestExp={this.props.requestExp}
+              requestObjectDetectionMetrics={
+                this.props.requestObjectDetectionMetrics
+              }
               requestPredictions={this.props.requestPredictions}
+              requestQuestionAnsweringMetrics={
+                this.props.requestQuestionAnsweringMetrics
+              }
               requestDebugML={this.props.requestDebugML}
               requestImportances={this.props.requestImportances}
               requestMatrix={this.props.requestMatrix}
@@ -124,6 +158,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               addTabDropdownOptions={this.addTabDropdownOptions}
               addTab={this.addTab}
             />
+            <Announce message={this.state.onAddMessage} />
           </Stack.Item>
           {this.state.saveCohortVisible && (
             <SaveCohort
@@ -140,6 +175,17 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       </ModelAssessmentContext.Provider>
     );
   }
+
+  private setAsCategorical = (
+    column: string,
+    treatAsCategorical: boolean
+  ): void => {
+    if (this.state.columnRanges) {
+      const ranges = this.state.columnRanges;
+      ranges[column].treatAsCategorical = treatAsCategorical;
+      this.setState({ columnRanges: ranges });
+    }
+  };
 
   private setSaveCohortVisible = (): void => {
     this.setState({ saveCohortVisible: true });
@@ -163,7 +209,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       name:
         this.addTabDropdownOptions.find(({ key }) => key === tab)?.text || ""
     });
-    this.setState({ activeGlobalTabs: tabs });
+    this.setState({ activeGlobalTabs: tabs, onAddMessage: addTabMessage(tab) });
   };
 
   private removeTab = (index: number): void => {
@@ -223,6 +269,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
 
   private addCohort = (
     manuallyCreatedCohort: Cohort,
+    datasetCohort?: DatasetCohort,
     switchNew?: boolean
   ): void => {
     if (
@@ -245,13 +292,34 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       cohorts: newCohorts,
       selectedCohort: switchNew ? newErrorCohort : prevState.selectedCohort
     }));
+    if (datasetCohort) {
+      let newDatasetCohorts = this.state.datasetCohorts
+        ? [...this.state.datasetCohorts, datasetCohort]
+        : [datasetCohort];
+      newDatasetCohorts = newDatasetCohorts.filter(
+        (cohort) => !cohort?.isTemporary
+      );
+      this.setState((prevState) => ({
+        baseDatasetCohort: switchNew
+          ? datasetCohort
+          : prevState.baseDatasetCohort,
+        datasetCohorts: newDatasetCohorts,
+        selectedDatasetCohort: switchNew
+          ? datasetCohort
+          : prevState.selectedDatasetCohort
+      }));
+    }
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
       type: TelemetryEventName.NewCohortAdded
     });
   };
 
-  private editCohort = (editCohort: Cohort, switchNew?: boolean): void => {
+  private editCohort = (
+    editCohort: Cohort,
+    datasetCohort?: DatasetCohort,
+    switchNew?: boolean
+  ): void => {
     const editIndex = this.state.cohorts.findIndex(
       (c) => c.cohort.name === editCohort.name
     );
@@ -270,11 +338,28 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
 
     if (switchNew) {
       this.setState({
+        baseCohort: newCohorts[editIndex],
         cohorts: newCohorts,
         selectedCohort: newCohorts[editIndex]
       });
     } else {
       this.setState({ cohorts: newCohorts });
+    }
+    if (datasetCohort) {
+      let newDatasetCohorts = this.state.datasetCohorts || [];
+      newDatasetCohorts[editIndex] = datasetCohort;
+      newDatasetCohorts = newDatasetCohorts.filter(
+        (cohort) => !cohort.isTemporary
+      );
+      if (switchNew) {
+        this.setState({
+          baseDatasetCohort: newDatasetCohorts[editIndex],
+          datasetCohorts: newDatasetCohorts,
+          selectedDatasetCohort: newDatasetCohorts[editIndex]
+        });
+      } else {
+        this.setState({ datasetCohorts: newDatasetCohorts });
+      }
     }
   };
 

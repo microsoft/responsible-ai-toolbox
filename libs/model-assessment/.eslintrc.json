@@ -7,12 +7,28 @@
       "rules": {}
     },
     {
-      "files": ["*.ts", "*.tsx"],
-      "rules": {}
+      "files": ["TabsView.tsx"],
+      "rules": {
+        "complexity": "warn"
+      }
     },
     {
-      "files": ["*.js", "*.jsx"],
-      "rules": {}
+      "files": [
+        "ModelAssessmentDashboard.tsx",
+        "ModelAssessmentDashboardState.ts",
+        "TabsView.tsx",
+        "StatsTableUtils.ts",
+        "ModelOverview.tsx",
+        "FeatureConfigurationFlyout.tsx",
+        "ChartConfigurationFlyout.tsx",
+        "ProcessPreBuiltCohortRegression.test.ts",
+        "ProcessPreBuiltCohortBinaryClassification.test.ts",
+        "CohortList.tsx",
+        "LargeIndividualFeatureImportanceView.tsx"
+      ],
+      "rules": {
+        "max-lines": "warn"
+      }
     }
   ]
 }

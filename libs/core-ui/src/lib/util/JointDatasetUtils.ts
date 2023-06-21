@@ -10,16 +10,21 @@ import {
 import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
 import { IFeatureMetaData } from "../Interfaces/IMetaData";
 
+import { AxisTypes } from "./IGenericChartProps";
+
 export interface IJointDatasetArgs {
   dataset?: any[][];
-  predictedY?: number[];
+  predictedY?: number[] | number[][] | string[];
   predictedProbabilities?: number[][];
-  trueY?: number[];
+  trueY?: number[] | number[][] | string[];
   localExplanations?:
     | IMultiClassLocalFeatureImportance
     | ISingleClassLocalFeatureImportance;
   metadata: IExplanationModelMetadata;
   featureMetaData?: IFeatureMetaData;
+  targetColumn?: string | string[];
+  objectDetectionTrueY?: number[][][];
+  objectDetectionPredictedY?: number[][][];
 }
 
 export enum ColumnCategories {
@@ -48,6 +53,7 @@ export enum MulticlassClassificationEnum {
 export interface IJointMeta {
   label: string;
   abbridgedLabel: string;
+  AxisType?: AxisTypes;
   isCategorical: boolean;
   // used to allow user to treat integers as categorical (but switch back as convenient...)
   treatAsCategorical?: boolean;

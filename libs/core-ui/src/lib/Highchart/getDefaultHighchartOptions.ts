@@ -8,10 +8,13 @@ export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
   const colorTheme = {
     axisColor: theme?.palette.neutralPrimary,
     axisGridColor: theme?.palette.neutralLight,
-    backgroundColor: theme?.palette.white,
+    backgroundColor: theme?.semanticColors.bodyBackground,
     fontColor: theme?.semanticColors.bodyText
   };
   return {
+    accessibility: {
+      screenReaderSection: { beforeChartFormat: "" }
+    },
     chart: {
       animation: false,
       backgroundColor: colorTheme.backgroundColor,
@@ -35,6 +38,21 @@ export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
       zoomType: "xy"
     },
     credits: undefined,
+    exporting: {
+      menuItemDefinitions: {
+        viewFullscreen: {
+          onclick(): void {
+            this.update({
+              tooltip: {
+                outside: this.fullscreen.isOpen
+              }
+            });
+            this.fullscreen.toggle();
+          },
+          textKey: "viewFullscreen"
+        }
+      }
+    },
     legend: {
       enabled: false
     },
@@ -73,7 +91,8 @@ export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
       gridLineWidth: 0,
       labels: {
         style: {
-          color: colorTheme.fontColor
+          color: colorTheme.fontColor,
+          textOverflow: "ellipsis"
         }
       },
       title: {

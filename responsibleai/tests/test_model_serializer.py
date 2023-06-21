@@ -3,21 +3,20 @@
 import pickle
 from pathlib import Path
 
+from rai_test_utils.datasets.tabular import create_cancer_data
+from rai_test_utils.models.lightgbm import create_lightgbm_classifier
 from responsibleai import RAIInsights
-
-from .common_utils import create_cancer_data, create_lightgbm_classifier
+from responsibleai._internal.constants import SerializationAttributes
 
 
 class PickleSerializer:
-    MODEL_FILENAME = 'model.pkl'
-
     def save(self, model, model_dir):
-        filepath = Path(model_dir) / self.MODEL_FILENAME
+        filepath = Path(model_dir) / SerializationAttributes.MODEL_PKL
         with open(filepath, 'wb') as f:
             pickle.dump(model, f)
 
     def load(self, model_dir):
-        filepath = Path(model_dir) / self.MODEL_FILENAME
+        filepath = Path(model_dir) / SerializationAttributes.MODEL_PKL
         with open(filepath, 'rb') as f:
             return pickle.load(f)
 
@@ -35,7 +34,7 @@ class TestModelSerializer:
 
     def test_init_with_pickle_serializer(self, tmpdir):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_cancer_data()
+            create_cancer_data(return_dataframe=True)
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train['target'] = y_train

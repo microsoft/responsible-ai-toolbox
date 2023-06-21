@@ -2,15 +2,17 @@
 // Licensed under the MIT License.
 
 import { getTheme, Stack, Text } from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { LoadingSpinner } from "../components/LoadingSpinner";
 import { getFeatureImportanceBarOptions } from "../util/getFeatureImportanceBarOptions";
 import { getFeatureImportanceBoxOptions } from "../util/getFeatureImportanceBoxOptions";
 import { ChartTypes } from "../util/IGenericChartProps";
 import { JointDataset } from "../util/JointDataset";
 
 import { BasicHighChart } from "./BasicHighChart";
-import { featureImportanceBarStyles } from "./FeatureImportanceBar.styles";
+import { getFeatureImportanceBarStyles } from "./FeatureImportanceBar.styles";
 import { IHighchartsConfig } from "./IHighchartsConfig";
 
 export interface IGlobalSeries {
@@ -34,6 +36,7 @@ export interface IFeatureBarProps {
   unsortedSeries: IGlobalSeries[];
   originX?: string[];
   xMapping?: string[];
+  loading?: boolean;
   onFeatureSelection?: (seriesIndex: number, featureIndex: number) => void;
 }
 
@@ -48,7 +51,7 @@ export class FeatureImportanceBar extends React.Component<
   public constructor(props: IFeatureBarProps) {
     super(props);
     this.state = {
-      highchartOption: this.getHightChartOption()
+      highchartOption: this.getHighchartOption()
     };
   }
 
@@ -60,42 +63,49 @@ export class FeatureImportanceBar extends React.Component<
       this.props.chartType !== prevProps.chartType
     ) {
       this.setState({
-        highchartOption: this.getHightChartOption()
+        highchartOption: this.getHighchartOption()
       });
     }
   }
-
   public render(): React.ReactNode {
+    const featureImportanceBarStyles = getFeatureImportanceBarStyles();
     return (
       <Stack
         horizontal
         id="FeatureImportanceBar"
         className={featureImportanceBarStyles.chartWithVertical}
       >
-        <Stack.Item className={featureImportanceBarStyles.verticalAxis}>
-          <div className={featureImportanceBarStyles.rotatedVerticalBox}>
-            <div>
-              {this.props.yAxisLabels.map((label, i) => (
-                <Text
-                  block
-                  variant="medium"
-                  className={featureImportanceBarStyles.boldText}
-                  key={i}
-                >
-                  {label}
-                </Text>
-              ))}
+        {!this.props.loading && (
+          <Stack.Item className={featureImportanceBarStyles.verticalAxis}>
+            <div className={featureImportanceBarStyles.rotatedVerticalBox}>
+              <div>
+                {this.props.yAxisLabels.map((label, i) => (
+                  <Text
+                    block
+                    variant="medium"
+                    className={featureImportanceBarStyles.boldText}
+                    key={i}
+                  >
+                    {label}
+                  </Text>
+                ))}
+              </div>
             </div>
-          </div>
-        </Stack.Item>
+          </Stack.Item>
+        )}
+
         <Stack.Item className={featureImportanceBarStyles.chart}>
-          <BasicHighChart configOverride={this.state.highchartOption} />
+          {this.props.loading ? (
+            <LoadingSpinner label={localization.Counterfactuals.loading} />
+          ) : (
+            <BasicHighChart configOverride={this.state.highchartOption} />
+          )}
         </Stack.Item>
       </Stack>
     );
   }
 
-  private getHightChartOption(): IHighchartsConfig {
+  private getHighchartOption(): IHighchartsConfig {
     return this.props.chartType === ChartTypes.Bar
       ? getFeatureImportanceBarOptions(
           this.props.sortArray,

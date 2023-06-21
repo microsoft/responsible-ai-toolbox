@@ -37,8 +37,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
             <Label>
               {localization.ErrorAnalysis.CohortInfo.basicInformation}
             </Label>
-            {this.props.currentCohort.cohort.name !==
-              localization.ErrorAnalysis.Cohort.defaultLabel && (
+            {!this.props.currentCohort.isAllDataCohort && (
               <Text>{this.props.currentCohort.cohort.name}</Text>
             )}
             <Text>

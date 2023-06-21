@@ -6,11 +6,13 @@ from unittest.mock import ANY, patch
 import numpy as np
 import pytest
 
-from responsibleai import ModelTask, RAIInsights
+from raiutils.exceptions import UserConfigValidationException
+from raiutils.models import ModelTask
+from responsibleai import RAIInsights
 from responsibleai._interfaces import CausalData
+from responsibleai._internal.constants import FileFormats
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
-from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.managers.causal_manager import CausalManager
 
 
@@ -60,7 +62,7 @@ class TestCausalManager:
             dm = DirectoryManager(parent_directory_path=save_dir,
                                   sub_directory_name=causal_dir)
             causal_analysis_pkl_file_path = \
-                dm.get_data_directory() / "causal_analysis.pkl"
+                dm.get_data_directory() / ("causal_analysis" + FileFormats.PKL)
             os.remove(causal_analysis_pkl_file_path)
 
         model_load_err = ('ERROR-LOADING-EXPLAINER: '
@@ -129,6 +131,9 @@ class TestCausalManager:
         assert hasattr(causal_data, 'global_effects')
         EFFECTS_ATTRIBUTES = [
             'point',
+            'outcome',
+            'feature',
+            'feature_value',
             'stderr',
             'zstat',
             'ci_lower',

@@ -10,6 +10,7 @@ import {
 } from "@fluentui/react";
 import {
   IExplanationContext,
+  IsClassifier,
   ModelTypes,
   ILocalExplanation,
   ModelExplanationUtils,
@@ -215,19 +216,13 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     //     return result;
     // }
     const modelType = this.props.explanationContext.modelMetadata.modelType;
-    if (
-      modelType !== ModelTypes.Multiclass &&
-      modelType !== ModelTypes.Binary
-    ) {
+    if (!IsClassifier(modelType)) {
       result.push({
         key: FeatureKeys.AbsoluteLocal,
         text: localization.Interpret.BarChart.absoluteLocal
       });
     }
-    if (
-      modelType === ModelTypes.Multiclass ||
-      modelType === ModelTypes.Binary
-    ) {
+    if (IsClassifier(modelType)) {
       result.push(
         ...this.props.explanationContext.modelMetadata.classNames.map(
           (className, index) => ({
@@ -245,8 +240,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
       return FeatureKeys.AbsoluteGlobal;
     }
     const modelType = this.props.explanationContext.modelMetadata.modelType;
-    return modelType === ModelTypes.Multiclass ||
-      modelType === ModelTypes.Binary
+    return IsClassifier(modelType)
       ? this.props.explanationContext.testDataset.predictedY[
           this.props.selectedRow
         ]

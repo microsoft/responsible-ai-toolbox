@@ -2,12 +2,10 @@
 // Licensed under the MIT License.
 
 import { getMenu } from "../../../../../util/getMenu";
+import { visit } from "../../../../../util/visit";
 import { Locators } from "../../Constants";
-import {
-  IModelAssessmentData,
-  RAINotebookNames
-} from "../../IModelAssessmentData";
-import { modelAssessmentDatasets } from "../../modelAssessmentDatasets";
+import { modelAssessmentDatasets } from "../../datasets/modelAssessmentDatasets";
+import { IModelAssessmentData } from "../../IModelAssessmentData";
 
 import { describeTabularDataView } from "./describeTabularDataView";
 
@@ -22,14 +20,7 @@ export function describeIndividualFeatureImportance(
   }
   describe(testName, () => {
     before(() => {
-      if (name) {
-        const hosts = Cypress.env().hosts;
-        const hostDetails = hosts.find((obj: { file: string }) => {
-          return obj.file === RAINotebookNames[name];
-        });
-        cy.task("log", hostDetails.host);
-        cy.visit(hostDetails.host);
-      }
+      visit(name);
       cy.get("#ModelAssessmentDashboard").should("exist");
       cy.get(Locators.DataAnalysisTab).eq(0).click();
     });

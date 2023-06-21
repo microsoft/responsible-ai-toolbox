@@ -12,8 +12,10 @@ export interface IModelAssessmentData {
   whatIfCounterfactualsData?: IWhatIfCounterfactualsData;
   featureNames?: string[];
   cohortDefaultName?: string;
+  checkDupCohort?: boolean;
   isMulticlass?: boolean;
   isRegression?: boolean;
+  isBinary?: boolean;
 }
 
 export interface IErrorAnalysisData {
@@ -62,6 +64,8 @@ export interface IModelOverviewData {
   featureCohortView?: {
     singleFeatureCohorts: number;
     multiFeatureCohorts: number;
+    firstFeatureToSelect: string;
+    secondFeatureToSelect: string;
   };
 }
 
@@ -117,6 +121,7 @@ export interface IFeatureImportanceData {
   aggregateFeatureImportanceExpectedValues?: {
     [key: string]: number;
   };
+  avgOfAbsValue?: string;
 }
 
 export interface IDataBalanceData {

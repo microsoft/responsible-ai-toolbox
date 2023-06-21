@@ -18,13 +18,15 @@ import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { getJoinedLabelString } from "../utils/labelUtils";
+
 import { flyoutStyles } from "./Flyout.styles";
 
 export interface IFlyoutProps {
-  explanations: Map<number, string>;
+  explanations: Map<number, Map<number, string>>;
   isOpen: boolean;
   item: IVisionListItem | undefined;
-  loadingExplanation: boolean[];
+  loadingExplanation: boolean[][];
   otherMetadataFieldNames: string[];
   callback: () => void;
 }
@@ -56,8 +58,12 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
     const fieldNames = this.props.otherMetadataFieldNames;
     const metadata: Array<Array<string | number | boolean>> = [];
     fieldNames.forEach((fieldName) => {
+      const itemField = item[fieldName];
+      const itemValue = Array.isArray(itemField)
+        ? itemField.join(",")
+        : itemField;
       if (item[fieldName]) {
-        metadata.push([fieldName, item[fieldName]]);
+        metadata.push([fieldName, itemValue]);
       }
     });
     this.setState({ item, metadata });
@@ -72,8 +78,12 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
       const fieldNames = this.props.otherMetadataFieldNames;
       const metadata: Array<Array<string | number | boolean>> = [];
       fieldNames.forEach((fieldName) => {
+        const itemField = item[fieldName];
+        const itemValue = Array.isArray(itemField)
+          ? itemField.join(",")
+          : itemField;
         if (item[fieldName]) {
-          metadata.push([fieldName, item[fieldName]]);
+          metadata.push([fieldName, itemValue]);
         }
       });
       this.setState({
@@ -91,6 +101,8 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
     }
     const index = item.index;
     const classNames = flyoutStyles();
+    const predictedY = getJoinedLabelString(item?.predictedY);
+    const trueY = getJoinedLabelString(item?.trueY);
     return (
       <FocusZone>
         <Panel
@@ -128,19 +140,17 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                       <Stack.Item className={classNames.iconContainer}>
                         <Icon
                           iconName={
-                            item?.predictedY !== item?.trueY
-                              ? "Cancel"
-                              : "Checkmark"
+                            predictedY !== trueY ? "Cancel" : "Checkmark"
                           }
                           className={
-                            item?.predictedY !== item?.trueY
+                            predictedY !== trueY
                               ? classNames.errorIcon
                               : classNames.successIcon
                           }
                         />
                       </Stack.Item>
                       <Stack.Item>
-                        {item?.predictedY !== item?.trueY ? (
+                        {predictedY !== trueY ? (
                           <Text
                             variant="large"
                             className={classNames.errorTitle}
@@ -172,13 +182,13 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                     <Stack.Item>
                       <Text variant="large">
                         {localization.InterpretVision.Dashboard.predictedY}
-                        {item?.predictedY}
+                        {predictedY}
                       </Text>
                     </Stack.Item>
                     <Stack.Item>
                       <Text variant="large">
                         {localization.InterpretVision.Dashboard.trueY}
-                        {item?.trueY}
+                        {trueY}
                       </Text>
                     </Stack.Item>
                   </Stack>
@@ -204,12 +214,12 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                   {localization.InterpretVision.Dashboard.panelExplanation}
                 </Text>
               </Stack.Item>
-              {!this.props.loadingExplanation[index] ? (
+              {!this.props.loadingExplanation[0][index] ? (
                 <Stack.Item>
                   <Image
-                    src={`data:image/jpg;base64,${this.props.explanations.get(
-                      index
-                    )}`}
+                    src={`data:image/jpg;base64,${this.props.explanations
+                      .get(0)
+                      ?.get(index)}`}
                     width="700px"
                     style={{ position: "relative", right: 85 }}
                   />

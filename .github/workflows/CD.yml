@@ -9,7 +9,7 @@ env:
   blob_container_for_js: latest
   blob_container_for_raiwidget: raiwidgets
   blob_path_for_pull_request: ${{ github.event.pull_request.head.repo.full_name }}/${{ github.head_ref }}
-  node-version: 16.8
+  node-version: 16.x
   widgetDirectory: raiwidgets
   raiDirectory: responsibleai
   dashboardDirectory: dashboard
@@ -33,9 +33,9 @@ jobs:
 
       #setup environment
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
-          python-version: 3.7
+          python-version: "3.10"
       - name: Use Node.js ${{ env.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -191,6 +191,7 @@ jobs:
         package:
           [
             core-ui,
+            forecasting,
             mlchartlib,
             dataset-explorer,
             causality,

@@ -5,15 +5,24 @@
     "identityFeature": "Identity feature",
     "infoTitle": "Additional information",
     "spinButton": "Spin",
-    "editButton": "Edit"
+    "editButton": "Edit",
+    "decreaseValue": "Decrease value",
+    "increaseValue": "Increase value",
+    "decreaseValueByOne": "Decrease value by 1",
+    "increaseValueByOne": "Increase value by 1",
+    "loading": "Loading..."
   },
   "ChartContextMenu": {
+    "hideData": "Hide data table",
+    "viewData": "View data table",
     "viewInFullScreen": "View in full screen",
     "printChart": "Print chart",
+    "downloadCSV": "Download CSV",
     "downloadPNG": "Download PNG image",
     "downloadJPEG": "Download JPEG image",
     "downloadPDF": "Download PDF document",
-    "downloadSVG": "Download SVG vector image"
+    "downloadSVG": "Download SVG vector image",
+    "downloadXLS": "Download XLS"
   },
   "CausalAnalysis": {
     "AggregateView": {
@@ -106,7 +115,9 @@
       "apply": "Apply",
       "cancel": "Cancel",
       "title": "Switch Cohort",
-      "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
+      "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard.",
+      "selectCohort": "Select a cohort",
+      "cohortList": "Cohort list"
     },
     "PreBuiltCohort": {
       "featureNameNotFound": "Feature name not found in the dataset",
@@ -137,10 +148,13 @@
       "predictedClass": "Predicted class",
       "predictedValue": "Predicted value"
     },
+    "Size": "Size",
+    "loading": "Loading...",
     "counterfactualEx": "Counterfactual Ex {0}",
     "counterfactualName": "What-if counterfactual name",
     "createWhatIfCounterfactual": "Create what-if counterfactual",
     "createCounterfactual": "Counterfactual",
+    "revertToBubbleChart": "View bubble chart",
     "createOwn": "Create your own counterfactual:",
     "currentClass": "Current class",
     "currentRange": "Current range",
@@ -153,6 +167,9 @@
     "listDescription": "This list shows which datapoints in the current data sample have the largest causal response to the selected treatment, based on all features included in the estimated causal model. The left five columns report whether treatment is recommended for the observation, the current treatment, the estimated effect of treatment (effect of applying a treatment from a baseline of no treatment for binary treatments or increasing/decreasing the treatment feature by 10% of the typical treatment size in the sample: [dynamic: report the numerical change in treatment we used] ), and the lower and upper confidence intervals (CI) for this effect. The remaining columns show the current treatment status and other features of each observation.",
     "localImportanceDescription": "The top ranked features in Row {0} to perturb to achieve desired model prediction. Based on what-if analysis for prediction: {1}",
     "localImportanceSelectData": "Select a data point to view local importance chart",
+    "largeLocalImportanceSelectData": "Select a bubble, followed by a data point to view local importance chart",
+    "localImportanceFetchError": "There was an error while fetching the local importance data. Error details: {0} Please check the data used.",
+    "BubbleChartFetchError": "There was an error while fetching the data. Error details: {0} Please check the data used.",
     "noData": "No data",
     "noFeatures": "No features available",
     "panelDescription": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set suggested counterfactual feature values by clicking “Set Value” text under each counterfactual name. Name your counterfactual and save it.",
@@ -206,7 +223,8 @@
       "features": "Features",
       "importances": "Importances",
       "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
-      "staticTreeMapDescription": "View the features that were used to train the tree map. The feature importances were calculated using mutual information with the error on the true labels."
+      "staticTreeMapDescription": "View the features that were used to train the tree map. The feature importances were calculated using mutual information with the error on the true labels.",
+      "searchResultMessage": "Results displayed out of {resultLength} for {searchValue}"
     },
     "TreeViewParameters": {
       "maximumDepth": "Maximum depth",
@@ -781,6 +799,7 @@
       "countHelperText": "A histogram of the number of points",
       "ditherLabel": "Should dither",
       "groupByCohort": "Group by cohort",
+      "logarithmicScaling": "Enable logarithmic scaling",
       "numOfBins": "Number of bins",
       "selectClass": "Select class",
       "selectFeature": "Select feature",
@@ -817,6 +836,7 @@
       "importancePrefix": "Importance",
       "numberOfDatapoints": "Number of datapoints",
       "rowIndex": "Row index",
+      "absoluteIndex": "Absolute index",
       "xValue": "X-value",
       "yValue": "Y-value"
     },
@@ -856,6 +876,14 @@
       "regressor": "Regressor"
     },
     "CohortEditor": {
+      "columns": {
+        "index": "Index",
+        "dataset": "Dataset",
+        "predictedY": "Predicted Y",
+        "trueY": "True Y",
+        "classificationOutcome": "Classification outcome",
+        "regressionError": "Error"
+      },
       "TreatAsCategorical": "Treat as categorical",
       "_TreatAsCategorical.comment": "a checkbox label to treat integers as categories instead of as numbers",
       "_addFilter.comment": "button text to add the current settings as a new filter",
@@ -888,7 +916,9 @@
       "placeholderName": "Cohort {0}",
       "save": "Save",
       "saveAndSwitch": "Save and switch",
-      "selectFilter": "Select filter"
+      "selectFilter": "Select filter",
+      "noFiltersApplied": "No filters applied",
+      "filterAdded": "Filter added"
     },
     "Columns": {
       "_classificationOutcome.comment": "Whether the prediction from the model matched the true value",
@@ -901,6 +931,8 @@
       "falsePositive": "False positive",
       "none": "Count",
       "predictedProbabilities": "Prediction probabilities",
+      "predictedLabels": "Predicted labels",
+      "trueLabels": "True labels",
       "regressionError": "Regression error",
       "trueNegative": "True negative",
       "truePositive": "True positive",
@@ -1067,6 +1099,7 @@
       "infoTitle": "Additional information on aggregate feature importance",
       "legendHelpText": "Toggle cohorts on and off in the plot by clicking on the legend items.",
       "missingParameters": "This tab requires the local feature importance parameter be supplied.",
+      "sortByCohort": "Sort by cohort",
       "sortBy": "Sort by datapoint",
       "topAtoB": "Top {0} features by their importance",
       "viewDependencePlotFor": "View dependence plot for:",
@@ -1140,16 +1173,26 @@
       "_rSquared.comment": "the coefficient of determination, see https://en.wikipedia.org/wiki/Coefficient_of_determination",
       "_recall.comment": "computed recall of model, see https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers",
       "accuracy": "Accuracy: {0}",
+      "bleuScore": "Bleu score: {0}",
+      "bertScore": "Bert score: {0}",
+      "exactMatchRatio": "Exact match ratio: {0}",
+      "rougeScore": "Rouge Score: {0}",
       "fnr": "False negative rate: {0}",
       "fpr": "False positive rate: {0}",
+      "hammingScore": "Hamming score: {0}",
       "meanPrediction": "Mean prediction {0}",
+      "meteorScore": "Meteor Score: {0}",
       "mse": "Mean squared error: {0}",
       "precision": "Precision: {0}",
       "rSquared": "R²: {0}",
       "recall": "Recall: {0}",
       "selectionRate": "Selection rate: {0}",
       "mae": "Mean absolute error: {0}",
-      "f1Score": "F1 score: {0}"
+      "f1Score": "F1 score: {0}",
+      "samples": "Sample size: {0}",
+      "meanAveragePrecision": "Mean average precision: {0}",
+      "averagePrecision": "Average precision: {0}",
+      "averageRecall": "Average recall: {0}"
     },
     "ValidationErrors": {
       "_inconsistentDimensions.comment": "Raise warning if arguments passed in have different sizes, listing dimensions of both mismatching pieces.",
@@ -1359,6 +1402,7 @@
       "columnThree": "True Y",
       "columnFour": "Predicted Y",
       "columnFive": "Other metadata",
+      "chooseObject": "Choose a detected object",
       "examples": "examples",
       "filter": "Filter",
       "indexLabel": "Image ",
@@ -1368,12 +1412,15 @@
       "legendSuccess": "success",
       "loading": "Computing explanation for index",
       "multiselect": "Multiselect",
+      "notdefined": "object scenario not defined",
+      "objectSelect": "Object Selection",
       "pageSize": "Page size: ",
       "panelTitle": "Selected instance",
       "panelExplanation": "Explanation",
       "panelInformation": "Information",
       "predictedLabel": "Predicted label",
       "predictedY": "Predicted: ",
+      "prefix": "Object: ",
       "rows": "Rows: ",
       "search": "Search",
       "selectAll": "Select all",
@@ -1381,7 +1428,7 @@
       "showAll": "Show all",
       "tabOptionFirst": "Image explorer view",
       "tabOptionSecond": "Table view",
-      "tabOptionThird": "Data characteristics",
+      "tabOptionThird": "Class view",
       "thumbnailSize": "Thumbnail size",
       "titleBarError": "Error instances",
       "titleBarSuccess": "Success instances",
@@ -1392,7 +1439,18 @@
     "AddingTab": {
       "AddButtonText": "Add",
       "CalloutContent": "Adding some components (error tree view, error heat map) will allow you to filter down the data from the global cohort that you see in the components below.",
-      "CalloutTitle": "Add component"
+      "CalloutTitle": "Add component",
+      "TabAddedMessage": {
+        "DataAnalysis": "Data analysis component added",
+        "FeatureImportances": "Feature importances component added",
+        "ErrorAnalysis": "Error analysis component added",
+        "Fairness": "Fairness component added",
+        "ModelOverview": "Model overview component added",
+        "CausalAnalysis": "Causal analysis component added",
+        "Counterfactuals": "Counterfactuals component added",
+        "Vision": "Vision data explorer component added",
+        "Forecasting": "Forecasting what-if component added"
+      }
     },
     "CausalAnalysis": {
       "Table": {
@@ -1419,6 +1477,7 @@
     },
     "CohortInformation": {
       "ShiftCohort": "Switch cohort",
+      "SwitchTimeSeries": "Switch time series",
       "NewCohort": "New cohort",
       "DataPoints": "Number of datapoints",
       "DefaultCohort": " (default)",
@@ -1439,6 +1498,7 @@
       "ErrorAnalysis": "Error analysis",
       "Fairness": "Fairness",
       "FeatureImportances": "Feature importances",
+      "Forecasting": "Forecasting",
       "ModelOverview": "Model overview",
       "TableView": "Table view",
       "VisionTab": "Vision data explorer"
@@ -1609,8 +1669,7 @@
       "SelectionColumnAriaLabel": "Toggle selection"
     },
     "IndividualFeatureImportanceView": {
-      "SmallInstanceSelection": "Instance selection",
-      "SmallTableText": "(change instances to explain in data analysis)"
+      "SmallInstanceSelection": "Instance selection"
     },
     "MainMenu": {
       "DashboardSettings": "Dashboard configuration",
@@ -1628,6 +1687,30 @@
         "accuracy": {
           "name": "Accuracy score",
           "description": "The fraction of data points classified correctly."
+        },
+        "exactMatchRatio": {
+          "name": "Exact match ratio",
+          "description": "The ratio of instances classified correctly for every label."
+        },
+        "meteorScore": {
+          "name": "Meteor Score",
+          "description": "METEOR Score is calculated based on the harmonic mean of precision and recall, with recall weighted more than precision in question answering task."
+        },
+        "bleuScore": {
+          "name": "Bleu Score",
+          "description": "Bleu Score measures the ratio of words (and/or n-grams) in the machine generated text that appeared in the reference text in question answering task."
+        },
+        "bertScore": {
+          "name": "Bert Score",
+          "description": "BERTScore focuses on computing semantic similarity between tokens of reference and machine generated text in question answering task."
+        },
+        "rougeScore": {
+          "name": "Rouge Score",
+          "description": "Rouge Score measures the ratio of words (and/or n-grams) in the reference text that appeared in the machine generated text in question answering task."
+        },
+        "hammingScore": {
+          "name": "Hamming score",
+          "description": "The average ratio of labels classified correctly among those classified as 1 in multilabel task."
         },
         "f1Score": {
           "name": "F1 score",
@@ -1689,6 +1772,18 @@
           "name": "Mean prediction",
           "description": "The average of all predictions."
         },
+        "meanAveragePrecision": {
+          "name": "Mean Average Precision score",
+          "description": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall."
+        },
+        "averagePrecision": {
+          "name": "Average Precision score",
+          "description": "Average precision for object detection models is calculated for a selected class."
+        },
+        "averageRecall": {
+          "name": "Average Recall score",
+          "description": "Average recall for object detection models is calculated for a selected class."
+        },
         "fairnessMetricDifference": "Difference",
         "fairnessMetricRatio": "Ratio"
       },
@@ -1697,6 +1792,13 @@
       "metricTypes": {
         "macro": "Macro",
         "micro": "Micro"
+      },
+      "classSelectionDropdown": "Select class(es)",
+      "iouThresholdDropdown": {
+        "name": "IoU Threshold",
+        "description": "Intersection over Union quantifies the degree of overlap between the prediction and ground truth bounding box of a detected object in an image. For example, setting an IoU threshold of 70% means that a prediction with greater than 70% overlap with ground truth is True, thus influencing the definition of prediction correctness and calculation of other performance metrics.",
+        "iconId": "iouThresholdIconId",
+        "title": "Learn about the IoU threshold"
       },
       "notAvailable": "N/A",
       "countColumnHeader": "Sample size",
@@ -1708,10 +1810,14 @@
       "featuresDropdown": "Feature(s)",
       "metricChartDropdownSelectionHeader": "Metric",
       "probabilityForClassSelectionHeader": "Probability for class",
+      "targetSelectionHeader": "Target",
       "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
+      "classSelectionDropdownPlaceholder": "Select class name for class-based analysis.",
       "featureSelectionDropdownPlaceholder": "Select features to use for a feature-based analysis.",
       "probabilityDistributionPivotItem": "Probability distribution",
+      "regressionDistributionPivotItem": "Target distribution",
       "metricsVisualizationsPivotItem": "Metrics visualizations",
+      "confusionMatrixPivotItem": "Confusion matrix",
       "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the feature-based analysis.",
       "tableCountTooltip": "Cohort {0} contains {1} instances.",
       "tableMetricTooltip": "The model's {0} on cohort {1} is {2}",
@@ -1722,19 +1828,36 @@
       "metricSelectionButton": "Choose metric",
       "cohortSelectionButton": "Choose cohorts",
       "probabilityLabelSelectionButton": "Choose label",
+      "regressionTargetSelectionButton": "Choose target",
       "selectAllCohortsOption": "Select all",
       "other": "Other",
       "BoxPlot": {
         "outlierProbability": "probability",
         "outlierLabel": "Outliers",
-        "boxPlotSeriesLabel": "Box Plot"
+        "boxPlotSeriesLabel": "Box Plot",
+        "lowerWhisker": "Lower whisker",
+        "upperWhisker": "Upper whisker",
+        "median": "Median",
+        "lowerQuartile": "Lower quartile",
+        "upperQuartile": "Upper quartile"
       },
       "chartConfigApply": "Apply",
       "chartConfigCancel": "Cancel",
       "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
       "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",
+      "confusionMatrix": {
+        "confusionMatrixCohortSelectionLabel": "Select dataset cohort",
+        "confusionMatrixClassSelectionLabel": "Select classes",
+        "confusionMatrixClassMinSelectionError": "Select at least {0} classes to visualize the confusion matrix.",
+        "confusionMatrixClassMaxSelectionError": "Select at most {0} classes to visualize the confusion matrix.",
+        "confusionMatrixClassSelectionDefaultPlaceholder": "Choose classes",
+        "confusionMatrixHeatmapTooltip": "{0} datapoints should be {1}, predicted to be {2}",
+        "confusionMatrixYAxisLabel": "True Class",
+        "confusionMatrixXAxisLabel": "Predicted Class",
+        "class": "Class"
+      },
       "nA": "N/A",
-      "disaggregatedAnalysisBaseCohortDislaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
+      "disaggregatedAnalysisBaseCohortDisclaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
       "disaggregatedAnalysisBaseCohortWarning": "Unlike the {0} cohort, {1} includes filters. As a consequence, it only captures a subset of the whole dataset and insights may not generalize to the full dataset.",
       "probabilitySplineChartToggleLabel": "Use spline chart",
       "countAxisLabel": "Count",
@@ -1763,10 +1886,77 @@
         "flyoutHeader": "Choose cohorts",
         "flyoutDescription": "You can choose to view dataset cohorts or feature cohorts. If feature cohorts are unavailable you need to first select one or more features in the feature cohorts view. Subsequently, feature cohorts are generated and you can select them here."
       },
+      "regressionTargetOptions": {
+        "predictedY": "Predicted Y",
+        "trueY": "True Y",
+        "error": "Error"
+      },
       "topLevelDescription": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. Use the \"Dataset cohorts\" tab to investigate your model by looking at a comparative analysis of its performance across different pre-built or newly-created dataset cohorts. Use the \"Feature cohorts\" to investigate your model by looking at a comparative analysis of its performance across sensitive/non-sensitive feature subcohorts.(e.g., performance across different genders, income levels).",
       "infoTitle": "Additional information on model overview",
       "visualDisplayToggleLabel": "Show heatmap",
       "featureBasedViewDescription": "Select up to two features to see the model performance breakdown across feature-based cohorts (if one feature is selected) or intersectional cohorts (if two features are selected)."
+    },
+    "TableViewTab": {
+      "Heading": "View the dataset in a table format for all features and rows."
+    }
+  },
+  "Forecasting": {
+    "target": "Target",
+    "whatIfForecastingHeader": "What-if analysis",
+    "forecastHeader": "Forecast analysis",
+    "whatIfForecastingDescription": "What-if allows you to perturb features for your entire time series and observe how the model's forecast changes.",
+    "whatIfForecastingChooseTimeSeries": "To start, choose a time series from the options below.",
+    "forecastDescription": "Forecast analysis compares your model's forecast to the actual values of your time series. To enable what-if analysis, provide a dataset with features.",
+    "timeSeries": "Time series",
+    "selectTimeSeries": "Select a time series.",
+    "singleTimeSeries": "The dataset contains only a single time series '{0}' which has been selected by default.",
+    "trueY": "True Y",
+    "baselinePrediction": "Baseline prediction",
+    "forecastComparisonHeader": "Compare What-if Forecasts",
+    "forecastComparisonChartTitle": "Forecasts",
+    "forecastComparisonChartTimeAxisLabel": "Time",
+    "Transformations": {
+      "multiply": "multiply",
+      "divide": "divide",
+      "add": "add",
+      "subtract": "subtract",
+      "change": "change to"
+    },
+    "TransformationCreation": {
+      "title": "Create what-if scenario",
+      "nameLabel": "What-if scenario name",
+      "featureInstructions": "Choose a feature to perturb.",
+      "operationInstructions": "Choose an operation to apply to the feature.",
+      "operationDropdownHeader": "Operation",
+      "featureDropdownHeader": "Feature",
+      "valueSpinButtonHeader": "Value",
+      "scenarioNamingInstructionsPlaceholder": "Enter a unique name",
+      "scenarioNamingInstructions": "Enter a name for your what-if scenario.",
+      "scenarioNamingCollisionMessage": "This name exists already. Please enter a unique name.",
+      "scenarioNamingLengthMessage": "The name must be between 1 and 50 characters. The actual length is {0}.",
+      "scenarioNamingInvalidCharactersMessage": "The name can only contain alphanumeric characters, whitespaces, dashes, or underscores, and needs to start with an alphanumeric character.",
+      "valueErrorMessage": "For operation {0} please select a value other than {1}.",
+      "invalidCombinationErrorMessage": "This is identical to an existing what-if scenario. Please change the feature, operation, or value.",
+      "addTransformationButton": "Add Transformation",
+      "divisionAndMultiplicationBy": "by"
+    },
+    "TransformationTable": {
+      "nameColumnHeader": "Name",
+      "methodColumnHeader": "Method",
+      "divisionAndMultiplicationBy": "by ",
+      "header": "What-if Forecasts ({0})"
+    },
+    "TimeSeries": {
+      "apply": "Apply",
+      "cancel": "Cancel",
+      "cohortList": "Time series list",
+      "selectCohort": "Select a time series",
+      "shiftCohort": "Switch time series",
+      "shiftCohortDescription": "Select a time series from the time series list. Apply the time series to the dashboard."
+    },
+    "TimeSeriesSettings": {
+      "CohortSettingsDescription": "Time series are pre-defined based on time series identifying columns.",
+      "CohortSettingsTitle": "Time series settings"
     }
   }
 }

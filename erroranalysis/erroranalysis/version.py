@@ -3,6 +3,6 @@
 
 name = 'erroranalysis'
 _major = '0'
-_minor = '3'
-_patch = '10'
+_minor = '4'
+_patch = '4'
 version = '{}.{}.{}'.format(_major, _minor, _patch)

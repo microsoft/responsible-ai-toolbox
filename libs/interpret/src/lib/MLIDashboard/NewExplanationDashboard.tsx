@@ -88,6 +88,7 @@ export class NewExplanationDashboard extends React.PureComponent<
             this.state.cohorts[0],
             this.state.jointDataset
           ),
+          columnRanges: this.state.columnRanges,
           dataset: {} as IDataset,
           deleteCohort: (): void => undefined,
           editCohort: (): void => undefined,
@@ -106,6 +107,7 @@ export class NewExplanationDashboard extends React.PureComponent<
             this.state.selectedCohort,
             this.state.jointDataset
           ),
+          setAsCategorical: this.setAsCategorical,
           shiftErrorCohort: this.shiftErrorCohort,
           telemetryHook:
             this.props.telemetryHook ||
@@ -154,6 +156,7 @@ export class NewExplanationDashboard extends React.PureComponent<
                   onCohortsChange={this.onCohortsChange}
                   jointDataset={this.state.jointDataset}
                   modelMetadata={this.state.modelMetadata}
+                  features={this.props.testData}
                 />
               </Stack.Item>
               <Stack.Item grow>
@@ -164,6 +167,7 @@ export class NewExplanationDashboard extends React.PureComponent<
                     linkSize={"normal"}
                     headersOnly
                     id="DashboardPivot"
+                    overflowBehavior="menu"
                   >
                     {this.pivotItems.map((props) => (
                       <PivotItem key={props.itemKey} {...props} />
@@ -202,6 +206,17 @@ export class NewExplanationDashboard extends React.PureComponent<
       </ModelAssessmentContext.Provider>
     );
   }
+
+  private setAsCategorical = (
+    column: string,
+    treatAsCategorical: boolean
+  ): void => {
+    if (this.state.columnRanges) {
+      const ranges = this.state.columnRanges;
+      ranges[column].treatAsCategorical = treatAsCategorical;
+      this.setState({ columnRanges: ranges });
+    }
+  };
 
   private async validatePredictMethod(): Promise<void> {
     if (

@@ -11,7 +11,8 @@ import {
   IExplanationModelMetadata,
   ITelemetryEvent,
   TelemetryLevels,
-  TelemetryEventName
+  TelemetryEventName,
+  ifEnableLargeData
 } from "@responsible-ai/core-ui";
 import { GlobalExplanationTab } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -20,6 +21,7 @@ import * as React from "react";
 
 import { featureImportanceTabStyles } from "./FeatureImportances.styles";
 import { IndividualFeatureImportanceView } from "./IndividualFeatureImportanceView/IndividualFeatureImportanceView";
+import { LargeIndividualFeatureImportanceView } from "./IndividualFeatureImportanceView/LargeIndividualFeatureImportanceView/LargeIndividualFeatureImportanceView";
 
 interface IFeatureImportancesProps {
   allSelectedItems: IObjectWithKey[];
@@ -76,30 +78,27 @@ export class FeatureImportancesTab extends React.PureComponent<
 
     return (
       <Stack className={classNames.container}>
-        <Stack.Item>
-          <Pivot
-            selectedKey={this.state.activeFeatureImportancesOption}
-            onLinkClick={this.onPivotLinkClick}
-            linkSize={"normal"}
-            headersOnly
-            className={classNames.tabs}
-            overflowBehavior="menu"
-          >
-            <PivotItem
-              itemKey={FeatureImportancesTabOptions.GlobalExplanation}
-              headerText={
-                localization.ModelAssessment.FeatureImportances
-                  .GlobalExplanation
-              }
-            />
-            <PivotItem
-              itemKey={FeatureImportancesTabOptions.LocalExplanation}
-              headerText={
-                localization.ModelAssessment.FeatureImportances.LocalExplanation
-              }
-            />
-          </Pivot>
-        </Stack.Item>
+        <Pivot
+          selectedKey={this.state.activeFeatureImportancesOption}
+          onLinkClick={this.onPivotLinkClick}
+          linkSize={"normal"}
+          headersOnly
+          className={classNames.tabs}
+          overflowBehavior="menu"
+        >
+          <PivotItem
+            itemKey={FeatureImportancesTabOptions.GlobalExplanation}
+            headerText={
+              localization.ModelAssessment.FeatureImportances.GlobalExplanation
+            }
+          />
+          <PivotItem
+            itemKey={FeatureImportancesTabOptions.LocalExplanation}
+            headerText={
+              localization.ModelAssessment.FeatureImportances.LocalExplanation
+            }
+          />
+        </Pivot>
 
         {this.state.activeFeatureImportancesOption ===
           FeatureImportancesTabOptions.GlobalExplanation && (
@@ -117,21 +116,35 @@ export class FeatureImportancesTab extends React.PureComponent<
           />
         )}
         {this.state.activeFeatureImportancesOption ===
-          FeatureImportancesTabOptions.LocalExplanation && (
-          <IndividualFeatureImportanceView
-            allSelectedItems={this.props.allSelectedItems}
-            features={this.context.modelMetadata.featureNames}
-            jointDataset={this.context.jointDataset}
-            invokeModel={this.props.requestPredictions}
-            selectedWeightVector={this.props.selectedWeightVector}
-            weightOptions={this.props.weightVectorOptions}
-            weightLabels={this.props.weightVectorLabels}
-            onWeightChange={this.props.onWeightVectorChange}
-            selectedCohort={this.context.selectedErrorCohort}
-            modelType={this.props.modelMetadata.modelType}
-            telemetryHook={this.props.telemetryHook}
-          />
-        )}
+          FeatureImportancesTabOptions.LocalExplanation &&
+          !ifEnableLargeData(this.context.dataset) && (
+            <IndividualFeatureImportanceView
+              allSelectedItems={this.props.allSelectedItems}
+              features={this.context.modelMetadata.featureNames}
+              jointDataset={this.context.jointDataset}
+              invokeModel={this.props.requestPredictions}
+              selectedWeightVector={this.props.selectedWeightVector}
+              weightOptions={this.props.weightVectorOptions}
+              weightLabels={this.props.weightVectorLabels}
+              onWeightChange={this.props.onWeightVectorChange}
+              selectedCohort={this.context.selectedErrorCohort}
+              modelType={this.props.modelMetadata.modelType}
+              telemetryHook={this.props.telemetryHook}
+            />
+          )}
+        {this.state.activeFeatureImportancesOption ===
+          FeatureImportancesTabOptions.LocalExplanation &&
+          ifEnableLargeData(this.context.dataset) && (
+            <LargeIndividualFeatureImportanceView
+              cohort={this.context.selectedErrorCohort.cohort}
+              modelType={this.props.modelMetadata.modelType}
+              telemetryHook={this.props.telemetryHook}
+              selectedWeightVector={this.props.selectedWeightVector}
+              onWeightChange={this.props.onWeightVectorChange}
+              weightOptions={this.props.weightVectorOptions}
+              weightLabels={this.props.weightVectorLabels}
+            />
+          )}
       </Stack>
     );
   }

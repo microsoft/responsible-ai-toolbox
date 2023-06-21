@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { visit } from "../../../../util/visit";
 import { Locators } from "../Constants";
-import {
-  IModelAssessmentData,
-  RAINotebookNames
-} from "../IModelAssessmentData";
-import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
+import { modelAssessmentDatasets } from "../datasets/modelAssessmentDatasets";
+import { IModelAssessmentData } from "../IModelAssessmentData";
 
 import { describeAggregatePlot } from "./describeAggregatePlot";
 import { describeCohortFunctionality } from "./describeCohortFunctionality";
@@ -20,14 +18,7 @@ export function describeDatasetExplorer(
 ): void {
   describe(testName, () => {
     before(() => {
-      if (name) {
-        const hosts = Cypress.env().hosts;
-        const hostDetails = hosts.find((obj: { file: string }) => {
-          return obj.file === RAINotebookNames[name];
-        });
-        cy.task("log", hostDetails.host);
-        cy.visit(hostDetails.host);
-      }
+      visit(name);
       cy.get("#ModelAssessmentDashboard").should("exist");
       cy.get(Locators.DataAnalysisTab).eq(1).click();
     });

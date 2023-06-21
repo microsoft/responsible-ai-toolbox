@@ -10,22 +10,30 @@ import pandas as pd
 from sklearn.feature_selection import (mutual_info_classif,
                                        mutual_info_regression)
 
-from erroranalysis._internal.constants import (MatrixParams, Metrics,
+from erroranalysis._internal.constants import (ErrorCorrelationMethods,
+                                               MatrixParams, Metrics,
                                                ModelTask, RootKeys,
                                                metric_to_display_name)
 from erroranalysis._internal.matrix_filter import \
     compute_matrix as _compute_matrix
+from erroranalysis._internal.matrix_filter import \
+    compute_matrix_on_dataset as _compute_matrix_on_dataset
 from erroranalysis._internal.metrics import metric_to_func
 from erroranalysis._internal.process_categoricals import process_categoricals
 from erroranalysis._internal.surrogate_error_tree import \
     compute_error_tree as _compute_error_tree
+from erroranalysis._internal.surrogate_error_tree import \
+    compute_error_tree_on_dataset as _compute_error_tree_on_dataset
 from erroranalysis._internal.utils import generate_random_unique_indexes
 from erroranalysis._internal.version_checker import check_pandas_version
+from erroranalysis.error_correlation_methods import (
+    compute_ebm_global_importance, compute_gbm_global_importance)
 from erroranalysis.report import ErrorReport
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 IMPORTANCES_THRESHOLD = 50000
 ROOT_COVERAGE = 100
+MUTUAL_INFO = ErrorCorrelationMethods.MUTUAL_INFO.value
 
 
 class BaseAnalyzer(ABC):
@@ -237,7 +245,7 @@ class BaseAnalyzer(ABC):
             to the dataset.
         :type composite_filters: list[str]
         :param quantile_binning: If true, use quantile binning for the
-            heatmap.  By default uses equal width binning.
+            heatmap. By default uses equal width binning.
         :type quantile_binning: bool
         :param num_bins: The number of bins per feature in the heatmap.
         :type num_bins: int
@@ -250,6 +258,40 @@ class BaseAnalyzer(ABC):
                                composite_filters,
                                quantile_binning=quantile_binning,
                                num_bins=num_bins)
+
+    def compute_matrix_on_dataset(
+            self,
+            features,
+            dataset,
+            quantile_binning=False,
+            num_bins=BIN_THRESHOLD):
+        """Computes the matrix filter (aka heatmap) json.
+
+        :param features: One or two feature names to compute the heatmap.
+        :type features: list
+        :param dataset: The dataset on which matrix view needs to be computed.
+            The dataset should have the feature columns and the columns
+            'true_y' and 'index'. The 'true_y' column should have the true
+            target values corresponding to the test data. The 'index'
+            column should have the indices. If the analyzer is of type
+            PredictionsAnalyzer, then the dataset should include the column
+            'pred_y' which will hold the predictions.
+        :type dataset: pd.DataFrame
+        :param quantile_binning: If true, use quantile binning for the
+            heatmap. By default uses equal width binning.
+        :type quantile_binning: bool
+        :param num_bins: The number of bins per feature in the heatmap.
+        :type num_bins: int
+        :return: The heatmap in json representation.
+        :rtype: dict
+        """
+        return _compute_matrix_on_dataset(
+            self,
+            features,
+            dataset,
+            quantile_binning,
+            num_bins
+        )
 
     def compute_error_tree(self,
                            features,
@@ -288,13 +330,54 @@ class BaseAnalyzer(ABC):
                                    num_leaves=num_leaves,
                                    min_child_samples=min_child_samples)
 
+    def compute_error_tree_on_dataset(
+            self,
+            features,
+            dataset,
+            max_depth=None,
+            num_leaves=None,
+            min_child_samples=None):
+        """Computes the tree view json.
+
+        :param features: The selected feature names to train the
+            surrogate model on.
+        :type features: list[str]
+        :param dataset: The dataset on which tree view needs to be computed.
+            The dataset should have the feature columns and the columns
+            'true_y' and 'index'. The 'true_y' column should have the true
+            target values corresponding to the test data. The 'index'
+            column should have the indices. If the analyzer is of type
+            PredictionsAnalyzer, then the dataset should include the column
+            'pred_y' which will hold the predictions.
+        :type dataset: pd.DataFrame
+        :param max_depth: The maximum depth of the surrogate tree trained
+            on errors.
+        :type max_depth: int
+        :param num_leaves: The number of leaves of the surrogate tree
+            trained on errors.
+        :type num_leaves: int
+        :param min_child_samples: The minimal number of data required to
+            create one leaf.
+        :type min_child_samples: int
+        :return: The tree view in json representation.
+        :rtype: dict
+        """
+        return _compute_error_tree_on_dataset(
+            self,
+            features,
+            dataset,
+            max_depth=max_depth,
+            num_leaves=num_leaves,
+            min_child_samples=min_child_samples)
+
     def create_error_report(self,
                             filter_features=None,
                             max_depth=None,
                             num_leaves=None,
                             min_child_samples=None,
                             compute_importances=False,
-                            compute_root_stats=False):
+                            compute_root_stats=False,
+                            error_correlation_method=MUTUAL_INFO):
         """Creates the error analysis ErrorReport.
 
         The ErrorReport contains the importances, heatmap and tree view json.
@@ -331,7 +414,7 @@ class BaseAnalyzer(ABC):
                                          None)
         importances = None
         if compute_importances:
-            importances = self.compute_importances()
+            importances = self.compute_importances(error_correlation_method)
         root_stats = None
         if compute_root_stats:
             root_stats = self.compute_root_stats()
@@ -341,7 +424,7 @@ class BaseAnalyzer(ABC):
                            importances=importances,
                            root_stats=root_stats)
 
-    def compute_importances(self):
+    def compute_importances(self, error_correlation_method=MUTUAL_INFO):
         """Compute the importances or correlation between features and error.
 
         Computes the feature importances or the correlation between
@@ -350,6 +433,8 @@ class BaseAnalyzer(ABC):
         uses the scikit-learn methods mutual_info_classif for classification
         and mutual_info_regression for regression tasks.
 
+        :param error_correlation_method: Method to compute error correlation.
+        :type error_correlation_method: str
         :return: The computed importances or correlation between the
             features and error.
         :rtype: list[float]
@@ -357,7 +442,7 @@ class BaseAnalyzer(ABC):
         input_data = self.dataset
         diff = self.get_diff()
         if isinstance(self.dataset, pd.DataFrame):
-            input_data = input_data.to_numpy()
+            input_data = input_data.to_numpy(copy=True)
         if self.categorical_features:
             # Inplace replacement of columns
             indexes = self.categorical_indexes
@@ -372,11 +457,51 @@ class BaseAnalyzer(ABC):
                                                      IMPORTANCES_THRESHOLD)
             input_data = input_data[indexes]
             diff = diff[indexes]
-        if self._model_task == ModelTask.CLASSIFICATION:
-            # compute the feature importances using mutual information
-            return mutual_info_classif(input_data, diff).tolist()
+        try:
+            importances = self._compute_error_correlation(
+                input_data, diff, error_correlation_method)
+        except ValueError:
+            # Impute input_data if it contains NaNs, infinity or a value too
+            # large for dtype('float64')
+            input_data = np.nan_to_num(input_data)
+            importances = self._compute_error_correlation(
+                input_data, diff, error_correlation_method)
+        return importances
+
+    def _compute_error_correlation(self, input_data, diff,
+                                   error_correlation_method):
+        """Compute the correlation between the features and error.
+
+        :param input_data: The input data to compute the error correlation
+            on.
+        :type input_data: numpy.ndarray
+        :param diff: The difference between the label and prediction
+            columns.
+        :type diff: numpy.ndarray
+        :param error_correlation_method: Method to compute error correlation.
+        :type error_correlation_method: str
+        :return: The computed error correlation between the features and
+            error.
+        :rtype: list[float]
+        """
+        # if only one row, replicate it to avoid exception
+        if input_data.shape[0] == 1:
+            input_data = np.concatenate((input_data, input_data))
+            diff = np.concatenate((diff, diff))
+        if error_correlation_method == ErrorCorrelationMethods.MUTUAL_INFO:
+            n_neighbors = min(3, input_data.shape[0] - 1)
+            if self._model_task == ModelTask.CLASSIFICATION:
+                return mutual_info_classif(
+                    input_data, diff, n_neighbors=n_neighbors).tolist()
+            else:
+                return mutual_info_regression(
+                    input_data, diff, n_neighbors=n_neighbors).tolist()
+        elif error_correlation_method == ErrorCorrelationMethods.EBM:
+            return compute_ebm_global_importance(
+                input_data, diff, self._model_task)
         else:
-            return mutual_info_regression(input_data, diff).tolist()
+            return compute_gbm_global_importance(
+                input_data, diff, self._model_task, self._categorical_indexes)
 
     def compute_root_stats(self):
         """Compute the root all data statistics.
