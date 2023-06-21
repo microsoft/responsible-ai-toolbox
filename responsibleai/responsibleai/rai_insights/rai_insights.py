@@ -566,6 +566,13 @@ class RAIInsights(RAIBaseInsights):
                         f"Error finding unique values in column {column}. "
                         "Please check your test data.")
 
+        # Validate that the target column isn't continuous if the
+        # user is running classification scenario
+        if (task_type == ModelTask.CLASSIFICATION and
+                train[target_column].dtype == "float64"):
+            raise UserConfigValidationException(
+                "Target column type must not be continuous "
+                "for classification scenario.")
         # Check if any features exist that are not numeric, datetime, or
         # categorical.
         train_features = train.drop(columns=[target_column]).columns
