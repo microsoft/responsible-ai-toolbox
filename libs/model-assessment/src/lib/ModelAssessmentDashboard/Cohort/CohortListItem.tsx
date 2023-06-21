@@ -161,7 +161,6 @@ export class CohortListItem extends React.Component<ICohortListItemProps> {
       );
       this.context.addCohort(newCohort);
     }
-    console.log("context", this.context);
   };
 
   private existsCohort(cohorts: ErrorCohort[], name: string): boolean {
