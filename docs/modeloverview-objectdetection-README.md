@@ -22,7 +22,7 @@ A dedicated Flask endpoint `requestObjectDetectionMetrics` is triggered by the d
 
 ### TorchMetrics
 
-This python module contains the implementation for the surfaced metrics (Mean Average Precision, Average Precision, and Average Recall) - Mean-Average-Precision (mAP) — PyTorch-Metrics 0.11.4 documentation (torchmetrics.readthedocs.io)
+This python module contains the implementation for the surfaced metrics (Mean Average Precision, Average Precision, and Average Recall) - ![Mean-Average-Precision (mAP) — PyTorch-Metrics 0.11.4 documentation (torchmetrics.readthedocs.io)](https://torchmetrics.readthedocs.io/en/stable/detection/mean_average_precision.html)
 
 ### Endpoint:
 
