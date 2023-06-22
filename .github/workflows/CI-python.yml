@@ -53,7 +53,7 @@ jobs:
 
       - name: Pip compile
         run: |
-          pip-compile requirements-dev.txt -o requirements-dev-comp.txt -r
+          pip-compile -r requirements-dev.txt -o requirements-dev-comp.txt
           cat requirements-dev-comp.txt
         working-directory: ${{ matrix.packageDirectory }}
 
