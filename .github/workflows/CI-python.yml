@@ -70,6 +70,7 @@ jobs:
 
       - name: Install package
         run: |
+          pip install -r requirements-dev.txt --no-cache-dir
           pip install -v -e . --no-cache-dir
         working-directory: ${{ matrix.packageDirectory }}
 
