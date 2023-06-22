@@ -1,0 +1,30 @@
+# Requirements for development
+
+pytest==7.0.1
+pytest-cov
+pytest-mock==3.6.1
+requests==2.25.1
+
+requirements-parser==0.2.0
+
+wheel
+
+# Required for notebook tests
+nbformat
+papermill
+scrapbook
+jupyter
+nbval
+
+docutils<0.18
+sphinx==3.1.1
+sphinx-gallery==0.8.1
+pydata-sphinx-theme==0.3.0
+
+transformers
+datasets
+tensorflow<2.11.0
+opencv-python
+
+fastai
+mlflow
