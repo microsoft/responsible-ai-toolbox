@@ -3,6 +3,7 @@
 # Data Flow Diagram for Object Detection Scenario
 
 ## Data Flow Diagram
+
 ![DFD](./img/ObjectDetection-DFD.png)
 
 ## Description
@@ -10,9 +11,10 @@
 When using the DPV2 run of the object detection ResponsibleAIVisionInsights dashboard, the above diagram explains the flow of data through software systems.
 
 1. To start, a user uploads images with corresponding labels to a blob storage. If the blob storage is private, the user should be sure to add the needed authentication to the path.  
-The label should follow the corresponding schema: 
+   The label should follow the corresponding schema:
+
 ```plaintext
-[ 
+[
   [
     [object_1, x1, y1, b1, h1, (optional) confidence_score],
     [object_2, x2, y2, b2, h2, (optional) confidence_score],
@@ -29,11 +31,11 @@ The label should follow the corresponding schema:
 
 3. Wrapped ML model returned for use
 
-4. The extracted data table is passed to the front end. The following three attributes are unique to the object detection scenario: `object_detection_true_y, 'object_detection_predicted_y`, and `imageDimensions`. See this ![mock data](https://github.com/microsoft/responsible-ai-toolbox/blob/main/apps/dashboard/src/model-assessment-vision/__mock_data__/fridgeObjectDetection.ts) for an example. 
+4. The extracted data table is passed to the front end. The following three attributes are unique to the object detection scenario: `object_detection_true_y, 'object_detection_predicted_y`, and `imageDimensions`. See this ![mock data](https://github.com/microsoft/responsible-ai-toolbox/blob/main/apps/dashboard/src/model-assessment-vision/__mock_data__/fridgeObjectDetection.ts) for an example.
 
 5. The dashboard is generated
 
-6. There are two types of event-based actions that can trigger backend interaction. First, there is a request to retrieve an explanation (click image -> click object index in drop down). There will be such request whether or not the explanations were precomputed. Second, there is a request for the model overview metrics. 
+6. There are two types of event-based actions that can trigger backend interaction. First, there is a request to retrieve an explanation (click image -> click object index in drop down). There will be such request whether or not the explanations were precomputed. Second, there is a request for the model overview metrics.
 
 7. The compute is connected.
 
