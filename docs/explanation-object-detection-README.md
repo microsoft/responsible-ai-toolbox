@@ -4,7 +4,7 @@
 
 ## Implementation Architecture
 
-![Explanations - Object Detection - Architecture](./img/Explanations-ObjectDetection-Architecture.png)
+![Explanations - Object Detection - Architecture](./img/ObjectDetection-Explanations.png)
 
 ## Description
 
