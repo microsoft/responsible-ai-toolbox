@@ -16,6 +16,10 @@
 
 ## Description
 
+### Data Flow Diagram
+![Object Detection - DFD](./img/ObjectDetection-DFD.png)
+Note: IOU = Intersection Over Union, MAP = Mean Average Precision, AP = Average Precision.
+
 ### Input Artifacts
 
 The user provides inputs including a model (from pytorch or an E2E differentiable AutoML model), dataset (with pandas or AML’s MLTable format for non-OS users), and a compute for enterprise users.
