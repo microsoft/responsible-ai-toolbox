@@ -293,7 +293,8 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
         task_type = rai_insights.task_type
         wrapped_model = wrap_model(rai_insights.model, dataset,
                                    rai_insights.task_type,
-                                   classes=rai_insights._classes)
+                                   classes=rai_insights._classes,
+                                   device=rai_insights.device)
         inst.__dict__['_task_type'] = task_type
         index_classes = rai_insights._classes
         is_od = task_type == ModelTask.OBJECT_DETECTION
