@@ -51,27 +51,26 @@ jobs:
           pip install --upgrade setuptools
           pip install --upgrade "pip-tools<=6.13.0"
 
-#       - name: Pip compile
-#         run: |
-#           pip-compile -r requirements-dev.txt -o requirements-dev-comp.txt
-#           cat requirements-dev-comp.txt
-#         working-directory: ${{ matrix.packageDirectory }}
+      - name: Pip compile
+        run: |
+          pip-compile requirements-dev.txt -o requirements-dev-comp.txt
+          cat requirements-dev-comp.txt
+        working-directory: ${{ matrix.packageDirectory }}
 
-#       - name: Upload requirements
-#         uses: actions/upload-artifact@v3
-#         with:
-#           name: requirements-dev-comp.txt
-#           path: ${{ matrix.packageDirectory }}/requirements-dev-comp.txt
+      - name: Upload requirements
+        uses: actions/upload-artifact@v3
+        with:
+          name: requirements-dev-comp.txt
+          path: ${{ matrix.packageDirectory }}/requirements-dev-comp.txt
 
-#       - name: Install dependencies
-#         run: |
-#           pip-sync requirements-dev-comp.txt
-#         working-directory: ${{ matrix.packageDirectory }}
+      - name: Install dependencies
+        run: |
+          pip-sync requirements-dev-comp.txt
+        working-directory: ${{ matrix.packageDirectory }}
 
       - name: Install package
         run: |
-          pip install -r requirements-dev.txt --no-cache-dir
-          pip install -v -e . --no-cache-dir
+          pip install -v -e .
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Run tests
