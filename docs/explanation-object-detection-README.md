@@ -15,4 +15,4 @@ In the RAI Dashboard (Object Detection scenario), we build in capabilities for d
 ## User Experience
 
 Explanations can be calculated on the fly or prior to instantiation of the dashboard. For the former, users can set precompute_explanations=False when creating the dashboard. For the latter, users can set precompute_explanations=True when creating the dashboard.  
-Note that a connected compute will be required to access these explanations for both scenarios.
+Note that an **attached compute** will be required to access these explanations for either setting.
