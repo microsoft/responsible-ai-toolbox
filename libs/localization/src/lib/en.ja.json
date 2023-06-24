@@ -1,24 +1,45 @@
 {
   "Common": {
-    "close": "Close",
-    "tooltipButton": "Tooltip button",
-    "identityFeature": "Identity feature"
+    "close": "閉じる",
+    "tooltipButton": "ツールヒント ボタン",
+    "identityFeature": "ID 特徴",
+    "infoTitle": "Additional information",
+    "spinButton": "Spin",
+    "editButton": "Edit",
+    "decreaseValue": "Decrease value",
+    "increaseValue": "Increase value",
+    "decreaseValueByOne": "Decrease value by 1",
+    "increaseValueByOne": "Increase value by 1",
+    "loading": "Loading..."
+  },
+  "ChartContextMenu": {
+    "hideData": "Hide data table",
+    "viewData": "View data table",
+    "viewInFullScreen": "View in full screen",
+    "printChart": "Print chart",
+    "downloadCSV": "Download CSV",
+    "downloadPNG": "Download PNG image",
+    "downloadJPEG": "Download JPEG image",
+    "downloadPDF": "Download PDF document",
+    "downloadSVG": "Download SVG vector image",
+    "downloadXLS": "Download XLS"
   },
   "CausalAnalysis": {
     "AggregateView": {
       "binary": "バイナリの処理: ",
-      "binaryDescription": "On average in this sample, turning on this feature will cause the probability of class/label '{0}' to increase by X units.",
-      "regressionDescription": "On average in this sample, turning on this feature will cause the predictions of the target to increase/decrease by X units.",
+      "binaryDescription": "このサンプルでは平均で、この特徴をオンにすると、クラス/ラベル {0} の確率が X 単位増加します。",
+      "regressionDescription": "このサンプルの平均では、この特徴をオンにすると、ターゲットの予測が X 単位で増減します。",
       "causalPoint": "因果効果のポイント",
       "confidenceLower": "信頼区間 (下)",
       "confidenceUpper": "信頼区間 (上)",
       "confoundingFeature": "交絡機能は、処理と興味のある結果の両方に関連しています。交絡因子では、処理から直接的な因果効果の上の結果への追加の相関パスが作成されます。交絡機能が測定され、モデルに含まれている場合を除いて、これらの追加の相関関係が因果効果の概算値に影響を与える可能性があります。この影響は、省略された交絡因子、処理、結果の間の相関関係の方向に応じて正にも負にもなり得ます。",
       "continuous": "継続的な処理: ",
-      "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the probability of class/label '{0}' to increase by X units.",
-      "continuousRegressionDescription": "On average in this sample, increasing this feature by 1 unit will cause the predictions of the target to increase/decrease by X units.",
+      "continuousDescription": "このサンプルでは平均で、この特徴量を 1 単位増やすと、クラス/ラベル `{0}` の確率が X 単位増加します。",
+      "continuousRegressionDescription": "このサンプルの平均では、この特徴量を 1 単位増やすと、ターゲットの予測が X 単位で増減します。",
       "description": "因果分析では、製品に関する別の価格戦略や、患者に対して別の処理を行うなどのさまざまなポリシーの選択肢の下で、実世界の結果がどのように変化するかについての “What If” の質問の回答を提供します。重要な相関パターンを識別するモデル予測とは異なり、これらのツールは、興味のある結果に直接影響する最も重要な因果関係の機能を識別するのに役立ちます。これらのモデルは、1 つの機能の因果効果 (通常は “処理” と呼ばれる) を識別し、他の交絡機能を一定に保ちます。最善の結果を得るには、データセット全体に、結果と関連する可能性のある、あらゆる機能を交絡因子が利用できることを確認してください。",
       "directAggregate": "信頼区間が 95% の各処理の直接的な集計因果効果",
       "here": "こちら",
+      "infoTitle": "Additional information on aggregated causal effects",
       "lasso": "なげなわ (または y がバイナリの場合はロジスティック回帰) が X[-i] から y を予測するために調整され、なげなわ (または X[i] がカテゴリ別の場合はロジスティック回帰) が X[-i] から X[i] を予測するために調整されました。因果効果は、2 つの予測タスクの残余または原因不明のバリエーションの相関関係と見なすことができます。Double Machine Learning に関する詳細情報",
       "unconfounding": "交絡因子とは"
     },
@@ -26,10 +47,11 @@
       "currentOutcome": "現在の結果",
       "currentTreatment": "現在の処理の値",
       "dataRequired": "このタブでは、データポイントを選択する必要があります。",
-      "selectedDatapoint": "Selected datapoint",
+      "selectedDatapoint": "選択されたデータ ポイント",
       "description": "個別の因果効果は、顧客へのターゲット プロモーションや個別の処理計画など、カスタマイズされた介入に反映されます。特定の特徴量を持つ個人が、因果関係のある特徴量や処理を変更した場合、どのように応答するでしょうか。因果関係の What-If ツールは、処理のレベルを変更した場合の、特定の個人の現実世界の結果の限界的な変化を計算します。この分析により、製品の異なる価格戦略や患者の代替処理など、さまざまなポリシーの選択肢の下で、現実の結果がどのように変化するか理解することができます。興味のある処理を指定して、現実の結果がどのように変化するかを観察します。",
       "directIndividual": "信頼区間が 95% の各処理の直接的な個別の因果効果",
       "index": "データポイント インデックス",
+      "infoTitle": "Additional information on individual causal what-if",
       "missingParameters": "このタブには、評価データセットを指定する必要があります。",
       "newOutcome": "新しい結果",
       "selectTreatment": "処理の選択",
@@ -52,9 +74,9 @@
       "BarTextBinary": "最初のバーは、上記の推奨グローバル処理ポリシーを適用した場合の平均相対ゲインを示しています。報告されたゲインは、使用した処理の数値の変化を反映したものです。2 番目のバーは、バイナリー処理を有効にすることによる、全員の相対的なゲイン (またはロス) を示します。",
       "BarTextContinuous": "最初のバーは、上記の推奨グローバル処理ポリシーを適用した場合の平均相対ゲインを示しています。報告されたゲインは、サンプルにおける通常の処理サイズの 10％ までの処理の特徴量の増減を反映したものです。2 つ目のバーは、連続した処理を 10％ まで増加または減少させた場合の相対的なゲイン (またはロス) を示します。",
       "Description": "これらのツールは、将来に介入するときのポリシーを構築するのに役立ちます。サンプルのどの部分が員がドライバーに対する最大の反応を得ているかを特定したり、ルールを構築してどの母集団が最も大きな治療を効果を得られるかを定義したりすることができます。",
-      "Left": "{0} less than or equal to {1}",
+      "Left": "{0} が {1} 以下",
       "Recommended": "推奨される治療 = {0}",
-      "Right": "{0} greater than {1}",
+      "Right": "{0} が {1} より大きい",
       "SelectPolicy": "治療特徴の設定",
       "Size": "サンプル サイズの解釈可能な推奨グローバル治療ポリシー (n) = {0}",
       "Table": "テーブルは、行を取得し、その特定の行の列を取得することで読み取ることができます。",
@@ -63,6 +85,7 @@
       "averageGainBinary": "処理 {0} をその初期値 {1} に設定した場合の平均ゲイン。",
       "averageGainContinuous": "'{0}' 処理を行っていない場合の代替ポリシーの平均利得。",
       "header": "これらのツールは、将来の介入に向けたポリシーを構築するのに役立ちます。サンプルのどの部分が、原因となる特徴量や処理の変化に対して最大の反応を示すかを特定し、将来どの母集団を特定の介入の対象とすることが必要か定義するルールを構築することができます。",
+      "infoTitle": "Additional information on treatment policy",
       "nSample": "n = {0}",
       "noData": "データなし"
     }
@@ -76,12 +99,12 @@
       "Title": "データなし"
     },
     "ComparisonTypes": {
-      "lt": "{0} less than {1}",
-      "lte": "{0} less than or equal to {1}",
-      "gt": "{0} greater than {1}",
-      "gte": "{0} greater than or equal to {1}",
-      "eq": "{0} equal to {1}",
-      "ne": "{0} not equal to {1}",
+      "lt": "{0} が {1} より小さい",
+      "lte": "{0} が {1} 以下",
+      "gt": "{0} が {1} より大きい",
+      "gte": "{0} が {1} 以上",
+      "eq": "{0} が {1} と等しい",
+      "ne": "{0} が {1} に等しくない",
       "in": "{0} が ({1}) のセットにある",
       "nin": "{0} が ({1}) のセットにない",
       "rg": "{0} の次の範囲 ({1})",
@@ -89,18 +112,20 @@
       "Unknown": "不明"
     },
     "ShiftCohort": {
-      "apply": "Apply",
-      "cancel": "Cancel",
-      "title": "Switch Cohort",
-      "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
+      "apply": "適用",
+      "cancel": "キャンセル",
+      "title": "コーホートの切り替え",
+      "subText": "コーホート リストでコーホートを選択します。デジタル ダッシュボードにコーホートを適用します。",
+      "selectCohort": "Select a cohort",
+      "cohortList": "Cohort list"
     },
     "PreBuiltCohort": {
-      "featureNameNotFound": "Feature name not found in the dataset",
-      "notACategoricalFeature": "Feature is not categorical"
+      "featureNameNotFound": "データセットに特徴名が見つかりません",
+      "notACategoricalFeature": "機能がカテゴリ別ではありません"
     },
     "EmptyCohortDialog": {
-      "title": "Dataset cohort contains no datapoints",
-      "subText": "It seems your dataset cohort contains no datapoints, adjust your filters to include at least one datapoint in your dataset cohort before saving."
+      "title": "データセットのコーホートにデータポイントが含まれていない",
+      "subText": "データセットのコーホートにデータポイントが含まれていないようです。保存する前に、データセットのコーホートに少なくとも 1 つのデータポイントを含めるフィルターを調整してください。"
     }
   },
   "Counterfactuals": {
@@ -109,27 +134,30 @@
     "EffectOfTreatment": "推奨の効果",
     "EffectUpperBound": "CI upper",
     "ErrorDialog": {
-      "Close": "Close",
-      "ErrorPrefix": "Error encountered: {0}",
-      "PythonError": "Python error"
+      "Close": "閉じる",
+      "ErrorPrefix": "エラーが発生しました: {0}",
+      "PythonError": "Python エラー"
     },
     "RecommendedTreatment": "推奨される治療",
     "WhatIf": {
       "setValue": "値の設定",
       "sortFeatures": "特徴量の列を反事実条件の特徴量の重要度で並べ替え",
-      "percentCounterfactualLocalImportance": "Percentage of counterfactuals that varied the feature",
+      "percentCounterfactualLocalImportance": "特徴が異なる反事実の割合",
       "toggleToolTipBody": "反事実の例では、ローカル特徴量の重要度が生成されます。これは、目的のクラス分類シナリオまたは回帰シナリオに必要な範囲を達成するために、どの上位の特徴が最も動作したのかを示します。",
       "toggleToolTipHeader": "優先度付けされた反事実機能",
-      "predictedClass": "Predicted class",
-      "predictedValue": "Predicted value"
+      "predictedClass": "予測されたクラス",
+      "predictedValue": "予測された値"
     },
+    "Size": "Size",
+    "loading": "Loading...",
     "counterfactualEx": "反事実条件の例 {0}",
     "counterfactualName": "What-if 反事実条件名",
     "createWhatIfCounterfactual": "What-if 反事実条件の作成",
     "createCounterfactual": "反事実条件",
+    "revertToBubbleChart": "View bubble chart",
     "createOwn": "自分自身の反事実条件を作成:",
     "currentClass": "現在のクラス",
-    "currentRange": "Current range",
+    "currentRange": "現在の範囲",
     "decreaseByOne": "値を 1 減らす",
     "desiredClass": "反事実条件の目的のクラス",
     "header": "What-If 反事実条件",
@@ -139,10 +167,13 @@
     "listDescription": "この一覧では、推定された因果モデルに含まれるすべての特徴量に基づいて、選択された処理に対する最大の因果反応を含む、現在のデータ サンプル内のデータポイントを示します。左側の 5 列は、処理の観察が推奨されているか、現在の処理、処理で推定される効果 (バイナリー処理の場合は処理の行われていないベースラインから処理を適用した効果、または処理の特徴量をサンプルでの通常処理サイズの 10% まで増加または減少させた場合の効果。[ダイナミック: 利用した処理の数値変化を報告するもの］)、およびこの効果の信頼区間 (CI) の上下を示します。残りの列は、それぞれの観察の現在の処理状態とその他の特徴量を示します。",
     "localImportanceDescription": "目的のモデル予測を実現するために調整する {0} 行の上位の特徴量。予測のための What-if 分析に基づいています: {1}",
     "localImportanceSelectData": "ローカルの重要度グラフを表示するデータ ポイントを選択します",
+    "largeLocalImportanceSelectData": "Select a bubble, followed by a data point to view local importance chart",
+    "localImportanceFetchError": "There was an error while fetching the local importance data. Error details: {0} Please check the data used.",
+    "BubbleChartFetchError": "There was an error while fetching the data. Error details: {0} Please check the data used.",
     "noData": "データなし",
     "noFeatures": "利用できる特徴量がない",
-    "panelDescription": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set suggested counterfactual feature values by clicking “Set Value” text under each counterfactual name. Name your counterfactual and save it.",
-    "panelDescriptionWithoutSetValue": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples.",
+    "panelDescription": "反事実条件を参照して独自のものを作成します。特徴を検索して、さまざまな反事実条件の例から提案された値を確認します。各反事実条件名の [値の設定] テキストをクリックして、提案された反事実条件の特徴量の値を設定します。反事実条件に名前をつけて保存します。",
+    "panelDescriptionWithoutSetValue": "反事実を参照し、独自に作成します。特徴を検索して、さまざまな反事実の例から提案された値を表示します。",
     "whatIfPanelHeader": "What-if 反事実条件",
     "panelHeader": "反事実条件",
     "recommendedPolicy": "推奨されるポリシーの利得",
@@ -161,13 +192,13 @@
       "defaultLabel": "すべてのデータ"
     },
     "CohortBaseAndFilters": {
-      "globalCohortAndFilters": "Global cohort and filters",
-      "globalCohort": "Global cohort",
-      "errorExplorer": "Error explorer",
-      "filters": "Filters"
+      "globalCohortAndFilters": "グローバル コーホートとフィルター",
+      "globalCohort": "グローバル コーホート",
+      "errorExplorer": "エラー エクスプローラー",
+      "filters": "フィルター"
     },
     "CohortInfo": {
-      "baseCohortInstances": "Instances in global cohort",
+      "baseCohortInstances": "グローバル コーホート内のインスタンス",
       "basicInformation": "基本情報",
       "cohortInformation": "コーホート情報",
       "correct": "正解",
@@ -186,11 +217,13 @@
       "subText": "選択したコーホートの詳細を確認します。そのコーホート名を編集します。このコーホートを削除します。"
     },
     "FeatureList": {
-      "apply": "Apply",
+      "featureList": "Feature List",
+      "apply": "適用",
       "features": "特徴量",
       "importances": "重要度",
-      "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
-      "staticTreeMapDescription": "View the features that were used to train the tree map. The feature importances were calculated using mutual information with the error on the true labels."
+      "treeMapDescription": "ツリー マップを再トレーニングするには、以下の特徴量を選択して保存します。特徴量の重要度は相互情報を使用して計算されましたが、true ラベルにエラーが見つかりました。ツリー マップのトレーニングのガイドラインとして使用してください。",
+      "staticTreeMapDescription": "ツリー マップのトレーニングに使用された特徴を表示します。特徴量の重要度は、真のラベルにエラーがある相互情報を使用して計算されました。",
+      "searchResultMessage": "Results displayed out of {resultLength} for {searchValue}"
     },
     "TreeViewParameters": {
       "maximumDepth": "最大深度",
@@ -204,7 +237,7 @@
       "minDataInLeafTitle": "1 つのリーフ内のサンプルの最小数に関する追加情報"
     },
     "TreeLegend": {
-      "clearSelection": "Clear selection"
+      "clearSelection": "選択のクリア"
     },
     "FilterTooltip": {
       "correctNum": "正解 (#): ",
@@ -231,8 +264,8 @@
       "featureList": "特徴量の一覧",
       "fullscreen": "全画面表示",
       "heatMap": "ヒート マップ",
-      "newCohort": "New cohort",
-      "shiftCohort": "Switch cohort",
+      "newCohort": "新しいコーホート",
+      "shiftCohort": "コーホートの切り替え",
       "treeMap": "ツリー マップ",
       "whatIf": "What-If"
     },
@@ -242,10 +275,10 @@
       "move": "移動",
       "saveAs": "新しいコーホートとして保存する",
       "shift": "シフト",
-      "heatTitle": "Leave tree view?",
-      "heatSubText": "Are you sure you want to leave tree view? You can save your filters as a new cohort so you can access them in Cohort settings. Otherwise your filters will be lost.",
-      "treeTitle": "Leave heatmap view?",
-      "treeSubText": "Are you sure you want to leave heatmap view? You can save your filters as a new cohort so you can access them in Cohort settings. Otherwise your filters will be lost."
+      "heatTitle": "ツリー ビューから移動しますか?",
+      "heatSubText": "ツリー ビューを終了しますか? フィルターを新しいコーホートとして保存すると、コーホートの設定でフィルターにアクセスできます。それ以外の場合、フィルターは失われます。",
+      "treeTitle": "ヒートマップ ビューを終了しますか?",
+      "treeSubText": "ヒートマップを終了しますか? フィルターを新しいコーホートとして保存すると、コーホートの設定でフィルターにアクセスできます。それ以外の場合、フィルターは失われます。"
     },
     "MatrixArea": {
       "clearAll": "すべてクリア",
@@ -256,6 +289,7 @@
       "disabledWarning": "データセット全体に対してヒートマップが生成されているため、グローバル コーホートが \"すべてのデータ\" を表すように切り替えられる場合を除き、エラー ヒートマップは無効になります。エラー ヒートマップを表示するには、完全なデータセットに切り替えます。"
     },
     "MatrixSummary": {
+      "heatMapInfoTitle": "Additional information on heat map",
       "heatMapDescription": "ヒート マップを使用すると、特定の交差する特徴量のフィルターに注目し、細分化したエラー率を組み合わせることができます。比較する 2 つのデータセット特徴量から開始します。",
       "heatMapStaticDescription": "ヒート マップを使用すると、特定の交差する特徴量フィルターに注目し、集計解除されたエラー率を計算できます。ダッシュボードを表示する前に、SDK を使用してヒート マップを作成するには、最大 2 つの機能を選択する必要があります。"
     },
@@ -270,64 +304,94 @@
       "binningThresholdTitle": "ビン分割のしきい値に関する追加情報"
     },
     "Metrics": {
-      "accuracyScore": "Accuracy score",
-      "accuracyScoreInfo": "The accuracy score represents the ratio of correct to total instances in the data.",
-      "accuracyScoreShort": "Accuracy",
-      "accuracyScoreTitle": "Additional information on accuracy score",
-      "errorRate": "エラー率",
-      "errorRateInfo": "エラー率は、システムが失敗したノード内のインスタンスの割合を表します。",
-      "errorRateTitle": "エラー率に関する追加情報",
-      "f1Score": "F1 score",
-      "f1ScoreInfo": "The F1 score is the harmonic mean of the precision and recall metrics.",
-      "f1ScoreTitle": "Additional information on F1 score",
-      "meanAbsoluteError": "平均絶対誤差",
-      "meanAbsoluteErrorInfo": "平均絶対誤差は、エラーの合計数の平均です。",
-      "meanAbsoluteErrorShort": "平均絶対誤差",
-      "meanAbsoluteErrorTitle": "平均絶対誤差に関する追加情報",
-      "meanSquaredError": "平均二乗誤差",
-      "meanSquaredErrorInfo": "平均二乗誤差は、エラーの二乗の平均です。",
-      "meanSquaredErrorShort": "平均二乗誤差",
-      "meanSquaredErrorTitle": "平均二乗誤差に関する追加情報",
-      "precision": "精度スコア",
-      "precisionInfo": "精度は、すべての予測された陽性に対する真陽性の比率です。",
-      "precisionShort": "精度",
-      "precisionTitle": "精度に関する追加情報",
-      "recall": "リコール スコア",
-      "recallInfo": "リコールは、すべての実際の陽性に対する真陽性の比率です。",
-      "recallShort": "リコール",
-      "recallTitle": "リコールに関する追加情報",
-      "macroPrecision": "マクロ平均精度のスコア",
-      "macroPrecisionInfo": "マクロ平均精度は、クラスごとに個別に計算され平均化された、すべての予測された陽性に対する真陽性の比率です。",
-      "macroPrecisionShort": "マクロ精度",
-      "macroPrecisionTitle": "マクロ平均精度に関する追加情報",
-      "microPrecision": "マイクロ平均精度のスコア",
-      "microPrecisionInfo": "マイクロ平均精度は、すべてのクラスについて集計されたすべての予測された陽性に対する真陽性の比率です。",
-      "microPrecisionShort": "マイクロ精度",
-      "microPrecisionTitle": "マイクロ平均精度に関する追加情報",
-      "macroRecall": "マクロ平均リコールのスコア",
-      "macroRecallInfo": "マクロ平均リコールは、クラスごとに個別に計算され平均化された、すべての実際の陽性に対する真陽性の比率です。",
-      "macroRecallShort": "マクロ リコール",
-      "macroRecallTitle": "マクロ平均リコールに関する追加情報",
-      "microRecall": "マイクロ平均リコールのスコア",
-      "microRecallInfo": "マイクロ平均リコールは、すべてのクラスについて集計されたすべての実際の陽性に対する真陽性の比率です。",
-      "microRecallShort": "マイクロ リコール",
-      "microRecallTitle": "マイクロ平均リコールに関する追加情報",
-      "macroF1Score": "Macro averaged F1 score",
-      "macroF1ScoreInfo": "The macro averaged F1 score is the harmonic mean of the macro averaged precision and recall metrics.",
-      "macroF1ScoreShort": "Macro F1 score",
-      "macroF1ScoreTitle": "Additional information on macro averaged F1 score",
-      "microF1Score": "Micro averaged F1 score",
-      "microF1ScoreInfo": "The micro averaged F1 score is the harmonic mean of the micro averaged precision and recall metrics.",
-      "microF1ScoreShort": "Micro F1 score",
-      "microF1ScoreTitle": "Additional information on micro averaged F1 score",
+      "AccuracyScore": {
+        "Name": "Accuracy score",
+        "Info": "The accuracy score represents the ratio of correct to total instances in the data.",
+        "Short": "Accuracy",
+        "Title": "Additional information on accuracy score"
+      },
+      "ErrorRate": {
+        "Name": "Error rate",
+        "Info": "The error rate represents the percentage of instances in the node for which the system has failed.",
+        "Short": "Error rate",
+        "Title": "Additional information on error rate"
+      },
+      "F1Score": {
+        "Name": "F1 score",
+        "Info": "The F1 score is the harmonic mean of the precision and recall metrics.",
+        "Short": "F1 score",
+        "Title": "Additional information on F1 score"
+      },
+      "MeanAbsoluteError": {
+        "Name": "Mean absolute error",
+        "Info": "The mean absolute error is the average of the sum of the errors.",
+        "Short": "Mean abs. error",
+        "Title": "Additional information on mean absolute error"
+      },
+      "MeanSquaredError": {
+        "Name": "Mean squared error",
+        "Info": "The mean squared error is the average of the squares of the errors.",
+        "Short": "Mean sq. error",
+        "Title": "Additional information on mean squared error"
+      },
+      "Precision": {
+        "Name": "Precision score",
+        "Info": "The precision is the ratio of true positives over all predicted positives.",
+        "Short": "Precision",
+        "Title": "Additional information on precision"
+      },
+      "Recall": {
+        "Name": "Recall score",
+        "Info": "The recall is the ratio of true positives over all actual positives.",
+        "Short": "Recall",
+        "Title": "Additional information on recall"
+      },
+      "MacroPrecision": {
+        "Name": "Macro averaged precision score",
+        "Info": "The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.",
+        "Short": "Macro precision",
+        "Title": "Additional information on macro averaged precision"
+      },
+      "MicroPrecision": {
+        "Name": "Micro averaged precision score",
+        "Info": "The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.",
+        "Short": "Micro precision",
+        "Title": "Additional information on micro averaged precision"
+      },
+      "MacroRecall": {
+        "Name": "Macro averaged recall score",
+        "Info": "The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.",
+        "Short": "Macro recall",
+        "Title": "Additional information on macro averaged recall"
+      },
+      "MicroRecall": {
+        "Name": "Micro averaged recall score",
+        "Info": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
+        "Short": "Micro recall",
+        "Title": "Additional information on micro averaged recall"
+      },
+      "MacroF1Score": {
+        "Name": "Macro averaged F1 score",
+        "Info": "The macro averaged F1 score is the harmonic mean of the macro averaged precision and recall metrics.",
+        "Short": "Macro F1 score",
+        "Title": "Additional information on macro averaged F1 score"
+      },
+      "MicroF1Score": {
+        "Name": "Micro averaged F1 score",
+        "Info": "The micro averaged F1 score is the harmonic mean of the micro averaged precision and recall metrics.",
+        "Short": "Micro F1 score",
+        "Title": "Additional information on micro averaged F1 score"
+      },
       "metricName": "メトリック名",
       "metricValue": "メトリック値"
     },
     "MetricSelector": {
-      "selectorLabel": "メトリックを選択します"
+      "selectorLabel": "メトリックを選択します",
+      "feature1SelectorLabel": "Rows: Feature 1",
+      "feature2SelectorLabel": "Columns: Feature 2"
     },
     "Navigation": {
-      "cohortSaved": "New cohort is saved! See Cohort list under Cohort settings.",
+      "cohortSaved": "新しいコーホートが保存されました。コーホートの設定でコーホート リストを参照してください。",
       "dataExplorer": "データ エクスプローラー",
       "errorExplorer": "エラー エクスプローラー",
       "globalExplanation": "グローバル説明",
@@ -345,8 +409,11 @@
       "defaultLabelCopy": "すべてのデータ コピー"
     },
     "TreeView": {
-      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Feature list.\" Use the \"select metric\" dropdown menu to learn more about your error and success nodes' performance. Please note that this metric selection will not impact the way your error tree is generated.",
-      "treeStaticDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on \"Feature list.\" Use the \"select metric\" dropdown menu to learn more about your error and success nodes' performance. Please note that this metric selection will not impact the way your error tree is generated.",
+      "ariaLabel": "Interactive chart",
+      "disabledArialLabel": "Disabled interactive chart",
+      "treeMapInfoTitle": "Additional information on tree map",
+      "treeDescription": "ツリーの視覚化では、各特徴とエラーの間の相互情報を使用して、エラー インスタンスをデータ内の成功インスタンスから階層的に最適に分離します。これにより、一般的な障害パターンを検出して強調表示するプロセスが簡略化されます。重要な障害パターンを見つけるには、赤色が強く (エラー率が高い) ノードと、より塗りつぶし線の厚い (つまり、エラーカバレッジが高い) ノードを探します。ツリーで使用されている機能のリストを編集するには、[特徴リスト] をクリックします。[メトリックの選択] ドロップダウン メニューを使用して、エラー ノードと成功ノードのパフォーマンスの詳細を確認します。このメトリックの選択により、エラー ツリーの生成方法が影響を受けないことに注意してください。",
+      "treeStaticDescription": "ツリーの視覚化では、各特徴とエラーの間の相互情報を使用して、エラー インスタンスをデータ内の成功インスタンスから階層的に最適に分離します。これにより、一般的な障害パターンを検出して強調表示するプロセスが簡略化されます。重要な障害パターンを見つけるには、赤色が強く (エラー率が高い) ノードと、より塗りつぶし線の厚い (つまり、エラーカバレッジが高い) ノードを探します。このエラー ツリーの作成で使用されている機能のリストを表示するには、[特徴リスト] をクリックします。[メトリックの選択] ドロップダウン メニューを使用して、エラー ノードと成功ノードのパフォーマンスの詳細を確認します。このメトリックの選択により、エラー ツリーの生成方法が影響を受けないことに注意してください。",
       "disabledWarning": "データセット全体に対してツリーマップが生成されているため、グローバル コーホートが \"すべてのデータ\" を表すように切り替えられる場合を除き、エラー ツリーマップは無効になります。エラー ツリーマップを表示するには、完全なデータセットに切り替えます。"
     },
     "WhatIfPanel": {
@@ -373,7 +440,7 @@
     "instanceView": "インスタンス ビュー",
     "localExplanationView": "ローカル説明",
     "noFeature": "特徴量なし",
-    "scaleWarning": "For scale reasons of the UI explanations are randomly downsampled",
+    "scaleWarning": "スケールの理由から、UI の説明はランダムにダウンサンプリングされます",
     "whatIfDatapoints": "What-If データポイント"
   },
   "Fairness": {
@@ -674,11 +741,12 @@
     },
     "AxisConfigDialog": {
       "TreatAsCategorical": "カテゴリ別として扱う",
-      "apply": "Apply",
+      "apply": "適用",
       "binLabel": "データにビン分割を適用する",
       "countHelperText": "ポイント数のヒストグラム",
       "ditherLabel": "ディザーが必要",
       "groupByCohort": "コーホートでグループ化",
+      "logarithmicScaling": "Enable logarithmic scaling",
       "numOfBins": "ビンの数",
       "selectClass": "クラスを選択",
       "selectFeature": "特徴量を選択",
@@ -702,13 +770,14 @@
       "importancePrefix": "重要度",
       "numberOfDatapoints": "データポイントの数",
       "rowIndex": "行インデックス",
+      "absoluteIndex": "Absolute index",
       "xValue": "X 値",
       "yValue": "Y 値"
     },
     "Cohort": {
       "cohort": "コーホート",
       "defaultLabel": "すべてのデータ",
-      "temporaryCohort": "Temporary cohort"
+      "temporaryCohort": "一時的コーホート"
     },
     "CohortBanner": {
       "addCohort": "新しいコーホート",
@@ -728,6 +797,14 @@
       "regressor": "リグレッサー"
     },
     "CohortEditor": {
+      "columns": {
+        "index": "Index",
+        "dataset": "Dataset",
+        "predictedY": "Predicted Y",
+        "trueY": "True Y",
+        "classificationOutcome": "Classification outcome",
+        "regressionError": "Error"
+      },
       "TreatAsCategorical": "カテゴリ別として扱う",
       "addFilter": "フィルターの追加",
       "addedFilters": "フィルター",
@@ -738,19 +815,21 @@
       "cancelTitle": "コーホートのキャンセル",
       "cancelYes": "はい",
       "cohortNameError": "コーホート名が指定されていません",
-      "cohortNameDupError": "Cohort with same name already exists",
+      "cohortNameDupError": "同じ名前のコーホートが既に存在します。",
       "cohortNameLabel": "データセットのコーホート名",
       "cohortNamePlaceholder": "コーホートの名前を指定してください",
       "clearAllFilters": "すべてのフィルターをクリア",
       "defaultFilterState": "データセットのコーホートにパラメーターを追加するフィルターを選択します。現在表示しているコーホートからのフィルターは、事前に設定されています。",
       "delete": "削除",
-      "invalidValueError": "Value should be between {0} and {1}",
-      "minimumGreaterThanMaximum": "Minimum value inputs must be less than maximum value inputs.",
+      "invalidValueError": "値は {0} から {1} までである必要があります",
+      "minimumGreaterThanMaximum": "最小値の入力は、最大値の入力よりも小さくする必要があります。",
       "noAddedFilters": "フィルターなし",
       "placeholderName": "コーホート {0}",
       "save": "保存",
-      "saveAndSwitch": "Save and switch",
-      "selectFilter": "フィルターを選択してください"
+      "saveAndSwitch": "保存して切り替える",
+      "selectFilter": "フィルターを選択してください",
+      "noFiltersApplied": "No filters applied",
+      "filterAdded": "Filter added"
     },
     "Columns": {
       "classificationOutcome": "分類結果",
@@ -760,11 +839,13 @@
       "falsePositive": "擬陽性",
       "none": "カウント",
       "predictedProbabilities": "予測確率",
+      "predictedLabels": "Predicted labels",
+      "trueLabels": "True labels",
       "regressionError": "回帰エラー",
       "trueNegative": "真陰性",
       "truePositive": "真陽性",
-      "correctlyClassified": "Correctly classified",
-      "misclassified": "Misclassified"
+      "correctlyClassified": "正しく分類されました",
+      "misclassified": "誤分類"
     },
     "CrossClass": {
       "absoluteValInfo": "絶対値の平均: 指定できるすべてのクラスにおける特徴量の重要性の合計をクラスの数で割ったものを 表示します。",
@@ -780,15 +861,16 @@
       "aggregatePlots": "集計のプロット",
       "chartType": "グラフの種類",
       "colorValue": "色の値",
-      "helperText": "Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups. Learn about the over/under presentation in your dataset.",
+      "infoTitle": "Additional information on data analysis chart view",
+      "helperText": "データセット コーホートを作成し、予測される結果、データセットの特徴量、エラー グループなどのフィルターを使ってデータセットの統計を分析します。データセットの提示過剰または提示不足について確認します。",
       "individualDatapoints": "個々のデータポイント",
       "missingParameters": "このタブには、評価データセットを指定する必要があります。",
       "noColor": "なし",
-      "datasetCohortDropdown": "Dataset cohort dropdown"
+      "datasetCohortDropdown": "データセットのコーホート ドロップダウン"
     },
     "DependencePlot": {
       "featureImportanceOf": "特徴量の重要度:",
-      "placeholder": "Select a feature to show its dependence plot"
+      "placeholder": "依存プロットを表示する特徴を選択する"
     },
     "ExplanationScatter": {
       "class": "クラス:",
@@ -827,14 +909,14 @@
       "violinText": "バイオリン"
     },
     "FilterOperations": {
-      "equals": " equal to {0}",
+      "equals": " {0} と等しい",
       "excludes": " {0} を除外する ",
-      "greaterThan": " greater than {0}",
-      "greaterThanEquals": " greater than or equal to {0}",
+      "greaterThan": " {0} より大きい",
+      "greaterThanEquals": " {0} 以上",
       "inTheRangeOf": "[ {0} ]",
       "includes": " {0} を含む ",
-      "lessThan": " less than {0}",
-      "lessThanEquals": " less than or equal to {0}",
+      "lessThan": " {0} 未満",
+      "lessThanEquals": " {0} 以下",
       "overflowFilterArgs": "{0} と他 {1} 個"
     },
     "Filters": {
@@ -857,7 +939,7 @@
       "helperText": "モデル全体の予測に影響を与える上位 K の特徴量の重要度を探索します。スライダーを使用して、特徴量の重要度を降順で表示します。"
     },
     "GlobalTab": {
-      "absoluteValues": "View as absolute values",
+      "absoluteValues": "絶対値として表示",
       "aggregateFeatureImportance": "特徴量の重要度の集計",
       "collapsedHelperText": "モデル予測全体に影響を与える上位 K の重要な特徴量について説明します。",
       "datapoint": "データポイント",
@@ -868,16 +950,18 @@
       "dependencePlotHelperText": "この従属プロットは、その特徴量の重要度の値と対応する特徴量の重要度の関係を示しています。",
       "dependencePlotTitle": "従属プロット",
       "helperText": "モデル全体の予測に影響を与える上位 k 個の重要な特徴量を調査することができます (グローバルな説明)。スライダーを使用して、機能の重要度を降順に表示します。すべてのコーホートの特徴量の重要度が横に並んで表示され、凡例でコーホートを選択することにより、表示を切り替えることができます。グラフ内の任意の特徴量をクリックすると、選択した特徴量の値が予測にどのように影響するかを示す密度プロットが下に表示されます。",
+      "infoTitle": "Additional information on aggregate feature importance",
       "legendHelpText": "凡例項目をクリックして、プロットのコーホートのオンとオフを切り替えます。",
       "missingParameters": "このタブには、ローカル特徴量の重要度パラメーターを指定する必要があります。",
-      "sortBy": "Sort by datapoint",
+      "sortByCohort": "Sort by cohort",
+      "sortBy": "データポイントで並べ替え",
       "topAtoB": "重要度別の上位 {0} 機能",
       "viewDependencePlotFor": "従属プロットの表示:",
       "weightOptions": "クラスの重要度の重み",
-      "weightOptionsDropdown": "Class importance weights dropdown"
+      "weightOptionsDropdown": "クラスの重要度の重みドロップダウン"
     },
     "IcePlot": {
-      "close": "Close",
+      "close": "閉じる",
       "errorPrefix": "エラーが発生しました: {0}",
       "featurePickerLabel": "特徴量:",
       "integerError": "整数にする必要があります",
@@ -890,7 +974,7 @@
       "prediction": "予測",
       "predictionLabel": "予測: {0}",
       "probabilityLabel": "確率 : {0}",
-      "pythonError": "Python error",
+      "pythonError": "Python エラー",
       "stepInputLabel": "手順:",
       "submitPrompt": "ICE プロットを表示する範囲を送信してください",
       "topLevelErrorMessage": "パラメーターのエラー"
@@ -912,16 +996,26 @@
     },
     "Statistics": {
       "accuracy": "正確性: {0}",
-      "fnr": "False negative rate: {0}",
-      "fpr": "False positive rate: {0}",
+      "bleuScore": "Bleu score: {0}",
+      "bertScore": "Bert score: {0}",
+      "exactMatchRatio": "Exact match ratio: {0}",
+      "rougeScore": "Rouge Score: {0}",
+      "fnr": "擬陰性の割合: {0}",
+      "fpr": "擬陽性の割合: {0}",
+      "hammingScore": "Hamming score: {0}",
       "meanPrediction": "平均予測 {0}",
-      "mse": "Mean squared error: {0}",
+      "meteorScore": "Meteor Score: {0}",
+      "mse": "平均二乗誤差: {0}",
       "precision": "適合率: {0}",
       "rSquared": "R²: {0}",
       "recall": "再現率: {0}",
-      "selectionRate": "Selection rate: {0}",
-      "mae": "Mean absolute error: {0}",
-      "f1Score": "F1 score: {0}"
+      "selectionRate": "選択率: {0}",
+      "mae": "平均絶対誤差: {0}",
+      "f1Score": "F1 スコア: {0}",
+      "samples": "Sample size: {0}",
+      "meanAveragePrecision": "Mean average precision: {0}",
+      "averagePrecision": "Average precision: {0}",
+      "averageRecall": "Average recall: {0}"
     },
     "ValidationErrors": {
       "addFilters": "フィルターの追加",
@@ -957,7 +1051,7 @@
       "dataPointInfo": "データ ポイントの情報",
       "deltaLabel": "差分",
       "disclaimer": "免責事項: これらは多くの概算に基づいた説明であり、予測の \"原因\" ではありません。因果推論の厳密な数学的頑健性がない場合、このツールに基づいて実際の意思決定を行わないようユーザーにお勧めします。",
-      "featureImportanceGetStartedText": "Select a datapoint in the table above to view its local feature importances",
+      "featureImportanceGetStartedText": "上のテーブルのデータポイントを選択して、そのローカル特徴量の重要度を表示します",
       "featureImportanceLackingParameters": "ローカル特徴量の重要度を指定して、各特徴量がどのように個々の予測に影響を与えるかを確認してください。",
       "featureImportancePlot": "特徴量の重要度プロット",
       "featureValues": "特徴量の値",
@@ -1028,50 +1122,94 @@
   },
   "InterpretText": {
     "View": {
-      "interpretibilityDashboard": "Interpretability Dashboard",
-      "importantWords": "Most Important Words",
-      "topFeatureList": "Top feature list analysis",
-      "allButton": "ALL FEATURES",
-      "negButton": "NEGATIVE FEATURES",
-      "posButton": "POSITIVE FEATURES",
-      "legendText": "Positive scalar feature importances represents the extent that the word was important towards the classification of your selected label, and negative scalar feature importances represents words that encouraged your model away from your selected label.",
-      "label": "Label",
+      "interpretibilityDashboard": "解釈可能性ダッシュボード",
+      "importantWords": "Show most Important Words",
+      "topFeatureList": "上位特徴リストの分析",
+      "allButton": "すべての特徴量",
+      "negButton": "負の特徴",
+      "posButton": "正の特徴量",
+      "legendText": "Positive scalar feature importances represent the extent that the words were important towards the classification of your selected label, and negative scalar feature importances represent words that encouraged your model away from your selected label.",
+      "label": "ラベル",
       "colon": ": "
     },
     "Legend": {
-      "featureLegend": "TEXT FEATURE LEGEND",
-      "posFeatureImportance": "POSITIVE FEATURE IMPORTANCE",
-      "negFeatureImportance": "NEGATIVE FEATURE IMPORTANCE"
+      "featureLegend": "テキスト特徴の凡例",
+      "posFeatureImportance": "正の特徴量の重要度",
+      "negFeatureImportance": "負の特徴量の重要度"
     },
     "BarChart": {
-      "featureImportance": "FEATURE IMPORTANCE"
+      "featureImportance": "特徴量の重要度"
     }
   },
   "InterpretVision": {
+    "Cohort": {
+      "close": "Close",
+      "errorCohortName": "Please choose a unique cohort name.",
+      "errorNumSelected": "Please select at least one (1) item.",
+      "itemsSelectedSingular": "item selected",
+      "itemsSelectedPlural": "items selected",
+      "save": "Save cohort",
+      "saveAndClose": "Save and close",
+      "saveAndSwitch": "Save and switch",
+      "textField": "New cohort name",
+      "title": "Save new cohort"
+    },
     "Dashboard": {
-      "allData": "All Data",
-      "columnOne": "Title",
-      "columnTwo": "Index",
+      "allData": "すべてのデータ",
+      "columnOne": "Image",
+      "columnTwo": "インデックス",
       "columnThree": "True Y",
-      "columnFour": "Predicted Y",
-      "columnFive": "Other metadata",
-      "filter": "Filter",
-      "pageSize": "Page size: ",
-      "search": "Search",
-      "settings": "Settings",
-      "tabOptionFirst": "Image explorer view",
-      "tabOptionSecond": "Table view",
-      "tabOptionThird": "Data characteristics",
-      "thumbnailSize": "Thumbnail size",
-      "titleBarError": "Error instances",
-      "titleBarSuccess": "Success instances"
+      "columnFour": "予測された Y",
+      "columnFive": "その他のメタデータ",
+      "chooseObject": "Choose a detected object",
+      "examples": "examples",
+      "filter": "フィルター",
+      "indexLabel": "Image ",
+      "labelTypeDropdown": "Select label type",
+      "labelVisibilityDropdown": "Select labels to display",
+      "legendFailure": "failure",
+      "legendSuccess": "success",
+      "loading": "Computing explanation for index",
+      "multiselect": "Multiselect",
+      "notdefined": "object scenario not defined",
+      "objectSelect": "Object Selection",
+      "pageSize": "ページ サイズ: ",
+      "panelTitle": "Selected instance",
+      "panelExplanation": "Explanation",
+      "panelInformation": "Information",
+      "predictedLabel": "Predicted label",
+      "predictedY": "Predicted: ",
+      "prefix": "Object: ",
+      "rows": "Rows: ",
+      "search": "検索",
+      "selectAll": "Select all",
+      "settings": "設定",
+      "showAll": "Show all",
+      "tabOptionFirst": "イメージ エクスプローラー ビュー",
+      "tabOptionSecond": "テーブル ビュー",
+      "tabOptionThird": "Class view",
+      "thumbnailSize": "サムネイルのサイズ",
+      "titleBarError": "エラー インスタンス",
+      "titleBarSuccess": "成功インスタンス",
+      "trueY": "Ground truth: "
     }
   },
   "ModelAssessment": {
     "AddingTab": {
       "AddButtonText": "追加",
       "CalloutContent": "コンポーネント (エラー ツリー ビュー、エラー ヒート マップ) を追加すると、下のコンポーネントに表示されるグローバル コーホートからデータをフィルター処理できるようになります。",
-      "CalloutTitle": "コンポーネントの追加"
+      "CalloutTitle": "コンポーネントの追加",
+      "TabAddedMessage": {
+        "DataAnalysis": "Data analysis component added",
+        "FeatureImportances": "Feature importances component added",
+        "ErrorAnalysis": "Error analysis component added",
+        "Fairness": "Fairness component added",
+        "ModelOverview": "Model overview component added",
+        "CausalAnalysis": "Causal analysis component added",
+        "Counterfactuals": "Counterfactuals component added",
+        "Vision": "Vision data explorer component added",
+        "Forecasting": "Forecasting what-if component added"
+      }
     },
     "CausalAnalysis": {
       "Table": {
@@ -1086,19 +1224,20 @@
     },
     "Cohort": {
       "apply": "適用",
-      "delete": "Delete",
+      "delete": "削除",
       "cancel": "キャンセル",
       "cohortInfo": "コーホート情報",
       "cohortList": "コーホート リスト",
       "deleteCohort": "{0} を削除中ですか?",
       "deleteConfirm": "このコーホートを削除しますか?",
       "selectCohort": "コーホートの選択",
-      "shiftCohort": "Switch cohort",
+      "shiftCohort": "コーホートの切り替え",
       "shiftCohortDescription": "コーホート リストでコーホートを選択します。デジタル ダッシュボードにコーホートを適用します。"
     },
     "CohortInformation": {
-      "ShiftCohort": "Switch cohort",
-      "NewCohort": "New cohort",
+      "ShiftCohort": "コーホートの切り替え",
+      "SwitchTimeSeries": "Switch time series",
+      "NewCohort": "新しいコーホート",
       "DataPoints": "データポイントの数",
       "DefaultCohort": " (既定)",
       "Filters": "ファイル数",
@@ -1109,18 +1248,22 @@
       "CohortSettingsTitle": "コーホートの設定"
     },
     "ComponentNames": {
+      "ChartView": "Chart view",
       "CausalAnalysis": "原因分析",
       "Counterfactuals": "反事実",
-      "DataAnalysis": "Data analysis",
-      "DataBalance": "Data balance",
+      "DataAnalysis": "データ分析",
+      "DataBalance": "データ バランス",
       "DataExplorer": "データ エクスプローラー",
       "ErrorAnalysis": "エラー分析",
       "Fairness": "公平性",
       "FeatureImportances": "特徴量の重要度",
-      "ModelOverview": "Model overview"
+      "Forecasting": "Forecasting",
+      "ModelOverview": "モデルの概要",
+      "TableView": "Table view",
+      "VisionTab": "Vision data explorer"
     },
     "DashboardSettings": {
-      "Content": "This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below.",
+      "Content": "このリストには、ダッシュボードのレイアウトが表示されます。エラー分析コンポーネントを使用してデータをフィルター処理し、以下のコンポーネントで表示できます。",
       "DashboardComponents": "ダッシュボードのコンポーネント",
       "DataPoints": "データポイントの数",
       "DeleteDialog": {
@@ -1129,164 +1272,171 @@
         "Delete": "削除",
         "Title": "{0} を削除しますか?"
       },
-      "Title": "Dashboard configuration"
+      "Title": "ダッシュボードの構成"
     },
     "DataBalance": {
       "AggregateBalanceMeasures": {
         "Callout": {
-          "Description": "Aggregate balance measures allow us to obtain a higher notion of inequality about our dataset. They are calculated on the set of our columns of interest and do not depend on the label column. These measures look at the distribution of records across all feature value combinations of our columns of interest.",
-          "Title": "What are aggregate balance measures?"
+          "Description": "集計バランス メジャーを使用すると、データセットに関する不均等のより高い概念を取得できます。これらは関心のある列のセットに基づいて計算され、ラベル列に依存しません。これらのメジャーは、対象の列のすべての特徴値の組み合わせにおけるレコードの分布を確認します。",
+          "Title": "集計バランス メジャーとは?"
         },
         "Measures": {
           "AtkinsonIndex": {
-            "Description": "The Atkinson Index is a measure of income inequality that presents the percentage of total income that a given society would have to forego in order to have more equal shares of income between its citizens. For the dataset, this represents the percentage of records that need to be dropped to have a perfectly balanced dataset with respect to the columns of interest. The index lies between 0 and 1, where smaller values of the index indicate lower levels of inequality.",
-            "Name": "Atkinson Index"
+            "Description": "Atkinson インデックスは、特定の社会が市民間でより均等な所得の共有を得るために先取りしなければならない合計所得の割合を示す所得不均等のメジャーです。データセットの場合、対象の列に対して完全にバランスの取れたデータセットを作成するために削除する必要があるレコードの割合を表します。インデックスは 0 と 1 の間にあります。インデックスの値が小さいほど不均等のレベルが低くなります。",
+            "Name": "Atkinson インデックス"
           },
           "TheilLIndex": {
-            "Description": "Theil's L Index is a measure of income inequality that is calculated using the Generalized Entropy Index with α = 0, and therefore it is more sensitive to differences at the lower end of the distribution. This index better captures record combinations that don't occur too often in the dataset. It is also referred to as the mean log deviation measure.",
-            "Name": "Theil Index (L)"
+            "Description": "Theil の L インデックスは、α = 0 の汎用エントロピ インデックスを使用して計算される所得不均等のインデックスであるため、分布の下位の差に敏感です。このインデックスは、データセット内でそんなに頻繁に発生しないレコードの組み合わせをより良くキャプチャーすることができます。これは平均対数偏差とも呼ばれます。",
+            "Name": "Theil インデックス (L)"
           },
           "TheilTIndex": {
-            "Description": "Theil's T Index is a measure of income inequality that is calculated using the Generalized Entropy Index with α = 1, and therefore it is more sensitive to differences at the higher end of the distribution. This index better captures record combinations that occur very often in the dataset.",
-            "Name": "Theil Index (T)"
+            "Description": "Theil の T インデックスは、α = 1 の汎用エントロピ インデックスを使用して計算される所得不均等のインデックスであるため、分布の上位の差に敏感です。このインデックスは、データセット内で非常に頻繁に発生するレコードの組み合わせをより良くキャプチャーすることができます。",
+            "Name": "Theil インデックス (T)"
           }
         },
-        "MeasuresNotComputed": "Aggregate balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
-        "Name": "Aggregate balance measures",
+        "MeasuresNotComputed": "集計バランス メジャーが計算されませんでした。それらを計算するには、次のことを確認してください: (1) タスクの種類が 'classification' で、(2) カテゴリ特徴のリストが有効で空ではなく、(3) 分析情報の計算時にエラーがスローされない。",
+        "Name": "集計バランス メジャー",
         "Table": {
-          "Description": "Description",
-          "FeatureName": "Feature name",
-          "FeatureValue": "Feature value"
+          "Description": "説明",
+          "FeatureName": "特徴名",
+          "FeatureValue": "特徴量の値"
         }
       },
       "DistributionBalanceMeasures": {
         "Callout": {
-          "Description": "Distribution balance measures allow us to compare our data with a reference uniform distribution. These measures are calculated per column of interest and do not depend on the label column.",
-          "Title": "What are distribution balance measures?"
+          "Description": "分布バランス メジャーを使用すると、データを参照の均等分布と比較できます。これらのメジャーは関心のある列ごとに計算され、ラベル列に依存しません。",
+          "Title": "分布バランス メジャーとは何ですか?"
         },
         "Chart": {
           "Axes": {
-            "DistributionMeasure": "Distribution measure",
-            "MeasureValue": "Measure value"
+            "DistributionMeasure": "分布メジャー",
+            "MeasureValue": "メジャー値"
           },
-          "Title1": "Comparing",
-          "Title2": "with the Uniform Distribution"
+          "Title1": "比較中",
+          "Title2": "均一分布付き"
         },
         "Measures": {
           "ChiSquarePValue": {
-            "Description": "The p-value of the chi-square test gives evidence against the null hypothesis that the difference in observed and expected frequencies is by random chance.",
-            "Name": "Chi-Square P-Value"
+            "Description": "カイ 2 乗テストの p 値は、観察された頻度と予期される頻度の差がランダムな確率によるものであるという null 仮説に対する証拠を示します。",
+            "Name": "カイ 2 乗 P 値"
           },
           "ChiSquareStatistic": {
-            "Description": "The chi-square test validates the null hypothesis that the categorical data has the given frequencies when compared with the expected frequencies in each category.",
-            "Name": "Chi-Square (χ2) Statistic"
+            "Description": "カイ 2 乗テストは、各カテゴリの期待される頻度と比較した場合に、カテゴリ データに指定された頻度が含まれているという null 仮説を検証します。",
+            "Name": "カイ 2 乗 (χ2) 統計"
           },
           "CrossEntropy": {
-            "Description": "The cross-entropy, also known as log loss, between two probability distributions is a measure from information theory that computes the negative summation of our dataset's probability distribution multiplied by the log of the reference probability distribution.",
-            "Name": "Cross Entropy"
+            "Description": "2 つの確率分布の間のクロス エントロピ (対数損失とも呼ばれます) は、データセットの確率分布の負の総和を計算する情報理論のメジャーで、参照確率分布の対数を掛けます。",
+            "Name": "クロス エントロピ"
           },
           "InfiniteNormDistance": {
-            "Description": "The infinite norm distance, also called the Chebyshev distance or chessboard distance, is a measure which states that the distance between two vectors is the greatest of their difference along any coordinate dimension. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
-            "Name": "Infinite Norm Distance"
+            "Description": "Chebyshev 距離またはチェスボード距離とも呼ばれる無限標準距離は、2 つのベクトル間の距離が任意の座標ディメンションに沿った差の最大値であることを示すメジャーです。メジャーは負でない値で、値 0 は、2 つの分布が等しいことを意味します。",
+            "Name": "無限標準距離"
           },
           "JSDistance": {
-            "Description": "The Jensen-Shannon (JS) distance measures the similarity between two probability distributions. It is the symmetrized and smoothed version of the Kullback-Leibler (KL) divergence and the square root of the JS divergence. Its range is [0, 1], in which a measure value of 0 means the distribution is perfectly balanced.",
-            "Name": "Jensen-Shannon Distance"
+            "Description": "Jensen-Shannon (JS) 距離は、2 つの確率分布間の類似性を測定します。これは、Kullback-Leibler (KL) の相違と JS 相違の平方根の、対称化およびスムージングされたバージョンです。範囲は [0, 1] で、メジャー値 0 は分布のバランスが完全であることを意味します。",
+            "Name": "Jensen-Shannon 距離"
           },
           "KLDivergence": {
-            "Description": "The Kullback-Leibler (KL) divergence is a measure of how one probability distribution is different from a second probability distribution. It represents the amount of information lost when one distribution is used to approximate the other. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
-            "Name": "Kullback-Leibler Divergence"
+            "Description": "Kullback-Leibler (KL) 相違は、1 つの確率分布が 2 番目の確率分布とどのように異なるかを示す測定値です。これは、一方の分布が他方の分布の概算に使用されるときに失われた情報の量を表します。メジャーは負でない値で、値 0 は、2 つの分布が等しいことを意味します。",
+            "Name": "Kullback-Leibler 相違"
           },
           "TotalVariationDistance": {
-            "Description": "The total variation distance is equal to half the Manhattan (L1) distance between two distributions. It is computed using the summation of absolute value differences between two distributions. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
-            "Name": "Total Variation Distance"
+            "Description": "合計バリエーション距離は、2 つの分布間の Manhattan (L1) 距離の半分に等しくなります。これは、2 つの分布間の絶対値の相違の合計を使用して計算されます。メジャーは負でない値です。値 0 は、2 つの分布が等しいことを意味します。",
+            "Name": "バリエーションの合計距離"
           },
           "WassersteinDistance": {
-            "Description": "The Wasserstein distance is also known as the earth mover's distance, since it can be seen as the minimum amount of 'work' required to transform one distribution into another. Work is measured as the amount of distribution weight that must be moved, multiplied by the distance it has to be moved. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
-            "Name": "Wasserstein Distance"
+            "Description": "1 つの分布を別の分布に変換するために必要な最小量の \"作業\" と見なすことができるため、Wasserstein 距離は earth mover 距離とも呼ばれます。作業は、移動する必要がある分布の重みの量に、移動する必要がある距離を掛けた値として測定されます。メジャーは負ではない値であり、値 0 は 2 つの分布が等しいことを意味します。",
+            "Name": "Wasserstein 距離"
           }
         },
-        "MeasuresNotComputed": "Distribution balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
-        "Name": "Distribution balance measures"
+        "MeasuresNotComputed": "分布バランス メジャーが計算されませんでした。それらを計算するには、次のことを確認してください: (1) タスクの種類が 'classification' で、(2) カテゴリ特徴のリストが有効で空ではなく、(3) 分析情報の計算時にエラーがスローされない。",
+        "Name": "分布バランス メジャー"
       },
       "FeatureBalanceMeasures": {
         "Callout": {
-          "Description": "Feature balance measures allow us to see whether each combination of feature values is receiving the positive outcome (true prediction) at balanced probability.",
-          "Title": "What are feature balance measures?"
+          "Description": "特徴のバランスメジャーを使用すると、特徴量値の各組み合わせが、バランスの取れた確率で正の結果 (真の予測) を受け取っているかどうかを確認できます。",
+          "Title": "特徴のバランス メジャーとは何ですか?"
         },
         "Chart": {
           "Axes": {
-            "ClassA": "Class A",
-            "ClassB": "Class B"
+            "ClassA": "クラス A",
+            "ClassB": "クラス B"
           },
           "Tooltip": {
-            "And": "and",
-            "ValueDescription1": "have a",
-            "ValueDescription2": "of"
+            "And": "および",
+            "ValueDescription1": "次を含む:",
+            "ValueDescription2": "/"
           }
         },
-        "Description1": "Showing",
-        "Description2": "gaps on all classes of",
-        "Description3": "for label",
-        "FeaturePicker": "Feature",
-        "LabelPicker": "Positive label",
-        "MeasurePicker": "Measure",
+        "Description1": "表示中",
+        "Description2": "すべてのクラスのギャップ",
+        "Description3": "ラベル用",
+        "FeaturePicker": "特徴",
+        "LabelPicker": "正のラベル",
+        "MeasurePicker": "メジャー",
         "Measures": {
           "JaccardIndex": {
-            "Description": "gap represents the difference between the Jaccard Index of Class A and Jaccard Index of Class B. Jaccard Index itself is an intersection-over-union measure and therefore has a range of [0, 1], where 0 means that the distributions are completely disjoint and 1 means they are completely identical.",
-            "Name": "Jaccard Index"
+            "Description": "ギャップは、クラス A の Jaccard インデックスとクラス B の Jaccard インデックスの差を表します。Jaccard インデックス自体は IoU メジャーであるため、[0, 1] の範囲を持ちます。0 は分布が完全に不整合であることを意味し、1 は完全に同じであることを意味します。",
+            "Name": "Jaccard インデックス"
           },
           "KendallRankCorrelation": {
-            "Description": "(KRC) gap represents the difference between the KRC of Class A and KRC of Class B. Kendall Rank Correlation itself is a correlation statistic used to measure the ordinal association between two measured quantities, and the measure is high when observations have a similar rank and low when observations have a dissimilar rank between the two variables.",
-            "Name": "Kendall Rank Correlation"
+            "Description": "(KRC) ギャップは、クラス A の KRC とクラス B の KRC の違いを表します。Kendall の順位相関関係自体は、つの測定量の順序的な関連性を測定するために用いられる相関統計量を測定するために使用される相関統計であり、観察値が 2 つの変数間で異なる順位を持つ場合は、測定の順位が類似している場合はメジャーが高になります。",
+            "Name": "Kendall の順位相関関係"
           },
           "LogLikelihoodRatio": {
-            "Description": "(LLR) gap represents the difference between the LLR of Class A and LLR of Class B. Log Likelihood Ratio itself is a correlation statistic used to measure the ratio between the probability of a feature with the positive label and the probability of the positive label.",
-            "Name": "Log-Likelihood Ratio"
+            "Description": "(LLR) ギャップは、クラス A の LLR とクラス B の LLR の差を表します。対数確率比自体は、正のラベルを持つ特徴の確率と正のラベルの確率の比率を測定するために使用される相関関係統計量です。",
+            "Name": "対数確率比"
           },
           "PointwiseMutualInformation": {
-            "Description": "(PMI) gap represents the difference between the PMI of Class A and PMI of Class B. Pointwise Mutual Information itself is a entropy measure that, given Class A and Class B, quantifies the discrepancy between the probability of their coincidence given their joint distribution and their individual distributions (assuming independence).",
-            "Name": "Pointwise Mutual Information"
+            "Description": "(PMI) ギャップは、クラス A の PMI とクラス B の PMI の違いを表します。自己相互情報量自体はエントロピ メジャーであり、クラス A とクラス B では、結合分布と個々の分布 (独立を仮定) を指定した場合の、その同時実行の確率の不一致を定量化するものです。",
+            "Name": "自己相互情報量"
           },
           "SorensenDiceCoefficient": {
-            "Description": "(SDC) gap represents the difference between the SDC of Class A and SDC of Class B. Sørensen-Dice Coefficient itself is an intserction-over-union measure that is used to guage the similarity of two samples. It is related to the F1 score, and it equals twice the number of elements common to both sets divided by the sum of the number of elements in each set.",
-            "Name": "Sørensen-Dice Coefficient"
+            "Description": "(SDC) ギャップは、クラス A の SDC とクラス B の SDC の差を表します。Sørensen-Dice 係数自体は、2 つのサンプルの類似性を示すために使用される IoU メジャーです。F1 スコアに関連しており、両方のセットに共通する要素の数の 2 倍を各セット内の要素数の合計で除算した値に等しくなります。",
+            "Name": "Sørensen-Dice 係数"
           },
           "StatisticalParity": {
-            "Description": "(SP) gap represents the difference between the SP of Class A and SP of Class B. Statistical Parity itself measures the positive rate, which is how much one class receives the positive outcome. The gap measures the difference between the two classes' positive rates. As close to 0 means both classes receive the positive outcome equally. A positive value means the first class sees the positive label more than the second class. A negative value means the opposite.",
-            "Name": "Statistical Parity"
+            "Description": "(SP) ギャップは、Class A の SP と Class B の SP の差を表します。統計パリティ自体は正の比率を測定します。これは、1 つのクラスが正の結果を受け取る量です。ギャップは、2 つのクラスの正の比率の差を測定します。0 に近いほど、両方のクラスが正の結果を等しく受け取ります。正の値は、最初のクラスが 2 番目のクラスよりも多くの正のラベルを参照することを意味します。負の値はその逆を意味します。",
+            "Name": "統計パリティ"
           },
           "TTest": {
-            "Description": "gap represents the difference between the t-test of Class A and t-test of Class B. t-test itself is a correlation statistic used to compare the means of two groups (pairwise). The gap value is looked up on the t-distribution table to tell if the two groups are significantly different.",
+            "Description": "ギャップは、クラス A の t-test とクラス B の t-test の差を表します。t-test 自体は、2 つのグループの平均 (ペアワイズ) を比較するために使用される相関統計です。ギャップ値は t-distribution テーブルで参照され、2 つのグループが有意に異なるかどうかを確認します。",
             "Name": "t-test"
           },
           "TTestPValue": {
-            "Description": "gap represents the statistical signifiance of the t-test gap between Class A and Class B. The t-test gap value and degrees of freedom are used to calculate the p-value.",
+            "Description": "ギャップは、クラス A とクラス B の間の t-test ギャップの統計的有意性を表します。t-test ギャップ値と自由度は、p 値の計算に使用されます。",
             "Name": "t-test p-value"
           }
         },
-        "MeasuresNotComputed": "Feature balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
-        "Name": "Feature balance measures"
+        "MeasuresNotComputed": "特徴量バランス メジャーが計算されませんでした。それらを計算するには、次のことを確認してください: (1) タスクの種類が 'classification' で、(2) カテゴリ特徴のリストが有効で空ではなく、(3) 分析情報の計算時にエラーがスローされない。",
+        "Name": "特徴量のバランス メジャーとは何ですか?"
       },
-      "LearnMore": "Learn more",
-      "MeasuresNotComputed": "This tab requires data balance measures to be computed for this dataset. Measures are computed when a 'classification' task type and a list of non-empty categorical features are specified."
+      "LearnMore": "詳細情報",
+      "MeasuresNotComputed": "このタブでは、このデータセットのデータ バランス メジャーを計算する必要があります。メジャーは、'classification' タスクの種類と空でないカテゴリ特徴のバランスが指定されたときに計算されます。"
     },
     "FeatureImportances": {
       "CorrectPredictions": "正しい予測",
       "GlobalExplanation": "特徴量の重要度集約",
       "IncorrectPredictions": "正しくない予測",
-      "IndividualFeature": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below.",
+      "InfoTitle": "Additional information on data analysis table view",
+      "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).",
       "LocalExplanation": "個々の特徴量の重要度",
-      "SelectionCounter": "{0}/{1} datapoints selected",
-      "SelectionLimit": "Up to 5 datapoints can be selected at this time."
+      "SelectionCounter": "{0}/{1} データポイントが選択されました",
+      "SelectionLimit": "現時点では最大 5 つのデータポイントを選択できます。",
+      "RowCheckboxAriaLabel": "Row checkbox",
+      "SelectionColumnAriaLabel": "Toggle selection"
+    },
+    "IndividualFeatureImportanceView": {
+      "SmallInstanceSelection": "Instance selection"
     },
     "MainMenu": {
-      "DashboardSettings": "Dashboard configuration",
+      "DashboardSettings": "ダッシュボードの構成",
       "cohortInfo": "コーホート情報",
       "cohortList": "コーホート リスト",
       "cohortSettings": "コーホートの設定",
       "createCohort": "コーホートの作成",
-      "shiftCohort": "Switch cohort"
+      "shiftCohort": "コーホートの切り替え"
     },
     "Navigation": {
       "modelStatistics": "モデルの統計情報"
@@ -1294,117 +1444,278 @@
     "ModelOverview": {
       "metrics": {
         "accuracy": {
-          "name": "Accuracy",
-          "description": "The fraction of data points classified correctly."
+          "name": "Accuracy score",
+          "description": "正しく分類されたデータ ポイントの割合。"
+        },
+        "exactMatchRatio": {
+          "name": "Exact match ratio",
+          "description": "The ratio of instances classified correctly for every label."
+        },
+        "meteorScore": {
+          "name": "Meteor Score",
+          "description": "METEOR Score is calculated based on the harmonic mean of precision and recall, with recall weighted more than precision in question answering task."
+        },
+        "bleuScore": {
+          "name": "Bleu Score",
+          "description": "Bleu Score measures the ratio of words (and/or n-grams) in the machine generated text that appeared in the reference text in question answering task."
+        },
+        "bertScore": {
+          "name": "Bert Score",
+          "description": "BERTScore focuses on computing semantic similarity between tokens of reference and machine generated text in question answering task."
+        },
+        "rougeScore": {
+          "name": "Rouge Score",
+          "description": "Rouge Score measures the ratio of words (and/or n-grams) in the reference text that appeared in the machine generated text in question answering task."
+        },
+        "hammingScore": {
+          "name": "Hamming score",
+          "description": "The average ratio of labels classified correctly among those classified as 1 in multilabel task."
         },
         "f1Score": {
-          "name": "F1 score",
-          "description": "F1-score is the harmonic mean of precision and recall."
+          "name": "F1 スコア",
+          "description": "F1 スコアは適合率と再現率の調和平均です。"
+        },
+        "f1ScoreMacro": {
+          "name": "Macro F1 score",
+          "description": "Macro F1 score is the harmonic mean of precision and recall for each class, with each class weighted equally."
+        },
+        "f1ScoreMicro": {
+          "name": "Micro F1 score",
+          "description": "Micro F1 score is the harmonic mean of precision and recall for each class, with each class weighted according to how many instances it contains."
         },
         "meanAbsoluteError": {
-          "name": "Mean absolute error",
-          "description": "The average of absolute values of errors. More robust to outliers than MSE."
+          "name": "平均絶対誤差",
+          "description": "誤差の絶対値の平均値。MSE よりも外れ値に対して頑健です。"
         },
         "meanSquaredError": {
-          "name": "Mean squared error",
-          "description": "The average of squared errors."
+          "name": "平均二乗誤差",
+          "description": "二乗誤差の平均値。"
         },
         "precision": {
-          "name": "Precision score",
-          "description": "The fraction of data points classified correctly among those classified as 1."
+          "name": "精度スコア",
+          "description": "1 に分類されたデータ ポイントの中で正しく分類されたデータ ポイントの割合。"
+        },
+        "precisionMacro": {
+          "name": "Macro Precision score",
+          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted equally."
+        },
+        "precisionMicro": {
+          "name": "Micro Precision score",
+          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted according to how many instances it contains."
         },
         "recall": {
-          "name": "Recall score",
-          "description": "The fraction of data points classified correctly among those whose true label is 1. Alternative names: true positive rate, sensitivity."
+          "name": "再現率スコア",
+          "description": "true ラベルが 1 のデータ ポイントの中で正しく分類されたデータ ポイントの割合。代替名: 真陽性率、感度。"
+        },
+        "recallMacro": {
+          "name": "Macro Recall score",
+          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted equally."
+        },
+        "recallMicro": {
+          "name": "Micro Recall score",
+          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted according to how many instances it contains."
         },
         "falsePositiveRate": {
-          "name": "False positive rate",
-          "description": "The fraction of data points classified incorrectly among those whose true label is 0."
+          "name": "擬陽性の割合",
+          "description": "true ラベルが 0 のデータ ポイントの中で誤って分類されたものの割合です。"
         },
         "falseNegativeRate": {
-          "name": "False negative rate",
-          "description": "The fraction of data points classified incorrectly among those whose true label is 1."
+          "name": "擬陰性の割合",
+          "description": "true ラベルが 1 のデータ ポイントの中で誤って分類されたものの割合です。"
         },
         "selectionRate": {
-          "name": "Selection rate",
-          "description": "The percentage of predictions with label 1."
+          "name": "選択率",
+          "description": "ラベル 1 を含む予測の割合。"
         },
         "meanPrediction": {
-          "name": "Mean prediction",
-          "description": "The average of all predictions."
+          "name": "平均予測",
+          "description": "すべての予測の平均。"
         },
-        "fairnessMetricDifference": "Difference",
-        "fairnessMetricRatio": "Ratio"
+        "meanAveragePrecision": {
+          "name": "Mean Average Precision score",
+          "description": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall."
+        },
+        "averagePrecision": {
+          "name": "Average Precision score",
+          "description": "Average precision for object detection models is calculated for a selected class."
+        },
+        "averageRecall": {
+          "name": "Average Recall score",
+          "description": "Average recall for object detection models is calculated for a selected class."
+        },
+        "fairnessMetricDifference": "差分",
+        "fairnessMetricRatio": "率"
       },
-      "metricsDropdown": "Metric(s)",
-      "notAvailable": "N/A",
-      "countColumnHeader": "Sample size",
-      "dataCohortsHeatmapHeader": "Cohorts",
-      "dataCohortsChartSelectionHeader": "Dataset cohorts",
-      "featureBasedCohortsChartSelectionHeader": "Feature cohorts",
-      "disaggregatedAnalysisHeatmapHeader": "Feature cohorts",
-      "fairnessMetricsHeatmapHeader": "Fairness metrics",
-      "featuresDropdown": "Feature(s)",
-      "metricChartDropdownSelectionHeader": "Metric",
-      "probabilityForClassSelectionHeader": "Probability for class",
-      "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
-      "featureSelectionDropdownPlaceholder": "Select features to use for a feature-based analysis.",
-      "probabilityDistributionPivotItem": "Probability distribution",
-      "metricsVisualizationsPivotItem": "Metrics visualizations",
-      "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the feature-based analysis.",
-      "tableCountTooltip": "Cohort {0} contains {1} instances.",
-      "tableMetricTooltip": "The model's {0} on cohort {1} is {2}",
-      "tableDifferenceTooltip": "The {0} difference is {1}. It is calculated by subtracting the minimum value {2} from cohort {3} from the maximum value {4} from cohort {5}.",
-      "tableRatioTooltip": "The {0} ratio is {1}. It is calculated by dividing the minimum value {2} from cohort {3} by the maximum value {4} from cohort {5}.",
-      "boxPlotPlaceholder": "Select at least one cohort to view the box plot.",
-      "chartCohortSelectionPlaceholder": "Select at least one cohort overall to view the chart.",
-      "metricSelectionButton": "Choose metric",
-      "cohortSelectionButton": "Choose cohorts",
-      "probabilityLabelSelectionButton": "Choose label",
-      "selectAllCohortsOption": "Select all",
-      "other": "Other",
+      "metricsDropdown": "メトリック",
+      "metricsTypeDropdown": "Aggregate method",
+      "metricTypes": {
+        "macro": "Macro",
+        "micro": "Micro"
+      },
+      "classSelectionDropdown": "Select class(es)",
+      "iouThresholdDropdown": {
+        "name": "IoU Threshold",
+        "description": "Intersection over Union quantifies the degree of overlap between the prediction and ground truth bounding box of a detected object in an image. For example, setting an IoU threshold of 70% means that a prediction with greater than 70% overlap with ground truth is True, thus influencing the definition of prediction correctness and calculation of other performance metrics.",
+        "iconId": "iouThresholdIconId",
+        "title": "Learn about the IoU threshold"
+      },
+      "notAvailable": "該当なし",
+      "countColumnHeader": "サンプル サイズ",
+      "dataCohortsHeatmapHeader": "コーホート",
+      "dataCohortsChartSelectionHeader": "データセットのコーホート",
+      "featureBasedCohortsChartSelectionHeader": "特徴コーホート",
+      "disaggregatedAnalysisHeatmapHeader": "特徴コーホート",
+      "fairnessMetricsHeatmapHeader": "公平性メトリック",
+      "featuresDropdown": "特徴",
+      "metricChartDropdownSelectionHeader": "メトリック",
+      "probabilityForClassSelectionHeader": "クラスの確率",
+      "targetSelectionHeader": "Target",
+      "metricSelectionDropdownPlaceholder": "コーホートを比較するメトリックを選択します。",
+      "classSelectionDropdownPlaceholder": "Select class name for class-based analysis.",
+      "featureSelectionDropdownPlaceholder": "特徴ベースの分析に使用する特徴を選択します。",
+      "probabilityDistributionPivotItem": "確率分布",
+      "regressionDistributionPivotItem": "Target distribution",
+      "metricsVisualizationsPivotItem": "メトリックの視覚化",
+      "confusionMatrixPivotItem": "Confusion matrix",
+      "disaggregatedAnalysisFeatureSelectionPlaceholder": "特徴ベースの分析を生成する特徴を選択します。",
+      "tableCountTooltip": "コーホート {0} には {1} インスタンスが含まれています。",
+      "tableMetricTooltip": "コーホート {1} に対するモデルの {0} が {2}",
+      "tableDifferenceTooltip": "{0} の差は {1}です。コーホート {5} の最大値 {4} からコーホート {3} の最小値 {2} を減算することによって算出されます。",
+      "tableRatioTooltip": "{0} の比率は {1} です。コーホート {3} の最小値 {2} を、コーホート {5} の最大値 {4} で割って算出されます。",
+      "boxPlotPlaceholder": "ボックス プロットを表示するには、コーホートを少なくとも 1 つ選択してください。",
+      "chartCohortSelectionPlaceholder": "グラフを表示するには、コーホート全体を少なくとも 1 つ選択してください。",
+      "metricSelectionButton": "メトリックの選択",
+      "cohortSelectionButton": "コーホートの選択",
+      "probabilityLabelSelectionButton": "ラベルの選択",
+      "regressionTargetSelectionButton": "Choose target",
+      "selectAllCohortsOption": "すべてを選択",
+      "other": "その他",
       "BoxPlot": {
-        "outlierProbability": "probability",
-        "outlierLabel": "Outliers",
-        "boxPlotSeriesLabel": "Box Plot"
+        "outlierProbability": "確率",
+        "outlierLabel": "外れ値",
+        "boxPlotSeriesLabel": "ボックス プロット",
+        "lowerWhisker": "Lower whisker",
+        "upperWhisker": "Upper whisker",
+        "median": "Median",
+        "lowerQuartile": "Lower quartile",
+        "upperQuartile": "Upper quartile"
       },
-      "chartConfigApply": "Apply",
-      "chartConfigCancel": "Cancel",
-      "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
-      "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",
-      "nA": "N/A",
+      "chartConfigApply": "適用",
+      "chartConfigCancel": "キャンセル",
+      "chartConfigDatasetCohortSelectionPlaceholder": "データセット コーホートの選択",
+      "chartConfigFeatureBasedCohortSelectionPlaceholder": "特徴ベースのコーホートの選択",
+      "confusionMatrix": {
+        "confusionMatrixCohortSelectionLabel": "Select dataset cohort",
+        "confusionMatrixClassSelectionLabel": "Select classes",
+        "confusionMatrixClassMinSelectionError": "Select at least {0} classes to visualize the confusion matrix.",
+        "confusionMatrixClassMaxSelectionError": "Select at most {0} classes to visualize the confusion matrix.",
+        "confusionMatrixClassSelectionDefaultPlaceholder": "Choose classes",
+        "confusionMatrixHeatmapTooltip": "{0} datapoints should be {1}, predicted to be {2}",
+        "confusionMatrixYAxisLabel": "True Class",
+        "confusionMatrixXAxisLabel": "Predicted Class",
+        "class": "Class"
+      },
+      "nA": "該当なし",
       "disaggregatedAnalysisBaseCohortDisclaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
-      "disaggregatedAnalysisBaseCohortWarning": "Unlike the {0} cohort, {1} includes filters. As a consequence, it only captures a subset of the whole dataset and insights may not generalize to the full dataset.",
-      "probabilitySplineChartToggleLabel": "Use spline chart",
-      "countAxisLabel": "Count",
-      "helpMeChooseFeaturesButton": "Help me choose features",
-      "helpMeChooseMetricsButton": "Help me choose metrics",
+      "disaggregatedAnalysisBaseCohortWarning": "{0} コーホートとは異なり、{1} にはフィルターが含まれています。結果として、データセット全体のサブセットのみがキャプチャされ、分析情報は完全なデータセットに一般化されない可能性があります。",
+      "probabilitySplineChartToggleLabel": "スプライン グラフを使用する",
+      "countAxisLabel": "カウント",
+      "helpMeChooseFeaturesButton": "特徴の選択に関するヘルプ",
+      "helpMeChooseMetricsButton": "メトリックの選択に関するヘルプ",
       "featureConfiguration": {
-        "flyoutHeader": "Choose your features",
-        "flyoutSubHeader": "Along which features would you like to evaluate your model's fairness?",
-        "flyoutDescription": "Fairness is evaluated in terms of disparities in your model's behavior. We will split your data according to values of each selected feature, and evaluate how your model's performance metrics differ across these splits.",
-        "featureColumnHeader": "Features",
-        "groupsColumnHeader": "Groups",
-        "categoricalGroupsCountRemark": "This feature has {0} unique values.",
-        "continuousGroupsCountRemark": "This feature is continuous and split into {0} bins.",
-        "continuousFeatureBinningLabel": "Change the number of bins",
-        "tooManyFeaturesSelectedWarning": "Please select only up to two features."
+        "flyoutHeader": "特徴の選択",
+        "flyoutSubHeader": "モデルの公平性を評価する特徴量",
+        "flyoutDescription": "公平性は、モデルの動作における不均衡の観点から評価されます。選択された各特徴量の値に従ってデータが分割され、モデルのパフォーマンス メトリックがこれらの分割間でどのように異なるかが評価されます。",
+        "featureColumnHeader": "特徴",
+        "groupsColumnHeader": "グループ",
+        "categoricalGroupsCountRemark": "この特徴には {0} 個の一意の値があります。",
+        "continuousGroupsCountRemark": "この特徴は連続しており、{0} 個のビンに分割されます。",
+        "continuousFeatureBinningLabel": "ビン数の変更",
+        "tooManyFeaturesSelectedWarning": "最大 2 つの特徴のみを選択してください。"
       },
       "metricConfiguration": {
-        "flyoutHeader": "Choose your metrics",
-        "flyoutSubHeader": "How would you like to measure your model's performance?",
-        "flyoutDescription": "Based on your model type, these are the recommended performance metrics. Fairness analysis or disaggregated analysis is performed by evaluating how your model's performance differs across feature subgroups.",
-        "noMetricsSelectedWarning": "Please select at least one metric.",
-        "metricNameColumnHeader": "Metric name",
-        "metricDescriptionColumnHeader": "Metric Description"
+        "flyoutHeader": "メトリックを選択する",
+        "flyoutSubHeader": "モデルのパフォーマンスをどのように測定しますか?",
+        "flyoutDescription": "モデルの種類に基づいて、推奨されるパフォーマンス メトリックです。公平性分析または非集計分析は、機能サブグループ間でモデルのパフォーマンスがどのように異なるかを評価することによって実行されます。",
+        "noMetricsSelectedWarning": "メトリックを少なくとも 1 つ選択してください。",
+        "metricNameColumnHeader": "メトリック名",
+        "metricDescriptionColumnHeader": "メトリックの説明"
       },
       "cohortSelection": {
-        "flyoutHeader": "Choose cohorts",
-        "flyoutDescription": "You can choose to view dataset cohorts or feature cohorts. If feature cohorts are unavailable you need to first select one or more features in the feature cohorts view. Subsequently, feature cohorts are generated and you can select them here."
+        "flyoutHeader": "コーホートの選択",
+        "flyoutDescription": "データセット コーホートまたは機能コーホートを表示するように選択できます。機能コーホートを使用できない場合は、まず機能コーホート ビューで 1 つ以上の機能を選択する必要があります。その後、機能コーホートが生成され、ここで選択できます。"
       },
-      "topLevelDescription": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. Use the \"Dataset cohorts\" tab to investigate your model by looking at a comparative analysis of its performance across different pre-built or newly-created dataset cohorts. Use the \"Feature cohorts\" to investigate your model by looking at a comparative analysis of its performance across sensitive/non-sensitive feature subcohorts.(e.g., performance across different genders, income levels).",
-      "visualDisplayToggleLabel": "Show heatmap",
-      "featureBasedViewDescription": "Select up to two features to see the model performance breakdown across feature-based cohorts (if one feature is selected) or intersectional cohorts (if two features are selected)."
+      "regressionTargetOptions": {
+        "predictedY": "Predicted Y",
+        "trueY": "True Y",
+        "error": "Error"
+      },
+      "topLevelDescription": "予測値の分布とモデルのパフォーマンス メトリックの値を調べて、モデルのパフォーマンスを評価します。[データセット コーホート] タブを使用して、さまざまな事前構築済みまたは新しく作成されたデータセット コーホート間のパフォーマンスの比較分析を調べて、モデルを調査します。\"特徴コーホート\" を使用して、センシティブ特徴サブコーホート間のパフォーマンスの比較分析を調べて、モデルを調査します。(たとえば、異なる性別間のパフォーマンス、収入レベルなど)。",
+      "infoTitle": "Additional information on model overview",
+      "visualDisplayToggleLabel": "ヒートマップの表示",
+      "featureBasedViewDescription": "最大 2 つの特徴を選択すると、特徴ベースのコーホート (1 つの特徴が選択されている場合) または交差コーホート (2 つの特徴が選択されている場合) のモデル パフォーマンスの内訳が表示されます。"
+    },
+    "TableViewTab": {
+      "Heading": "View the dataset in a table format for all features and rows."
+    }
+  },
+  "Forecasting": {
+    "target": "Target",
+    "whatIfForecastingHeader": "What-if analysis",
+    "forecastHeader": "Forecast analysis",
+    "whatIfForecastingDescription": "What-if allows you to perturb features for your entire time series and observe how the model's forecast changes.",
+    "whatIfForecastingChooseTimeSeries": "To start, choose a time series from the options below.",
+    "forecastDescription": "Forecast analysis compares your model's forecast to the actual values of your time series. To enable what-if analysis, provide a dataset with features.",
+    "timeSeries": "Time series",
+    "selectTimeSeries": "Select a time series.",
+    "singleTimeSeries": "The dataset contains only a single time series '{0}' which has been selected by default.",
+    "trueY": "True Y",
+    "baselinePrediction": "Baseline prediction",
+    "forecastComparisonHeader": "Compare What-if Forecasts",
+    "forecastComparisonChartTitle": "Forecasts",
+    "forecastComparisonChartTimeAxisLabel": "Time",
+    "Transformations": {
+      "multiply": "multiply",
+      "divide": "divide",
+      "add": "add",
+      "subtract": "subtract",
+      "change": "change to"
+    },
+    "TransformationCreation": {
+      "title": "Create what-if scenario",
+      "nameLabel": "What-if scenario name",
+      "featureInstructions": "Choose a feature to perturb.",
+      "operationInstructions": "Choose an operation to apply to the feature.",
+      "operationDropdownHeader": "Operation",
+      "featureDropdownHeader": "Feature",
+      "valueSpinButtonHeader": "Value",
+      "scenarioNamingInstructionsPlaceholder": "Enter a unique name",
+      "scenarioNamingInstructions": "Enter a name for your what-if scenario.",
+      "scenarioNamingCollisionMessage": "This name exists already. Please enter a unique name.",
+      "scenarioNamingLengthMessage": "The name must be between 1 and 50 characters. The actual length is {0}.",
+      "scenarioNamingInvalidCharactersMessage": "The name can only contain alphanumeric characters, whitespaces, dashes, or underscores, and needs to start with an alphanumeric character.",
+      "valueErrorMessage": "For operation {0} please select a value other than {1}.",
+      "invalidCombinationErrorMessage": "This is identical to an existing what-if scenario. Please change the feature, operation, or value.",
+      "addTransformationButton": "Add Transformation",
+      "divisionAndMultiplicationBy": "by"
+    },
+    "TransformationTable": {
+      "nameColumnHeader": "Name",
+      "methodColumnHeader": "Method",
+      "divisionAndMultiplicationBy": "by ",
+      "header": "What-if Forecasts ({0})"
+    },
+    "TimeSeries": {
+      "apply": "Apply",
+      "cancel": "Cancel",
+      "cohortList": "Time series list",
+      "selectCohort": "Select a time series",
+      "shiftCohort": "Switch time series",
+      "shiftCohortDescription": "Select a time series from the time series list. Apply the time series to the dashboard."
+    },
+    "TimeSeriesSettings": {
+      "CohortSettingsDescription": "Time series are pre-defined based on time series identifying columns.",
+      "CohortSettingsTitle": "Time series settings"
     }
   }
 }
