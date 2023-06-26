@@ -48,7 +48,7 @@ class TestRAIInsightsValidations:
                 task_type='regre',
                 forecasting_enabled=forecasting_enabled)
 
-    def test_missing_data_warnings(self):
+    def test_missing_test_data_warnings(self):
         train_data = {
             'Column1': [10, 20, 90, 40, 50],
             'Column2': [10, 20, 90, 40, 50],
@@ -57,7 +57,39 @@ class TestRAIInsightsValidations:
         train = pd.DataFrame(train_data)
 
         test_data = {
-            'Column1': [10, 20, np.nan, 40, 50],
+            'Column1': [10, 20, 90, 40, 50],
+            'Column2': [10, 20, 90, 40, 50],
+            'Target': [10, 20, np.nan, 40, 50]
+        }
+        test = pd.DataFrame(test_data)
+
+        X_train = train.drop(columns=['Target'])
+        y_train = train['Target'].values
+        model = create_complex_classification_pipeline(
+            X_train, y_train, ['Column1', 'Column2'], [])
+
+        with pytest.raises(
+            UserConfigValidationException,
+                match="['Column1']") as ucve:
+            RAIInsights(
+                model=model,
+                train=train,
+                test=test,
+                target_column='Target',
+                task_type='classification')
+        assert "Features ['Target'] have missing values in " + \
+            "test data" in str(ucve.value)
+
+    def test_missing_train_data(self):
+        train_data = {
+            'Column1': [10, 20, 90, 40, 50],
+            'Column2': [10, 20, np.nan, 40, 50],
+            'Target': [10, 20, 90, 40, 50]
+        }
+        train = pd.DataFrame(train_data)
+
+        test_data = {
+            'Column1': [10, 20, 90, 40, 50],
             'Column2': [10, 20, 90, 40, 50],
             'Target': [10, 20, 90, 40, 50]
         }
@@ -68,15 +100,17 @@ class TestRAIInsightsValidations:
         model = create_complex_classification_pipeline(
             X_train, y_train, ['Column1', 'Column2'], [])
 
-        with pytest.warns(
-            UserWarning,
-                match="['Column1']"):
+        with pytest.raises(
+            UserConfigValidationException,
+                match="['Column2']") as ucve:
             RAIInsights(
                 model=model,
                 train=train,
                 test=test,
                 target_column='Target',
                 task_type='classification')
+        assert "Features ['Column2'] have missing values in " + \
+            "train data" in str(ucve.value)
 
     def test_validate_test_data_size(self):
         X_train, X_test, y_train, y_test, _, _ = \
