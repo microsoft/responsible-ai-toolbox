@@ -569,7 +569,7 @@ class RAIInsights(RAIBaseInsights):
         # Validate that the target column isn't continuous if the
         # user is running classification scenario
         if (task_type == ModelTask.CLASSIFICATION and
-                train[target_column].dtype == "float64"):
+                pd.api.types.is_float_dtype(train[target_column].dtype)):
             raise UserConfigValidationException(
                 "Target column type must not be continuous "
                 "for classification scenario.")
