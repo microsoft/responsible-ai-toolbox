@@ -68,8 +68,8 @@ class TestRAIInsightsValidations:
         model = create_complex_classification_pipeline(
             X_train, y_train, ['Column1', 'Column2'], [])
 
-        with pytest.warns(
-            UserWarning,
+        with pytest.raises(
+            UserConfigValidationException,
                 match="['Column1']"):
             RAIInsights(
                 model=model,
