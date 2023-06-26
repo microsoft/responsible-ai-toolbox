@@ -2,8 +2,6 @@
 # Licensed under the MIT License.
 
 import pytest
-from dice_ml.utils.exception import \
-    UserConfigValidationException as DiceException
 
 from raiutils.exceptions import UserConfigValidationException
 from responsibleai._internal.constants import (CounterfactualManagerKeys,
@@ -112,7 +110,7 @@ def validate_counterfactual(cf_analyzer,
             counterfactual_props=cf_analyzer.counterfactual.list(),
             expected_counterfactuals=2)
     else:
-        with pytest.raises(DiceException):
+        with pytest.raises(UserConfigValidationException):
             cf_analyzer.counterfactual.add(
                 total_CFs=-2,
                 method='random',
