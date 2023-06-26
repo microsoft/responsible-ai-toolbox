@@ -591,9 +591,10 @@ class RAIInsights(RAIBaseInsights):
             if np.any(test[feature].isnull()):
                 list_of_feature_having_missing_values.append(feature)
         if len(list_of_feature_having_missing_values) > 0:
-            warnings.warn(
+            raise UserConfigValidationException(
                 f"Features {list_of_feature_having_missing_values} "
-                "have missing values in test data")
+                "have missing values in test data. "
+                "Please check your data.")
 
         self._validate_feature_metadata(
             feature_metadata, train, task_type, model, target_column)
