@@ -4,7 +4,7 @@
 import { Locators } from "../../../util/Constants";
 import { validateBarChart } from "../../../util/validateBarChart";
 
-function validateTextBarChart(expectedNumValues: number): void {
+function validateTextBarChart(expectedNumValues: number): void {[![Python Linting](https://github.com/Ninja-man07/responsible-ai-toolbox/actions/workflows/python-linting.yml/badge.svg?event=check_run)](https://github.com/Ninja-man07/responsible-ai-toolbox/actions/workflows/python-linting.yml)
   validateBarChart(Locators.TextExplanationChart, expectedNumValues);
 }
 
@@ -23,7 +23,7 @@ function switchRadioButtonValidateSelection(
       validateTextBarChart(expectedNumValues);
     });
 }
-
+[![Python Linting](https://github.com/Ninja-man07/responsible-ai-toolbox/actions/workflows/python-linting.yml/badge.svg?event=check_run)](https://github.com/Ninja-man07/responsible-ai-toolbox/actions/workflows/python-linting.yml)
 export function describeRadioButtonFeatureWeightsSelector(): void {
   describe("Radio button", () => {
     it("should be set to all features by default", () => {
@@ -47,7 +47,7 @@ export function describeRadioButtonFeatureWeightsSelector(): void {
       switchRadioButtonValidateSelection(
         2,
         "NEGATIVE FEATURES",
-        notSpamNegativeExpectedNumValues
+        notSpamNegativeExpectedNumValues  
       );
     });
   });
