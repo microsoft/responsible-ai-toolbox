@@ -180,7 +180,7 @@ function pushRowData(
   jointDataset: JointDataset,
   row: { [key: string]: number }
 ): void {
-  const categories = jointDataset.metaDict[property].sortedCategoricalValues;
+  const categories = jointDataset.metaDict[property]?.sortedCategoricalValues;
   if (jointDataset.metaDict[property].isCategorical && categories) {
     tableRow.push(categories[row[property]]);
   } else {
@@ -197,7 +197,8 @@ function pushMultilabelRowData(
   const values = [];
   for (let i = 0; i < jointDataset.numLabels; i++) {
     const labelProp = property + i.toString();
-    const categories = jointDataset.metaDict[labelProp].sortedCategoricalValues;
+    const categories =
+      jointDataset.metaDict[labelProp]?.sortedCategoricalValues;
     if (jointDataset.metaDict[labelProp].isCategorical && categories) {
       const value = categories[row[labelProp]];
       if (value) {
