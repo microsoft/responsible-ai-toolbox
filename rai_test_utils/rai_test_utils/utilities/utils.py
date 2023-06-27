@@ -2,7 +2,10 @@
 # Licensed under the MIT License.
 
 import os
+import shutil
 import uuid
+
+DOWNLOADED_DATASET_DIR = 'datasets.4.27.2021'
 
 
 def is_valid_uuid(id: str):
@@ -29,7 +32,7 @@ def retrieve_dataset(dataset, **kwargs):
     :rtype: object
     """
     # if data not extracted, download zip and extract
-    outdirname = 'datasets.4.27.2021'
+    outdirname = DOWNLOADED_DATASET_DIR
     if not os.path.exists(outdirname):
         try:
             from urllib import urlretrieve
@@ -48,17 +51,21 @@ def retrieve_dataset(dataset, **kwargs):
     if extension == '.npz':
         # sparse format file
         from scipy.sparse import load_npz
-        return load_npz(filepath)
+        in_memory_dataset = load_npz(filepath)
     elif extension == '.svmlight':
         from sklearn import datasets
-        return datasets.load_svmlight_file(filepath)
+        in_memory_dataset = datasets.load_svmlight_file(filepath)
     elif extension == '.json':
         import json
         with open(filepath, encoding='utf-8') as f:
-            dataset = json.load(f)
-        return dataset
+            in_memory_dataset = json.load(f)
     elif extension == '.csv':
         import pandas as pd
-        return pd.read_csv(filepath, **kwargs)
+        in_memory_dataset = pd.read_csv(filepath, **kwargs)
     else:
         raise Exception('Unrecognized file extension: ' + extension)
+
+    shutil.rmtree(outdirname)
+    os.remove(zipfilename)
+
+    return in_memory_dataset
