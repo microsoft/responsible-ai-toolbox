@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
+[![Python Linting](https://github.com/Ninja-man07/responsible-ai-toolbox/actions/workflows/python-linting.yml/badge.svg?event=check_run)](https://github.com/Ninja-man07/responsible-ai-toolbox/actions/workflows/python-linting.yml)
 import { Locators } from "../../../util/Constants";
 import { validateBarChart } from "../../../util/validateBarChart";
 
