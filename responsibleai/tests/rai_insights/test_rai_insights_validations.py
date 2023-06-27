@@ -48,7 +48,7 @@ class TestRAIInsightsValidations:
                 task_type='regre',
                 forecasting_enabled=forecasting_enabled)
 
-    def test_missing_test_data_warnings(self):
+    def test_missing_test_data(self):
         train_data = {
             'Column1': [10, 20, 90, 40, 50],
             'Column2': [10, 20, 90, 40, 50],
