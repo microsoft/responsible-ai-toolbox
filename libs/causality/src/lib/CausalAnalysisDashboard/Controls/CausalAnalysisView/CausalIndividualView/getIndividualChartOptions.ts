@@ -65,7 +65,8 @@ export function getIndividualChartOptions(
               onClickHandler(this);
             }
           }
-        }
+        },
+        turboThreshold: 0
       }
     },
     series,

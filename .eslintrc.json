@@ -36,7 +36,8 @@
             ]
           }
         ],
-        "no-alert": ["error"]
+        "no-alert": ["error"],
+        "import/no-internal-modules": "off"
       }
     },
     {

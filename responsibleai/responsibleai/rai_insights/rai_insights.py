@@ -260,6 +260,14 @@ class RAIInsights(RAIBaseInsights):
         self._initialize_managers()
         self._try_add_data_balance()
 
+    def get_categorical_features_after_drop(self):
+        dropped_features = self._feature_metadata.dropped_features
+        if dropped_features is None:
+            return self.categorical_features
+        else:
+            return list(set(self.categorical_features) -
+                        set(dropped_features))
+
     def get_train_data(self):
         """Returns the training dataset after dropping
         features if any were configured to be dropped.
@@ -372,7 +380,8 @@ class RAIInsights(RAIBaseInsights):
         dropped_features = self._feature_metadata.dropped_features
         self._causal_manager = CausalManager(
             self.get_train_data(), self.get_test_data(), self.target_column,
-            self.task_type, self.categorical_features, self._feature_metadata)
+            self.task_type, self.get_categorical_features_after_drop(),
+            self._feature_metadata)
 
         self._counterfactual_manager = CounterfactualManager(
             model=self.model, train=self.get_train_data(),
@@ -394,7 +403,7 @@ class RAIInsights(RAIBaseInsights):
             self.model, self.get_train_data(), self.get_test_data(),
             self.target_column,
             self._classes,
-            categorical_features=self.categorical_features)
+            self.get_categorical_features_after_drop())
 
         self._managers = [self._causal_manager,
                           self._counterfactual_manager,
@@ -881,10 +890,11 @@ class RAIInsights(RAIBaseInsights):
             true_y = self.test[self.target_column]
 
         X_test = test_data.drop(columns=[self.target_column])
+        X_test_after_drop = self.get_test_data(X_test)
         filter_data_with_cohort = FilterDataWithCohortFilters(
             model=self.model,
-            dataset=X_test,
-            features=X_test.columns,
+            dataset=X_test_after_drop,
+            features=X_test_after_drop.columns,
             categorical_features=self.categorical_features,
             categories=self._categories,
             true_y=true_y,

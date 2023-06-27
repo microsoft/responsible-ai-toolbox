@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 import pytest
 from tests.causal_manager_validator import validate_causal
-from tests.common_utils import create_adult_income_dataset, create_iris_data
+from tests.common_utils import create_iris_data
 from tests.counterfactual_manager_validator import validate_counterfactual
 from tests.error_analysis_validator import (setup_error_analysis,
                                             validate_error_analysis)
@@ -109,12 +109,11 @@ class TestModelAnalysis(object):
                                               ManagerNames.ERROR_ANALYSIS,
                                               ManagerNames.EXPLAINER,
                                               ManagerNames.COUNTERFACTUAL])
-    def test_model_analysis_binary_mixed_types(self, manager_type):
+    def test_model_analysis_binary_mixed_types(self, manager_type, adult_data):
 
         data_train, data_test, y_train, y_test, categorical_features, \
             continuous_features, target_name, classes, \
-            feature_columns, feature_range_keys = \
-            create_adult_income_dataset()
+            feature_columns, feature_range_keys = adult_data
         X_train = data_train.drop([target_name], axis=1)
 
         model = create_complex_classification_pipeline(

@@ -107,6 +107,7 @@ export function buildInitialModelAssessmentContext(
     localization.ErrorAnalysis.Cohort.defaultLabel,
     props.dataset,
     [],
+    [],
     modelType,
     columnRanges,
     CohortSource.None,
@@ -132,6 +133,7 @@ export function buildInitialModelAssessmentContext(
   return {
     activeGlobalTabs,
     baseCohort: cohorts[0],
+    baseDatasetCohort: datasetCohorts[0],
     cohorts,
     columnRanges,
     customPoints: [],
@@ -150,6 +152,7 @@ export function buildInitialModelAssessmentContext(
     onAddMessage: "",
     saveCohortVisible: false,
     selectedCohort: cohorts[0],
+    selectedDatasetCohort: datasetCohorts[0],
     selectedWhatIfIndex: undefined,
     sortVector: undefined
   };

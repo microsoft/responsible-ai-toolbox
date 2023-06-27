@@ -93,15 +93,18 @@ export class VisionExplanationDashboard extends React.Component<
           />
         </Stack.Item>
         <Stack.Item>
-          <FlyoutObjectDetection
-            explanations={this.state.computedExplanations}
-            isOpen={this.state.panelOpen}
-            item={this.state.selectedItem}
-            loadingExplanation={this.state.loadingExplanation}
-            otherMetadataFieldNames={this.state.otherMetadataFieldNames}
-            callback={this.onPanelClose}
-            onChange={this.onItemSelectObjectDetection}
-          />
+          {this.state.panelOpen && (
+            <FlyoutObjectDetection
+              dataset={this.context.dataset}
+              explanations={this.state.computedExplanations}
+              isOpen={this.state.panelOpen}
+              item={this.state.selectedItem}
+              loadingExplanation={this.state.loadingExplanation}
+              otherMetadataFieldNames={this.state.otherMetadataFieldNames}
+              callback={this.onPanelClose}
+              onChange={this.onItemSelectObjectDetection}
+            />
+          )}
         </Stack.Item>
       </Stack>
     ) : (
@@ -152,6 +155,7 @@ export class VisionExplanationDashboard extends React.Component<
   public addCohortWrapper = (name: string, switchCohort: boolean): void => {
     this.context.addCohort(
       getCohort(name, this.state.selectedIndices, this.context.jointDataset),
+      undefined,
       switchCohort
     );
   };

@@ -82,6 +82,7 @@ export function processPreBuiltDatasetCohort(
         preBuiltCohort.name,
         props.dataset,
         filterList,
+        [],
         modelType,
         columnRanges,
         CohortSource.Prebuilt
