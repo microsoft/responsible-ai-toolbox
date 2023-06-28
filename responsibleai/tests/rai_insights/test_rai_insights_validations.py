@@ -190,6 +190,31 @@ class TestRAIInsightsValidations:
                 task_type='classification',
                 categorical_features=['not_a_feature'])
 
+    def test_validate_multi_classification_continuous_target_column(self):
+        raw_data = {
+            'Column1': [10, 20, 90, 40, 50],
+            'Column2': [10, 20, 90, 40, 50],
+            'Target': [.1, .2, .9, .4, .5]
+        }
+        data = pd.DataFrame(raw_data)
+        X_data = data.drop(columns=['Target'])
+        X_data[TARGET] = data['Target'].values
+
+        # use valid target data to create the model
+        y_train = np.array([1, 1, 2, 0, 1])
+        model = create_lightgbm_classifier(X_data, y_train)
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="Target column type must not be continuous "
+                "for classification scenario."):
+            RAIInsights(
+                model=model,
+                train=X_data,
+                test=X_data,
+                target_column=TARGET,
+                task_type='classification')
+
     def test_validate_serializer(self):
         X_train, X_test, y_train, y_test, _, _ = \
             create_cancer_data(return_dataframe=True)
