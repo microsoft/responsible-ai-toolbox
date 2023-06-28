@@ -16,11 +16,14 @@ import {
   IDataset,
   ILabeledStatistic,
   ITelemetryEvent,
+  JointDataset,
   ModelAssessmentContext,
   calculateAUCData,
+  computeAUC,
   defaultModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import { getFetchPredictionPromise } from "libs/counterfactuals/src/util/getFetchPredictionPromise";
 import React from "react";
 
 import { getAUCChartOptions } from "./getAUCChartOptions";
@@ -71,6 +74,7 @@ export class AUCChart extends React.PureComponent<
       // if previously selected cohort does not exist use globally selected cohort
       selectedCohort = this.context.baseErrorCohort;
     }
+    this.getData();
     const aucLocString = localization.ModelAssessment.ModelOverview.AUCChart;
     return (
       <Stack id="modelOverviewAUCChart">
@@ -107,6 +111,25 @@ export class AUCChart extends React.PureComponent<
   ): void => {
     if (item) {
       this.setState({ selectedCohort: Number(item.key) });
+    }
+  };
+  private getData = (): void => {
+    if (
+      this.context.jointDataset.hasPredictedProbabilities &&
+      this.context.jointDataset.hasTrueY
+    ) {
+      console.log(this.context.jointDataset);
+      const trueYLabels = this.context.jointDataset.unwrap(
+        JointDataset.TrueYLabel
+      );
+      // TODO: how to get predicted probabilities ?
+
+      const predictedProbabilities = this.context.jointDataset.unwrap(
+        JointDataset.PredictedYLabel
+      );
+      console.log(predictedProbabilities);
+      const result = computeAUC(trueYLabels, predictedProbabilities);
+      console.log(result);
     }
   };
 }
