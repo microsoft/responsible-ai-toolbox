@@ -89,10 +89,13 @@ interface IModelOverviewState {
 const datasetCohortViewPivotKey = "datasetCohortView";
 const disaggregatedAnalysisPivotKey = "disaggregatedAnalysis";
 
+type modelOverviewKeyType = [number[], string, string, number];
+
 export class ModelOverview extends React.Component<
   IModelOverviewProps,
   IModelOverviewState
 > {
+  public modelOverviewCache: Map<string, [number, number, number]> = new Map();
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
@@ -598,10 +601,14 @@ export class ModelOverview extends React.Component<
     const selectionIndexes: number[][] = this.context.errorCohorts.map(
       (errorCohort) => errorCohort.cohort.unwrap(JointDataset.IndexLabel)
     );
+    console.log('existing cache');
+    console.log(this.modelOverviewCache);
     const datasetCohortMetricStats = generateMetrics(
       this.context.jointDataset,
       selectionIndexes,
-      this.context.modelMetadata.modelType
+      this.context.modelMetadata.modelType,
+      this.modelOverviewCache,
+      [this.state.aggregateMethod, this.state.className, this.state.iouThresh]
     );
 
     this.setState({
@@ -627,7 +634,7 @@ export class ModelOverview extends React.Component<
       selectionIndexes.length > 0 &&
       this.state.aggregateMethod.length > 0 &&
       this.state.className.length > 0 &&
-      this.state.iouThresh
+      this.state.iouThresh // TODO: and if value doesn't exist in cache!
     ) {
       this.context
         .requestObjectDetectionMetrics(
@@ -646,6 +653,18 @@ export class ModelOverview extends React.Component<
             [meanAveragePrecision, averagePrecision, averageRecall]
           ] of result.entries()) {
             const count = selectionIndexes[cohortIndex].length;
+
+            const key: modelOverviewKeyType = [
+              selectionIndexes[cohortIndex], 
+              this.state.aggregateMethod, 
+              this.state.className, 
+              this.state.iouThresh
+            ];
+            if (!this.modelOverviewCache.has(key.toString())) {
+              this.modelOverviewCache.set(key.toString(), [meanAveragePrecision, averagePrecision, averageRecall]);
+              console.log('set new value');
+              console.log(this.modelOverviewCache);
+            }
 
             const updatedCohortMetricStats = [
               {
@@ -783,7 +802,9 @@ export class ModelOverview extends React.Component<
     const featureCohortMetricStats = generateMetrics(
       this.context.jointDataset,
       selectionIndexes,
-      this.context.modelMetadata.modelType
+      this.context.modelMetadata.modelType,
+      this.modelOverviewCache,
+      [this.state.aggregateMethod, this.state.className, this.state.iouThresh]
     );
 
     this.setState({

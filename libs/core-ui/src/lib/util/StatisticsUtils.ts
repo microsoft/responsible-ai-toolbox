@@ -249,11 +249,15 @@ const generateImageStats: (
 export const generateMetrics: (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
-  modelType: ModelTypes
+  modelType: ModelTypes,
+  modelOverviewCache?: Map<string, [number, number, number]>,
+  objectDetectionInputs?: [string, string, number]
 ) => ILabeledStatistic[][] = (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
-  modelType: ModelTypes
+  modelType: ModelTypes,
+  modelOverviewCache?: Map<string, [number, number, number]>, //  = new Map()
+  objectDetectionInputs?: [string, string, number]
 ): ILabeledStatistic[][] => {
   if (
     modelType === ModelTypes.ImageMultilabel ||
@@ -282,8 +286,8 @@ export const generateMetrics: (
       return generateImageStats(trueYSubset, predYSubset);
     });
   }
-  if (modelType === ModelTypes.ObjectDetection) {
-    return generateObjectDetectionStats(selectionIndexes);
+  if (modelType === ModelTypes.ObjectDetection && modelOverviewCache && objectDetectionInputs) {
+    return generateObjectDetectionStats(selectionIndexes, modelOverviewCache, objectDetectionInputs);
   }
   const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
   return selectionIndexes.map((selectionArray) => {
