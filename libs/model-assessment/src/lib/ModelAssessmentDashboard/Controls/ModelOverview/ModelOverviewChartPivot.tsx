@@ -201,7 +201,10 @@ export class ModelOverviewChartPivot extends React.Component<
                 localization.ModelAssessment.ModelOverview.AUCPivotItem
               }
             >
-              <AUCChart cohortStats={labeledStatistics} />
+              <AUCChart
+                dataset={this.context.dataset}
+                cohortStats={labeledStatistics}
+              />
             </PivotItem>
           )}
       </Pivot>

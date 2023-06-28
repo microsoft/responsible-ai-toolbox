@@ -13,6 +13,7 @@ import {
   BasicHighChart,
   ErrorCohort,
   FluentUIStyles,
+  IDataset,
   ILabeledStatistic,
   ITelemetryEvent,
   ModelAssessmentContext,
@@ -26,6 +27,7 @@ import { getAUCChartOptions } from "./getAUCChartOptions";
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 
 interface IAUCChartProps {
+  dataset: IDataset;
   cohortStats: ILabeledStatistic[][];
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
@@ -58,7 +60,7 @@ export class AUCChart extends React.PureComponent<
     if (this.context.dataset.true_y.length !== yLength) {
       return React.Fragment;
     }
-    const allData = calculateAUCData(this.props.cohortStats);
+    const allData = calculateAUCData(this.props.dataset);
     const plotData = getAUCChartOptions(allData, theme);
 
     let selectedCohort = this.context.errorCohorts.find(
