@@ -49,6 +49,7 @@ export interface ITabsViewProps {
     aggregateMethod: string,
     className: string,
     iouThresh: number,
+    objectDetectionCache: Map<string, [number, number, number]>,
     abortSignal: AbortSignal
   ) => Promise<any[]>;
 

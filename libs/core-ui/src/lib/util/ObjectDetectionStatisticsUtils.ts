@@ -16,11 +16,11 @@ export enum ObjectDetectionMetrics {
 
 export const generateObjectDetectionStats: (
   selectionIndexes: number[][],
-  modelOverviewCache: Map<string, [number, number, number]>,
+  objectDetectionCache: Map<string, [number, number, number]>,
   objectDetectionInputs: [string, string, number]
 ) => ILabeledStatistic[][] = (
   selectionIndexes: number[][],
-  modelOverviewCache: Map<string, [number, number, number]>, //  = new Map()
+  objectDetectionCache: Map<string, [number, number, number]>, //  = new Map()
   objectDetectionInputs: [string, string, number]
 ): ILabeledStatistic[][] => {
   return selectionIndexes.map((selectionArray) => {
@@ -32,7 +32,7 @@ export const generateObjectDetectionStats: (
       objectDetectionInputs[1],
       objectDetectionInputs[2]
     ];
-    const value = modelOverviewCache.get(key.toString());
+    const value = objectDetectionCache.get(key.toString());
     console.log('retrieving key');
     console.log(key.toString());
     console.log(value);

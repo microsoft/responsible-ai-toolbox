@@ -334,11 +334,13 @@ class ResponsibleAIDashboardInput:
             aggregate_method = post_data[1]
             class_name = post_data[2]
             iou_thresh = post_data[3]
+            object_detection_cache = post_data[4]
             exp = self._analysis.compute_object_detection_metrics(
                 selection_indexes,
                 aggregate_method,
                 class_name,
-                iou_thresh
+                iou_thresh,
+                object_detection_cache
             )
             return {
                 WidgetRequestResponseConstants.data: exp
