@@ -16,6 +16,7 @@ export interface ITextExplanationDashboardState {
   selectedWeightVector: WeightVectorOption;
   weightVectorOptions: WeightVectorOption[];
   weightVectorLabels: Dictionary<string>;
+  isQA?: boolean;
 }
 
 export class TextExplanationDashboard extends React.PureComponent<
@@ -42,7 +43,8 @@ export class TextExplanationDashboard extends React.PureComponent<
     this.state = {
       selectedWeightVector: WeightVectors.AbsAvg,
       weightVectorLabels,
-      weightVectorOptions
+      weightVectorOptions,
+      isQA: false
     };
   }
 
@@ -54,6 +56,7 @@ export class TextExplanationDashboard extends React.PureComponent<
         selectedWeightVector={this.state.selectedWeightVector}
         weightOptions={this.state.weightVectorOptions}
         weightLabels={this.state.weightVectorLabels}
+        isQA={this.state.isQA}
       />
     );
   }
