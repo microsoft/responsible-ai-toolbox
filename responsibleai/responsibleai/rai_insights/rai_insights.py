@@ -566,6 +566,17 @@ class RAIInsights(RAIBaseInsights):
                         f"Error finding unique values in column {column}. "
                         "Please check your test data.")
 
+        # Validate that the target column isn't continuous if the
+        # user is running classification scenario
+        # To address error thrown from sklearn here:  # noqa: E501
+        # https://github.com/scikit-learn/scikit-learn/blob/main/sklearn/utils/multiclass.py#L197
+        y_data = train[target_column]
+        if (task_type == ModelTask.CLASSIFICATION and
+                pd.api.types.is_float_dtype(y_data.dtype) and
+                np.any(y_data != y_data.astype(int))):
+            raise UserConfigValidationException(
+                "Target column type must not be continuous "
+                "for classification scenario.")
         # Check if any features exist that are not numeric, datetime, or
         # categorical.
         train_features = train.drop(columns=[target_column]).columns

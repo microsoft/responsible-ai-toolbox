@@ -1,0 +1,150 @@
+name: CI ResponsibleAI Text & Vision pytest
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    paths:
+      - "responsibleai_text/**"
+      - "responsibleai_vision/**"
+      - ".github/workflows/CI-responsibleai-text-pytest.yml"
+
+jobs:
+  ci-python:
+    strategy:
+      matrix:
+        packageDirectory: ["responsibleai_text", "responsibleai_vision"]
+        operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
+        pythonVersion: ["3.7", "3.8", "3.9", "3.10"]
+        # TODO: re-add macos-latest once build timeout issues are resolved
+        exclude:
+          - packageDirectory: "responsibleai_text"
+            operatingSystem: macos-latest
+            pythonVersion: "3.7"
+          - packageDirectory: "responsibleai_text"
+            operatingSystem: macos-latest
+            pythonVersion: "3.8"
+          - packageDirectory: "responsibleai_text"
+            operatingSystem: macos-latest
+            pythonVersion: "3.9"
+          - packageDirectory: "responsibleai_text"
+            operatingSystem: macos-latest
+            pythonVersion: "3.10"
+          - packageDirectory: "responsibleai_vision"
+            operatingSystem: macos-latest
+            pythonVersion: "3.7"
+          - packageDirectory: "responsibleai_vision"
+            operatingSystem: macos-latest
+            pythonVersion: "3.8"
+          - packageDirectory: "responsibleai_vision"
+            operatingSystem: macos-latest
+            pythonVersion: "3.9"
+          - packageDirectory: "responsibleai_vision"
+            operatingSystem: macos-latest
+            pythonVersion: "3.10"
+    runs-on: ${{ matrix.operatingSystem }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: ${{ matrix.pythonVersion }}
+
+      - if: ${{ matrix.operatingSystem != 'macos-latest' }}
+        name: Install pytorch on non-MacOS
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
+
+      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
+        name: Install Anaconda packages on MacOS, which should not include cpuonly according to official docs
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet pytorch torchvision captum -c pytorch
+
+      - name: Setup tools
+        shell: bash -l {0}
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade setuptools
+          pip install --upgrade "pip-tools<=6.13.0"
+
+      - name: Install dependencies
+        shell: bash -l {0}
+        run: |
+          pip install -r requirements-dev.txt
+          pip install .
+        working-directory: ${{ matrix.packageDirectory }}
+
+      - if: ${{ matrix.packageDirectory == 'responsibleai_text' }}
+        name: Setup spacy
+        shell: bash -l {0}
+        run: |
+          python -m spacy download en_core_web_sm
+
+      - if: ${{ (matrix.packageDirectory == 'responsibleai_vision') && ((matrix.pythonVersion == '3.7') || (matrix.pythonVersion == '3.8')) }}
+        name: Install automl dependencies
+        shell: bash -l {0}
+        run: |
+          pip install -r ${{ matrix.packageDirectory }}/requirements-automl.txt
+
+      - name: Install package
+        shell: bash -l {0}
+        run: |
+          pip install -v -e .
+        working-directory: ${{ matrix.packageDirectory }}
+
+      - name: Run tests
+        shell: bash -l {0}
+        run: |
+          pytest -s -v --durations=10 --doctest-modules --junitxml=junit/test-results.xml --cov=${{ matrix.packageDirectory }} --cov-report=xml --cov-report=html
+        working-directory: ${{ matrix.packageDirectory }}
+
+      - name: Upload code coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.packageDirectory }}-code-coverage-results
+          path: ${{ matrix.packageDirectory }}/htmlcov
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}
+
+      - if: ${{ (matrix.operatingSystem == 'windows-latest') && (matrix.pythonVersion == '3.8') }}
+        name: Upload to codecov
+        id: codecovupload1
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ${{ matrix.packageDirectory }}
+          env_vars: OS,PYTHON
+          fail_ci_if_error: false
+          files: ./${{ matrix.packageDirectory }}/coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          verbose: true
+
+      - if: ${{ (steps.codecovupload1.outcome == 'failure') && (matrix.pythonVersion == '3.8') && (matrix.operatingSystem == 'windows-latest') }}
+        name: Retry upload to codecov
+        id: codecovupload2
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ${{ matrix.packageDirectory }}
+          env_vars: OS,PYTHON
+          fail_ci_if_error: false
+          files: ./${{ matrix.packageDirectory }}/coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          verbose: true
+
+      - name: Set codecov status
+        if: ${{ (matrix.pythonVersion == '3.8') && (matrix.operatingSystem == 'windows-latest') }}
+        shell: bash
+        run: |
+          if ${{ (steps.codecovupload1.outcome == 'success') || (steps.codecovupload2.outcome == 'success') }} ; then
+            echo fine
+          else
+            exit 1
+          fi
