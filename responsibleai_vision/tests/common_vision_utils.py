@@ -36,6 +36,7 @@ from torchvision import models as torchvision_models
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 
 from raiutils.common.retries import retry_function
+from raiutils.dataset import fetch_dataset
 from responsibleai_vision.common.constants import ImageColumns
 
 try:
@@ -163,7 +164,7 @@ def create_dummy_model(df):
 
 
 def retrieve_unzip_file(download_url, data_file):
-    urlretrieve(download_url, filename=data_file)
+    fetch_dataset(download_url, data_file)
     # extract files
     with ZipFile(data_file, "r") as zipfile:
         zipfile.extractall(path="./data")
@@ -583,7 +584,7 @@ def download_object_detection_assets(filepath, force=False):
         blob_storage_url = "https://publictestdatasets.blob.core.windows.net/"
         models = "models/"
         rcnn_url = blob_storage_url + models + "fastrcnn.pt"
-        urlretrieve(rcnn_url, os.path.join(filepath))
+        fetch_dataset(rcnn_url, os.path.join(filepath))
     else:
         print('Found' + filepath)
 

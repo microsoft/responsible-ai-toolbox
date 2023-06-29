@@ -1,4 +1,4 @@
-name: CI ResponsibleAI-Text pytest
+name: CI ResponsibleAI Text & Vision pytest
 
 on:
   push:
@@ -7,13 +7,14 @@ on:
     branches: [main]
     paths:
       - "responsibleai_text/**"
+      - "responsibleai_vision/**"
       - ".github/workflows/CI-responsibleai-text-pytest.yml"
 
 jobs:
   ci-python:
     strategy:
       matrix:
-        packageDirectory: ["responsibleai_text"]
+        packageDirectory: ["responsibleai_text", "responsibleai_vision"]
         operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
         pythonVersion: ["3.7", "3.8", "3.9", "3.10"]
         # TODO: re-add macos-latest once build timeout issues are resolved
@@ -28,6 +29,18 @@ jobs:
             operatingSystem: macos-latest
             pythonVersion: "3.9"
           - packageDirectory: "responsibleai_text"
+            operatingSystem: macos-latest
+            pythonVersion: "3.10"
+          - packageDirectory: "responsibleai_vision"
+            operatingSystem: macos-latest
+            pythonVersion: "3.7"
+          - packageDirectory: "responsibleai_vision"
+            operatingSystem: macos-latest
+            pythonVersion: "3.8"
+          - packageDirectory: "responsibleai_vision"
+            operatingSystem: macos-latest
+            pythonVersion: "3.9"
+          - packageDirectory: "responsibleai_vision"
             operatingSystem: macos-latest
             pythonVersion: "3.10"
     runs-on: ${{ matrix.operatingSystem }}
@@ -66,10 +79,17 @@ jobs:
           pip install .
         working-directory: ${{ matrix.packageDirectory }}
 
-      - name: Setup spacy
+      - if: ${{ matrix.packageDirectory == 'responsibleai_text' }}
+        name: Setup spacy
         shell: bash -l {0}
         run: |
           python -m spacy download en_core_web_sm
+
+      - if: ${{ (matrix.packageDirectory == 'responsibleai_vision') && ((matrix.pythonVersion == '3.7') || (matrix.pythonVersion == '3.8')) }}
+        name: Install automl dependencies
+        shell: bash -l {0}
+        run: |
+          pip install -r ${{ matrix.packageDirectory }}/requirements-automl.txt
 
       - name: Install package
         shell: bash -l {0}
