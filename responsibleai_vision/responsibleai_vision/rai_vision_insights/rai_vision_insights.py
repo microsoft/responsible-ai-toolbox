@@ -1083,10 +1083,11 @@ class RAIVisionInsights(RAIBaseInsights):
         true_y = dashboard_dataset.object_detection_true_y
         predicted_y = dashboard_dataset.object_detection_predicted_y
 
-        normalized_iou_thresh = [iou_thresh/100.0]
+        normalized_iou_thresh = [iou_thresh / 100.0]
         all_cohort_metrics = []
         for cohort_indices in selection_indexes:
-            key = ','.join([str(cid) for cid in cohort_indices] + [aggregate_method, class_name, str(iou_thresh)])
+            key = ','.join([str(cid) for cid in cohort_indices] +
+                           [aggregate_method, class_name, str(iou_thresh)])
             if key in object_detection_cache:
                 all_cohort_metrics.append(object_detection_cache[key])
                 continue
