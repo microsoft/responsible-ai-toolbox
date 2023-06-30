@@ -17,15 +17,12 @@ import {
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  BinaryClassificationMetrics,
-  RegressionMetrics,
   generateMetrics,
   JointDataset,
   ModelTypes,
   MultilabelMetrics,
   ObjectDetectionMetrics,
   FluentUIStyles,
-  MulticlassClassificationMetrics,
   ErrorCohort,
   ILabeledStatistic,
   ITelemetryEvent,
@@ -51,6 +48,11 @@ import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewChartPivot } from "./ModelOverviewChartPivot";
 import { ObjectDetectionWidgets } from "./ObjectDetectionModelOverview";
 import { getSelectableMetrics } from "./StatsTableUtils";
+import {
+  BinaryClassificationMetrics,
+  MulticlassClassificationMetrics,
+  RegressionMetrics
+} from "libs/core-ui/src/lib/util/StatisticsUtilsEnums";
 
 interface IModelOverviewProps {
   telemetryHook?: (message: ITelemetryEvent) => void;

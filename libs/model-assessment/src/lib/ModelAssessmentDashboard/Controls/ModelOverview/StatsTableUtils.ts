@@ -3,21 +3,23 @@
 
 import { getTheme, IDropdownOption } from "@fluentui/react";
 import {
-  BinaryClassificationMetrics,
   DatasetTaskType,
   ErrorCohort,
   HighchartsNull,
   ILabeledStatistic,
   ImageClassificationMetrics,
-  MulticlassClassificationMetrics,
   MultilabelMetrics,
   ObjectDetectionMetrics,
   QuestionAnsweringMetrics,
-  RegressionMetrics,
   TotalCohortSamples
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
+import {
+  MulticlassClassificationMetrics,
+  BinaryClassificationMetrics,
+  RegressionMetrics
+} from "libs/core-ui/src/lib/util/StatisticsUtilsEnums";
 
 export interface IFairnessStats {
   max: number;
