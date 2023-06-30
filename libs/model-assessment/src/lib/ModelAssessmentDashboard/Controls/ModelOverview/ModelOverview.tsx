@@ -90,14 +90,12 @@ interface IModelOverviewState {
 const datasetCohortViewPivotKey = "datasetCohortView";
 const disaggregatedAnalysisPivotKey = "disaggregatedAnalysis";
 
-type modelOverviewKeyType = [number[], string, string, number];
-
 export class ModelOverview extends React.Component<
   IModelOverviewProps,
   IModelOverviewState
 > {
-  public objectDetectionCache: Map<string, [number, number, number]> = new Map();
   public static contextType = ModelAssessmentContext;
+  public objectDetectionCache: Map<string, [number, number, number]> = new Map();
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
   private featureComboBoxRef = React.createRef<IComboBox>();
@@ -602,8 +600,6 @@ export class ModelOverview extends React.Component<
     const selectionIndexes: number[][] = this.context.errorCohorts.map(
       (errorCohort) => errorCohort.cohort.unwrap(JointDataset.IndexLabel)
     );
-    console.log('existing cache');
-    console.log(this.objectDetectionCache);
     const datasetCohortMetricStats = generateMetrics(
       this.context.jointDataset,
       selectionIndexes,
@@ -656,7 +652,7 @@ export class ModelOverview extends React.Component<
           ] of result.entries()) {
             const count = selectionIndexes[cohortIndex].length;
 
-            const key: modelOverviewKeyType = [
+            const key: [number[], string, string, number] = [
               selectionIndexes[cohortIndex], 
               this.state.aggregateMethod, 
               this.state.className, 
@@ -664,8 +660,6 @@ export class ModelOverview extends React.Component<
             ];
             if (!this.objectDetectionCache.has(key.toString())) {
               this.objectDetectionCache.set(key.toString(), [meanAveragePrecision, averagePrecision, averageRecall]);
-              console.log('set new value');
-              console.log(this.objectDetectionCache);
             }
 
             const updatedCohortMetricStats = [

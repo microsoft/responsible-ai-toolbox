@@ -22,27 +22,7 @@ import {
 import { generateMultilabelStats } from "./MultilabelStatisticsUtils";
 import { generateObjectDetectionStats } from "./ObjectDetectionStatisticsUtils";
 import { generateQuestionAnsweringStats } from "./QuestionAnsweringStatisticsUtils";
-
-export enum BinaryClassificationMetrics {
-  Accuracy = "accuracy",
-  Precision = "precision",
-  Recall = "recall",
-  FalseNegativeRate = "falseNegativeRate",
-  FalsePositiveRate = "falsePositiveRate",
-  SelectionRate = "selectionRate",
-  F1Score = "f1Score"
-}
-
-export enum RegressionMetrics {
-  MeanSquaredError = "meanSquaredError",
-  MeanAbsoluteError = "meanAbsoluteError",
-  MeanPrediction = "meanPrediction",
-  RSquared = "rSquared"
-}
-
-export enum MulticlassClassificationMetrics {
-  Accuracy = "accuracy"
-}
+import { BinaryClassificationMetrics, MulticlassClassificationMetrics, RegressionMetrics } from "./StatisticsUtilsEnums";
 
 const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
   outcomes: number[]
@@ -256,7 +236,7 @@ export const generateMetrics: (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
   modelType: ModelTypes,
-  objectDetectionCache?: Map<string, [number, number, number]>, //  = new Map()
+  objectDetectionCache?: Map<string, [number, number, number]>,
   objectDetectionInputs?: [string, string, number]
 ): ILabeledStatistic[][] => {
   if (

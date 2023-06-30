@@ -20,7 +20,7 @@ export const generateObjectDetectionStats: (
   objectDetectionInputs: [string, string, number]
 ) => ILabeledStatistic[][] = (
   selectionIndexes: number[][],
-  objectDetectionCache: Map<string, [number, number, number]>, //  = new Map()
+  objectDetectionCache: Map<string, [number, number, number]>,
   objectDetectionInputs: [string, string, number]
 ): ILabeledStatistic[][] => {
   return selectionIndexes.map((selectionArray) => {
@@ -33,9 +33,6 @@ export const generateObjectDetectionStats: (
       objectDetectionInputs[2]
     ];
     const value = objectDetectionCache.get(key.toString());
-    console.log('retrieving key');
-    console.log(key.toString());
-    console.log(value);
     const stat = value ? value : [Number.NaN, Number.NaN, Number.NaN];
 
     return [
