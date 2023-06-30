@@ -632,7 +632,7 @@ export class ModelOverview extends React.Component<
       selectionIndexes.length > 0 &&
       this.state.aggregateMethod.length > 0 &&
       this.state.className.length > 0 &&
-      this.state.iouThresh // TODO: and if value doesn't exist in cache!
+      this.state.iouThresh
     ) {
       this.context
         .requestObjectDetectionMetrics(
