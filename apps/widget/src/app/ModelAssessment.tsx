@@ -61,7 +61,6 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
         aggregateMethod: string,
         className: string,
         iouThresh: number,
-        objectDetectionCache: Map<string, [number, number, number]>,
         abortSignal: AbortSignal
       ): Promise<any[]> => {
         return callFlaskService(
@@ -70,8 +69,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
             selectionIndexes,
             aggregateMethod,
             className,
-            iouThresh,
-            objectDetectionCache
+            iouThresh
           ],
           "/get_object_detection_metrics",
           abortSignal
@@ -82,11 +80,12 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       };
       callBack.requestQuestionAnsweringMetrics = async (
         selectionIndexes: number[][],
+        questionAnsweringCache: Map<string, [number, number, number, number, number, number]>,
         abortSignal: AbortSignal
       ): Promise<any[]> => {
         return callFlaskService(
           this.props.config,
-          [selectionIndexes],
+          [selectionIndexes, questionAnsweringCache],
           "/get_question_answering_metrics",
           abortSignal
         );

@@ -146,13 +146,13 @@ export interface IModelAssessmentContext {
         aggregateMethod: string,
         className: string,
         iouThresh: number,
-        objectDetectionCache: Map<string, [number, number, number]>,
         abortSignal: AbortSignal
       ) => Promise<any[]>)
     | undefined;
   requestQuestionAnsweringMetrics?:
     | ((
         selectionIndexes: number[][],
+        questionAnsweringCache: Map<string, [number, number, number, number, number, number]>,
         abortSignal: AbortSignal
       ) => Promise<any[]>)
     | undefined;

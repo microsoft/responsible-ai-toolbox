@@ -234,14 +234,12 @@ export const generateMetrics: (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
   modelType: ModelTypes,
-  objectDetectionCache?: Map<string, [number, number, number]>,
-  objectDetectionInputs?: [string, string, number]
+  questionAnsweringCache?: Map<string, [number, number, number, number, number, number]>,
 ) => ILabeledStatistic[][] = (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
   modelType: ModelTypes,
-  objectDetectionCache?: Map<string, [number, number, number]>,
-  objectDetectionInputs?: [string, string, number]
+  questionAnsweringCache?: Map<string, [number, number, number, number, number, number]>,
 ): ILabeledStatistic[][] => {
   if (
     modelType === ModelTypes.ImageMultilabel ||
@@ -249,8 +247,8 @@ export const generateMetrics: (
   ) {
     return generateMultilabelStats(jointDataset, selectionIndexes);
   }
-  if (modelType === ModelTypes.QuestionAnswering) {
-    return generateQuestionAnsweringStats(selectionIndexes);
+  if (modelType === ModelTypes.QuestionAnswering && questionAnsweringCache) {
+    return generateQuestionAnsweringStats(selectionIndexes, questionAnsweringCache);
   }
   const trueYs = jointDataset.unwrap(JointDataset.TrueYLabel);
   const predYs = jointDataset.unwrap(JointDataset.PredictedYLabel);
@@ -270,16 +268,8 @@ export const generateMetrics: (
       return generateImageStats(trueYSubset, predYSubset);
     });
   }
-  if (
-    modelType === ModelTypes.ObjectDetection &&
-    objectDetectionCache &&
-    objectDetectionInputs
-  ) {
-    return generateObjectDetectionStats(
-      selectionIndexes,
-      objectDetectionCache,
-      objectDetectionInputs
-    );
+  if (modelType === ModelTypes.ObjectDetection) {
+    return generateObjectDetectionStats(selectionIndexes);
   }
   const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
   return selectionIndexes.map((selectionArray) => {

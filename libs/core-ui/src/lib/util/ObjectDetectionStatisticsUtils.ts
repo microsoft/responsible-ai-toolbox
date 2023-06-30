@@ -15,25 +15,12 @@ export enum ObjectDetectionMetrics {
 }
 
 export const generateObjectDetectionStats: (
-  selectionIndexes: number[][],
-  objectDetectionCache: Map<string, [number, number, number]>,
-  objectDetectionInputs: [string, string, number]
+  selectionIndexes: number[][]
 ) => ILabeledStatistic[][] = (
-  selectionIndexes: number[][],
-  objectDetectionCache: Map<string, [number, number, number]>,
-  objectDetectionInputs: [string, string, number]
+  selectionIndexes: number[][]
 ): ILabeledStatistic[][] => {
   return selectionIndexes.map((selectionArray) => {
     const count = selectionArray.length;
-
-    const key: [number[], string, string, number] = [
-      selectionArray,
-      objectDetectionInputs[0],
-      objectDetectionInputs[1],
-      objectDetectionInputs[2]
-    ];
-    const value = objectDetectionCache.get(key.toString());
-    const stat = value ? value : [Number.NaN, Number.NaN, Number.NaN];
 
     return [
       {
@@ -44,17 +31,17 @@ export const generateObjectDetectionStats: (
       {
         key: ObjectDetectionMetrics.MeanAveragePrecision,
         label: localization.Interpret.Statistics.meanAveragePrecision,
-        stat: stat[0]
+        stat: Number.isNaN
       },
       {
         key: ObjectDetectionMetrics.AveragePrecision,
         label: localization.Interpret.Statistics.averagePrecision,
-        stat: stat[1]
+        stat: Number.isNaN
       },
       {
         key: ObjectDetectionMetrics.AverageRecall,
         label: localization.Interpret.Statistics.averageRecall,
-        stat: stat[2]
+        stat: Number.isNaN
       }
     ];
   });

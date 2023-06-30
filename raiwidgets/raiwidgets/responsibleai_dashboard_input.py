@@ -369,8 +369,10 @@ class ResponsibleAIDashboardInput:
         """
         try:
             selection_indexes = post_data[0]
+            question_answering_cache = post_data[1]
             exp = self._analysis.compute_question_answering_metrics(
-                selection_indexes
+                selection_indexes,
+                question_answering_cache
             )
             return {
                 WidgetRequestResponseConstants.data: exp

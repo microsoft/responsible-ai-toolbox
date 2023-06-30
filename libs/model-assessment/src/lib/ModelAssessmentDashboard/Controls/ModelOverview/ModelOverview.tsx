@@ -58,11 +58,11 @@ interface IModelOverviewProps {
     selectionIndexes: number[][],
     aggregateMethod: string,
     className: string,
-    iouThresh: number,
-    objectDetectionCache: Map<string, [number, number, number]>
+    iouThresh: number
   ) => Promise<any[]>;
   requestQuestionAnsweringMetrics?: (
-    selectionIndexes: number[][]
+    selectionIndexes: number[][],
+    questionAnsweringCache: Map<string, [number, number, number, number, number, number]>
   ) => Promise<any[]>;
 }
 
@@ -95,7 +95,7 @@ export class ModelOverview extends React.Component<
   IModelOverviewState
 > {
   public static contextType = ModelAssessmentContext;
-  public objectDetectionCache: Map<string, [number, number, number]> =
+  public questionAnsweringCache: Map<string, [number, number, number, number, number, number]> =
     new Map();
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
@@ -605,8 +605,7 @@ export class ModelOverview extends React.Component<
       this.context.jointDataset,
       selectionIndexes,
       this.context.modelMetadata.modelType,
-      this.objectDetectionCache,
-      [this.state.aggregateMethod, this.state.className, this.state.iouThresh]
+      this.questionAnsweringCache
     );
 
     this.setState({
@@ -640,7 +639,6 @@ export class ModelOverview extends React.Component<
           this.state.aggregateMethod,
           this.state.className,
           this.state.iouThresh,
-          this.objectDetectionCache,
           new AbortController().signal
         )
         .then((result) => {
@@ -652,20 +650,6 @@ export class ModelOverview extends React.Component<
             [meanAveragePrecision, averagePrecision, averageRecall]
           ] of result.entries()) {
             const count = selectionIndexes[cohortIndex].length;
-
-            const key: [number[], string, string, number] = [
-              selectionIndexes[cohortIndex],
-              this.state.aggregateMethod,
-              this.state.className,
-              this.state.iouThresh
-            ];
-            if (!this.objectDetectionCache.has(key.toString())) {
-              this.objectDetectionCache.set(key.toString(), [
-                meanAveragePrecision,
-                averagePrecision,
-                averageRecall
-              ]);
-            }
 
             const updatedCohortMetricStats = [
               {
@@ -711,6 +695,7 @@ export class ModelOverview extends React.Component<
       this.context
         .requestQuestionAnsweringMetrics(
           selectionIndexes,
+          this.questionAnsweringCache,
           new AbortController().signal
         )
         .then((result) => {
@@ -729,6 +714,17 @@ export class ModelOverview extends React.Component<
             ]
           ] of result.entries()) {
             const count = selectionIndexes[cohortIndex].length;
+
+            if (!this.questionAnsweringCache.has(selectionIndexes[cohortIndex].toString())) {
+              this.questionAnsweringCache.set(selectionIndexes[cohortIndex].toString(), [
+                exactMatchRatio,
+                f1Score,
+                meteorScore,
+                bleuScore,
+                bertScore,
+                rougeScore
+              ]);
+            }
 
             const updatedCohortMetricStats = [
               {
@@ -804,8 +800,7 @@ export class ModelOverview extends React.Component<
       this.context.jointDataset,
       selectionIndexes,
       this.context.modelMetadata.modelType,
-      this.objectDetectionCache,
-      [this.state.aggregateMethod, this.state.className, this.state.iouThresh]
+      this.questionAnsweringCache
     );
 
     this.setState({
