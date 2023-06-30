@@ -66,7 +66,13 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       ): Promise<any[]> => {
         return callFlaskService(
           this.props.config,
-          [selectionIndexes, aggregateMethod, className, iouThresh, objectDetectionCache],
+          [
+            selectionIndexes,
+            aggregateMethod,
+            className,
+            iouThresh,
+            objectDetectionCache
+          ],
           "/get_object_detection_metrics",
           abortSignal
         );

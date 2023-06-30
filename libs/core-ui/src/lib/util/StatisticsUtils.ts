@@ -22,7 +22,11 @@ import {
 import { generateMultilabelStats } from "./MultilabelStatisticsUtils";
 import { generateObjectDetectionStats } from "./ObjectDetectionStatisticsUtils";
 import { generateQuestionAnsweringStats } from "./QuestionAnsweringStatisticsUtils";
-import { BinaryClassificationMetrics, MulticlassClassificationMetrics, RegressionMetrics } from "./StatisticsUtilsEnums";
+import {
+  BinaryClassificationMetrics,
+  MulticlassClassificationMetrics,
+  RegressionMetrics
+} from "./StatisticsUtilsEnums";
 
 const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
   outcomes: number[]
@@ -266,8 +270,16 @@ export const generateMetrics: (
       return generateImageStats(trueYSubset, predYSubset);
     });
   }
-  if (modelType === ModelTypes.ObjectDetection && objectDetectionCache && objectDetectionInputs) {
-    return generateObjectDetectionStats(selectionIndexes, objectDetectionCache, objectDetectionInputs);
+  if (
+    modelType === ModelTypes.ObjectDetection &&
+    objectDetectionCache &&
+    objectDetectionInputs
+  ) {
+    return generateObjectDetectionStats(
+      selectionIndexes,
+      objectDetectionCache,
+      objectDetectionInputs
+    );
   }
   const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
   return selectionIndexes.map((selectionArray) => {

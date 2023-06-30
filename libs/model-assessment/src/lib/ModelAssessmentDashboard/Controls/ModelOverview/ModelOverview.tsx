@@ -59,7 +59,7 @@ interface IModelOverviewProps {
     aggregateMethod: string,
     className: string,
     iouThresh: number,
-    objectDetectionCache: Map<string, [number, number, number]>,
+    objectDetectionCache: Map<string, [number, number, number]>
   ) => Promise<any[]>;
   requestQuestionAnsweringMetrics?: (
     selectionIndexes: number[][]
@@ -95,7 +95,8 @@ export class ModelOverview extends React.Component<
   IModelOverviewState
 > {
   public static contextType = ModelAssessmentContext;
-  public objectDetectionCache: Map<string, [number, number, number]> = new Map();
+  public objectDetectionCache: Map<string, [number, number, number]> =
+    new Map();
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
   private featureComboBoxRef = React.createRef<IComboBox>();
@@ -653,13 +654,17 @@ export class ModelOverview extends React.Component<
             const count = selectionIndexes[cohortIndex].length;
 
             const key: [number[], string, string, number] = [
-              selectionIndexes[cohortIndex], 
-              this.state.aggregateMethod, 
-              this.state.className, 
+              selectionIndexes[cohortIndex],
+              this.state.aggregateMethod,
+              this.state.className,
               this.state.iouThresh
             ];
             if (!this.objectDetectionCache.has(key.toString())) {
-              this.objectDetectionCache.set(key.toString(), [meanAveragePrecision, averagePrecision, averageRecall]);
+              this.objectDetectionCache.set(key.toString(), [
+                meanAveragePrecision,
+                averagePrecision,
+                averageRecall
+              ]);
             }
 
             const updatedCohortMetricStats = [
