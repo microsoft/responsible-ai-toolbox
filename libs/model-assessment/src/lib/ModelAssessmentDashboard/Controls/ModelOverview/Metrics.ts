@@ -10,15 +10,13 @@ import {
   Metrics,
   generateMetrics,
   JointDataset,
+  BinaryClassificationMetrics,
+  MulticlassClassificationMetrics,
+  RegressionMetrics,
   TotalCohortSamples,
   ifEnableLargeData
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  BinaryClassificationMetrics,
-  MulticlassClassificationMetrics,
-  RegressionMetrics
-} from "libs/core-ui/src/lib/util/StatisticsUtilsEnums";
 
 export async function generateMetricsCohortsSDK(
   context: IModelAssessmentContext,
