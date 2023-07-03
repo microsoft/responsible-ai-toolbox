@@ -18,6 +18,7 @@ from common_vision_utils import (FRIDGE_MULTILABEL_TARGETS, ImageTransformEnum,
                                  load_multilabel_fridge_dataset,
                                  retrieve_fridge_object_detection_model,
                                  retrieve_or_train_fridge_model)
+from ml_wrappers.common.constants import Device
 from rai_vision_insights_validator import validate_rai_vision_insights
 
 from responsibleai.feature_metadata import FeatureMetadata
@@ -138,6 +139,27 @@ class TestRAIVisionInsights(object):
             run_rai_insights(model, data[:1], ImageColumns.LABEL,
                              task_type, class_names, mask_res=mask_res)
 
+    @pytest.mark.parametrize('device', [None, 'cpu'])
+    def test_rai_insights_device(self, device):
+        data = load_fridge_object_detection_dataset()
+        model = retrieve_fridge_object_detection_model()
+        task_type = ModelTask.OBJECT_DETECTION
+        class_names = np.array(['can', 'carton',
+                                'milk_bottle', 'water_bottle'])
+        run_rai_insights(model, data[:1], ImageColumns.LABEL,
+                         task_type, class_names, device=device)
+
+    @pytest.mark.parametrize('device', ["bad_device", ""])
+    def test_rai_insights_invalid_device(self, device):
+        data = load_fridge_object_detection_dataset()
+        model = retrieve_fridge_object_detection_model()
+        task_type = ModelTask.OBJECT_DETECTION
+        class_names = np.array(['can', 'carton',
+                                'milk_bottle', 'water_bottle'])
+        with pytest.raises(ValueError, match="Selected device is invalid"):
+            run_rai_insights(model, data[:1], ImageColumns.LABEL,
+                             task_type, class_names, device=device)
+
     @pytest.mark.skip("This test fails in the build due to \
                       incompatibility between fastai and pytorch \
                       2.0.0. TODO: fix may be to ping pytorch <2.0.0 \
@@ -233,7 +255,8 @@ def run_rai_insights(model, test_data, target_column,
                      image_mode=None, dropped_features=None,
                      upscale=False, max_evals=DEFAULT_MAX_EVALS,
                      num_masks=DEFAULT_NUM_MASKS,
-                     mask_res=DEFAULT_MASK_RES):
+                     mask_res=DEFAULT_MASK_RES,
+                     device=Device.AUTO.value):
     feature_metadata = None
     if dropped_features:
         feature_metadata = FeatureMetadata(dropped_features=dropped_features)
@@ -249,7 +272,8 @@ def run_rai_insights(model, test_data, target_column,
                                      image_width=image_width,
                                      max_evals=max_evals,
                                      num_masks=num_masks,
-                                     mask_res=mask_res)
+                                     mask_res=mask_res,
+                                     device=device)
     # Note: this seems too resource-intensive
     # TODO: re-add when we get beefier test machines
     if test_explainer:
