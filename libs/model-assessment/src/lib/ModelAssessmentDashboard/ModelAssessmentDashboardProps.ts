@@ -119,7 +119,7 @@ export interface IModelAssessmentDashboardProps
     selectionIndexes: number[][],
     aggregateMethod: string,
     className: string,
-    iouThresh: number,
+    iouThreshold: number,
     objectDetectionCache: Map<string, [number, number, number]>,
     abortSignal: AbortSignal
   ) => Promise<any[]>;

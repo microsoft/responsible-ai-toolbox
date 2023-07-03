@@ -60,7 +60,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
         selectionIndexes: number[][],
         aggregateMethod: string,
         className: string,
-        iouThresh: number,
+        iouThreshold: number,
         objectDetectionCache: Map<string, [number, number, number]>,
         abortSignal: AbortSignal
       ): Promise<any[]> => {
@@ -70,7 +70,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
             selectionIndexes,
             aggregateMethod,
             className,
-            iouThresh,
+            iouThreshold,
             objectDetectionCache
           ],
           "/get_object_detection_metrics",

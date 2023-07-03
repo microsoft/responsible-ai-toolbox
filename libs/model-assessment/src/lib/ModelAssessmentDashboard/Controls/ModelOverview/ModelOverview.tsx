@@ -58,7 +58,7 @@ interface IModelOverviewProps {
     selectionIndexes: number[][],
     aggregateMethod: string,
     className: string,
-    iouThresh: number,
+    iouThreshold: number,
     objectDetectionCache: Map<string, [number, number, number]>
   ) => Promise<any[]>;
   requestQuestionAnsweringMetrics?: (
@@ -84,7 +84,7 @@ interface IModelOverviewState {
   className: string;
   featureBasedCohortLabeledStatistics: ILabeledStatistic[][];
   featureBasedCohorts: ErrorCohort[];
-  iouThresh: number;
+  iouThreshold: number;
 }
 
 const datasetCohortViewPivotKey = "datasetCohortView";
@@ -116,7 +116,7 @@ export class ModelOverview extends React.Component<
       featureBasedCohortLabeledStatistics: [],
       featureBasedCohorts: [],
       featureConfigurationIsVisible: false,
-      iouThresh: 70,
+      iouThreshold: 70,
       metricConfigurationIsVisible: false,
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
@@ -584,7 +584,7 @@ export class ModelOverview extends React.Component<
   };
 
   private setIoUThreshold = (value: number): void => {
-    this.setState({ iouThresh: value }, () => {
+    this.setState({ iouThreshold: value }, () => {
       if (this.state.datasetCohortChartIsVisible) {
         this.updateDatasetCohortStats();
       } else {
@@ -606,7 +606,7 @@ export class ModelOverview extends React.Component<
       selectionIndexes,
       this.context.modelMetadata.modelType,
       this.objectDetectionCache,
-      [this.state.aggregateMethod, this.state.className, this.state.iouThresh]
+      [this.state.aggregateMethod, this.state.className, this.state.iouThreshold]
     );
 
     this.setState({
@@ -632,14 +632,14 @@ export class ModelOverview extends React.Component<
       selectionIndexes.length > 0 &&
       this.state.aggregateMethod.length > 0 &&
       this.state.className.length > 0 &&
-      this.state.iouThresh
+      this.state.iouThreshold
     ) {
       this.context
         .requestObjectDetectionMetrics(
           selectionIndexes,
           this.state.aggregateMethod,
           this.state.className,
-          this.state.iouThresh,
+          this.state.iouThreshold,
           this.objectDetectionCache,
           new AbortController().signal
         )
@@ -657,7 +657,7 @@ export class ModelOverview extends React.Component<
               selectionIndexes[cohortIndex],
               this.state.aggregateMethod,
               this.state.className,
-              this.state.iouThresh
+              this.state.iouThreshold
             ];
             if (!this.objectDetectionCache.has(key.toString())) {
               this.objectDetectionCache.set(key.toString(), [
@@ -805,7 +805,7 @@ export class ModelOverview extends React.Component<
       selectionIndexes,
       this.context.modelMetadata.modelType,
       this.objectDetectionCache,
-      [this.state.aggregateMethod, this.state.className, this.state.iouThresh]
+      [this.state.aggregateMethod, this.state.className, this.state.iouThreshold]
     );
 
     this.setState({
