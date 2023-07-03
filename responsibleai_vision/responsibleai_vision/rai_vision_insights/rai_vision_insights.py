@@ -19,6 +19,7 @@ import numpy as np
 import pandas as pd
 import torch
 from ml_wrappers import wrap_model
+from ml_wrappers.common.constants import Device
 from torchmetrics.detection.mean_ap import MeanAveragePrecision
 
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
@@ -56,6 +57,7 @@ _IMAGE_WIDTH = 'image_width'
 _MAX_EVALS = 'max_evals'
 _NUM_MASKS = 'num_masks'
 _MASK_RES = 'mask_res'
+_DEVICE = 'device'
 _PREDICTIONS = 'predictions'
 _TEST = 'test'
 _TARGET_COLUMN = 'target_column'
@@ -117,7 +119,8 @@ class RAIVisionInsights(RAIBaseInsights):
                  image_width: Optional[float] = None,
                  max_evals: Optional[int] = DEFAULT_MAX_EVALS,
                  num_masks: Optional[int] = DEFAULT_NUM_MASKS,
-                 mask_res: Optional[int] = DEFAULT_MASK_RES):
+                 mask_res: Optional[int] = DEFAULT_MASK_RES,
+                 device: Optional[str] = Device.AUTO.value):
         """Creates an RAIVisionInsights object.
 
         :param model: The model to compute RAI insights for.
@@ -175,6 +178,9 @@ class RAIVisionInsights(RAIBaseInsights):
             DRISE image explainer for object detection.
             If not specified defaults to 4.
         :type mask_res: int
+        :param device: The device to run the model on.
+            If not specified defaults to Device.AUTO.
+        :type device: str
         """
         # drop index as this can cause issues later like when copying
         # target column below from test dataset to _ext_test_df
@@ -197,16 +203,19 @@ class RAIVisionInsights(RAIBaseInsights):
             mask_res = DEFAULT_MASK_RES
         elif mask_res < 1:
             raise ValueError('mask_res must be greater than 0')
+        if device is None:
+            device = Device.AUTO.value
         self.max_evals = max_evals
         self.num_masks = num_masks
         self.mask_res = mask_res
+        self.device = device
         self.test_mltable_path = test_data_path
         self._transformations = transformations
         self._image_downloader = image_downloader
         sample = test.iloc[0:2]
         sample = get_images(sample, self.image_mode, self._transformations)
         self._wrapped_model = wrap_model(
-            model, sample, task_type, classes=classes)
+            model, sample, task_type, classes=classes, device=device)
 
         # adding this field to use in _get_single_image and _save_predictions
         self._task_type = task_type
@@ -907,7 +916,8 @@ class RAIVisionInsights(RAIBaseInsights):
             _IMAGE_WIDTH: self.image_width,
             _MAX_EVALS: self.max_evals,
             _NUM_MASKS: self.num_masks,
-            _MASK_RES: self.mask_res
+            _MASK_RES: self.mask_res,
+            _DEVICE: self.device
         }
         with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)
@@ -932,8 +942,9 @@ class RAIVisionInsights(RAIBaseInsights):
             inst.__dict__[_IMAGE_WIDTH] = meta[_IMAGE_WIDTH]
         else:
             inst.__dict__[_IMAGE_WIDTH] = None
-        params = [_MAX_EVALS, _NUM_MASKS, _MASK_RES]
-        defaults = [DEFAULT_MAX_EVALS, DEFAULT_NUM_MASKS, DEFAULT_MASK_RES]
+        params = [_MAX_EVALS, _NUM_MASKS, _MASK_RES, _DEVICE]
+        defaults = [DEFAULT_MAX_EVALS, DEFAULT_NUM_MASKS,
+                    DEFAULT_MASK_RES, Device.AUTO.value]
         for param, default in zip(params, defaults):
             if param in meta:
                 inst.__dict__[param] = meta[param]
@@ -1064,7 +1075,8 @@ class RAIVisionInsights(RAIBaseInsights):
         RAIBaseInsights._load(
             path, inst, manager_map, RAIVisionInsights._load_metadata)
         inst._wrapped_model = wrap_model(inst.model, inst.test, inst.task_type,
-                                         classes=inst._classes)
+                                         classes=inst._classes,
+                                         device=inst.device)
         inst.automl_image_model = is_automl_image_model(inst._wrapped_model)
         inst.predict_output = None
         return inst
