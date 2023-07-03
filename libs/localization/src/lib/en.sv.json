@@ -1,24 +1,45 @@
 {
   "Common": {
-    "close": "Close",
-    "tooltipButton": "Tooltip button",
-    "identityFeature": "Identity feature"
+    "close": "Stänga",
+    "tooltipButton": "Knappbeskrivning",
+    "identityFeature": "Identitetsfunktion",
+    "infoTitle": "Additional information",
+    "spinButton": "Spin",
+    "editButton": "Edit",
+    "decreaseValue": "Decrease value",
+    "increaseValue": "Increase value",
+    "decreaseValueByOne": "Decrease value by 1",
+    "increaseValueByOne": "Increase value by 1",
+    "loading": "Loading..."
+  },
+  "ChartContextMenu": {
+    "hideData": "Hide data table",
+    "viewData": "View data table",
+    "viewInFullScreen": "View in full screen",
+    "printChart": "Print chart",
+    "downloadCSV": "Download CSV",
+    "downloadPNG": "Download PNG image",
+    "downloadJPEG": "Download JPEG image",
+    "downloadPDF": "Download PDF document",
+    "downloadSVG": "Download SVG vector image",
+    "downloadXLS": "Download XLS"
   },
   "CausalAnalysis": {
     "AggregateView": {
       "binary": "Binära behandlingar: ",
-      "binaryDescription": "On average in this sample, turning on this feature will cause the probability of class/label '{0}' to increase by X units.",
-      "regressionDescription": "On average in this sample, turning on this feature will cause the predictions of the target to increase/decrease by X units.",
+      "binaryDescription": "Om den här funktionen sktiveras ökar det sannolikheten för klass/etikett {0} med X enheter i genomsnitt i det här exemplet.",
+      "regressionDescription": "Om du aktiverar den här funktionen i genomsnitt i det här exemplet kommer förutsägelserna för målet att öka/minska med X-enheter.",
       "causalPoint": "Orsaksverkanspunkt",
       "confidenceLower": "Konfidensintervall (lägre)",
       "confidenceUpper": "Konfidensintervall (övre)",
       "confoundingFeature": "En funktion som är påslagen korreleras med både behandling och intresseresultatet. Counfounder skapar en extra korrelationssökväg från behandlingen till resultat utöver den direkta orsakseffekten. Om det inte finns några funktioner som mäts och ingår i modellen, kan dessa extra korrelationer bias uppskattning av orsakseffekten. Bias kan vara positiv eller negativ, beroende på riktningarna för korrelationer mellan utelämnade confounders, behandling och resultat.",
       "continuous": "Kontinuerliga behandlingar: ",
-      "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the probability of class/label '{0}' to increase by X units.",
-      "continuousRegressionDescription": "On average in this sample, increasing this feature by 1 unit will cause the predictions of the target to increase/decrease by X units.",
+      "continuousDescription": "Om den här funktionen ökas med 1 enhet ökar det sannolikheten för klass/etikett {0} med X enheter i genomsnitt i det här exemplet.",
+      "continuousRegressionDescription": "I det här exemplet gör en ökning av den här funktionen med 1 enhet i genomsnitt att förutsägelserna för målet ökar/minskar med X-enheter.",
       "description": "Orsaksanalys svarar \"Vad händer om\"-frågor om hur verkliga resultat skulle ha ändrats under andra principval, såsom en annan prisstrategi för en produkt eller en alternativprincip för en patient. Till skillnad från modellförutsägelser som identifierar viktiga korrelationsmönster hjälper de här verktygen dig att identifiera de viktigaste orsakssamband som direkt påverkar ditt resultat av intresse. Dessa modeller identifierar orsakseffekten för en funktion (vanligtvis kallad “behandling”) och håller andra confounder-funktioner konstanta. För bästa resultat, se till att hela datamängden innehåller alla tillgängliga funktioner som kan korreleras med resultatet som confounders.",
       "directAggregate": "Direkt aggregerad orsakseffekt för varje behandling med 95 % konfidensintervall",
       "here": "här",
+      "infoTitle": "Additional information on aggregated causal effects",
       "lasso": "En lasso (eller logistisk regression om y är binär) passade för att förutse y från X [-i], och en lasso (eller logistisk regression om X[i] är kategorisk) passade för att förutsäga X[i] från Χ [-i]. Orsakssambandet kan ses som genomsnittskorrelationen för återstående/oväntade variationer av de två förutsägelseaktiviteterna. Läs mer om dubbel maskininlärning",
       "unconfounding": "Vad är confounding-funktioner?"
     },
@@ -26,10 +47,11 @@
       "currentOutcome": "Aktuellt resultat",
       "currentTreatment": "Aktuellt behandlingsvärde",
       "dataRequired": "På den här fliken måste en datapunkt väljas.",
-      "selectedDatapoint": "Selected datapoint",
+      "selectedDatapoint": "Vald datapunkt",
       "description": "Enskilda orsakssamband kan underrätta anpassade åtgärder, till exempel riktad marknadsföring mot kunder eller en enskild behandlingsplan. Hur skulle en individ med en viss uppsättning funktioner reagera på en ändring av ett orsakssamband eller behandling?  Orsakssambandet som används för att beräkna marginaländringarna i verkliga resultat för en viss individ om du ändrar nivån för en behandling. Med den här analysen kan du förstå hur verkliga resultat skulle ha ändrats under olika principval, till exempel en annan prisstrategi för en produkt eller en alternativ princip för en patient. Ange en behandling av intresse och observera hur det faktiska resultatet skulle ändras.",
       "directIndividual": "Direkt individuell orsakseffekt för varje behandling med 95 % konfidensintervall",
       "index": "Datapoint-index",
+      "infoTitle": "Additional information on individual causal what-if",
       "missingParameters": "Den här fliken kräver att en utvärderingsdatauppsättning anges.",
       "newOutcome": "Nytt resultat",
       "selectTreatment": "Välj behandling",
@@ -52,9 +74,9 @@
       "BarTextBinary": "Den första stapeln visar genomsnittligt antal relativa vinster om den rekommenderade globala behandlingsprincipen som beskrivs ovan tillämpades. De rapporterade vinsterna rapporterar den numeriska förändringen i behandlingen vi använt. I den andra stapeln anges relativa vinster (eller förluster) från att behandla alla genom att aktivera binära behandlingar.",
       "BarTextContinuous": "Den första stapeln visar genomsnittligt antal relativa vinster om den rekommenderade globala behandlingsprincipen som beskrivs ovan tillämpades. De rapporterade vinsterna återspeglar ökning/minskning av behandlingsfunktionen med 10 % av den normala behandlingsstorleken i provet. I den andra stapeln anges relativa vinster (eller förluster) från ökande/fallande kontinuerliga behandlingar med 10 %.",
       "Description": "Dessa verktyg hjälper dig att skapa principer för framtida åtgärder. Du kan identifiera vilka delar av exempelupplevelsen som har flest svar på en orsakssambandsdrivrutin (t. ex. behandling) eller skapa regler för att definiera vilka framtida populationer som får störst behandlingseffekter.",
-      "Left": "{0} less than or equal to {1}",
+      "Left": "{0} mindre än eller lika med {1}",
       "Recommended": "Rekommenderad behandling = {0}",
-      "Right": "{0} greater than {1}",
+      "Right": "{0} större än {1}",
       "SelectPolicy": "Ange behandlingsfunktion",
       "Size": "Tolkningsbar rekommenderad global behandlingsprincip för urvalsstorlek (n) = {0}",
       "Table": "Tabellen kan läsas genom att ta en rad och sedan ta en kolumn med den specifika raden.",
@@ -63,6 +85,7 @@
       "averageGainBinary": "Genomsnittligt vinst vid inställning av behandlingen {0} till dess baslinjevärde {1}.",
       "averageGainContinuous": "Genomsnittliga vinster med alternativa principer utan {0} behandling.",
       "header": "Dessa verktyg hjälper dig att skapa principer för framtida åtgärder. Du kan identifiera vilka delar av provupplevelsen som har störst svar på förändringar i orsakssamband, eller behandlingar, och skapa regler för att definiera vilka framtida populationer som ska riktas till särskilda åtgärder.",
+      "infoTitle": "Additional information on treatment policy",
       "nSample": "n = {0}",
       "noData": "Inga data"
     }
@@ -76,12 +99,12 @@
       "Title": "Inga data"
     },
     "ComparisonTypes": {
-      "lt": "{0} less than {1}",
-      "lte": "{0} less than or equal to {1}",
-      "gt": "{0} greater than {1}",
-      "gte": "{0} greater than or equal to {1}",
-      "eq": "{0} equal to {1}",
-      "ne": "{0} not equal to {1}",
+      "lt": "{0} mindre än {1}",
+      "lte": "{0} mindre än eller lika med {1}",
+      "gt": "{0} större än {1}",
+      "gte": "{0} större än eller lika med {1}",
+      "eq": "{0} lika med {1}",
+      "ne": "{0} inte lika med {1}",
       "in": "{0} i uppsättningen ({1})",
       "nin": "{0} inte i uppsättningen ({1})",
       "rg": "{0} i intervallet av ({1})",
@@ -89,18 +112,20 @@
       "Unknown": "okänt"
     },
     "ShiftCohort": {
-      "apply": "Apply",
-      "cancel": "Cancel",
-      "title": "Switch Cohort",
-      "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
+      "apply": "Använda",
+      "cancel": "Avbryt",
+      "title": "Byt kohort",
+      "subText": "Välj en kohort från kohort-listan. Tillämpa kohorten på instrumentpanelen.",
+      "selectCohort": "Select a cohort",
+      "cohortList": "Cohort list"
     },
     "PreBuiltCohort": {
-      "featureNameNotFound": "Feature name not found in the dataset",
-      "notACategoricalFeature": "Feature is not categorical"
+      "featureNameNotFound": "Funktionsnamnet hittades inte i datamängden",
+      "notACategoricalFeature": "Funktionen är inte kategorisk"
     },
     "EmptyCohortDialog": {
-      "title": "Dataset cohort contains no datapoints",
-      "subText": "It seems your dataset cohort contains no datapoints, adjust your filters to include at least one datapoint in your dataset cohort before saving."
+      "title": "Datamängdskohorten innehåller inga datapunkter",
+      "subText": "Det verkar som om din datamängdskohort inte innehåller några datapunkter, justera dina filter så att de innehåller minst en datapunkt i din datamängdskohort innan du sparar."
     }
   },
   "Counterfactuals": {
@@ -109,27 +134,30 @@
     "EffectOfTreatment": "Rekommendationens verkan",
     "EffectUpperBound": "CI upper",
     "ErrorDialog": {
-      "Close": "Close",
-      "ErrorPrefix": "Error encountered: {0}",
-      "PythonError": "Python error"
+      "Close": "Stäng",
+      "ErrorPrefix": "Ett fel påträffades: {0}",
+      "PythonError": "Python-fel"
     },
     "RecommendedTreatment": "Rekommenderad behandling",
     "WhatIf": {
       "setValue": "Ange värde",
       "sortFeatures": "Sortera funktionskolumner efter kontrafaktisk funktionsrelevans",
-      "percentCounterfactualLocalImportance": "Percentage of counterfactuals that varied the feature",
+      "percentCounterfactualLocalImportance": "Procentandel kontrafaktiska objekt som har varierat funktionen",
       "toggleToolTipBody": "Kontrafaktiska exempel genererar lokala funktionsprioriteter som anger vilka viktigaste funktionerna som påverkades mest för att uppnå önskade klassklassificeringsscenarier eller önskat intervall för regressionsscenarier.",
       "toggleToolTipHeader": "Rangordnade kontrafaktiska funktioner",
-      "predictedClass": "Predicted class",
-      "predictedValue": "Predicted value"
+      "predictedClass": "Förutsagd klass",
+      "predictedValue": "Förutsagt värde"
     },
+    "Size": "Size",
+    "loading": "Loading...",
     "counterfactualEx": "Kontrafaktiskt ex. {0}",
     "counterfactualName": "Kontrafaktual namn för konsekvensgranskning",
     "createWhatIfCounterfactual": "Skapa kontrafaktual namn för konsekvensgranskning",
     "createCounterfactual": "Kontrafaktiskt",
+    "revertToBubbleChart": "View bubble chart",
     "createOwn": "Skapa din egen kontrafaktiska villkorssats:",
     "currentClass": "Aktuell klass",
-    "currentRange": "Current range",
+    "currentRange": "Aktuellt intervall",
     "decreaseByOne": "Minska värdet med 1",
     "desiredClass": "Önskad klass för kontrafaktiska",
     "header": "Konsekvensgranskning av kontrafaktisk villkorssats",
@@ -139,10 +167,13 @@
     "listDescription": "Den här listan visar vilka datapunkter i det aktuella dataexemplet som har det största orsakssambandet med den valda behandlingen, baserat på alla funktioner som ingår i det uppskattade orsakssambandet. De fem vänstra kolumnerna rapporterar om behandlingen rekommenderas för observationen, den aktuella behandlingen, den uppskattade effekten av behandlingen (verkan av att tillämpa en behandling från en baslinje utan behandling av binära behandlingar eller ökning/minskning av behandlingsfunktionen med 10 % av den typiska behandlingsstorleken i provet: [dynamic: rapportera den numeriska ändringen av behandling vi använde]) och de nedre och övre konfidensintervallen (CI) för den här effekten. De återstående kolumnerna visar aktuell behandlingsstatus och andra funktioner för varje observation.",
     "localImportanceDescription": "De främsta rankade funktionerna i rad {0} att störa för att uppnå önskad modellförutsägelse. Baserat på konsekvensanalys för förutsägelse: {1}",
     "localImportanceSelectData": "Välj en datapunkt för att visa lokalt relevansdiagram",
+    "largeLocalImportanceSelectData": "Select a bubble, followed by a data point to view local importance chart",
+    "localImportanceFetchError": "There was an error while fetching the local importance data. Error details: {0} Please check the data used.",
+    "BubbleChartFetchError": "There was an error while fetching the data. Error details: {0} Please check the data used.",
     "noData": "Inga data",
     "noFeatures": "Inga funktioner tillgängliga",
-    "panelDescription": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set suggested counterfactual feature values by clicking “Set Value” text under each counterfactual name. Name your counterfactual and save it.",
-    "panelDescriptionWithoutSetValue": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples.",
+    "panelDescription": "Bläddra bland kontrafaktiska och skapa egna. Sök efter funktioner för att se föreslagna värden från en mängd olika kontrafaktiska exempel. Ange föreslaget kontrafaktiskt funktionsvärde genom att klicka på ange värdetext under varje kontrafaktisktnamn. Namnge ditt kontrafaktiska och spara det.",
+    "panelDescriptionWithoutSetValue": "Bläddra bland kontrafaktiska och skapa egna. Sök efter funktioner för att se föreslagna värden från en mängd olika kontrafaktiska exempel.",
     "whatIfPanelHeader": "Konsekvensgranskning",
     "panelHeader": "Motfakta",
     "recommendedPolicy": "Rekommenderade principvinster",
@@ -161,13 +192,13 @@
       "defaultLabel": "Alla data"
     },
     "CohortBaseAndFilters": {
-      "globalCohortAndFilters": "Global cohort and filters",
-      "globalCohort": "Global cohort",
-      "errorExplorer": "Error explorer",
-      "filters": "Filters"
+      "globalCohortAndFilters": "Global kohort och filter",
+      "globalCohort": "Global kohort",
+      "errorExplorer": "Felutforskaren",
+      "filters": "Filter"
     },
     "CohortInfo": {
-      "baseCohortInstances": "Instances in global cohort",
+      "baseCohortInstances": "Instanser i global kohort",
       "basicInformation": "Grundläggande information",
       "cohortInformation": "Kohortinformation",
       "correct": "Korrekt",
@@ -186,11 +217,13 @@
       "subText": "Läs mer om den valda kohorten. Redigera kohortens namn. Ta bort den här kohorten."
     },
     "FeatureList": {
-      "apply": "Apply",
+      "featureList": "Feature List",
+      "apply": "Använda",
       "features": "Funktioner",
       "importances": "Relevanser",
-      "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
-      "staticTreeMapDescription": "View the features that were used to train the tree map. The feature importances were calculated using mutual information with the error on the true labels."
+      "treeMapDescription": "Om du vill träna om trädkartan markerar och sparar du funktionerna nedan. Funktionsrelevanser har beräknats med gemensam information med felet på de verkliga etiketterna.  Använd det som riktlinje för träning av trädkartan.",
+      "staticTreeMapDescription": "Visa de funktioner som användes för att träna trädkartan. Funktionsprioriteterna beräknades med ömsesidig information med felet på de sanna etiketterna.",
+      "searchResultMessage": "Results displayed out of {resultLength} for {searchValue}"
     },
     "TreeViewParameters": {
       "maximumDepth": "Maximalt djup",
@@ -204,7 +237,7 @@
       "minDataInLeafTitle": "Ytterligare information om det minsta antalet prov i ett löv"
     },
     "TreeLegend": {
-      "clearSelection": "Clear selection"
+      "clearSelection": "Radera markering"
     },
     "FilterTooltip": {
       "correctNum": "Korrekt (#): ",
@@ -231,8 +264,8 @@
       "featureList": "Funktionslista",
       "fullscreen": "Helskärm",
       "heatMap": "Termisk karta",
-      "newCohort": "New cohort",
-      "shiftCohort": "Switch cohort",
+      "newCohort": "Ny kohort",
+      "shiftCohort": "Byt kohort",
       "treeMap": "Trädkarta",
       "whatIf": "What If"
     },
@@ -242,10 +275,10 @@
       "move": "Flytta",
       "saveAs": "Spara som ny kohort",
       "shift": "Växla",
-      "heatTitle": "Leave tree view?",
-      "heatSubText": "Are you sure you want to leave tree view? You can save your filters as a new cohort so you can access them in Cohort settings. Otherwise your filters will be lost.",
-      "treeTitle": "Leave heatmap view?",
-      "treeSubText": "Are you sure you want to leave heatmap view? You can save your filters as a new cohort so you can access them in Cohort settings. Otherwise your filters will be lost."
+      "heatTitle": "Vill du lämna trädvyn?",
+      "heatSubText": "Vill du lämna trädvyn? Du kan spara dina filter som en ny kohort så att du kan komma åt dem i kohortinställningarna. Annars går dina filter förlorade.",
+      "treeTitle": "Vill du lämna heatmap-vyn?",
+      "treeSubText": "Vill du lämna termisk karta? Du kan spara dina filter som en ny kohort så att du kan komma åt dem i kohortinställningarna. Annars går dina filter förlorade."
     },
     "MatrixArea": {
       "clearAll": "Rensa alla",
@@ -256,6 +289,7 @@
       "disabledWarning": "Fel heatmap inaktiveras om inte den globala kohorten växlas till att representera Alla data på grund av att termisk karta genereras för den fullständiga datamängden. Växla tillbaka till den fullständiga datauppsättningen för att visa fel heatmap."
     },
     "MatrixSummary": {
+      "heatMapInfoTitle": "Additional information on heat map",
       "heatMapDescription": "Med den termiska kartan kan du fokusera på specifika intersektionella funktionsfilter och beräkna uppdelade felfrekvenser. Börja med två datamängdsfunktioner att jämföra.",
       "heatMapStaticDescription": "Med termisk karta kan du fokusera på specifika intersektionella funktionsfilter och beräkna disaggregerade felfrekvenser. Upp till två funktioner måste väljas för att skapa en termisk karta via SDK innan du visar instrumentpanelen."
     },
@@ -270,64 +304,94 @@
       "binningThresholdTitle": "Ytterligare information om datagrupperingströskelvärdet"
     },
     "Metrics": {
-      "accuracyScore": "Accuracy score",
-      "accuracyScoreInfo": "The accuracy score represents the ratio of correct to total instances in the data.",
-      "accuracyScoreShort": "Accuracy",
-      "accuracyScoreTitle": "Additional information on accuracy score",
-      "errorRate": "Felfrekvens",
-      "errorRateInfo": "Felfrekvensen motsvarar procentandelen instanser i noden som systemet har misslyckats för.",
-      "errorRateTitle": "Ytterligare information om felfrekvens",
-      "f1Score": "F1 score",
-      "f1ScoreInfo": "The F1 score is the harmonic mean of the precision and recall metrics.",
-      "f1ScoreTitle": "Additional information on F1 score",
-      "meanAbsoluteError": "Genomsnittligt absolut fel",
-      "meanAbsoluteErrorInfo": "Det genomsnittliga absoluta felet är medelvärdet av summan av felen.",
-      "meanAbsoluteErrorShort": "Genomsnittligt abs. fel",
-      "meanAbsoluteErrorTitle": "Ytterligare information om genomsnittligt absolut fel",
-      "meanSquaredError": "Genomsnittligt kvadratfel",
-      "meanSquaredErrorInfo": "Det genomsnittliga kvadratfelet är medelvärdet av kvadraterna för felen.",
-      "meanSquaredErrorShort": "Genomsnittligt sq. fel",
-      "meanSquaredErrorTitle": "Ytterligare information om genomsnittligt kvadratfel",
-      "precision": "Precisionspoäng",
-      "precisionInfo": "Precisionen är förhållandet mellan sanna positiva identifieringar och alla förutsagda positiva identifieringar.",
-      "precisionShort": "Precision",
-      "precisionTitle": "Ytterligare information om precision",
-      "recall": "Träffsäkerhetspoäng",
-      "recallInfo": "Träffsäkerheten är förhållandet mellan sanna positiva identifieringar och faktiska positiva identifieringar.",
-      "recallShort": "Träffsäkerhet",
-      "recallTitle": "Ytterligare information om träffsäkerheten",
-      "macroPrecision": "Makrots genomsnittliga precisionspoäng",
-      "macroPrecisionInfo": "Den genomsnittliga makroprecisionen är förhållandet mellan sanna positiva identifieringar och alla förutsagda positiva värden som beräknats oberoende av klass och medelvärde.",
-      "macroPrecisionShort": "Makroprecision",
-      "macroPrecisionTitle": "Ytterligare information om makrots genomsnittliga precision",
-      "microPrecision": "Mikrots genomsnittliga precisionspoäng",
-      "microPrecisionInfo": "Den genomsnittliga mikroprecisionen är förhållandet mellan sanna positiva identifieringar och alla förutsagda positiva identifieringar aggregerade för alla klasser.",
-      "microPrecisionShort": "Mikroprecision",
-      "microPrecisionTitle": "Ytterligare information om mikrots genomsnittliga precision",
-      "macroRecall": "Makrots genomsnittliga träffsäkerhetspoäng",
-      "macroRecallInfo": "Den genomsnittliga makroträffsäkerheten är förhållandet mellan sanna positiva identifieringar och alla faktiska positiva värden som beräknats oberoende av klass och medelvärde.",
-      "macroRecallShort": "Makroåterkallning",
-      "macroRecallTitle": "Ytterligare information om makrots genomsnittliga återkallande",
-      "microRecall": "Mikrogenomsnittsträffsäkerhetspoäng",
-      "microRecallInfo": "Den mikrogenomsnittade träffsäkerheten är förhållandet mellan sanna positiva identifieringar och alla faktiska positiva identifieringar aggregerade för alla klasser.",
-      "microRecallShort": "Mikroåterkallning",
-      "microRecallTitle": "Ytterligare information om mikrogenomsnittsåterkallning",
-      "macroF1Score": "Macro averaged F1 score",
-      "macroF1ScoreInfo": "The macro averaged F1 score is the harmonic mean of the macro averaged precision and recall metrics.",
-      "macroF1ScoreShort": "Macro F1 score",
-      "macroF1ScoreTitle": "Additional information on macro averaged F1 score",
-      "microF1Score": "Micro averaged F1 score",
-      "microF1ScoreInfo": "The micro averaged F1 score is the harmonic mean of the micro averaged precision and recall metrics.",
-      "microF1ScoreShort": "Micro F1 score",
-      "microF1ScoreTitle": "Additional information on micro averaged F1 score",
+      "AccuracyScore": {
+        "Name": "Accuracy score",
+        "Info": "The accuracy score represents the ratio of correct to total instances in the data.",
+        "Short": "Accuracy",
+        "Title": "Additional information on accuracy score"
+      },
+      "ErrorRate": {
+        "Name": "Error rate",
+        "Info": "The error rate represents the percentage of instances in the node for which the system has failed.",
+        "Short": "Error rate",
+        "Title": "Additional information on error rate"
+      },
+      "F1Score": {
+        "Name": "F1 score",
+        "Info": "The F1 score is the harmonic mean of the precision and recall metrics.",
+        "Short": "F1 score",
+        "Title": "Additional information on F1 score"
+      },
+      "MeanAbsoluteError": {
+        "Name": "Mean absolute error",
+        "Info": "The mean absolute error is the average of the sum of the errors.",
+        "Short": "Mean abs. error",
+        "Title": "Additional information on mean absolute error"
+      },
+      "MeanSquaredError": {
+        "Name": "Mean squared error",
+        "Info": "The mean squared error is the average of the squares of the errors.",
+        "Short": "Mean sq. error",
+        "Title": "Additional information on mean squared error"
+      },
+      "Precision": {
+        "Name": "Precision score",
+        "Info": "The precision is the ratio of true positives over all predicted positives.",
+        "Short": "Precision",
+        "Title": "Additional information on precision"
+      },
+      "Recall": {
+        "Name": "Recall score",
+        "Info": "The recall is the ratio of true positives over all actual positives.",
+        "Short": "Recall",
+        "Title": "Additional information on recall"
+      },
+      "MacroPrecision": {
+        "Name": "Macro averaged precision score",
+        "Info": "The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.",
+        "Short": "Macro precision",
+        "Title": "Additional information on macro averaged precision"
+      },
+      "MicroPrecision": {
+        "Name": "Micro averaged precision score",
+        "Info": "The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.",
+        "Short": "Micro precision",
+        "Title": "Additional information on micro averaged precision"
+      },
+      "MacroRecall": {
+        "Name": "Macro averaged recall score",
+        "Info": "The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.",
+        "Short": "Macro recall",
+        "Title": "Additional information on macro averaged recall"
+      },
+      "MicroRecall": {
+        "Name": "Micro averaged recall score",
+        "Info": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
+        "Short": "Micro recall",
+        "Title": "Additional information on micro averaged recall"
+      },
+      "MacroF1Score": {
+        "Name": "Macro averaged F1 score",
+        "Info": "The macro averaged F1 score is the harmonic mean of the macro averaged precision and recall metrics.",
+        "Short": "Macro F1 score",
+        "Title": "Additional information on macro averaged F1 score"
+      },
+      "MicroF1Score": {
+        "Name": "Micro averaged F1 score",
+        "Info": "The micro averaged F1 score is the harmonic mean of the micro averaged precision and recall metrics.",
+        "Short": "Micro F1 score",
+        "Title": "Additional information on micro averaged F1 score"
+      },
       "metricName": "Måttnamn",
       "metricValue": "Mätvärde"
     },
     "MetricSelector": {
-      "selectorLabel": "Välj mått"
+      "selectorLabel": "Välj mått",
+      "feature1SelectorLabel": "Rows: Feature 1",
+      "feature2SelectorLabel": "Columns: Feature 2"
     },
     "Navigation": {
-      "cohortSaved": "New cohort is saved! See Cohort list under Cohort settings.",
+      "cohortSaved": "Ny kohort sparas! Se kohortlistan under Kohortinställningar.",
       "dataExplorer": "Datautforskaren",
       "errorExplorer": "Felutforskaren",
       "globalExplanation": "Global förklaring",
@@ -345,8 +409,11 @@
       "defaultLabelCopy": "All datakopiering"
     },
     "TreeView": {
-      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Feature list.\" Use the \"select metric\" dropdown menu to learn more about your error and success nodes' performance. Please note that this metric selection will not impact the way your error tree is generated.",
-      "treeStaticDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on \"Feature list.\" Use the \"select metric\" dropdown menu to learn more about your error and success nodes' performance. Please note that this metric selection will not impact the way your error tree is generated.",
+      "ariaLabel": "Interactive chart",
+      "disabledArialLabel": "Disabled interactive chart",
+      "treeMapInfoTitle": "Additional information on tree map",
+      "treeDescription": "Trädvisualiseringen använder ömsesidig information mellan varje funktion och felet för att bäst separera felinstanser från lyckade instanser hierarkiskt i datan. Det här förenklar processen med att upptäcka och belysa vanliga felmönster. Om du vill hitta viktiga felmönster kan du söka efter noder med en starkare röd färg (t. ex. hög felfrekvens) och en högre fyllningslinje (t. ex. hög feltäckning). Om du vill redigera listan med funktioner som används i trädet klickar du på Funktionslista. Använd rullgardinsmenyn \"Välj mätvärde\" för att lära dig mer om dina fel- och framgångsnoders prestanda. Observera att detta måttenhetsval inte påverkar hur ditt felträd genereras.",
+      "treeStaticDescription": "Trädvisualiseringen använder ömsesidig information mellan varje funktion och felet för att bäst separera felinstanser från lyckade instanser hierarkiskt i datan. Det här förenklar processen med att upptäcka och belysa vanliga felmönster. Om du vill hitta viktiga felmönster kan du söka efter noder med en starkare röd färg (t. ex. hög felfrekvens) och en högre fyllningslinje (t. ex. hög feltäckning). Om du vill visa listan med funktioner som används för att skapa felträdet klickar du på Funktionslista. Använd rullgardinsmenyn \"Välj mätvärde\" för att lära dig mer om dina fel- och framgångsnoders prestanda. Observera att detta måttenhetsval inte påverkar hur ditt felträd genereras.",
       "disabledWarning": "Fel treemap inaktiveras om inte den globala kohorten växlas till att representera Alla data på grund av att treemappen genereras för den fullständiga datamängden. Växla tillbaka till den fullständiga datauppsättningen för att visa fel treemap."
     },
     "WhatIfPanel": {
@@ -373,7 +440,7 @@
     "instanceView": "Instansvy",
     "localExplanationView": "Lokal förklaring",
     "noFeature": "Ingen funktion",
-    "scaleWarning": "For scale reasons of the UI explanations are randomly downsampled",
+    "scaleWarning": "Av skalningsskäl nedsamplas UI-förklaringarna slumpmässigt",
     "whatIfDatapoints": "Datapunkter för konsekvensgranskning"
   },
   "Fairness": {
@@ -674,11 +741,12 @@
     },
     "AxisConfigDialog": {
       "TreatAsCategorical": "Hantera som kategoriskt",
-      "apply": "Apply",
+      "apply": "Använda",
       "binLabel": "Använd gruppering för data",
       "countHelperText": "Ett histogram med antalet punkter",
       "ditherLabel": "Ska använda raster",
       "groupByCohort": "Gruppera efter kohort",
+      "logarithmicScaling": "Enable logarithmic scaling",
       "numOfBins": "Antal intervall",
       "selectClass": "Välj klass",
       "selectFeature": "Välj funktion",
@@ -702,13 +770,14 @@
       "importancePrefix": "Relevans",
       "numberOfDatapoints": "Antalet datapunkter",
       "rowIndex": "Radindex",
+      "absoluteIndex": "Absolute index",
       "xValue": "X-värde",
       "yValue": "Y-värde"
     },
     "Cohort": {
       "cohort": "Kohort",
       "defaultLabel": "Alla data",
-      "temporaryCohort": "Temporary cohort"
+      "temporaryCohort": "Tillfällig kohort"
     },
     "CohortBanner": {
       "addCohort": "Ny kohort",
@@ -728,6 +797,14 @@
       "regressor": "Regressor"
     },
     "CohortEditor": {
+      "columns": {
+        "index": "Index",
+        "dataset": "Dataset",
+        "predictedY": "Predicted Y",
+        "trueY": "True Y",
+        "classificationOutcome": "Classification outcome",
+        "regressionError": "Error"
+      },
       "TreatAsCategorical": "Hantera som kategoriskt",
       "addFilter": "Lägg till filter",
       "addedFilters": "Filter",
@@ -738,19 +815,21 @@
       "cancelTitle": "Avbryta kohort",
       "cancelYes": "Ja",
       "cohortNameError": "Kohortnamn saknas",
-      "cohortNameDupError": "Cohort with same name already exists",
+      "cohortNameDupError": "Kohort med samma namn finns redan",
       "cohortNameLabel": "Datauppsättningens kohortnamn",
       "cohortNamePlaceholder": "Namnge din kohort",
       "clearAllFilters": "Rensa alla filter",
       "defaultFilterState": "Välj ett filter för att lägga till parametrar till din datauppsättningskohort. Filter från din aktuella visningskohort är förifyllda.",
       "delete": "Ta bort",
-      "invalidValueError": "Value should be between {0} and {1}",
-      "minimumGreaterThanMaximum": "Minimum value inputs must be less than maximum value inputs.",
+      "invalidValueError": "Värdet måste vara mellan {0} och {1}",
+      "minimumGreaterThanMaximum": "Minsta värdeindata måste vara mindre än maximala värdeindata.",
       "noAddedFilters": "Inga filter",
       "placeholderName": "Kohort {0}",
       "save": "Spara",
-      "saveAndSwitch": "Save and switch",
-      "selectFilter": "Välj filter"
+      "saveAndSwitch": "Spara och växla",
+      "selectFilter": "Välj filter",
+      "noFiltersApplied": "No filters applied",
+      "filterAdded": "Filter added"
     },
     "Columns": {
       "classificationOutcome": "Klassificeringsutfall",
@@ -760,11 +839,13 @@
       "falsePositive": "Falsk positiv identifiering",
       "none": "Antal",
       "predictedProbabilities": "Förutsägelsesannolikheter",
+      "predictedLabels": "Predicted labels",
+      "trueLabels": "True labels",
       "regressionError": "Regressionsfel",
       "trueNegative": "Sant positiv identifiering",
       "truePositive": "Sann positiv",
-      "correctlyClassified": "Correctly classified",
-      "misclassified": "Misclassified"
+      "correctlyClassified": "Korrekt klassificerad",
+      "misclassified": "Felaktigt klassificerad"
     },
     "CrossClass": {
       "absoluteValInfo": "Genomsnittligt absolutvärde: Visar summan av funktionens betydelse i alla möjliga klasser, delat med antalet klasser",
@@ -780,15 +861,16 @@
       "aggregatePlots": "Sammansatta områden",
       "chartType": "Diagramtyp",
       "colorValue": "Färgvärde",
-      "helperText": "Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups. Learn about the over/under presentation in your dataset.",
+      "infoTitle": "Additional information on data analysis chart view",
+      "helperText": "Skapa datamängdskohorter för att analysera datamängdsstatistik i filter som till exempel förutsägbart resultat, datamängdsfunktioner och felgrupper. Läs mer om över-/underrepresentation i din datamängd.",
       "individualDatapoints": "Enskilda datapunkter",
       "missingParameters": "Den här fliken kräver att en utvärderingsdatauppsättning anges.",
       "noColor": "Inget",
-      "datasetCohortDropdown": "Dataset cohort dropdown"
+      "datasetCohortDropdown": "Listruta för datamängdskohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "Funktionsprioritet för",
-      "placeholder": "Select a feature to show its dependence plot"
+      "placeholder": "Välj en funktion för att visa dess beroendediagram"
     },
     "ExplanationScatter": {
       "class": "klass: ",
@@ -827,14 +909,14 @@
       "violinText": "Violin"
     },
     "FilterOperations": {
-      "equals": " equal to {0}",
+      "equals": " lika med {0}",
       "excludes": " omfattar inte {0} ",
-      "greaterThan": " greater than {0}",
-      "greaterThanEquals": " greater than or equal to {0}",
+      "greaterThan": " större än {0}",
+      "greaterThanEquals": " större än eller lika med {0}",
       "inTheRangeOf": "[ {0} ]",
       "includes": " omfattar {0} ",
-      "lessThan": " less than {0}",
-      "lessThanEquals": " less than or equal to {0}",
+      "lessThan": " mindre än {0}",
+      "lessThanEquals": " mindre än eller lika med {0}",
       "overflowFilterArgs": "{0} och {1} andra"
     },
     "Filters": {
@@ -857,7 +939,7 @@
       "helperText": "Utforska de viktigaste k funktionerna som påverkar dina övergripande modellförutsägelser. Använd skjutreglaget för att visa fallande funktionsvikter."
     },
     "GlobalTab": {
-      "absoluteValues": "View as absolute values",
+      "absoluteValues": "Visa som absoluta värden",
       "aggregateFeatureImportance": "Mängdfunktionsprioritet",
       "collapsedHelperText": "Utforska de viktigaste funktionerna som påverkar de övergripande modellprognoserna.",
       "datapoint": "Datapoint",
@@ -868,16 +950,18 @@
       "dependencePlotHelperText": "Den här beroendekartan visar relationen mellan värdena för en funktion och motsvarande funktions prioritetsvärden.",
       "dependencePlotTitle": "Beroenderitytor",
       "helperText": "Utforska de främsta viktigaste funktionerna som påverkar dina övergripande modellförutsägelser (även kallad global förklaring). Använd skjutreglaget för att visa funktioner för fallande funktioner. Alla kohorters funktionsrelevans visas sida vid sida och kan växlas till av genom att välja kohort i förklaringen. Klicka på någon av funktionerna i diagrammet om du vill se en täthetskurva nedan över hur värden för den valda funktionen påverkar förutsägelse.",
+      "infoTitle": "Additional information on aggregate feature importance",
       "legendHelpText": "Växla kohorter på och av i området genom att klicka på förklaringselementen.",
       "missingParameters": "Den här fliken kräver att du anger den lokala parametern för funktionsrelevans.",
-      "sortBy": "Sort by datapoint",
+      "sortByCohort": "Sort by cohort",
+      "sortBy": "Sortera efter datapunkt",
       "topAtoB": "Främsta {0} funktionerna efter prioritet",
       "viewDependencePlotFor": "Visa beroendediagram för:",
       "weightOptions": "Vikter för klassbetydelse",
-      "weightOptionsDropdown": "Class importance weights dropdown"
+      "weightOptionsDropdown": "Listruta för vikter för klassprioritet"
     },
     "IcePlot": {
-      "close": "Close",
+      "close": "Stäng",
       "errorPrefix": "Ett fel påträffades: {0}",
       "featurePickerLabel": "Funktion:",
       "integerError": "Måste vara ett heltal",
@@ -890,7 +974,7 @@
       "prediction": "Förutsägelse",
       "predictionLabel": "Förutsägelse: {0}",
       "probabilityLabel": "Sannolikhet: {0}",
-      "pythonError": "Python error",
+      "pythonError": "Python-fel",
       "stepInputLabel": "Steg:",
       "submitPrompt": "Skicka ett intervall så att du kan visa en ICE-rityta",
       "topLevelErrorMessage": "Fel i parametern"
@@ -912,16 +996,26 @@
     },
     "Statistics": {
       "accuracy": "Noggrannhet: {0}",
-      "fnr": "False negative rate: {0}",
-      "fpr": "False positive rate: {0}",
+      "bleuScore": "Bleu score: {0}",
+      "bertScore": "Bert score: {0}",
+      "exactMatchRatio": "Exact match ratio: {0}",
+      "rougeScore": "Rouge Score: {0}",
+      "fnr": "Falsk negativ frekvens: {0}",
+      "fpr": "Falsk positiv frekvens: {0}",
+      "hammingScore": "Hamming score: {0}",
       "meanPrediction": "Genomsnittlig förutsägelse {0}",
-      "mse": "Mean squared error: {0}",
+      "meteorScore": "Meteor Score: {0}",
+      "mse": "Genomsnittligt kvadratfel: {0}",
       "precision": "Precision: {0}",
       "rSquared": "R²: {0}",
       "recall": "Träffsäkerhet: {0}",
-      "selectionRate": "Selection rate: {0}",
-      "mae": "Mean absolute error: {0}",
-      "f1Score": "F1 score: {0}"
+      "selectionRate": "Markeringshastighet: {0}",
+      "mae": "Genomsnittligt absolut fel: {0}",
+      "f1Score": "F1-poäng: {0}",
+      "samples": "Sample size: {0}",
+      "meanAveragePrecision": "Mean average precision: {0}",
+      "averagePrecision": "Average precision: {0}",
+      "averageRecall": "Average recall: {0}"
     },
     "ValidationErrors": {
       "addFilters": "Lägg till filter",
@@ -957,7 +1051,7 @@
       "dataPointInfo": "Datapunkt, information",
       "deltaLabel": "Delta",
       "disclaimer": "Ansvarsfriskrivning: dessa är förklaringar som baseras på många approximationer och är inte orsaken till förutsägelser. Utan en strikt matematiskt robusthet av orsakssamband, så rekommenderar vi inte användare att fatta verkliga beslut baserat på det här verktyget.",
-      "featureImportanceGetStartedText": "Select a datapoint in the table above to view its local feature importances",
+      "featureImportanceGetStartedText": "Välj en datapunkt i tabellen ovan för att visa dess lokala funktionsprioriteter",
       "featureImportanceLackingParameters": "Ange lokala funktionsrelevans för att se hur varje funktion påverkar enskilda prognoser.",
       "featureImportancePlot": "Funktionsprioritetskurva",
       "featureValues": "Funktionsvärden",
@@ -1028,50 +1122,94 @@
   },
   "InterpretText": {
     "View": {
-      "interpretibilityDashboard": "Interpretability Dashboard",
-      "importantWords": "Most Important Words",
-      "topFeatureList": "Top feature list analysis",
-      "allButton": "ALL FEATURES",
-      "negButton": "NEGATIVE FEATURES",
-      "posButton": "POSITIVE FEATURES",
-      "legendText": "Positive scalar feature importances represents the extent that the word was important towards the classification of your selected label, and negative scalar feature importances represents words that encouraged your model away from your selected label.",
-      "label": "Label",
+      "interpretibilityDashboard": "Instrumentpanel för tolkning",
+      "importantWords": "Show most Important Words",
+      "topFeatureList": "Analys av toppfunktionslistan",
+      "allButton": "ALLA FUNKTIONER",
+      "negButton": "NEGATIVA FUNKTIONER",
+      "posButton": "POSITIVA FUNKTIONER",
+      "legendText": "Positive scalar feature importances represent the extent that the words were important towards the classification of your selected label, and negative scalar feature importances represent words that encouraged your model away from your selected label.",
+      "label": "Etikett",
       "colon": ": "
     },
     "Legend": {
-      "featureLegend": "TEXT FEATURE LEGEND",
-      "posFeatureImportance": "POSITIVE FEATURE IMPORTANCE",
-      "negFeatureImportance": "NEGATIVE FEATURE IMPORTANCE"
+      "featureLegend": "FÖRKLARING AV TEXTFUNKTION",
+      "posFeatureImportance": "POSITIV FUNKTIONSPRIORITET",
+      "negFeatureImportance": "NEGATIV FUNKTIONSPRIORITET"
     },
     "BarChart": {
-      "featureImportance": "FEATURE IMPORTANCE"
+      "featureImportance": "FUNKTIONSPRIORITET"
     }
   },
   "InterpretVision": {
+    "Cohort": {
+      "close": "Close",
+      "errorCohortName": "Please choose a unique cohort name.",
+      "errorNumSelected": "Please select at least one (1) item.",
+      "itemsSelectedSingular": "item selected",
+      "itemsSelectedPlural": "items selected",
+      "save": "Save cohort",
+      "saveAndClose": "Save and close",
+      "saveAndSwitch": "Save and switch",
+      "textField": "New cohort name",
+      "title": "Save new cohort"
+    },
     "Dashboard": {
-      "allData": "All Data",
-      "columnOne": "Title",
+      "allData": "Alla data",
+      "columnOne": "Image",
       "columnTwo": "Index",
-      "columnThree": "True Y",
-      "columnFour": "Predicted Y",
-      "columnFive": "Other metadata",
+      "columnThree": "Sant Y",
+      "columnFour": "Förutsade Y",
+      "columnFive": "Andra metadata",
+      "chooseObject": "Choose a detected object",
+      "examples": "examples",
       "filter": "Filter",
-      "pageSize": "Page size: ",
-      "search": "Search",
-      "settings": "Settings",
-      "tabOptionFirst": "Image explorer view",
-      "tabOptionSecond": "Table view",
-      "tabOptionThird": "Data characteristics",
-      "thumbnailSize": "Thumbnail size",
-      "titleBarError": "Error instances",
-      "titleBarSuccess": "Success instances"
+      "indexLabel": "Image ",
+      "labelTypeDropdown": "Select label type",
+      "labelVisibilityDropdown": "Select labels to display",
+      "legendFailure": "failure",
+      "legendSuccess": "success",
+      "loading": "Computing explanation for index",
+      "multiselect": "Multiselect",
+      "notdefined": "object scenario not defined",
+      "objectSelect": "Object Selection",
+      "pageSize": "Sidstorlek: ",
+      "panelTitle": "Selected instance",
+      "panelExplanation": "Explanation",
+      "panelInformation": "Information",
+      "predictedLabel": "Predicted label",
+      "predictedY": "Predicted: ",
+      "prefix": "Object: ",
+      "rows": "Rows: ",
+      "search": "Sök",
+      "selectAll": "Select all",
+      "settings": "Inställningar",
+      "showAll": "Show all",
+      "tabOptionFirst": "Vyn Bildutforskaren",
+      "tabOptionSecond": "Tabellvy",
+      "tabOptionThird": "Class view",
+      "thumbnailSize": "Storlek på miniatyrbilden",
+      "titleBarError": "Felinstanser",
+      "titleBarSuccess": "Lyckade instanser",
+      "trueY": "Ground truth: "
     }
   },
   "ModelAssessment": {
     "AddingTab": {
       "AddButtonText": "Lägg till",
       "CalloutContent": "När du lägger till vissa komponenter (fel trädsvy, fel heatmap) kan du filtrera data från den globala kohorten som visas i komponenterna nedan.",
-      "CalloutTitle": "Lägg till komponent"
+      "CalloutTitle": "Lägg till komponent",
+      "TabAddedMessage": {
+        "DataAnalysis": "Data analysis component added",
+        "FeatureImportances": "Feature importances component added",
+        "ErrorAnalysis": "Error analysis component added",
+        "Fairness": "Fairness component added",
+        "ModelOverview": "Model overview component added",
+        "CausalAnalysis": "Causal analysis component added",
+        "Counterfactuals": "Counterfactuals component added",
+        "Vision": "Vision data explorer component added",
+        "Forecasting": "Forecasting what-if component added"
+      }
     },
     "CausalAnalysis": {
       "Table": {
@@ -1086,19 +1224,20 @@
     },
     "Cohort": {
       "apply": "Använda",
-      "delete": "Delete",
+      "delete": "Ta bort",
       "cancel": "Avbryt",
       "cohortInfo": "Kohortinformation",
       "cohortList": "Kohortlista",
       "deleteCohort": "Tar du bort {0}?",
       "deleteConfirm": "Vill du ta bort den här kohorten?",
       "selectCohort": "Välj en kohort",
-      "shiftCohort": "Switch cohort",
+      "shiftCohort": "Byt kohort",
       "shiftCohortDescription": "Välj en kohort från kohort-listan. Tillämpa kohorten på instrumentpanelen."
     },
     "CohortInformation": {
-      "ShiftCohort": "Switch cohort",
-      "NewCohort": "New cohort",
+      "ShiftCohort": "Byt kohort",
+      "SwitchTimeSeries": "Switch time series",
+      "NewCohort": "Ny kohort",
       "DataPoints": "Antalet datapunkter",
       "DefaultCohort": " (standardinställning)",
       "Filters": "Antal filer",
@@ -1109,18 +1248,22 @@
       "CohortSettingsTitle": "Kohortinställningar"
     },
     "ComponentNames": {
+      "ChartView": "Chart view",
       "CausalAnalysis": "Causal analys",
       "Counterfactuals": "Motfakta",
-      "DataAnalysis": "Data analysis",
-      "DataBalance": "Data balance",
+      "DataAnalysis": "Dataanalys",
+      "DataBalance": "Databalans",
       "DataExplorer": "Datautforskaren",
       "ErrorAnalysis": "Felanalys",
       "Fairness": "Rättvisa",
       "FeatureImportances": "Funktionsrelevanser",
-      "ModelOverview": "Model overview"
+      "Forecasting": "Forecasting",
+      "ModelOverview": "Modellöversikt",
+      "TableView": "Table view",
+      "VisionTab": "Vision data explorer"
     },
     "DashboardSettings": {
-      "Content": "This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below.",
+      "Content": "I den här listan visas instrumentpanelens layout. Du kan filtrera datan med hjälp av felanalyskomponenten, så att de visas i komponenterna nedanför.",
       "DashboardComponents": "Instrumentpanelskomponenter",
       "DataPoints": "Antalet datapunkter",
       "DeleteDialog": {
@@ -1129,164 +1272,171 @@
         "Delete": "Ta bort",
         "Title": "Ta bort {0}?"
       },
-      "Title": "Dashboard configuration"
+      "Title": "Instrumentpanelskonfiguration"
     },
     "DataBalance": {
       "AggregateBalanceMeasures": {
         "Callout": {
-          "Description": "Aggregate balance measures allow us to obtain a higher notion of inequality about our dataset. They are calculated on the set of our columns of interest and do not depend on the label column. These measures look at the distribution of records across all feature value combinations of our columns of interest.",
-          "Title": "What are aggregate balance measures?"
+          "Description": "Med aggregerade balansmått kan vi få en högre uppfattning om olikhet i vår datamängd. De beräknas på uppsättningen av våra kolumner av intresse och är inte beroende av etikettkolumnen. De här måtten tittar på fördelningen av poster över alla kombinationer av funktionsvärden i våra kolumner av intresse.",
+          "Title": "Vad är mått för aggregerat saldo?"
         },
         "Measures": {
           "AtkinsonIndex": {
-            "Description": "The Atkinson Index is a measure of income inequality that presents the percentage of total income that a given society would have to forego in order to have more equal shares of income between its citizens. For the dataset, this represents the percentage of records that need to be dropped to have a perfectly balanced dataset with respect to the columns of interest. The index lies between 0 and 1, where smaller values of the index indicate lower levels of inequality.",
-            "Name": "Atkinson Index"
+            "Description": "Atkinson index är ett mått på inkomstskillnader som anger procentandelen av den totala inkomsten som ett visst samhället skulle behöva avstå från för att ha mer likvärdiga inkomstresurser mellan sina medborgare. För datamängden representerar detta procentandelen poster som behöver släppas för att ha en perfekt balanserad datauppsättning med avseende på kolumnerna av intresse. Indexet ligger mellan 0 och 1, där mindre värden i indexet indikerar lägre olikhetsnivåer.",
+            "Name": "Atkinson index"
           },
           "TheilLIndex": {
-            "Description": "Theil's L Index is a measure of income inequality that is calculated using the Generalized Entropy Index with α = 0, and therefore it is more sensitive to differences at the lower end of the distribution. This index better captures record combinations that don't occur too often in the dataset. It is also referred to as the mean log deviation measure.",
-            "Name": "Theil Index (L)"
+            "Description": "Theils L-index är ett mått på inkomstskillnader som beräknas med hjälp av generaliserat entropiindex med α = 0, och därför är det mer känsligt för skillnader i den nedre delen av fördelningen. Det här indexet samlar bättre in postkombinationer som inte förekommer för ofta i datamängden. Det kallas även för medelvärdet för loggavvikelsemåttet.",
+            "Name": "Theil Index (T)"
           },
           "TheilTIndex": {
-            "Description": "Theil's T Index is a measure of income inequality that is calculated using the Generalized Entropy Index with α = 1, and therefore it is more sensitive to differences at the higher end of the distribution. This index better captures record combinations that occur very often in the dataset.",
+            "Description": "Theils T-index är ett mått på inkomstolikhet som beräknas med generaliserat entropy-index med α = 1, och därför är det mer känsligt för skillnader i den högre delen av fördelningen. Det här indexet fångar bättre in postkombinationer som förekommer väldigt ofta i datauppsättningen.",
             "Name": "Theil Index (T)"
           }
         },
-        "MeasuresNotComputed": "Aggregate balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
-        "Name": "Aggregate balance measures",
+        "MeasuresNotComputed": "Mått för aggregat saldo beräknades inte. För att beräkna dem, se till att: (1) aktivitetstypen är \"klassificering\", (2) listan över kategoriska funktioner är giltig och inte tom, och (3) inga fel utlöses när insikter beräknas.",
+        "Name": "Aggregerade saldomått",
         "Table": {
-          "Description": "Description",
-          "FeatureName": "Feature name",
-          "FeatureValue": "Feature value"
+          "Description": "Beskrivning",
+          "FeatureName": "Namn på funktion",
+          "FeatureValue": "Funktionsvärde"
         }
       },
       "DistributionBalanceMeasures": {
         "Callout": {
-          "Description": "Distribution balance measures allow us to compare our data with a reference uniform distribution. These measures are calculated per column of interest and do not depend on the label column.",
-          "Title": "What are distribution balance measures?"
+          "Description": "Med mått för distributionsutjämning kan vi jämföra våra data med en referensuniform fördelning. Dessa mått beräknas per kolumn av intresse och är inte beroende av etikettkolumnen.",
+          "Title": "Vad är mått för distributionsutjämning?"
         },
         "Chart": {
           "Axes": {
-            "DistributionMeasure": "Distribution measure",
-            "MeasureValue": "Measure value"
+            "DistributionMeasure": "Distributionsmått",
+            "MeasureValue": "Måttvärde"
           },
-          "Title1": "Comparing",
-          "Title2": "with the Uniform Distribution"
+          "Title1": "Jämför",
+          "Title2": "med den enhetliga distributionen"
         },
         "Measures": {
           "ChiSquarePValue": {
-            "Description": "The p-value of the chi-square test gives evidence against the null hypothesis that the difference in observed and expected frequencies is by random chance.",
+            "Description": "P-värdet för chi-square-testet visar mot nollhypotesen att skillnaden i observerade och förväntade frekvenser sker slumpmässigt.",
             "Name": "Chi-Square P-Value"
           },
           "ChiSquareStatistic": {
-            "Description": "The chi-square test validates the null hypothesis that the categorical data has the given frequencies when compared with the expected frequencies in each category.",
-            "Name": "Chi-Square (χ2) Statistic"
+            "Description": "Chi-square-testet verifierar hypotesen null att kategoriska data har de givna frekvenserna jämfört med de förväntade frekvenserna i varje kategori.",
+            "Name": "Statistik för Chi-Square (χ2)"
           },
           "CrossEntropy": {
-            "Description": "The cross-entropy, also known as log loss, between two probability distributions is a measure from information theory that computes the negative summation of our dataset's probability distribution multiplied by the log of the reference probability distribution.",
-            "Name": "Cross Entropy"
+            "Description": "Korsentropi, även kallat loggförlust, mellan två sannolikhetsfördelningar är ett mått från informationsteorin som beräknar den negativa sammanfattningen av vår datamängds sannolikhetsfördelning multiplicerat med loggen för referenssannolikhetsfördelningen.",
+            "Name": "Korsentropi"
           },
           "InfiniteNormDistance": {
-            "Description": "The infinite norm distance, also called the Chebyshev distance or chessboard distance, is a measure which states that the distance between two vectors is the greatest of their difference along any coordinate dimension. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
-            "Name": "Infinite Norm Distance"
+            "Description": "Det oändliga normavståndet, även kallat Chebyshev-avståndet eller schackbrädeavståndet, är ett mått som anger att avståndet mellan två vektorer är den största skillnaden längs någon koordinatdimension. Måttet är icke-negativt och värdet 0 innebär att de två fördelningarna är lika.",
+            "Name": "Oändligt normavstånd"
           },
           "JSDistance": {
-            "Description": "The Jensen-Shannon (JS) distance measures the similarity between two probability distributions. It is the symmetrized and smoothed version of the Kullback-Leibler (KL) divergence and the square root of the JS divergence. Its range is [0, 1], in which a measure value of 0 means the distribution is perfectly balanced.",
+            "Description": "JS-avståndet (Jensen-Shannon) mäter likheten mellan två sannolikhetsfördelningar. Det är den symmetriserade och utjämnade versionen av kl-avvikelsen (Kullback-Leibler) och kvadratroten av JS-avvikelsen. Dess intervall är [0, 1], där ett måttvärde på 0 innebär att fördelningen är perfekt balanserad.",
             "Name": "Jensen-Shannon Distance"
           },
           "KLDivergence": {
-            "Description": "The Kullback-Leibler (KL) divergence is a measure of how one probability distribution is different from a second probability distribution. It represents the amount of information lost when one distribution is used to approximate the other. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
+            "Description": "Kl-avvikelsen (Kullback-Leibler) är ett mått på hur en sannolikhetsfördelning skiljer sig från en andra sannolikhetsfördelning. Den representerar mängden information som går förlorad när en fördelning används för att ungefärligt den andra. Måttet är inte negativt och värdet 0 innebär att de två fördelningen är lika med.",
             "Name": "Kullback-Leibler Divergence"
           },
           "TotalVariationDistance": {
-            "Description": "The total variation distance is equal to half the Manhattan (L1) distance between two distributions. It is computed using the summation of absolute value differences between two distributions. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
-            "Name": "Total Variation Distance"
+            "Description": "Det totala variationsavståndet är lika med halva Manhattan-avståndet (L1) mellan två distributioner. Den beräknas med hjälp av summering av absoluta värdeskillnader mellan två distributioner. Måttet är inte negativt och värdet 0 innebär att de två fördelningen är lika med.",
+            "Name": "Total variation, avstånd"
           },
           "WassersteinDistance": {
-            "Description": "The Wasserstein distance is also known as the earth mover's distance, since it can be seen as the minimum amount of 'work' required to transform one distribution into another. Work is measured as the amount of distribution weight that must be moved, multiplied by the distance it has to be moved. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
-            "Name": "Wasserstein Distance"
+            "Description": "Wasserstein-avståndet kallas även för jordflyttarens avstånd, eftersom det kan ses som den minsta mängden arbete som krävs för att omvandla en fördelning till en annan. Arbete mäts som mängden fördelningsvikt som måste flyttas, multiplicerat med avståndet som det måste flyttas. Måttet är icke-negativt och värdet 0 innebär att de två fördelningarna är lika.",
+            "Name": "Wasserstein-avstånd"
           }
         },
-        "MeasuresNotComputed": "Distribution balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
-        "Name": "Distribution balance measures"
+        "MeasuresNotComputed": "Mått för distributionssaldo beräknades inte. För att beräkna dem, se till att: (1) aktivitetstypen är \"klassificering\", (2) listan över kategoriska funktioner är giltig och inte tom, och (3) inga fel utlöses när insikter beräknas.",
+        "Name": "mått för distributionsutjämning"
       },
       "FeatureBalanceMeasures": {
         "Callout": {
-          "Description": "Feature balance measures allow us to see whether each combination of feature values is receiving the positive outcome (true prediction) at balanced probability.",
-          "Title": "What are feature balance measures?"
+          "Description": "Med mått för funktionsutjämning kan vi se om varje kombination av funktionsvärden tar emot det positiva resultatet (sann förutsägelse) med balanserad sannolikhet.",
+          "Title": "Vad är funktionsutjämningsmått?"
         },
         "Chart": {
           "Axes": {
-            "ClassA": "Class A",
-            "ClassB": "Class B"
+            "ClassA": "Klass A",
+            "ClassB": "Klass B"
           },
           "Tooltip": {
-            "And": "and",
-            "ValueDescription1": "have a",
-            "ValueDescription2": "of"
+            "And": "och",
+            "ValueDescription1": "har ett",
+            "ValueDescription2": "av"
           }
         },
-        "Description1": "Showing",
-        "Description2": "gaps on all classes of",
-        "Description3": "for label",
-        "FeaturePicker": "Feature",
-        "LabelPicker": "Positive label",
-        "MeasurePicker": "Measure",
+        "Description1": "Visar",
+        "Description2": "luckor i alla klasser av",
+        "Description3": "för etikett",
+        "FeaturePicker": "Funktion",
+        "LabelPicker": "Positiv etikett",
+        "MeasurePicker": "Mått",
         "Measures": {
           "JaccardIndex": {
-            "Description": "gap represents the difference between the Jaccard Index of Class A and Jaccard Index of Class B. Jaccard Index itself is an intersection-over-union measure and therefore has a range of [0, 1], where 0 means that the distributions are completely disjoint and 1 means they are completely identical.",
-            "Name": "Jaccard Index"
+            "Description": "mellanrummet representerar skillnaden mellan Jaccard index för Klass A och Jaccard index för Klass B. Själva Indexet för visitkort är ett intersection over-union-mått och har därför ett intervall på [0, 1], där 0 innebär att distributionerna är helt åtskilda och 1 innebär att de är helt identiska.",
+            "Name": "Jaccard index"
           },
           "KendallRankCorrelation": {
-            "Description": "(KRC) gap represents the difference between the KRC of Class A and KRC of Class B. Kendall Rank Correlation itself is a correlation statistic used to measure the ordinal association between two measured quantities, and the measure is high when observations have a similar rank and low when observations have a dissimilar rank between the two variables.",
+            "Description": "(KRC) skillnaden representerar skillnaden mellan KRC i Klass A och KRC i Klass B. Den interna rangordningskorrelationen är en korrelationsstatistik som används för att mäta ordningstalsassociationen mellan två uppmätta kvantiteter och måttet är högt när observationer har en liknande rangordning och låg när observationer har en olika rangordning mellan de två variablerna.",
             "Name": "Kendall Rank Correlation"
           },
           "LogLikelihoodRatio": {
-            "Description": "(LLR) gap represents the difference between the LLR of Class A and LLR of Class B. Log Likelihood Ratio itself is a correlation statistic used to measure the ratio between the probability of a feature with the positive label and the probability of the positive label.",
-            "Name": "Log-Likelihood Ratio"
+            "Description": "(LLR) skillnaden representerar skillnaden mellan LLR för klass A och LLR för klass B. Själva loggens sannolikhetskvot är en korrelationsstatistik som används för att mäta förhållandet mellan sannolikheten för en funktion med den positiva etiketten och sannolikheten för den positiva etiketten.",
+            "Name": "Log-Likelihood ratio"
           },
           "PointwiseMutualInformation": {
-            "Description": "(PMI) gap represents the difference between the PMI of Class A and PMI of Class B. Pointwise Mutual Information itself is a entropy measure that, given Class A and Class B, quantifies the discrepancy between the probability of their coincidence given their joint distribution and their individual distributions (assuming independence).",
-            "Name": "Pointwise Mutual Information"
+            "Description": "(PMI)-luckor representerar skillnaden mellan PMI i klass A och PMI i Klass B. Annars är ömsesidig information i sig ett entropimått som, med tanke på Klass A och Klass B, kvantifierar avvikelsen mellan sannolikheten för deras sårbarhet med tanke på deras gemensamma fördelning och deras individuella fördelningar (som förutsätter självständighet).",
+            "Name": "Punktvis ömsesidig information"
           },
           "SorensenDiceCoefficient": {
-            "Description": "(SDC) gap represents the difference between the SDC of Class A and SDC of Class B. Sørensen-Dice Coefficient itself is an intserction-over-union measure that is used to guage the similarity of two samples. It is related to the F1 score, and it equals twice the number of elements common to both sets divided by the sum of the number of elements in each set.",
+            "Description": "(SDC) skillnaden representerar skillnaden mellan SDC för Klass A och SDC i Klass B. Sørensen-Dice koefficienten själv är ett intersection over-union-mått som används för att garantera likheten mellan två samplingar. Det är relaterat till F1-poängen och det är dubbelt så många element som är gemensamma för båda uppsättningarna delat med summan av antalet element i varje mängd.",
             "Name": "Sørensen-Dice Coefficient"
           },
           "StatisticalParity": {
-            "Description": "(SP) gap represents the difference between the SP of Class A and SP of Class B. Statistical Parity itself measures the positive rate, which is how much one class receives the positive outcome. The gap measures the difference between the two classes' positive rates. As close to 0 means both classes receive the positive outcome equally. A positive value means the first class sees the positive label more than the second class. A negative value means the opposite.",
-            "Name": "Statistical Parity"
+            "Description": "Mellanrummet representerar skillnaden mellan SP för klass A och SP i klass B. Den statistiska pariteten mäter den positiva hastigheten, vilket är hur mycket en klass får det positiva resultatet. Luckan mäter skillnaden mellan de två klassernas positiva frekvenser. Så nära 0 innebär att båda klasserna får det positiva utfallet lika. Ett positivt värde innebär att den första klassen ser den positiva etiketten mer än den andra klassen. Ett negativt värde betyder det motsatta.",
+            "Name": "Statistisk paritet"
           },
           "TTest": {
-            "Description": "gap represents the difference between the t-test of Class A and t-test of Class B. t-test itself is a correlation statistic used to compare the means of two groups (pairwise). The gap value is looked up on the t-distribution table to tell if the two groups are significantly different.",
+            "Description": "skillnaden representerar skillnaden mellan t-testet av klass A och t-testet av klass B. själva t-testet är en korrelationsstatistik som används för att jämföra medelvärdet för två grupper (parvis). Gapvärdet letas upp i t-distributionstabellen för att se om de två grupperna skiljer sig avsevärt.",
             "Name": "t-test"
           },
           "TTestPValue": {
-            "Description": "gap represents the statistical signifiance of the t-test gap between Class A and Class B. The t-test gap value and degrees of freedom are used to calculate the p-value.",
-            "Name": "t-test p-value"
+            "Description": "mellanrummet representerar den statistiska rensningen av t-testmellanrummet mellan klass A och klass B. T-testets mellanrumsvärde och frihetsgrader används för att beräkna p-värdet.",
+            "Name": "t-test p-värde"
           }
         },
-        "MeasuresNotComputed": "Feature balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
-        "Name": "Feature balance measures"
+        "MeasuresNotComputed": "Mått för funktionssaldo beräknades inte. För att beräkna dem, se till att: (1) aktivitetstypen är \"klassificering\", (2) listan över kategoriska funktioner är giltig och inte tom, och (3) inga fel utlöses när insikter beräknas.",
+        "Name": "Mått för funktionssaldo"
       },
-      "LearnMore": "Learn more",
-      "MeasuresNotComputed": "This tab requires data balance measures to be computed for this dataset. Measures are computed when a 'classification' task type and a list of non-empty categorical features are specified."
+      "LearnMore": "Läs mer",
+      "MeasuresNotComputed": "Den här fliken kräver att databalansmått beräknas för den här datauppsättningen. Mått beräknas när en klassificeringsaktivitetstyp och en lista över icke-tomma kategoriska funktioner anges."
     },
     "FeatureImportances": {
       "CorrectPredictions": "Korrigera förutsägelser",
       "GlobalExplanation": "Mängdfunktionsprioritet",
       "IncorrectPredictions": "Felaktiga förutsägelser",
-      "IndividualFeature": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below.",
+      "InfoTitle": "Additional information on data analysis table view",
+      "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).",
       "LocalExplanation": "Enskild funktions prioritet",
-      "SelectionCounter": "{0}/{1} datapoints selected",
-      "SelectionLimit": "Up to 5 datapoints can be selected at this time."
+      "SelectionCounter": "{0}/{1} datapunkter har valts",
+      "SelectionLimit": "Upp till 5 datapunkter kan väljas just nu.",
+      "RowCheckboxAriaLabel": "Row checkbox",
+      "SelectionColumnAriaLabel": "Toggle selection"
+    },
+    "IndividualFeatureImportanceView": {
+      "SmallInstanceSelection": "Instance selection"
     },
     "MainMenu": {
-      "DashboardSettings": "Dashboard configuration",
+      "DashboardSettings": "Instrumentpanelskonfiguration",
       "cohortInfo": "Kohortinformation",
       "cohortList": "Kohortlista",
       "cohortSettings": "Kohortinställningar",
       "createCohort": "Skapa kohort",
-      "shiftCohort": "Switch cohort"
+      "shiftCohort": "Byt kohort"
     },
     "Navigation": {
       "modelStatistics": "Modellstatistik"
@@ -1294,117 +1444,278 @@
     "ModelOverview": {
       "metrics": {
         "accuracy": {
-          "name": "Accuracy",
-          "description": "The fraction of data points classified correctly."
+          "name": "Accuracy score",
+          "description": "Datapunktsfraktionen klassificeras korrekt."
+        },
+        "exactMatchRatio": {
+          "name": "Exact match ratio",
+          "description": "The ratio of instances classified correctly for every label."
+        },
+        "meteorScore": {
+          "name": "Meteor Score",
+          "description": "METEOR Score is calculated based on the harmonic mean of precision and recall, with recall weighted more than precision in question answering task."
+        },
+        "bleuScore": {
+          "name": "Bleu Score",
+          "description": "Bleu Score measures the ratio of words (and/or n-grams) in the machine generated text that appeared in the reference text in question answering task."
+        },
+        "bertScore": {
+          "name": "Bert Score",
+          "description": "BERTScore focuses on computing semantic similarity between tokens of reference and machine generated text in question answering task."
+        },
+        "rougeScore": {
+          "name": "Rouge Score",
+          "description": "Rouge Score measures the ratio of words (and/or n-grams) in the reference text that appeared in the machine generated text in question answering task."
+        },
+        "hammingScore": {
+          "name": "Hamming score",
+          "description": "The average ratio of labels classified correctly among those classified as 1 in multilabel task."
         },
         "f1Score": {
-          "name": "F1 score",
-          "description": "F1-score is the harmonic mean of precision and recall."
+          "name": "F1-poäng",
+          "description": "F1-poäng är det harmoniska medelvärdet för precision och träffsäkerhet."
+        },
+        "f1ScoreMacro": {
+          "name": "Macro F1 score",
+          "description": "Macro F1 score is the harmonic mean of precision and recall for each class, with each class weighted equally."
+        },
+        "f1ScoreMicro": {
+          "name": "Micro F1 score",
+          "description": "Micro F1 score is the harmonic mean of precision and recall for each class, with each class weighted according to how many instances it contains."
         },
         "meanAbsoluteError": {
-          "name": "Mean absolute error",
-          "description": "The average of absolute values of errors. More robust to outliers than MSE."
+          "name": "Genomsnittligt absolut fel",
+          "description": "Medelvärdet av absoluta värden för fel. Mer robust för extremvärden än MSE."
         },
         "meanSquaredError": {
-          "name": "Mean squared error",
-          "description": "The average of squared errors."
+          "name": "Genomsnittligt kvadratfel",
+          "description": "Medelvärdet för kvadratfel."
         },
         "precision": {
-          "name": "Precision score",
-          "description": "The fraction of data points classified correctly among those classified as 1."
+          "name": "Precisionspoäng",
+          "description": "Fraktionen av datapunkter som klassificeras korrekt bland de som klassificerats som 1."
+        },
+        "precisionMacro": {
+          "name": "Macro Precision score",
+          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted equally."
+        },
+        "precisionMicro": {
+          "name": "Micro Precision score",
+          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted according to how many instances it contains."
         },
         "recall": {
-          "name": "Recall score",
-          "description": "The fraction of data points classified correctly among those whose true label is 1. Alternative names: true positive rate, sensitivity."
+          "name": "Träffsäkerhetspoäng",
+          "description": "Fraktionen av datapunkter som klassificeras korrekt bland de vars sanna etikett är 1. Alternativa namn: sant positiv hastighet, känslighet."
+        },
+        "recallMacro": {
+          "name": "Macro Recall score",
+          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted equally."
+        },
+        "recallMicro": {
+          "name": "Micro Recall score",
+          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted according to how many instances it contains."
         },
         "falsePositiveRate": {
-          "name": "False positive rate",
-          "description": "The fraction of data points classified incorrectly among those whose true label is 0."
+          "name": "Falsk positiv frekvens",
+          "description": "Fraktionen av datapunkter som klassificeras korrekt bland de vars sanna etikett är 0."
         },
         "falseNegativeRate": {
-          "name": "False negative rate",
-          "description": "The fraction of data points classified incorrectly among those whose true label is 1."
+          "name": "Falsk negativ frekvens",
+          "description": "Fraktionen av datapunkter som klassificeras korrekt bland de vars sanna etikett är 1."
         },
         "selectionRate": {
-          "name": "Selection rate",
-          "description": "The percentage of predictions with label 1."
+          "name": "Markeringshastighet",
+          "description": "Procentandelen förutsägelser med etikett 1."
         },
         "meanPrediction": {
-          "name": "Mean prediction",
-          "description": "The average of all predictions."
+          "name": "Genomsnittlig förutsägelse",
+          "description": "Medelvärdet för alla förutsägelser."
         },
-        "fairnessMetricDifference": "Difference",
-        "fairnessMetricRatio": "Ratio"
+        "meanAveragePrecision": {
+          "name": "Mean Average Precision score",
+          "description": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall."
+        },
+        "averagePrecision": {
+          "name": "Average Precision score",
+          "description": "Average precision for object detection models is calculated for a selected class."
+        },
+        "averageRecall": {
+          "name": "Average Recall score",
+          "description": "Average recall for object detection models is calculated for a selected class."
+        },
+        "fairnessMetricDifference": "Skillnad",
+        "fairnessMetricRatio": "Kvot"
       },
-      "metricsDropdown": "Metric(s)",
-      "notAvailable": "N/A",
-      "countColumnHeader": "Sample size",
-      "dataCohortsHeatmapHeader": "Cohorts",
-      "dataCohortsChartSelectionHeader": "Dataset cohorts",
-      "featureBasedCohortsChartSelectionHeader": "Feature cohorts",
-      "disaggregatedAnalysisHeatmapHeader": "Feature cohorts",
-      "fairnessMetricsHeatmapHeader": "Fairness metrics",
-      "featuresDropdown": "Feature(s)",
-      "metricChartDropdownSelectionHeader": "Metric",
-      "probabilityForClassSelectionHeader": "Probability for class",
-      "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
-      "featureSelectionDropdownPlaceholder": "Select features to use for a feature-based analysis.",
-      "probabilityDistributionPivotItem": "Probability distribution",
-      "metricsVisualizationsPivotItem": "Metrics visualizations",
-      "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the feature-based analysis.",
-      "tableCountTooltip": "Cohort {0} contains {1} instances.",
-      "tableMetricTooltip": "The model's {0} on cohort {1} is {2}",
-      "tableDifferenceTooltip": "The {0} difference is {1}. It is calculated by subtracting the minimum value {2} from cohort {3} from the maximum value {4} from cohort {5}.",
-      "tableRatioTooltip": "The {0} ratio is {1}. It is calculated by dividing the minimum value {2} from cohort {3} by the maximum value {4} from cohort {5}.",
-      "boxPlotPlaceholder": "Select at least one cohort to view the box plot.",
-      "chartCohortSelectionPlaceholder": "Select at least one cohort overall to view the chart.",
-      "metricSelectionButton": "Choose metric",
-      "cohortSelectionButton": "Choose cohorts",
-      "probabilityLabelSelectionButton": "Choose label",
-      "selectAllCohortsOption": "Select all",
-      "other": "Other",
+      "metricsDropdown": "Mått",
+      "metricsTypeDropdown": "Aggregate method",
+      "metricTypes": {
+        "macro": "Macro",
+        "micro": "Micro"
+      },
+      "classSelectionDropdown": "Select class(es)",
+      "iouThresholdDropdown": {
+        "name": "IoU Threshold",
+        "description": "Intersection over Union quantifies the degree of overlap between the prediction and ground truth bounding box of a detected object in an image. For example, setting an IoU threshold of 70% means that a prediction with greater than 70% overlap with ground truth is True, thus influencing the definition of prediction correctness and calculation of other performance metrics.",
+        "iconId": "iouThresholdIconId",
+        "title": "Learn about the IoU threshold"
+      },
+      "notAvailable": "Inte tillämpligt",
+      "countColumnHeader": "Exempelstorlek",
+      "dataCohortsHeatmapHeader": "Kohorter",
+      "dataCohortsChartSelectionHeader": "Datauppsättningskohorter",
+      "featureBasedCohortsChartSelectionHeader": "Funktionskohorter",
+      "disaggregatedAnalysisHeatmapHeader": "Funktionskohorter",
+      "fairnessMetricsHeatmapHeader": "Rättvisa mått",
+      "featuresDropdown": "Funktioner",
+      "metricChartDropdownSelectionHeader": "Mått",
+      "probabilityForClassSelectionHeader": "Sannolikhet för klass",
+      "targetSelectionHeader": "Target",
+      "metricSelectionDropdownPlaceholder": "Välj mått för att jämföra dina kohorter.",
+      "classSelectionDropdownPlaceholder": "Select class name for class-based analysis.",
+      "featureSelectionDropdownPlaceholder": "Välj vilka funktioner som ska användas för en funktionsbaserad analys.",
+      "probabilityDistributionPivotItem": "Sannolikhetsfördelningen",
+      "regressionDistributionPivotItem": "Target distribution",
+      "metricsVisualizationsPivotItem": "Måttvisualiseringar",
+      "confusionMatrixPivotItem": "Confusion matrix",
+      "disaggregatedAnalysisFeatureSelectionPlaceholder": "Välj funktioner för att generera den funktionsbaserade analysen.",
+      "tableCountTooltip": "Kohort {0} innehåller {1} instanser.",
+      "tableMetricTooltip": "Modellens {0} på kohorten {1} är {2}",
+      "tableDifferenceTooltip": "Skillnaden {0} är {1}. Det beräknas genom att subtrahera det minsta värdet {2} från kohorten {3} från det maximala värdet {4} från kohorten {5}.",
+      "tableRatioTooltip": "Förhållandet {0} är {1}. Det beräknas genom att dividera minimivärdet {2} från kohorten {3} med det högsta värdet {4} från kohorten {5}.",
+      "boxPlotPlaceholder": "Välj minst en kohort för att visa låddiagrammet.",
+      "chartCohortSelectionPlaceholder": "Välj minst en kohort totalt för att visa diagrammet.",
+      "metricSelectionButton": "Välj mått",
+      "cohortSelectionButton": "Välj kohorter",
+      "probabilityLabelSelectionButton": "Välj etikett",
+      "regressionTargetSelectionButton": "Choose target",
+      "selectAllCohortsOption": "Välj allt",
+      "other": "Övrigt",
       "BoxPlot": {
-        "outlierProbability": "probability",
-        "outlierLabel": "Outliers",
-        "boxPlotSeriesLabel": "Box Plot"
+        "outlierProbability": "sannolikhet",
+        "outlierLabel": "Extremvärden",
+        "boxPlotSeriesLabel": "Låddiagram",
+        "lowerWhisker": "Lower whisker",
+        "upperWhisker": "Upper whisker",
+        "median": "Median",
+        "lowerQuartile": "Lower quartile",
+        "upperQuartile": "Upper quartile"
       },
-      "chartConfigApply": "Apply",
-      "chartConfigCancel": "Cancel",
-      "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
-      "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",
-      "nA": "N/A",
+      "chartConfigApply": "Använda",
+      "chartConfigCancel": "Avbryt",
+      "chartConfigDatasetCohortSelectionPlaceholder": "Välj datamängdskohorter",
+      "chartConfigFeatureBasedCohortSelectionPlaceholder": "Välj funktionsbaserade kohorter",
+      "confusionMatrix": {
+        "confusionMatrixCohortSelectionLabel": "Select dataset cohort",
+        "confusionMatrixClassSelectionLabel": "Select classes",
+        "confusionMatrixClassMinSelectionError": "Select at least {0} classes to visualize the confusion matrix.",
+        "confusionMatrixClassMaxSelectionError": "Select at most {0} classes to visualize the confusion matrix.",
+        "confusionMatrixClassSelectionDefaultPlaceholder": "Choose classes",
+        "confusionMatrixHeatmapTooltip": "{0} datapoints should be {1}, predicted to be {2}",
+        "confusionMatrixYAxisLabel": "True Class",
+        "confusionMatrixXAxisLabel": "Predicted Class",
+        "class": "Class"
+      },
+      "nA": "Inte tillämpligt",
       "disaggregatedAnalysisBaseCohortDisclaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
-      "disaggregatedAnalysisBaseCohortWarning": "Unlike the {0} cohort, {1} includes filters. As a consequence, it only captures a subset of the whole dataset and insights may not generalize to the full dataset.",
-      "probabilitySplineChartToggleLabel": "Use spline chart",
-      "countAxisLabel": "Count",
-      "helpMeChooseFeaturesButton": "Help me choose features",
-      "helpMeChooseMetricsButton": "Help me choose metrics",
+      "disaggregatedAnalysisBaseCohortWarning": "Till skillnad från {0} kohort innehåller {1} filter. Därför samlar den bara in en delmängd av hela datamängden och insikter kanske inte generaliseras till den fullständiga datauppsättningen.",
+      "probabilitySplineChartToggleLabel": "Använd spline-diagram",
+      "countAxisLabel": "Antal",
+      "helpMeChooseFeaturesButton": "Hjälp mig att välja funktioner",
+      "helpMeChooseMetricsButton": "Hjälp mig att välja mått",
       "featureConfiguration": {
-        "flyoutHeader": "Choose your features",
-        "flyoutSubHeader": "Along which features would you like to evaluate your model's fairness?",
-        "flyoutDescription": "Fairness is evaluated in terms of disparities in your model's behavior. We will split your data according to values of each selected feature, and evaluate how your model's performance metrics differ across these splits.",
-        "featureColumnHeader": "Features",
-        "groupsColumnHeader": "Groups",
-        "categoricalGroupsCountRemark": "This feature has {0} unique values.",
-        "continuousGroupsCountRemark": "This feature is continuous and split into {0} bins.",
-        "continuousFeatureBinningLabel": "Change the number of bins",
-        "tooManyFeaturesSelectedWarning": "Please select only up to two features."
+        "flyoutHeader": "Välj dina funktioner",
+        "flyoutSubHeader": "Efter vilka funktioner vill du utvärdera din modells rättvisa?",
+        "flyoutDescription": "Rättvisa utvärderas i förhållande till diskrepanser i modellens beteende. Vi delar upp dina data enligt värdena för varje vald funktion och utvärderar hur modellens prestandamått skiljer sig åt i dessa delningar.",
+        "featureColumnHeader": "Funktioner",
+        "groupsColumnHeader": "Grupper",
+        "categoricalGroupsCountRemark": "Den här funktionen har {0} unika värden.",
+        "continuousGroupsCountRemark": "Den här funktionen är kontinuerlig och uppdelad i {0} fack.",
+        "continuousFeatureBinningLabel": "Ändra antalet lagerplatser",
+        "tooManyFeaturesSelectedWarning": "Välj endast upp till två funktioner."
       },
       "metricConfiguration": {
-        "flyoutHeader": "Choose your metrics",
-        "flyoutSubHeader": "How would you like to measure your model's performance?",
-        "flyoutDescription": "Based on your model type, these are the recommended performance metrics. Fairness analysis or disaggregated analysis is performed by evaluating how your model's performance differs across feature subgroups.",
-        "noMetricsSelectedWarning": "Please select at least one metric.",
-        "metricNameColumnHeader": "Metric name",
-        "metricDescriptionColumnHeader": "Metric Description"
+        "flyoutHeader": "Välj dina mått",
+        "flyoutSubHeader": "Hur vill du mäta modellens prestanda?",
+        "flyoutDescription": "Baserat på din modelltyp är det här de rekommenderade prestandamåtten. Rättviseanalys eller disaggregerad analys utförs genom att utvärdera hur modellens prestanda skiljer sig mellan funktionsundergrupper.",
+        "noMetricsSelectedWarning": "Välj minst ett mått.",
+        "metricNameColumnHeader": "Måttnamn",
+        "metricDescriptionColumnHeader": "Måttbeskrivning"
       },
       "cohortSelection": {
-        "flyoutHeader": "Choose cohorts",
-        "flyoutDescription": "You can choose to view dataset cohorts or feature cohorts. If feature cohorts are unavailable you need to first select one or more features in the feature cohorts view. Subsequently, feature cohorts are generated and you can select them here."
+        "flyoutHeader": "Välj kohorter",
+        "flyoutDescription": "Du kan välja att visa datauppsättningskohorter eller funktionskohorter. Om funktionskohorter inte är tillgängliga måste du först välja en eller flera funktioner i funktionskohortvyn. Därefter genereras funktionskohorter och du kan välja dem här."
       },
-      "topLevelDescription": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. Use the \"Dataset cohorts\" tab to investigate your model by looking at a comparative analysis of its performance across different pre-built or newly-created dataset cohorts. Use the \"Feature cohorts\" to investigate your model by looking at a comparative analysis of its performance across sensitive/non-sensitive feature subcohorts.(e.g., performance across different genders, income levels).",
-      "visualDisplayToggleLabel": "Show heatmap",
-      "featureBasedViewDescription": "Select up to two features to see the model performance breakdown across feature-based cohorts (if one feature is selected) or intersectional cohorts (if two features are selected)."
+      "regressionTargetOptions": {
+        "predictedY": "Predicted Y",
+        "trueY": "True Y",
+        "error": "Error"
+      },
+      "topLevelDescription": "Utvärdera prestandan för modellen genom att utforska fördelningen av dina prognosvärden och värdena i modellens prestandamått. Använd fliken \"Datamängdskohorter\" för att undersöka din modell genom att titta på en jämförande analys av dess prestanda i olika fördefinierade eller nyligen skapade datamängdskohorter. Använd funktionskohorterna för att undersöka din modell genom att titta på en jämförande analys av dess prestanda för känsliga/icke-känsliga funktionsunderkolumner. (t.ex. prestanda mellan olika kön, inkomstnivåer).",
+      "infoTitle": "Additional information on model overview",
+      "visualDisplayToggleLabel": "Visa termisk karta",
+      "featureBasedViewDescription": "Välj upp till två funktioner för att se modellens prestandauppdelning för funktionsbaserade kohorter (om en funktion väljs) eller intersektionella kohorter (om två funktioner väljs)."
+    },
+    "TableViewTab": {
+      "Heading": "View the dataset in a table format for all features and rows."
+    }
+  },
+  "Forecasting": {
+    "target": "Target",
+    "whatIfForecastingHeader": "What-if analysis",
+    "forecastHeader": "Forecast analysis",
+    "whatIfForecastingDescription": "What-if allows you to perturb features for your entire time series and observe how the model's forecast changes.",
+    "whatIfForecastingChooseTimeSeries": "To start, choose a time series from the options below.",
+    "forecastDescription": "Forecast analysis compares your model's forecast to the actual values of your time series. To enable what-if analysis, provide a dataset with features.",
+    "timeSeries": "Time series",
+    "selectTimeSeries": "Select a time series.",
+    "singleTimeSeries": "The dataset contains only a single time series '{0}' which has been selected by default.",
+    "trueY": "True Y",
+    "baselinePrediction": "Baseline prediction",
+    "forecastComparisonHeader": "Compare What-if Forecasts",
+    "forecastComparisonChartTitle": "Forecasts",
+    "forecastComparisonChartTimeAxisLabel": "Time",
+    "Transformations": {
+      "multiply": "multiply",
+      "divide": "divide",
+      "add": "add",
+      "subtract": "subtract",
+      "change": "change to"
+    },
+    "TransformationCreation": {
+      "title": "Create what-if scenario",
+      "nameLabel": "What-if scenario name",
+      "featureInstructions": "Choose a feature to perturb.",
+      "operationInstructions": "Choose an operation to apply to the feature.",
+      "operationDropdownHeader": "Operation",
+      "featureDropdownHeader": "Feature",
+      "valueSpinButtonHeader": "Value",
+      "scenarioNamingInstructionsPlaceholder": "Enter a unique name",
+      "scenarioNamingInstructions": "Enter a name for your what-if scenario.",
+      "scenarioNamingCollisionMessage": "This name exists already. Please enter a unique name.",
+      "scenarioNamingLengthMessage": "The name must be between 1 and 50 characters. The actual length is {0}.",
+      "scenarioNamingInvalidCharactersMessage": "The name can only contain alphanumeric characters, whitespaces, dashes, or underscores, and needs to start with an alphanumeric character.",
+      "valueErrorMessage": "For operation {0} please select a value other than {1}.",
+      "invalidCombinationErrorMessage": "This is identical to an existing what-if scenario. Please change the feature, operation, or value.",
+      "addTransformationButton": "Add Transformation",
+      "divisionAndMultiplicationBy": "by"
+    },
+    "TransformationTable": {
+      "nameColumnHeader": "Name",
+      "methodColumnHeader": "Method",
+      "divisionAndMultiplicationBy": "by ",
+      "header": "What-if Forecasts ({0})"
+    },
+    "TimeSeries": {
+      "apply": "Apply",
+      "cancel": "Cancel",
+      "cohortList": "Time series list",
+      "selectCohort": "Select a time series",
+      "shiftCohort": "Switch time series",
+      "shiftCohortDescription": "Select a time series from the time series list. Apply the time series to the dashboard."
+    },
+    "TimeSeriesSettings": {
+      "CohortSettingsDescription": "Time series are pre-defined based on time series identifying columns.",
+      "CohortSettingsTitle": "Time series settings"
     }
   }
 }
