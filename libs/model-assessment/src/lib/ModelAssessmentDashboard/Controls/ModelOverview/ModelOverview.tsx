@@ -606,7 +606,11 @@ export class ModelOverview extends React.Component<
       selectionIndexes,
       this.context.modelMetadata.modelType,
       this.objectDetectionCache,
-      [this.state.aggregateMethod, this.state.className, this.state.iouThreshold]
+      [
+        this.state.aggregateMethod,
+        this.state.className,
+        this.state.iouThreshold
+      ]
     );
 
     this.setState({
@@ -805,7 +809,11 @@ export class ModelOverview extends React.Component<
       selectionIndexes,
       this.context.modelMetadata.modelType,
       this.objectDetectionCache,
-      [this.state.aggregateMethod, this.state.className, this.state.iouThreshold]
+      [
+        this.state.aggregateMethod,
+        this.state.className,
+        this.state.iouThreshold
+      ]
     );
 
     this.setState({
