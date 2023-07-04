@@ -234,11 +234,15 @@ export const generateMetrics: (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
   modelType: ModelTypes,
-  questionAnsweringCache?: Map<string, [number, number, number, number, number, number]>,
+  objectDetectionCache?: Map<string, [number, number, number]>,
+  objectDetectionInputs?: [string, string, number],
+  questionAnsweringCache?: Map<string, [number, number, number, number, number, number]>
 ) => ILabeledStatistic[][] = (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
   modelType: ModelTypes,
+  objectDetectionCache?: Map<string, [number, number, number]>,
+  objectDetectionInputs?: [string, string, number],
   questionAnsweringCache?: Map<string, [number, number, number, number, number, number]>,
 ): ILabeledStatistic[][] => {
   if (
@@ -268,8 +272,16 @@ export const generateMetrics: (
       return generateImageStats(trueYSubset, predYSubset);
     });
   }
-  if (modelType === ModelTypes.ObjectDetection) {
-    return generateObjectDetectionStats(selectionIndexes);
+  if (
+    modelType === ModelTypes.ObjectDetection &&
+    objectDetectionCache &&
+    objectDetectionInputs
+  ) {
+    return generateObjectDetectionStats(
+      selectionIndexes,
+      objectDetectionCache,
+      objectDetectionInputs
+    );
   }
   const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
   return selectionIndexes.map((selectionArray) => {
