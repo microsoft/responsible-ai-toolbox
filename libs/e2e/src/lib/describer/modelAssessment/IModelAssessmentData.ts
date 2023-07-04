@@ -164,6 +164,17 @@ export interface IWhatIfCounterfactualsData {
   newClassValue?: string;
 }
 
+export interface IWhatIfForecastingData {
+  hasWhatIfForecastingComponent?: boolean;
+  numberOfTimeSeriesOptions?: number;
+  timeSeriesToSelect?: string;
+  testTransformation?: {
+    featureToSelect?: string;
+    operationToSelect?: string;
+    valueToSelect?: number;
+  };
+}
+
 export enum RAINotebookNames {
   "CensusClassificationModelDebugging" = "responsibleaidashboard-census-classification-model-debugging.py",
   "CensusClassificationModelDebuggingDataBalanceExperience" = "responsibleaidashboard-census-classification-model-debugging.py",
@@ -176,5 +187,7 @@ export enum RAINotebookNames {
   "HousingDecisionMaking" = "responsibleaidashboard-housing-decision-making.py",
   "HousingDecisionMakingDataBalanceExperience" = "responsibleaidashboard-housing-decision-making.py",
   "MulticlassDnnModelDebugging" = "responsibleaidashboard-multiclass-dnn-model-debugging.py",
-  "MulticlassDnnModelDebuggingDataBalanceExperience" = "responsibleaidashboard-multiclass-dnn-model-debugging.py"
+  "MulticlassDnnModelDebuggingDataBalanceExperience" = "responsibleaidashboard-multiclass-dnn-model-debugging.py",
+  "OrangeJuiceForecasting" = "responsibleaidashboard-orange-juice-forecasting.py",
+  "OrangeJuiceForecastingDataBalanceExperience" = "responsibleaidashboard-orange-juice-forecasting.py"
 }

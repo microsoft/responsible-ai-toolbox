@@ -35,6 +35,7 @@ export class WhatIfSection extends React.Component<IWhatIfSectionProps> {
       <>
         <Stack.Item>
           <PrimaryButton
+            id={"ForecastingWhatIfTransformationCreationButton"}
             disabled={false}
             onClick={this.props.onClickWhatIfButton}
             text={localization.Forecasting.TransformationCreation.title}
