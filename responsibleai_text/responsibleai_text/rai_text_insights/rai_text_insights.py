@@ -806,7 +806,11 @@ class RAITextInsights(RAIBaseInsights):
 
         return 2 * (prec * rec) / (prec + rec)
 
-    def compute_question_answering_metrics(self, selection_indexes, question_answering_cache):
+    def compute_question_answering_metrics(
+        self,
+        selection_indexes,
+        question_answering_cache
+    ):
         dashboard_dataset = self.get_data().dataset
         true_y = dashboard_dataset.true_y
         predicted_y = dashboard_dataset.predicted_y
