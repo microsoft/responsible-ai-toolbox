@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme } from "@fluentui/react";
 import { Point } from "highcharts";
 
 import { IGenericChartProps } from "../../util/IGenericChartProps";
@@ -35,9 +36,11 @@ export function getScatterOption(
     showColorAxis,
     useDifferentColorForScatterPoints
   );
+  const theme = getTheme();
 
   return {
     chart: {
+      backgroundColor: theme.semanticColors.bodyBackground,
       type: "scatter",
       zoomType: "xy"
     },

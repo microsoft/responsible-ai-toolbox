@@ -20,8 +20,9 @@ import {
   IModelAssessmentContext,
   IsClassifier,
   DatasetTaskType,
-  isAllDataErrorCohort,
-  featureColumnsExist
+  featureColumnsExist,
+  dataBalanceExperienceFlight,
+  isFlightActive
 } from "@responsible-ai/core-ui";
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import {
@@ -44,10 +45,6 @@ import { Dictionary } from "lodash";
 import * as React from "react";
 
 import { AddTabButton } from "../../AddTabButton";
-import {
-  isFlightActive,
-  dataBalanceExperienceFlight
-} from "../../FeatureFlights";
 import { GlobalTabKeys } from "../../ModelAssessmentEnums";
 import {
   FeatureImportancesTab,
@@ -138,7 +135,7 @@ export class TabsView extends React.PureComponent<
     const disabledView =
       this.props.requestDebugML === undefined &&
       this.props.requestMatrix === undefined &&
-      !isAllDataErrorCohort(this.props.baseCohort, true);
+      !this.props.baseCohort.isAllDataCohort;
     const classNames = tabsViewStyles();
     return (
       <Stack className={classNames.stackStyle}>
@@ -181,6 +178,9 @@ export class TabsView extends React.PureComponent<
                         true_y: this.props.dataset.true_y
                       }}
                       requestExp={this.props.requestExp}
+                      requestObjectDetectionMetrics={
+                        this.props.requestObjectDetectionMetrics
+                      }
                       cohorts={this.props.cohorts}
                       setSelectedCohort={this.props.setSelectedCohort}
                       selectedCohort={this.props.selectedCohort}

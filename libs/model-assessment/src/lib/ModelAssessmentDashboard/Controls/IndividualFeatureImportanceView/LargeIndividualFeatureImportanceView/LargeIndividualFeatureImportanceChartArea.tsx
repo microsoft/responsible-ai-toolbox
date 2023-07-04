@@ -13,7 +13,8 @@ import {
   ChartTypes,
   ColumnCategories,
   ISelectorConfig,
-  IHighchartsConfig
+  IHighchartsConfig,
+  ITelemetryEvent
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -31,6 +32,7 @@ export interface ILargeIndividualFeatureImportanceChartAreaProps {
   onXSet: (value: ISelectorConfig) => void;
   onYSet: (value: ISelectorConfig) => void;
   setIsRevertButtonClicked: (status: boolean) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export class LargeIndividualFeatureImportanceChartArea extends React.PureComponent<ILargeIndividualFeatureImportanceChartAreaProps> {
@@ -63,7 +65,12 @@ export class LargeIndividualFeatureImportanceChartArea extends React.PureCompone
       chartProps?.chartType === ChartTypes.Box;
 
     return (
-      <Stack horizontal grow tokens={{ childrenGap: "l1" }}>
+      <Stack
+        horizontal
+        grow
+        tokens={{ childrenGap: "l1" }}
+        className={classNames.chartWithLegend}
+      >
         <Stack.Item className={classNames.chart}>
           <Stack.Item className={classNames.chartWithAxes}>
             <Stack horizontal>
@@ -153,7 +160,7 @@ export class LargeIndividualFeatureImportanceChartArea extends React.PureCompone
             )}
           </Stack.Item>
         </Stack.Item>
-        <Stack.Item className={classNames.legendContainer}>
+        <Stack.Item>
           <LargeIndividualFeatureImportanceLegend
             setIsRevertButtonClicked={this.props.setIsRevertButtonClicked}
             isBubbleChartRendered={this.props.isBubbleChartRendered}
@@ -161,6 +168,7 @@ export class LargeIndividualFeatureImportanceChartArea extends React.PureCompone
               this.props.isLocalExplanationsDataLoading
             }
             isBubbleChartDataLoading={this.props.isBubbleChartDataLoading}
+            telemetryHook={this.props.telemetryHook}
           />
         </Stack.Item>
       </Stack>

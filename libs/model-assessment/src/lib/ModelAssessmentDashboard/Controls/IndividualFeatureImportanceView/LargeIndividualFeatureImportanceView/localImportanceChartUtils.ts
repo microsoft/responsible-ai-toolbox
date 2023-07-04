@@ -57,9 +57,9 @@ function findValue(sortedData: any, keyToFind: string): number[] | undefined {
   const sortedDataTemp: Array<{ [key: string]: number[] }> = sortedData;
   let valToReturn: number[] | undefined;
   for (const data of sortedDataTemp) {
-    const entry = Object.entries(data).find(
-      (pair) => pair[0] === keyToFind.toString()
-    );
+    const entry = data
+      ? Object.entries(data).find((pair) => pair[0] === keyToFind.toString())
+      : undefined;
     if (entry) {
       valToReturn = entry[1]; // value of the entry
       break;

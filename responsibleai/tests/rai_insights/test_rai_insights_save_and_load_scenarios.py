@@ -8,7 +8,7 @@ from tempfile import TemporaryDirectory
 import numpy as np
 import pandas as pd
 import pytest
-from tests.common_utils import create_adult_income_dataset, create_iris_data
+from tests.common_utils import create_iris_data
 
 from rai_test_utils.datasets.tabular import \
     create_binary_classification_dataset
@@ -73,11 +73,10 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
                                               ManagerNames.EXPLAINER,
                                               ManagerNames.COUNTERFACTUAL,
                                               ManagerNames.DATA_BALANCE])
-    def test_rai_insights_save_load_add_save(self, manager_type):
+    def test_rai_insights_save_load_add_save(self, manager_type, adult_data):
         data_train, data_test, y_train, y_test, categorical_features, \
             continuous_features, target_name, classes, \
-            feature_columns, feature_range_keys = \
-            create_adult_income_dataset()
+            feature_columns, feature_range_keys = adult_data
         X_train = data_train.drop([target_name], axis=1)
 
         model = create_complex_classification_pipeline(
@@ -144,7 +143,7 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
     @pytest.mark.parametrize('target_dir', [ManagerNames.CAUSAL,
                                             ManagerNames.ERROR_ANALYSIS,
                                             ManagerNames.COUNTERFACTUAL])
-    def test_load_missing_dirs(self, target_dir):
+    def test_load_missing_dirs(self, target_dir, adult_data):
         # This test is about the case where an object has been saved to Azure
         # Directories only exist implicitly, so in a downloaded instance
         # if a manager had no outputs, then its subdirectory won't exist
@@ -152,8 +151,7 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
         # in its subdirectory
         data_train, data_test, y_train, y_test, categorical_features, \
             continuous_features, target_name, classes, \
-            feature_columns, feature_range_keys = \
-            create_adult_income_dataset()
+            feature_columns, feature_range_keys = adult_data
         X_train = data_train.drop([target_name], axis=1)
 
         model = create_complex_classification_pipeline(
@@ -213,11 +211,10 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
                                               ManagerNames.EXPLAINER,
                                               ManagerNames.COUNTERFACTUAL,
                                               ManagerNames.DATA_BALANCE])
-    def test_rai_insights_add_save_load_save(self, manager_type):
+    def test_rai_insights_add_save_load_save(self, manager_type, adult_data):
         data_train, data_test, y_train, y_test, categorical_features, \
             continuous_features, target_name, classes, \
-            feature_columns, feature_range_keys = \
-            create_adult_income_dataset()
+            feature_columns, feature_range_keys = adult_data
         X_train = data_train.drop([target_name], axis=1)
 
         model = create_complex_classification_pipeline(

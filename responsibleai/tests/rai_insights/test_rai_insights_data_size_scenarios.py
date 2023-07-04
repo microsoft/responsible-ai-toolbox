@@ -14,6 +14,7 @@ from rai_test_utils.models.sklearn import (
     create_sklearn_random_forest_classifier,
     create_sklearn_random_forest_regressor)
 from responsibleai import RAIInsights
+from responsibleai._interfaces import Dataset, TabularDatasetMetadata
 
 LABELS = 'labels'
 
@@ -33,8 +34,18 @@ class TestRAIInsightsLargeData(object):
                 rai_insights._large_predict_proba_output)
 
         dataset = rai_insights._get_dataset()
+        assert isinstance(dataset, Dataset)
         assert dataset.is_large_data_scenario
         assert not dataset.use_entire_test_data
+
+        assert isinstance(
+            dataset.tabular_dataset_metadata, TabularDatasetMetadata)
+        assert dataset.tabular_dataset_metadata is not None
+        assert dataset.tabular_dataset_metadata.is_large_data_scenario
+        assert not dataset.tabular_dataset_metadata.use_entire_test_data
+        assert dataset.tabular_dataset_metadata.num_rows == \
+            len(rai_insights.test) + 1
+        assert dataset.tabular_dataset_metadata.feature_ranges is not None
 
         filtered_small_data = rai_insights.get_filtered_test_data(
             [], [], use_entire_test_data=False)

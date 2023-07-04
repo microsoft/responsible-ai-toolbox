@@ -13,7 +13,15 @@ import { getPrimaryChartColor } from "@responsible-ai/core-ui";
 
 export const textStackStyles: IStackStyles = {
   root: {
+    margin: "2px",
     maxWidth: "1500px"
+  }
+};
+
+export const scrollablePaneStyles: IStackStyles = {
+  root: {
+    height: "200px",
+    position: "relative"
   }
 };
 

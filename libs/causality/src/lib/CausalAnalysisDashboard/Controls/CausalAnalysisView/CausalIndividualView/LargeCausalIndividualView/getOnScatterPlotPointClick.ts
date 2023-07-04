@@ -24,9 +24,15 @@ export async function getLocalCausalFromSDK(
       absoluteIndex,
       new AbortController().signal
     );
+    telemetryHook?.({
+      level: TelemetryLevels.Trace,
+      type: TelemetryEventName.LocalCausalEffectsFetchSuccess
+    });
+
     return result;
   } catch (error) {
     telemetryHook?.({
+      context: error,
       level: TelemetryLevels.Error,
       type: TelemetryEventName.LocalCausalEffectsFetchError
     });

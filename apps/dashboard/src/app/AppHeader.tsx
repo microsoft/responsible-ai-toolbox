@@ -6,12 +6,12 @@ import {
   ICommandBarItemProps,
   IContextualMenuItem
 } from "@fluentui/react";
-import { Language } from "@responsible-ai/localization";
 import {
   featureFlights,
   featureFlightSeparator,
   parseFeatureFlights
-} from "@responsible-ai/model-assessment";
+} from "@responsible-ai/core-ui";
+import { Language } from "@responsible-ai/localization";
 import React from "react";
 
 import { applications, IApplications } from "./applications";

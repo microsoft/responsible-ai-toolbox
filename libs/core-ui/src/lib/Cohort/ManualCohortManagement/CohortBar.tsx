@@ -25,6 +25,7 @@ export interface ICohortBarProps {
   cohorts: Cohort[];
   jointDataset: JointDataset;
   modelMetadata: IExplanationModelMetadata;
+  features: unknown[][] | undefined;
   onCohortsChange(cohorts: Cohort[]): void;
 }
 interface ICohortBarState {
@@ -90,6 +91,9 @@ export class CohortBar extends React.Component<
         {this.state?.showEditPanel &&
           (cohortForEdit ? (
             <CohortEditor
+              isFromExplanation
+              metadata={this.props.modelMetadata}
+              features={this.props.features}
               jointDataset={this.props.jointDataset}
               filterList={cohortForEdit.filterList}
               cohortName={cohortForEdit.cohortName}

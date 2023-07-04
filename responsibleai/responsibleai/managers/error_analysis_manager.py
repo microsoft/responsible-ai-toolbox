@@ -15,6 +15,7 @@ from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.error_report import as_error_report
 from erroranalysis._internal.error_report import \
     json_converter as report_json_converter
+from raiutils.exceptions import UserConfigValidationException
 from responsibleai._config.base_config import BaseConfig
 from responsibleai._interfaces import ErrorAnalysisData
 from responsibleai._internal.constants import ErrorAnalysisManagerKeys as Keys
@@ -23,9 +24,9 @@ from responsibleai._internal.constants import (FileFormats, ListProperties,
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.exceptions import (ConfigAndResultMismatchException,
-                                      DuplicateManagerConfigException,
-                                      UserConfigValidationException)
+                                      DuplicateManagerConfigException)
 from responsibleai.managers.base_manager import BaseManager
+from responsibleai.utils import _measure_time
 
 REPORTS = 'reports'
 CONFIG = 'config'
@@ -303,9 +304,12 @@ class ErrorAnalysisManager(BaseManager):
         else:
             self._ea_config_list.append(ea_config)
 
+    @_measure_time
     def compute(self):
         """Creates an ErrorReport by running the error analyzer on the model.
         """
+        print("Error Analysis")
+        print('Current Status: Generating error analysis reports.')
         for config in self._ea_config_list:
             if config.is_computed:
                 continue
@@ -327,6 +331,7 @@ class ErrorAnalysisManager(BaseManager):
                 json.loads(report.to_json()), schema)
 
             self._ea_report_list.append(report)
+        print('Current Status: Finished generating error analysis reports.')
 
     def get(self):
         """Get the computed error reports.

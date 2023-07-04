@@ -5,6 +5,7 @@ import {
   getInitialClusterState,
   IClusterData,
   IGenericChartProps,
+  IHighchartsConfig,
   ITelemetryEvent
 } from "@responsible-ai/core-ui";
 
@@ -21,6 +22,8 @@ export interface IDatasetExplorerTabState {
   isBubbleChartDataLoading: boolean;
   bubbleChartErrorMessage?: string;
   isRevertButtonClicked?: boolean;
+  bubblePlotData?: IHighchartsConfig;
+  isAggregatePlotLoading?: boolean;
 }
 
 export function getInitialState(): IDatasetExplorerTabState {

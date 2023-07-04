@@ -17,7 +17,9 @@ import {
   ICausalAnalysisData,
   getInitialClusterState,
   getScatterOption,
-  IClusterData
+  IClusterData,
+  TelemetryLevels,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -149,12 +151,44 @@ export class LargeCausalIndividualChart extends React.PureComponent<
   }
 
   private onRevertButtonClick = (): void => {
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.ViewBubblePlotButtonClicked
+    });
     this.setState({ isRevertButtonClicked: true });
   };
 
   private updateBubblePlotData = async (
-    chartProps: IGenericChartProps
+    chartProps: IGenericChartProps,
+    hasRevertToBubbleChartUpdated: boolean
   ): Promise<void> => {
+    if (hasRevertToBubbleChartUpdated) {
+      this.setState(
+        {
+          chartProps,
+          clusterData: getInitialClusterState(),
+          isBubbleChartDataLoading: true,
+          isBubbleChartRendered: true,
+          isLocalCausalDataLoading: false,
+          isRevertButtonClicked: false,
+          localCausalData: undefined,
+          localCausalErrorMessage: undefined,
+          selectedPointsIndexes: []
+        },
+        () => {
+          this.setState({
+            chartProps,
+            isBubbleChartDataLoading: false,
+            isBubbleChartRendered: true,
+            isRevertButtonClicked: false,
+            plotData: this.state.bubblePlotData
+          });
+          this.props.onDataClick(false, undefined);
+        }
+      );
+      return;
+    }
+
     this.setState({
       clusterData: getInitialClusterState(),
       isBubbleChartDataLoading: true,
@@ -164,7 +198,7 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       selectedPointsIndexes: []
     });
     this.props.onDataClick(false, undefined);
-    const datasetBarConfigOverride = await getBubblePlotData(
+    const datasetBubbleConfigOverride = await getBubblePlotData(
       chartProps,
       this.props.cohort,
       this.context.jointDataset,
@@ -172,25 +206,27 @@ export class LargeCausalIndividualChart extends React.PureComponent<
       this.state.isLocalCausalDataLoading,
       this.context.requestBubblePlotData,
       this.selectPointFromChartLargeData,
-      this.onBubbleClick
+      this.onBubbleClick,
+      this.props.telemetryHook
     );
     if (
-      datasetBarConfigOverride &&
-      !instanceOfHighChart(datasetBarConfigOverride)
+      datasetBubbleConfigOverride &&
+      !instanceOfHighChart(datasetBubbleConfigOverride)
     ) {
       this.setState({
-        bubbleChartErrorMessage: getErrorMessage(datasetBarConfigOverride),
+        bubbleChartErrorMessage: getErrorMessage(datasetBubbleConfigOverride),
         isBubbleChartDataLoading: false,
         plotData: undefined
       });
       return;
     }
     this.setState({
+      bubblePlotData: datasetBubbleConfigOverride,
       chartProps,
       isBubbleChartDataLoading: false,
       isBubbleChartRendered: true,
       isRevertButtonClicked: false,
-      plotData: datasetBarConfigOverride
+      plotData: datasetBubbleConfigOverride
     });
   };
 

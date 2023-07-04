@@ -24,7 +24,8 @@ import {
   TelemetryEventName,
   ifEnableLargeData,
   IDataset,
-  OtherChartTypes
+  OtherChartTypes,
+  ITelemetryEvent
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -41,8 +42,10 @@ export interface ISidePanelProps {
   dataset: IDataset;
   disabled?: boolean;
   isBubbleChartRendered?: boolean;
+  loading?: boolean;
   onChartPropChange: (p: IGenericChartProps) => void;
   setIsRevertButtonClicked?: (status: boolean) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 interface ISidePanelState {
   colorDialogOpen: boolean;
@@ -86,7 +89,7 @@ export class SidePanel extends React.Component<
           selectedKey={this.props.chartProps.chartType}
           options={this.chartOptions}
           onChange={this.onChartTypeChange}
-          disabled={this.props.disabled}
+          disabled={this.props.disabled || this.props.loading}
         />
         {this.displayAxisConfigDialog() && this.props.chartProps.colorAxis && (
           <AxisConfigDialog
@@ -182,6 +185,10 @@ export class SidePanel extends React.Component<
   }
 
   private onRevertButtonClick = (): void => {
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.ViewBubblePlotButtonClicked
+    });
     this.props.setIsRevertButtonClicked &&
       this.props.setIsRevertButtonClicked(true);
   };

@@ -90,7 +90,7 @@ export class TransformationCreation extends React.Component<
             }
           </Label>
           <ComboBox
-            id="ForecastingWhatIfTransformationFeatureDropdown"
+            id={"ForecastingWhatIfTransformationFeatureDropdown"}
             errorMessage={
               this.props.transformationFeature === undefined
                 ? localization.Forecasting.TransformationCreation

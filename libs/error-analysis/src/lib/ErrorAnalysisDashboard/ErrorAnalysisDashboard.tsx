@@ -42,7 +42,8 @@ import {
   EditCohort,
   ShiftCohort,
   IsBinary,
-  IsMulticlass
+  IsMulticlass,
+  IsMultilabel
 } from "@responsible-ai/core-ui";
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
 import { GlobalExplanationTab } from "@responsible-ai/interpret";
@@ -202,7 +203,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       );
     } else if (IsBinary(modelType)) {
       classLength = 2;
-    } else if (IsMulticlass(modelType)) {
+    } else if (IsMulticlass(modelType) || IsMultilabel(modelType)) {
       classLength = new Set(
         [...(props.trueY || [])].concat(props.predictedY || [])
       ).size;
@@ -283,7 +284,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         0,
         CohortSource.None,
         false,
-        metricStats
+        metricStats,
+        true
       )
     ];
     const weightVectorLabels = {

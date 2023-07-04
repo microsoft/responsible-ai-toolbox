@@ -23,7 +23,8 @@
         "ChartConfigurationFlyout.tsx",
         "ProcessPreBuiltCohortRegression.test.ts",
         "ProcessPreBuiltCohortBinaryClassification.test.ts",
-        "CohortList.tsx"
+        "CohortList.tsx",
+        "LargeIndividualFeatureImportanceView.tsx"
       ],
       "rules": {
         "max-lines": "warn"

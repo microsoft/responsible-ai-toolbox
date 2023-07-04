@@ -15,6 +15,15 @@ from sklearn.preprocessing import (FunctionTransformer, OneHotEncoder,
 
 
 def create_sklearn_random_forest_classifier(X, y):
+    """Create a sklearn random forest classifier.
+
+    param X: The training data.
+    type X: numpy.ndarray or pandas.DataFrame
+    param y: The training labels.
+    type y: numpy.ndarray or pandas.DataFrame
+    return: A sklearn random forest classifier.
+    rtype: sklearn.ensemble.RandomForestClassifier
+    """
     rfc = RandomForestClassifier(n_estimators=10, max_depth=4,
                                  random_state=777)
     model = rfc.fit(X, y)
@@ -22,6 +31,17 @@ def create_sklearn_random_forest_classifier(X, y):
 
 
 def create_sklearn_svm_classifier(X, y, probability=True):
+    """Create a sklearn svm classifier.
+
+    param X: The training data.
+    type X: numpy.ndarray or pandas.DataFrame
+    param y: The training labels.
+    type y: numpy.ndarray or pandas.DataFrame
+    param probability: Whether to enable probability estimates.
+    type probability: bool
+    return: A sklearn svm classifier.
+    rtype: sklearn.svm.SVC
+    """
     clf = svm.SVC(gamma=0.001, C=100., probability=probability,
                   random_state=777)
     model = clf.fit(X, y)
@@ -29,12 +49,32 @@ def create_sklearn_svm_classifier(X, y, probability=True):
 
 
 def create_kneighbors_classifier(X, y):
+    """Create a sklearn k-neighbors classifier.
+
+    param X: The training data.
+    type X: numpy.ndarray or pandas.DataFrame
+    param y: The training labels.
+    type y: numpy.ndarray or pandas.DataFrame
+    return: A sklearn k-neighbors classifier.
+    rtype: sklearn.neighbors.KNeighborsClassifier
+    """
     knn = KNeighborsClassifier()
     model = knn.fit(X, y)
     return model
 
 
 def create_sklearn_logistic_regressor(X, y, pipeline=False):
+    """Create a sklearn logistic regressor.
+
+    param X: The training data.
+    type X: numpy.ndarray or pandas.DataFrame
+    param y: The training labels.
+    type y: numpy.ndarray or pandas.DataFrame
+    param pipeline: Whether to wrap the model in a pipeline.
+    type pipeline: bool
+    return: A sklearn logistic regressor.
+    rtype: sklearn.linear_model.LogisticRegression
+    """
     lin = LogisticRegression(solver='liblinear', random_state=777)
     if pipeline:
         lin = Pipeline([('lin', lin)])
@@ -43,6 +83,15 @@ def create_sklearn_logistic_regressor(X, y, pipeline=False):
 
 
 def create_sklearn_random_forest_regressor(X, y):
+    """Create a sklearn random forest regressor.
+
+    param X: The training data.
+    type X: numpy.ndarray or pandas.DataFrame
+    param y: The training labels.
+    type y: numpy.ndarray or pandas.DataFrame
+    return: A sklearn random forest regressor.
+    rtype: sklearn.ensemble.RandomForestRegressor
+    """
     rfc = RandomForestRegressor(n_estimators=10, max_depth=4,
                                 random_state=777)
     model = rfc.fit(X, y)
@@ -50,7 +99,23 @@ def create_sklearn_random_forest_regressor(X, y):
 
 
 def create_titanic_pipeline(X_train, y_train):
+    """Create a sklearn pipeline for the titanic dataset.
+
+    param X_train: The training data.
+    type X_train: numpy.ndarray or pandas.DataFrame
+    param y_train: The training labels.
+    type y_train: numpy.ndarray or pandas.DataFrame
+    return: A sklearn pipeline for the titanic dataset.
+    rtype: sklearn.pipeline.Pipeline
+    """
     def conv(X):
+        """Convert a pandas series to a numpy array.
+
+        param X: The data.
+        type X: pandas.Series
+        return: The data as a numpy array.
+        rtype: numpy.ndarray
+        """
         if isinstance(X, pd.Series):
             return X.values
         return X
@@ -84,9 +149,23 @@ def create_titanic_pipeline(X_train, y_train):
 
 def create_complex_classification_pipeline(
         X_train, y_train, continuous_features, categorical_features):
+    """Create a complex sklearn pipeline for classification.
+
+    param X_train: The training data.
+    type X_train: numpy.ndarray or pandas.DataFrame
+    param y_train: The training labels.
+    type y_train: numpy.ndarray or pandas.DataFrame
+    param continuous_features: The continuous features.
+    type continuous_features: list
+    param categorical_features: The categorical features.
+    type categorical_features: list
+    return: A complex sklearn pipeline for classification.
+    rtype: sklearn.pipeline.Pipeline
+    """
     # We create the preprocessing pipelines for both
     # numeric and categorical data.
     numeric_transformer = Pipeline(steps=[
+        ("imputer", SimpleImputer(strategy='median')),
         ('scaler', StandardScaler())])
 
     categorical_transformer = Pipeline(steps=[

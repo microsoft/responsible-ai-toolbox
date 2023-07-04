@@ -32,7 +32,6 @@ export class CohortEditorFilterList extends React.Component<ICohortEditorFilterL
         <Label>{localization.Interpret.CohortEditor.addedFilters}</Label>
         <FilterList
           filters={this.props.filters}
-          jointDataset={this.props.jointDataset}
           editFilter={this.props.editFilter}
           removeFilter={this.props.removeFilter}
         />

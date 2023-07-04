@@ -75,6 +75,7 @@ export function getTokenImportancesChartOptions(
   ];
   return {
     chart: {
+      backgroundColor: theme.semanticColors.bodyBackground,
       type: "bar"
     },
     plotOptions: {

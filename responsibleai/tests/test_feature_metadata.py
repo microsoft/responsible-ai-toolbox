@@ -3,7 +3,7 @@
 
 import pytest
 
-from responsibleai.exceptions import UserConfigValidationException
+from raiutils.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
 
 

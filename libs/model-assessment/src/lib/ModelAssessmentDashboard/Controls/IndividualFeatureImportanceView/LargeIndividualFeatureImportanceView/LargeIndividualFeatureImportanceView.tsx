@@ -122,22 +122,25 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
             this.state.isLocalExplanationsDataLoading
           }
           setIsRevertButtonClicked={this.setIsRevertButtonClicked}
+          telemetryHook={this.props.telemetryHook}
         />
-        <LocalImportanceChart
-          rowNumber={this.state.selectedPointsIndexes[0]}
-          data={this.state.localExplanationsData}
-          isLocalExplanationsDataLoading={
-            this.state.isLocalExplanationsDataLoading
-          }
-          localExplanationsErrorMessage={
-            this.state.localExplanationsErrorMessage
-          }
-          selectedWeightVector={this.props.selectedWeightVector}
-          onWeightChange={this.props.onWeightChange}
-          weightOptions={this.props.weightOptions}
-          weightLabels={this.props.weightLabels}
-          modelType={this.props.modelType}
-        />
+        {!this.state.isBubbleChartDataLoading && (
+          <LocalImportanceChart
+            rowNumber={this.state.selectedPointsIndexes[0]}
+            data={this.state.localExplanationsData}
+            isLocalExplanationsDataLoading={
+              this.state.isLocalExplanationsDataLoading
+            }
+            localExplanationsErrorMessage={
+              this.state.localExplanationsErrorMessage
+            }
+            selectedWeightVector={this.props.selectedWeightVector}
+            onWeightChange={this.props.onWeightChange}
+            weightOptions={this.props.weightOptions}
+            weightLabels={this.props.weightLabels}
+            modelType={this.props.modelType}
+          />
+        )}
       </Stack>
     );
   }
@@ -147,8 +150,31 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
   };
 
   private updateBubblePlotData = async (
-    chartProps: IGenericChartProps
+    chartProps: IGenericChartProps,
+    hasRevertToBubbleChartUpdated: boolean
   ): Promise<void> => {
+    if (hasRevertToBubbleChartUpdated) {
+      this.setState(
+        {
+          clusterData: getInitialClusterState(),
+          isBubbleChartDataLoading: true,
+          isLocalExplanationsDataLoading: false,
+          localExplanationsData: undefined,
+          localExplanationsErrorMessage: undefined,
+          selectedPointsIndexes: []
+        },
+        () => {
+          this.setState({
+            chartProps,
+            highChartConfigOverride: this.state.bubblePlotData,
+            isBubbleChartDataLoading: false,
+            isBubbleChartRendered: true,
+            isRevertButtonClicked: false
+          });
+        }
+      );
+      return;
+    }
     this.setState({
       clusterData: getInitialClusterState(),
       isBubbleChartDataLoading: true,
@@ -157,7 +183,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       localExplanationsErrorMessage: undefined,
       selectedPointsIndexes: []
     });
-    const datasetBarConfigOverride = await getBubblePlotData(
+    const datasetBubblePlotConfigOverride = await getBubblePlotData(
       chartProps,
       this.props.cohort,
       this.context.jointDataset,
@@ -165,22 +191,26 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       this.state.isLocalExplanationsDataLoading,
       this.context.requestBubblePlotData,
       this.selectPointFromChartLargeData,
-      this.onBubbleClick
+      this.onBubbleClick,
+      this.props.telemetryHook
     );
     if (
-      datasetBarConfigOverride &&
-      !instanceOfHighChart(datasetBarConfigOverride)
+      datasetBubblePlotConfigOverride &&
+      !instanceOfHighChart(datasetBubblePlotConfigOverride)
     ) {
       this.setState({
-        bubbleChartErrorMessage: getErrorMessage(datasetBarConfigOverride),
+        bubbleChartErrorMessage: getErrorMessage(
+          datasetBubblePlotConfigOverride
+        ),
         highChartConfigOverride: undefined,
         isBubbleChartDataLoading: false
       });
       return;
     }
     this.setState({
+      bubblePlotData: datasetBubblePlotConfigOverride,
       chartProps,
-      highChartConfigOverride: datasetBarConfigOverride,
+      highChartConfigOverride: datasetBubblePlotConfigOverride,
       isBubbleChartDataLoading: false,
       isBubbleChartRendered: true,
       isRevertButtonClicked: false
@@ -265,7 +295,8 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     });
     const localExplanationsData = await getLocalExplanationsFromSDK(
       absoluteIndex,
-      this.context.requestLocalExplanations
+      this.context.requestLocalExplanations,
+      this.props.telemetryHook
     );
     if (
       typeof localExplanationsData === "object" &&

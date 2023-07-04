@@ -169,6 +169,11 @@ export interface IWhatIfForecastingData {
   hasWhatIfForecastingComponent?: boolean;
   numberOfTimeSeriesOptions?: number;
   timeSeriesToSelect?: string;
+  testTransformation?: {
+    featureToSelect?: string;
+    operationToSelect?: string;
+    valueToSelect?: number;
+  };
 }
 
 export enum RAINotebookNames {
@@ -185,5 +190,5 @@ export enum RAINotebookNames {
   "MulticlassDnnModelDebugging" = "responsibleaidashboard-multiclass-dnn-model-debugging.py",
   "MulticlassDnnModelDebuggingDataBalanceExperience" = "responsibleaidashboard-multiclass-dnn-model-debugging.py",
   "OrangeJuiceForecasting" = "responsibleaidashboard-orange-juice-forecasting.py",
-  "OrangeJuiceForecastingDataBalanceExperience" = "responsibleaidashboard-orange-juice-forecasting.py",
+  "OrangeJuiceForecastingDataBalanceExperience" = "responsibleaidashboard-orange-juice-forecasting.py"
 }

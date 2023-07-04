@@ -20,27 +20,13 @@ import {
   MulticlassClassificationEnum
 } from "./JointDatasetUtils";
 import { generateMultilabelStats } from "./MultilabelStatisticsUtils";
-
-export enum BinaryClassificationMetrics {
-  Accuracy = "accuracy",
-  Precision = "precision",
-  Recall = "recall",
-  FalseNegativeRate = "falseNegativeRate",
-  FalsePositiveRate = "falsePositiveRate",
-  SelectionRate = "selectionRate",
-  F1Score = "f1Score"
-}
-
-export enum RegressionMetrics {
-  MeanSquaredError = "meanSquaredError",
-  MeanAbsoluteError = "meanAbsoluteError",
-  MeanPrediction = "meanPrediction",
-  RSquared = "rSquared"
-}
-
-export enum MulticlassClassificationMetrics {
-  Accuracy = "accuracy"
-}
+import { generateObjectDetectionStats } from "./ObjectDetectionStatisticsUtils";
+import { generateQuestionAnsweringStats } from "./QuestionAnsweringStatisticsUtils";
+import {
+  BinaryClassificationMetrics,
+  MulticlassClassificationMetrics,
+  RegressionMetrics
+} from "./StatisticsUtilsEnums";
 
 const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
   outcomes: number[]
@@ -247,17 +233,24 @@ const generateImageStats: (
 export const generateMetrics: (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
-  modelType: ModelTypes
+  modelType: ModelTypes,
+  objectDetectionCache?: Map<string, [number, number, number]>,
+  objectDetectionInputs?: [string, string, number]
 ) => ILabeledStatistic[][] = (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
-  modelType: ModelTypes
+  modelType: ModelTypes,
+  objectDetectionCache?: Map<string, [number, number, number]>,
+  objectDetectionInputs?: [string, string, number]
 ): ILabeledStatistic[][] => {
   if (
     modelType === ModelTypes.ImageMultilabel ||
     modelType === ModelTypes.TextMultilabel
   ) {
     return generateMultilabelStats(jointDataset, selectionIndexes);
+  }
+  if (modelType === ModelTypes.QuestionAnswering) {
+    return generateQuestionAnsweringStats(selectionIndexes);
   }
   const trueYs = jointDataset.unwrap(JointDataset.TrueYLabel);
   const predYs = jointDataset.unwrap(JointDataset.PredictedYLabel);
@@ -276,6 +269,17 @@ export const generateMetrics: (
       const predYSubset = selectionArray.map((i) => predYs[i]);
       return generateImageStats(trueYSubset, predYSubset);
     });
+  }
+  if (
+    modelType === ModelTypes.ObjectDetection &&
+    objectDetectionCache &&
+    objectDetectionInputs
+  ) {
+    return generateObjectDetectionStats(
+      selectionIndexes,
+      objectDetectionCache,
+      objectDetectionInputs
+    );
   }
   const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
   return selectionIndexes.map((selectionArray) => {

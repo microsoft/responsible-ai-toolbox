@@ -37,6 +37,7 @@ export const overallMetricChartStyles: () => IProcessedStyleSet<IOverallMetricCh
         paddingBottom: "5px"
       },
       chart: {
+        backgroundColor: theme.semanticColors.bodyBackground,
         flexGrow: "1"
       },
       chartWithAxes: {

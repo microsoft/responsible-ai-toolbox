@@ -55,7 +55,7 @@ export class TransformationCreationContinuous extends React.Component<ITransform
               }
             </Label>
             <ComboBox
-              id="ForecastingWhatIfTransformationOperationDropdown"
+              id={"ForecastingWhatIfTransformationOperationDropdown"}
               errorMessage={
                 this.props.transformationOperation === undefined
                   ? localization.Forecasting.TransformationCreation
@@ -91,7 +91,7 @@ export class TransformationCreationContinuous extends React.Component<ITransform
                 }
               </Label>
               <TextField
-                id="ForecastingWhatIfTransformationValueField"
+                id={"ForecastingWhatIfTransformationValueField"}
                 type="number"
                 step={this.transformationValueStep}
                 value={this.props.transformationValue.toString()}

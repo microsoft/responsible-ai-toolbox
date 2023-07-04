@@ -82,15 +82,17 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
     const sortedData = this.getSortedData();
     const x = sortedData.map((d) => d.label);
     const y = sortedData.map((d) => d.value);
+    const theme = getTheme();
     const seriesData = [
       {
-        color: getPrimaryChartColor(getTheme()),
+        color: getPrimaryChartColor(theme),
         data: y,
         name: ""
       }
     ];
     return {
       chart: {
+        backgroundColor: theme.semanticColors.bodyBackground,
         type: "column"
       },
       series: seriesData,

@@ -18,7 +18,7 @@ import {
   WeightVectors,
   WeightVectorOption
 } from "../Interfaces/IWeightedDropdownContext";
-import { IsBinary, IsMulticlass } from "../util/ExplanationUtils";
+import { IsBinary, IsMulticlass, IsMultilabel } from "../util/ExplanationUtils";
 
 import { AxisTypes } from "./IGenericChartProps";
 import {
@@ -42,6 +42,9 @@ export class JointDataset {
   public static readonly PredictedYLabel = "PredictedY";
   public static readonly ProbabilityYRoot = "ProbabilityClass";
   public static readonly TrueYLabel = "TrueY";
+  public static readonly ObjectDetectionPredictedYLabel =
+    "ObjectDetectionPredictedY";
+  public static readonly ObjectDetectionTrueYLabel = "ObjectDetectionTrueY";
   public static readonly DitherLabel = "Dither";
   public static readonly DitherLabel2 = "Dither2";
   public static readonly ClassificationError = "ClassificationError";
@@ -70,6 +73,7 @@ export class JointDataset {
   // these properties should only be accessed by Cohort class,
   // which enables independent filtered views of this data
   public dataDict: Array<{ [key: string]: number }> | undefined;
+  public strDataDict: Array<{ [key: string]: string }> | undefined;
   public binDict: { [key: string]: number[] | undefined } = {};
 
   private readonly _modelMeta: IExplanationModelMetadata;
@@ -203,7 +207,11 @@ export class JointDataset {
     // include error columns if applicable
     if (this.hasPredictedY && this.hasTrueY) {
       this.dataDict?.forEach((row) => {
-        JointDataset.setErrorMetrics(row, this._modelMeta.modelType);
+        JointDataset.setErrorMetrics(
+          row,
+          this._modelMeta.modelType,
+          this.numLabels
+        );
       });
       // Set appropriate metadata
       if (args.metadata.modelType === ModelTypes.Regression && this.dataDict) {
@@ -238,7 +246,10 @@ export class JointDataset {
           treatAsCategorical: true
         };
       }
-      if (IsMulticlass(args.metadata.modelType)) {
+      if (
+        IsMulticlass(args.metadata.modelType) ||
+        IsMultilabel(args.metadata.modelType)
+      ) {
         this.metaDict[JointDataset.ClassificationError] = {
           abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
           category: ColumnCategories.Outcome,
@@ -332,7 +343,8 @@ export class JointDataset {
   // set the appropriate error value in the keyed column
   public static setErrorMetrics(
     row: { [key: string]: any },
-    modelType: ModelTypes
+    modelType: ModelTypes,
+    numLabels = 0
   ): void {
     if (modelType === ModelTypes.Regression) {
       row[JointDataset.RegressionError] = Math.abs(
@@ -356,6 +368,23 @@ export class JointDataset {
         row[JointDataset.TrueYLabel] !== row[JointDataset.PredictedYLabel]
           ? MulticlassClassificationEnum.Misclassified
           : MulticlassClassificationEnum.Correct;
+      return;
+    }
+    if (IsMultilabel(modelType)) {
+      let misclassified = false;
+      // go over each label and check if it is misclassified
+      for (let i = 0; i < numLabels; i++) {
+        if (
+          row[JointDataset.TrueYLabel + i.toString()] !==
+          row[JointDataset.PredictedYLabel + i.toString()]
+        ) {
+          misclassified = true;
+          break;
+        }
+      }
+      row[JointDataset.ClassificationError] = misclassified
+        ? MulticlassClassificationEnum.Misclassified
+        : MulticlassClassificationEnum.Correct;
       return;
     }
   }
@@ -663,7 +692,7 @@ export class JointDataset {
   }
 
   private updateMetaDataDict(
-    values: number[] | number[][],
+    values: number[] | number[][] | string[],
     metadata: IExplanationModelMetadata,
     labelColName: string,
     abbridgedLabel: string,
@@ -680,7 +709,11 @@ export class JointDataset {
           }
         });
       } else if (this.dataDict) {
-        this.dataDict[index][labelColName] = val;
+        if (typeof val !== "string") {
+          this.dataDict[index][labelColName] = val;
+        } else if (this.strDataDict) {
+          this.strDataDict[index][labelColName] = val;
+        }
       }
     });
     for (let i = 0; i < this.numLabels; i++) {
@@ -729,6 +762,13 @@ export class JointDataset {
   private initializeDataDictIfNeeded(arr: any[]): void {
     if (arr === undefined) {
       return;
+    }
+    if (this.strDataDict === undefined) {
+      this.strDataDict = Array.from({ length: arr.length }).map((_, index) => {
+        const dict = {};
+        dict[JointDataset.IndexLabel] = index;
+        return dict;
+      });
     }
     if (this.dataDict !== undefined) {
       if (this.dataDict.length !== arr.length) {

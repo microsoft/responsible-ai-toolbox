@@ -6,13 +6,12 @@
 import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from uuid import UUID
 
 import numpy as np
 import pandas as pd
 import pytest
 from tests.causal_manager_validator import validate_causal
-from tests.common_utils import create_adult_income_dataset, create_iris_data
+from tests.common_utils import create_iris_data
 from tests.counterfactual_manager_validator import validate_counterfactual
 from tests.error_analysis_validator import (setup_error_analysis,
                                             validate_error_analysis)
@@ -26,6 +25,7 @@ from rai_test_utils.models.model_utils import (create_models_classification,
                                                create_models_regression)
 from rai_test_utils.models.sklearn import \
     create_complex_classification_pipeline
+from rai_test_utils.utilities import is_valid_uuid
 from raiutils.models import ModelTask
 from responsibleai import ModelAnalysis
 from responsibleai._internal.constants import ManagerNames
@@ -109,12 +109,11 @@ class TestModelAnalysis(object):
                                               ManagerNames.ERROR_ANALYSIS,
                                               ManagerNames.EXPLAINER,
                                               ManagerNames.COUNTERFACTUAL])
-    def test_model_analysis_binary_mixed_types(self, manager_type):
+    def test_model_analysis_binary_mixed_types(self, manager_type, adult_data):
 
         data_train, data_test, y_train, y_test, categorical_features, \
             continuous_features, target_name, classes, \
-            feature_columns, feature_range_keys = \
-            create_adult_income_dataset()
+            feature_columns, feature_range_keys = adult_data
         X_train = data_train.drop([target_name], axis=1)
 
         model = create_complex_classification_pipeline(
@@ -277,7 +276,7 @@ def validate_state_directory(path, manager_type):
     all_component_paths = os.listdir(path / manager_type)
     for component_path in all_component_paths:
         # Test if the component directory has UUID structure
-        UUID(component_path, version=4)
+        is_valid_uuid(component_path)
 
         dm = DirectoryManager(path / manager_type, component_path)
 

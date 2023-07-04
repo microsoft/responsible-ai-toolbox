@@ -39,6 +39,7 @@ export interface ISidePanelProps {
   sortingSeriesIndex: number;
   cohorts: Cohort[];
   chartType: ChartTypes;
+  loading?: boolean;
   telemetryHook?: (message: ITelemetryEvent) => void;
   onWeightChange(option: WeightVectorOption): void;
   setSortIndex(option: number): void;
@@ -92,6 +93,7 @@ export class SidePanel extends React.Component<
             text: row.name
           }))}
           onChange={this.onSortChange}
+          disabled={this.props.loading}
         />
         <ChoiceGroup
           label={localization.Interpret.DatasetExplorer.chartType}
@@ -99,6 +101,7 @@ export class SidePanel extends React.Component<
           options={this.getChartOptions()}
           onChange={this.onChartTypeChange}
           id="ChartTypeSelection"
+          disabled={this.props.loading}
         />
         {IsClassifier(this.props.metadata.modelType) &&
           this.state.weightOptions && (
@@ -132,6 +135,7 @@ export class SidePanel extends React.Component<
                 options={this.state.weightOptions}
                 selectedKey={this.props.selectedWeightVector}
                 onChange={this.setWeightOption}
+                disabled={this.props.loading}
                 ariaLabel={
                   localization.Interpret.GlobalTab.weightOptionsDropdown
                 }

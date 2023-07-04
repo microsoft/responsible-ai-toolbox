@@ -16,7 +16,7 @@ from rai_test_utils.datasets.tabular import (
 from rai_test_utils.models.lightgbm import create_lightgbm_classifier
 from rai_test_utils.models.sklearn import \
     create_sklearn_random_forest_regressor
-from responsibleai.exceptions import UserConfigValidationException
+from raiutils.exceptions import UserConfigValidationException
 from responsibleai.modelanalysis.model_analysis import ModelAnalysis
 
 
@@ -331,7 +331,7 @@ class TestModelAnalysisValidations:
                 task_type='classification',
                 train_labels=[0, 1])
 
-        assert 'The train labels and distinct values in target ' + \
+        assert 'The test labels and distinct values in target ' + \
             '(test data) do not match' in str(ucve.value)
 
 

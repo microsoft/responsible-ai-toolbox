@@ -7,15 +7,16 @@ require you to agree to a Contributor License Agreement (CLA) declaring that
 you have the right to, and actually do, grant us the rights to use your
 contribution. For details, visit <https://cla.opensource.microsoft.com>.
 
+Before contributing, please check that you have the correct configurations of
+(1) Contributor License Agreement and (2) GPG key.
+
+(1) Contributor License Agreement
 When you submit a pull request, a CLA bot will automatically determine whether
 you need to provide a CLA and decorate the PR appropriately (e.g., status
 check, comment). Simply follow the instructions provided by the bot. You will
 only need to do this once across all repos using our CLA.
 
-If you have previously committed changes that were not signed follow
-[these steps](https://dev.to/jrushlow/oops-i-forgot-to-sign-my-commit-from-last-monday-2jke)
-to sign them retroactively after setting up your GPG key as described in the
-[GitHub documentation](https://docs.github.com/en/github/authenticating-to-github/managing-commit-signature-verification).
+(2) GPG Key
 
 Setting up a GPG key has three stages:
 
@@ -25,6 +26,13 @@ Setting up a GPG key has three stages:
 
 Note that the `GitBash` shell installed by Git on Windows already has GPG
 installed, so there is no need to install GPG separately.
+
+Please also make sure to set email in git config (git config --global user.email "MY_NAME@example.com") which should be the same email linked to the PGP Key.
+
+If you have previously committed changes that were not signed follow
+[these steps](https://dev.to/jrushlow/oops-i-forgot-to-sign-my-commit-from-last-monday-2jke)
+to sign them retroactively after setting up your GPG key as described in the
+[GitHub documentation](https://docs.github.com/en/github/authenticating-to-github/managing-commit-signature-verification).
 
 ## Code of conduct
 
@@ -121,7 +129,7 @@ once.
 2. `cd responsible-ai-toolbox`
 3. `yarn install`
 4. `yarn build`
-5. To execute tests run `yarn e2eall`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible using `yarn e2e --watch`.
+5. To execute tests run `yarn e2e`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible using `yarn e2e --watch`.
 
 cypress window will open locally - select test file to run the tests
 

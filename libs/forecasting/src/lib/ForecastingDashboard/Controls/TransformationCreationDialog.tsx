@@ -119,7 +119,7 @@ export class TransformationCreationDialog extends React.Component<
         >
           <Stack.Item>
             <TextField
-              id="ForecastingWhatIfTransformationNameField"
+              id={"ForecastingWhatIfTransformationNameField"}
               label={localization.Forecasting.TransformationCreation.nameLabel}
               placeholder={
                 localization.Forecasting.TransformationCreation
@@ -156,7 +156,7 @@ export class TransformationCreationDialog extends React.Component<
         </Stack>
         <DialogFooter>
           <PrimaryButton
-            id="ForecastingWhatIfAddTransformationButton"
+            id={"ForecastingWhatIfAddTransformationButton"}
             disabled={
               transformationCombinationErrorMessage !== undefined ||
               this.getTransformationNameErrorMessage(

@@ -93,3 +93,21 @@ class ResponsibleAIDashboard(Dashboard):
                 data = request.get_json(force=True)
                 return jsonify(self.input.forecast(data))
             self.add_url_rule(forecast, '/forecast', methods=["POST"])
+        
+        def get_object_detection_metrics():
+            data = request.get_json(force=True)
+            return jsonify(self.input.get_object_detection_metrics(data))
+        self.add_url_rule(
+            get_object_detection_metrics,
+            '/get_object_detection_metrics',
+            methods=["POST"]
+        )
+
+        def get_question_answering_metrics():
+            data = request.get_json(force=True)
+            return jsonify(self.input.get_question_answering_metrics(data))
+        self.add_url_rule(
+            get_question_answering_metrics,
+            '/get_question_answering_metrics',
+            methods=["POST"]
+        )

@@ -56,6 +56,7 @@ export interface ICounterfactualChartState {
   isBubbleChartDataLoading: boolean;
   bubbleChartErrorMessage?: string;
   isBubbleChartRendered: boolean;
+  bubblePlotData?: IHighchartsConfig;
 }
 
 export class LargeCounterfactualChart extends React.PureComponent<
@@ -81,12 +82,14 @@ export class LargeCounterfactualChart extends React.PureComponent<
   }
 
   public componentDidMount(): void {
-    this.updateBubblePlot();
+    this.updateBubblePlot(false);
   }
 
   public componentDidUpdate(prevProps: ILargeCounterfactualChartProps): void {
-    if (this.shouldUpdateBubbleChartPlot(prevProps)) {
-      this.updateBubblePlot();
+    const hasRevertToBubbleChartUpdated =
+      this.hasRevertToBubbleChartUpdated(prevProps);
+    if (hasRevertToBubbleChartUpdated || this.hasCohortUpdated(prevProps)) {
+      this.updateBubblePlot(hasRevertToBubbleChartUpdated);
       return;
     }
     if (this.hasAxisTypeChanged(prevProps.chartProps)) {
@@ -94,7 +97,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
       return;
     }
     if (!_.isEqual(prevProps.chartProps, this.props.chartProps)) {
-      this.updateBubblePlot();
+      this.updateBubblePlot(false);
       return;
     }
     if (this.shouldUpdateScatterPlot(prevProps)) {
@@ -244,14 +247,19 @@ export class LargeCounterfactualChart extends React.PureComponent<
     );
   };
 
-  private readonly shouldUpdateBubbleChartPlot = (
+  private readonly hasRevertToBubbleChartUpdated = (
     prevProps: ILargeCounterfactualChartProps
   ): boolean => {
     return (
-      this.props.cohort.name !== prevProps.cohort.name ||
-      (this.props.isRevertButtonClicked &&
-        prevProps.isRevertButtonClicked !== this.props.isRevertButtonClicked)
+      this.props.isRevertButtonClicked &&
+      prevProps.isRevertButtonClicked !== this.props.isRevertButtonClicked
     );
+  };
+
+  private readonly hasCohortUpdated = (
+    prevProps: ILargeCounterfactualChartProps
+  ): boolean => {
+    return this.props.cohort.name !== prevProps.cohort.name;
   };
 
   private readonly hasAxisTypeChanged = (
@@ -270,7 +278,25 @@ export class LargeCounterfactualChart extends React.PureComponent<
     this.setState({ yDialogOpen: !this.state.yDialogOpen });
   };
 
-  private async updateBubblePlot(): Promise<void> {
+  private async updateBubblePlot(
+    hasRevertToBubbleChartUpdated: boolean
+  ): Promise<void> {
+    if (hasRevertToBubbleChartUpdated) {
+      this.setState(
+        {
+          isBubbleChartDataLoading: true
+        },
+        () => {
+          this.setState({
+            bubbleChartErrorMessage: undefined,
+            isBubbleChartDataLoading: false,
+            isBubbleChartRendered: true,
+            plotData: this.state.bubblePlotData
+          });
+        }
+      );
+      return;
+    }
     this.setState({
       isBubbleChartDataLoading: true
     });
@@ -288,6 +314,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
     }
     this.setState({
       bubbleChartErrorMessage: undefined,
+      bubblePlotData: plotData,
       isBubbleChartDataLoading: false,
       isBubbleChartRendered: true,
       plotData
@@ -323,10 +350,12 @@ export class LargeCounterfactualChart extends React.PureComponent<
       this.props.isCounterfactualsDataLoading,
       true,
       false,
+      TelemetryEventName.CounterfactualsBubblePlotDataFetch,
       this.context.requestBubblePlotData,
       this.selectPointFromChartLargeData,
       this.onBubbleClick,
-      this.props.onIndexSeriesUpdated
+      this.props.onIndexSeriesUpdated,
+      this.props.telemetryHook
     );
   }
 

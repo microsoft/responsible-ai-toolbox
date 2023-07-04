@@ -6,7 +6,7 @@ import { IPrecomputedExplanations } from "./ExplanationInterfaces";
 export interface IModelExplanationData {
   modelClass?: ModelClass;
   method?: Method;
-  predictedY?: number[] | number[][];
+  predictedY?: number[] | number[][] | string[];
   probabilityY?: number[][];
   explanationMethod?: string;
   precomputedExplanations?: IPrecomputedExplanations;

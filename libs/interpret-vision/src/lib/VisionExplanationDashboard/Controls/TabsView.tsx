@@ -63,7 +63,7 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
   public render(): React.ReactNode {
     const classNames = visionExplanationDashboardStyles();
     switch (this.props.selectedKey) {
-      case VisionDatasetExplorerTabOptions.DataCharacteristics:
+      case VisionDatasetExplorerTabOptions.ClassView:
         return (
           <Stack
             className={classNames.mainContainer}

@@ -169,6 +169,7 @@ export function getFeatureBalanceMeasuresChart(
 
   return {
     chart: {
+      backgroundColor: theme.semanticColors.bodyBackground,
       numberFormatter: (value: number): string => value.toFixed(3),
       type: "heatmap"
     },

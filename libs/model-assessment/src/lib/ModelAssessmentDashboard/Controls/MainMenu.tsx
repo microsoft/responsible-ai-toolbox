@@ -16,7 +16,6 @@ import {
   defaultModelAssessmentContext,
   ErrorCohort,
   IModelAssessmentContext,
-  isAllDataErrorCohort,
   ITelemetryEvent,
   ModelAssessmentContext,
   TelemetryEventName,
@@ -188,7 +187,7 @@ export class MainMenu extends React.PureComponent<
     // add (default) if it's the default cohort
     let cohortInfoTitle =
       localization.ModelAssessment.CohortInformation.GlobalCohort + cohortName;
-    if (isAllDataErrorCohort(currentCohort, true)) {
+    if (currentCohort.isAllDataCohort) {
       cohortInfoTitle +=
         localization.ModelAssessment.CohortInformation.DefaultCohort;
     }

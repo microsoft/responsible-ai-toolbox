@@ -213,7 +213,9 @@ export class TabularDataView extends React.Component<
     this.props.setWhatIfDatapoint?.(item[0] as number);
   };
 
-  private tabularDataFilter = (row: { [key: string]: number }): boolean => {
+  private tabularDataFilter = (row: {
+    [key: string]: string | number;
+  }): boolean => {
     switch (this.props.dataView) {
       case DataViewKeys.CorrectInstances: {
         if (

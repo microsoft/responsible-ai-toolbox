@@ -6,10 +6,10 @@ import json
 import pandas as pd
 import pytest
 
+from raiutils.exceptions import UserConfigValidationException
 from raiwidgets.cohort import (ClassificationOutcomes, Cohort, CohortFilter,
                                CohortFilterMethods,
                                cohort_filter_json_converter)
-from responsibleai.exceptions import UserConfigValidationException
 
 
 def get_toy_binary_classification_dataset():

@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "@fluentui/react": "8.58.0",
+    "canvas": "^2.11.2",
     "core-js": "^3.6.5",
     "d3-array": "^2.8.0",
     "d3-color": "^2.0.0",
@@ -70,7 +71,8 @@
     "react-router-dom": "^5.0.1",
     "regenerator-runtime": "0.13.7",
     "tslib": "^2.5.0",
-    "uuid": "^8.3.0"
+    "uuid": "^8.3.0",
+    "vott-ct": "^2.4.2-rc.0"
   },
   "devDependencies": {
     "@babel/core": "7.11.1",

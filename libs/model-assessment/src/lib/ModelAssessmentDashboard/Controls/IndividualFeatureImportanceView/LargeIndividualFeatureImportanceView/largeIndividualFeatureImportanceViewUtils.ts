@@ -86,12 +86,15 @@ export async function generateHighChartConfigOverride(
   hasChartPropsUpdated: boolean,
   hasCohortUpdated: boolean,
   hasAxisTypeChanged: boolean,
-  updateBubblePlotData: (chartProps: IGenericChartProps) => void,
+  updateBubblePlotData: (
+    chartProps: IGenericChartProps,
+    hasRevertToBubbleChartUpdated: boolean
+  ) => void,
   updateScatterPlotData: (chartProps: IGenericChartProps) => void
 ): Promise<void> {
   if (chartProps) {
     if (hasCohortUpdated || hasRevertToBubbleChartUpdated) {
-      updateBubblePlotData(chartProps);
+      updateBubblePlotData(chartProps, hasRevertToBubbleChartUpdated);
       return;
     }
     if (hasAxisTypeChanged) {
@@ -99,7 +102,7 @@ export async function generateHighChartConfigOverride(
       return;
     }
     if (hasChartPropsUpdated) {
-      updateBubblePlotData(chartProps);
+      updateBubblePlotData(chartProps, false);
       return;
     }
     if (
@@ -166,7 +169,8 @@ export async function getBubblePlotData(
   onBubbleClick?: (
     scatterPlotData: IHighchartsConfig,
     clusterData: IClusterData
-  ) => void
+  ) => void,
+  telemetryHook?: (message: ITelemetryEvent) => void
 ): Promise<IHighchartBubbleSDKClusterData | IHighchartsConfig | undefined> {
   return await calculateBubblePlotDataFromErrorCohort(
     cohort,
@@ -177,10 +181,12 @@ export async function getBubblePlotData(
     isLocalExplanationsDataLoading,
     true,
     false,
+    TelemetryEventName.FeatureImportanceBubblePlotDataFetch,
     requestBubblePlotData,
     selectPointFromChartLargeData,
     onBubbleClick,
-    undefined
+    undefined,
+    telemetryHook
   );
 }
 

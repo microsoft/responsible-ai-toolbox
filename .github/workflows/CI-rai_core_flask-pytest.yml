@@ -18,7 +18,7 @@ jobs:
       matrix:
         operatingSystem:
           [ubuntu-20.04, ubuntu-latest, macos-latest, windows-latest]
-        pythonVersion: ["3.6", "3.7", "3.8", "3.9"]
+        pythonVersion: ["3.6", "3.7", "3.8", "3.9", "3.10"]
         exclude:
           - operatingSystem: macos-latest
             pythonVersion: "3.9"
@@ -28,8 +28,14 @@ jobs:
             pythonVersion: "3.8"
           - operatingSystem: ubuntu-20.04
             pythonVersion: "3.9"
+          - operatingSystem: ubuntu-20.04
+            pythonVersion: "3.10"
           - operatingSystem: ubuntu-latest
             pythonVersion: "3.6"
+          - operatingSystem: ubuntu-latest
+            pythonVersion: "3.9"
+          - operatingSystem: windows-latest
+            pythonVersion: "3.8"
 
     runs-on: ${{ matrix.operatingSystem }}
 
@@ -45,23 +51,23 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install --upgrade setuptools
-          pip install --upgrade "pip-tools<6.12.2"
+          pip install --upgrade "pip-tools<=6.13.0"
 
       - name: Pip compile
         run: |
-          pip-compile requirements-dev.txt
-          cat requirements-dev.txt
+          pip-compile requirements-dev.txt -o requirements-dev-comp.txt
+          cat requirements-dev-comp.txt
         working-directory: rai_core_flask
 
       - name: Upload requirements
         uses: actions/upload-artifact@v3
         with:
-          name: requirements-dev.txt
-          path: rai_core_flask/requirements-dev.txt
+          name: requirements-dev-comp.txt
+          path: rai_core_flask/requirements-dev-comp.txt
 
       - name: Install dependencies
         run: |
-          pip-sync requirements-dev.txt
+          pip-sync requirements-dev-comp.txt
         working-directory: rai_core_flask
 
       - name: Install package
@@ -85,7 +91,7 @@ jobs:
       - if: ${{ (matrix.operatingSystem == 'windows-latest') && (matrix.pythonVersion == '3.8') }}
         name: Upload to codecov
         id: codecovupload1
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: rai_core_flask
@@ -99,7 +105,7 @@ jobs:
       - if: ${{ (steps.codecovupload1.outcome == 'failure') && (matrix.pythonVersion == '3.8') && (matrix.operatingSystem == 'windows-latest') }}
         name: Retry upload to codecov
         id: codecovupload2
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: rai_core_flask

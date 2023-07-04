@@ -11,6 +11,8 @@ import {
   ImageClassificationMetrics,
   MulticlassClassificationMetrics,
   MultilabelMetrics,
+  ObjectDetectionMetrics,
+  QuestionAnsweringMetrics,
   RegressionMetrics,
   TotalCohortSamples
 } from "@responsible-ai/core-ui";
@@ -139,7 +141,9 @@ export function generateCohortsStatsTable(
             // only 1 unique value in the set, set color to 0
             colorValue = 0;
           }
+          const colorConfig = { color: "transparent" };
           items.push({
+            ...colorConfig,
             colorValue,
             value: Number(labeledStat.stat.toFixed(3)),
             x: metricIndex + 1,
@@ -401,6 +405,81 @@ export function getSelectableMetrics(
         key: MultilabelMetrics.HammingScore,
         text: localization.ModelAssessment.ModelOverview.metrics.hammingScore
           .name
+      }
+    );
+  } else if (taskType === DatasetTaskType.ObjectDetection) {
+    selectableMetrics.push(
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics
+            .meanAveragePrecision.description,
+        key: ObjectDetectionMetrics.MeanAveragePrecision,
+        text: localization.ModelAssessment.ModelOverview.metrics
+          .meanAveragePrecision.name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.averagePrecision
+            .description,
+        key: ObjectDetectionMetrics.AveragePrecision,
+        text: localization.ModelAssessment.ModelOverview.metrics
+          .averagePrecision.name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.averageRecall
+            .description,
+        key: ObjectDetectionMetrics.AverageRecall,
+        text: localization.ModelAssessment.ModelOverview.metrics.averageRecall
+          .name
+      }
+    );
+  } else if (taskType === DatasetTaskType.QuestionAnswering) {
+    selectableMetrics.push(
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.exactMatchRatio
+            .description,
+        key: QuestionAnsweringMetrics.ExactMatchRatio,
+        text: localization.ModelAssessment.ModelOverview.metrics.exactMatchRatio
+          .name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.meteorScore
+            .description,
+        key: QuestionAnsweringMetrics.MeteorScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.meteorScore
+          .name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.f1Score
+            .description,
+        key: QuestionAnsweringMetrics.F1Score,
+        text: localization.ModelAssessment.ModelOverview.metrics.f1Score.name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.bleuScore
+            .description,
+        key: QuestionAnsweringMetrics.BleuScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.bleuScore.name
+      },
+
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.bertScore
+            .description,
+        key: QuestionAnsweringMetrics.BertScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.bertScore.name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.rougeScore
+            .description,
+        key: QuestionAnsweringMetrics.RougeScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.rougeScore.name
       }
     );
   } else {

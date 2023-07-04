@@ -23,6 +23,7 @@ export interface IModelOverviewStyles {
   generalText: IStyle;
   generalSemiBoldText: IStyle;
   selections: IStyle;
+  slider: IStyle;
   smallDropdown: IStyle;
   tabs: IStyle;
 }
@@ -53,6 +54,9 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
         padding: "0 40px 32px 40px"
       },
       selections: flexLgDown,
+      slider: {
+        width: "250px"
+      },
       smallDropdown: {
         width: "150px"
       },

@@ -10,8 +10,10 @@ import {
   ICausalPolicy,
   ITelemetryEvent,
   ModelAssessmentContext,
-  ifEnableLargeData
+  ifEnableLargeData,
+  LoadingSpinner
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { CausalAnalysisOptions } from "../../CausalAnalysisEnums";
@@ -32,6 +34,7 @@ interface ICausalAnalysisState {
   currentGlobalCausalEffects?: ICausalAnalysisSingleData[];
   currentLocalCausalEffects?: ICausalAnalysisSingleData[][];
   currentGlobalCausalPolicy: undefined | ICausalPolicy[];
+  isCausalPolicyDataLoading: boolean;
 }
 
 export class CausalAnalysisView extends React.PureComponent<
@@ -49,7 +52,8 @@ export class CausalAnalysisView extends React.PureComponent<
         this.props.data.global_effects
       ),
       currentGlobalCausalPolicy: this.props.data.policies,
-      currentLocalCausalEffects: this.props.data.local_effects
+      currentLocalCausalEffects: this.props.data.local_effects,
+      isCausalPolicyDataLoading: true
     };
   }
 
@@ -77,12 +81,8 @@ export class CausalAnalysisView extends React.PureComponent<
               telemetryHook={this.props.telemetryHook}
             />
           )}
-        {this.props.viewOption === CausalAnalysisOptions.Treatment && (
-          <TreatmentView
-            data={this.state.currentGlobalCausalPolicy}
-            telemetryHook={this.props.telemetryHook}
-          />
-        )}
+        {this.props.viewOption === CausalAnalysisOptions.Treatment &&
+          this.getPolicyElement()}
       </>
     );
   }
@@ -95,6 +95,7 @@ export class CausalAnalysisView extends React.PureComponent<
         this.getGlobalCausalEffects();
       }
       if (this.props.viewOption === CausalAnalysisOptions.Treatment) {
+        this.setState({ isCausalPolicyDataLoading: true });
         this.getGlobalCausalPolicy();
       }
     }
@@ -103,6 +104,7 @@ export class CausalAnalysisView extends React.PureComponent<
         this.getGlobalCausalEffects();
       }
       if (this.props.viewOption === CausalAnalysisOptions.Treatment) {
+        this.setState({ isCausalPolicyDataLoading: true });
         this.getGlobalCausalPolicy();
       }
     }
@@ -160,9 +162,15 @@ export class CausalAnalysisView extends React.PureComponent<
         compositeFiltersRelabeled,
         new AbortController().signal
       );
-      this.setState({ currentGlobalCausalPolicy: result.policies });
+      this.setState({
+        currentGlobalCausalPolicy: result.policies,
+        isCausalPolicyDataLoading: false
+      });
     } else {
-      this.setState({ currentGlobalCausalPolicy: this.props.data.policies });
+      this.setState({
+        currentGlobalCausalPolicy: this.props.data.policies,
+        isCausalPolicyDataLoading: false
+      });
     }
   };
 
@@ -170,5 +178,17 @@ export class CausalAnalysisView extends React.PureComponent<
     globalCausalEffects?: ICausalAnalysisSingleData[]
   ): ICausalAnalysisSingleData[] | undefined {
     return globalCausalEffects?.sort((d1, d2) => d2.point - d1.point);
+  }
+
+  private getPolicyElement(): React.ReactNode {
+    if (!this.state.isCausalPolicyDataLoading) {
+      return (
+        <TreatmentView
+          data={this.state.currentGlobalCausalPolicy}
+          telemetryHook={this.props.telemetryHook}
+        />
+      );
+    }
+    return <LoadingSpinner label={localization.Common.loading} />;
   }
 }

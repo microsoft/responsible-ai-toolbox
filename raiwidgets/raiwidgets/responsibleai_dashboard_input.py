@@ -8,16 +8,18 @@ import numpy as np
 import pandas as pd
 
 
-from erroranalysis._internal.constants import display_name_to_metric
-from raiutils.data_processing import convert_to_list, serialize_json_safe
 from raiutils.models import is_classifier, ModelTask
-from raiwidgets.cohort import Cohort, CohortFilter, CohortFilterMethods
+from raiwidgets.cohort import CohortFilter, CohortFilterMethods
+from erroranalysis._internal.constants import display_name_to_metric
+from raiutils.cohort import Cohort
+from raiutils.data_processing import convert_to_list, serialize_json_safe
+from raiutils.exceptions import UserConfigValidationException
+from raiutils.models import is_classifier
 from raiwidgets.constants import ErrorMessages
 from raiwidgets.error_handling import _format_exception
 from raiwidgets.interfaces import WidgetRequestResponseConstants
 from responsibleai import RAIInsights
 from responsibleai._internal.constants import ManagerNames
-from responsibleai.exceptions import UserConfigValidationException
 
 EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 
@@ -270,7 +272,15 @@ class ResponsibleAIDashboardInput:
 
     def get_exp(self, index):
         try:
-            exp = self._analysis.explainer.compute_single_explanation(index)
+            # index 0 = index of the image
+            # index 1 = index of the object
+            if self.dashboard_input.dataset.task_type == "object_detection":
+                exp = self._analysis.explainer.compute_single_explanation(
+                    index=index[0],
+                    object_index=index[1])
+            else:
+                exp = self._analysis.explainer.compute_single_explanation(
+                    index)
             return {
                 WidgetRequestResponseConstants.data: exp
             }
@@ -341,6 +351,44 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: []
             }
 
+    def get_object_detection_metrics(self, post_data):
+        """Flask endpoint function to get Model Overview metrics
+        for the Object Detection scenario.
+
+        :param post_data: List of inputs in the order
+        [true_y, predicted_y, aggregate_method, class_name, iou_thresh].
+        :type post_data: List
+
+        :return: JSON/dict data response
+        :rtype: Dict[str, List]
+        """
+        try:
+            selection_indexes = post_data[0]
+            aggregate_method = post_data[1]
+            class_name = post_data[2]
+            iou_thresh = post_data[3]
+            object_detection_cache = post_data[4]
+            exp = self._analysis.compute_object_detection_metrics(
+                selection_indexes,
+                aggregate_method,
+                class_name,
+                iou_thresh,
+                object_detection_cache
+            )
+            return {
+                WidgetRequestResponseConstants.data: exp
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to get Object Detection Model Overview metrics,"
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }
+    
     def forecast(self, post_data):
         # This is a separate function from predict since we apply
         # transformations to an entire time series. That enables us
@@ -388,6 +436,36 @@ class ResponsibleAIDashboardInput:
             return {
                 WidgetRequestResponseConstants.error:
                     "Failed to generate forecast for time series, "
+                "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }
+
+    def get_question_answering_metrics(self, post_data):
+        """Flask endpoint function to get Model Overview metrics
+        for the Question Answering scenario.
+
+        :param post_data: List of inputs in the order
+        [true_y, predicted_y, aggregate_method, class_name, iou_thresh].
+        :type post_data: List
+
+        :return: JSON/dict data response
+        :rtype: Dict[str, List]
+        """
+        try:
+            selection_indexes = post_data[0]
+            exp = self._analysis.compute_question_answering_metrics(
+                selection_indexes
+            )
+            return {
+                WidgetRequestResponseConstants.data: exp
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to get Question Answering Model Overview metrics,"
                     "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }

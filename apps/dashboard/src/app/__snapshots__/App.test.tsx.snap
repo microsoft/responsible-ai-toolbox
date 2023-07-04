@@ -1,7 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`FairnessWizardV1 should render successfully 1`] = `
-<Fragment>
+<div
+  style={
+    Object {
+      "backgroundColor": "#ffffff",
+    }
+  }
+>
   <AppHeader
     application="modelAssessment"
     dataset="adultCensusIncomeData"
@@ -16,7 +22,6 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
     key="1"
     style={
       Object {
-        "backgroundColor": "#ffffff",
         "height": "calc(100% - 70px)",
         "minHeight": "500px",
         "width": "calc(100%-20px)",
@@ -16916,6 +16921,86 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
               0.3195856063209964,
             ],
           ],
+          "tabular_dataset_metadata": Object {
+            "feature_ranges": Array [
+              Object {
+                "column_name": "age",
+                "max_value": 74,
+                "min_value": 17,
+                "range_type": "integer",
+              },
+              Object {
+                "column_name": "workclass",
+                "range_type": "categorical",
+                "unique_values": Array [
+                  "Private",
+                  "Government",
+                  "Other/Unknown",
+                  "Self-Employed",
+                ],
+              },
+              Object {
+                "column_name": "education",
+                "range_type": "categorical",
+                "unique_values": Array [
+                  "HS-grad",
+                  "Masters",
+                  "Some-college",
+                  "Assoc",
+                  "Bachelors",
+                  "School",
+                  "Doctorate",
+                ],
+              },
+              Object {
+                "column_name": "marital_status",
+                "range_type": "categorical",
+                "unique_values": Array [
+                  "Married",
+                  "Divorced",
+                  "Single",
+                  "Widowed",
+                ],
+              },
+              Object {
+                "column_name": "occupation",
+                "range_type": "categorical",
+                "unique_values": Array [
+                  "Blue-Collar",
+                  "Sales",
+                  "White-Collar",
+                  "Service",
+                  "Other/Unknown",
+                  "Professional",
+                ],
+              },
+              Object {
+                "column_name": "race",
+                "range_type": "categorical",
+                "unique_values": Array [
+                  "White",
+                  "Other",
+                ],
+              },
+              Object {
+                "column_name": "gender",
+                "range_type": "categorical",
+                "unique_values": Array [
+                  "Male",
+                  "Female",
+                ],
+              },
+              Object {
+                "column_name": "hours_per_week",
+                "max_value": 70,
+                "min_value": 10,
+                "range_type": "integer",
+              },
+            ],
+            "is_large_data_scenario": false,
+            "num_rows": 48,
+            "use_entire_test_data": false,
+          },
           "target_column": "income",
           "task_type": "classification",
           "true_y": Array [
@@ -18819,5 +18904,5 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
     push={true}
     to="/modelAssessment/adultCensusIncomeData/1%20-%20light/en/1/"
   />
-</Fragment>
+</div>
 `;

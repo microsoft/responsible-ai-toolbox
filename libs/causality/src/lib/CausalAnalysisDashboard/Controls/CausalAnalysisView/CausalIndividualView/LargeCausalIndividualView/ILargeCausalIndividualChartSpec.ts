@@ -34,6 +34,7 @@ export interface ILargeCausalIndividualChartState {
   isLocalCausalDataLoading: boolean;
   localCausalErrorMessage?: string;
   localCausalData?: ICausalAnalysisData;
+  bubblePlotData?: IHighchartsConfig;
 }
 
 export function getInitialSpec(): ILargeCausalIndividualChartState {

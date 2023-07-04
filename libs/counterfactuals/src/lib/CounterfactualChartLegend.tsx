@@ -180,6 +180,10 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
   };
 
   private onRevertButtonClick = (): void => {
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.ViewBubblePlotButtonClicked
+    });
     this.props.setIsRevertButtonClicked(true);
   };
 

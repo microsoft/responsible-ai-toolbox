@@ -8,6 +8,7 @@ export * from "./lib/components/ChartBuilder";
 export * from "./lib/components/DefaultSelectionFunctions";
 export * from "./lib/components/IAccessor";
 export * from "./lib/components/ICategoricalRange";
+export * from "./lib/components/IColumnRange";
 export * from "./lib/components/IData";
 export * from "./lib/components/IModelMetadata";
 export * from "./lib/components/INumericRange";

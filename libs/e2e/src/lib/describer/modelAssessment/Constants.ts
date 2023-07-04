@@ -180,12 +180,15 @@ export enum Locators {
   ForecastingDashboard = "#ModelAssessmentDashboard #ForecastingDashboard",
   ForecastingTimeSeriesDropdown = "#ForecastingDashboard #ForecastingTimeSeriesDropdown",
   ForecastingTimeSeriesDropdownOptions = "#ForecastingDashboard button[role='option']",
-  ForecastingTransformationCreationButton = "ForecastingWhatIfTransformationCreationButton",
+  ForecastingTransformationCreationButton = "#ForecastingWhatIfTransformationCreationButton",
   ForecastingTransformationsTable = "#ForecastingDashboard #ForecastingWhatIfTransformationsTable",
   ForecastingTransformationValueField = "#ForecastingWhatIfTransformationValueField",
   ForecastingTransformationNameField = "#ForecastingWhatIfTransformationNameField",
   ForecastingTransformationAddButton = "#ForecastingWhatIfAddTransformationButton",
   ForecastingTransformationFeatureDropdown = "#ForecastingWhatIfTransformationFeatureDropdown",
+  ForecastingTransformationFeatureDropdownOptions = "#ForecastingWhatIfTransformationFeatureDropdown button[role='option']",
   ForecastingTransformationOperationDropdown = "#ForecastingWhatIfTransformationOperationDropdown",
-  ForecastingScenarioChart = "#ForecastingDashboard #ForecastScenarioChart"
+  ForecastingTransformationOperationDropdownOptions = "#ForecastingWhatIfTransformationOperationDropdown button[role='option']",
+  ForecastingScenarioChart = "#ForecastingDashboard #ForecastScenarioChart",
+  ForecastingScenarioChartLegendItems = "#ForecastingDashboard .highcharts-a11y-proxy-button"
 }
