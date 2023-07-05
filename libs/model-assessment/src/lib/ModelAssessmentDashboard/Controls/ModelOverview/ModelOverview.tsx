@@ -58,7 +58,8 @@ interface IModelOverviewProps {
     selectionIndexes: number[][],
     aggregateMethod: string,
     className: string,
-    iouThresh: number
+    iouThreshold: number,
+    objectDetectionCache: Map<string, [number, number, number]>
   ) => Promise<any[]>;
   requestQuestionAnsweringMetrics?: (
     selectionIndexes: number[][]
@@ -83,7 +84,7 @@ interface IModelOverviewState {
   className: string;
   featureBasedCohortLabeledStatistics: ILabeledStatistic[][];
   featureBasedCohorts: ErrorCohort[];
-  iouThresh: number;
+  iouThreshold: number;
 }
 
 const datasetCohortViewPivotKey = "datasetCohortView";
@@ -94,6 +95,8 @@ export class ModelOverview extends React.Component<
   IModelOverviewState
 > {
   public static contextType = ModelAssessmentContext;
+  public objectDetectionCache: Map<string, [number, number, number]> =
+    new Map();
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
   private featureComboBoxRef = React.createRef<IComboBox>();
@@ -113,7 +116,7 @@ export class ModelOverview extends React.Component<
       featureBasedCohortLabeledStatistics: [],
       featureBasedCohorts: [],
       featureConfigurationIsVisible: false,
-      iouThresh: 70,
+      iouThreshold: 70,
       metricConfigurationIsVisible: false,
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
@@ -581,7 +584,7 @@ export class ModelOverview extends React.Component<
   };
 
   private setIoUThreshold = (value: number): void => {
-    this.setState({ iouThresh: value }, () => {
+    this.setState({ iouThreshold: value }, () => {
       if (this.state.datasetCohortChartIsVisible) {
         this.updateDatasetCohortStats();
       } else {
@@ -601,7 +604,13 @@ export class ModelOverview extends React.Component<
     const datasetCohortMetricStats = generateMetrics(
       this.context.jointDataset,
       selectionIndexes,
-      this.context.modelMetadata.modelType
+      this.context.modelMetadata.modelType,
+      this.objectDetectionCache,
+      [
+        this.state.aggregateMethod,
+        this.state.className,
+        this.state.iouThreshold
+      ]
     );
 
     this.setState({
@@ -627,14 +636,15 @@ export class ModelOverview extends React.Component<
       selectionIndexes.length > 0 &&
       this.state.aggregateMethod.length > 0 &&
       this.state.className.length > 0 &&
-      this.state.iouThresh
+      this.state.iouThreshold
     ) {
       this.context
         .requestObjectDetectionMetrics(
           selectionIndexes,
           this.state.aggregateMethod,
           this.state.className,
-          this.state.iouThresh,
+          this.state.iouThreshold,
+          this.objectDetectionCache,
           new AbortController().signal
         )
         .then((result) => {
@@ -646,6 +656,20 @@ export class ModelOverview extends React.Component<
             [meanAveragePrecision, averagePrecision, averageRecall]
           ] of result.entries()) {
             const count = selectionIndexes[cohortIndex].length;
+
+            const key: [number[], string, string, number] = [
+              selectionIndexes[cohortIndex],
+              this.state.aggregateMethod,
+              this.state.className,
+              this.state.iouThreshold
+            ];
+            if (!this.objectDetectionCache.has(key.toString())) {
+              this.objectDetectionCache.set(key.toString(), [
+                meanAveragePrecision,
+                averagePrecision,
+                averageRecall
+              ]);
+            }
 
             const updatedCohortMetricStats = [
               {
@@ -783,7 +807,13 @@ export class ModelOverview extends React.Component<
     const featureCohortMetricStats = generateMetrics(
       this.context.jointDataset,
       selectionIndexes,
-      this.context.modelMetadata.modelType
+      this.context.modelMetadata.modelType,
+      this.objectDetectionCache,
+      [
+        this.state.aggregateMethod,
+        this.state.className,
+        this.state.iouThreshold
+      ]
     );
 
     this.setState({
