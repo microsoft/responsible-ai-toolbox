@@ -39,9 +39,6 @@ export class TextExplanationView extends React.PureComponent<
           weightVector
         );
 
-    const selectedToken = 0; // default to the first token
-    const singleTokenImportances =
-      this.getImportanceForSingleToken(selectedToken);
     const maxK = this.calculateMaxKImportances(importances);
     const topK = this.calculateTopKImportances(importances);
     this.state = {
@@ -49,8 +46,8 @@ export class TextExplanationView extends React.PureComponent<
       maxK,
       // qaRadio: QAExplanationType.Start,
       radio: RadioKeys.All,
-      selectedToken,
-      singleTokenImportances,
+      selectedToken: 0, // default to the first token
+      singleTokenImportances: this.getImportanceForSingleToken(0), // get importance for first token
       text: this.props.dataSummary.text,
       tokenIndexes: [...this.props.dataSummary.text].map((_, index) => index),
       topK
