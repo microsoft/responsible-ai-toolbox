@@ -11,6 +11,7 @@ import {
 import { IsBinary } from "../util/ExplanationUtils";
 
 import {
+  generateImageStats,
   generateMicroMacroMetrics,
   ImageClassificationMetrics
 } from "./ImageStatisticsUtils";
@@ -27,6 +28,11 @@ import {
   MulticlassClassificationMetrics,
   RegressionMetrics
 } from "./StatisticsUtilsEnums";
+
+type QuestionAnsweringCacheType = Map<
+  string,
+  [number, number, number, number, number, number]
+>
 
 const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
   outcomes: number[]
@@ -166,90 +172,20 @@ const generateMulticlassStats: (outcomes: number[]) => ILabeledStatistic[] = (
   ];
 };
 
-const generateImageStats: (
-  trueYs: number[],
-  predYs: number[]
-) => ILabeledStatistic[] = (
-  trueYs: number[],
-  predYs: number[]
-): ILabeledStatistic[] => {
-  const correctCount = predYs.filter(
-    (pred, index) => pred === trueYs[index]
-  ).length;
-  const accuracy = correctCount / predYs.length;
-  const precision = generateMicroMacroMetrics(predYs, trueYs);
-  const microP = precision.microScore;
-  const macroP = precision.macroScore;
-  const recall = generateMicroMacroMetrics(trueYs, predYs);
-  const microR = recall.microScore;
-  const macroR = recall.macroScore;
-  const microF1 = 2 * ((microP * microR) / (microP + microR)) || 0;
-  const macroF1 = 2 * ((macroP * macroR) / (macroP + macroR)) || 0;
-
-  return [
-    {
-      key: TotalCohortSamples,
-      label: localization.Interpret.Statistics.samples,
-      stat: predYs.length
-    },
-    {
-      key: ImageClassificationMetrics.Accuracy,
-      label: localization.Interpret.Statistics.accuracy,
-      stat: accuracy
-    },
-    {
-      key: ImageClassificationMetrics.MicroPrecision,
-      label: localization.Interpret.Statistics.precision,
-      stat: microP
-    },
-    {
-      key: ImageClassificationMetrics.MicroRecall,
-      label: localization.Interpret.Statistics.recall,
-      stat: microR
-    },
-    {
-      key: ImageClassificationMetrics.MicroF1,
-      label: localization.Interpret.Statistics.f1Score,
-      stat: microF1
-    },
-    {
-      key: ImageClassificationMetrics.MacroPrecision,
-      label: localization.Interpret.Statistics.precision,
-      stat: macroP
-    },
-    {
-      key: ImageClassificationMetrics.MacroRecall,
-      label: localization.Interpret.Statistics.recall,
-      stat: macroR
-    },
-    {
-      key: ImageClassificationMetrics.MacroF1,
-      label: localization.Interpret.Statistics.f1Score,
-      stat: macroF1
-    }
-  ];
-};
-
 export const generateMetrics: (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
   modelType: ModelTypes,
   objectDetectionCache?: Map<string, [number, number, number]>,
   objectDetectionInputs?: [string, string, number],
-  questionAnsweringCache?: Map<
-    string,
-    [number, number, number, number, number, number]
-  >
+  questionAnsweringCache?: QuestionAnsweringCacheType
 ) => ILabeledStatistic[][] = (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
   modelType: ModelTypes,
   objectDetectionCache?: Map<string, [number, number, number]>,
   objectDetectionInputs?: [string, string, number],
-  questionAnsweringCache?: Map<
-    string,
-    [number, number, number, number, number, number]
-  >
+  questionAnsweringCache?: QuestionAnsweringCacheType
 ): ILabeledStatistic[][] => {
   if (
     modelType === ModelTypes.ImageMultilabel ||
