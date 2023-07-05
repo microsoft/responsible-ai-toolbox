@@ -10,11 +10,7 @@ import {
 } from "../Interfaces/IStatistic";
 import { IsBinary } from "../util/ExplanationUtils";
 
-import {
-  generateImageStats,
-  generateMicroMacroMetrics,
-  ImageClassificationMetrics
-} from "./ImageStatisticsUtils";
+import { generateImageStats } from "./ImageStatisticsUtils";
 import { JointDataset } from "./JointDataset";
 import {
   ClassificationEnum,
