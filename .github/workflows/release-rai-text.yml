@@ -10,7 +10,7 @@ on:
         default: "Test"
 
 jobs:
-  release-error-analysis:
+  release-responsibleai-text:
     runs-on: ubuntu-latest
     steps:
       - name: fail if Test nor Prod
