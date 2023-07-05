@@ -19,7 +19,6 @@ export interface ITextExplanationViewState {
   selectedToken: number;
   tokenIndexes: number[];
   text: string[];
-  isQA: boolean;
 }
 
 export const options: IChoiceGroupOption[] = [

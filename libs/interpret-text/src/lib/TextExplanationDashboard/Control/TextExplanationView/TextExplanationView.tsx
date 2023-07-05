@@ -46,7 +46,6 @@ export class TextExplanationView extends React.PureComponent<
     const topK = this.calculateTopKImportances(importances);
     this.state = {
       importances,
-      isQA: this.props.isQA || false,
       maxK,
       // qaRadio: QAExplanationType.Start,
       radio: RadioKeys.All,
@@ -64,7 +63,7 @@ export class TextExplanationView extends React.PureComponent<
       this.props.dataSummary.localExplanations !==
         prevProps.dataSummary.localExplanations
     ) {
-      if (this.state.isQA) {
+      if (this.props.isQA) {
         this.setState(
           {
             selectedToken: 0,
@@ -90,7 +89,7 @@ export class TextExplanationView extends React.PureComponent<
     return (
       <Stack>
         <Stack tokens={componentStackTokens} horizontal>
-          {this.state.isQA ? (
+          {this.props.isQA ? (
             <Text>{localization.InterpretText.View.legendTextForQA}</Text>
           ) : (
             <Text>{localization.InterpretText.View.legendText}</Text>
@@ -102,7 +101,7 @@ export class TextExplanationView extends React.PureComponent<
           importances={this.state.importances}
           topK={this.state.topK}
           radio={this.state.radio}
-          isQA={this.state.isQA}
+          isQA={this.props.isQA}
           dataSummary={this.props.dataSummary}
           maxK={this.state.maxK}
           selectedToken={this.state.selectedToken}
@@ -132,7 +131,7 @@ export class TextExplanationView extends React.PureComponent<
             />
           </Stack.Item>
 
-          {this.state.isQA && (
+          {this.props.isQA && (
             <Stack.Item
               align="stretch"
               grow
