@@ -1165,4 +1165,16 @@ class RAIVisionInsights(RAIBaseInsights):
                            ['mar_100_per_class'][index].item(), 2)
                 all_cohort_metrics.append([mAP, AP, AR])
 
+                for i in range(len(cohort_classes)):
+                    class_name = cohort_classes[i]
+                    key = ','.join([str(cid) for cid in cohort_indices] +
+                                   [aggregate_method, class_name, str(iou_thresh)])
+                    if key not in object_detection_cache:
+                        class_AP = round(object_detection_values
+                                         ['map_per_class'][index].item(), 2)
+                        class_AR = round(object_detection_values
+                                         ['mar_100_per_class'][index].item(), 2)
+                        object_detection_cache[key] = [mAP, class_AP, class_AR]
+
+
         return all_cohort_metrics
