@@ -10,7 +10,7 @@ on:
         default: "Test"
 
 jobs:
-  release-error-analysis:
+  release-nlp-feature-extractors:
     runs-on: ubuntu-latest
     steps:
       - name: fail if Test nor Prod
@@ -25,7 +25,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.7
+          python-version: 3.8
 
       - name: update and upgrade pip, setuptools, wheel, and twine
         run: |

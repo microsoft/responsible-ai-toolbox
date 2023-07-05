@@ -22,27 +22,11 @@ import {
 import { generateMultilabelStats } from "./MultilabelStatisticsUtils";
 import { generateObjectDetectionStats } from "./ObjectDetectionStatisticsUtils";
 import { generateQuestionAnsweringStats } from "./QuestionAnsweringStatisticsUtils";
-
-export enum BinaryClassificationMetrics {
-  Accuracy = "accuracy",
-  Precision = "precision",
-  Recall = "recall",
-  FalseNegativeRate = "falseNegativeRate",
-  FalsePositiveRate = "falsePositiveRate",
-  SelectionRate = "selectionRate",
-  F1Score = "f1Score"
-}
-
-export enum RegressionMetrics {
-  MeanSquaredError = "meanSquaredError",
-  MeanAbsoluteError = "meanAbsoluteError",
-  MeanPrediction = "meanPrediction",
-  RSquared = "rSquared"
-}
-
-export enum MulticlassClassificationMetrics {
-  Accuracy = "accuracy"
-}
+import {
+  BinaryClassificationMetrics,
+  MulticlassClassificationMetrics,
+  RegressionMetrics
+} from "./StatisticsUtilsEnums";
 
 const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
   outcomes: number[]
@@ -249,11 +233,15 @@ const generateImageStats: (
 export const generateMetrics: (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
-  modelType: ModelTypes
+  modelType: ModelTypes,
+  objectDetectionCache?: Map<string, [number, number, number]>,
+  objectDetectionInputs?: [string, string, number]
 ) => ILabeledStatistic[][] = (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
-  modelType: ModelTypes
+  modelType: ModelTypes,
+  objectDetectionCache?: Map<string, [number, number, number]>,
+  objectDetectionInputs?: [string, string, number]
 ): ILabeledStatistic[][] => {
   if (
     modelType === ModelTypes.ImageMultilabel ||
@@ -282,8 +270,16 @@ export const generateMetrics: (
       return generateImageStats(trueYSubset, predYSubset);
     });
   }
-  if (modelType === ModelTypes.ObjectDetection) {
-    return generateObjectDetectionStats(selectionIndexes);
+  if (
+    modelType === ModelTypes.ObjectDetection &&
+    objectDetectionCache &&
+    objectDetectionInputs
+  ) {
+    return generateObjectDetectionStats(
+      selectionIndexes,
+      objectDetectionCache,
+      objectDetectionInputs
+    );
   }
   const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
   return selectionIndexes.map((selectionArray) => {
