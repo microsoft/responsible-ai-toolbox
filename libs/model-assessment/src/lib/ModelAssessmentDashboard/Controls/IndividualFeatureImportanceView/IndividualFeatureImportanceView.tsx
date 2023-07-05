@@ -48,8 +48,6 @@ export class IndividualFeatureImportanceView extends React.Component<
         ?.dropped_features
     );
 
-    console.log("!!modelType: ", this.context.modelType);
-
     return (
       <Stack
         tokens={verticalComponentTokens}

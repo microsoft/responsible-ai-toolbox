@@ -41,10 +41,10 @@ export class TextExplanationDashboard extends React.PureComponent<
       weightVectorOptions.push(index);
     });
     this.state = {
+      isQA: false,
       selectedWeightVector: WeightVectors.AbsAvg,
       weightVectorLabels,
-      weightVectorOptions,
-      isQA: false
+      weightVectorOptions
     };
   }
 

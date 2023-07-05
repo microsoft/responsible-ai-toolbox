@@ -1,71 +1,23 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  ChoiceGroup,
-  IChoiceGroupOption,
-  IStackTokens,
-  Label,
-  Slider,
-  Stack,
-  Text
-} from "@fluentui/react";
+import { IChoiceGroupOption, Stack, Text } from "@fluentui/react";
 import { WeightVectorOption, WeightVectors } from "@responsible-ai/core-ui";
-import {
-  ClassImportanceWeights,
-  TokenImportance
-} from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-import { RadioKeys, QAExplanationType, Utils } from "../../CommonUtils";
+import { RadioKeys, Utils } from "../../CommonUtils";
 import { ITextExplanationViewProps } from "../../Interfaces/IExplanationViewProps";
-import { BarChart } from "../BarChart/BarChart";
 import { TextFeatureLegend } from "../TextFeatureLegend/TextFeatureLegend";
 import { TextHighlighting } from "../TextHighlighting/TextHightlighting";
 
+import {
+  ITextExplanationViewState,
+  MaxImportantWords,
+  componentStackTokens
+} from "./ITextExplanationViewSpec";
+import { SidePanelOfChart } from "./SidePanelOfChart";
 import { textExplanationDashboardStyles } from "./TextExplanationView.styles";
-
-export interface ITextExplanationViewState {
-  /*
-   * Holds the state of the dashboard
-   */
-  maxK: number;
-  topK: number;
-  radio: string;
-  qaRadio?: string;
-  importances: number[];
-  singleTokenImportances: number[];
-  selectedToken: number;
-  tokenIndexes: number[];
-  text: string[];
-  isQA: boolean; // temporal flag for identifying QA
-}
-
-const options: IChoiceGroupOption[] = [
-  /*
-   * Creates the choices for the radio button
-   */
-  { key: RadioKeys.All, text: localization.InterpretText.View.allButton },
-  { key: RadioKeys.Pos, text: localization.InterpretText.View.posButton },
-  { key: RadioKeys.Neg, text: localization.InterpretText.View.negButton }
-];
-
-const qaOptions: IChoiceGroupOption[] = [
-  /*
-   * Creates the choices for the QA prediction radio button(local testing)
-   * TODO: move text under localization.InterpretText.View
-   */
-  { key: QAExplanationType.Start, text: "STARTING POSITION" },
-  { key: QAExplanationType.End, text: "ENDING POSITION" }
-];
-
-const componentStackTokens: IStackTokens = {
-  childrenGap: "m",
-  padding: "m"
-};
-
-const MaxImportantWords = 15;
 
 export class TextExplanationView extends React.PureComponent<
   ITextExplanationViewProps,
@@ -77,11 +29,15 @@ export class TextExplanationView extends React.PureComponent<
      */
     super(props);
 
-    //  const isQA = this.props.modelType; // FIXME: temporally hardcode the flag, should use prop instead
-
-    const importances = this.computeImportancesForAllTokens(
-      this.props.dataSummary.localExplanations
-    );
+    const weightVector = this.props.selectedWeightVector;
+    const importances = this.props.isQA
+      ? this.computeImportancesForAllTokens(
+          this.props.dataSummary.localExplanations
+        )
+      : this.computeImportancesForWeightVector(
+          this.props.dataSummary.localExplanations,
+          weightVector
+        );
 
     const selectedToken = 0; // default to the first token
     const singleTokenImportances =
@@ -89,19 +45,16 @@ export class TextExplanationView extends React.PureComponent<
     const maxK = this.calculateMaxKImportances(importances);
     const topK = this.calculateTopKImportances(importances);
     this.state = {
-      importances: importances,
-      singleTokenImportances: singleTokenImportances,
-      selectedToken: selectedToken,
-      tokenIndexes: Array.from(
-        this.props.dataSummary.text,
-        (_, index) => index
-      ),
+      importances,
+      isQA: this.props.isQA || false,
       maxK,
+      // qaRadio: QAExplanationType.Start,
       radio: RadioKeys.All,
-      qaRadio: "starting",
+      selectedToken,
+      singleTokenImportances,
       text: this.props.dataSummary.text,
-      topK,
-      isQA: this.props.isQA || false
+      tokenIndexes: [...this.props.dataSummary.text].map((_, index) => index),
+      topK
     };
   }
 
@@ -111,16 +64,14 @@ export class TextExplanationView extends React.PureComponent<
       this.props.dataSummary.localExplanations !==
         prevProps.dataSummary.localExplanations
     ) {
-      console.log("!!isQA: ", this.state.isQA);
       if (this.state.isQA) {
         this.setState(
           {
+            selectedToken: 0,
             //update token dropdown
-            tokenIndexes: Array.from(
-              this.props.dataSummary.text,
+            tokenIndexes: [...this.props.dataSummary.text].map(
               (_, index) => index
-            ),
-            selectedToken: 0
+            )
           },
           () => {
             this.updateTokenImportances();
@@ -135,104 +86,36 @@ export class TextExplanationView extends React.PureComponent<
 
   public render(): React.ReactNode {
     const classNames = textExplanationDashboardStyles();
-    const qaDescription =
-      "The left text box and the bar chart display the predictions of the model." +
-      "The right textbox shows the feature importance associated with a selected token. Positive feature " +
-      "importances represent the extent that the words were important towards marking the selected token" +
-      "as the starting/ending position of the answer.";
 
     return (
       <Stack>
         <Stack tokens={componentStackTokens} horizontal>
           {this.state.isQA ? (
-            <Text>{qaDescription}</Text>
+            <Text>{localization.InterpretText.View.legendTextForQA}</Text>
           ) : (
             <Text>{localization.InterpretText.View.legendText}</Text>
           )}
         </Stack>
-        <Stack tokens={componentStackTokens} horizontal>
-          <Stack.Item grow disableShrink>
-            <BarChart
-              text={this.state.text}
-              localExplanations={this.state.importances}
-              topK={this.state.topK}
-              radio={this.state.radio}
-            />
-          </Stack.Item>
-          <Stack.Item grow className={classNames.chartRight}>
-            <Stack tokens={componentStackTokens}>
-              {!this.state.isQA && ( // classfication
-                <Stack.Item>
-                  <Text variant={"xLarge"}>
-                    {localization.InterpretText.View.label +
-                      localization.InterpretText.View.colon +
-                      Utils.predictClass(
-                        this.props.dataSummary.classNames,
-                        this.props.dataSummary.prediction
-                      )}
-                  </Text>
-                </Stack.Item>
-              )}
 
-              {this.state.isQA && ( // select starting/ending for QA
-                <Stack.Item id="TextChoiceGroup">
-                  <ChoiceGroup
-                    defaultSelectedKey="starting"
-                    options={qaOptions}
-                    onChange={this.switchQAprediction}
-                    required
-                  />
-                </Stack.Item>
-              )}
-
-              <Stack.Item>
-                <Label>{localization.InterpretText.View.importantWords}</Label>
-              </Stack.Item>
-
-              <Stack.Item id="TextTopKSlider">
-                <Slider
-                  min={1}
-                  max={this.state.maxK}
-                  step={1}
-                  value={this.state.topK}
-                  showValue
-                  onChange={this.setTopK}
-                />
-              </Stack.Item>
-
-              {this.state.isQA ? (
-                <Stack.Item>
-                  <TokenImportance
-                    onTokenChange={this.onSelectedTokenChange}
-                    selectedToken={this.state.selectedToken}
-                    tokenOptions={this.state.tokenIndexes}
-                    tokenLabels={this.state.text}
-                  />
-                </Stack.Item>
-              ) : (
-                <Stack.Item>
-                  <ClassImportanceWeights
-                    onWeightChange={this.onWeightVectorChange}
-                    selectedWeightVector={this.props.selectedWeightVector}
-                    weightOptions={this.props.weightOptions}
-                    weightLabels={this.props.weightLabels}
-                  />
-                </Stack.Item>
-              )}
-
-              {this.props.selectedWeightVector !== WeightVectors.AbsAvg && (
-                <Stack.Item id="TextChoiceGroup">
-                  <ChoiceGroup
-                    defaultSelectedKey="all"
-                    options={options}
-                    onChange={this.changeRadioButton}
-                    required
-                  />
-                </Stack.Item>
-              )}
-            </Stack>
-          </Stack.Item>
-        </Stack>
+        <SidePanelOfChart
+          text={this.state.text}
+          importances={this.state.importances}
+          topK={this.state.topK}
+          radio={this.state.radio}
+          isQA={this.state.isQA}
+          dataSummary={this.props.dataSummary}
+          maxK={this.state.maxK}
+          selectedToken={this.state.selectedToken}
+          tokenIndexes={this.state.tokenIndexes}
+          selectedWeightVector={this.props.selectedWeightVector}
+          weightOptions={this.props.weightOptions}
+          weightLabels={this.props.weightLabels}
+          changeRadioButton={this.changeRadioButton}
+          switchQAPrediction={this.switchQAPrediction}
+          setTopK={this.setTopK}
+          onWeightVectorChange={this.onWeightVectorChange}
+          onSelectedTokenChange={this.onSelectedTokenChange}
+        />
 
         <Stack tokens={componentStackTokens} horizontal>
           <Stack.Item
@@ -313,8 +196,8 @@ export class TextExplanationView extends React.PureComponent<
     this.setState({
       importances,
       maxK,
-      topK,
-      text: this.props.dataSummary.text
+      text: this.props.dataSummary.text,
+      topK
     });
   }
 
@@ -322,7 +205,7 @@ export class TextExplanationView extends React.PureComponent<
     const singleTokenImportances = this.getImportanceForSingleToken(
       this.state.selectedToken
     );
-    this.setState({ singleTokenImportances: singleTokenImportances });
+    this.setState({ singleTokenImportances });
   }
 
   private calculateTopKImportances(importances: number[]): number {
@@ -394,16 +277,15 @@ export class TextExplanationView extends React.PureComponent<
     }
   };
 
-  private switchQAprediction = (
-    _event?: React.FormEvent,
-    item?: IChoiceGroupOption
-  ): void => {
+  private switchQAPrediction = (): // _event?: React.FormEvent,
+  // _item?: IChoiceGroupOption
+  void => {
     /*
      * switch to the target predictions(starting or ending)
      * TODO: add logic for switching explanation data
      */
-    if (item?.key !== undefined) {
-      this.setState({ qaRadio: item.key });
-    }
+    // if (item?.key !== undefined) {
+    //   this.setState({ qaRadio: item.key });
+    // }
   };
 }

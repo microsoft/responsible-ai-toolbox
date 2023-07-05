@@ -33,7 +33,6 @@ export class TextHighlighting extends React.PureComponent<IChartProps> {
     const classNames = textHighlightingStyles();
     const text = this.props.text;
     const importances = this.props.localExplanations;
-    console.log("!!importances: ", importances);
     const k = this.props.topK;
     const sortedList = Utils.sortedTopK(importances, k, this.props.radio);
     return (
@@ -49,16 +48,7 @@ export class TextHighlighting extends React.PureComponent<IChartProps> {
           >
             {text.map((word, wordIndex) => {
               let styleType = classNames.normal;
-              console.log(
-                "!!text2: ",
-                text,
-                word,
-                wordIndex,
-                importances,
-                importances[wordIndex]
-              );
               const score = importances[wordIndex];
-              console.log("!!score: ", score);
               let isBold = false;
               if (sortedList.includes(wordIndex)) {
                 if (score > 0) {

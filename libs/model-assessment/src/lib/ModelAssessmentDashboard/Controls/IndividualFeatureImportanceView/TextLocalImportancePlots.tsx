@@ -51,12 +51,12 @@ export class TextLocalImportancePlots extends React.Component<ITextLocalImportan
     };
     const dashboardProp: ITextExplanationViewProps = {
       dataSummary: textExplanationDashboardData,
+      isQA:
+        this.context.modelMetadata.modelType === ModelTypes.QuestionAnswering,
       onWeightChange: this.props.onWeightChange,
       selectedWeightVector: this.props.selectedWeightVector,
       weightLabels: this.props.weightLabels,
-      weightOptions: this.props.weightOptions,
-      isQA:
-        this.context.modelMetadata.modelType === ModelTypes.QuestionAnswering
+      weightOptions: this.props.weightOptions
     };
     return <TextExplanationView {...dashboardProp} />;
   }

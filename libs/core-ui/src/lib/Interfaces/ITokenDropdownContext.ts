@@ -4,8 +4,7 @@
 import { IComboBox, IComboBoxOption } from "@fluentui/react";
 import React from "react";
 
-export type TokenOption = number
-
+export type TokenOption = number;
 
 export interface ITokenDropdownContext {
   options: IComboBoxOption[];
