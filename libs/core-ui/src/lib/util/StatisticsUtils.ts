@@ -236,14 +236,20 @@ export const generateMetrics: (
   modelType: ModelTypes,
   objectDetectionCache?: Map<string, [number, number, number]>,
   objectDetectionInputs?: [string, string, number],
-  questionAnsweringCache?: Map<string, [number, number, number, number, number, number]>
+  questionAnsweringCache?: Map<
+    string,
+    [number, number, number, number, number, number]
+  >
 ) => ILabeledStatistic[][] = (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
   modelType: ModelTypes,
   objectDetectionCache?: Map<string, [number, number, number]>,
   objectDetectionInputs?: [string, string, number],
-  questionAnsweringCache?: Map<string, [number, number, number, number, number, number]>,
+  questionAnsweringCache?: Map<
+    string,
+    [number, number, number, number, number, number]
+  >
 ): ILabeledStatistic[][] => {
   if (
     modelType === ModelTypes.ImageMultilabel ||
@@ -252,7 +258,10 @@ export const generateMetrics: (
     return generateMultilabelStats(jointDataset, selectionIndexes);
   }
   if (modelType === ModelTypes.QuestionAnswering && questionAnsweringCache) {
-    return generateQuestionAnsweringStats(selectionIndexes, questionAnsweringCache);
+    return generateQuestionAnsweringStats(
+      selectionIndexes,
+      questionAnsweringCache
+    );
   }
   const trueYs = jointDataset.unwrap(JointDataset.TrueYLabel);
   const predYs = jointDataset.unwrap(JointDataset.PredictedYLabel);

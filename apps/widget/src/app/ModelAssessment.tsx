@@ -51,7 +51,10 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       };
       callBack.requestQuestionAnsweringMetrics = async (
         selectionIndexes: number[][],
-        questionAnsweringCache: Map<string, [number, number, number, number, number, number]>,
+        questionAnsweringCache: Map<
+          string,
+          [number, number, number, number, number, number]
+        >,
         abortSignal: AbortSignal
       ): Promise<any[]> => {
         return callFlaskService(

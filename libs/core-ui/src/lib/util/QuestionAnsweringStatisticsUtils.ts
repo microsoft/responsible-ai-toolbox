@@ -19,16 +19,31 @@ export enum QuestionAnsweringMetrics {
 
 export const generateQuestionAnsweringStats: (
   selectionIndexes: number[][],
-  questionAnsweringCache: Map<string, [number, number, number, number, number, number]>
+  questionAnsweringCache: Map<
+    string,
+    [number, number, number, number, number, number]
+  >
 ) => ILabeledStatistic[][] = (
   selectionIndexes: number[][],
-  questionAnsweringCache: Map<string, [number, number, number, number, number, number]>
+  questionAnsweringCache: Map<
+    string,
+    [number, number, number, number, number, number]
+  >
 ): ILabeledStatistic[][] => {
   return selectionIndexes.map((selectionArray) => {
     const count = selectionArray.length;
 
     const value = questionAnsweringCache.get(selectionArray.toString());
-    const stat = value ? value : [Number.NaN, Number.NaN, Number.NaN, Number.NaN, Number.NaN, Number.NaN];
+    const stat = value
+      ? value
+      : [
+          Number.NaN,
+          Number.NaN,
+          Number.NaN,
+          Number.NaN,
+          Number.NaN,
+          Number.NaN
+        ];
 
     return [
       {

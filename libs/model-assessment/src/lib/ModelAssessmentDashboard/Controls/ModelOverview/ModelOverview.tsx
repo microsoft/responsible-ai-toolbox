@@ -63,7 +63,10 @@ interface IModelOverviewProps {
   ) => Promise<any[]>;
   requestQuestionAnsweringMetrics?: (
     selectionIndexes: number[][],
-    questionAnsweringCache: Map<string, [number, number, number, number, number, number]>
+    questionAnsweringCache: Map<
+      string,
+      [number, number, number, number, number, number]
+    >
   ) => Promise<any[]>;
 }
 
@@ -96,7 +99,10 @@ export class ModelOverview extends React.Component<
   IModelOverviewState
 > {
   public static contextType = ModelAssessmentContext;
-  public questionAnsweringCache: Map<string, [number, number, number, number, number, number]> = new Map();
+  public questionAnsweringCache: Map<
+    string,
+    [number, number, number, number, number, number]
+  > = new Map();
   public objectDetectionCache: Map<string, [number, number, number]> =
     new Map();
   public context: React.ContextType<typeof ModelAssessmentContext> =
@@ -738,15 +744,22 @@ export class ModelOverview extends React.Component<
           ] of result.entries()) {
             const count = selectionIndexes[cohortIndex].length;
 
-            if (!this.questionAnsweringCache.has(selectionIndexes[cohortIndex].toString())) {
-              this.questionAnsweringCache.set(selectionIndexes[cohortIndex].toString(), [
-                exactMatchRatio,
-                f1Score,
-                meteorScore,
-                bleuScore,
-                bertScore,
-                rougeScore
-              ]);
+            if (
+              !this.questionAnsweringCache.has(
+                selectionIndexes[cohortIndex].toString()
+              )
+            ) {
+              this.questionAnsweringCache.set(
+                selectionIndexes[cohortIndex].toString(),
+                [
+                  exactMatchRatio,
+                  f1Score,
+                  meteorScore,
+                  bleuScore,
+                  bertScore,
+                  rougeScore
+                ]
+              );
             }
 
             const updatedCohortMetricStats = [
