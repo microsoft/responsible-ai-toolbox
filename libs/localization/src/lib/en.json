@@ -1834,9 +1834,6 @@
       "regressionTargetSelectionButton": "Choose target",
       "selectAllCohortsOption": "Select all",
       "other": "Other",
-      "AUCChart": {
-        "aucCohortSelectionLabel": "Select dataset cohort"
-      },
       "BoxPlot": {
         "outlierProbability": "probability",
         "outlierLabel": "Outliers",

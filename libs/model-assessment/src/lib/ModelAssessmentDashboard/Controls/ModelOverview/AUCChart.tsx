@@ -1,18 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  ComboBox,
-  IComboBox,
-  IComboBoxOption,
-  Stack,
-  StackItem,
-  getTheme
-} from "@fluentui/react";
+import { Stack, StackItem, getTheme } from "@fluentui/react";
 import {
   BasicHighChart,
-  ErrorCohort,
-  FluentUIStyles,
   IDataset,
   ILabeledStatistic,
   ITelemetryEvent,
@@ -20,7 +11,6 @@ import {
   calculateAUCData,
   defaultModelAssessmentContext
 } from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { getAUCChartOptions } from "./getAUCChartOptions";
@@ -32,20 +22,11 @@ interface IAUCChartProps {
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
-export class AUCChart extends React.PureComponent<
-  IAUCChartProps,
-  { selectedCohort?: number }
-> {
+export class AUCChart extends React.PureComponent<IAUCChartProps> {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
-  public constructor(props: IAUCChartProps) {
-    super(props);
-    this.state = {
-      selectedCohort: 0
-    };
-  }
   public render(): React.ReactNode {
     const theme = getTheme();
     const classNames = modelOverviewChartStyles();
@@ -62,35 +43,8 @@ export class AUCChart extends React.PureComponent<
     }
     const allData = calculateAUCData(this.props.dataset);
     const plotData = getAUCChartOptions(allData, theme);
-
-    let selectedCohort = this.context.errorCohorts.find(
-      (errorCohort) =>
-        errorCohort.cohort.getCohortID() === this.state.selectedCohort
-    );
-    if (selectedCohort === undefined) {
-      // if previously selected cohort does not exist use globally selected cohort
-      selectedCohort = this.context.baseErrorCohort;
-    }
-    const aucLocString = localization.ModelAssessment.ModelOverview.AUCChart;
     return (
       <Stack id="modelOverviewAUCChart">
-        <StackItem className={classNames.dropdown}>
-          <ComboBox
-            id="AUCCohortDropdown"
-            label={aucLocString.aucCohortSelectionLabel}
-            selectedKey={selectedCohort.cohort.getCohortID()}
-            options={this.context.errorCohorts.map(
-              (errorCohort: ErrorCohort) => {
-                return {
-                  key: errorCohort.cohort.getCohortID(),
-                  text: errorCohort.cohort.name
-                };
-              }
-            )}
-            onChange={this.onSelectCohort}
-            styles={FluentUIStyles.limitedSizeMenuDropdown}
-          />
-        </StackItem>
         <StackItem className={classNames.chart}>
           <BasicHighChart
             configOverride={plotData}
@@ -101,31 +55,4 @@ export class AUCChart extends React.PureComponent<
       </Stack>
     );
   }
-  private onSelectCohort = (
-    _: React.FormEvent<IComboBox>,
-    item?: IComboBoxOption
-  ): void => {
-    if (item) {
-      this.setState({ selectedCohort: Number(item.key) });
-    }
-  };
-  // private getData = (): void => {
-  //   if (
-  //     this.context.jointDataset.hasPredictedProbabilities &&
-  //     this.context.jointDataset.hasTrueY
-  //   ) {
-  //     console.log(this.context.jointDataset);
-  //     const trueYLabels = this.context.jointDataset.unwrap(
-  //       JointDataset.TrueYLabel
-  //     );
-  //     // TODO: how to get predicted probabilities ?
-
-  //     const predictedProbabilities = this.context.jointDataset.unwrap(
-  //       JointDataset.PredictedYLabel
-  //     );
-  //     console.log(predictedProbabilities);
-  //     const result = computeAUC(trueYLabels, predictedProbabilities);
-  //     console.log(result);
-  //   }
-  // };
 }

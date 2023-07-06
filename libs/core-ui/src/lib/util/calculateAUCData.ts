@@ -3,7 +3,7 @@
 
 import { localization } from "@responsible-ai/localization";
 import { SeriesOptionsType } from "highcharts";
-import { orderBy, sortBy, zipWith } from "lodash";
+import { orderBy, sortBy, sum, unzip, zipWith } from "lodash";
 
 import { IDataset } from "../Interfaces/IDataset";
 
@@ -34,35 +34,43 @@ function getStaticROCData(): SeriesOptionsType[] {
   ];
 }
 
-export function calculateROCData(
+function calculatePerClassROCData(
   probabilityY: number[],
-  trueY: number[]
+  binTrueY: boolean[]
 ): IROCData {
   const rocData: IROCData = {
-    falsePositiveRates: [0],
-    truePositiveRates: [0]
+    falsePositiveRates: [],
+    truePositiveRates: []
   };
 
-  const yData = zipWith(
-    probabilityY as number[],
-    trueY as number[],
-    (probY, trueY) => {
-      return {
-        // TODO: confirm that it's probability that y == 1
-        probabilityY: probY[0],
-        trueY
-      };
-    }
-  );
+  const yData = zipWith(probabilityY, binTrueY, (probY, trueY) => {
+    return {
+      probabilityY: probY,
+      trueY
+    };
+  });
   const sortedY = sortBy(yData, ["probabilityY"]);
-  // TODO: remove duplicates of values
+  let prevProba = -Infinity;
+  let truePositives = 0;
+  let falsePositives = 0;
+  const totalPositives = sum(binTrueY);
+  const totalNegatives = binTrueY.length - totalPositives;
   let i = sortedY.length - 1;
   while (i >= 0) {
-    let truePositives = 0;
-    let trueNegatives = 0;
-    let falsePositives = 0;
-    let falseNegatives = 0;
+    // only add the point, if the probability has changed
+    if (sortedY[i].probabilityY !== prevProba) {
+      addROCPoint(
+        truePositives,
+        falsePositives,
+        totalPositives,
+        totalNegatives,
+        rocData
+      );
+      prevProba = sortedY[i].probabilityY;
+    }
     const threshold = sortedY[i].probabilityY;
+    truePositives = 0;
+    falsePositives = 0;
     for (const y of sortedY) {
       // if the probability of predicting the positive label is greater than the
       // threshold and the positive label was predicted than it's a true positive.
@@ -73,40 +81,82 @@ export function calculateROCData(
         } else {
           falsePositives++;
         }
-      } else if (y.trueY) {
-        falseNegatives++;
-      } else {
-        trueNegatives++;
       }
     }
-    const totalPositives = truePositives + falseNegatives || 1;
-    const totalNegatives = falsePositives + trueNegatives || 1;
-    const tpr = truePositives / totalPositives;
-    const fpr = falsePositives / totalNegatives;
-    rocData.truePositiveRates.push(tpr);
-    rocData.falsePositiveRates.push(fpr);
     i--;
   }
+  addROCPoint(
+    truePositives,
+    falsePositives,
+    totalPositives,
+    totalNegatives,
+    rocData
+  );
+
   return rocData;
 }
 
+function addROCPoint(
+  truePositives: number,
+  falsePositives: number,
+  totalPositives: number,
+  totalNegatives: number,
+  rocData: IROCData
+): void {
+  // prevent division by 0
+  const tpr = totalPositives === 0 ? 1 : truePositives / totalPositives;
+  const fpr = totalNegatives === 0 ? 1 : falsePositives / totalNegatives;
+  rocData.truePositiveRates.push(tpr);
+  rocData.falsePositiveRates.push(fpr);
+}
+
+export function binarizeData(
+  yData: string[] | number[] | number[][],
+  classes: string[] | number[]
+): boolean[][] {
+  // binarize labels in a one-vs-all fashion according to
+  const yBinData: boolean[][] = [];
+
+  for (const yDatum of yData) {
+    const binaryData = classes.map((c) => {
+      return c === yDatum;
+    });
+    yBinData.push(binaryData);
+  }
+  // transpose
+  return unzip(yBinData);
+}
+
+// based on https://msdata.visualstudio.com/Vienna/_git/AzureMlCli?path=/src/azureml-metrics/azureml/metrics/_classification.py&version=GBmaster
 export function calculateAUCData(dataset: IDataset): SeriesOptionsType[] {
-  if (!dataset.probability_y) {
+  if (!dataset.probability_y || !dataset.class_names) {
     // TODO: show warning message
     return [...getStaticROCData()];
   }
-  const rocData = calculateROCData(
-    // TODO: remove cast
-    dataset.probability_y as unknown as number[],
-    dataset.true_y as number[]
-  );
-  const data = zipWith(
-    rocData.falsePositiveRates,
-    rocData.truePositiveRates,
-    (fpr, tpr) => {
-      return { x: fpr, y: tpr };
-    }
-  );
+
+  const binTrueY = binarizeData(dataset.true_y, dataset.class_names);
+  const data = [];
+  // TODO: class_names.length might not work ....
+  for (let i = 0; i < dataset.class_names.length; i++) {
+    const classROCData = calculatePerClassROCData(
+      dataset.probability_y[i],
+      binTrueY[i]
+    );
+    const classData = zipWith(
+      classROCData.falsePositiveRates,
+      classROCData.truePositiveRates,
+      (fpr, tpr) => {
+        return {
+          // TODO: check class_names length earlier ?
+          name: dataset.class_names ? dataset.class_names[i] : "",
+          x: fpr,
+          y: tpr
+        };
+      }
+    );
+    data.push(classData);
+  }
+
   const allData = [
     {
       data: orderBy(data, ["x"]),

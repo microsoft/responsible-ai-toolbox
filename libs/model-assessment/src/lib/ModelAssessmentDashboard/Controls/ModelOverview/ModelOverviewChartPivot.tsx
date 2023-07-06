@@ -14,6 +14,8 @@ import {
   MissingParametersPlaceholder,
   IsMulticlass,
   ifEnableLargeData
+  // isFlightActive,
+  // aucChartExperienceFlight
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -122,7 +124,7 @@ export class ModelOverviewChartPivot extends React.Component<
           return element.text;
         })
     );
-
+    console.log(this.context.dataset);
     return (
       <Pivot
         id="modelOverviewChartPivot"
@@ -196,6 +198,11 @@ export class ModelOverviewChartPivot extends React.Component<
         {!ifEnableLargeData(this.context.dataset) &&
           (IsBinary(this.context.modelMetadata.modelType) ||
             IsMulticlass(this.context.modelMetadata.modelType)) && (
+            // isFlightActive(
+            //   aucChartExperienceFlight,
+            //   this.context.featureFlights
+            // ) && (
+            // TODO: support multiclass: IsMulticlass(this.context.modelMetadata.modelType)) && (
             <PivotItem
               headerText={
                 localization.ModelAssessment.ModelOverview.AUCPivotItem
