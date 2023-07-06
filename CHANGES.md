@@ -34,12 +34,12 @@ this file to understand what changed.
   - [Object Detection] CanvasTools documentation by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2133
   - [Object Detection] Model Overview Object Detection Documentation by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2132
 - new features
-
   - ## Responsible AI Dashboard
     - [Object Detection] Cache support for Model Overview Metrics by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2158
     - [Image Explorer] CanvasTools Image Loading support for Object Detection by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2097
     - [Object Detection] [Image Explorer] Bounding Box Support with CanvasTools on Flyout by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2116
-  - bug fixes and tests
+- bug fixes and tests
+
   - ## Responsible AI Dashboard
     - update responsibleai-text and responsibleai-vision packages to latest responsibleai 0.28.0 release by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2159
     - Robot page exception in DatasetUtils where jointDataset.metaDict[property] is undefined by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/2148
@@ -59,7 +59,7 @@ this file to understand what changed.
     - add responsibleai-text package tests to build gate by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2139
     - release responsibleai-text 0.1.4 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2163
     - add release scripts for responsibleai-text and responsibleai-vision pypi packages by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2156
-    - ## RAI Vision
+  - ## RAI Vision
     - add responsibleai-vision package to responsible-ai-toolbox by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2135
     - add responsibleai-vision package to gated CI tests by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2152
     - add retry logic to common vision utils to make tests more robust by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2154
