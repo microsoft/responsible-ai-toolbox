@@ -2,7 +2,11 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { ILabeledStatistic, TotalCohortSamples } from "../Interfaces/IStatistic";
+
+import {
+  ILabeledStatistic,
+  TotalCohortSamples
+} from "../Interfaces/IStatistic";
 
 export enum ImageClassificationMetrics {
   Accuracy = "accuracy",

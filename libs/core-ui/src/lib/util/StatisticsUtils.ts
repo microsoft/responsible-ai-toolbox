@@ -28,7 +28,7 @@ import {
 type QuestionAnsweringCacheType = Map<
   string,
   [number, number, number, number, number, number]
->
+>;
 
 const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
   outcomes: number[]
