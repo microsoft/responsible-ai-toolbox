@@ -153,6 +153,10 @@ export interface IModelAssessmentContext {
   requestQuestionAnsweringMetrics?:
     | ((
         selectionIndexes: number[][],
+        questionAnsweringCache: Map<
+          string,
+          [number, number, number, number, number, number]
+        >,
         abortSignal: AbortSignal
       ) => Promise<any[]>)
     | undefined;

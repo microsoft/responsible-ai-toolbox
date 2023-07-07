@@ -62,7 +62,11 @@ interface IModelOverviewProps {
     objectDetectionCache: Map<string, [number, number, number]>
   ) => Promise<any[]>;
   requestQuestionAnsweringMetrics?: (
-    selectionIndexes: number[][]
+    selectionIndexes: number[][],
+    questionAnsweringCache: Map<
+      string,
+      [number, number, number, number, number, number]
+    >
   ) => Promise<any[]>;
 }
 
@@ -95,6 +99,10 @@ export class ModelOverview extends React.Component<
   IModelOverviewState
 > {
   public static contextType = ModelAssessmentContext;
+  public questionAnsweringCache: Map<
+    string,
+    [number, number, number, number, number, number]
+  > = new Map();
   public objectDetectionCache: Map<string, [number, number, number]> =
     new Map();
   public context: React.ContextType<typeof ModelAssessmentContext> =
@@ -610,7 +618,8 @@ export class ModelOverview extends React.Component<
         this.state.aggregateMethod,
         this.state.className,
         this.state.iouThreshold
-      ]
+      ],
+      this.questionAnsweringCache
     );
 
     this.setState({
@@ -715,6 +724,7 @@ export class ModelOverview extends React.Component<
       this.context
         .requestQuestionAnsweringMetrics(
           selectionIndexes,
+          this.questionAnsweringCache,
           new AbortController().signal
         )
         .then((result) => {
@@ -733,6 +743,24 @@ export class ModelOverview extends React.Component<
             ]
           ] of result.entries()) {
             const count = selectionIndexes[cohortIndex].length;
+
+            if (
+              !this.questionAnsweringCache.has(
+                selectionIndexes[cohortIndex].toString()
+              )
+            ) {
+              this.questionAnsweringCache.set(
+                selectionIndexes[cohortIndex].toString(),
+                [
+                  exactMatchRatio,
+                  f1Score,
+                  meteorScore,
+                  bleuScore,
+                  bertScore,
+                  rougeScore
+                ]
+              );
+            }
 
             const updatedCohortMetricStats = [
               {
@@ -813,7 +841,8 @@ export class ModelOverview extends React.Component<
         this.state.aggregateMethod,
         this.state.className,
         this.state.iouThreshold
-      ]
+      ],
+      this.questionAnsweringCache
     );
 
     this.setState({
