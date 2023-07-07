@@ -1147,7 +1147,7 @@ class RAIVisionInsights(RAIBaseInsights):
             cohort_classes = list(set([classes[i - 1]
                                   for i in pred_labels + gt_labels]))
             cohort_classes.sort(
-                key=lambda class_name: classes.index(class_name))
+                key=lambda cname: classes.index(cname))
             # to catch if the class is not in the cohort
             try:
                 index = cohort_classes.index(class_name)
@@ -1159,22 +1159,12 @@ class RAIVisionInsights(RAIBaseInsights):
                 object_detection_values = metric_OD.compute()
                 mAP = round(object_detection_values
                             ['map'].item(), 2)
-                AP = round(object_detection_values
-                           ['map_per_class'][index].item(), 2)
-                AR = round(object_detection_values
-                           ['mar_100_per_class'][index].item(), 2)
-                all_cohort_metrics.append([mAP, AP, AR])
+                APs = [round(value, 2) for value in object_detection_values['map_per_class'].detach().tolist()]
+                ARs = [round(value, 2) for value in object_detection_values['mar_100_per_class'].detach().tolist()]
 
-                for i in range(len(cohort_classes)):
-                    class_name = cohort_classes[i]
-                    key = ','.join([str(cid) for cid in cohort_indices] +
-                                   [aggregate_method, class_name, str(iou_thresh)])
-                    if key not in object_detection_cache:
-                        class_AP = round(object_detection_values
-                                         ['map_per_class'][index].item(), 2)
-                        class_AR = round(object_detection_values
-                                         ['mar_100_per_class'][index].item(), 2)
-                        object_detection_cache[key] = [mAP, class_AP, class_AR]
+                assert len(APs) == len(ARs) == len(cohort_classes)
 
+                all_submetrics = [[mAP, APs[i], ARs[i]] for i in range(len(APs))]
+                all_cohort_metrics.append(all_submetrics)
 
-        return all_cohort_metrics
+        return [all_cohort_metrics, cohort_classes]
