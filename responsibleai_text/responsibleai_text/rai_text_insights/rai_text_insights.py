@@ -806,12 +806,20 @@ class RAITextInsights(RAIBaseInsights):
 
         return 2 * (prec * rec) / (prec + rec)
 
-    def compute_question_answering_metrics(self, selection_indexes):
+    def compute_question_answering_metrics(
+        self,
+        selection_indexes,
+        question_answering_cache
+    ):
         dashboard_dataset = self.get_data().dataset
         true_y = dashboard_dataset.true_y
         predicted_y = dashboard_dataset.predicted_y
         all_cohort_metrics = []
         for cohort_indices in selection_indexes:
+            key = ','.join([str(cid) for cid in cohort_indices])
+            if key in question_answering_cache:
+                all_cohort_metrics.append(question_answering_cache[key])
+                continue
             true_y_cohort = [true_y[cohort_index] for cohort_index
                              in cohort_indices]
             predicted_y_cohort = [predicted_y[cohort_index] for cohort_index
