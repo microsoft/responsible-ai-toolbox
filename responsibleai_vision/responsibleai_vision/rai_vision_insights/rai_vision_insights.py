@@ -1086,7 +1086,7 @@ class RAIVisionInsights(RAIBaseInsights):
             selection_indexes,
             aggregate_method,
             class_name,
-            iou_thresh,
+            iou_threshold,
             object_detection_cache):
         dashboard_dataset = self.get_data().dataset
         true_y = dashboard_dataset.object_detection_true_y
@@ -1095,18 +1095,18 @@ class RAIVisionInsights(RAIBaseInsights):
         true_y = dashboard_dataset.object_detection_true_y
         predicted_y = dashboard_dataset.object_detection_predicted_y
 
-        normalized_iou_thresh = [iou_thresh / 100.0]
+        normalized_iou_threshold = [iou_threshold / 100.0]
         all_cohort_metrics = []
         for cohort_indices in selection_indexes:
             key = ','.join([str(cid) for cid in cohort_indices] +
-                           [aggregate_method, class_name, str(iou_thresh)])
+                           [aggregate_method, class_name, str(iou_threshold)])
             if key in object_detection_cache:
                 all_cohort_metrics.append(object_detection_cache[key])
                 continue
 
             metric_OD = MeanAveragePrecision(
                 class_metrics=True,
-                iou_thresholds=normalized_iou_thresh,
+                iou_thresholds=normalized_iou_threshold,
                 average=aggregate_method)
             true_y_cohort = [true_y[cohort_index] for cohort_index
                              in cohort_indices]

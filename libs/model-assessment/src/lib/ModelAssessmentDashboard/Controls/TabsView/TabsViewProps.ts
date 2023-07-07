@@ -59,6 +59,10 @@ export interface ITabsViewProps {
   ) => Promise<any[]>;
   requestQuestionAnsweringMetrics?: (
     selectionIndexes: number[][],
+    questionAnsweringCache: Map<
+      string,
+      [number, number, number, number, number, number]
+    >,
     abortSignal: AbortSignal
   ) => Promise<any[]>;
   requestDebugML?: (
