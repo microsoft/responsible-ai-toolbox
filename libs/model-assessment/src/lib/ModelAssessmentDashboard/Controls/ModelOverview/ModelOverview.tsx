@@ -648,7 +648,7 @@ export class ModelOverview extends React.Component<
           new AbortController().signal
         )
         .then((result) => {
-          let [allCohortMetrics, cohortClasses] = result;
+          const [allCohortMetrics, cohortClasses] = result;
 
           // Assumption: the lengths of `allCohortMetrics` and `selectionIndexes` are the same.
           const updatedMetricStats: ILabeledStatistic[][] = [];
@@ -659,14 +659,17 @@ export class ModelOverview extends React.Component<
           ] of allCohortMetrics.entries()) {
             const count = selectionIndexes[cohortIndex].length;
 
-            let meanAveragePrecision: number = -1;
-            let averagePrecision: number = -1;
-            let averageRecall: number = -1;
+            let meanAveragePrecision = -1;
+            let averagePrecision = -1;
+            let averageRecall = -1;
 
             // checking 2D array of computed metrics to cache
-            if (Array.isArray(cohortMetrics) && cohortMetrics.every(subArray => Array.isArray(subArray))) {
-              for (let i = 0; i < cohortMetrics.length; i++) {
-                let [mAP, aP, aR] = cohortMetrics[i];
+            if (
+              Array.isArray(cohortMetrics) &&
+              cohortMetrics.every((subArray) => Array.isArray(subArray))
+            ) {
+              for (const [i, cohortMetric] of cohortMetrics.entries()) {
+                const [mAP, aP, aR] = cohortMetric;
 
                 const key: [number[], string, string, number] = [
                   selectionIndexes[cohortIndex],
@@ -679,12 +682,13 @@ export class ModelOverview extends React.Component<
                 }
 
                 if (this.state.className === cohortClasses[i]) {
-                  [meanAveragePrecision, averagePrecision, averageRecall] = cohortMetrics[i];
+                  [meanAveragePrecision, averagePrecision, averageRecall] =
+                    cohortMetric;
                 }
               }
-            }
-            else if (Array.isArray(cohortMetrics)) {
-              [meanAveragePrecision, averagePrecision, averageRecall] = cohortMetrics;
+            } else if (Array.isArray(cohortMetrics)) {
+              [meanAveragePrecision, averagePrecision, averageRecall] =
+                cohortMetrics;
             }
 
             const updatedCohortMetricStats = [
