@@ -4,7 +4,6 @@
 export interface IModelAssessmentData {
   errorAnalysisData?: IErrorAnalysisData;
   modelOverviewData?: IModelOverviewData;
-  datasetExplorerData?: {};
   featureImportanceData?: IFeatureImportanceData;
   featureNames?: string[];
   cohortDefaultName?: string;
