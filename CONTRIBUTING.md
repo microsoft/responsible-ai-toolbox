@@ -144,7 +144,6 @@ cypress window will open locally - select test file to run the tests
 7. `pip install -e raiwidgets` to install raiwidgets locally.
 8. `pip install -e responsibleai` to install responsibleai locally.
 
-
    If there are changes to other python packages, you will want to install them locally as well:
 
    `pip install -e raiutils`
