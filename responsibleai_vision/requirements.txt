@@ -3,6 +3,6 @@ pandas>=0.25.1,<2.0.0 # TODO: remove ceiling on version.
 scikit-learn>=0.22.1
 scipy>=1.4.1
 semver~=2.13.0
-responsibleai>=0.28.0
+responsibleai>=0.29.0
 torchmetrics
 vision_explanation_methods
