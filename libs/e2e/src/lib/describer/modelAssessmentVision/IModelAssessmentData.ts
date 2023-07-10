@@ -4,7 +4,7 @@
 export interface IModelAssessmentData {
   errorAnalysisData?: IErrorAnalysisData;
   modelOverviewData?: IModelOverviewData;
-  datasetExplorerData?: IDatasetExplorerData;
+  datasetExplorerData?: {};
   featureImportanceData?: IFeatureImportanceData;
   featureNames?: string[];
   cohortDefaultName?: string;
@@ -52,9 +52,6 @@ interface IExpectedCohortData {
   name: string;
   sampleSize: string;
   metrics: { [name: string]: string };
-}
-
-export interface IDatasetExplorerData {
 }
 
 export interface IFeatureImportanceData {
