@@ -10,6 +10,11 @@ export enum RadioKeys {
   Neg = "neg"
 }
 
+export enum QAExplanationType {
+  Start = "start",
+  End = "end"
+}
+
 export class Utils {
   public static argsort(toSort: number[]): number[] {
     /*
