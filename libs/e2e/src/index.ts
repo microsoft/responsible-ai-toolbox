@@ -11,4 +11,5 @@ export * from "./lib/describer/modelAssessment/modelOverview/describeModelOvervi
 export * from "./lib/describer/modelAssessment/whatIfCounterfactuals/describeWhatIf";
 export * from "./lib/describer/modelAssessment/datasets/modelAssessmentDatasets";
 export * from "./lib/describer/modelAssessment/IModelAssessmentData";
+export * from "./lib/describer/modelAssessmentVision/dataExplorer/describeDatasetExplorer";
 export * from "./util/visit";
