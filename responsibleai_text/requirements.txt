@@ -4,4 +4,4 @@ scikit-learn>=0.22.1
 scipy>=1.4.1
 semver~=2.13.0
 nlp-feature-extractors==0.1.0
-responsibleai>=0.28.0
+responsibleai>=0.29.0
