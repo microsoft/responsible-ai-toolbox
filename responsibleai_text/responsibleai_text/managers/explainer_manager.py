@@ -258,10 +258,10 @@ class ExplainerManager(BaseManager):
                     instance.values.tolist()
                 text_feature_importance.text = instance.data
             elif self._task_type == ModelTask.QUESTION_ANSWERING:
-                # TODO: This is a bit more complicated, as it's
-                # a map of importances for each token from question
-                # to answer and the other way around.
-                continue
+                text_feature_importance = TextFeatureImportance()
+                text_feature_importance.localExplanations = \
+                    instance.values.tolist()
+                text_feature_importance.text = instance.data
             else:
                 raise ValueError("Unknown task type: {}".format(
                     self._task_type))
