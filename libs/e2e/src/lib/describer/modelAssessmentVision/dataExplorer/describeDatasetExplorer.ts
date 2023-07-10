@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { before } from "lodash";
-import { visit } from "../../../../util/visit";
+import { visit } from "../../../../util/visitVision";
 import { Locators } from "../../modelAssessmentVision/Constants";
 import { IModelAssessmentData } from "../../modelAssessmentVision/IModelAssessmentData";
 import { modelAssessmentDatasets } from "../../modelAssessmentVision/datasets/modelAssessmentDatasets";

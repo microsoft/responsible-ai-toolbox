@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { modelAssessmentDatasets } from "../lib/describer/modelAssessment/datasets/modelAssessmentDatasets";
-import { RAINotebookNames } from "../lib/describer/modelAssessment/IModelAssessmentData";
+import { modelAssessmentDatasets } from "../lib/describer/modelAssessmentVision/datasets/modelAssessmentDatasets";
+import { RAIVisionNotebookNames } from "../lib/describer/modelAssessmentVision/IModelAssessmentData";
 
 export function visit(
   name?: keyof typeof modelAssessmentDatasets,
@@ -10,7 +10,7 @@ export function visit(
 ): void {
   let fileName: string;
   const hosts = Cypress.env().hosts;
-  if (!name || !RAINotebookNames[name]) {
+  if (!name || !RAIVisionNotebookNames[name]) {
     return;
   }
   if (!hosts || !name) {
@@ -18,7 +18,7 @@ export function visit(
     return;
   }
   const hostDetails = hosts.find((obj: { file: string }) => {
-    fileName = RAINotebookNames[name];
+    fileName = RAIVisionNotebookNames[name];
     return obj.file === fileName;
   });
   const url = new URL(relativePath, hostDetails.host);
