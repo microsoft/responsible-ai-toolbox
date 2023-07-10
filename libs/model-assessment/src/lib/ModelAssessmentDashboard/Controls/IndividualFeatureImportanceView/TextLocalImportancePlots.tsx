@@ -7,7 +7,8 @@ import {
   ModelAssessmentContext,
   JointDataset,
   ITextExplanationDashboardData,
-  WeightVectorOption
+  WeightVectorOption,
+  ModelTypes
 } from "@responsible-ai/core-ui";
 import {
   ITextExplanationViewProps,
@@ -22,6 +23,7 @@ export interface ITextLocalImportancePlotsProps {
   selectedWeightVector: WeightVectorOption;
   weightOptions: WeightVectorOption[];
   weightLabels: any;
+  isQA?: boolean;
 }
 
 export interface ITextFeatureImportances {
@@ -49,6 +51,8 @@ export class TextLocalImportancePlots extends React.Component<ITextLocalImportan
     };
     const dashboardProp: ITextExplanationViewProps = {
       dataSummary: textExplanationDashboardData,
+      isQA:
+        this.context.modelMetadata.modelType === ModelTypes.QuestionAnswering,
       onWeightChange: this.props.onWeightChange,
       selectedWeightVector: this.props.selectedWeightVector,
       weightLabels: this.props.weightLabels,

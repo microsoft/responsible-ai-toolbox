@@ -5,7 +5,9 @@ import { IObjectWithKey, Label, Stack, Text } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   getFeatureNamesAfterDrop,
-  ModelAssessmentContext
+  IModelAssessmentContext,
+  ModelAssessmentContext,
+  ModelTypes
 } from "@responsible-ai/core-ui";
 import { TableView } from "@responsible-ai/dataset-explorer";
 import { localization } from "@responsible-ai/localization";
@@ -26,8 +28,7 @@ export class IndividualFeatureImportanceView extends React.Component<
   IIndividualFeatureImportanceState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<typeof ModelAssessmentContext> =
-    defaultModelAssessmentContext;
+  public context: IModelAssessmentContext = defaultModelAssessmentContext;
 
   public constructor(props: IIndividualFeatureImportanceProps) {
     super(props);
@@ -102,6 +103,10 @@ export class IndividualFeatureImportanceView extends React.Component<
             weightOptions={this.props.weightOptions}
             weightLabels={this.props.weightLabels}
             onWeightChange={this.props.onWeightChange}
+            isQA={
+              this.context.modelMetadata.modelType ===
+              ModelTypes.QuestionAnswering
+            }
           />
         )}
       </Stack>
