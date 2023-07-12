@@ -1129,8 +1129,11 @@
       "negButton": "RECURSOS NEGATIVOS",
       "posButton": "RECURSOS POSITIVOS",
       "legendText": "Positive scalar feature importances represent the extent that the words were important towards the classification of your selected label, and negative scalar feature importances represent words that encouraged your model away from your selected label.",
+      "legendTextForQA": "The left text box and the bar chart display the predictions of the model. The right text box shows the feature importance associated with a selected token. Positive feature importances represent the extent that the words were important towards marking the selected token as the starting/ending position of the answer.",
       "label": "Rótulo",
-      "colon": ": "
+      "colon": ": ",
+      "startingPosition": "STARTING POSITION",
+      "endingPosition": "ENDING POSITION"
     },
     "Legend": {
       "featureLegend": "LEGENDA DO RECURSO DE TEXTO",

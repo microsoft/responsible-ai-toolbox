@@ -59,6 +59,16 @@ class QAPredictor:
         """
         return self.predict_qa(questions, True)
 
+    def predict_qa_end(self, questions):
+        """Define predictions outputting the logits for the end of the range.
+
+        :param questions: The questions and context to predict on.
+        :type questions: list[str]
+        :return: The logits for the end of the range.
+        :rtype: list[list[float]]
+        """
+        return self.predict_qa(questions, False)
+
     def output_names(self, inputs):
         """Define the output names as tokens.
 
