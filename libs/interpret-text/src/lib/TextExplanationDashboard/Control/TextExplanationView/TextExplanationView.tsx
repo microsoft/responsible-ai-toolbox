@@ -83,6 +83,8 @@ export class TextExplanationView extends React.PureComponent<
   public render(): React.ReactNode {
     const classNames = textExplanationDashboardStyles();
 
+    console.log("!!text: ", this.state.text);
+
     return (
       <Stack>
         <Stack tokens={componentStackTokens} horizontal>
@@ -92,26 +94,6 @@ export class TextExplanationView extends React.PureComponent<
             <Text>{localization.InterpretText.View.legendText}</Text>
           )}
         </Stack>
-
-        <SidePanelOfChart
-          text={this.state.text}
-          importances={this.state.importances}
-          topK={this.state.topK}
-          radio={this.state.radio}
-          isQA={this.props.isQA}
-          dataSummary={this.props.dataSummary}
-          maxK={this.state.maxK}
-          selectedToken={this.state.selectedToken}
-          tokenIndexes={this.state.tokenIndexes}
-          selectedWeightVector={this.props.selectedWeightVector}
-          weightOptions={this.props.weightOptions}
-          weightLabels={this.props.weightLabels}
-          changeRadioButton={this.changeRadioButton}
-          switchQAPrediction={this.switchQAPrediction}
-          setTopK={this.setTopK}
-          onWeightVectorChange={this.onWeightVectorChange}
-          onSelectedTokenChange={this.onSelectedTokenChange}
-        />
 
         <Stack tokens={componentStackTokens} horizontal>
           <Stack.Item
@@ -151,6 +133,26 @@ export class TextExplanationView extends React.PureComponent<
             <TextFeatureLegend />
           </Stack.Item>
         </Stack>
+
+        <SidePanelOfChart
+          text={this.state.text}
+          importances={this.state.importances}
+          topK={this.state.topK}
+          radio={this.state.radio}
+          isQA={this.props.isQA}
+          dataSummary={this.props.dataSummary}
+          maxK={this.state.maxK}
+          selectedToken={this.state.selectedToken}
+          tokenIndexes={this.state.tokenIndexes}
+          selectedWeightVector={this.props.selectedWeightVector}
+          weightOptions={this.props.weightOptions}
+          weightLabels={this.props.weightLabels}
+          changeRadioButton={this.changeRadioButton}
+          switchQAPrediction={this.switchQAPrediction}
+          setTopK={this.setTopK}
+          onWeightVectorChange={this.onWeightVectorChange}
+          onSelectedTokenChange={this.onSelectedTokenChange}
+        />
       </Stack>
     );
   }
