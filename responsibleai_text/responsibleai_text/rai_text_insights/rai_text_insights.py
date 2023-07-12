@@ -637,6 +637,8 @@ class RAITextInsights(RAIBaseInsights):
             is_classification_task)
         predict_output = self._wrapped_model.predict(
             test_without_target_column)
+        if isinstance(predict_output, pd.DataFrame):
+            predict_output = predict_output.to_numpy()
         self._write_to_file(
             prediction_output_path / (_PREDICT + _JSON_EXTENSION),
             json.dumps(predict_output.tolist()))
@@ -644,6 +646,8 @@ class RAITextInsights(RAIBaseInsights):
         if hasattr(self.model, SKLearn.PREDICT_PROBA):
             predict_proba_output = self.model.predict_proba(
                 test_without_target_column)
+            if isinstance(predict_proba_output, pd.DataFrame):
+                predict_proba_output = predict_proba_output.to_numpy()
             self._write_to_file(
                 prediction_output_path / (_PREDICT_PROBA + _JSON_EXTENSION),
                 json.dumps(predict_proba_output.tolist()))
