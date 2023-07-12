@@ -10,7 +10,7 @@ import { FridgeImageClassificationModelDebugging } from "./FridgeImageClassifica
 export const regExForNumbersWithBrackets = /^\((\d+)\)$/; // Ex: (60)
 
 const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
-    FridgeImageClassificationModelDebugging
+  FridgeImageClassificationModelDebugging
 };
 
 const modelAssessmentDatasetsDataBalanceExperience: {
