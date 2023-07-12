@@ -60,6 +60,7 @@ class FeatureImportance:
 
 
 class TextFeatureImportance:
+    baseValues: List[float]
     localExplanations: List
     text: List[str]
 
