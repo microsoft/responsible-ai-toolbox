@@ -1,4 +1,4 @@
-name: CI e2e notebooks
+name: CI e2e notebooks vision
 
 on:
   push:
@@ -49,7 +49,7 @@ jobs:
         operatingSystem: [ubuntu-latest, windows-latest]
         pythonVersion: [3.6, 3.7, 3.8, 3.9, "3.10"]
         flights: ["", "dataBalanceExperience"]
-        notebookGroup: ["nb_group_1", "nb_group_2"]
+        notebookGroup: ["nb_group_1"]
 
     runs-on: ${{ matrix.operatingSystem }}
 
@@ -96,6 +96,13 @@ jobs:
           pip install -r requirements-dev.txt
           pip install -v -e .
         working-directory: raiwidgets
+      
+      - name: Install vision dependencies
+        shell: bash -l {0}
+        run: |
+          pip install -r requirements-dev.txt
+          pip install .
+        working-directory: responsibleai_vision
 
       - name: Pip freeze
         shell: bash -l {0}
@@ -115,17 +122,7 @@ jobs:
         name: Run widget tests
         shell: bash -l {0}
         run: |
-          yarn e2e-widget -n "responsibleaidashboard-census-classification-model-debugging" -f ${{ matrix.flights }}
-          yarn e2e-widget -n "responsibleaidashboard-diabetes-regression-model-debugging" -f ${{ matrix.flights }}
-          yarn e2e-widget -n "responsibleaidashboard-housing-decision-making" -f ${{ matrix.flights }}
-
-      - if: ${{ matrix.notebookGroup == 'nb_group_2'}}
-        name: Run widget tests
-        shell: bash -l {0}
-        run: |
-          yarn e2e-widget -n "responsibleaidashboard-housing-classification-model-debugging" -f ${{ matrix.flights }}
-          yarn e2e-widget -n "responsibleaidashboard-diabetes-decision-making" -f ${{ matrix.flights }}
-          yarn e2e-widget -n "responsibleaidashboard-multiclass-dnn-model-debugging" -f ${{ matrix.flights }}
+          yarn e2e-widget -n "responsibleaidashboard-fridge-object-detection-model-debugging" -f ${{ matrix.flights }}
 
       - name: Upload e2e test screen shot
         if: always()
