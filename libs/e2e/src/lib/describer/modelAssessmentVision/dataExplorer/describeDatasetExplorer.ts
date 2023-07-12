@@ -3,14 +3,14 @@
 
 import { visit } from "../../../../util/visitVision";
 import { Locators } from "../../modelAssessmentVision/Constants";
-import { modelAssessmentDatasets } from "../../modelAssessmentVision/datasets/modelAssessmentDatasets";
+import { modelAssessmentVisionDatasets } from "../datasets/modelAssessmentVisionDatasets";
 import { IModelAssessmentData } from "../../modelAssessmentVision/IModelAssessmentData";
 
 const testName = "Vision Dataset explorer";
 
 export function describeVisionDatasetExplorer(
   datasetShape: IModelAssessmentData,
-  name?: keyof typeof modelAssessmentDatasets
+  name?: keyof typeof modelAssessmentVisionDatasets
 ): void {
   describe(testName, () => {
     before(() => {
