@@ -66,6 +66,13 @@ jobs:
           pip install -r requirements-dev.txt
           pip install .
         working-directory: raiwidgets
+      
+      - name: Install vision dependencies
+        shell: bash -l {0}
+        run: |
+          pip install -r requirements-dev.txt
+          pip install .
+        working-directory: responsibleai_vision
 
       - name: Pip freeze
         shell: bash -l {0}
@@ -82,7 +89,7 @@ jobs:
 
       - name: Run notebook tests
         shell: bash -l {0}
-        run: python -m pytest notebooks -k "not test_responsibleaidashboard_fridge_object_detection_model_debugging"
+        run: python -m pytest notebooks -k "test_responsibleaidashboard_fridge_object_detection_model_debugging"
 
       - name: Upload notebook test result
         if: always()
