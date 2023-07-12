@@ -1,4 +1,4 @@
-name: CI Notebooks
+name: CI Vision Notebooks
 
 on:
   push:
