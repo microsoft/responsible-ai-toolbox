@@ -1,4 +1,4 @@
-name: CI Vision Notebooks
+name: CI e2e notebooks vision
 
 on:
   push:
@@ -7,23 +7,14 @@ on:
     branches: [main]
 
 jobs:
-  ci-notebook-vision:
+  ui-build:
     env:
       node-version: 16.x
-    strategy:
-      matrix:
-        operatingSystem: [ubuntu-latest, windows-latest]
-        pythonVersion: [3.7, 3.8, 3.9, "3.10"]
 
-    runs-on: ${{ matrix.operatingSystem }}
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v3
-
-      - uses: conda-incubator/setup-miniconda@v2
-        with:
-          auto-update-conda: true
-          python-version: ${{ matrix.pythonVersion }}
 
       - name: Use Node.js ${{ env.node-version }}
         uses: actions/setup-node@v3
@@ -34,24 +25,63 @@ jobs:
         run: npm install yarn -g
 
       - name: Install yarn dependencies
-        run: |
-          yarn config set network-timeout 300000
-          yarn install --frozen-lock-file
+        run: yarn install --frozen-lock-file
 
       - name: Build Typescript
         run: yarn buildall
 
-      - if: ${{ matrix.operatingSystem != 'macos-latest' }}
-        name: Install pytorch on non-MacOS
+      - name: Upload the build result
+        uses: actions/upload-artifact@v3
+        with:
+          name: raiwidgets-js
+          path: raiwidgets/raiwidgets/widget
+
+  ci-e2e-notebook-vision:
+    needs: ui-build
+
+    env:
+      node-version: 16.x
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # TODO: add macos
+        operatingSystem: [ubuntu-latest, windows-latest]
+        pythonVersion: [3.7, 3.8, 3.9, "3.10"]
+        flights: [""]
+        notebookGroup: ["nb_group_1"]
+
+    runs-on: ${{ matrix.operatingSystem }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ env.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node-version }}
+
+      - name: Install yarn
+        run: npm install yarn -g
+
+      - name: Install yarn dependencies
+        run: yarn install --frozen-lock-file
+
+      - name: Download the UI build result
+        uses: actions/download-artifact@v2
+        with:
+          name: raiwidgets-js
+          path: raiwidgets/raiwidgets/widget
+
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: ${{ matrix.pythonVersion }}
+
+      - name: Install pytorch
         shell: bash -l {0}
         run: |
           conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
-
-      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
-        name: Install Anaconda packages on MacOS, which should not include cpuonly according to official docs
-        shell: bash -l {0}
-        run: |
-          conda install --yes --quiet pytorch torchvision captum -c pytorch
 
       - name: Setup tools
         shell: bash -l {0}
@@ -64,7 +94,7 @@ jobs:
         shell: bash -l {0}
         run: |
           pip install -r requirements-dev.txt
-          pip install .
+          pip install -v -e .
         working-directory: raiwidgets
 
       - name: Install vision dependencies
@@ -87,20 +117,16 @@ jobs:
           name: requirements-dev.txt
           path: raiwidgets/installed-requirements-dev.txt
 
-      - name: Run notebook tests
+      # keep list of notebooks in sync with scripts/e2e-widget.js, create new notebook group if necessary
+      - if: ${{ matrix.notebookGroup == 'nb_group_1'}}
+        name: Run widget tests
         shell: bash -l {0}
-        run: python -m pytest notebooks -k "test_responsibleaidashboard_fridge_image_classification_model_debugging"
-
-      - name: Upload notebook test result
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: notebook-test-${{ matrix.operatingSystem }}-${{ matrix.pythonVersion }}
-          path: notebooks
+        run: |
+          yarn e2e-widget -n "responsibleaidashboard-fridge-image-classification-model-debugging" -f ${{ matrix.flights }}
 
       - name: Upload e2e test screen shot
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: raiwidgets-e2e-screen-shot
-          path: dist/cypress
+          path: ./dist/cypress
