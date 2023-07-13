@@ -4,10 +4,12 @@
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
 import { FridgeMultilabelModelDebugging } from "./FridgeMultilabelModelDebugging";
+import { FridgeObjectDetectionModelDebugging } from "./FridgeObjectDetectionModelDebugging";
 
 const modelAssessmentVisionDatasets: { [name: string]: IModelAssessmentData } =
   {
-    FridgeMultilabelModelDebugging
+    FridgeMultilabelModelDebugging,
+    FridgeObjectDetectionModelDebugging
   };
 
 const withType: {
