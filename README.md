@@ -108,6 +108,7 @@ Model Debugging Examples:
 - [Try the tool: model debugging of a census income prediction model (classification)](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-census-classification-model-debugging.ipynb)
 - [Try the tool: model debugging of a housing price prediction model (classification)](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-housing-classification-model-debugging.ipynb)
 - [Try the tool: model debugging of a diabetes progression prediction model (regression)](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-diabetes-regression-model-debugging.ipynb)
+- [Try the tool: model debugging of a fridge object detection model](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-fridge-object-detection-model-debugging.ipynb)
 
  Responsible Decision Making Examples:
 - [Try the tool: make decisions for house improvements](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-housing-decision-making.ipynb)

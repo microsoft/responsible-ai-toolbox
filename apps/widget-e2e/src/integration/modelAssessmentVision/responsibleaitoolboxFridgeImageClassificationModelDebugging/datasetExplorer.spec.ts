@@ -3,10 +3,10 @@
 
 import {
   describeVisionDatasetExplorer,
-  modelAssessmentDatasets
+  modelAssessmentVisionDatasets
 } from "@responsible-ai/e2e";
 const datasetShape =
-  modelAssessmentDatasets.FridgeImageClassificationModelDebugging;
+modelAssessmentVisionDatasets.FridgeImageClassificationModelDebugging;
 describeVisionDatasetExplorer(
   datasetShape,
   "FridgeImageClassificationModelDebugging"

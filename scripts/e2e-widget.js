@@ -9,7 +9,7 @@ const nxPath = path.join(__dirname, "../node_modules/@nrwl/cli/bin/nx.js");
 const baseDir = path.join(__dirname, "../notebooks/responsibleaidashboard");
 const filePrefix = "responsibleaidashboard-";
 // Please add notebook name into 'fileNames' array only when you are adding e2e tests to that notebook.
-// Keep this list in sync with .github/workflows/CI-e2e-notebooks.yml
+// Keep this list in sync with .github/workflows/CI-e2e-notebooks.yml and/or .github/workflows/CI-e2e-notebooks-vision.yml
 const fileNames = [
   "responsibleaidashboard-census-classification-model-debugging",
   "responsibleaidashboard-diabetes-regression-model-debugging",
@@ -17,7 +17,8 @@ const fileNames = [
   "responsibleaidashboard-diabetes-decision-making",
   "responsibleaidashboard-housing-decision-making",
   "responsibleaidashboard-multiclass-dnn-model-debugging",
-  "responsibleaidashboard-fridge-image-classification-model-debugging"
+  "responsibleaidashboard-fridge-image-classification-model-debugging",
+  "responsibleaidashboard-fridge-object-detection-model-debugging"
 ];
 const notebookHostReg = /^ResponsibleAI started at (http:\/\/localhost:\d+)$/m;
 const serveHostReg = /Web Development Server is listening at\s+(.*)$/m;

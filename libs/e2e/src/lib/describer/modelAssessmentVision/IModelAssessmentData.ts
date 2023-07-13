@@ -74,5 +74,6 @@ export interface IFeatureImportanceData {
 }
 
 export enum RAIVisionNotebookNames {
-  "FridgeImageClassificationModelDebugging" = "responsibleaidashboard-fridge-image-classification-model-debugging"
+  "FridgeImageClassificationModelDebugging" = "responsibleaidashboard-fridge-image-classification-model-debugging.ipynb",
+  "FridgeObjectDetectionModelDebugging" = "responsibleaidashboard-fridge-object-detection-model-debugging.ipynb"
 }

@@ -6,8 +6,8 @@ import {
   modelAssessmentVisionDatasets
 } from "@responsible-ai/e2e";
 const datasetShape =
-  modelAssessmentVisionDatasets.FridgeImageClassificationModelDebugging;
+  modelAssessmentVisionDatasets.FridgeObjectDetectionModelDebugging;
 describeVisionDatasetExplorer(
   datasetShape,
-  "FridgeImageClassificationModelDebugging"
+  "FridgeObjectDetectionModelDebugging"
 );
