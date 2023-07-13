@@ -7,8 +7,6 @@ import { IModelAssessmentData } from "../IModelAssessmentData";
 
 import { FridgeObjectDetectionModelDebugging } from "./FridgeObjectDetectionModelDebugging";
 
-export const regExForNumbersWithBrackets = /^\((\d+)\)$/; // Ex: (60)
-
 const modelAssessmentVisionDatasets: { [name: string]: IModelAssessmentData } = {
   FridgeObjectDetectionModelDebugging
 };
