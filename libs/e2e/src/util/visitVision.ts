@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { modelAssessmentDatasets } from "../lib/describer/modelAssessmentVision/datasets/modelAssessmentVisionDatasets";
+import { modelAssessmentVisionDatasets } from "../lib/describer/modelAssessmentVision/datasets/modelAssessmentVisionDatasets";
 import { RAIVisionNotebookNames } from "../lib/describer/modelAssessmentVision/IModelAssessmentData";
 
 export function visit(
-  name?: keyof typeof modelAssessmentDatasets,
+  name?: keyof typeof modelAssessmentVisionDatasets,
   relativePath = "/"
 ): void {
   let fileName: string;
