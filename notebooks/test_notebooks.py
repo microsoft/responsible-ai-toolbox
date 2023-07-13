@@ -267,6 +267,7 @@ def test_responsibleaidashboard_fridge_multilabel_ic_model_debugging():
     assay_one_notebook(nb_path, nb_name, test_values)
 
 
+@pytest.mark.notebooks
 def test_responsibleaidashboard_fridge_object_detection_model_debugging():
     nb_path = RESPONSIBLEAIDASHBOARD
     nb_name = "responsibleaidashboard-fridge-object-detection-model-debugging"
