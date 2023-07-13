@@ -3,8 +3,8 @@
 
 import { visit } from "../../../../util/visitVision";
 import { Locators } from "../../modelAssessmentVision/Constants";
-import { modelAssessmentVisionDatasets } from "../datasets/modelAssessmentVisionDatasets";
 import { IModelAssessmentData } from "../../modelAssessmentVision/IModelAssessmentData";
+import { modelAssessmentVisionDatasets } from "../datasets/modelAssessmentVisionDatasets";
 
 const testName = "Vision Dataset explorer";
 
