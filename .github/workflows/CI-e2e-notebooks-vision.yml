@@ -36,7 +36,7 @@ jobs:
           name: raiwidgets-js
           path: raiwidgets/raiwidgets/widget
 
-  ci-e2e-notebook:
+  ci-e2e-notebook-vision:
     needs: ui-build
 
     env:
@@ -47,7 +47,7 @@ jobs:
       matrix:
         # TODO: add macos
         operatingSystem: [ubuntu-latest, windows-latest]
-        pythonVersion: [3.6, 3.7, 3.8, 3.9, "3.10"]
+        pythonVersion: [3.7, 3.8, 3.9, "3.10"]
         flights: [""]
         notebookGroup: ["nb_group_1"]
 
