@@ -5,9 +5,5 @@ import {
   describeVisionDatasetExplorer,
   modelAssessmentDatasets
 } from "@responsible-ai/e2e";
-const datasetShape =
-  modelAssessmentDatasets.FridgeMultilabelModelDebugging;
-describeVisionDatasetExplorer(
-  datasetShape,
-  "FridgeMultilabelModelDebugging"
-);
+const datasetShape = modelAssessmentDatasets.FridgeMultilabelModelDebugging;
+describeVisionDatasetExplorer(datasetShape, "FridgeMultilabelModelDebugging");

@@ -25,7 +25,7 @@ export const FridgeMultilabelModelDebugging = {
       {
         metrics: {
           exactMatchRatio: "0.925",
-          hammingScore: "0.729",
+          hammingScore: "0.729"
         },
         name: "All data",
         sampleSize: "10"
