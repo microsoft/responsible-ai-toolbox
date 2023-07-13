@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { modelAssessmentDatasets } from "../lib/describer/modelAssessmentVision/datasets/modelAssessmentDatasets";
+import { modelAssessmentDatasets } from "../lib/describer/modelAssessmentVision/datasets/modelAssessmentVisionDatasets";
 import { RAIVisionNotebookNames } from "../lib/describer/modelAssessmentVision/IModelAssessmentData";
 
 export function visit(
