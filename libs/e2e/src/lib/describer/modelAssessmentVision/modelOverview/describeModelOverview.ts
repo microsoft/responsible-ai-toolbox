@@ -14,7 +14,7 @@ import { ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresen
 
 const testName = "Model Overview v2";
 
-export function describeModelOverview(
+export function describeVisionModelOverview(
   datasetShape: IModelAssessmentData,
   name?: keyof typeof modelAssessmentVisionDatasets,
   isNotebookTest = true
@@ -61,10 +61,7 @@ export function describeModelOverview(
           datasetShape.modelOverviewData?.featureCohortView
             ?.secondFeatureToSelect || ""
         );
-        ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
-          datasetShape,
-          2
-        );
+        ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent();
       });
     } else {
       it("should not have 'Model overview' component", () => {
