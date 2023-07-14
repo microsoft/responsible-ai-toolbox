@@ -82,7 +82,7 @@ jobs:
 
       - name: Run notebook tests
         shell: bash -l {0}
-        run: python -m pytest notebooks -k "not test_responsibleaidashboard_fridge_object_detection_model_debugging"
+        run: python -m pytest notebooks -m notebooks
 
       - name: Upload notebook test result
         if: always()

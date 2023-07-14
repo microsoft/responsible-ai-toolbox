@@ -113,6 +113,8 @@ Model Debugging Examples:
  Responsible Decision Making Examples:
 - [Try the tool: make decisions for house improvements](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-housing-decision-making.ipynb)
 - [Try the tool: provide recommendations to patients using diabetes data](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-diabetes-decision-making.ipynb)
+- [Try the tool: model debugging of a fridge multilabel image classification model](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-fridge-multilabel-image-classification-model-debugging.ipynb)
+- [Try the tool: model debugging of a fridge object detection model](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/responsibleaidashboard-fridge-object-detection-model-debugging.ipynb)
 
 
 

@@ -17,6 +17,7 @@ const fileNames = [
   "responsibleaidashboard-diabetes-decision-making",
   "responsibleaidashboard-housing-decision-making",
   "responsibleaidashboard-multiclass-dnn-model-debugging",
+  "responsibleaidashboard-fridge-multilabel-image-classification-model-debugging",
   "responsibleaidashboard-fridge-object-detection-model-debugging"
 ];
 const notebookHostReg = /^ResponsibleAI started at (http:\/\/localhost:\d+)$/m;

@@ -139,6 +139,7 @@ jobs:
           yarn e2e-widget -n "responsibleaidashboard-housing-classification-model-debugging" -f ""
           yarn e2e-widget -n "responsibleaidashboard-diabetes-decision-making" -f ""
           yarn e2e-widget -n "responsibleaidashboard-multiclass-dnn-model-debugging" -f ""
+          yarn e2e-widget -n "responsibleaidashboard-fridge-multilabel-image-classification-model-debugging" -f ""
           yarn e2e-widget -n "responsibleaidashboard-fridge-object-detection-model-debugging" -f ""
 
       - name: Upload e2e test screen shot
