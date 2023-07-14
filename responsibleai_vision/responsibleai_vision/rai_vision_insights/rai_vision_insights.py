@@ -1147,11 +1147,9 @@ class RAIVisionInsights(RAIBaseInsights):
             cohort_classes = list(set([classes[i - 1]
                                   for i in pred_labels + gt_labels]))
             cohort_classes.sort(
-                key=lambda class_name: classes.index(class_name))
+                key=lambda cname: classes.index(cname))
             # to catch if the class is not in the cohort
-            try:
-                index = cohort_classes.index(class_name)
-            except ValueError:
+            if class_name not in cohort_classes:
                 all_cohort_metrics.append([-1, -1, -1])
             else:
                 metric_OD.update(cohort_pred,
@@ -1159,10 +1157,17 @@ class RAIVisionInsights(RAIBaseInsights):
                 object_detection_values = metric_OD.compute()
                 mAP = round(object_detection_values
                             ['map'].item(), 2)
-                AP = round(object_detection_values
-                           ['map_per_class'][index].item(), 2)
-                AR = round(object_detection_values
-                           ['mar_100_per_class'][index].item(), 2)
-                all_cohort_metrics.append([mAP, AP, AR])
+                APs = [round(value, 2) for value in
+                       object_detection_values['map_per_class']
+                       .detach().tolist()]
+                ARs = [round(value, 2) for value in
+                       object_detection_values['mar_100_per_class']
+                       .detach().tolist()]
 
-        return all_cohort_metrics
+                assert len(APs) == len(ARs) == len(cohort_classes)
+
+                all_submetrics = [[mAP, APs[i], ARs[i]]
+                                  for i in range(len(APs))]
+                all_cohort_metrics.append(all_submetrics)
+
+        return [all_cohort_metrics, cohort_classes]

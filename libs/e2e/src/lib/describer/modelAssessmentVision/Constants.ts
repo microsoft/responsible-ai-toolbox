@@ -36,4 +36,5 @@ export enum Locators {
   ModelOverviewConfusionMatrix = "#ModelOverview #modelOverviewConfusionMatrix",
   ModelOverviewConfusionMatrixHeatmap = "#ModelOverview #ModelOverviewConfusionMatrix",
   MissingParameterPlaceholder = "#ModelOverview #MissingParameterPlaceholder",
+  DataAnalysisTab = "#visionDataAnalysisPivot"
 }
