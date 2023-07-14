@@ -257,7 +257,7 @@ def test_responsibleaidashboard_multiclass_dnn_model_debugging():
     assay_one_notebook(nb_path, nb_name, test_values)
 
 
-@pytest.mark.notebooks
+@pytest.mark.vision_notebooks
 def test_responsibleaidashboard_fridge_image_classification_model_debugging():
     nb_path = RESPONSIBLEAIDASHBOARD
     nb_name = \
@@ -267,7 +267,7 @@ def test_responsibleaidashboard_fridge_image_classification_model_debugging():
     assay_one_notebook(nb_path, nb_name, test_values)
 
 
-@pytest.mark.notebooks
+@pytest.mark.vision_notebooks
 def test_responsibleaidashboard_fridge_object_detection_model_debugging():
     nb_path = RESPONSIBLEAIDASHBOARD
     nb_name = "responsibleaidashboard-fridge-object-detection-model-debugging"
