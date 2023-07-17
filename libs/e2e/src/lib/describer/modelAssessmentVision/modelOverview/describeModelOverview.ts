@@ -61,7 +61,7 @@ export function describeVisionModelOverview(
           datasetShape.modelOverviewData?.featureCohortView
             ?.secondFeatureToSelect || ""
         );
-        ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent();
+        ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(datasetShape);
       });
     } else {
       it("should not have 'Model overview' component", () => {
