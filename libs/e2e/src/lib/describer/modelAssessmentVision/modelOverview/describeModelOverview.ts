@@ -4,8 +4,8 @@
 import { multiSelectComboBox } from "../../../../util/comboBox";
 import { visit } from "../../../../util/visitVision";
 import { Locators } from "../Constants";
-import { IModelAssessmentData } from "../IModelAssessmentData";
 import { modelAssessmentVisionDatasets } from "../datasets/modelAssessmentVisionDatasets";
+import { IModelAssessmentData } from "../IModelAssessmentData";
 
 import { ensureAllModelOverviewBasicElementsArePresent } from "./ensureAllModelOverviewBasicElementsArePresent";
 import { ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent } from "./ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent";
