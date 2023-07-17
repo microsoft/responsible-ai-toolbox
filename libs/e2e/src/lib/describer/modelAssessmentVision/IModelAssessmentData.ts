@@ -5,6 +5,7 @@ export interface IModelAssessmentData {
   errorAnalysisData?: IErrorAnalysisData;
   modelOverviewData?: IModelOverviewData;
   featureImportanceData?: IFeatureImportanceData;
+  dataBalanceData?: IDataBalanceData;
   featureNames?: string[];
   cohortDefaultName?: string;
   checkDupCohort?: boolean;
@@ -45,6 +46,12 @@ export interface IModelOverviewData {
     firstFeatureToSelect: string;
     secondFeatureToSelect: string;
   };
+}
+
+export interface IDataBalanceData {
+  aggregateBalanceMeasuresComputed?: boolean;
+  distributionBalanceMeasuresComputed?: boolean;
+  featureBalanceMeasuresComputed?: boolean;
 }
 
 interface IExpectedCohortData {
