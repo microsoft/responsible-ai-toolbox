@@ -122,6 +122,7 @@ jobs:
         name: Run widget tests
         shell: bash -l {0}
         run: |
+          yarn e2e-widget -n "responsibleaidashboard-fridge-image-classification-model-debugging" -f ${{ matrix.flights }}
           yarn e2e-widget -n "responsibleaidashboard-fridge-multilabel-image-classification-model-debugging" -f ${{ matrix.flights }}
           yarn e2e-widget -n "responsibleaidashboard-fridge-object-detection-model-debugging" -f ${{ matrix.flights }}
 
