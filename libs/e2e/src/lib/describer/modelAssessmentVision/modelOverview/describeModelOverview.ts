@@ -52,7 +52,7 @@ export function describeVisionModelOverview(
             ?.firstFeatureToSelect || "",
           true
         );
-        ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent();
+        ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(datasetShape);
       });
 
       it("should show 'Feature cohorts' view with multiple features when selected", () => {
