@@ -8,4 +8,7 @@ import {
 
 const datasetShape =
   modelAssessmentVisionDatasets.FridgeMultilabelModelDebugging;
-describeVisionDataBalance(datasetShape, "FridgeMultilabelModelDebuggingDataBalanceExperience");
+describeVisionDataBalance(
+  datasetShape,
+  "FridgeMultilabelModelDebuggingDataBalanceExperience"
+);
