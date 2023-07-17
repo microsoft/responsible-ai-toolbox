@@ -41,12 +41,8 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
       "averageRecall"
     );
   } else if (datasetShape.isMultiLabel) {
-    metricsOrder.push(
-      "exactMatchRatio",
-      "hammingScore"
-    );
-  }
-  else if (datasetShape.isImageClassification) {
+    metricsOrder.push("exactMatchRatio", "hammingScore");
+  } else if (datasetShape.isImageClassification) {
     metricsOrder.push(
       "accuracy",
       "f1Score",
