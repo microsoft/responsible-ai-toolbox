@@ -12,7 +12,7 @@ import { ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent } from 
 import { ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent } from "./ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent";
 import { ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent } from "./ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent";
 
-const testName = "Model Overview v2";
+const testName = "Vision Model Overview v2";
 
 export function describeVisionModelOverview(
   datasetShape: IModelAssessmentData,
@@ -26,7 +26,7 @@ export function describeVisionModelOverview(
       });
     } else {
       before(() => {
-        cy.visit(`#/modelAssessment/${name}/light/english/Version-2`);
+        cy.visit(`#/modelAssessmentVision/${name}/light/english/Version-2`);
       });
     }
 
