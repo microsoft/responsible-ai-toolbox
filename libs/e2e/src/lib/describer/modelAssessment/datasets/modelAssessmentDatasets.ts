@@ -12,6 +12,9 @@ import { HousingClassificationModelDebugging } from "./HousingClassificationMode
 import { HousingDecisionMaking } from "./HousingDecisionMaking";
 import { HousingRegression } from "./HousingRegression";
 import { MulticlassDnnModelDebugging } from "./MulticlassDnnModelDebugging";
+import { FridgeImageClassificationModelDebugging } from "./FridgeImageClassificationModelDebugging";
+import { FridgeMultilabelModelDebugging } from "./FridgeMultilabelModelDebugging";
+import { FridgeObjectDetectionModelDebugging } from "./FridgeObjectDetectionModelDebugging";
 
 export const regExForNumbersWithBrackets = /^\((\d+)\)$/; // Ex: (60)
 
@@ -22,7 +25,10 @@ const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
   HousingClassificationModelDebugging,
   HousingDecisionMaking,
   HousingRegression,
-  MulticlassDnnModelDebugging
+  MulticlassDnnModelDebugging,
+  FridgeImageClassificationModelDebugging,
+  FridgeMultilabelModelDebugging,
+  FridgeObjectDetectionModelDebugging
 };
 
 const modelAssessmentDatasetsDataBalanceExperience: {
