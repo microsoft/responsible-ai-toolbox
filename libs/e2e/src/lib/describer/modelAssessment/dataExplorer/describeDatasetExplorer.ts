@@ -21,7 +21,7 @@ export function describeDatasetExplorer(
     before(() => {
       visit(name);
       cy.get("#ModelAssessmentDashboard").should("exist");
-      const tab = Locators.VisionDataAnalysisTab ? isVision : Locators.DataAnalysisTab;
+      const tab = isVision ? Locators.VisionDataAnalysisTab : Locators.DataAnalysisTab;
       cy.get(tab).eq(1).click();
     });
     if (datasetShape.featureImportanceData?.noDataset) {
