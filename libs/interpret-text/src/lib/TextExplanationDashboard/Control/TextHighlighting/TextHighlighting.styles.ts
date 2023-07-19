@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 import {
-  IStyle,
-  mergeStyles,
-  mergeStyleSets,
   IProcessedStyleSet,
   IStackStyles,
-  getTheme
+  IStyle,
+  getTheme,
+  mergeStyleSets,
+  mergeStyles
 } from "@fluentui/react";
 
 export const textStackStyles: IStackStyles = {

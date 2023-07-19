@@ -95,14 +95,6 @@ export class TextExplanationView extends React.Component<
       : this.state.importances;
     const baseValue = this.props.isQA ? this.getBaseValue() : undefined;
 
-    // console.log(
-    //   "!!this.props.dataSummary: ",
-    //   this.props.dataSummary,
-    //   this.state.selectedToken,
-    //   baseValue,
-    //   outputLocalExplanations[this.state.selectedToken]
-    // );
-
     return (
       <Stack>
         <Stack tokens={componentStackTokens} horizontal>
@@ -199,7 +191,10 @@ export class TextExplanationView extends React.Component<
             </Stack>
           </Stack.Item>
           <Stack.Item grow className={classNames.chartRight}>
-            <TextFeatureLegend selectedWord={this.getSelectedWord()} />
+            <TextFeatureLegend
+              selectedWord={this.getSelectedWord()}
+              isQA={this.props.isQA}
+            />
           </Stack.Item>
         </Stack>
 
@@ -310,10 +305,9 @@ export class TextExplanationView extends React.Component<
       );
       return sumImportances;
     }
-    const imp = importances.map(
+    return importances.map(
       (perClassImportances) => perClassImportances[weightVector as number]
     );
-    return imp;
   }
 
   private computeImportancesForAllTokens(

@@ -55,10 +55,6 @@ export class TextLocalImportancePlots extends React.Component<ITextLocalImportan
       trueY: textFeatureImportances.trueY,
       predictedY: textFeatureImportances.predictedY
     };
-    console.log(
-      "textExplanationDashboardData: ",
-      textExplanationDashboardData.baseValues
-    );
     const dashboardProp: ITextExplanationViewProps = {
       dataSummary: textExplanationDashboardData,
       isQA:
@@ -72,7 +68,6 @@ export class TextLocalImportancePlots extends React.Component<ITextLocalImportan
   }
 
   private getTextFeatureImportances(): ITextFeatureImportances[] {
-    console.log("!!sele: ", this.props.selectedItems);
     const featureImportances = this.props.selectedItems.map((row) => {
       const textFeatureImportance =
         this.context.modelExplanationData?.precomputedExplanations

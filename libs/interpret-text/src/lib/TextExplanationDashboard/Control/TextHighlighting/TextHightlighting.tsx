@@ -30,12 +30,9 @@ export class TextHighlighting extends React.Component<IChartProps> {
    */
   public render(): React.ReactNode {
     const text = this.props.text;
-    console.log("!!text: ", text, this.props.isInput);
     const importances = this.props.localExplanations;
-    console.log("!!importances: ", importances);
     const k = this.props.topK;
     const sortedList = Utils.sortedTopK(importances, k, this.props.radio);
-    console.log("!!sortedList: ", sortedList, text.length, importances.length);
     return (
       <Stack styles={scrollablePaneStyles}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
@@ -55,42 +52,15 @@ export class TextHighlighting extends React.Component<IChartProps> {
               const classNames = textHighlightingStyles(isWordSelected);
               let styleType = classNames.normal;
               const score = importances[wordIndex];
-              console.log("!!word: ", wordIndex, word, score);
-              // let isBold = false;
               if (sortedList.includes(wordIndex)) {
                 if (score > 0) {
                   styleType = classNames.highlighted;
                 } else if (score < 0) {
                   styleType = classNames.boldunderline;
-                  // isBold = true;
                 } else {
                   styleType = classNames.normal;
                 }
               }
-              // if (isBold) {
-              //   return (
-              //     <Label
-              //       key={wordIndex}
-              //       className={styleType}
-              //       title={score.toString()}
-              //     >
-              //       {word}
-              //     </Label>
-              //   );
-              // }
-              // if (word === "[SEP]") {
-              //   return (
-              //     <Text
-              //       variant={"large"}
-              //       key={wordIndex}
-              //       className={styleType}
-              //       title={score.toString()}
-              //       styles={{ root: { whiteSpace: "pre-line" } }}
-              //     >
-              //       {word}
-              //     </Text>
-              //   );
-              // }
 
               return (
                 <Text

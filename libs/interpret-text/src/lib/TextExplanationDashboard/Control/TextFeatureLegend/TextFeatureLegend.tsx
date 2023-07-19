@@ -19,6 +19,7 @@ const legendStackTokens: IStackTokens = {
 
 interface ITextFeatureLegendProps {
   selectedWord: string;
+  isQA?: boolean;
 }
 
 export class TextFeatureLegend extends React.Component<ITextFeatureLegendProps> {
@@ -55,24 +56,28 @@ export class TextFeatureLegend extends React.Component<ITextFeatureLegendProps> 
             </Stack.Item>
           </Stack>
         </Stack.Item>
-        <Stack.Item>
-          <Text>{localization.InterpretText.Legend.cls}</Text>
-        </Stack.Item>
-        <Stack.Item>
-          <Text>{localization.InterpretText.Legend.sep}</Text>
-        </Stack.Item>
-        <Stack.Item>
-          <Stack horizontal>
+        {this.props.isQA && (
+          <Stack tokens={componentStackTokens}>
             <Stack.Item>
-              <Text>
-                {localization.InterpretText.Legend.selectedWord} &nbsp;
-              </Text>
+              <Text>{localization.InterpretText.Legend.cls}</Text>
             </Stack.Item>
             <Stack.Item>
-              <Text>{this.props.selectedWord}</Text>
+              <Text>{localization.InterpretText.Legend.sep}</Text>
+            </Stack.Item>
+            <Stack.Item>
+              <Stack horizontal>
+                <Stack.Item>
+                  <Text>
+                    {localization.InterpretText.Legend.selectedWord} &nbsp;
+                  </Text>
+                </Stack.Item>
+                <Stack.Item>
+                  <Text>{this.props.selectedWord}</Text>
+                </Stack.Item>
+              </Stack>
             </Stack.Item>
           </Stack>
-        </Stack.Item>
+        )}
       </Stack>
     );
   }

@@ -28,7 +28,6 @@ export function getTokenImportancesChartOptions(
   theme: ITheme
 ): IHighchartsConfig {
   const importances = props.localExplanations;
-  // console.log("importances: ", importances);
   const k = props.topK;
   const sortedList = Utils.sortedTopK(importances, k, props.radio);
 
@@ -42,7 +41,6 @@ export function getTokenImportancesChartOptions(
     [],
     []
   ];
-  // console.log("!!sortedList: ", sortedList);
   sortedList.forEach((idx, i) => {
     let str = "";
     if (idx > 1) {
@@ -89,9 +87,6 @@ export function getTokenImportancesChartOptions(
   x.reverse();
   y.reverse();
   const data: any[] = [];
-  // console.log("!!x: ", x);
-  // console.log("!!y: ", y);
-  // console.log("!!y: ", ylabel);
   x.forEach((p, index) => {
     const temp = {
       color:
@@ -104,8 +99,6 @@ export function getTokenImportancesChartOptions(
     data.push(temp);
   });
 
-  // console.log("!!data: ", data);
-
   const series: SeriesOptionsType[] = [
     {
       data,
@@ -115,7 +108,7 @@ export function getTokenImportancesChartOptions(
       dataLabels: {
         enabled: true,
         inside: true, // Display data labels inside the bars
-        color: "#FFFFFF", // Text color of the data labels
+        color: theme.semanticColors.bodyBackground, // Text color of the data labels
         align: "center", // Align data labels to the center of each bar
         formatter: function () {
           return this.x; // Display the Y-axis value inside the bar

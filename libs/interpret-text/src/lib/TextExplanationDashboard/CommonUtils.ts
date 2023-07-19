@@ -79,11 +79,11 @@ export class Utils {
   }
 
   public static addItem(value: number, radio: string | undefined): boolean {
-    if (radio === RadioKeys.All) {
-      return true;
-    } else if (radio === RadioKeys.Neg && value <= 0) {
-      return true;
-    } else if (radio === RadioKeys.Pos && value >= 0) {
+    if (
+      radio === RadioKeys.All ||
+      (radio === RadioKeys.Neg && value <= 0) ||
+      (radio === RadioKeys.Pos && value >= 0)
+    ) {
       return true;
     }
     return false;
