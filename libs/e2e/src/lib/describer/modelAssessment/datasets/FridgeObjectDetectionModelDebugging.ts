@@ -19,6 +19,7 @@ export const FridgeObjectDetectionModelDebugging = {
     hasFeatureImportanceComponent: false
   },
   featureNames: ["image"],
+  isObjectDetection: true,
   modelOverviewData: {
     hasModelOverviewComponent: true,
     initialCohorts: [
