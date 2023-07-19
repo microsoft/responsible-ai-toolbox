@@ -2,13 +2,10 @@
 // Licensed under the MIT License.
 
 import {
-    describeDataBalance,
-    modelAssessmentDatasets
+  describeDataBalance,
+  modelAssessmentDatasets
 } from "@responsible-ai/e2e";
 
 const datasetShape =
-    modelAssessmentDatasets.FridgeImageClassificationModelDebugging;
-describeDataBalance(
-    datasetShape,
-    "FridgeImageClassificationModelDebugging"
-);
+  modelAssessmentDatasets.FridgeImageClassificationModelDebugging;
+describeDataBalance(datasetShape, "FridgeImageClassificationModelDebugging");

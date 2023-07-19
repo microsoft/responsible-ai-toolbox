@@ -16,12 +16,17 @@ export function describeDatasetExplorer(
   datasetShape: IModelAssessmentData,
   name?: keyof typeof modelAssessmentDatasets
 ): void {
-  const isVision = datasetShape.isObjectDetection || datasetShape.isMultiLabel || datasetShape.isImageClassification;
+  const isVision =
+    datasetShape.isObjectDetection ||
+    datasetShape.isMultiLabel ||
+    datasetShape.isImageClassification;
   describe(testName, () => {
     before(() => {
       visit(name);
       cy.get("#ModelAssessmentDashboard").should("exist");
-      const tab = isVision ? Locators.VisionDataAnalysisTab : Locators.DataAnalysisTab;
+      const tab = isVision
+        ? Locators.VisionDataAnalysisTab
+        : Locators.DataAnalysisTab;
       cy.get(tab).eq(1).click();
     });
     if (datasetShape.featureImportanceData?.noDataset) {

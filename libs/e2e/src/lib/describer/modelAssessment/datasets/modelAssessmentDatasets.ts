@@ -8,13 +8,13 @@ import { IModelAssessmentData } from "../IModelAssessmentData";
 import { CensusClassificationModelDebugging } from "./CensusClassificationModelDebugging";
 import { DiabetesDecisionMaking } from "./DiabetesDecisionMaking";
 import { DiabetesRegressionModelDebugging } from "./DiabetesRegressionModelDebugging";
+import { FridgeImageClassificationModelDebugging } from "./FridgeImageClassificationModelDebugging";
+import { FridgeMultilabelModelDebugging } from "./FridgeMultilabelModelDebugging";
+import { FridgeObjectDetectionModelDebugging } from "./FridgeObjectDetectionModelDebugging";
 import { HousingClassificationModelDebugging } from "./HousingClassificationModelDebugging";
 import { HousingDecisionMaking } from "./HousingDecisionMaking";
 import { HousingRegression } from "./HousingRegression";
 import { MulticlassDnnModelDebugging } from "./MulticlassDnnModelDebugging";
-import { FridgeImageClassificationModelDebugging } from "./FridgeImageClassificationModelDebugging";
-import { FridgeMultilabelModelDebugging } from "./FridgeMultilabelModelDebugging";
-import { FridgeObjectDetectionModelDebugging } from "./FridgeObjectDetectionModelDebugging";
 
 export const regExForNumbersWithBrackets = /^\((\d+)\)$/; // Ex: (60)
 
@@ -22,13 +22,13 @@ const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
   CensusClassificationModelDebugging,
   DiabetesDecisionMaking,
   DiabetesRegressionModelDebugging,
+  FridgeImageClassificationModelDebugging,
+  FridgeMultilabelModelDebugging,
+  FridgeObjectDetectionModelDebugging,
   HousingClassificationModelDebugging,
   HousingDecisionMaking,
   HousingRegression,
-  MulticlassDnnModelDebugging,
-  FridgeImageClassificationModelDebugging,
-  FridgeMultilabelModelDebugging,
-  FridgeObjectDetectionModelDebugging
+  MulticlassDnnModelDebugging
 };
 
 const modelAssessmentDatasetsDataBalanceExperience: {
