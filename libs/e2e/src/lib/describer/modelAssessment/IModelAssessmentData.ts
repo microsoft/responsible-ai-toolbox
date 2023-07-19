@@ -18,6 +18,7 @@ export interface IModelAssessmentData {
   isBinary?: boolean;
   isObjectDetection?: boolean;
   isMultiLabel?: boolean;
+  isImageClassification?: boolean;
 }
 
 export interface IErrorAnalysisData {

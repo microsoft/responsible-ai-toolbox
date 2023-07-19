@@ -18,6 +18,7 @@ export const FridgeImageClassificationModelDebugging = {
   featureImportanceData: {
     hasFeatureImportanceComponent: false
   },
+  isImageClassification: true,
   featureNames: ["image"],
   modelOverviewData: {
     hasModelOverviewComponent: true,
