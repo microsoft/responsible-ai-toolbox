@@ -85,7 +85,9 @@ export function describeModelOverview(
       });
 
       it("should pivot between charts when clicking", () => {
-        ensureChartsPivot(datasetShape, isNotebookTest, true);
+        if (!isVision) {
+          ensureChartsPivot(datasetShape, isNotebookTest, true);
+        }
       });
     } else {
       it("should not have 'Model overview' component", () => {

@@ -27,7 +27,7 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     "not.exist"
   );
   if (isNotebookTest) {
-    if (getNumberOfCohorts(datasetShape, includeNewCohort) <= 1 && datasetShape.isObjectDetection == true) {
+    if (getNumberOfCohorts(datasetShape, includeNewCohort) <= 1 || isVision) {
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
         "not.exist"
       );
@@ -61,15 +61,11 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     );
   } else if (datasetShape.isMultiLabel) {
     metricsOrder.push("exactMatchRatio", "hammingScore");
-  } else if (datasetShape.isImageClassification) {
+  } else if (datasetShape.isObjectDetection) {
     metricsOrder.push(
-      "accuracy",
-      "f1Score",
-      "precisionScore",
-      "recallScore",
-      "falsePositiveRate",
-      "falseNegativeRate",
-      "selectionRate"
+      "meanAveragePrecision",
+      "averagePrecision",
+      "averageRecall",
     );
   } else {
     metricsOrder.push("accuracy");

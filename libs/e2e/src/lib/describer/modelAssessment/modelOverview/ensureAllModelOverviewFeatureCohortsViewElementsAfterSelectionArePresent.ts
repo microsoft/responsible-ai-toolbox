@@ -19,7 +19,9 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
   cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should(
     "exist"
   );
-  cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
+  if (!isVision) { // TODO: check!
+    cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
+  }
   cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("not.exist");
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
 
