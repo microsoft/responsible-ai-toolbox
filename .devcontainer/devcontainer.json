@@ -1,0 +1,10 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": 16,
+      "nodeGypDependencies": true
+    },
+    "ghcr.io/devcontainers/features/anaconda:1": {}
+  }
+}
