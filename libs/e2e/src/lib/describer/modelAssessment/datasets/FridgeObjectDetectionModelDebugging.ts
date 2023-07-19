@@ -32,6 +32,15 @@ export const FridgeObjectDetectionModelDebugging = {
         name: "All data",
         sampleSize: "5"
       }
-    ]
+    ],
+    newCohort: {
+      metrics: {
+        averagePrecision: "1",
+        averageRecall: "1",
+        meanAveragePrecision: "1"
+      },
+      name: "New Cohort",
+      sampleSize: "2"
+    }
   }
 };

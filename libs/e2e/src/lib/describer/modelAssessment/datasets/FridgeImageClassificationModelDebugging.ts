@@ -36,6 +36,19 @@ export const FridgeImageClassificationModelDebugging = {
         name: "All data",
         sampleSize: "134"
       }
-    ]
+    ],
+    newCohort: {
+      metrics: {
+        accuracy: "0.9",
+          macroF1: "0.9",
+          macroPrecision: "0.9",
+          macroRecall: "0.9",
+          microF1: "0.9",
+          microPrecision: "0.9",
+          microRecall: "0.9"
+      },
+      name: "New Cohort",
+      sampleSize: "5"
+    }
   }
 };

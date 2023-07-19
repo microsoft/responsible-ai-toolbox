@@ -12,7 +12,8 @@ import {
 
 export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
   datasetShape: IModelAssessmentData,
-  selectedFeatures: number
+  selectedFeatures: number,
+  isVision: boolean
 ): void {
   cy.get(Locators.ModelOverviewFeatureSelection).should("exist");
   cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should(
@@ -22,17 +23,19 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
   cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("not.exist");
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
 
-  const defaultVisibleChart = getDefaultVisibleChart(
-    datasetShape.isRegression,
-    datasetShape.isBinary
-  );
-  assertChartVisibility(datasetShape, defaultVisibleChart);
+  if (!isVision) {
+    const defaultVisibleChart = getDefaultVisibleChart(
+      datasetShape.isRegression,
+      datasetShape.isBinary
+    );
+    assertChartVisibility(datasetShape, defaultVisibleChart);
 
-  assertNumberOfChartRowsEqual(
-    datasetShape,
-    selectedFeatures,
-    defaultVisibleChart
-  );
+    assertNumberOfChartRowsEqual(
+      datasetShape,
+      selectedFeatures,
+      defaultVisibleChart
+    );
+  }
 }
 
 function assertNumberOfChartRowsEqual(

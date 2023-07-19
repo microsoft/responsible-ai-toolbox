@@ -31,6 +31,14 @@ export const FridgeMultilabelModelDebugging = {
         name: "All data",
         sampleSize: "10"
       }
-    ]
+    ],
+    newCohort: {
+      metrics: {
+        exactMatchRatio: "1",
+        hammingScore: "1"
+      },
+      name: "New Cohort",
+      sampleSize: "3"
+    }
   }
 };

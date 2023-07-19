@@ -25,7 +25,7 @@ export function describeModelOverview(
     const isVision =
       datasetShape.isObjectDetection ||
       datasetShape.isMultiLabel ||
-      datasetShape.isImageClassification;
+      datasetShape.isImageClassification ? true : false;
     if (isNotebookTest) {
       before(() => {
         visit(name);
@@ -62,7 +62,8 @@ export function describeModelOverview(
         );
         ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
           datasetShape,
-          1
+          1,
+          isVision
         );
       });
 
@@ -74,7 +75,8 @@ export function describeModelOverview(
         );
         ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
           datasetShape,
-          2
+          2,
+          isVision
         );
       });
 
