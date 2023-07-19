@@ -22,13 +22,18 @@ export function describeModelOverview(
   isNotebookTest = true
 ): void {
   describe(testName, () => {
+    const isVision =
+      datasetShape.isObjectDetection ||
+      datasetShape.isMultiLabel ||
+      datasetShape.isImageClassification;
     if (isNotebookTest) {
       before(() => {
         visit(name);
       });
     } else {
       before(() => {
-        cy.visit(`#/modelAssessment/${name}/light/english/Version-2`);
+        const dashboardName = isVision ? "modelAssessmentVision" : "modelAssessment";
+        cy.visit(`#/${dashboardName}/${name}/light/english/Version-2`);
       });
     }
 

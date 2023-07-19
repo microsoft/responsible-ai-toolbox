@@ -16,6 +16,10 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   includeNewCohort: boolean,
   isNotebookTest: boolean
 ): void {
+  const isVision =
+    datasetShape.isObjectDetection ||
+    datasetShape.isMultiLabel ||
+    datasetShape.isImageClassification;
   const data = datasetShape.modelOverviewData;
   const initialCohorts = data?.initialCohorts;
   cy.get(Locators.ModelOverviewFeatureSelection).should("not.exist");
@@ -23,7 +27,7 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     "not.exist"
   );
   if (isNotebookTest) {
-    if (getNumberOfCohorts(datasetShape, includeNewCohort) <= 1) {
+    if (getNumberOfCohorts(datasetShape, includeNewCohort) <= 1 && datasetShape.isObjectDetection == true) {
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
         "not.exist"
       );
@@ -44,6 +48,28 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
       "meanAbsoluteError",
       "meanSquaredError",
       "meanPrediction"
+    );
+  } else if (datasetShape.isImageClassification) {
+    metricsOrder.push(
+      "accuracy",
+      "f1Score",
+      "precisionScore",
+      "recallScore",
+      "falsePositiveRate",
+      "falseNegativeRate",
+      "selectionRate"
+    );
+  } else if (datasetShape.isMultiLabel) {
+    metricsOrder.push("exactMatchRatio", "hammingScore");
+  } else if (datasetShape.isImageClassification) {
+    metricsOrder.push(
+      "accuracy",
+      "f1Score",
+      "precisionScore",
+      "recallScore",
+      "falsePositiveRate",
+      "falseNegativeRate",
+      "selectionRate"
     );
   } else {
     metricsOrder.push("accuracy");
@@ -69,7 +95,7 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     });
   });
 
-  if (isNotebookTest) {
+  if (isNotebookTest && !isVision) {
     cy.get(Locators.ModelOverviewHeatmapCells)
       .should("have.length", (cohorts?.length || 0) * (metricsOrder.length + 1))
       .each(($cell) => {
@@ -87,17 +113,19 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     "not.exist"
   );
 
-  const defaultVisibleChart = getDefaultVisibleChart(
-    datasetShape.isRegression,
-    datasetShape.isBinary
-  );
-  assertChartVisibility(datasetShape, defaultVisibleChart);
-
-  if (defaultVisibleChart === Locators.ModelOverviewMetricChart) {
-    ensureNotebookModelOverviewMetricChartIsCorrect(
-      isNotebookTest,
-      datasetShape,
-      includeNewCohort
+  if (!isVision) {
+    const defaultVisibleChart = getDefaultVisibleChart(
+      datasetShape.isRegression,
+      datasetShape.isBinary
     );
+    assertChartVisibility(datasetShape, defaultVisibleChart);
+
+    if (defaultVisibleChart === Locators.ModelOverviewMetricChart) {
+      ensureNotebookModelOverviewMetricChartIsCorrect(
+        isNotebookTest,
+        datasetShape,
+        includeNewCohort
+      );
+    }
   }
 }

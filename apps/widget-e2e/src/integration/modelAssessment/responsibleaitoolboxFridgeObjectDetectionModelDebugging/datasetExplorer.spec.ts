@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 import {
-  describeVisionDatasetExplorer,
-  modelAssessmentVisionDatasets
+  describeDatasetExplorer,
+  modelAssessmentDatasets
 } from "@responsible-ai/e2e";
 const datasetShape =
-  modelAssessmentVisionDatasets.FridgeObjectDetectionModelDebugging;
-describeVisionDatasetExplorer(
+  modelAssessmentDatasets.FridgeObjectDetectionModelDebugging;
+describeDatasetExplorer(
   datasetShape,
   "FridgeObjectDetectionModelDebugging"
 );
