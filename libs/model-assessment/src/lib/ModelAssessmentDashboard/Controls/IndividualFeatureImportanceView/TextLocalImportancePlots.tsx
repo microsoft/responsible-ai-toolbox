@@ -29,7 +29,10 @@ export interface ITextLocalImportancePlotsProps {
 export interface ITextFeatureImportances {
   text: string[];
   importances: number[][];
+  baseValues?: number[][];
   prediction: number[];
+  predictedY?: number[] | number[][] | string[] | string | number;
+  trueY?: number[] | number[][] | string[] | string | number;
 }
 
 export class TextLocalImportancePlots extends React.Component<ITextLocalImportancePlotsProps> {
@@ -46,9 +49,16 @@ export class TextLocalImportancePlots extends React.Component<ITextLocalImportan
     const textExplanationDashboardData: ITextExplanationDashboardData = {
       classNames,
       localExplanations: textFeatureImportances.importances,
+      baseValues: textFeatureImportances.baseValues,
       prediction: textFeatureImportances.prediction,
-      text: textFeatureImportances.text
+      text: textFeatureImportances.text,
+      trueY: textFeatureImportances.trueY,
+      predictedY: textFeatureImportances.predictedY
     };
+    console.log(
+      "textExplanationDashboardData: ",
+      textExplanationDashboardData.baseValues
+    );
     const dashboardProp: ITextExplanationViewProps = {
       dataSummary: textExplanationDashboardData,
       isQA:
@@ -62,12 +72,13 @@ export class TextLocalImportancePlots extends React.Component<ITextLocalImportan
   }
 
   private getTextFeatureImportances(): ITextFeatureImportances[] {
+    console.log("!!sele: ", this.props.selectedItems);
     const featureImportances = this.props.selectedItems.map((row) => {
       const textFeatureImportance =
         this.context.modelExplanationData?.precomputedExplanations
           ?.textFeatureImportance?.[row[0]];
       if (!textFeatureImportance) {
-        return { importances: [], prediction: [], text: [] };
+        return { importances: [], baseValues: [], prediction: [], text: [] };
       }
       const text = textFeatureImportance?.text;
       const rowDict = this.props.jointDataset.getRow(row[0]);
@@ -78,10 +89,16 @@ export class TextLocalImportancePlots extends React.Component<ITextLocalImportan
           return rowDict[key];
         });
       const importances: number[][] = textFeatureImportance?.localExplanations;
+      const baseValues = textFeatureImportance?.baseValues;
+      const trueY = this.context.dataset.true_y[row[0]];
+      const predictedY = this.context.dataset.predicted_y?.[row[0]];
       return {
         importances,
+        baseValues,
         prediction,
-        text
+        text,
+        trueY,
+        predictedY
       };
     });
     return featureImportances;

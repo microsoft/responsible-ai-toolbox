@@ -75,7 +75,7 @@ export class FeatureImportancesTab extends React.PureComponent<
       return React.Fragment;
     }
     const classNames = featureImportanceTabStyles();
-
+    console.log("!!jointDataset: ", this.context.dataset);
     return (
       <Stack className={classNames.container}>
         <Pivot

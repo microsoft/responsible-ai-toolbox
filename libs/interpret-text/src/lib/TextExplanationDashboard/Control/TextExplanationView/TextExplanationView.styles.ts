@@ -11,6 +11,8 @@ import {
 export interface ITextExplanationDashboardStyles {
   chartRight: IStyle;
   textHighlighting: IStyle;
+  predictedAnswer: IStyle;
+  boldText: IStyle;
 }
 
 export const textExplanationDashboardStyles: () => IProcessedStyleSet<ITextExplanationDashboardStyles> =
@@ -29,6 +31,13 @@ export const textExplanationDashboardStyles: () => IProcessedStyleSet<ITextExpla
         maxHeight: "200px",
         minWidth: "400px",
         padding: "25px"
+      },
+      predictedAnswer: {
+        fontWeight: "bold",
+        paddingBottom: "14px"
+      },
+      boldText: {
+        fontWeight: "bold"
       }
     });
   };

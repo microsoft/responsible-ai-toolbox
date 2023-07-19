@@ -17,7 +17,11 @@ const legendStackTokens: IStackTokens = {
   padding: "s"
 };
 
-export class TextFeatureLegend extends React.Component {
+interface ITextFeatureLegendProps {
+  selectedWord: string;
+}
+
+export class TextFeatureLegend extends React.Component<ITextFeatureLegendProps> {
   public render(): React.ReactNode {
     const classNames = textFeatureLegendStyles();
     return (
@@ -48,6 +52,24 @@ export class TextFeatureLegend extends React.Component {
               <Text>
                 {localization.InterpretText.Legend.negFeatureImportance}
               </Text>
+            </Stack.Item>
+          </Stack>
+        </Stack.Item>
+        <Stack.Item>
+          <Text>{localization.InterpretText.Legend.cls}</Text>
+        </Stack.Item>
+        <Stack.Item>
+          <Text>{localization.InterpretText.Legend.sep}</Text>
+        </Stack.Item>
+        <Stack.Item>
+          <Stack horizontal>
+            <Stack.Item>
+              <Text>
+                {localization.InterpretText.Legend.selectedWord} &nbsp;
+              </Text>
+            </Stack.Item>
+            <Stack.Item>
+              <Text>{this.props.selectedWord}</Text>
             </Stack.Item>
           </Stack>
         </Stack.Item>

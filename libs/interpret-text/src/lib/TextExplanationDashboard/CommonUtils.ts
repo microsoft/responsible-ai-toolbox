@@ -78,6 +78,17 @@ export class Utils {
     return sortedList;
   }
 
+  public static addItem(value: number, radio: string | undefined): boolean {
+    if (radio === RadioKeys.All) {
+      return true;
+    } else if (radio === RadioKeys.Neg && value <= 0) {
+      return true;
+    } else if (radio === RadioKeys.Pos && value >= 0) {
+      return true;
+    }
+    return false;
+  }
+
   public static takeTopK(list: number[], k: number): number[] {
     /*
      * Returns a list after splicing and taking the top K

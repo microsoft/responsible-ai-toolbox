@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  Label,
   Text,
   Stack,
   IStackTokens,
@@ -25,16 +24,18 @@ const textStackTokens: IStackTokens = {
   padding: "s2"
 };
 
-export class TextHighlighting extends React.PureComponent<IChartProps> {
+export class TextHighlighting extends React.Component<IChartProps> {
   /*
    * Presents the document in an accessible manner with text highlighting
    */
   public render(): React.ReactNode {
-    const classNames = textHighlightingStyles();
     const text = this.props.text;
+    console.log("!!text: ", text, this.props.isInput);
     const importances = this.props.localExplanations;
+    console.log("!!importances: ", importances);
     const k = this.props.topK;
     const sortedList = Utils.sortedTopK(importances, k, this.props.radio);
+    console.log("!!sortedList: ", sortedList, text.length, importances.length);
     return (
       <Stack styles={scrollablePaneStyles}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
@@ -47,30 +48,49 @@ export class TextHighlighting extends React.PureComponent<IChartProps> {
             styles={textStackStyles}
           >
             {text.map((word, wordIndex) => {
+              const isWordSelected =
+                (this.props.selectedTokenIndex &&
+                  wordIndex === this.props.selectedTokenIndex) ||
+                false;
+              const classNames = textHighlightingStyles(isWordSelected);
               let styleType = classNames.normal;
               const score = importances[wordIndex];
-              let isBold = false;
+              console.log("!!word: ", wordIndex, word, score);
+              // let isBold = false;
               if (sortedList.includes(wordIndex)) {
                 if (score > 0) {
                   styleType = classNames.highlighted;
                 } else if (score < 0) {
                   styleType = classNames.boldunderline;
-                  isBold = true;
+                  // isBold = true;
                 } else {
                   styleType = classNames.normal;
                 }
               }
-              if (isBold) {
-                return (
-                  <Label
-                    key={wordIndex}
-                    className={styleType}
-                    title={score.toString()}
-                  >
-                    {word}
-                  </Label>
-                );
-              }
+              // if (isBold) {
+              //   return (
+              //     <Label
+              //       key={wordIndex}
+              //       className={styleType}
+              //       title={score.toString()}
+              //     >
+              //       {word}
+              //     </Label>
+              //   );
+              // }
+              // if (word === "[SEP]") {
+              //   return (
+              //     <Text
+              //       variant={"large"}
+              //       key={wordIndex}
+              //       className={styleType}
+              //       title={score.toString()}
+              //       styles={{ root: { whiteSpace: "pre-line" } }}
+              //     >
+              //       {word}
+              //     </Text>
+              //   );
+              // }
 
               return (
                 <Text
@@ -78,6 +98,7 @@ export class TextHighlighting extends React.PureComponent<IChartProps> {
                   key={wordIndex}
                   className={styleType}
                   title={score.toString()}
+                  onClick={() => this.handleClick(wordIndex)}
                 >
                   {word}
                 </Text>
@@ -88,4 +109,13 @@ export class TextHighlighting extends React.PureComponent<IChartProps> {
       </Stack>
     );
   }
+
+  private readonly handleClick = (wordIndex: number) => {
+    if (this.props.isInput) {
+      return;
+    }
+    if (this.props.onSelectedTokenChange) {
+      this.props.onSelectedTokenChange(wordIndex);
+    }
+  };
 }

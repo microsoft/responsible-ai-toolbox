@@ -6,7 +6,6 @@ import {
   defaultModelAssessmentContext,
   getFeatureNamesAfterDrop,
   IModelAssessmentContext,
-  JointDataset,
   ModelAssessmentContext,
   ModelTypes
 } from "@responsible-ai/core-ui";
@@ -47,11 +46,6 @@ export class IndividualFeatureImportanceView extends React.Component<
       this.context.modelMetadata.featureNames,
       this.context.jointDataset.datasetMetaData?.featureMetaData
         ?.dropped_features
-    );
-
-    console.log(
-      "!!jointDataset: ",
-      this.props.jointDataset.unwrap(JointDataset.TrueYLabel)
     );
 
     return (

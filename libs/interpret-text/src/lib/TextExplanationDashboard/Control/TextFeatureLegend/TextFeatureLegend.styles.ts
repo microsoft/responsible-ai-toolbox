@@ -7,10 +7,6 @@ import {
   IProcessedStyleSet,
   getTheme
 } from "@fluentui/react";
-import {
-  getPrimaryBackgroundChartColor,
-  getPrimaryChartColor
-} from "@responsible-ai/core-ui";
 
 export interface ITextFeatureLegendStyles {
   legend: IStyle;
@@ -26,12 +22,12 @@ export const textFeatureLegendStyles: () => IProcessedStyleSet<ITextFeatureLegen
         color: theme.semanticColors.disabledText
       },
       negFeatureImportance: {
-        color: getPrimaryChartColor(theme),
-        textDecorationLine: "underline"
+        color: theme.semanticColors.bodyBackground,
+        backgroundColor: theme.semanticColors.link
       },
       posFeatureImportance: {
-        backgroundColor: getPrimaryChartColor(theme),
-        color: getPrimaryBackgroundChartColor(theme)
+        backgroundColor: theme.semanticColors.errorText,
+        color: theme.semanticColors.bodyBackground
       }
     });
   };
