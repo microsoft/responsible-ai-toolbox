@@ -47,7 +47,7 @@ export const FridgeImageClassificationModelDebugging = {
         microPrecision: "0.9",
         microRecall: "0.9"
       },
-      name: "New Cohort",
+      name: "CohortCreateE2E-image-classification",
       sampleSize: "5"
     }
   }

@@ -39,7 +39,7 @@ export const FridgeObjectDetectionModelDebugging = {
         averageRecall: "1",
         meanAveragePrecision: "1"
       },
-      name: "New Cohort",
+      name: "CohortCreateE2E-object-detection",
       sampleSize: "2"
     }
   }

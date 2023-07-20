@@ -37,7 +37,7 @@ export const FridgeMultilabelModelDebugging = {
         exactMatchRatio: "1",
         hammingScore: "1"
       },
-      name: "New Cohort",
+      name: "CohortCreateE2E-multilabel",
       sampleSize: "3"
     }
   }

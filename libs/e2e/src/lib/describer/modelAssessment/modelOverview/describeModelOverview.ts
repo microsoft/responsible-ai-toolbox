@@ -86,9 +86,7 @@ export function describeModelOverview(
       });
 
       it("should show new cohorts in charts", () => {
-        if (!isVision) {
-          ensureNewCohortsShowUpInCharts(datasetShape, isNotebookTest);
-        }
+        ensureNewCohortsShowUpInCharts(datasetShape, isNotebookTest, isVision);
       });
 
       it("should pivot between charts when clicking", () => {
