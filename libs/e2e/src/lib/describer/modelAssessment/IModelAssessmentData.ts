@@ -6,6 +6,7 @@ export interface IModelAssessmentData {
   modelStatisticsData?: IModelStatisticsData;
   modelOverviewData?: IModelOverviewData;
   datasetExplorerData?: IDatasetExplorerData;
+  visionDataExplorerData?: IVisionDataExplorerData;
   featureImportanceData?: IFeatureImportanceData;
   dataBalanceData?: IDataBalanceData;
   causalAnalysisData?: ICausalAnalysisData;
@@ -84,6 +85,11 @@ export interface IDatasetExplorerData {
   colorValueButton?: string;
   noY?: boolean;
   cohortDatasetNewValue?: string;
+}
+
+export interface IVisionDataExplorerData {
+  hasVisionDataExplorerComponent?: boolean;
+
 }
 
 export interface IDEWhiskerPlotData {
