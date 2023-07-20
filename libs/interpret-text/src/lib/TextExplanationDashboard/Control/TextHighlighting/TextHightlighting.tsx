@@ -68,7 +68,7 @@ export class TextHighlighting extends React.Component<IChartProps> {
                   key={wordIndex}
                   className={styleType}
                   title={score.toString()}
-                  onClick={() => this.handleClick(wordIndex)}
+                  onClick={(): void => this.handleClick(wordIndex)}
                 >
                   {word}
                 </Text>
@@ -80,7 +80,7 @@ export class TextHighlighting extends React.Component<IChartProps> {
     );
   }
 
-  private readonly handleClick = (wordIndex: number) => {
+  private readonly handleClick = (wordIndex: number): void => {
     if (this.props.isInput) {
       return;
     }

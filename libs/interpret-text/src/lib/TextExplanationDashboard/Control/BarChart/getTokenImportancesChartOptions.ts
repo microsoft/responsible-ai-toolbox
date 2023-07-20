@@ -103,19 +103,12 @@ export function getTokenImportancesChartOptions(
     {
       data,
       dataLabels: {
-        
-// Text color of the data labels
-align: "center",
-        
-
-// Display data labels inside the bars
-color: theme.semanticColors.bodyBackground, 
-        
-enabled: true, 
-        // Align data labels to the center of each bar
-formatter () {
+        align: "center",
+        color: theme.semanticColors.bodyBackground,
+        enabled: true,
+        formatter(): string | number | undefined {
           return this.x; // Display the Y-axis value inside the bar
-        }, 
+        },
         inside: true
       },
       name: "",
