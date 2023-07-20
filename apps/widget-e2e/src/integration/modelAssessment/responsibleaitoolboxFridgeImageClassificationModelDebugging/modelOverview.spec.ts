@@ -5,5 +5,6 @@ import {
   describeModelOverview,
   modelAssessmentDatasets
 } from "@responsible-ai/e2e";
-const datasetShape = modelAssessmentDatasets.FridgeImageClassificationModelDebugging;
+const datasetShape =
+  modelAssessmentDatasets.FridgeImageClassificationModelDebugging;
 describeModelOverview(datasetShape, "FridgeImageClassificationModelDebugging");

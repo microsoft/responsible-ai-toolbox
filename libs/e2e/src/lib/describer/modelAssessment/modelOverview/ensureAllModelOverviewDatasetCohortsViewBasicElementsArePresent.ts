@@ -65,7 +65,7 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     metricsOrder.push(
       "meanAveragePrecision",
       "averagePrecision",
-      "averageRecall",
+      "averageRecall"
     );
   } else {
     metricsOrder.push("accuracy");

@@ -22,7 +22,7 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
   cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("not.exist");
 
   if (!isVision) {
-    cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");  // TODO: check!
+    cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist"); // TODO: check!
     cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
 
     const defaultVisibleChart = getDefaultVisibleChart(

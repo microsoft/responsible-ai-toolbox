@@ -25,14 +25,18 @@ export function describeModelOverview(
     const isVision =
       datasetShape.isObjectDetection ||
       datasetShape.isMultiLabel ||
-      datasetShape.isImageClassification ? true : false;
+      datasetShape.isImageClassification
+        ? true
+        : false;
     if (isNotebookTest) {
       before(() => {
         visit(name);
       });
     } else {
       before(() => {
-        const dashboardName = isVision ? "modelAssessmentVision" : "modelAssessment";
+        const dashboardName = isVision
+          ? "modelAssessmentVision"
+          : "modelAssessment";
         cy.visit(`#/${dashboardName}/${name}/light/english/Version-2`);
       });
     }
