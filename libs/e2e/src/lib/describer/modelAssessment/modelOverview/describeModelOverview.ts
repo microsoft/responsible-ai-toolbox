@@ -47,7 +47,8 @@ export function describeModelOverview(
         ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
           datasetShape,
           false,
-          isNotebookTest
+          isNotebookTest,
+          isVision
         );
       });
 

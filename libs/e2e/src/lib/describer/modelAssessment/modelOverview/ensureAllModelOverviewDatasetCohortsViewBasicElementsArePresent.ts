@@ -14,12 +14,9 @@ import { getNumberOfCohorts } from "./numberOfCohorts";
 export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   datasetShape: IModelAssessmentData,
   includeNewCohort: boolean,
-  isNotebookTest: boolean
+  isNotebookTest: boolean,
+  isVision: boolean
 ): void {
-  const isVision =
-    datasetShape.isObjectDetection ||
-    datasetShape.isMultiLabel ||
-    datasetShape.isImageClassification;
   const data = datasetShape.modelOverviewData;
   const initialCohorts = data?.initialCohorts;
   cy.get(Locators.ModelOverviewFeatureSelection).should("not.exist");
@@ -91,17 +88,6 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     });
   });
 
-  if (isNotebookTest && !isVision) {
-    cy.get(Locators.ModelOverviewHeatmapCells)
-      .should("have.length", (cohorts?.length || 0) * (metricsOrder.length + 1))
-      .each(($cell) => {
-        // somehow the cell string is one invisible character longer, trim
-        expect($cell.text().slice(0, $cell.text().length - 1)).to.be.oneOf(
-          heatmapCellContents
-        );
-      });
-  }
-
   cy.get(
     Locators.ModelOverviewDisaggregatedAnalysisBaseCohortDisclaimer
   ).should("not.exist");
@@ -110,6 +96,16 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   );
 
   if (!isVision) {
+    if (isNotebookTest) {
+      cy.get(Locators.ModelOverviewHeatmapCells)
+        .should("have.length", (cohorts?.length || 0) * (metricsOrder.length + 1))
+        .each(($cell) => {
+          // somehow the cell string is one invisible character longer, trim
+          expect($cell.text().slice(0, $cell.text().length - 1)).to.be.oneOf(
+            heatmapCellContents
+          );
+        });
+    }
     const defaultVisibleChart = getDefaultVisibleChart(
       datasetShape.isRegression,
       datasetShape.isBinary
