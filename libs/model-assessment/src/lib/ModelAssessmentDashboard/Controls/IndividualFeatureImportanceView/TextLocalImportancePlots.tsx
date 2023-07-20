@@ -47,13 +47,13 @@ export class TextLocalImportancePlots extends React.Component<ITextLocalImportan
     }
     const classNames = this.props.jointDataset.getModelClasses();
     const textExplanationDashboardData: ITextExplanationDashboardData = {
+      baseValues: textFeatureImportances.baseValues,
       classNames,
       localExplanations: textFeatureImportances.importances,
-      baseValues: textFeatureImportances.baseValues,
+      predictedY: textFeatureImportances.predictedY,
       prediction: textFeatureImportances.prediction,
       text: textFeatureImportances.text,
-      trueY: textFeatureImportances.trueY,
-      predictedY: textFeatureImportances.predictedY
+      trueY: textFeatureImportances.trueY
     };
     const dashboardProp: ITextExplanationViewProps = {
       dataSummary: textExplanationDashboardData,
@@ -73,7 +73,7 @@ export class TextLocalImportancePlots extends React.Component<ITextLocalImportan
         this.context.modelExplanationData?.precomputedExplanations
           ?.textFeatureImportance?.[row[0]];
       if (!textFeatureImportance) {
-        return { importances: [], baseValues: [], prediction: [], text: [] };
+        return { baseValues: [], importances: [], prediction: [], text: [] };
       }
       const text = textFeatureImportance?.text;
       const rowDict = this.props.jointDataset.getRow(row[0]);
@@ -88,12 +88,12 @@ export class TextLocalImportancePlots extends React.Component<ITextLocalImportan
       const trueY = this.context.dataset.true_y[row[0]];
       const predictedY = this.context.dataset.predicted_y?.[row[0]];
       return {
-        importances,
         baseValues,
+        importances,
+        predictedY,
         prediction,
         text,
-        trueY,
-        predictedY
+        trueY
       };
     });
     return featureImportances;
