@@ -19,9 +19,16 @@ export const textExplanationDashboardStyles: () => IProcessedStyleSet<ITextExpla
   () => {
     const theme = getTheme();
     return mergeStyleSets<ITextExplanationDashboardStyles>({
+      boldText: {
+        fontWeight: "bold"
+      },
       chartRight: {
         maxWidth: "230px",
         minWidth: "230px"
+      },
+      predictedAnswer: {
+        fontWeight: "bold",
+        paddingBottom: "14px"
       },
       textHighlighting: {
         borderColor: theme.semanticColors.variantBorder,
@@ -31,13 +38,6 @@ export const textExplanationDashboardStyles: () => IProcessedStyleSet<ITextExpla
         maxHeight: "200px",
         minWidth: "400px",
         padding: "25px"
-      },
-      predictedAnswer: {
-        fontWeight: "bold",
-        paddingBottom: "14px"
-      },
-      boldText: {
-        fontWeight: "bold"
       }
     });
   };

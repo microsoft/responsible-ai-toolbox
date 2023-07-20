@@ -5,10 +5,10 @@ import { ITheme } from "@fluentui/react";
 import { IHighchartsConfig } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { SeriesOptionsType } from "highcharts";
+import _ from "lodash";
 
 import { Utils } from "../../CommonUtils";
 import { IChartProps } from "../../Interfaces/IChartProps";
-import _ from "lodash";
 
 function findNearestIndex(
   array: number[],
@@ -102,18 +102,25 @@ export function getTokenImportancesChartOptions(
   const series: SeriesOptionsType[] = [
     {
       data,
+      dataLabels: {
+        
+// Text color of the data labels
+align: "center",
+        
+
+// Display data labels inside the bars
+color: theme.semanticColors.bodyBackground, 
+        
+enabled: true, 
+        // Align data labels to the center of each bar
+formatter () {
+          return this.x; // Display the Y-axis value inside the bar
+        }, 
+        inside: true
+      },
       name: "",
       showInLegend: false,
-      type: "bar",
-      dataLabels: {
-        enabled: true,
-        inside: true, // Display data labels inside the bars
-        color: theme.semanticColors.bodyBackground, // Text color of the data labels
-        align: "center", // Align data labels to the center of each bar
-        formatter: function () {
-          return this.x; // Display the Y-axis value inside the bar
-        }
-      }
+      type: "bar"
     }
   ];
   return {
@@ -123,12 +130,12 @@ export function getTokenImportancesChartOptions(
     },
     plotOptions: {
       bar: {
+        minPointLength: 10,
         tooltip: {
           pointFormatter(): string {
             return `${tooltip[this.x || 0]}: ${this.y || 0}`;
           }
-        },
-        minPointLength: 10 // Set the minimum pixel width for bars
+        } // Set the minimum pixel width for bars
       }
     },
     series,

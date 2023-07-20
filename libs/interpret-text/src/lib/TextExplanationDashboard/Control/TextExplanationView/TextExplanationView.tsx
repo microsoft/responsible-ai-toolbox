@@ -45,16 +45,18 @@ export class TextExplanationView extends React.Component<
     this.state = {
       importances,
       maxK,
+      outputFeatureImportances: this.getOutputFeatureImportances(),
       qaRadio: QAExplanationType.Start,
-      radio: RadioKeys.All,
-      selectedToken: 0, // default to the first token
-      singleTokenImportances: this.props.dataSummary.localExplanations[0].map(
+      radio: RadioKeys.All, 
+      selectedToken: 0, 
+      // default to the first token
+singleTokenImportances: this.props.dataSummary.localExplanations[0].map(
         (row) => row[0]
-      ), // get importance for first token
-      text: this.props.dataSummary.text,
+      ),
+      // get importance for first token
+text: this.props.dataSummary.text,
       tokenIndexes: [...this.props.dataSummary.text].map((_, index) => index),
-      topK,
-      outputFeatureImportances: this.getOutputFeatureImportances()
+      topK
     };
   }
 
@@ -185,7 +187,7 @@ export class TextExplanationView extends React.Component<
                   localExplanations={inputLocalExplanations}
                   topK={this.state.topK}
                   radio={this.state.radio}
-                  isInput={true}
+                  isInput
                 />
               </Stack.Item>
             </Stack>

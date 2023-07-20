@@ -39,18 +39,18 @@ export const textHighlightingStyles: (
   };
   const selectedTextStyle = isTextSelected
     ? {
+        textDecorationColor: "black",
         textDecorationLine: "underline",
         textDecorationStyle: "solid",
-        textDecorationThickness: "4px",
-        textDecorationColor: "black"
+        textDecorationThickness: "4px"
       }
     : {};
   return mergeStyleSets<ITextHighlightingStyles>({
     boldunderline: mergeStyles([
       normal,
       {
-        color: theme.semanticColors.bodyBackground,
         backgroundColor: theme.semanticColors.link,
+        color: theme.semanticColors.bodyBackground,
         fontSize: theme.fonts.large.fontSize,
         margin: "2px",
         padding: 0

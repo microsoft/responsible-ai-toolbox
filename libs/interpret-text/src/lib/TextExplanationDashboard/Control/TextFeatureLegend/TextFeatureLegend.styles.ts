@@ -22,8 +22,8 @@ export const textFeatureLegendStyles: () => IProcessedStyleSet<ITextFeatureLegen
         color: theme.semanticColors.disabledText
       },
       negFeatureImportance: {
-        color: theme.semanticColors.bodyBackground,
-        backgroundColor: theme.semanticColors.link
+        backgroundColor: theme.semanticColors.link,
+        color: theme.semanticColors.bodyBackground
       },
       posFeatureImportance: {
         backgroundColor: theme.semanticColors.errorText,
