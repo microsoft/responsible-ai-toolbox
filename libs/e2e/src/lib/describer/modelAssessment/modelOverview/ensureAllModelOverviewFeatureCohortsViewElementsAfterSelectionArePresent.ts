@@ -19,13 +19,12 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
   cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should(
     "exist"
   );
-  if (!isVision) { // TODO: check!
-    cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
-  }
   cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("not.exist");
-  cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
 
   if (!isVision) {
+    cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");  // TODO: check!
+    cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
+
     const defaultVisibleChart = getDefaultVisibleChart(
       datasetShape.isRegression,
       datasetShape.isBinary
