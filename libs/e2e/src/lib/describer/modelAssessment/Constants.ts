@@ -176,5 +176,9 @@ export enum Locators {
   AggregateBalanceMeasuresHeader = "#aggregateBalanceMeasures #aggregateBalanceMeasuresHeader",
   AggregateBalanceMeasuresTable = "#aggregateBalanceMeasures .ms-DetailsList",
   AggregateBalanceMeasuresTableColumns = "#aggregateBalanceMeasures .ms-DetailsList-headerWrapper div[aria-label]",
-  AggregateBalanceMeasuresTableRows = "#aggregateBalanceMeasures .ms-DetailsRow"
+  AggregateBalanceMeasuresTableRows = "#aggregateBalanceMeasures .ms-DetailsRow",
+  VisionDataExplorerCohortDropDown = "#dataExplorerCohortDropdown",
+  VisionDataExplorerSearchBox = "#dataExplorerSearchBox",
+  VisionDataExplorerThumbnailSize = "dataExplorerThumbnailSize",
+  VisionDataExplorerCohortPickerLabel = "dataExplorerCohortPickerLabel"
 }

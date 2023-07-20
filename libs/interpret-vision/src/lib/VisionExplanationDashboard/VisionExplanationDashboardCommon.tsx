@@ -68,6 +68,7 @@ export class VisionExplanationDashboardCommon extends React.Component<
               <Slider
                 max={80}
                 min={20}
+                id="dataExplorerThumbnailSize"
                 className={this.props.classNames.slider}
                 label={localization.InterpretVision.Dashboard.thumbnailSize}
                 defaultValue={50}
