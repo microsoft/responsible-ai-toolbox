@@ -16,6 +16,9 @@ export interface IModelAssessmentData {
   isMulticlass?: boolean;
   isRegression?: boolean;
   isBinary?: boolean;
+  isObjectDetection?: boolean;
+  isMultiLabel?: boolean;
+  isImageClassification?: boolean;
 }
 
 export interface IErrorAnalysisData {
@@ -176,5 +179,8 @@ export enum RAINotebookNames {
   "HousingDecisionMaking" = "responsibleaidashboard-housing-decision-making.py",
   "HousingDecisionMakingDataBalanceExperience" = "responsibleaidashboard-housing-decision-making.py",
   "MulticlassDnnModelDebugging" = "responsibleaidashboard-multiclass-dnn-model-debugging.py",
-  "MulticlassDnnModelDebuggingDataBalanceExperience" = "responsibleaidashboard-multiclass-dnn-model-debugging.py"
+  "MulticlassDnnModelDebuggingDataBalanceExperience" = "responsibleaidashboard-multiclass-dnn-model-debugging.py",
+  "FridgeImageClassificationModelDebugging" = "responsibleaidashboard-fridge-image-classification-model-debugging.py",
+  "FridgeMultilabelModelDebugging" = "responsibleaidashboard-fridge-multilabel-image-classification-model-debugging.py",
+  "FridgeObjectDetectionModelDebugging" = "responsibleaidashboard-fridge-object-detection-model-debugging.py"
 }
