@@ -11,22 +11,39 @@ export function getOutputFeatureImportances(
   localExplanations: number[][],
   baseValues?: number[][]
 ): number[][] {
-  const startSumOfFeatureImportances = localExplanations[0].map((_, index) =>
-    localExplanations[0].reduce((sum, row) => sum + row[index], 0)
+  const startSumOfFeatureImportances = getSumOfFeatureImportances(
+    localExplanations[0]
   );
-  const startOutputFeatureImportances = baseValues?.[0].map(
-    (bValue, index) => startSumOfFeatureImportances[index] + bValue
+  const endSumOfFeatureImportances = getSumOfFeatureImportances(
+    localExplanations[1]
   );
-  const endSumOfFeatureImportances = localExplanations[1].map((_, index) =>
-    localExplanations[1].reduce((sum, row) => sum + row[index], 0)
+  const startOutputFeatureImportances = getOutputFeatureImportancesIntl(
+    startSumOfFeatureImportances,
+    baseValues?.[0]
   );
-  const endOutputFeatureImportances = baseValues?.[1].map(
-    (bValue, index) => endSumOfFeatureImportances[index] + bValue
+  const endOutputFeatureImportances = getOutputFeatureImportancesIntl(
+    endSumOfFeatureImportances,
+    baseValues?.[1]
   );
   return [
     startOutputFeatureImportances || [],
     endOutputFeatureImportances || []
   ];
+}
+
+export function getSumOfFeatureImportances(importances: number[]): number[] {
+  return importances.map((_, index) =>
+    importances.reduce((sum, row) => sum + row[index], 0)
+  );
+}
+
+export function getOutputFeatureImportancesIntl(
+  sumOfFeatureImportances: number[],
+  baseValues?: number[]
+): number[] | undefined {
+  return baseValues?.map(
+    (bValue, index) => sumOfFeatureImportances[index] + bValue
+  );
 }
 
 export function calculateTopKImportances(importances: number[]): number {

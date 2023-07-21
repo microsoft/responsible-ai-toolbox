@@ -207,16 +207,18 @@ export class TextExplanationView extends React.Component<
   }
 
   private getImportanceForSingleToken(index: number): number[] {
-    return this.state.qaRadio === QAExplanationType.Start
-      ? this.props.dataSummary.localExplanations[0].map((row) => row[index])
-      : this.props.dataSummary.localExplanations[1].map((row) => row[index]);
+    const expIndex = this.state.qaRadio === QAExplanationType.Start ? 0 : 1;
+    return this.props.dataSummary.localExplanations[expIndex].map(
+      (row) => row[index]
+    );
   }
 
   private getBaseValue(): number {
     if (this.props.dataSummary.baseValues) {
-      return this.state.qaRadio === QAExplanationType.Start
-        ? this.props.dataSummary.baseValues?.[0][this.state.selectedToken]
-        : this.props.dataSummary.baseValues?.[1][this.state.selectedToken];
+      const expIndex = this.state.qaRadio === QAExplanationType.Start ? 0 : 1;
+      return this.props.dataSummary.baseValues?.[expIndex][
+        this.state.selectedToken
+      ];
     }
     return 0;
   }
@@ -229,7 +231,7 @@ export class TextExplanationView extends React.Component<
     _event?: React.FormEvent,
     item?: IChoiceGroupOption
   ): void => {
-    if (item?.key !== undefined) {
+    if (item?.key) {
       this.setState({ radio: item.key });
     }
   };
@@ -238,7 +240,7 @@ export class TextExplanationView extends React.Component<
     _event?: React.FormEvent,
     item?: IChoiceGroupOption
   ): void => {
-    if (item?.key !== undefined) {
+    if (item?.key) {
       const singleTokenImportances = this.getImportanceForSingleToken(
         this.state.selectedToken
       );

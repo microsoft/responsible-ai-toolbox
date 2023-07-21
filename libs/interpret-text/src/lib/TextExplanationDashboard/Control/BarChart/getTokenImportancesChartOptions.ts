@@ -71,12 +71,22 @@ export function getTokenImportancesChartOptions(
     const baseValueFeatureValueIndex = findNearestIndex(x, props.baseValue);
     if (outputFeatureValueIndex && baseValueFeatureValueIndex) {
       if (Utils.addItem(props.outputFeatureValue, props.radio)) {
-        x.splice(outputFeatureValueIndex, 0, props.outputFeatureValue);
-        ylabel.splice(outputFeatureValueIndex, 0, outputFeatureImportanceLabel);
+        addItem(
+          x,
+          props.outputFeatureValue,
+          ylabel,
+          outputFeatureImportanceLabel,
+          outputFeatureValueIndex
+        );
       }
       if (Utils.addItem(props.baseValue, props.radio)) {
-        x.splice(baseValueFeatureValueIndex, 0, props.baseValue);
-        ylabel.splice(baseValueFeatureValueIndex, 0, baseValueLabel);
+        addItem(
+          x,
+          props.baseValue,
+          ylabel,
+          baseValueLabel,
+          baseValueFeatureValueIndex
+        );
       }
     }
   }
@@ -141,4 +151,15 @@ export function getTokenImportancesChartOptions(
       }
     }
   };
+}
+
+function addItem(
+  x: any[],
+  xValue: any,
+  yLabel: any[],
+  yLabelValue: any,
+  index: number
+): void {
+  x.splice(index, 0, xValue);
+  yLabel.splice(index, 0, yLabelValue);
 }

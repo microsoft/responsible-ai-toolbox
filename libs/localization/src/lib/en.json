@@ -1376,7 +1376,7 @@
       "startingPosition": "STARTING POSITION",
       "endingPosition": "ENDING POSITION",
       "predictedAnswer": "Predicted answer: ",
-      "trueAnswer": "True Answer: ",
+      "trueAnswer": "True answer: ",
       "inputs": "Inputs",
       "outputs": "Outputs"
     },
