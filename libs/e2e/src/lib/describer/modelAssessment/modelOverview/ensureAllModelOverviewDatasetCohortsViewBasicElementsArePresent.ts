@@ -24,7 +24,10 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     "not.exist"
   );
   if (isNotebookTest) {
-    if (getNumberOfCohorts(datasetShape, includeNewCohort) <= 1 || datasetShape.isObjectDetection === true) {
+    if (
+      getNumberOfCohorts(datasetShape, includeNewCohort) <= 1 ||
+      datasetShape.isObjectDetection === true
+    ) {
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
         "not.exist"
       );
@@ -98,7 +101,10 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   if (!isVision) {
     if (isNotebookTest) {
       cy.get(Locators.ModelOverviewHeatmapCells)
-        .should("have.length", (cohorts?.length || 0) * (metricsOrder.length + 1))
+        .should(
+          "have.length",
+          (cohorts?.length || 0) * (metricsOrder.length + 1)
+        )
         .each(($cell) => {
           // somehow the cell string is one invisible character longer, trim
           expect($cell.text().slice(0, $cell.text().length - 1)).to.be.oneOf(
