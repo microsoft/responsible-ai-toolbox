@@ -183,5 +183,8 @@ export enum Locators {
   VisionDataExplorerCohortPickerLabel = "dataExplorerCohortPickerLabel",
   VisionDataExplorerImageExplorerViewButton = "#ModelAssessmentDashboard button[name='Image explorer view']",
   VisionDataExplorerTableViewButton = "#ModelAssessmentDashboard button[name='Table view']",
-  VisionDataExplorerClassViewButton = "#ModelAssessmentDashboard button[name='Class view']"
+  VisionDataExplorerClassViewButton = "#ModelAssessmentDashboard button[name='Class view']",
+  VisionDataAnalysisPivot = "#visionDataAnalysisPivot",
+  VisionDataAnalysisTab = "#visionDataAnalysisPivot .ms-Pivot-link",
+  VisionDataBalancePivotItem = "#visionDataAnalysisPivot button[name='Data balance']"
 }
