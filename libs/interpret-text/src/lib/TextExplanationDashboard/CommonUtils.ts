@@ -79,14 +79,11 @@ export class Utils {
   }
 
   public static addItem(value: number, radio: string | undefined): boolean {
-    if (
+    return (
       radio === RadioKeys.All ||
       (radio === RadioKeys.Neg && value <= 0) ||
       (radio === RadioKeys.Pos && value >= 0)
-    ) {
-      return true;
-    }
-    return false;
+    );
   }
 
   public static takeTopK(list: number[], k: number): number[] {
