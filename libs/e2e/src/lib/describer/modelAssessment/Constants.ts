@@ -180,5 +180,8 @@ export enum Locators {
   VisionDataExplorerCohortDropDown = "#dataExplorerCohortDropdown",
   VisionDataExplorerSearchBox = "#dataExplorerSearchBox",
   VisionDataExplorerThumbnailSize = "dataExplorerThumbnailSize",
-  VisionDataExplorerCohortPickerLabel = "dataExplorerCohortPickerLabel"
+  VisionDataExplorerCohortPickerLabel = "dataExplorerCohortPickerLabel",
+  VisionDataExplorerImageExplorerViewButton = "#ModelAssessmentDashboard button[name='Image explorer view']",
+  VisionDataExplorerTableViewButton = "#ModelAssessmentDashboard button[name='Table view']",
+  VisionDataExplorerClassViewButton = "#ModelAssessmentDashboard button[name='Class view']"
 }
