@@ -29,7 +29,10 @@ export interface ITextLocalImportancePlotsProps {
 export interface ITextFeatureImportances {
   text: string[];
   importances: number[][];
+  baseValues?: number[][];
   prediction: number[];
+  predictedY?: number[] | number[][] | string[] | string | number;
+  trueY?: number[] | number[][] | string[] | string | number;
 }
 
 export class TextLocalImportancePlots extends React.Component<ITextLocalImportancePlotsProps> {
@@ -44,10 +47,13 @@ export class TextLocalImportancePlots extends React.Component<ITextLocalImportan
     }
     const classNames = this.props.jointDataset.getModelClasses();
     const textExplanationDashboardData: ITextExplanationDashboardData = {
+      baseValues: textFeatureImportances.baseValues,
       classNames,
       localExplanations: textFeatureImportances.importances,
+      predictedY: textFeatureImportances.predictedY,
       prediction: textFeatureImportances.prediction,
-      text: textFeatureImportances.text
+      text: textFeatureImportances.text,
+      trueY: textFeatureImportances.trueY
     };
     const dashboardProp: ITextExplanationViewProps = {
       dataSummary: textExplanationDashboardData,
@@ -67,7 +73,7 @@ export class TextLocalImportancePlots extends React.Component<ITextLocalImportan
         this.context.modelExplanationData?.precomputedExplanations
           ?.textFeatureImportance?.[row[0]];
       if (!textFeatureImportance) {
-        return { importances: [], prediction: [], text: [] };
+        return { baseValues: [], importances: [], prediction: [], text: [] };
       }
       const text = textFeatureImportance?.text;
       const rowDict = this.props.jointDataset.getRow(row[0]);
@@ -78,10 +84,16 @@ export class TextLocalImportancePlots extends React.Component<ITextLocalImportan
           return rowDict[key];
         });
       const importances: number[][] = textFeatureImportance?.localExplanations;
+      const baseValues = textFeatureImportance?.baseValues;
+      const trueY = this.context.dataset.true_y[row[0]];
+      const predictedY = this.context.dataset.predicted_y?.[row[0]];
       return {
+        baseValues,
         importances,
+        predictedY,
         prediction,
-        text
+        text,
+        trueY
       };
     });
     return featureImportances;

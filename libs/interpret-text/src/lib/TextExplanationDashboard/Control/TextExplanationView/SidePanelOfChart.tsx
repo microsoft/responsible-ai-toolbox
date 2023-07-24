@@ -38,6 +38,9 @@ export interface ISidePanelOfChartProps {
   selectedWeightVector: WeightVectorOption;
   weightOptions: WeightVectorOption[];
   weightLabels: any;
+  baseValue?: number;
+  outputFeatureValue?: number;
+  selectedTokenIndex?: number;
   changeRadioButton: (
     _event?: React.FormEvent,
     item?: IChoiceGroupOption
@@ -63,6 +66,9 @@ export class SidePanelOfChart extends React.PureComponent<ISidePanelOfChartProps
             localExplanations={this.props.importances}
             topK={this.props.topK}
             radio={this.props.radio}
+            baseValue={this.props.baseValue}
+            outputFeatureValue={this.props.outputFeatureValue}
+            selectedTokenIndex={this.props.selectedTokenIndex}
           />
         </Stack.Item>
         <Stack.Item grow className={classNames.chartRight}>
