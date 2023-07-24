@@ -22,13 +22,22 @@ export function describeModelOverview(
   isNotebookTest = true
 ): void {
   describe(testName, () => {
+    const isVision =
+      datasetShape.isObjectDetection ||
+      datasetShape.isMultiLabel ||
+      datasetShape.isImageClassification
+        ? true
+        : false;
     if (isNotebookTest) {
       before(() => {
         visit(name);
       });
     } else {
       before(() => {
-        cy.visit(`#/modelAssessment/${name}/light/english/Version-2`);
+        const dashboardName = isVision
+          ? "modelAssessmentVision"
+          : "modelAssessment";
+        cy.visit(`#/${dashboardName}/${name}/light/english/Version-2`);
       });
     }
 
@@ -38,7 +47,8 @@ export function describeModelOverview(
         ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
           datasetShape,
           false,
-          isNotebookTest
+          isNotebookTest,
+          isVision
         );
       });
 
@@ -57,7 +67,8 @@ export function describeModelOverview(
         );
         ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
           datasetShape,
-          1
+          1,
+          isVision
         );
       });
 
@@ -69,16 +80,19 @@ export function describeModelOverview(
         );
         ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
           datasetShape,
-          2
+          2,
+          isVision
         );
       });
 
       it("should show new cohorts in charts", () => {
-        ensureNewCohortsShowUpInCharts(datasetShape, isNotebookTest);
+        ensureNewCohortsShowUpInCharts(datasetShape, isNotebookTest, isVision);
       });
 
       it("should pivot between charts when clicking", () => {
-        ensureChartsPivot(datasetShape, isNotebookTest, true);
+        if (!isVision) {
+          ensureChartsPivot(datasetShape, isNotebookTest, true);
+        }
       });
     } else {
       it("should not have 'Model overview' component", () => {
