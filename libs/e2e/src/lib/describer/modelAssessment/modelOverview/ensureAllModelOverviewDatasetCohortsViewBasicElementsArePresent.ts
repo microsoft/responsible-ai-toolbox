@@ -26,7 +26,7 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   if (isNotebookTest) {
     if (
       getNumberOfCohorts(datasetShape, includeNewCohort) <= 1 ||
-      datasetShape.isObjectDetection === true
+      datasetShape.isObjectDetection
     ) {
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
         "not.exist"
