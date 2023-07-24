@@ -65,7 +65,7 @@ export class VisionExplanationDashboard extends React.Component<
       <Stack
         horizontal={false}
         grow
-        id="visionDataAnalysisPivot"
+        id="VisionDataExplorer"
         tokens={{ childrenGap: "l1", padding: "m 40px" }}
       >
         <Stack.Item>
@@ -112,6 +112,7 @@ export class VisionExplanationDashboard extends React.Component<
       <Stack
         horizontal={false}
         grow
+        id="VisionDataExplorer"
         tokens={{ childrenGap: "l1", padding: "m 40px" }}
       >
         <VisionExplanationDashboardCommon

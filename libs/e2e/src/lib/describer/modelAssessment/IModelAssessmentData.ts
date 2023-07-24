@@ -92,7 +92,8 @@ export interface IDatasetExplorerData {
 
 export interface IVisionDataExplorerData {
   hasVisionDataExplorerComponent?: boolean;
-
+  errorInstances?: number;
+  successInstances?: number;
 }
 
 export interface IDEWhiskerPlotData {

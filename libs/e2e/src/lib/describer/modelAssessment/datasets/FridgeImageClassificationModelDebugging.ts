@@ -37,5 +37,10 @@ export const FridgeImageClassificationModelDebugging = {
         sampleSize: "134"
       }
     ]
+  },
+  visionDataExplorerData: {
+    hasVisionDataExplorerComponent: true,
+    errorInstances: 4,
+    successInstances: 130
   }
 };
