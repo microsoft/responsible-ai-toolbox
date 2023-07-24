@@ -176,5 +176,8 @@ export enum Locators {
   AggregateBalanceMeasuresHeader = "#aggregateBalanceMeasures #aggregateBalanceMeasuresHeader",
   AggregateBalanceMeasuresTable = "#aggregateBalanceMeasures .ms-DetailsList",
   AggregateBalanceMeasuresTableColumns = "#aggregateBalanceMeasures .ms-DetailsList-headerWrapper div[aria-label]",
-  AggregateBalanceMeasuresTableRows = "#aggregateBalanceMeasures .ms-DetailsRow"
+  AggregateBalanceMeasuresTableRows = "#aggregateBalanceMeasures .ms-DetailsRow",
+  VisionDataAnalysisPivot = "#visionDataAnalysisPivot",
+  VisionDataAnalysisTab = "#visionDataAnalysisPivot .ms-Pivot-link",
+  VisionDataBalancePivotItem = "#visionDataAnalysisPivot button[name='Data balance']"
 }
