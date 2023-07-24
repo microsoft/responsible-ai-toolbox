@@ -9,19 +9,28 @@ import { ensureAllVisionDataExplorerBasicElementsArePresent } from "./ensureAllV
 import { ensureAllVisionDataExplorerClassViewElementsAfterSelectionArePresent } from "./ensureAllVisionDataExplorerClassViewElementsAfterSelectionArePresent";
 import { ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelectionArePresent } from "./ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelectionArePresent";
 import { ensureAllVisionDataExplorerTableViewElementsAfterSelectionArePresent } from "./ensureAllVisionDataExplorerTableViewElementsAfterSelectionArePresent";
+import { ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresent } from "./ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresent"
 
 
 const testName = "VisionDataExplorer";
 
 export function describeVisionDataExplorer(
   datasetShape: IModelAssessmentData,
-  name?: keyof typeof modelAssessmentDatasets
+  name?: keyof typeof modelAssessmentDatasets,
+  isNotebookTest = true
 ): void {
   describe(testName, () => {
-    before(() => {
-      visit(name);
-      cy.get("#ModelAssessmentDashboard").should("exist");
-    });
+    if (isNotebookTest) {
+      before(() => {
+        visit(name);
+        cy.get("#ModelAssessmentDashboard").should("exist");
+      });
+    } else {
+      before(() => {
+        cy.visit(`#/modelAssessmentVision/${name}/light/english/Version-2`);
+        cy.get("#ModelAssessmentDashboard").should("exist");
+      });
+    }
 
     if (datasetShape.visionDataExplorerData?.hasVisionDataExplorerComponent) {
         it("should have basic components in the initial state", () => {
@@ -41,7 +50,7 @@ export function describeVisionDataExplorer(
         })
 
         it("should should Flyout view components when selected", () => {
-            ensureAllVisionDataExplorerFlyoutBasicElementsArePresent();
+            ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresent();
         })
     } else {
         it("should not have 'VisionDataExplorer' component", () => {

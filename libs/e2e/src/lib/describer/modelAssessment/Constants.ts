@@ -195,5 +195,9 @@ export enum Locators {
   VisionDataExplorerTabsViewTableList = "#VisionDataExplorer #tabsViewTableList",
   VisionDataExplorerTabsViewItemsSelectedStatement = "#VisionDataExplorer #itemsSelectedStatement",
   VisionDataExplorerTabsViewSaveCohortButton = "#VisionDataExplorer #saveCohortButton",
-  VisionDataExplorerPageSizeSelector = "#VisionDataExplorer #pageSizeSelector"
+  VisionDataExplorerPageSizeSelector = "#VisionDataExplorer #pageSizeSelector",
+  VisionDataExplorerClassViewLabelTypeDropdown = "#VisionDataExplorer #labelTypeDropdown",
+  VisionDataExplorerClassViewLabelDisplayDropdown = "#VisionDataExplorer #labelVisibilitySelectorsDropdown",
+  VisionDataExplorerClassViewDataCharacteristicsLegend = "#VisionDataExplorer #dataCharacteristicsLegend",
+  VisionDataExplorerClassViewContainer = "#VisionDataExplorer #classViewContainer"
 }

@@ -8,6 +8,11 @@ export function ensureAllVisionDataExplorerClassViewElementsAfterSelectionArePre
 
     cy.get(Locators.VisionDataExplorerPageSizeSelector).should("exist");
 
-    // TODO: label types & display widgets
-    // pagebox
+    cy.get(Locators.VisionDataExplorerClassViewLabelTypeDropdown).should("exist");
+    cy.get(Locators.VisionDataExplorerClassViewLabelDisplayDropdown).should("exist");
+
+    cy.get(Locators.VisionDataExplorerClassViewDataCharacteristicsLegend).should("exist");
+
+    cy.get(Locators.VisionDataExplorerClassViewDataCharacteristicsLegend).should("exist");
+    cy.get(Locators.VisionDataExplorerClassViewContainer).should("exist");
 }
