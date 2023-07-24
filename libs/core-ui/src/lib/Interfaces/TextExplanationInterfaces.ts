@@ -6,4 +6,7 @@ export interface ITextExplanationDashboardData {
   localExplanations: number[][];
   prediction: number[];
   text: string[];
+  baseValues?: number[][];
+  predictedY?: number[] | number[][] | string[] | string | number;
+  trueY?: number[] | number[][] | string[] | string | number;
 }

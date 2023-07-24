@@ -13,12 +13,13 @@ export interface ITextExplanationViewState {
   maxK: number;
   topK: number;
   radio: string;
-  // qaRadio?: string;
+  qaRadio?: string;
   importances: number[];
   singleTokenImportances: number[];
   selectedToken: number;
   tokenIndexes: number[];
   text: string[];
+  outputFeatureImportances: number[][];
 }
 
 export const options: IChoiceGroupOption[] = [
