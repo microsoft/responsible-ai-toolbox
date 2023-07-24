@@ -72,7 +72,8 @@ class WrappedIndexPredictorModel:
         if self.task_type in classif_tasks:
             dataset = self.dataset.iloc[:, 0].tolist()
             self.predictions = self.model.predict(dataset)
-            self.predictions = np.array(self.predictions)
+            if not isinstance(self.predictions, np.ndarray):
+                self.predictions = np.array(self.predictions)
             self.predict_proba = self.model.predict_proba(dataset)
         elif self.task_type == ModelTask.QUESTION_ANSWERING:
             self.predictions = self.model.predict(
