@@ -267,14 +267,15 @@ class ExplainerManager(BaseManager):
                 if device == Device.AUTO.value:
                     device = None
                 try:
-                    fl, _, _, = get_drise_saliency_map(img,
-                                                       self._model,
-                                                       len(self._classes),
-                                                       savename=str(index),
-                                                       nummasks=self._num_masks,
-                                                       maskres=mask_res_tuple,
-                                                       devicechoice=device,
-                                                       max_figures=5000)
+                    fl, _, _, = get_drise_saliency_map(
+                        img,
+                        self._model,
+                        len(self._classes),
+                        savename=str(index),
+                        nummasks=self._num_masks,
+                        maskres=mask_res_tuple,
+                        devicechoice=device,
+                        max_figures=5000)
                 except ValueError as ve:
                     if str(ve) == 'No detections found':
                         raise UserConfigValidationException(
@@ -589,7 +590,7 @@ class ExplainerManager(BaseManager):
         draw = ImageDraw.Draw(fail)
         font = ImageFont.load_default()
         text = "saliency map could not be created"
-        left, top, right, bottom = draw.textbbox((0,0), text, font)
+        left, top, right, bottom = draw.textbbox((0, 0), text, font)
         textwidth = right - left
         textheight = bottom - top
         x = (fail.width - textwidth) // 2
