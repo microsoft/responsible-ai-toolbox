@@ -53,7 +53,7 @@ export const FridgeImageClassificationModelDebugging = {
   },
   visionDataExplorerData: {
     hasVisionDataExplorerComponent: true,
-    errorInstances: 4,
-    successInstances: 130
+    errorInstances: 0,
+    successInstances: 10
   }
 };

@@ -43,7 +43,7 @@ export const FridgeMultilabelModelDebugging = {
   },
   visionDataExplorerData: {
     hasVisionDataExplorerComponent: true,
-    errorInstances: 2,
-    successInstances: 8
+    errorInstances: 0,
+    successInstances: 10
   }
 };

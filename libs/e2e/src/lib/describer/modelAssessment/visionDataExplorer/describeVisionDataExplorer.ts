@@ -12,7 +12,7 @@ import { ensureAllVisionDataExplorerTableViewElementsAfterSelectionArePresent } 
 import { ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresent } from "./ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresent"
 
 
-const testName = "VisionDataExplorer";
+const testName = "Vision Data Explorer";
 
 export function describeVisionDataExplorer(
   datasetShape: IModelAssessmentData,

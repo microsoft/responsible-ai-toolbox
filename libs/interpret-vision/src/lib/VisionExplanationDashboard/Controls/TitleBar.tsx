@@ -53,7 +53,7 @@ export class TitleBar extends React.Component<ITitleBarProps, ITitleBarState> {
               : localization.InterpretVision.Dashboard.titleBarSuccess}
           </Text>
         </Stack.Item>
-        <Stack.Item>
+        <Stack.Item id="instanceCount">
           <Text variant="large" className={classNames.titleBarNumber}>
             {this.props.count}
           </Text>

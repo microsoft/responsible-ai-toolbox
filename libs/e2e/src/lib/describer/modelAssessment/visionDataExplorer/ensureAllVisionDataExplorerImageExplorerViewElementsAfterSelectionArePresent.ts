@@ -14,9 +14,11 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
     cy.get(Locators.VisionDataExplorerLegendSuccess).should("exist");
 
     cy.get(Locators.VisionDataExplorerImageExplorerViewErrorInstances).should("exist");
-    cy.get(Locators.VisionDataExplorerImageExplorerViewErrorInstances).should("include.text", datasetShape.visionDataExplorerData?.errorInstances);
+    cy.get(Locators.VisionDataExplorerImageExplorerViewErrorInstances).should("include.text", "Error instances");
+    cy.get(Locators.VisionDataExplorerImageExplorerViewErrorInstanceCount).should("include.text", datasetShape.visionDataExplorerData?.errorInstances);
     cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessInstances).should("exist");
-    cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessInstances).should("include.text", datasetShape.visionDataExplorerData?.successInstances);
+    cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessInstances).should("include.text", "Success instances");
+    cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessInstanceCount).should("include.text", datasetShape.visionDataExplorerData?.successInstances);
 
     cy.get(Locators.VisionDataExplorerImageExplorerViewErrorImageContainer).should("exist");
     cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImageContainer).should("exist");
