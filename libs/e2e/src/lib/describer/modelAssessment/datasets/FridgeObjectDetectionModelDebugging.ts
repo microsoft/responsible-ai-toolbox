@@ -32,7 +32,16 @@ export const FridgeObjectDetectionModelDebugging = {
         name: "All data",
         sampleSize: "5"
       }
-    ]
+    ],
+    newCohort: {
+      metrics: {
+        averagePrecision: "1",
+        averageRecall: "1",
+        meanAveragePrecision: "1"
+      },
+      name: "CohortCreateE2E-object-detection",
+      sampleSize: "2"
+    }
   },
   visionDataExplorerData: {
     hasVisionDataExplorerComponent: true,
