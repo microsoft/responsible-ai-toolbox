@@ -92,6 +92,7 @@ class WrappedIndexPredictorModel:
             test = get_images(self.dataset, self.image_mode,
                               self.transformations)
         self.predictions = self.model.predict(test)
+        self.predictions = np.array(self.predictions)
         if task_type == ModelTask.MULTILABEL_IMAGE_CLASSIFICATION:
             predictions_joined = []
             for row in self.predictions:
