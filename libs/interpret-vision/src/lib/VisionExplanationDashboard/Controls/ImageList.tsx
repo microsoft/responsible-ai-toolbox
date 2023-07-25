@@ -129,6 +129,7 @@ export class ImageList extends React.Component<
             <Image
               {...imageProps}
               alt={alt}
+              id={`visionImage_${item?.index}`}
               src={`data:image/jpg;base64,${item?.image}`}
               onClick={this.callbackWrapper(item)}
               width={this.props.imageDim}
