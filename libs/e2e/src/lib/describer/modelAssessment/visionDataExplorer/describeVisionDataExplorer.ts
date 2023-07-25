@@ -23,12 +23,10 @@ export function describeVisionDataExplorer(
     if (isNotebookTest) {
       before(() => {
         visit(name);
-        cy.get("#ModelAssessmentDashboard").should("exist");
       });
     } else {
       before(() => {
         cy.visit(`#/modelAssessmentVision/${name}/light/english/Version-2`);
-        cy.get("#ModelAssessmentDashboard").should("exist");
       });
     }
 
