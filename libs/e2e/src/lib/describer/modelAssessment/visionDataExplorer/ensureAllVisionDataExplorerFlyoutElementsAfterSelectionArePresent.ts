@@ -7,6 +7,5 @@ export function ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresen
   cy.get(Locators.VisionDataExplorerImageExplorerViewButton).click();
 
   // TODO: click on flyout and get basic elements, then exit
-//   cy.get(Locators.VisionDataExplorerImageExplorerViewErrorImage).click();
-
+  //   cy.get(Locators.VisionDataExplorerImageExplorerViewErrorImage).click();
 }
