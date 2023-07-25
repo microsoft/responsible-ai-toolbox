@@ -50,10 +50,10 @@ export function getGroupedData(
     if (styles) {
       result.push({
         color:
-          styles[index].value.marker?.color || getPrimaryChartColor(getTheme()),
+          styles[index]?.value.marker?.color || getPrimaryChartColor(getTheme()),
         data: d,
         marker: {
-          symbol: styles[index].value.marker?.symbol?.toString() || "circle"
+          symbol: styles[index]?.value.marker?.symbol?.toString() || "circle"
         }
       });
     }
