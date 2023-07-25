@@ -4,15 +4,14 @@
 import { Locators } from "../Constants";
 
 export function ensureAllVisionDataExplorerBasicElementsArePresent(): void {
-  cy.get(Locators.VisionDataExplorerTableViewButton).click()
+  cy.get(Locators.VisionDataExplorerTableViewButton).click();
   constantButtons();
 
-  cy.get(Locators.VisionDataExplorerClassViewButton).click()
+  cy.get(Locators.VisionDataExplorerClassViewButton).click();
   constantButtons();
 
-  cy.get(Locators.VisionDataExplorerImageExplorerViewButton).click()
+  cy.get(Locators.VisionDataExplorerImageExplorerViewButton).click();
   constantButtons();
-
 }
 
 function constantButtons(): void {

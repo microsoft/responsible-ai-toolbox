@@ -4,7 +4,7 @@
 import { Locators } from "../Constants";
 
 export function ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresent(): void {
-    cy.get(Locators.VisionDataExplorerImageExplorerViewButton).click()
+  cy.get(Locators.VisionDataExplorerImageExplorerViewButton).click();
 
-    // TODO: click on flyout and get basic elements, then exit
+  // TODO: click on flyout and get basic elements, then exit
 }

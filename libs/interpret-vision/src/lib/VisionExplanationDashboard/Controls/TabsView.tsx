@@ -111,7 +111,10 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
                     type={TitleBarOptions.Error}
                   />
                 </Stack.Item>
-                <Stack.Item className={classNames.imageListContainer} id="errorImageContainer">
+                <Stack.Item
+                  className={classNames.imageListContainer}
+                  id="errorImageContainer"
+                >
                   <ImageList
                     items={this.props.errorInstances}
                     imageDim={this.props.imageDim}
@@ -127,7 +130,10 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
                     type={TitleBarOptions.Success}
                   />
                 </Stack.Item>
-                <Stack.Item className={classNames.imageListContainer}  id="successImageContainer">
+                <Stack.Item
+                  className={classNames.imageListContainer}
+                  id="successImageContainer"
+                >
                   <ImageList
                     items={this.props.successInstances}
                     imageDim={this.props.imageDim}

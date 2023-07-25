@@ -44,8 +44,8 @@ export const FridgeObjectDetectionModelDebugging = {
     }
   },
   visionDataExplorerData: {
-    hasVisionDataExplorerComponent: true,
     errorInstances: 0,
+    hasVisionDataExplorerComponent: true,
     successInstances: 5
   }
 };

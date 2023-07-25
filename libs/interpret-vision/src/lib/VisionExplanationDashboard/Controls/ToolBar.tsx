@@ -34,7 +34,10 @@ export class ToolBar extends React.Component<IToolBarProps> {
       });
     return (
       <Stack>
-        <Stack.Item className={classNames.cohortPickerLabelWrapper} id="dataExplorerCohortPickerLabel">
+        <Stack.Item
+          className={classNames.cohortPickerLabelWrapper}
+          id="dataExplorerCohortPickerLabel"
+        >
           <Text variant="mediumPlus" className={classNames.cohortPickerLabel}>
             {localization.Interpret.ModelPerformance.cohortPickerLabel}
           </Text>

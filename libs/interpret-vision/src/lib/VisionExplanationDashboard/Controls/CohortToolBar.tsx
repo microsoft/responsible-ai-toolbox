@@ -83,7 +83,10 @@ export class CohortToolBar extends React.Component<
     return (
       <Stack>
         <Stack horizontal tokens={stackTokens}>
-          <Stack.Item className={classNames.itemsSelectedContainer} id="itemsSelectedStatement">
+          <Stack.Item
+            className={classNames.itemsSelectedContainer}
+            id="itemsSelectedStatement"
+          >
             <Text>
               {this.state.selectionCount}{" "}
               {this.state.selectionCount === 1

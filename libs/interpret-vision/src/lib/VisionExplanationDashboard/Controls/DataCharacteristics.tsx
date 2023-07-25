@@ -270,9 +270,7 @@ export class DataCharacteristics extends React.Component<
     this.props.selectItem(item);
   };
 
-  private getPageHeight = (): number => {
-    return this.rowHeight;
-  };
+  private getPageHeight = (): number => this.rowHeight;
 
   private getItemCountForPageWrapper = (
     index: number

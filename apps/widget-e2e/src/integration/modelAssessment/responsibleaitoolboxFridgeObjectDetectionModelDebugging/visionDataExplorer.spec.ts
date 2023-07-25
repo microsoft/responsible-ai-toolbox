@@ -7,7 +7,4 @@ import {
 } from "@responsible-ai/e2e";
 const datasetShape =
   modelAssessmentDatasets.FridgeObjectDetectionModelDebugging;
-describeVisionDataExplorer(
-  datasetShape,
-  "FridgeObjectDetectionModelDebugging"
-);
+describeVisionDataExplorer(datasetShape, "FridgeObjectDetectionModelDebugging");
