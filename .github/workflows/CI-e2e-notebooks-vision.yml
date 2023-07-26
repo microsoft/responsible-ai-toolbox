@@ -81,6 +81,9 @@ jobs:
       - name: Install pytorch
         shell: bash -l {0}
         run: |
+          python -m pip install --upgrade pip
+          pip uninstall -y opencv-python
+          conda install --yes --quiet -c conda-forge opencv
           conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
 
       - name: Setup tools
@@ -90,19 +93,19 @@ jobs:
           pip install --upgrade setuptools
           pip install --upgrade "pip-tools<=6.13.0"
 
-      - name: Install dependencies
-        shell: bash -l {0}
-        run: |
-          pip install -r requirements-dev.txt
-          pip install -v -e .
-        working-directory: raiwidgets
-
       - name: Install vision dependencies
         shell: bash -l {0}
         run: |
           pip install -r requirements-dev.txt
           pip install .
         working-directory: responsibleai_vision
+
+      - name: Install dependencies
+        shell: bash -l {0}
+        run: |
+          pip install -r requirements-dev.txt
+          pip install -v -e .
+        working-directory: raiwidgets
 
       - name: Pip freeze
         shell: bash -l {0}
