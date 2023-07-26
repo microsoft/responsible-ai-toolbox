@@ -40,7 +40,7 @@ export function describeDatasetExplorer(
     if (!isVision) {
       describeAggregatePlot(datasetShape);
       describeCohortFunctionality(datasetShape);
-      describeIndividualDatapoints(datasetShape);
     }
+    describeIndividualDatapoints(datasetShape);
   });
 }
