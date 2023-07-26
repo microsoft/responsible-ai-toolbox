@@ -50,7 +50,7 @@ export function describeVisionDataExplorer(
       });
 
       it("should should Flyout view components when selected", () => {
-        ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresent();
+        ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresent(datasetShape);
       });
     } else {
       it("should not have 'VisionDataExplorer' component", () => {

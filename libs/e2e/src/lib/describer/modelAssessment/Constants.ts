@@ -205,5 +205,14 @@ export enum Locators {
   VisionDataExplorerClassViewLabelDisplayDropdown = "#VisionDataExplorer #labelVisibilitySelectorsDropdown",
   VisionDataExplorerClassViewDataCharacteristicsLegend = "#VisionDataExplorer #dataCharacteristicsLegend",
   VisionDataExplorerClassViewContainer = "#VisionDataExplorer #classViewContainer",
-  VisionDataExplorerImageExplorerViewErrorImage = "#VisionDataExplorer #successImageContainer #visionImage_0"
+  VisionDataExplorerImageExplorerViewSuccessImage = "#VisionDataExplorer #successImageContainer #visionImage_0",
+  VisionDataExplorerFlyoutPredictionTitle = "#flyoutPredictionTitle",
+  VisionDataExplorerFlyoutPredictionLabel = "#flyoutPredLabel",
+  VisionDataExplorerFlyoutGroundTruthLabel = "#flyoutGtLabel",
+  VisionDataExplorerFlyoutImage = "#flyoutImage_0",
+  VisionDataExplorerFlyoutExplanationImage = "#flyoutExplanationImage_0",
+  VisionDataExplorerFlyoutMetadata = "#flyoutMetadata",
+  VisionDataExplorerFlyoutCloseButton = "button[aria-label='Close']",
+  VisionDataExplorerFlyoutCanvasToolsImageContainer = "#canvasToolsDiv #selectionDiv #editorDiv",
+  VisionDataExplorerFlyoutObjectSelection = "#Object Selection"
 }
