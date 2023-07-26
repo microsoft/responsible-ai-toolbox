@@ -88,7 +88,9 @@ jobs:
       - if: ${{ (matrix.packageDirectory == 'responsibleai_vision') && ((matrix.pythonVersion == '3.7') || (matrix.pythonVersion == '3.8')) }}
         name: Install automl dependencies
         shell: bash -l {0}
+        # pycocotools is a downstream dependency of automl requirements, but fails to install with pip
         run: |
+          conda install pycocotools==2.0.4 -c conda-forge
           pip install -r ${{ matrix.packageDirectory }}/requirements-automl.txt
 
       - name: Install package
