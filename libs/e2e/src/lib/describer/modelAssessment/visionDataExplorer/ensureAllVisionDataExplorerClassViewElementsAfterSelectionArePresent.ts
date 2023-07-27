@@ -16,9 +16,5 @@ export function ensureAllVisionDataExplorerClassViewElementsAfterSelectionArePre
   cy.get(Locators.VisionDataExplorerClassViewDataCharacteristicsLegend).should(
     "exist"
   );
-
-  cy.get(Locators.VisionDataExplorerClassViewDataCharacteristicsLegend).should(
-    "exist"
-  );
   cy.get(Locators.VisionDataExplorerClassViewContainer).should("exist");
 }
