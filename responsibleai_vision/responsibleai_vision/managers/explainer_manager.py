@@ -265,14 +265,23 @@ class ExplainerManager(BaseManager):
                 # get_drise_saliency_map only recognizes GPU and CPU
                 if device == Device.AUTO.value:
                     device = None
-                fl, _, _, = get_drise_saliency_map(img,
-                                                   self._model,
-                                                   len(self._classes),
-                                                   savename=str(index),
-                                                   nummasks=self._num_masks,
-                                                   maskres=mask_res_tuple,
-                                                   devicechoice=device,
-                                                   max_figures=5000)
+                try:
+                    fl, _, _, = get_drise_saliency_map(
+                        img,
+                        self._model,
+                        len(self._classes),
+                        savename=str(index),
+                        nummasks=self._num_masks,
+                        maskres=mask_res_tuple,
+                        devicechoice=device,
+                        max_figures=5000)
+                except ValueError as ve:
+                    if str(ve) == 'No detections found':
+                        raise UserConfigValidationException(
+                            "No detections found in image. "
+                            "Please increase num_masks or mask_res.")
+                    else:
+                        raise ve
                 if object_index is None:
                     return fl
                 b64_string = fl[object_index]
@@ -576,11 +585,13 @@ class ExplainerManager(BaseManager):
         return self._task_type == ModelTask.OBJECT_DETECTION
 
     def _get_fail_str(self):
-        fail = Image.new('RGB', (100, 100))
+        fail = Image.new('RGB', (250, 250))
         draw = ImageDraw.Draw(fail)
         font = ImageFont.load_default()
         text = "saliency map could not be created"
-        textwidth, textheight = draw.textsize(text, font)
+        left, top, right, bottom = draw.textbbox((0, 0), text, font)
+        textwidth = right - left
+        textheight = bottom - top
         x = (fail.width - textwidth) // 2
         y = (fail.height - textheight) // 2
         draw.text((x, y), text, fill="white", font=font)
