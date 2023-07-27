@@ -25,9 +25,7 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsBeforeSelect
   );
   cy.get(
     Locators.VisionDataExplorerImageExplorerViewSuccessInstanceCount
-  ).should(
-    "not.exist"
-  );
+  ).should("not.exist");
 
   cy.get(
     Locators.VisionDataExplorerImageExplorerViewErrorImageContainer
@@ -36,10 +34,13 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsBeforeSelect
     Locators.VisionDataExplorerImageExplorerViewSuccessImageContainer
   ).should("not.exist");
 
-  cy.get(Locators.VisionDataExplorerImageExplorerViewImagePredictedY).should("not.exist");
-  cy.get(Locators.VisionDataExplorerImageExplorerViewImageTrueY).should("not.exist");
+  cy.get(Locators.VisionDataExplorerImageExplorerViewImagePredictedY).should(
+    "not.exist"
+  );
+  cy.get(Locators.VisionDataExplorerImageExplorerViewImageTrueY).should(
+    "not.exist"
+  );
 }
-
 
 export function ensureAllVisionDataExplorerTableViewElementsBeforeSelectionAreNotPresent(): void {
   cy.get(Locators.VisionDataExplorerTabsViewTableList).should("not.exist");
@@ -47,12 +48,15 @@ export function ensureAllVisionDataExplorerTableViewElementsBeforeSelectionAreNo
   cy.get(Locators.VisionDataExplorerTabsViewItemsSelectedStatement).should(
     "not.exist"
   );
-  cy.get(Locators.VisionDataExplorerTabsViewSaveCohortButton).should("not.exist");
+  cy.get(Locators.VisionDataExplorerTabsViewSaveCohortButton).should(
+    "not.exist"
+  );
 }
 
-
 export function ensureAllVisionDataExplorerClassViewElementsBeforeSelectionAreNotPresent(): void {
-  cy.get(Locators.VisionDataExplorerClassViewLabelTypeDropdown).should("not.exist");
+  cy.get(Locators.VisionDataExplorerClassViewLabelTypeDropdown).should(
+    "not.exist"
+  );
   cy.get(Locators.VisionDataExplorerClassViewLabelDisplayDropdown).should(
     "not.exist"
   );
