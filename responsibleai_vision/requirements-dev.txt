@@ -24,7 +24,6 @@ pydata-sphinx-theme==0.3.0
 transformers
 datasets
 tensorflow<2.11.0
-opencv-python
 
 fastai
 mlflow

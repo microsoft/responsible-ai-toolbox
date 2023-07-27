@@ -11,7 +11,6 @@ import warnings
 from pathlib import Path
 from typing import Any, List, Optional
 
-import cv2
 import matplotlib.pyplot as pl
 import numpy as np
 import pandas as pd
@@ -587,9 +586,9 @@ class ExplainerManager(BaseManager):
         draw.text((x, y), text, fill="white", font=font)
         fail.show()
         fail.save('fail.jpg')
-        image = get_image_from_path("fail.jpg", "RGB")
-        jpg_img = cv2.imencode('.jpg', image)
-        return base64.b64encode(jpg_img[1]).decode('utf-8')
+        byte_buffer = io.BytesIO()
+        fail.save(byte_buffer, format='JPEG')
+        return base64.b64encode(byte_buffer.getvalue()).decode('utf-8')
 
     def _save(self, path):
         """Save the ExplainerManager to the given path.
