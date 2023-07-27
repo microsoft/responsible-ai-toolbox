@@ -16,18 +16,11 @@ export function describeDatasetExplorer(
   datasetShape: IModelAssessmentData,
   name?: keyof typeof modelAssessmentDatasets
 ): void {
-  const isVision =
-    datasetShape.isObjectDetection ||
-    datasetShape.isMultiLabel ||
-    datasetShape.isImageClassification;
   describe(testName, () => {
     before(() => {
       visit(name);
       cy.get("#ModelAssessmentDashboard").should("exist");
-      const tab = isVision
-        ? Locators.VisionDataAnalysisTab
-        : Locators.DataAnalysisTab;
-      cy.get(tab).eq(1).click();
+      cy.get(Locators.DataAnalysisTab).eq(1).click();
     });
     if (datasetShape.featureImportanceData?.noDataset) {
       it("should render no data message", () => {
@@ -37,10 +30,8 @@ export function describeDatasetExplorer(
       });
       return;
     }
-    if (!isVision) {
-      describeAggregatePlot(datasetShape);
-      describeCohortFunctionality(datasetShape);
-      describeIndividualDatapoints(datasetShape);
-    }
+    describeAggregatePlot(datasetShape);
+    describeCohortFunctionality(datasetShape);
+    describeIndividualDatapoints(datasetShape);
   });
 }
