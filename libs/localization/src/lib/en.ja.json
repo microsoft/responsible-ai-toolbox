@@ -1133,12 +1133,19 @@
       "label": "ラベル",
       "colon": ": ",
       "startingPosition": "STARTING POSITION",
-      "endingPosition": "ENDING POSITION"
+      "endingPosition": "ENDING POSITION",
+      "predictedAnswer": "Predicted answer: ",
+      "trueAnswer": "True answer: ",
+      "inputs": "Inputs",
+      "outputs": "Outputs"
     },
     "Legend": {
       "featureLegend": "テキスト特徴の凡例",
       "posFeatureImportance": "正の特徴量の重要度",
-      "negFeatureImportance": "負の特徴量の重要度"
+      "negFeatureImportance": "負の特徴量の重要度",
+      "cls": "CLS: start of the sentence",
+      "sep": "SEP: end of the sentence",
+      "selectedWord": "Selected word: "
     },
     "BarChart": {
       "featureImportance": "特徴量の重要度"
