@@ -1133,12 +1133,19 @@
       "label": "Bezeichnung",
       "colon": ": ",
       "startingPosition": "STARTING POSITION",
-      "endingPosition": "ENDING POSITION"
+      "endingPosition": "ENDING POSITION",
+      "predictedAnswer": "Predicted answer: ",
+      "trueAnswer": "True answer: ",
+      "inputs": "Inputs",
+      "outputs": "Outputs"
     },
     "Legend": {
       "featureLegend": "TEXTFUNKTIONSLEGENDE",
       "posFeatureImportance": "POSITIVE FEATURERELEVANZ",
-      "negFeatureImportance": "NEGATIVE FEATURERELEVANZ"
+      "negFeatureImportance": "NEGATIVE FEATURERELEVANZ",
+      "cls": "CLS: start of the sentence",
+      "sep": "SEP: end of the sentence",
+      "selectedWord": "Selected word: "
     },
     "BarChart": {
       "featureImportance": "FEATURERELEVANZ"

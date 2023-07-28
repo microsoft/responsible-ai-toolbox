@@ -1133,12 +1133,19 @@
       "label": "標籤",
       "colon": ": ",
       "startingPosition": "STARTING POSITION",
-      "endingPosition": "ENDING POSITION"
+      "endingPosition": "ENDING POSITION",
+      "predictedAnswer": "Predicted answer: ",
+      "trueAnswer": "True answer: ",
+      "inputs": "Inputs",
+      "outputs": "Outputs"
     },
     "Legend": {
       "featureLegend": "文字特徵圖例",
       "posFeatureImportance": "負面特徵重要度",
-      "negFeatureImportance": "負面特徵重要性"
+      "negFeatureImportance": "負面特徵重要性",
+      "cls": "CLS: start of the sentence",
+      "sep": "SEP: end of the sentence",
+      "selectedWord": "Selected word: "
     },
     "BarChart": {
       "featureImportance": "特徵重要度"
