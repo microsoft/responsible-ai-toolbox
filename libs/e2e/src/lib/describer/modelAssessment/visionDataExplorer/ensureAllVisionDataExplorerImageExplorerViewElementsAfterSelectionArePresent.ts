@@ -4,9 +4,7 @@
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
-export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelectionArePresent(
-  datasetShape: IModelAssessmentData
-): void {
+export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelectionArePresent(): void {
   cy.get(Locators.VisionDataExplorerImageExplorerViewButton).click();
 
   cy.get(Locators.VisionDataExplorerPredictedLabel).should("exist");
