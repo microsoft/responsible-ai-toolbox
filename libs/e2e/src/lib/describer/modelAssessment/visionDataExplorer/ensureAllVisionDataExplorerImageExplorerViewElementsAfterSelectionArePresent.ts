@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { Locators } from "../Constants";
-import { IModelAssessmentData } from "../IModelAssessmentData";
 
 export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelectionArePresent(): void {
   cy.get(Locators.VisionDataExplorerImageExplorerViewButton).click();
