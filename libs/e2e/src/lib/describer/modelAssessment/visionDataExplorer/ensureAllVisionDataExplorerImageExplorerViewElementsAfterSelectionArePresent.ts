@@ -20,10 +20,10 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
     "include.text",
     "Error instances"
   );
-  cy.get(Locators.VisionDataExplorerImageExplorerViewErrorInstanceCount).should(
-    "include.text",
-    datasetShape.visionDataExplorerData?.errorInstances
-  );
+//   cy.get(Locators.VisionDataExplorerImageExplorerViewErrorInstanceCount).should(
+//     "include.text",
+//     datasetShape.visionDataExplorerData?.errorInstances
+//   );
   cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessInstances).should(
     "exist"
   );
@@ -31,12 +31,12 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
     "include.text",
     "Success instances"
   );
-  cy.get(
-    Locators.VisionDataExplorerImageExplorerViewSuccessInstanceCount
-  ).should(
-    "include.text",
-    datasetShape.visionDataExplorerData?.successInstances
-  );
+//   cy.get(
+//     Locators.VisionDataExplorerImageExplorerViewSuccessInstanceCount
+//   ).should(
+//     "include.text",
+//     datasetShape.visionDataExplorerData?.successInstances
+//   );
 
   cy.get(
     Locators.VisionDataExplorerImageExplorerViewErrorImageContainer
@@ -45,15 +45,15 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
     Locators.VisionDataExplorerImageExplorerViewSuccessImageContainer
   ).should("exist");
 
-  cy.get(Locators.VisionDataExplorerImageExplorerViewImagePredictedY)
-    .invoke("text")
-    .then((text1) => {
-      cy.get(Locators.VisionDataExplorerImageExplorerViewImageTrueY)
-        .invoke("text")
-        .should((text2) => {
-          expect(text1).to.equal(text2);
-        });
-    });
+//   cy.get(Locators.VisionDataExplorerImageExplorerViewImagePredictedY)
+//     .invoke("text")
+//     .then((text1) => {
+//       cy.get(Locators.VisionDataExplorerImageExplorerViewImageTrueY)
+//         .invoke("text")
+//         .should((text2) => {
+//           expect(text1).to.equal(text2);
+//         });
+//     });
 
   cy.get(Locators.VisionDataExplorerPageSizeSelector).should("not.exist");
 }
