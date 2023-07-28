@@ -8,7 +8,7 @@ requirements-parser==0.2.0
 
 wheel
 
-fairlearn==0.6.0
+fairlearn>=0.7.0,<0.9.0
 ml-wrappers>=0.4.0
 
 # Jupyter dependency that fails with python 3.6
