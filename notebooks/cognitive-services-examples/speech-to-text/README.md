@@ -34,4 +34,4 @@ This quickstart and example
   - [Documentation](https://docs.microsoft.com/en-us/azure/cognitive-services/speech/)
   - [Speech SDK](https://docs.microsoft.com/en-us/python/api/azure-cognitiveservices-speech/azure.cognitiveservices.speech?view=azure-pythonn)
   - [Speech API Reference](https://docs.microsoft.com/en-us/azure/cognitive-services/speech/APIReference)
-  - [Fairlearn API Reference](https://fairlearn.org/v0.7.0/api_reference/index.html)
+  - [Fairlearn API Reference](https://fairlearn.org/v0.9/api_reference/index.html)

@@ -3,21 +3,46 @@
 
 import importlib
 
+import math
 import numpy as np
 from packaging import version
-from sklearn.metrics import confusion_matrix
+import sklearn.metrics as skm
+from fairlearn import (
+    selection_rate, mean_prediction, true_negative_rate,
+    false_negative_rate, false_positive_rate)  # noqa: F401,E501
+
+_Y_TRUE_NOT_0_1 = "Only 0 and 1 are allowed in y_true and both must be present"
 
 MODULE_NOT_INSTALLED_ERROR_MESSAGE = "{} is not installed. " \
     "Either install fairlearn or provide another fairness metric module."
-FAIRLEARN_PRE_V0_5_0_ERROR_MESSAGE = "fairlearn<0.5.0 is not compatible " \
-    "with raiwidgets. Please upgrade to the latest version."
+FAIRLEARN_PRE_V0_9_0_ERROR_MESSAGE = "fairlearn<0.9.0 is not compatible " \
+    "with this version of raiwidgets. " \
+    "Please upgrade fairlearn to the latest version."
 METRICFRAME_NOT_AVAILABLE_ERROR_MESSAGE = "The fairness metric module " \
     "needs to provide a MetricFrame class to calculate metrics. For an " \
-    "refer to fairlearn.metrics.MetricFrame"
+    "example, refer to fairlearn.metrics.MetricFrame"
 
 z_score = 1.959964  # This z-score corresponds to the 95% confidence interval
 alpha = 0.95        # Conventional level of power for statistical tests
 digits_of_precision = 4
+
+
+def _convert_to_ndarray_and_squeeze(target):
+    """
+    Convert input to a `numpy.ndarray` and calls squeeze (to dispose of unit length dimensions).
+
+    There is a special case for empty.
+    There is a special case to stop single element arrays being converted to scalars.
+    """
+    result = np.asarray(target)
+    if result.size == 0:
+        result = result
+    elif result.size > 1:
+        result = np.squeeze(result)
+    else:
+        result = result.reshape(1)
+
+    return result
 
 
 def compute_wilson_bounds(p, n, digits=digits_of_precision, z=z_score):
@@ -59,34 +84,34 @@ def general_cm_wilson(a, b, digits_of_precision, z_score):
 def recall_wilson(y_true, y_pred):
     # aka True Positive Rate
     assert len(y_true) == len(y_pred)
-    tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
+    tn, fp, fn, tp = skm.confusion_matrix(y_true, y_pred).ravel()
     return general_cm_wilson(tp, fn, digits_of_precision, z_score)
 
 
 def precision_wilson(y_true, y_pred):
     assert len(y_true) == len(y_pred)
-    tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
+    tn, fp, fn, tp = skm.confusion_matrix(y_true, y_pred).ravel()
     return general_cm_wilson(tp, fp, digits_of_precision, z_score)
 
 
 def false_positive_rate_wilson(y_true, y_pred):
     # aka fall-out
     assert len(y_true) == len(y_pred)
-    tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
+    tn, fp, fn, tp = skm.confusion_matrix(y_true, y_pred).ravel()
     return general_cm_wilson(fp, tn, digits_of_precision, z_score)
 
 
 def true_negative_rate_wilson(y_true, y_pred):
     # aka specificity
     assert len(y_true) == len(y_pred)
-    tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
+    tn, fp, fn, tp = skm.confusion_matrix(y_true, y_pred).ravel()
     return general_cm_wilson(tn, fp, digits_of_precision, z_score)
 
 
 def false_negative_rate_wilson(y_true, y_pred):
     # aka miss rate
     assert len(y_true) == len(y_pred)
-    tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
+    tn, fp, fn, tp = skm.confusion_matrix(y_true, y_pred).ravel()
     return general_cm_wilson(fn, tp, digits_of_precision, z_score)
 
 
@@ -108,6 +133,108 @@ def mae_standard_normal(y_true, y_pred):
     return mae - standard_error, mae + standard_error
 
 
+def _balanced_root_mean_squared_error(y_true, y_pred, sample_weight=None):
+    r"""Calculate the balanced mean of the root mean squared error (RMSE).
+
+    Used for binary logistic regression, this computes the error as
+
+    .. math::
+       \frac{\text{RMSE}(Y=0) + \text{RMSE}(Y=1)}{2}
+
+    The classes are constrained to be :math:`\in {0, 1}`. The :code:`y_true` values must
+    always be one of these, while :code:`y_pred` can be a continuous probability
+    (which could be thresholded to get a predicted class).
+
+    Internally, this builds on the
+    :py:func:`sklearn.metrics.mean_squared_error` routine.
+    """
+    y_ta = _convert_to_ndarray_and_squeeze(y_true)
+    y_pa = _convert_to_ndarray_and_squeeze(y_pred)
+    s_w = np.ones(len(y_ta))
+    if sample_weight is not None:
+        s_w = _convert_to_ndarray_and_squeeze(sample_weight)
+
+    y_ta_values = np.unique(y_ta)
+    if not np.array_equal(y_ta_values, [0, 1]):
+        raise ValueError(_Y_TRUE_NOT_0_1)
+
+    errs = np.zeros(2)
+    for i in range(0, 2):
+        indices = y_ta == i
+        y_ta_s = y_ta[indices]
+        y_pa_s = y_pa[indices]
+        s_w_s = s_w[indices]
+        errs[i] = math.sqrt(skm.mean_squared_error(y_ta_s, y_pa_s, sample_weight=s_w_s))
+
+    return errs.mean()
+
+
+def _mean_overprediction(y_true, y_pred, sample_weight=None) -> float:
+    """Calculate the (weighted) mean overprediction.
+
+    This is the (weighted) mean of the error where any negative
+    errors (i.e. underpredictions) are set to zero
+
+    Parameters
+    ----------
+    y_true : array_like
+        The true values
+
+    y_pred : array_like
+        The predicted values
+
+    sample_weight : array_like
+        Optional array of sample weights
+    """
+    y_t = _convert_to_ndarray_and_squeeze(y_true)
+    y_p = _convert_to_ndarray_and_squeeze(y_pred)
+    s_w = np.ones(len(y_p))
+    if sample_weight is not None:
+        s_w = _convert_to_ndarray_and_squeeze(sample_weight)
+
+    err = y_p - y_t
+    err[err < 0] = 0
+
+    return np.dot(err, s_w) / s_w.sum()
+
+
+def _mean_underprediction(y_true, y_pred, sample_weight=None) -> float:
+    """Calculate the (weighted) mean underprediction.
+
+    This is the (weighted) mean of the error where any
+    positive errors (i.e. overpredictions) are set to zero.
+    The absolute value of the underpredictions is used, so the
+    returned value is always positive.
+
+    Parameters
+    ----------
+    y_true : array_like
+        The true values
+
+    y_pred : array_like
+        The predicted values
+
+    sample_weight : array_like
+        Optional array of sample weights
+    """
+    y_t = _convert_to_ndarray_and_squeeze(y_true)
+    y_p = _convert_to_ndarray_and_squeeze(y_pred)
+    s_w = np.ones(len(y_p))
+    if sample_weight is not None:
+        s_w = _convert_to_ndarray_and_squeeze(sample_weight)
+
+    err = y_p - y_t
+    err[err > 0] = 0
+
+    # Error metrics should decrease to 0 so have to flip sign
+    return -np.dot(err, s_w) / s_w.sum()
+
+
+def _root_mean_squared_error(y_true, y_pred, **kwargs):
+    r"""Calculate the root mean squared error."""
+    return skm.mean_squared_error(y_true, y_pred, squared=False, **kwargs)
+
+
 class FairnessMetricModule:
     def __init__(self, module_name=None, mapping=None):
         # default to fairlearn if no metrics module was specified
@@ -125,24 +252,14 @@ class FairnessMetricModule:
         except AttributeError:
             raise Exception(METRICFRAME_NOT_AVAILABLE_ERROR_MESSAGE)
 
-        # Raise exception if fairlearn pre-v0.5.0 is installed since
+        # Raise exception if fairlearn pre-v0.9.0 is installed since
         # the metrics API had breaking changes.
         if module_name == 'fairlearn.metrics':
             import fairlearn
-            if version.parse(fairlearn.__version__) < version.parse('0.5.0'):
-                raise Exception(FAIRLEARN_PRE_V0_5_0_ERROR_MESSAGE)
+            if version.parse(fairlearn.__version__) < version.parse('0.9.0'):
+                raise Exception(FAIRLEARN_PRE_V0_9_0_ERROR_MESSAGE)
 
-        # use Fairlearn's metric mapping if no mapping is explicitly provided.
         if mapping is None:
-            # The following mappings should match those in the GroupMetricSet
-            # Issue 269 has been opened to track the work for unifying the two
-            import sklearn.metrics as skm
-            from fairlearn.metrics._extra_metrics import (
-                _balanced_root_mean_squared_error, _mean_overprediction,
-                _mean_underprediction, _root_mean_squared_error,
-                false_negative_rate, false_positive_rate, mean_prediction,
-                selection_rate, true_negative_rate)
-
             self._metric_methods = {
                 "accuracy_score": {
                     "model_type": ["classification"],

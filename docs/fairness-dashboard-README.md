@@ -22,7 +22,7 @@ You can further navigate trade offs between fairness and performance of your loa
 
 ## Fairness Dashboard
 
-Please refer to [Fairlearn](https://github.com/fairlearn/fairlearn)'s README and [user guide](https://fairlearn.github.io/v0.5.0/user_guide/index.html) to learn how you can assess and mitigate model's fairness issues. Once your model is trained, load the Fairness dashboard in your notebook to understand how your model’s predictions impact different groups (e.g., different ethnicities). Compare multiple models along different fairness and performance metrics.
+Please refer to [Fairlearn](https://github.com/fairlearn/fairlearn)'s README and [user guide](https://fairlearn.github.io/v0.9/user_guide/index.html) to learn how you can assess and mitigate model's fairness issues. Once your model is trained, load the Fairness dashboard in your notebook to understand how your model’s predictions impact different groups (e.g., different ethnicities). Compare multiple models along different fairness and performance metrics.
 
 ### Setup and single-model assessment
 
@@ -60,7 +60,7 @@ These selections are then used to obtain the visualization of the model’s impa
 
 ### Comparing multiple models
 
-The dashboard also enables comparison of multiple models, such as the models produced by different learning algorithms and different mitigation approaches, including Fairlearn's [GridSearch](https://fairlearn.github.io/v0.5.0/api_reference/fairlearn.reductions.html#fairlearn.reductions.GridSearch), [ExponentiatedGradient](https://fairlearn.github.io/v0.5.0/api_reference/fairlearn.reductions.html#fairlearn.reductions.ExponentiatedGradient), and [ThresholdOptimizer](https://fairlearn.github.io/v0.5.0/api_reference/fairlearn.postprocessing.html#fairlearn.postprocessing.ThresholdOptimizer).
+The dashboard also enables comparison of multiple models, such as the models produced by different learning algorithms and different mitigation approaches, including Fairlearn's [GridSearch](https://fairlearn.org/v0.9/api_reference/generated/fairlearn.reductions.GridSearch.html), [ExponentiatedGradient](https://fairlearn.org/v0.9/api_reference/generated/fairlearn.reductions.ExponentiatedGradient.html), and [ThresholdOptimizer](https://fairlearn.org/v0.9/api_reference/generated/fairlearn.postprocessing.ThresholdOptimizer.html).
 
 As before, select the sensitive feature and the performance metric. The model comparison view then depicts the performance and disparity of all the provided models in a scatter plot. This allows the you to examine trade-offs between performance and fairness. Each of the dots can be clicked to open the assessment of the corresponding model. The figure below shows the model comparison view with `binary gender` selected as a sensitive feature and accuracy rate selected as the performance metric.
 
