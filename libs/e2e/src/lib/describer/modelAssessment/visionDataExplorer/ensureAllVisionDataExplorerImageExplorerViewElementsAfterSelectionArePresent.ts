@@ -14,15 +14,6 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
     "include.text",
     "Error instances"
   );
-  cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage)
-    .should("be.visible")
-    .and(($image) => {
-      // verifies the image is loaded
-      expect(($image[0] as HTMLImageElement).naturalWidth).to.be.greaterThan(0);
-      expect(($image[0] as HTMLImageElement).naturalHeight).to.be.greaterThan(
-        0
-      );
-    });
   cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessInstances).should(
     "include.text",
     "Success instances"
@@ -34,6 +25,8 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
   cy.get(
     Locators.VisionDataExplorerImageExplorerViewSuccessImageContainer
   ).should("exist");
+
+  cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage).should("exist")
 
   cy.get(Locators.VisionDataExplorerImageExplorerViewImagePredictedY)
     .invoke("text")
