@@ -203,6 +203,6 @@ export enum Locators {
   VisionDataExplorerClassViewDataCharacteristicsLegend = "#VisionDataExplorer #dataCharacteristicsLegend",
   VisionDataExplorerClassViewContainer = "#VisionDataExplorer #classViewContainer",
   VisionDataExplorerImageExplorerViewSuccessImage = "#VisionDataExplorer #visionImage_0",
-  VisionDataExplorerImageExplorerViewImagePredictedY = "#VisionDataExplorer #successImageContainer #predictedY_0",
-  VisionDataExplorerImageExplorerViewImageTrueY = "#VisionDataExplorer #successImageContainer #trueY_0"
+  VisionDataExplorerImageExplorerViewImagePredictedY = "#VisionDataExplorer #predictedY_0",
+  VisionDataExplorerImageExplorerViewImageTrueY = "#VisionDataExplorer #trueY_0"
 }

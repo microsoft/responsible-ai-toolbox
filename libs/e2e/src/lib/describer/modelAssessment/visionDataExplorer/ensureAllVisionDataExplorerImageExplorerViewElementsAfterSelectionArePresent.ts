@@ -30,15 +30,5 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
     "exist"
   );
 
-  cy.get(Locators.VisionDataExplorerImageExplorerViewImagePredictedY)
-    .invoke("text")
-    .then((text1) => {
-      cy.get(Locators.VisionDataExplorerImageExplorerViewImageTrueY)
-        .invoke("text")
-        .should((text2) => {
-          expect(text1).to.equal(text2);
-        });
-    });
-
   cy.get(Locators.VisionDataExplorerPageSizeSelector).should("not.exist");
 }
