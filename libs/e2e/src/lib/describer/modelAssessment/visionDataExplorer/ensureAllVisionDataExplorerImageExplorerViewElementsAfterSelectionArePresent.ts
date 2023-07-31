@@ -26,7 +26,9 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
     Locators.VisionDataExplorerImageExplorerViewSuccessImageContainer
   ).should("exist");
 
-  cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage).should("exist")
+  cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage).should(
+    "exist"
+  );
 
   cy.get(Locators.VisionDataExplorerImageExplorerViewImagePredictedY)
     .invoke("text")
