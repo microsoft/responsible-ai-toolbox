@@ -5,7 +5,7 @@ export const FridgeObjectDetectionModelDebugging = {
   causalAnalysisData: {
     hasCausalAnalysisComponent: false
   },
-  checkDupCohort: true,
+  checkDupCohort: false,
   cohortDefaultName: "All data",
   dataBalanceData: {
     aggregateBalanceMeasuresComputed: false,
