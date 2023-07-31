@@ -21,20 +21,10 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
         expect(($image[0] as HTMLImageElement).naturalWidth).to.be.greaterThan(0);
         expect(($image[0] as HTMLImageElement).naturalHeight).to.be.greaterThan(0);
     });
-//   cy.get(Locators.VisionDataExplorerImageExplorerViewErrorInstanceCount).should(
-//     "include.text",
-//     datasetShape.visionDataExplorerData?.errorInstances
-//   );
   cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessInstances).should(
     "include.text",
     "Success instances"
   );
-//   cy.get(
-//     Locators.VisionDataExplorerImageExplorerViewSuccessInstanceCount
-//   ).should(
-//     "include.text",
-//     datasetShape.visionDataExplorerData?.successInstances
-//   );
 
   cy.get(
     Locators.VisionDataExplorerImageExplorerViewErrorImageContainer
@@ -43,15 +33,15 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
     Locators.VisionDataExplorerImageExplorerViewSuccessImageContainer
   ).should("exist");
 
-//   cy.get(Locators.VisionDataExplorerImageExplorerViewImagePredictedY)
-//     .invoke("text")
-//     .then((text1) => {
-//       cy.get(Locators.VisionDataExplorerImageExplorerViewImageTrueY)
-//         .invoke("text")
-//         .should((text2) => {
-//           expect(text1).to.equal(text2);
-//         });
-//     });
+  cy.get(Locators.VisionDataExplorerImageExplorerViewImagePredictedY)
+    .invoke("text")
+    .then((text1) => {
+      cy.get(Locators.VisionDataExplorerImageExplorerViewImageTrueY)
+        .invoke("text")
+        .should((text2) => {
+          expect(text1).to.equal(text2);
+        });
+    });
 
   cy.get(Locators.VisionDataExplorerPageSizeSelector).should("not.exist");
 }
