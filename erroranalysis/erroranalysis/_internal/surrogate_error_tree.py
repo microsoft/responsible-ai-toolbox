@@ -471,12 +471,14 @@ def create_surrogate_model(analyzer,
         surrogate = LGBMClassifier(n_estimators=1,
                                    max_depth=max_depth,
                                    num_leaves=num_leaves,
-                                   min_child_samples=min_child_samples)
+                                   min_child_samples=min_child_samples,
+                                   verbosity=-1)
     else:
         surrogate = LGBMRegressor(n_estimators=1,
                                   max_depth=max_depth,
                                   num_leaves=num_leaves,
-                                  min_child_samples=min_child_samples)
+                                  min_child_samples=min_child_samples,
+                                  verbosity=-1)
     if cat_ind_reindexed:
         surrogate.fit(dataset_sub_features, diff,
                       categorical_feature=cat_ind_reindexed)
