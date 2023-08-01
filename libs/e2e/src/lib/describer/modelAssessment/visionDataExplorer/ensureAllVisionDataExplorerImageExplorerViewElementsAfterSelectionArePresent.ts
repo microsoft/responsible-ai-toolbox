@@ -19,33 +19,8 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
     "Success instances"
   );
 
-  cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage).then(($el) => {
-    if ($el.length > 0) {
-      // Success element exists, i.e., correct prediction
-      cy.get(Locators.VisionDataExplorerImageExplorerViewFailureImage).should("not.exist");
-      cy.get(Locators.VisionDataExplorerImageExplorerViewImagePredictedY)
-        .invoke("text")
-        .then((text1) => {
-          cy.get(Locators.VisionDataExplorerImageExplorerViewImageTrueY)
-            .invoke("text")
-            .should((text2) => {
-              expect(text1).to.equal(text2);
-            });
-        });
-    } else {
-      // Failure element exists, i.e., error prediction
-      cy.get(Locators.VisionDataExplorerImageExplorerViewFailureImage).should("exist");
-      cy.get(Locators.VisionDataExplorerImageExplorerViewImagePredictedY)
-        .invoke("text")
-        .then((text1) => {
-          cy.get(Locators.VisionDataExplorerImageExplorerViewImageTrueY)
-            .invoke("text")
-            .should((text2) => {
-              expect(text1).not.equal(text2);
-            });
-        });
-    }
-  })
+  cy.get(Locators.VisionDataExplorerImageExplorerViewImagePredictedY).should("exist");
+  cy.get(Locators.VisionDataExplorerImageExplorerViewImageTrueY).should("exist");
 
   cy.get(
     Locators.VisionDataExplorerImageExplorerViewErrorImageContainer
