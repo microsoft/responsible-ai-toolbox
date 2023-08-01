@@ -174,8 +174,7 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
         :type categorical_features: list[str]
         """
         index_classes = classes
-        is_od = task_type == ModelTask.OBJECT_DETECTION
-        if isinstance(target_column, list) and not is_od:
+        if isinstance(target_column, list):
             # create copy of dataset as we will make modifications to it
             dataset = dataset.copy()
             index_classes = target_column
@@ -297,9 +296,8 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
                                    device=rai_insights.device)
         inst.__dict__['_task_type'] = task_type
         index_classes = rai_insights._classes
-        is_od = task_type == ModelTask.OBJECT_DETECTION
         index_dataset = rai_insights.test
-        if isinstance(target_column, list) and not is_od:
+        if isinstance(target_column, list):
             # create copy of dataset as we will make modifications to it
             index_dataset = index_dataset.copy()
             index_classes = target_column
