@@ -127,7 +127,8 @@ class WrappedIndexPredictorModel:
         """
         index = X.index
         predictions = self.predictions[index]
-        if self.task_type == ModelTask.MULTILABEL_IMAGE_CLASSIFICATION:
+        if self.task_type == ModelTask.MULTILABEL_IMAGE_CLASSIFICATION or \
+                self.task_type == ModelTask.OBJECT_DETECTION:
             return predictions
         if self.classes is not None:
             predictions = [self.classes[y] for y in predictions]

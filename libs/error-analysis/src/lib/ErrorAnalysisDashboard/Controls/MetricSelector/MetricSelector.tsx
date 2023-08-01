@@ -58,6 +58,10 @@ export class MetricSelector extends React.Component<IMetricSelectorProps> {
       options.push(this.addDropdownOption(Metrics.AccuracyScore));
     } else if (IsMultilabel(modelType)) {
       options.push(this.addDropdownOption(Metrics.ErrorRate));
+    } else if (modelType === ModelTypes.ObjectDetection) {
+      options.push(this.addDropdownOption(Metrics.MeanAveragePrecision));
+      options.push(this.addDropdownOption(Metrics.AveragePrecision));
+      options.push(this.addDropdownOption(Metrics.AverageRecall));
     }
     return (
       <Dropdown
