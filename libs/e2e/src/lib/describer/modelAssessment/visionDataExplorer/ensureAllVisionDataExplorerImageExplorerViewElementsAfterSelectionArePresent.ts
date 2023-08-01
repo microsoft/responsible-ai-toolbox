@@ -19,7 +19,7 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
     "Success instances"
   );
 
-  cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage, { failOnStatusCode: false }).then(($el) => {
+  cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage).then(($el) => {
     if ($el.length > 0) {
       // Success element exists, i.e., correct prediction
       cy.get(Locators.VisionDataExplorerImageExplorerViewFailureImage).should("not.exist");
