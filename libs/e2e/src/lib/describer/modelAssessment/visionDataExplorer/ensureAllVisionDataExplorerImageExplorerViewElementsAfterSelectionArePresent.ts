@@ -19,6 +19,16 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
     "Success instances"
   );
 
+  cy.get(Locators.VisionDataExplorerImageExplorerViewImagePredictedY)
+    .invoke("text")
+    .then((text1) => {
+      cy.get(Locators.VisionDataExplorerImageExplorerViewImageTrueY)
+        .invoke("text")
+        .should((text2) => {
+          expect(text1).to.equal(text2);
+        });
+    });
+
   cy.get(
     Locators.VisionDataExplorerImageExplorerViewErrorImageContainer
   ).should("exist");
