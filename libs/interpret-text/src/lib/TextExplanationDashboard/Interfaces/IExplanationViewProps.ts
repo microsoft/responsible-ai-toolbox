@@ -14,4 +14,5 @@ export interface ITextExplanationViewProps
   selectedWeightVector: WeightVectorOption;
   weightOptions: WeightVectorOption[];
   weightLabels: any;
+  isQA?: boolean;
 }

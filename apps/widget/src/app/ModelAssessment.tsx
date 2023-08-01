@@ -11,47 +11,16 @@ import {
   ILocalExplanations,
   parseFeatureFlights
 } from "@responsible-ai/core-ui";
-import {
-  ModelAssessmentDashboard,
-  IModelAssessmentData,
-  IModelAssessmentDashboardProps
-} from "@responsible-ai/model-assessment";
+import { ModelAssessmentDashboard } from "@responsible-ai/model-assessment";
 import React from "react";
 
 import { callFlaskService } from "./callFlaskService";
-import { IAppConfig } from "./config";
+import { CallbackType, IModelAssessmentProps } from "./ModelAssessmentUtils";
 
-interface IModelAssessmentProps {
-  config: IAppConfig;
-  modelData: IModelAssessmentData;
-}
 export class ModelAssessment extends React.Component<IModelAssessmentProps> {
   public render(): React.ReactNode {
-    const callBack: Pick<
-      IModelAssessmentDashboardProps,
-      | "requestExp"
-      | "requestObjectDetectionMetrics"
-      | "requestPredictions"
-      | "requestQuestionAnsweringMetrics"
-      | "requestDebugML"
-      | "requestMatrix"
-      | "requestImportances"
-      | "requestCausalWhatIf"
-      | "requestBoxPlotDistribution"
-      | "requestDatasetAnalysisBarChart"
-      | "requestDatasetAnalysisBoxChart"
-      | "requestForecast"
-      | "requestGlobalCausalEffects"
-      | "requestGlobalCausalPolicy"
-      | "requestGlobalExplanations"
-      | "requestBubblePlotData"
-      | "requestLocalCounterfactuals"
-      | "requestLocalExplanations"
-      | "requestMetrics"
-      | "requestLocalCausalEffects"
-      | "requestSplinePlotDistribution"
-      | "requestTestDataRow"
-    > = {};
+    // Note: If defining a new callback, specify the name under the `callbackType` definition.
+    const callBack: CallbackType = {};
     if (this.props.config.baseUrl) {
       callBack.requestExp = async (data: number | number[]): Promise<any[]> => {
         return callFlaskService(this.props.config, data, "/get_exp");
@@ -60,12 +29,19 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
         selectionIndexes: number[][],
         aggregateMethod: string,
         className: string,
-        iouThresh: number,
+        iouThreshold: number,
+        objectDetectionCache: Map<string, [number, number, number]>,
         abortSignal: AbortSignal
       ): Promise<any[]> => {
         return callFlaskService(
           this.props.config,
-          [selectionIndexes, aggregateMethod, className, iouThresh],
+          [
+            selectionIndexes,
+            aggregateMethod,
+            className,
+            iouThreshold,
+            objectDetectionCache
+          ],
           "/get_object_detection_metrics",
           abortSignal
         );
@@ -75,11 +51,15 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       };
       callBack.requestQuestionAnsweringMetrics = async (
         selectionIndexes: number[][],
+        questionAnsweringCache: Map<
+          string,
+          [number, number, number, number, number, number]
+        >,
         abortSignal: AbortSignal
       ): Promise<any[]> => {
         return callFlaskService(
           this.props.config,
-          [selectionIndexes],
+          [selectionIndexes, questionAnsweringCache],
           "/get_question_answering_metrics",
           abortSignal
         );

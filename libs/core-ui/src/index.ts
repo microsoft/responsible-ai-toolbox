@@ -61,6 +61,7 @@ export * from "./lib/util/MultilabelStatisticsUtils";
 export * from "./lib/util/ObjectDetectionStatisticsUtils";
 export * from "./lib/util/QuestionAnsweringStatisticsUtils";
 export * from "./lib/util/StatisticsUtils";
+export * from "./lib/util/StatisticsUtilsEnums";
 export * from "./lib/util/string";
 export * from "./lib/util/toScientific";
 export * from "./lib/util/ITelemetryEvent";

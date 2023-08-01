@@ -2,14 +2,13 @@
 // Licensed under the MIT License.
 
 import {
-  IStyle,
-  mergeStyles,
-  mergeStyleSets,
   IProcessedStyleSet,
   IStackStyles,
-  getTheme
+  IStyle,
+  getTheme,
+  mergeStyleSets,
+  mergeStyles
 } from "@fluentui/react";
-import { getPrimaryChartColor } from "@responsible-ai/core-ui";
 
 export const textStackStyles: IStackStyles = {
   root: {
@@ -31,30 +30,41 @@ export interface ITextHighlightingStyles {
   boldunderline: IStyle;
 }
 
-export const textHighlightingStyles: () => IProcessedStyleSet<ITextHighlightingStyles> =
-  () => {
-    const theme = getTheme();
-    const normal = {
-      color: theme.semanticColors.bodyText
-    };
-    return mergeStyleSets<ITextHighlightingStyles>({
-      boldunderline: mergeStyles([
-        normal,
-        {
-          color: getPrimaryChartColor(theme),
-          fontSize: theme.fonts.large.fontSize,
-          margin: "2px",
-          padding: 0,
-          textDecorationLine: "underline"
-        }
-      ]),
-      highlighted: mergeStyles([
-        normal,
-        {
-          backgroundColor: getPrimaryChartColor(theme),
-          color: theme.semanticColors.bodyBackground
-        }
-      ]),
-      normal
-    });
+export const textHighlightingStyles: (
+  isTextSelected: boolean
+) => IProcessedStyleSet<ITextHighlightingStyles> = (isTextSelected) => {
+  const theme = getTheme();
+  const normal = {
+    color: theme.semanticColors.bodyText
   };
+  const selectedTextStyle = isTextSelected
+    ? {
+        textDecorationColor: "black",
+        textDecorationLine: "underline",
+        textDecorationStyle: "solid",
+        textDecorationThickness: "4px"
+      }
+    : {};
+  return mergeStyleSets<ITextHighlightingStyles>({
+    boldunderline: mergeStyles([
+      normal,
+      {
+        backgroundColor: theme.semanticColors.link,
+        color: theme.semanticColors.bodyBackground,
+        fontSize: theme.fonts.large.fontSize,
+        margin: "2px",
+        padding: 0
+      },
+      selectedTextStyle
+    ]),
+    highlighted: mergeStyles([
+      normal,
+      selectedTextStyle,
+      {
+        backgroundColor: theme.semanticColors.errorText,
+        color: theme.semanticColors.bodyBackground
+      }
+    ]),
+    normal: mergeStyles([normal, selectedTextStyle])
+  });
+};

@@ -145,13 +145,18 @@ export interface IModelAssessmentContext {
         selectionIndexes: number[][],
         aggregateMethod: string,
         className: string,
-        iouThresh: number,
+        iouThreshold: number,
+        objectDetectionCache: Map<string, [number, number, number]>,
         abortSignal: AbortSignal
       ) => Promise<any[]>)
     | undefined;
   requestQuestionAnsweringMetrics?:
     | ((
         selectionIndexes: number[][],
+        questionAnsweringCache: Map<
+          string,
+          [number, number, number, number, number, number]
+        >,
         abortSignal: AbortSignal
       ) => Promise<any[]>)
     | undefined;

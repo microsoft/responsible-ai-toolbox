@@ -32,7 +32,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v2
         with:
           auto-update-conda: true
-          python-version: 3.7
+          python-version: 3.8
 
       - name: Use Node.js ${{ env.node-version }}
         uses: actions/setup-node@v3
@@ -139,6 +139,9 @@ jobs:
           yarn e2e-widget -n "responsibleaidashboard-housing-classification-model-debugging" -f ""
           yarn e2e-widget -n "responsibleaidashboard-diabetes-decision-making" -f ""
           yarn e2e-widget -n "responsibleaidashboard-multiclass-dnn-model-debugging" -f ""
+          yarn e2e-widget -n "responsibleaidashboard-fridge-image-classification-model-debugging" -f ""
+          yarn e2e-widget -n "responsibleaidashboard-fridge-multilabel-image-classification-model-debugging" -f ""
+          yarn e2e-widget -n "responsibleaidashboard-fridge-object-detection-model-debugging" -f ""
 
       - name: Upload e2e test screen shot
         if: always()

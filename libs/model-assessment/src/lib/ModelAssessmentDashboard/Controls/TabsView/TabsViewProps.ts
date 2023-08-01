@@ -48,7 +48,8 @@ export interface ITabsViewProps {
     selectionIndexes: number[][],
     aggregateMethod: string,
     className: string,
-    iouThresh: number,
+    iouThreshold: number,
+    objectDetectionCache: Map<string, [number, number, number]>,
     abortSignal: AbortSignal
   ) => Promise<any[]>;
 
@@ -58,6 +59,10 @@ export interface ITabsViewProps {
   ) => Promise<any[]>;
   requestQuestionAnsweringMetrics?: (
     selectionIndexes: number[][],
+    questionAnsweringCache: Map<
+      string,
+      [number, number, number, number, number, number]
+    >,
     abortSignal: AbortSignal
   ) => Promise<any[]>;
   requestDebugML?: (

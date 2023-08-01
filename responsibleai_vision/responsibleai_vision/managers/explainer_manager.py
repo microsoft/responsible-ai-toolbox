@@ -17,6 +17,7 @@ import numpy as np
 import pandas as pd
 import shap
 from ml_wrappers import wrap_model
+from ml_wrappers.common.constants import Device
 from ml_wrappers.model.image_model_wrapper import (MLflowDRiseWrapper,
                                                    PytorchDRiseWrapper)
 from PIL import Image, ImageDraw, ImageFont
@@ -53,6 +54,7 @@ TASK_TYPE = 'task_type'
 _MAX_EVALS = '_max_evals'
 _NUM_MASKS = '_num_masks'
 _MASK_RES = '_mask_res'
+_DEVICE = '_device'
 DEFAULT_MAX_EVALS = ExplainabilityDefaults.DEFAULT_MAX_EVALS
 DEFAULT_MASK_RES = ExplainabilityDefaults.DEFAULT_MASK_RES
 DEFAULT_NUM_MASKS = ExplainabilityDefaults.DEFAULT_NUM_MASKS
@@ -70,7 +72,8 @@ class ExplainerManager(BaseManager):
                  image_mode: str = None,
                  max_evals: Optional[int] = DEFAULT_MAX_EVALS,
                  num_masks: Optional[int] = DEFAULT_NUM_MASKS,
-                 mask_res: Optional[int] = DEFAULT_MASK_RES):
+                 mask_res: Optional[int] = DEFAULT_MASK_RES,
+                 device: Optional[str] = Device.AUTO.value):
         """Creates an ExplainerManager object.
 
         :param model: The model to explain.
@@ -105,13 +108,17 @@ class ExplainerManager(BaseManager):
             DRISE image explainer for object detection.
             If not specified defaults to 4.
         :type mask_res: int
+        :param device: The device to run the model on.
+            If not specified defaults to Device.AUTO.
+        :type device: str
         """
         self._image_mode = image_mode
         if task_type == ModelTask.OBJECT_DETECTION:
             if is_automl_image_model(model):
                 self._model = MLflowDRiseWrapper(model._model, classes)
             else:
-                self._model = PytorchDRiseWrapper(model._model, len(classes))
+                self._model = PytorchDRiseWrapper(
+                    model._model, len(classes), device=device)
         else:
             self._model = model
         self._target_column = target_column
@@ -128,6 +135,7 @@ class ExplainerManager(BaseManager):
         self._max_evals = max_evals
         self._num_masks = num_masks
         self._mask_res = mask_res
+        self._device = device
 
     def add(self):
         """Add an explainer to be computed later."""
@@ -249,17 +257,32 @@ class ExplainerManager(BaseManager):
                                                          self._classes)
                     else:
                         self._model = PytorchDRiseWrapper(self._model._model,
-                                                          len(self._classes))
+                                                          len(self._classes),
+                                                          self._device)
 
                 # calling DRISE to generate saliency maps for all objects
                 mask_res_tuple = (self._mask_res, self._mask_res)
-                fl, _, _, = get_drise_saliency_map(img,
-                                                   self._model,
-                                                   len(self._classes),
-                                                   savename=str(index),
-                                                   nummasks=self._num_masks,
-                                                   maskres=mask_res_tuple,
-                                                   max_figures=5000)
+                device = self._device
+                # get_drise_saliency_map only recognizes GPU and CPU
+                if device == Device.AUTO.value:
+                    device = None
+                try:
+                    fl, _, _, = get_drise_saliency_map(
+                        img,
+                        self._model,
+                        len(self._classes),
+                        savename=str(index),
+                        nummasks=self._num_masks,
+                        maskres=mask_res_tuple,
+                        devicechoice=device,
+                        max_figures=5000)
+                except ValueError as ve:
+                    if str(ve) == 'No detections found':
+                        raise UserConfigValidationException(
+                            "No detections found in image. "
+                            "Please increase num_masks or mask_res.")
+                    else:
+                        raise ve
                 if object_index is None:
                     return fl
                 b64_string = fl[object_index]
@@ -563,11 +586,13 @@ class ExplainerManager(BaseManager):
         return self._task_type == ModelTask.OBJECT_DETECTION
 
     def _get_fail_str(self):
-        fail = Image.new('RGB', (100, 100))
+        fail = Image.new('RGB', (250, 250))
         draw = ImageDraw.Draw(fail)
         font = ImageFont.load_default()
         text = "saliency map could not be created"
-        textwidth, textheight = draw.textsize(text, font)
+        left, top, right, bottom = draw.textbbox((0, 0), text, font)
+        textwidth = right - left
+        textheight = bottom - top
         x = (fail.width - textwidth) // 2
         y = (fail.height - textheight) // 2
         draw.text((x, y), text, fill="white", font=font)
@@ -640,12 +665,14 @@ class ExplainerManager(BaseManager):
 
         wrapped_model = wrap_model(rai_insights.model, rai_insights.test,
                                    rai_insights.task_type,
-                                   classes=rai_insights._classes)
+                                   classes=rai_insights._classes,
+                                   device=rai_insights.device)
         inst.__dict__['_' + MODEL] = wrapped_model
         inst.__dict__['_' + CLASSES] = rai_insights._classes
         inst.__dict__[_MAX_EVALS] = rai_insights.max_evals
         inst.__dict__[_NUM_MASKS] = rai_insights.num_masks
         inst.__dict__[_MASK_RES] = rai_insights.mask_res
+        inst.__dict__[_DEVICE] = rai_insights.device
         target_column = rai_insights.target_column
         if not isinstance(target_column, list):
             target_column = [target_column]

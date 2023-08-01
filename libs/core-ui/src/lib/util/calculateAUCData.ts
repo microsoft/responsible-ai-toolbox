@@ -3,7 +3,7 @@
 
 import { localization } from "@responsible-ai/localization";
 import { SeriesOptionsType } from "highcharts";
-import { range, unzip } from "lodash";
+import { unzip } from "lodash";
 
 import { IDataset } from "../Interfaces/IDataset";
 
@@ -44,7 +44,7 @@ export function calculatePerClassROCData(
   const rocData: IROCData = {
     points: []
   };
-  const thresholds = range(0, 1, 0.01);
+  const thresholds = probabilityY.sort();
   let truePositives = 0;
   let falsePositives = 0;
   let trueNegatives = 0;
@@ -76,6 +76,7 @@ export function calculatePerClassROCData(
     );
     truePositives = falsePositives = trueNegatives = falseNegatives = 0;
   }
+  rocData.points.push({ x: 0, y: 0 });
 
   return rocData;
 }
@@ -99,7 +100,7 @@ export function binarizeData(
   yData: string[] | number[] | number[][],
   classes: string[] | number[]
 ): number[][] {
-  // binarize labels in a one-vs-all fashion according to
+  // binarize labels in a one-vs-all fashion
   const yBinData: number[][] = [];
   for (const yDatum of yData) {
     const binaryData = classes.map((c) => {
@@ -113,14 +114,14 @@ export function binarizeData(
 // based on https://msdata.visualstudio.com/Vienna/_git/AzureMlCli?path=/src/azureml-metrics/azureml/metrics/_classification.py&version=GBmaster
 export function calculateAUCData(dataset: IDataset): SeriesOptionsType[] {
   if (!dataset.probability_y || !dataset.class_names) {
-    // TODO: show warning message
+    // TODO: show warning message ?
     return [...getStaticROCData()];
   }
 
-  // temporary, replace with dataset.classnames
+  // TODO: for some reason in the adult census data, classnames doesn't match the true_y data
+  // need to confirm how this data aligns. temporarily hard code classnames to 0 and 1 for now
   const cNames = [0, 1];
   const binTrueY = binarizeData(dataset.true_y, cNames);
-  console.log(binTrueY);
   // transpose in order to group class data together
   const perClassBinY = unzip(binTrueY);
   const perClassProba = unzip(dataset.probability_y);
@@ -130,8 +131,7 @@ export function calculateAUCData(dataset: IDataset): SeriesOptionsType[] {
     const classROCData = calculatePerClassROCData(perClassProba[i], element);
     const classData = {
       data: classROCData.points,
-      // TODO: check class_names length earlier ?
-      name: cNames ? cNames[i] : "",
+      name: dataset.class_names ? dataset.class_names[i] : "",
       type: "line"
     };
     data.push(classData);

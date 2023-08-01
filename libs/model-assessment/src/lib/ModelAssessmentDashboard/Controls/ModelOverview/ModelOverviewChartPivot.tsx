@@ -124,7 +124,6 @@ export class ModelOverviewChartPivot extends React.Component<
           return element.text;
         })
     );
-    console.log(this.context.dataset);
     return (
       <Pivot
         id="modelOverviewChartPivot"
