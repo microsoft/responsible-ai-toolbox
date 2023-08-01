@@ -1133,12 +1133,19 @@
       "label": "Címke",
       "colon": ": ",
       "startingPosition": "STARTING POSITION",
-      "endingPosition": "ENDING POSITION"
+      "endingPosition": "ENDING POSITION",
+      "predictedAnswer": "Predicted answer: ",
+      "trueAnswer": "True answer: ",
+      "inputs": "Inputs",
+      "outputs": "Outputs"
     },
     "Legend": {
       "featureLegend": "SZÖVEGJELLEMZŐ JELMAGYARÁZATA",
       "posFeatureImportance": "POZITÍV JELLEMZŐFONTOSSÁG",
-      "negFeatureImportance": "NEGATÍV JELLEMZŐFONTOSSÁG"
+      "negFeatureImportance": "NEGATÍV JELLEMZŐFONTOSSÁG",
+      "cls": "CLS: start of the sentence",
+      "sep": "SEP: end of the sentence",
+      "selectedWord": "Selected word: "
     },
     "BarChart": {
       "featureImportance": "JELLEMZŐFONTOSSÁG"

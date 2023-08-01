@@ -1133,12 +1133,19 @@
       "label": "Etykieta",
       "colon": ": ",
       "startingPosition": "STARTING POSITION",
-      "endingPosition": "ENDING POSITION"
+      "endingPosition": "ENDING POSITION",
+      "predictedAnswer": "Predicted answer: ",
+      "trueAnswer": "True answer: ",
+      "inputs": "Inputs",
+      "outputs": "Outputs"
     },
     "Legend": {
       "featureLegend": "LEGENDA FUNKCJI TEKSTU",
       "posFeatureImportance": "WAŻNOŚĆ FUNKCJI POZYTYWNYCH",
-      "negFeatureImportance": "NEGATYWNA WAŻNOŚĆ FUNKCJI"
+      "negFeatureImportance": "NEGATYWNA WAŻNOŚĆ FUNKCJI",
+      "cls": "CLS: start of the sentence",
+      "sep": "SEP: end of the sentence",
+      "selectedWord": "Selected word: "
     },
     "BarChart": {
       "featureImportance": "WAŻNOŚĆ CECHY"
