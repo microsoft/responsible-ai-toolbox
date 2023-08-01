@@ -19,9 +19,6 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
     "Success instances"
   );
 
-  cy.get(Locators.VisionDataExplorerImageExplorerViewImagePredictedY).should("exist");
-  cy.get(Locators.VisionDataExplorerImageExplorerViewImageTrueY).should("exist");
-
   cy.get(
     Locators.VisionDataExplorerImageExplorerViewErrorImageContainer
   ).should("exist");
@@ -29,9 +26,11 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
     Locators.VisionDataExplorerImageExplorerViewSuccessImageContainer
   ).should("exist");
 
-  cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage).should(
+  cy.get(Locators.VisionDataExplorerImageExplorerViewImage).should(
     "exist"
   );
+  cy.get(Locators.VisionDataExplorerImageExplorerViewImagePredictedY).should("exist");
+  cy.get(Locators.VisionDataExplorerImageExplorerViewImageTrueY).should("exist");
 
   cy.get(Locators.VisionDataExplorerPageSizeSelector).should("not.exist");
 }
