@@ -32,11 +32,11 @@ export class App extends React.Component<IAppProps> {
   public async generateRandomObjectDetectionMetrics(
     selectionIndexes: number[][],
     className: string
-  ) {
-    const returnedValues = [];
-    for (const _ of selectionIndexes) {
+  ): Promise<any[]> {
+    const returnedValues: any[] = [];
+    selectionIndexes.forEach(() => {
       returnedValues.push([Math.random(), Math.random(), Math.random()]);
-    }
+    });
     await new Promise((resolve) => setTimeout(resolve, 1000));
     return [returnedValues, [className]];
   }
