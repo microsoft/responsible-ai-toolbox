@@ -43,7 +43,6 @@ export function ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresen
   }
   cy.get(Locators.VisionDataExplorerFlyoutMetadata).should("exist");
 
-  // TODO: after
   cy.get(Locators.VisionDataExplorerFlyoutCloseButton).click();
 
 }

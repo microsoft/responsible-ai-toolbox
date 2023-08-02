@@ -45,7 +45,6 @@ export class PageSizeSelectors extends React.Component<IPageSizeSelectorsProps> 
         horizontal
         tokens={stackTokens}
         verticalAlign="center"
-        id="pageSizeSelector"
       >
         <Stack.Item>
           <Text>

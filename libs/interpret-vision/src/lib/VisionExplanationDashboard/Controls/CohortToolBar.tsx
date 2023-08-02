@@ -83,10 +83,7 @@ export class CohortToolBar extends React.Component<
     return (
       <Stack>
         <Stack horizontal tokens={stackTokens}>
-          <Stack.Item
-            className={classNames.itemsSelectedContainer}
-            id="itemsSelectedStatement"
-          >
+          <Stack.Item className={classNames.itemsSelectedContainer}>
             <Text>
               {this.state.selectionCount}{" "}
               {this.state.selectionCount === 1
@@ -94,7 +91,7 @@ export class CohortToolBar extends React.Component<
                 : localization.InterpretVision.Cohort.itemsSelectedPlural}
             </Text>
           </Stack.Item>
-          <Stack.Item id="saveCohortButton">
+          <Stack.Item>
             <PrimaryButton
               text={localization.InterpretVision.Cohort.save}
               onClick={this.openDialogue}

@@ -15,7 +15,6 @@ export class DataCharacteristicsLegend extends React.Component {
         horizontal
         tokens={{ childrenGap: "l1" }}
         verticalAlign="center"
-        id="dataCharacteristicsLegend"
       >
         <Stack.Item>
           <div
