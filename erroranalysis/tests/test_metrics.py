@@ -6,7 +6,7 @@ import pytest
 
 from erroranalysis._internal.constants import (
     Metrics, binary_classification_metrics, multiclass_classification_metrics,
-    regression_metrics)
+    regression_metrics, object_detection_metrics)
 from erroranalysis._internal.metrics import metric_to_func
 
 
@@ -50,3 +50,12 @@ class TestMetrics:
         else:
             metric_value = metric_to_func[metric](y_true, y_pred)
         assert isinstance(metric_value, float)
+
+    @pytest.mark.parametrize('metric', object_detection_metrics)
+    def test_object_detection_metrics(self, metric):
+        y_true = np.array([[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]])
+        y_pred = np.array([[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]])
+        with pytest.raises(AttributeError):
+            metric_to_func[metric](y_true, y_pred)
+        # TODO: Add object detection metrics test support
+        # assert isinstance(metric_to_func[metric](y_true, y_pred), float)

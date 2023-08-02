@@ -256,7 +256,11 @@ metric_to_func = {
     Metrics.FALSE_POSITIVE_RATE: false_positive_rate,
     Metrics.FALSE_NEGATIVE_RATE: false_negative_rate,
     Metrics.SELECTION_RATE: selection_rate,
-    Metrics.ERROR_RATE: error_rate
+    Metrics.ERROR_RATE: error_rate,
+    # TODO: Add support for object detection metrics.
+    # Metrics.MEAN_AVERAGE_PRECISION: mean_average_precision,
+    # Metrics.AVERAGE_PRECISION: average_precision,
+    # Metrics.AVERAGE_RECALL: average_recall,
 }
 
 metric_to_task = {
@@ -276,5 +280,8 @@ metric_to_task = {
     Metrics.MACRO_RECALL_SCORE: ModelTask.CLASSIFICATION,
     Metrics.FALSE_NEGATIVE_RATE: ModelTask.CLASSIFICATION,
     Metrics.FALSE_POSITIVE_RATE: ModelTask.CLASSIFICATION,
-    Metrics.SELECTION_RATE: ModelTask.CLASSIFICATION
+    Metrics.SELECTION_RATE: ModelTask.CLASSIFICATION,
+    Metrics.MEAN_AVERAGE_PRECISION: ModelTask.CLASSIFICATION,
+    Metrics.AVERAGE_PRECISION: ModelTask.CLASSIFICATION,
+    Metrics.AVERAGE_RECALL: ModelTask.CLASSIFICATION
 }
