@@ -44,54 +44,54 @@ export const DiabetesDecisionMaking = {
     initialCohorts: [
       {
         metrics: {
-          meanAbsoluteError: "43.363",
-          meanPrediction: "154.102",
-          meanSquaredError: "2 981.101"
+          meanAbsoluteError: "43.324",
+          meanPrediction: "154.043",
+          meanSquaredError: "2 983.258"
         },
         name: "All data",
         sampleSize: "89"
       },
       {
         metrics: {
-          meanAbsoluteError: "51.611",
-          meanPrediction: "196.629",
-          meanSquaredError: "4 014.697"
+          meanAbsoluteError: "51.629",
+          meanPrediction: "196.622",
+          meanSquaredError: "4 018.715"
         },
         name: "Cohort Age and BMI",
         sampleSize: "38"
       },
       {
         metrics: {
-          meanAbsoluteError: "49.176",
+          meanAbsoluteError: "49.167",
           meanPrediction: "142.495",
-          meanSquaredError: "3 829.201"
+          meanSquaredError: "3 839.796"
         },
         name: "Cohort Index",
         sampleSize: "20"
       },
       {
         metrics: {
-          meanAbsoluteError: "40.867",
-          meanPrediction: "115.086",
-          meanSquaredError: "2 416.75"
+          meanAbsoluteError: "40.124",
+          meanPrediction: "116.04",
+          meanSquaredError: "2 374.166"
         },
         name: "Cohort Predicted Y",
-        sampleSize: "51"
+        sampleSize: "52"
       },
       {
         metrics: {
-          meanAbsoluteError: "43.044",
-          meanPrediction: "155.306",
-          meanSquaredError: "2 972.126"
+          meanAbsoluteError: "42.988",
+          meanPrediction: "155.229",
+          meanSquaredError: "2 972.082"
         },
         name: "Cohort True Y",
         sampleSize: "87"
       },
       {
         metrics: {
-          meanAbsoluteError: "57.105",
-          meanPrediction: "157.301",
-          meanSquaredError: "4 154.723"
+          meanAbsoluteError: "57.108",
+          meanPrediction: "157.322",
+          meanSquaredError: "4 157.804"
         },
         name: "Cohort Regression Error",
         sampleSize: "63"
@@ -99,9 +99,9 @@ export const DiabetesDecisionMaking = {
     ],
     newCohort: {
       metrics: {
-        meanAbsoluteError: "43.841",
-        meanPrediction: "153.958",
-        meanSquaredError: "3 014.96"
+        meanAbsoluteError: "43.802",
+        meanPrediction: "153.898",
+        meanSquaredError: "3 017.141"
       },
       name: "CohortCreateE2E-diabetes",
       sampleSize: "88"
