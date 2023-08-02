@@ -254,7 +254,7 @@ class CausalManager(BaseManager):
             ).format(max_cat_expansion, max_cat_expansion)
             if expected in message:
                 raise UserConfigValidationException(
-                  message + clarification)
+                    message + clarification)
             raise e
 
     def _create_policy(
