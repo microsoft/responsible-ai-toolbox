@@ -3,7 +3,7 @@
 
 import { localization } from "@responsible-ai/localization";
 import { SeriesOptionsType } from "highcharts";
-import { unzip } from "lodash";
+import { orderBy, unzip } from "lodash";
 
 import { IDataset } from "../Interfaces/IDataset";
 
@@ -41,16 +41,13 @@ export function calculatePerClassROCData(
   probabilityY: number[],
   binY: number[]
 ): IROCData {
-  const rocData: IROCData = {
-    points: []
-  };
   const thresholds = probabilityY.sort();
-  let truePositives = 0;
-  let falsePositives = 0;
-  let trueNegatives = 0;
-  let falseNegatives = 0;
-
+  const points: IPoint[] = [];
   for (const threshold of thresholds) {
+    let truePositives = 0;
+    let falsePositives = 0;
+    let trueNegatives = 0;
+    let falseNegatives = 0;
     for (const [index, yProba] of probabilityY.entries()) {
       // if the probability of predicting the positive label is greater than the
       // threshold then it's a true positive.
@@ -72,12 +69,33 @@ export function calculatePerClassROCData(
       falsePositives,
       trueNegatives,
       falseNegatives,
-      rocData
+      points
     );
-    truePositives = falsePositives = trueNegatives = falseNegatives = 0;
   }
-  rocData.points.push({ x: 0, y: 0 });
+  points.push({ x: 0, y: 0 });
 
+  // construct the convex hull of the ROC points
+  const sortedPoints = orderBy(points, ["x", "y"], ["asc", "desc"]);
+  const convexHullPoints = [];
+  let highestY = -Infinity;
+  for (let i = 0; i < sortedPoints.length; i++) {
+    // only add points which have a greater y value than the last seen y
+    if (sortedPoints[i].y >= highestY) {
+      convexHullPoints.push(sortedPoints[i]);
+      highestY = sortedPoints[i].y;
+    }
+    let frontIterator = i + 1;
+    while (
+      frontIterator < sortedPoints.length &&
+      sortedPoints[i].x === sortedPoints[frontIterator].x
+    ) {
+      frontIterator++;
+    }
+    i = frontIterator;
+  }
+  const rocData: IROCData = {
+    points: convexHullPoints
+  };
   return rocData;
 }
 
@@ -86,14 +104,14 @@ function addROCPoint(
   falsePositives: number,
   trueNegatives: number,
   falseNegatives: number,
-  rocData: IROCData
+  points: IPoint[]
 ): void {
   // prevent division by 0
   const totalNegatives = trueNegatives + falsePositives;
   const totalPositives = truePositives + falseNegatives;
   const tpr = totalPositives === 0 ? 1 : truePositives / totalPositives;
   const fpr = totalNegatives === 0 ? 1 : falsePositives / totalNegatives;
-  rocData.points.push({ x: fpr, y: tpr });
+  points.push({ x: fpr, y: tpr });
 }
 
 export function binarizeData(
