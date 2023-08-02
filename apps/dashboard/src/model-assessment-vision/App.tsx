@@ -33,7 +33,7 @@ export class App extends React.Component<IAppProps> {
     selectionIndexes: number[][],
     className: string
   ) {
-    let returnedValues = [];
+    const returnedValues = [];
     for (const _ of selectionIndexes) {
       returnedValues.push([Math.random(), Math.random(), Math.random()]);
     }
@@ -51,20 +51,10 @@ export class App extends React.Component<IAppProps> {
       ...this.props,
       locale: this.props.language,
       localUrl: "https://www.bing.com/",
+      requestObjectDetectionMetrics: (selectionIndexes, _, className) =>
+        this.generateRandomObjectDetectionMetrics(selectionIndexes, className),
       stringParams: { contextualHelp: this.messages },
-      theme: this.props.theme,
-      requestObjectDetectionMetrics: (
-        selectionIndexes,
-        _aggregateMethod,
-        className,
-        _iouThreshold,
-        _objectDetectionCache,
-        _abortSignal
-      ) =>
-        this.generateRandomObjectDetectionMetrics(
-          selectionIndexes,
-          className
-        )
+      theme: this.props.theme
     };
 
     return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
