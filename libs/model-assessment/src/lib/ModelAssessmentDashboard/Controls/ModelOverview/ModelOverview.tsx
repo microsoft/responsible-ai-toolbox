@@ -424,7 +424,11 @@ export class ModelOverview extends React.Component<
               labeledStatistics={this.state.datasetCohortLabeledStatistics}
               selectableMetrics={selectableMetrics}
               selectedMetrics={this.state.selectedMetrics}
-              showHeatmapColors={this.state.showHeatmapColors}
+              showHeatmapColors={
+                this.state.showHeatmapColors &&
+                this.context.dataset.task_type !==
+                  DatasetTaskType.ObjectDetection
+              }
             />
           ) : (
             <>
@@ -474,7 +478,11 @@ export class ModelOverview extends React.Component<
                 selectedMetrics={this.state.selectedMetrics}
                 selectedFeatures={this.state.selectedFeatures}
                 featureBasedCohorts={this.state.featureBasedCohorts}
-                showHeatmapColors={this.state.showHeatmapColors}
+                showHeatmapColors={
+                  this.state.showHeatmapColors &&
+                  this.context.dataset.task_type !==
+                    DatasetTaskType.ObjectDetection
+                }
               />
             </>
           )}
