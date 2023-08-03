@@ -246,7 +246,10 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                   {localization.InterpretVision.Dashboard.panelInformation}
                 </Text>
               </Stack.Item>
-              <Stack.Item id="flyoutMetadata" className={classNames.featureListContainer}>
+              <Stack.Item
+                id="flyoutMetadata"
+                className={classNames.featureListContainer}
+              >
                 <List
                   items={this.state.metadata}
                   onRenderCell={this.onRenderCell}

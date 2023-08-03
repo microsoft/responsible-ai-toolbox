@@ -193,7 +193,8 @@ export class FlyoutObjectDetection extends React.Component<
                     {localization.InterpretVision.Dashboard.panelInformation}
                   </FluentUI.Text>
                 </FluentUI.Stack.Item>
-                <FluentUI.Stack.Item id="flyoutMetadata"
+                <FluentUI.Stack.Item
+                  id="flyoutMetadata"
                   className={classNames.featureListContainer}
                 >
                   <FluentUI.List
