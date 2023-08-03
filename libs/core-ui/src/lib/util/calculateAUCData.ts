@@ -70,7 +70,7 @@ export function calculatePerClassROCData(
       probability: p
     };
   });
-  const thresholds = orderBy(yData, ["probability"], ["asc"]);
+  const sortedYData = orderBy(yData, ["probability"], ["asc"]);
 
   const points: IPoint[] = [];
   let truePositives = sum(binY);
@@ -84,8 +84,8 @@ export function calculatePerClassROCData(
     falseNegatives,
     points
   );
-  for (const threshold of thresholds) {
-    if (threshold.binaryY) {
+  for (const y of sortedYData) {
+    if (y.binaryY) {
       falseNegatives++;
       truePositives--;
     } else {
