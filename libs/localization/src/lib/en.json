@@ -1806,6 +1806,11 @@
         "micro": "Micro"
       },
       "classSelectionDropdown": "Select class(es)",
+      "AUCChart": {
+        "title": "AUC",
+        "falsePositiveRate": "False positive rate",
+        "truePositiveRate": "True positive rate"
+      },
       "iouThresholdDropdown": {
         "name": "IoU Threshold",
         "description": "Intersection over Union quantifies the degree of overlap between the prediction and ground truth bounding box of a detected object in an image. For example, setting an IoU threshold of 70% means that a prediction with greater than 70% overlap with ground truth is True, thus influencing the definition of prediction correctness and calculation of other performance metrics.",

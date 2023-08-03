@@ -3,14 +3,17 @@
 
 import { ITheme } from "@fluentui/react";
 import { IHighchartsConfig } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import { SeriesOptionsType } from "highcharts";
 
 export function getAUCChartOptions(
   data: SeriesOptionsType[],
   theme?: ITheme
 ): IHighchartsConfig {
-  // Open questions:
-  // 1. select cohort ?
+  // Open TODO/questions:
+  // 1. should user be able to select cohort ?
+  // 2. support for multi class classification ?
+  // 3. solidify location of chart / wording
   const colorTheme = {
     axisColor: theme?.palette.neutralPrimary,
     axisGridColor: theme?.palette.neutralLight,
@@ -28,23 +31,22 @@ export function getAUCChartOptions(
     },
     series: data,
     title: {
-      // TODO: localize
-      text: "AUC"
+      text: localization.ModelAssessment.ModelOverview.AUCChart.title
     },
     xAxis: {
       max: 1.05,
       min: -0.05,
       title: {
-        // TODO: localize
-        text: "False Positive Rate"
+        text: localization.ModelAssessment.ModelOverview.AUCChart
+          .falsePositiveRate
       }
     },
     yAxis: {
       max: 1.05,
       min: -0.05,
       title: {
-        // TODO: localize
-        text: "True Positive Rate"
+        text: localization.ModelAssessment.ModelOverview.AUCChart
+          .truePositiveRate
       }
     }
   };

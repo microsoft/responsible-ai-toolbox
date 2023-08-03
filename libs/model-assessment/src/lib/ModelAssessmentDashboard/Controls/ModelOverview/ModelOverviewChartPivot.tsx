@@ -201,7 +201,6 @@ export class ModelOverviewChartPivot extends React.Component<
             //   aucChartExperienceFlight,
             //   this.context.featureFlights
             // ) && (
-            // TODO: support multiclass: IsMulticlass(this.context.modelMetadata.modelType)) && (
             <PivotItem
               headerText={
                 localization.ModelAssessment.ModelOverview.AUCPivotItem

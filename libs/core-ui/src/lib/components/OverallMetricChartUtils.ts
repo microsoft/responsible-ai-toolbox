@@ -220,7 +220,6 @@ export function generateMetricsList(
   if (!chartProps) {
     return [];
   }
-  console.log(yAxisProperty);
   if (chartProps.yAxis.property === cohortKey) {
     const indexes = context.errorCohorts.map((errorCohort) =>
       errorCohort.cohort.unwrap(JointDataset.IndexLabel)

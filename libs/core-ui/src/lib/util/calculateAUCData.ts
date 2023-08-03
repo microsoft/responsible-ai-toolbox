@@ -3,7 +3,7 @@
 
 import { localization } from "@responsible-ai/localization";
 import { SeriesOptionsType } from "highcharts";
-import { orderBy, unzip } from "lodash";
+import { orderBy, sum, unzip, zipWith } from "lodash";
 
 import { IDataset } from "../Interfaces/IDataset";
 
@@ -37,43 +37,7 @@ function getStaticROCData(): SeriesOptionsType[] {
   ];
 }
 
-export function calculatePerClassROCData(
-  probabilityY: number[],
-  binY: number[]
-): IROCData {
-  const thresholds = probabilityY.sort();
-  const points: IPoint[] = [];
-  for (const threshold of thresholds) {
-    let truePositives = 0;
-    let falsePositives = 0;
-    let trueNegatives = 0;
-    let falseNegatives = 0;
-    for (const [index, yProba] of probabilityY.entries()) {
-      // if the probability of predicting the positive label is greater than the
-      // threshold then it's a true positive.
-      // otherwise, it's a false positive
-      if (yProba < threshold) {
-        if (binY[index]) {
-          falseNegatives++;
-        } else {
-          trueNegatives++;
-        }
-      } else if (binY[index]) {
-        truePositives++;
-      } else {
-        falsePositives++;
-      }
-    }
-    addROCPoint(
-      truePositives,
-      falsePositives,
-      trueNegatives,
-      falseNegatives,
-      points
-    );
-  }
-  points.push({ x: 0, y: 0 });
-
+export function getConvexHullPoints(points: IPoint[]): IPoint[] {
   // construct the convex hull of the ROC points
   const sortedPoints = orderBy(points, ["x", "y"], ["asc", "desc"]);
   const convexHullPoints = [];
@@ -93,8 +57,53 @@ export function calculatePerClassROCData(
     }
     i = frontIterator;
   }
+  return convexHullPoints;
+}
+
+export function calculatePerClassROCData(
+  probabilityY: number[],
+  binY: number[]
+): IROCData {
+  const yData = zipWith(probabilityY, binY, (p: number, y: number) => {
+    return {
+      binaryY: y,
+      probability: p
+    };
+  });
+  const thresholds = orderBy(yData, ["probability"], ["asc"]);
+
+  const points: IPoint[] = [];
+  let truePositives = sum(binY);
+  let falsePositives = binY.length - truePositives;
+  let trueNegatives = 0;
+  let falseNegatives = 0;
+  addROCPoint(
+    truePositives,
+    falsePositives,
+    trueNegatives,
+    falseNegatives,
+    points
+  );
+  for (const threshold of thresholds) {
+    if (threshold.binaryY) {
+      falseNegatives++;
+      truePositives--;
+    } else {
+      trueNegatives++;
+      falsePositives--;
+    }
+    addROCPoint(
+      truePositives,
+      falsePositives,
+      trueNegatives,
+      falseNegatives,
+      points
+    );
+  }
+  points.push({ x: 0, y: 0 });
+
   const rocData: IROCData = {
-    points: convexHullPoints
+    points: getConvexHullPoints(points)
   };
   return rocData;
 }
