@@ -1133,12 +1133,19 @@
       "label": "Popisek",
       "colon": ": ",
       "startingPosition": "STARTING POSITION",
-      "endingPosition": "ENDING POSITION"
+      "endingPosition": "ENDING POSITION",
+      "predictedAnswer": "Predicted answer: ",
+      "trueAnswer": "True answer: ",
+      "inputs": "Inputs",
+      "outputs": "Outputs"
     },
     "Legend": {
       "featureLegend": "LEGENDA TEXTOVÉ FUNKCE",
       "posFeatureImportance": "POZITIVNÍ DŮLEŽITOST PŘÍZNAKŮ",
-      "negFeatureImportance": "NEGATIVNÍ DŮLEŽITOST PŘÍZNAKŮ"
+      "negFeatureImportance": "NEGATIVNÍ DŮLEŽITOST PŘÍZNAKŮ",
+      "cls": "CLS: start of the sentence",
+      "sep": "SEP: end of the sentence",
+      "selectedWord": "Selected word: "
     },
     "BarChart": {
       "featureImportance": "DŮLEŽITOST PŘÍZNAKŮ"

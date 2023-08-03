@@ -1133,12 +1133,19 @@
       "label": "Étiquette",
       "colon": ": ",
       "startingPosition": "STARTING POSITION",
-      "endingPosition": "ENDING POSITION"
+      "endingPosition": "ENDING POSITION",
+      "predictedAnswer": "Predicted answer: ",
+      "trueAnswer": "True answer: ",
+      "inputs": "Inputs",
+      "outputs": "Outputs"
     },
     "Legend": {
       "featureLegend": "LÉGENDE DE FONCTIONNALITÉ DE TEXTE",
       "posFeatureImportance": "IMPORTANCE DE LA FONCTIONNALITÉ POSITIVE",
-      "negFeatureImportance": "IMPORTANCE DE LA FONCTIONNALITÉ NÉGATIVE"
+      "negFeatureImportance": "IMPORTANCE DE LA FONCTIONNALITÉ NÉGATIVE",
+      "cls": "CLS: start of the sentence",
+      "sep": "SEP: end of the sentence",
+      "selectedWord": "Selected word: "
     },
     "BarChart": {
       "featureImportance": "IMPORTANCE DES FONCTIONNALITÉS"

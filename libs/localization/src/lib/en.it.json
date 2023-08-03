@@ -1133,12 +1133,19 @@
       "label": "Etichetta",
       "colon": ":",
       "startingPosition": "STARTING POSITION",
-      "endingPosition": "ENDING POSITION"
+      "endingPosition": "ENDING POSITION",
+      "predictedAnswer": "Predicted answer: ",
+      "trueAnswer": "True answer: ",
+      "inputs": "Inputs",
+      "outputs": "Outputs"
     },
     "Legend": {
       "featureLegend": "LEGENDA FUNZIONALITÀ TESTO",
       "posFeatureImportance": "IMPORTANZA DELLA CARATTERISTICA POSITIVA",
-      "negFeatureImportance": "IMPORTANZA DELLA CARATTERISTICA NEGATIVA"
+      "negFeatureImportance": "IMPORTANZA DELLA CARATTERISTICA NEGATIVA",
+      "cls": "CLS: start of the sentence",
+      "sep": "SEP: end of the sentence",
+      "selectedWord": "Selected word: "
     },
     "BarChart": {
       "featureImportance": "IMPORTANZA DELLA FUNZIONALITÀ"
