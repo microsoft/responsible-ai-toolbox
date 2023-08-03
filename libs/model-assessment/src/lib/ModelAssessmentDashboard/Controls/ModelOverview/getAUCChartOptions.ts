@@ -29,9 +29,20 @@ export function getAUCChartOptions(
     custom: {
       disableUpdate: true
     },
+    legend: {
+      align: "right",
+      enabled: true,
+      layout: "vertical",
+      verticalAlign: "top",
+      y: 30
+    },
     series: data,
     title: {
       text: localization.ModelAssessment.ModelOverview.AUCChart.title
+    },
+    tooltip: {
+      headerFormat: "<strong>{series.name}</strong>",
+      pointFormat: "</br>{point.x},{point.y}"
     },
     xAxis: {
       max: 1.05,
