@@ -323,7 +323,7 @@ class ResponsibleAIDashboardInput:
         for the Object Detection scenario.
 
         :param post_data: List of inputs in the order
-        [true_y, predicted_y, aggregate_method, class_name, iou_thresh].
+        [true_y, predicted_y, aggregate_method, class_name, iou_threshold].
         :type post_data: List
 
         :return: JSON/dict data response
@@ -333,13 +333,13 @@ class ResponsibleAIDashboardInput:
             selection_indexes = post_data[0]
             aggregate_method = post_data[1]
             class_name = post_data[2]
-            iou_thresh = post_data[3]
+            iou_threshold = post_data[3]
             object_detection_cache = post_data[4]
             exp = self._analysis.compute_object_detection_metrics(
                 selection_indexes,
                 aggregate_method,
                 class_name,
-                iou_thresh,
+                iou_threshold,
                 object_detection_cache
             )
             return {
@@ -361,7 +361,7 @@ class ResponsibleAIDashboardInput:
         for the Question Answering scenario.
 
         :param post_data: List of inputs in the order
-        [true_y, predicted_y, aggregate_method, class_name, iou_thresh].
+        [true_y, predicted_y, aggregate_method, class_name, iou_threshold].
         :type post_data: List
 
         :return: JSON/dict data response
@@ -369,8 +369,10 @@ class ResponsibleAIDashboardInput:
         """
         try:
             selection_indexes = post_data[0]
+            question_answering_cache = post_data[1]
             exp = self._analysis.compute_question_answering_metrics(
-                selection_indexes
+                selection_indexes,
+                question_answering_cache
             )
             return {
                 WidgetRequestResponseConstants.data: exp

@@ -9,4 +9,9 @@ export interface IChartProps {
   localExplanations: number[];
   topK?: number;
   radio?: string;
+  isInput?: boolean;
+  baseValue?: number;
+  outputFeatureValue?: number;
+  selectedTokenIndex?: number;
+  onSelectedTokenChange?: (newIndex: number) => void;
 }

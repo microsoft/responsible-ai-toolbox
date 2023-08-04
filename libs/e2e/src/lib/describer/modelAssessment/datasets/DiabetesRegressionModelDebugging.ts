@@ -47,9 +47,9 @@ export const DiabetesRegressionModelDebugging = {
     initialCohorts: [
       {
         metrics: {
-          meanAbsoluteError: "43.363",
-          meanPrediction: "154.102",
-          meanSquaredError: "2 981.101"
+          meanAbsoluteError: "43.324",
+          meanPrediction: "154.043",
+          meanSquaredError: "2 983.258"
         },
         name: "All data",
         sampleSize: "89"
@@ -57,9 +57,9 @@ export const DiabetesRegressionModelDebugging = {
     ],
     newCohort: {
       metrics: {
-        meanAbsoluteError: "43.841",
-        meanPrediction: "153.958",
-        meanSquaredError: "3 014.96"
+        meanAbsoluteError: "43.802",
+        meanPrediction: "153.898",
+        meanSquaredError: "3 017.141"
       },
       name: "CohortCreateE2E-diabetes",
       sampleSize: "88"

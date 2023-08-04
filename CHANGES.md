@@ -24,6 +24,59 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.29.0
+
+- educational materials
+  - Doc update for `responsibleai_vision` by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2164
+  - [Object Detection] User Flows / Architectures by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2134
+  - [Object Detection] DFD Documentation by @natalie-isak in https://github.com/microsoft/responsible-ai-toolbox/pull/2138
+  - [Object Detection] Explanation Documentation by @natalie-isak in https://github.com/microsoft/responsible-ai-toolbox/pull/2136
+  - [Object Detection] CanvasTools documentation by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2133
+  - [Object Detection] Model Overview Object Detection Documentation by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2132
+- new features
+  - ## Responsible AI Dashboard
+    - [Object Detection] Cache support for Model Overview Metrics by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2158
+    - [Image Explorer] CanvasTools Image Loading support for Object Detection by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2097
+    - [Object Detection] [Image Explorer] Bounding Box Support with CanvasTools on Flyout by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2116
+- bug fixes and tests
+
+  - ## Responsible AI Dashboard
+    - update responsibleai-text and responsibleai-vision packages to latest responsibleai 0.28.0 release by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2159
+    - Robot page exception in DatasetUtils where jointDataset.metaDict[property] is undefined by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/2148
+    - Remove console log by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/2125
+    - Refactor- Add datasetCohorts to ModelAssessementContext && create datasetCohort && add compositeFilter in DatasetCohort by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/2119
+  - ## RAIInsights
+    - raise error instead of warning when a user has missing data and add c… by @hawestra in https://github.com/microsoft/responsible-ai-toolbox/pull/2143
+    - Add columns names to `create_multiclass_classification_dataset` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2114
+    - add validation target column type in the classification scenario by @hawestra in https://github.com/microsoft/responsible-ai-toolbox/pull/2127
+    - update econml to latest 0.14.1 release by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2112
+    - Update dice-ml to 0.10.0 by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2145
+  - ## Causal
+    - Fix individual causal plot not rendering for 5k points by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/2113
+    - Add loading spinner for causal policy tab by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2121
+  - ## RAI Text
+    - merge RAI Text repository to RAI toolbox by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2118
+    - add responsibleai-text package tests to build gate by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2139
+    - release responsibleai-text 0.1.4 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2163
+    - add release scripts for responsibleai-text and responsibleai-vision pypi packages by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2156
+  - ## RAI Vision
+    - add responsibleai-vision package to responsible-ai-toolbox by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2135
+    - add responsibleai-vision package to gated CI tests by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2152
+    - add retry logic to common vision utils to make tests more robust by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2154
+    - add device parameter to responsibleai_vision package and pass to model wrappers by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2157
+    - release responsibleai-vision 0.2.3 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2162
+  - ## RAI Test Utils
+    - Update rai_test_utils in erroranalysis and responsibleai to 0.3.0 by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2111
+    - `rai_test_utils`: Convert all namespaces in `__all__` list as strings by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2128
+
+- ## other
+  - fix build failures due to lint errors for onelocbuild yml by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2137
+  - Skipping python 3.7 tests on MACOS by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2129
+  - fix build failures due to new joblib 1.3.0 release failing on windows with python 3.7 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2155
+  - Localized file check-in by OneLocBuild Task: Build definition ID 21368: Build ID 97902894 by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/2160
+  - Update the python version to 3.8 in release workflows by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2161
+  - fix job names in release scripts by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2165
+
 ## v0.28.0
 
 - educational materials

@@ -62,7 +62,11 @@ interface IModelOverviewProps {
     objectDetectionCache: Map<string, [number, number, number]>
   ) => Promise<any[]>;
   requestQuestionAnsweringMetrics?: (
-    selectionIndexes: number[][]
+    selectionIndexes: number[][],
+    questionAnsweringCache: Map<
+      string,
+      [number, number, number, number, number, number]
+    >
   ) => Promise<any[]>;
 }
 
@@ -95,6 +99,10 @@ export class ModelOverview extends React.Component<
   IModelOverviewState
 > {
   public static contextType = ModelAssessmentContext;
+  public questionAnsweringCache: Map<
+    string,
+    [number, number, number, number, number, number]
+  > = new Map();
   public objectDetectionCache: Map<string, [number, number, number]> =
     new Map();
   public context: React.ContextType<typeof ModelAssessmentContext> =
@@ -416,7 +424,11 @@ export class ModelOverview extends React.Component<
               labeledStatistics={this.state.datasetCohortLabeledStatistics}
               selectableMetrics={selectableMetrics}
               selectedMetrics={this.state.selectedMetrics}
-              showHeatmapColors={this.state.showHeatmapColors}
+              showHeatmapColors={
+                this.state.showHeatmapColors &&
+                this.context.dataset.task_type !==
+                  DatasetTaskType.ObjectDetection
+              }
             />
           ) : (
             <>
@@ -466,7 +478,11 @@ export class ModelOverview extends React.Component<
                 selectedMetrics={this.state.selectedMetrics}
                 selectedFeatures={this.state.selectedFeatures}
                 featureBasedCohorts={this.state.featureBasedCohorts}
-                showHeatmapColors={this.state.showHeatmapColors}
+                showHeatmapColors={
+                  this.state.showHeatmapColors &&
+                  this.context.dataset.task_type !==
+                    DatasetTaskType.ObjectDetection
+                }
               />
             </>
           )}
@@ -610,7 +626,8 @@ export class ModelOverview extends React.Component<
         this.state.aggregateMethod,
         this.state.className,
         this.state.iouThreshold
-      ]
+      ],
+      this.questionAnsweringCache
     );
 
     this.setState({
@@ -648,27 +665,47 @@ export class ModelOverview extends React.Component<
           new AbortController().signal
         )
         .then((result) => {
-          // Assumption: the lengths of `result` and `selectionIndexes` are the same.
+          const [allCohortMetrics, cohortClasses] = result;
+
+          // Assumption: the lengths of `allCohortMetrics` and `selectionIndexes` are the same.
           const updatedMetricStats: ILabeledStatistic[][] = [];
 
           for (const [
             cohortIndex,
-            [meanAveragePrecision, averagePrecision, averageRecall]
-          ] of result.entries()) {
+            cohortMetrics
+          ] of allCohortMetrics.entries()) {
             const count = selectionIndexes[cohortIndex].length;
 
-            const key: [number[], string, string, number] = [
-              selectionIndexes[cohortIndex],
-              this.state.aggregateMethod,
-              this.state.className,
-              this.state.iouThreshold
-            ];
-            if (!this.objectDetectionCache.has(key.toString())) {
-              this.objectDetectionCache.set(key.toString(), [
-                meanAveragePrecision,
-                averagePrecision,
-                averageRecall
-              ]);
+            let meanAveragePrecision = -1;
+            let averagePrecision = -1;
+            let averageRecall = -1;
+
+            // checking 2D array of computed metrics to cache
+            if (
+              Array.isArray(cohortMetrics) &&
+              cohortMetrics.every((subArray) => Array.isArray(subArray))
+            ) {
+              for (const [i, cohortMetric] of cohortMetrics.entries()) {
+                const [mAP, aP, aR] = cohortMetric;
+
+                const key: [number[], string, string, number] = [
+                  selectionIndexes[cohortIndex],
+                  this.state.aggregateMethod,
+                  cohortClasses[i],
+                  this.state.iouThreshold
+                ];
+                if (!this.objectDetectionCache.has(key.toString())) {
+                  this.objectDetectionCache.set(key.toString(), [mAP, aP, aR]);
+                }
+
+                if (this.state.className === cohortClasses[i]) {
+                  [meanAveragePrecision, averagePrecision, averageRecall] =
+                    cohortMetric;
+                }
+              }
+            } else if (Array.isArray(cohortMetrics)) {
+              [meanAveragePrecision, averagePrecision, averageRecall] =
+                cohortMetrics;
             }
 
             const updatedCohortMetricStats = [
@@ -715,6 +752,7 @@ export class ModelOverview extends React.Component<
       this.context
         .requestQuestionAnsweringMetrics(
           selectionIndexes,
+          this.questionAnsweringCache,
           new AbortController().signal
         )
         .then((result) => {
@@ -733,6 +771,24 @@ export class ModelOverview extends React.Component<
             ]
           ] of result.entries()) {
             const count = selectionIndexes[cohortIndex].length;
+
+            if (
+              !this.questionAnsweringCache.has(
+                selectionIndexes[cohortIndex].toString()
+              )
+            ) {
+              this.questionAnsweringCache.set(
+                selectionIndexes[cohortIndex].toString(),
+                [
+                  exactMatchRatio,
+                  f1Score,
+                  meteorScore,
+                  bleuScore,
+                  bertScore,
+                  rougeScore
+                ]
+              );
+            }
 
             const updatedCohortMetricStats = [
               {
@@ -813,7 +869,8 @@ export class ModelOverview extends React.Component<
         this.state.aggregateMethod,
         this.state.className,
         this.state.iouThreshold
-      ]
+      ],
+      this.questionAnsweringCache
     );
 
     this.setState({

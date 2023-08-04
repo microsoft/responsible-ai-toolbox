@@ -10,6 +10,11 @@ export enum RadioKeys {
   Neg = "neg"
 }
 
+export enum QAExplanationType {
+  Start = "start",
+  End = "end"
+}
+
 export class Utils {
   public static argsort(toSort: number[]): number[] {
     /*
@@ -71,6 +76,14 @@ export class Utils {
       }
     }
     return sortedList;
+  }
+
+  public static addItem(value: number, radio: string | undefined): boolean {
+    return (
+      radio === RadioKeys.All ||
+      (radio === RadioKeys.Neg && value <= 0) ||
+      (radio === RadioKeys.Pos && value >= 0)
+    );
   }
 
   public static takeTopK(list: number[], k: number): number[] {
