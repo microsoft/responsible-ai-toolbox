@@ -82,7 +82,7 @@ jobs:
 
       - name: Run notebook tests
         shell: bash -l {0}
-        run: python -m pytest notebooks -m notebooks
+        run: python -m pytest -s -v notebooks -m notebooks
 
       - name: Upload notebook test result
         if: always()
