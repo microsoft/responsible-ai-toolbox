@@ -90,26 +90,18 @@ class WrappedIndexPredictorModel:
             test = get_images(self.dataset, self.image_mode,
                               self.transformations)
         self.predictions = self.model.predict(test)
-        if task_type == ModelTask.MULTILABEL_IMAGE_CLASSIFICATION:
+        if task_type == ModelTask.MULTILABEL_IMAGE_CLASSIFICATION \
+            or task_type == ModelTask.OBJECT_DETECTION:
             predictions_joined = []
             for row in self.predictions:
                 # get all labels where prediction is 1
-                pred_labels = [i for i in range(len(row)) if row[i]]
-                if self.classes is not None:
-                    pred_labels = [self.classes[i] for i in pred_labels]
-                else:
-                    pred_labels = [str(i) for i in pred_labels]
-                # concatenate all predicted labels into a single string
-                predictions_joined.append(','.join(pred_labels))
-            self.predictions = np.array(predictions_joined)
-        elif task_type == ModelTask.OBJECT_DETECTION:
-            # TODO: change logic after success/error labels
-            # are updated to `x correct, y incorrect`
-            predictions_joined = []
-            for image_pred in self.predictions:
-                # get all labels where prediction is 1
-                pred_labels = [int(object_pred[0] - 1)
-                               for object_pred in image_pred]
+                if task_type == ModelTask.MULTILABEL_IMAGE_CLASSIFICATION:
+                    pred_labels = [i for i in range(len(row)) if row[i]]
+                elif task_type == ModelTask.OBJECT_DETECTION:
+                    # TODO: change logic after success/error labels
+                    # are updated to `x correct, y incorrect`
+                    pred_labels = [int(object_pred[0] - 1)
+                                   for object_pred in row]
                 if self.classes is not None:
                     pred_labels = [self.classes[i] for i in pred_labels]
                 else:

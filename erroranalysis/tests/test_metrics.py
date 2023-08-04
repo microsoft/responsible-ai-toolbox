@@ -55,7 +55,9 @@ class TestMetrics:
     def test_object_detection_metrics(self, metric):
         y_true = np.array([[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]])
         y_pred = np.array([[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]])
-        with pytest.raises(AttributeError):
-            metric_to_func[metric](y_true, y_pred)
-        # TODO: Add object detection metrics test support
-        # assert isinstance(metric_to_func[metric](y_true, y_pred), float)
+        if metric == Metrics.ERROR_RATE:
+            diff = y_true != y_pred
+            metric_value = metric_to_func[metric](y_true, y_pred, diff)
+        else:
+            metric_value = metric_to_func[metric](y_true, y_pred)
+        assert isinstance(metric_value, float)
