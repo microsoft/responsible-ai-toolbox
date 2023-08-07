@@ -55,5 +55,4 @@ class TestMetrics:
     def test_object_detection_metrics(self, metric):
         y_true = np.array([[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]])
         y_pred = np.array([[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]])
-        with pytest.raises(AttributeError):
-            metric_to_func[metric](y_true, y_pred)
+        metric_to_func[metric](y_true, y_pred)
