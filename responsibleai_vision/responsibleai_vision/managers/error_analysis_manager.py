@@ -76,6 +76,8 @@ class WrappedIndexPredictorModel:
         self.image_mode = image_mode
         self.transformations = transformations
         self.task_type = task_type
+        print('WrappedIndexPredictorModel')
+        print(task_type)
         if is_automl_image_model(self.model):
             test = np.array(
                 self.dataset.iloc[:, 0].tolist()
@@ -323,5 +325,6 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
                                                    dataset,
                                                    true_y,
                                                    feature_names,
-                                                   categorical_features)
+                                                   categorical_features,
+                                                   model_task=task_type)
         return inst

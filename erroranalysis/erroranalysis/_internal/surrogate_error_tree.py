@@ -25,7 +25,7 @@ from erroranalysis._internal.metrics import get_ordered_classes, metric_to_func
 from erroranalysis._internal.process_categoricals import process_categoricals
 from erroranalysis._internal.utils import is_spark
 from raiutils.exceptions import UserConfigValidationException
-from vision_explanation_methods.error_labeling import ErrorLabeling
+from vision_explanation_methods.error_labeling.error_labeling import ErrorLabeling
 
 # imports required for pyspark support
 try:
@@ -306,15 +306,14 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
         input_data = input_data.to_numpy(copy=True)
     if is_model_analyzer:
         pred_y = analyzer.model.predict(input_data)
+    print('surrogate')
+    print(analyzer.model_task)
     if analyzer.model_task == ModelTask.CLASSIFICATION:
         diff = pred_y != true_y
     elif analyzer.model_task == ModelTask.OBJECT_DETECTION:
-        diff = len(ErrorLabeling(
-            ModelTask.OBJECT_DETECTION,
-            pred_y,
-            true_y
-        ).compute_error_labels()) > 0
-
+        print('yes surrogate')
+        assert len(pred_y) == len(true_y)
+        diff = [len(ErrorLabeling(ModelTask.OBJECT_DETECTION, pred_y[image_idx], true_y[image_idx]).compute_error_labels()) > 0 for image_idx in range(len(true_y))]
     else:
         diff = pred_y - true_y
     if not isinstance(diff, np.ndarray):

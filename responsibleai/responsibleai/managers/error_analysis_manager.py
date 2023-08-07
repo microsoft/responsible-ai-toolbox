@@ -10,7 +10,7 @@ from typing import Any, List, Optional
 import jsonschema
 import pandas as pd
 
-from erroranalysis._internal.constants import metric_to_display_name
+from erroranalysis._internal.constants import ModelTask, metric_to_display_name
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.error_report import as_error_report
 from erroranalysis._internal.error_report import \
@@ -227,7 +227,8 @@ class ErrorAnalysisManager(BaseManager):
     def __init__(self, model: Any, dataset: pd.DataFrame, target_column: str,
                  classes: Optional[List] = None,
                  categorical_features: Optional[List[str]] = None,
-                 dropped_features: Optional[List[str]] = None):
+                 dropped_features: Optional[List[str]] = None,
+                 model_task: Optional[str] = ModelTask.CLASSIFICATION):
         """Creates an ErrorAnalysisManager object.
 
         :param model: The model to analyze errors on.
@@ -265,6 +266,7 @@ class ErrorAnalysisManager(BaseManager):
             self._true_y,
             self._feature_names,
             self._categorical_features,
+            model_task=model_task,
             classes=self._classes)
 
     def add(self, max_depth: int = 3, num_leaves: int = 31,

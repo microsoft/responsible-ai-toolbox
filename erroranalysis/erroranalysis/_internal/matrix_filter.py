@@ -18,6 +18,7 @@ from erroranalysis._internal.metrics import (get_ordered_classes,
                                              is_multi_agg_metric,
                                              metric_to_func)
 from raiutils.exceptions import UserConfigValidationException
+from vision_explanation_methods.error_labeling.error_labeling import ErrorLabeling
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 CATEGORY1 = 'category1'
@@ -110,9 +111,14 @@ def compute_matrix_on_dataset(analyzer, features, dataset,
         input_data = input_data.to_numpy()
     if is_model_analyzer:
         pred_y = analyzer.model.predict(input_data)
-
+    print('matrix filter')
+    print(analyzer.model_task)
     if analyzer.model_task == ModelTask.CLASSIFICATION:
         diff = pred_y != true_y
+    elif analyzer.model_task == ModelTask.OBJECT_DETECTION:
+        print('yes od')
+        assert len(pred_y) == len(true_y)
+        diff = [len(ErrorLabeling(ModelTask.OBJECT_DETECTION, pred_y[image_idx], true_y[image_idx]).compute_error_labels()) > 0 for image_idx in range(len(true_y))]
     else:
         diff = pred_y - true_y
     if not isinstance(diff, np.ndarray):

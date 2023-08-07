@@ -145,7 +145,7 @@ class FilterDataWithCohortFilters:
         # For classification task, check if classification
         # outcome is included in filters, and if it is then
         # compute the necessary column data on the fly
-        if model_task == ModelTask.CLASSIFICATION and filters:
+        if (model_task == ModelTask.CLASSIFICATION or model_task == ModelTask.OBJECT_DETECTION) and filters:
             for filter in filters:
                 if COLUMN in filter:
                     column = filter[COLUMN]
