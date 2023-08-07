@@ -6,7 +6,8 @@ import pytest
 
 from erroranalysis._internal.constants import (Metrics,
                                                binary_classification_metrics,
-                                               multiclass_classification_metrics,regression_metrics,
+                                               multiclass_classification_metrics,  # noqa: E501
+                                               regression_metrics,
                                                object_detection_metrics)
 from erroranalysis._internal.metrics import metric_to_func
 
