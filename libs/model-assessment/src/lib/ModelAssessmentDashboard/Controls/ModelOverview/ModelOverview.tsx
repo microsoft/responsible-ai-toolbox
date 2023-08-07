@@ -33,7 +33,6 @@ import {
   TelemetryLevels,
   TelemetryEventName,
   DatasetTaskType,
-  ImageClassificationMetrics,
   QuestionAnsweringMetrics,
   TotalCohortSamples
 } from "@responsible-ai/core-ui";
@@ -147,17 +146,13 @@ export class ModelOverview extends React.Component<
           BinaryClassificationMetrics.FalseNegativeRate,
           BinaryClassificationMetrics.SelectionRate
         ];
-      } else if (
-        this.context.dataset.task_type === DatasetTaskType.ImageClassification
-      ) {
-        defaultSelectedMetrics = [
-          ImageClassificationMetrics.Accuracy,
-          ImageClassificationMetrics.MacroF1,
-          ImageClassificationMetrics.MacroPrecision,
-          ImageClassificationMetrics.MacroRecall
-        ];
       } else {
-        defaultSelectedMetrics = [MulticlassClassificationMetrics.Accuracy];
+        defaultSelectedMetrics = [
+          MulticlassClassificationMetrics.Accuracy,
+          MulticlassClassificationMetrics.MacroF1,
+          MulticlassClassificationMetrics.MacroPrecision,
+          MulticlassClassificationMetrics.MacroRecall
+        ];
       }
     } else if (
       this.context.dataset.task_type ===
