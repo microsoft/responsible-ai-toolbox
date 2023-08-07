@@ -192,5 +192,5 @@ export enum Locators {
   VisionDataExplorerClassViewLabelTypeDropdown = "#VisionDataExplorer #labelTypeDropdown",
   VisionDataExplorerClassViewLabelDisplayDropdown = "#VisionDataExplorer #labelVisibilitySelectorsDropdown",
   VisionDataExplorerClassViewDataCharacteristicsLegend = "#VisionDataExplorer #dataCharacteristicsLegend",
-  VisionDataExplorerClassViewContainer = "#VisionDataExplorer #classViewContainer",
+  VisionDataExplorerClassViewContainer = "#VisionDataExplorer #classViewContainer"
 }

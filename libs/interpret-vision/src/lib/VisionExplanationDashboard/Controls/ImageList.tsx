@@ -156,7 +156,7 @@ export class ImageList extends React.Component<
                   ? this.props.imageDim
                   : this.props.imageDim - 1.35 * ImagePadding
             }}
-        >
+          >
             <Text
               className={classNames.label}
               style={{ width: this.props.imageDim - 20 }}
