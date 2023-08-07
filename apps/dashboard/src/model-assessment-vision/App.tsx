@@ -29,6 +29,18 @@ export class App extends React.Component<IAppProps> {
     TestReq: [{ displayText: "TestReq", format: "text" }]
   };
 
+  public async generateRandomObjectDetectionMetrics(
+    selectionIndexes: number[][],
+    className: string
+  ): Promise<any[]> {
+    const returnedValues: any[] = [];
+    selectionIndexes.forEach(() => {
+      returnedValues.push([Math.random(), Math.random(), Math.random()]);
+    });
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    return [returnedValues, [className]];
+  }
+
   public render(): React.ReactNode {
     if (this.props.modelExplanationData) {
       for (const exp of this.props.modelExplanationData) {
@@ -39,6 +51,8 @@ export class App extends React.Component<IAppProps> {
       ...this.props,
       locale: this.props.language,
       localUrl: "https://www.bing.com/",
+      requestObjectDetectionMetrics: (selectionIndexes, _, className) =>
+        this.generateRandomObjectDetectionMetrics(selectionIndexes, className),
       stringParams: { contextualHelp: this.messages },
       theme: this.props.theme
     };
