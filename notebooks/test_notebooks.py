@@ -17,6 +17,7 @@ RACE_GROUP_SIZES_ADULT = {
 }
 INDIVIDUAL_DASHBOARDS = 'individual-dashboards/'
 RESPONSIBLEAIDASHBOARD = 'responsibleaidashboard/'
+TEXT = RESPONSIBLEAIDASHBOARD + 'text/'
 ERROR_ANALYSIS_DASHBOARD = INDIVIDUAL_DASHBOARDS + 'erroranalysis-dashboard/'
 EXPLANATION_DASHBOARD = INDIVIDUAL_DASHBOARDS + 'explanation-dashboard/'
 FAIRNESS_DASHBOARD = INDIVIDUAL_DASHBOARDS + 'fairness-dashboard/'
@@ -290,6 +291,16 @@ def test_responsibleaidashboard_fridge_object_detection_model_debugging():
 def test_responsibleaidashboard_getting_started():
     nb_path = RESPONSIBLEAIDASHBOARD
     nb_name = "getting-started"
+
+    test_values = {}
+    assay_one_notebook(nb_path, nb_name, test_values)
+
+
+@pytest.mark.text_notebooks
+def test_responsibleaidashboard_dbpedia_text_classification_model_debugging():
+    nb_path = TEXT
+    nb_name = ("responsibleaidashboard-DBPedia-text-classification-" +
+               "model-debugging")
 
     test_values = {}
     assay_one_notebook(nb_path, nb_name, test_values)
