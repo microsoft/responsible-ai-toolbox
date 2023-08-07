@@ -96,9 +96,6 @@ class Metrics(str, Enum):
     FALSE_POSITIVE_RATE = 'false_positive_rate'
     FALSE_NEGATIVE_RATE = 'false_negative_rate'
     SELECTION_RATE = 'selection_rate'
-    MEAN_AVERAGE_PRECISION = 'mean_average_precision'
-    AVERAGE_PRECISION = 'average_precision'
-    AVERAGE_RECALL = 'average_recall'
 
 
 class MetricKeys(str, Enum):
@@ -153,10 +150,7 @@ metric_to_display_name = {
     Metrics.ERROR_RATE: 'Error rate',
     Metrics.FALSE_POSITIVE_RATE: 'False positive rate',
     Metrics.FALSE_NEGATIVE_RATE: 'False negative rate',
-    Metrics.SELECTION_RATE: 'Selection rate',
-    Metrics.MEAN_AVERAGE_PRECISION: 'Mean average precision',
-    Metrics.AVERAGE_PRECISION: 'Average precision',
-    Metrics.AVERAGE_RECALL: 'Average recall'
+    Metrics.SELECTION_RATE: 'Selection rate'
 }
 
 
