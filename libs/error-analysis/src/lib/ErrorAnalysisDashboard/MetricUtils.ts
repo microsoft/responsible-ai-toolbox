@@ -29,9 +29,11 @@ const localizedMetricMapping = {
   [Metrics.MicroRecallScore]: localization.ErrorAnalysis.Metrics.MicroRecall,
   [Metrics.MacroF1Score]: localization.ErrorAnalysis.Metrics.MacroF1Score,
   [Metrics.MicroF1Score]: localization.ErrorAnalysis.Metrics.MicroF1Score,
-  [Metrics.MeanAveragePrecision]: localization.ErrorAnalysis.Metrics.MeanAveragePrecision,
-  [Metrics.AveragePrecision]: localization.ErrorAnalysis.Metrics.AveragePrecision,
-  [Metrics.AverageRecall]: localization.ErrorAnalysis.Metrics.AverageRecall,
+  [Metrics.MeanAveragePrecision]:
+    localization.ErrorAnalysis.Metrics.MeanAveragePrecision,
+  [Metrics.AveragePrecision]:
+    localization.ErrorAnalysis.Metrics.AveragePrecision,
+  [Metrics.AverageRecall]: localization.ErrorAnalysis.Metrics.AverageRecall
 };
 
 export class MetricUtils {
