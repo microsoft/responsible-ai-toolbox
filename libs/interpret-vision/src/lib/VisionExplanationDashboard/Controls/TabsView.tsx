@@ -105,16 +105,13 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
               className={classNames.mainImageContainer}
             >
               <Stack className={classNames.halfContainer} tokens={stackTokens}>
-                <Stack.Item id="errorInstances">
+                <Stack.Item>
                   <TitleBar
                     count={this.props.errorInstances.length}
                     type={TitleBarOptions.Error}
                   />
                 </Stack.Item>
-                <Stack.Item
-                  className={classNames.imageListContainer}
-                  id="errorImageContainer"
-                >
+                <Stack.Item className={classNames.imageListContainer}>
                   <ImageList
                     items={this.props.errorInstances}
                     imageDim={this.props.imageDim}
@@ -124,16 +121,13 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
                 </Stack.Item>
               </Stack>
               <Stack className={classNames.halfContainer} tokens={stackTokens}>
-                <Stack.Item id="successInstances">
+                <Stack.Item>
                   <TitleBar
                     count={this.props.successInstances.length}
                     type={TitleBarOptions.Success}
                   />
                 </Stack.Item>
-                <Stack.Item
-                  className={classNames.imageListContainer}
-                  id="successImageContainer"
-                >
+                <Stack.Item className={classNames.imageListContainer}>
                   <ImageList
                     items={this.props.successInstances}
                     imageDim={this.props.imageDim}

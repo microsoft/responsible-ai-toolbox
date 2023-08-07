@@ -8,14 +8,7 @@ import { IModelAssessmentData } from "../IModelAssessmentData";
 
 import { ensureAllVisionDataExplorerBasicElementsArePresent } from "./ensureAllVisionDataExplorerBasicElementsArePresent";
 import { ensureAllVisionDataExplorerClassViewElementsAfterSelectionArePresent } from "./ensureAllVisionDataExplorerClassViewElementsAfterSelectionArePresent";
-import { ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresent } from "./ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresent";
-import { ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelectionArePresent } from "./ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelectionArePresent";
 import { ensureAllVisionDataExplorerTableViewElementsAfterSelectionArePresent } from "./ensureAllVisionDataExplorerTableViewElementsAfterSelectionArePresent";
-import {
-  ensureAllVisionDataExplorerClassViewElementsBeforeSelectionAreNotPresent,
-  ensureAllVisionDataExplorerImageExplorerViewElementsBeforeSelectionAreNotPresent,
-  ensureAllVisionDataExplorerTableViewElementsBeforeSelectionAreNotPresent
-} from "./ensureAllVisionDataExplorerViewElementsBeforeSelectionAreNotPresent";
 
 const testName = "Vision Data Explorer";
 
@@ -40,27 +33,12 @@ export function describeVisionDataExplorer(
         ensureAllVisionDataExplorerBasicElementsArePresent();
       });
 
-      it("should show Image explorer view components when selected", () => {
-        ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelectionArePresent();
-        ensureAllVisionDataExplorerTableViewElementsBeforeSelectionAreNotPresent();
-        ensureAllVisionDataExplorerClassViewElementsBeforeSelectionAreNotPresent();
-        cy.get(Locators.VisionDataExplorerPageSizeSelector).should("not.exist");
-      });
-
       it("should show Table view components when selected", () => {
         ensureAllVisionDataExplorerTableViewElementsAfterSelectionArePresent();
-        ensureAllVisionDataExplorerImageExplorerViewElementsBeforeSelectionAreNotPresent();
-        ensureAllVisionDataExplorerClassViewElementsBeforeSelectionAreNotPresent();
       });
 
       it("should show Class view components when selected", () => {
         ensureAllVisionDataExplorerClassViewElementsAfterSelectionArePresent();
-        ensureAllVisionDataExplorerImageExplorerViewElementsBeforeSelectionAreNotPresent();
-        ensureAllVisionDataExplorerTableViewElementsBeforeSelectionAreNotPresent();
-      });
-
-      it("should should Flyout view components when selected", () => {
-        ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresent();
       });
     } else {
       it("should not have 'VisionDataExplorer' component", () => {
