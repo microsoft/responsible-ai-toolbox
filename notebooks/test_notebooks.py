@@ -304,3 +304,13 @@ def test_responsibleaidashboard_dbpedia_text_classification_model_debugging():
 
     test_values = {}
     assay_one_notebook(nb_path, nb_name, test_values)
+
+
+@pytest.mark.text_notebooks
+def test_responsibleaidashboard_covid19_event_text_model_debugging():
+    nb_path = TEXT
+    nb_name = ("responsibleaidashboard-covid19-event-multilabel-" +
+               "text-classification-model-debugging")
+
+    test_values = {}
+    assay_one_notebook(nb_path, nb_name, test_values)
