@@ -256,11 +256,7 @@ metric_to_func = {
     Metrics.FALSE_POSITIVE_RATE: false_positive_rate,
     Metrics.FALSE_NEGATIVE_RATE: false_negative_rate,
     Metrics.SELECTION_RATE: selection_rate,
-    Metrics.ERROR_RATE: error_rate,
-    # TODO: Add support for object detection metrics.
-    # Metrics.MEAN_AVERAGE_PRECISION: mean_average_precision,
-    # Metrics.AVERAGE_PRECISION: average_precision,
-    # Metrics.AVERAGE_RECALL: average_recall,
+    Metrics.ERROR_RATE: error_rate
 }
 
 metric_to_task = {

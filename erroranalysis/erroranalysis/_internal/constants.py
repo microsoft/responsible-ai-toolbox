@@ -213,7 +213,5 @@ multiclass_classification_metrics = [
 
 
 object_detection_metrics = [
-    Metrics.MEAN_AVERAGE_PRECISION,
-    Metrics.AVERAGE_PRECISION,
-    Metrics.AVERAGE_RECALL
+    Metrics.ERROR_RATE
 ]
