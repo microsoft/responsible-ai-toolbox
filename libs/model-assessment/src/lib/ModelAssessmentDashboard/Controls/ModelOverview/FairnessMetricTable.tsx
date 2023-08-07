@@ -104,10 +104,7 @@ export class FairnessMetricTable extends React.Component<
                 data: items,
                 dataLabels: {
                   color: theme.semanticColors.bodyText,
-                  enabled: true,
-                  style: {
-                    color: theme.semanticColors.bodyText
-                  }
+                  enabled: true
                 },
                 name: "Metrics",
                 type: "heatmap"
