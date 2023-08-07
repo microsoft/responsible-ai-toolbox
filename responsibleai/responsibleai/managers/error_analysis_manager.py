@@ -260,6 +260,8 @@ class ErrorAnalysisManager(BaseManager):
         wrapper_model = get_wrapped_model(
             model,
             dropped_features)
+        print('Base EA Manager')
+        print(model_task)
         self._analyzer = ModelAnalyzer(
             wrapper_model,
             self._dataset,

@@ -198,7 +198,7 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
             transformations, index_classes)
         super(ErrorAnalysisManager, self).__init__(
             index_predictor, ext_dataset, target_column,
-            classes, categorical_features)
+            classes, categorical_features, model_task=task_type)
 
     def compute(self, **kwargs):
         """Compute the error analysis data.
@@ -299,7 +299,7 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
         inst.__dict__['_feature_names'] = feature_names
         task_type = rai_insights.task_type
         wrapped_model = wrap_model(rai_insights.model, dataset,
-                                   rai_insights.task_type,
+                                   task_type,
                                    classes=rai_insights._classes,
                                    device=rai_insights.device)
         inst.__dict__['_task_type'] = task_type
