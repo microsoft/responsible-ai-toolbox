@@ -92,18 +92,11 @@ class WrappedIndexPredictorModel:
             test = get_images(self.dataset, self.image_mode,
                               self.transformations)
         self.predictions = self.model.predict(test)
-        if task_type == ModelTask.MULTILABEL_IMAGE_CLASSIFICATION \
-            or task_type == ModelTask.OBJECT_DETECTION:
+        if task_type == ModelTask.MULTILABEL_IMAGE_CLASSIFICATION:
             predictions_joined = []
             for row in self.predictions:
                 # get all labels where prediction is 1
-                if task_type == ModelTask.MULTILABEL_IMAGE_CLASSIFICATION:
-                    pred_labels = [i for i in range(len(row)) if row[i]]
-                elif task_type == ModelTask.OBJECT_DETECTION:
-                    # TODO: change logic after success/error labels
-                    # are updated to `x correct, y incorrect`
-                    pred_labels = [int(object_pred[0] - 1)
-                                   for object_pred in row]
+                pred_labels = [i for i in range(len(row)) if row[i]]
                 if self.classes is not None:
                     pred_labels = [self.classes[i] for i in pred_labels]
                 else:

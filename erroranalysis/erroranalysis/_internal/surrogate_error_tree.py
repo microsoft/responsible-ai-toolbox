@@ -305,15 +305,15 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
     else:
         input_data = input_data.to_numpy(copy=True)
     if is_model_analyzer:
+        print('predicting for tree')
         pred_y = analyzer.model.predict(input_data)
-    print('surrogate')
     print(analyzer.model_task)
     if analyzer.model_task == ModelTask.CLASSIFICATION:
         diff = pred_y != true_y
     elif analyzer.model_task == ModelTask.OBJECT_DETECTION:
         print('yes surrogate')
-        assert len(pred_y) == len(true_y)
-        diff = [len(ErrorLabeling(ModelTask.OBJECT_DETECTION, pred_y[image_idx], true_y[image_idx]).compute_error_labels()) > 0 for image_idx in range(len(true_y))]
+        print(pred_y)
+        diff = [len(ErrorLabeling(ModelTask.OBJECT_DETECTION, pred_y[image_idx], true_y[image_idx]).compute_error_list()) > 0 for image_idx in range(len(true_y))]
     else:
         diff = pred_y - true_y
     if not isinstance(diff, np.ndarray):

@@ -118,7 +118,7 @@ def compute_matrix_on_dataset(analyzer, features, dataset,
     elif analyzer.model_task == ModelTask.OBJECT_DETECTION:
         print('yes od')
         assert len(pred_y) == len(true_y)
-        diff = [len(ErrorLabeling(ModelTask.OBJECT_DETECTION, pred_y[image_idx], true_y[image_idx]).compute_error_labels()) > 0 for image_idx in range(len(true_y))]
+        diff = [len(ErrorLabeling(ModelTask.OBJECT_DETECTION, pred_y[image_idx], true_y[image_idx]).compute_error_list()) > 0 for image_idx in range(len(true_y))]
     else:
         diff = pred_y - true_y
     if not isinstance(diff, np.ndarray):
