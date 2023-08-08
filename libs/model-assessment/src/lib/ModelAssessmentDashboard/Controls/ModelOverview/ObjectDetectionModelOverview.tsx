@@ -61,7 +61,7 @@ export interface IObjectDetectionWidgetsProps {
 export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetectionWidgetsProps> {
   public render(): React.ReactNode {
     return (
-      <Stack horizontal>
+      <Stack horizontal tokens={{ childrenGap: "10px" }}>
         <ComboBox
           id="modelOverviewAggregateMethod"
           label={localization.ModelAssessment.ModelOverview.metricsTypeDropdown}
