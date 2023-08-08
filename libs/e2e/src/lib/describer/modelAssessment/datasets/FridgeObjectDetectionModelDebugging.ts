@@ -12,6 +12,7 @@ export const FridgeObjectDetectionModelDebugging = {
     distributionBalanceMeasuresComputed: false,
     featureBalanceMeasuresComputed: false
   },
+  // TODO: switch to true after EA support
   errorAnalysisData: {
     hasErrorAnalysisComponent: false
   },
