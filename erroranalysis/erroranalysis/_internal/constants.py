@@ -154,10 +154,7 @@ metric_to_display_name = {
     Metrics.ERROR_RATE: 'Error rate',
     Metrics.FALSE_POSITIVE_RATE: 'False positive rate',
     Metrics.FALSE_NEGATIVE_RATE: 'False negative rate',
-    Metrics.SELECTION_RATE: 'Selection rate',
-    Metrics.MEAN_AVERAGE_PRECISION: 'Mean average precision',
-    Metrics.AVERAGE_PRECISION: 'Average precision',
-    Metrics.AVERAGE_RECALL: 'Average recall'
+    Metrics.SELECTION_RATE: 'Selection rate'
 }
 
 

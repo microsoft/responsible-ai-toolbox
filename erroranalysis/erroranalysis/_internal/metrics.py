@@ -237,45 +237,6 @@ def is_multi_agg_metric(metric):
             metric in f1_metrics)
 
 
-def mean_average_precision(y_true, y_pred):
-    """Compute mean average precision for object detection task.
-
-    :param y_true: True labels.
-    :type y_true: list
-    :param y_pred: Predicted labels.
-    :type y_pred: list
-    :return: Mean average precision.
-    :rtype: float
-    """
-    return 1.0
-
-
-def average_precision(y_true, y_pred):
-    """Compute average precision for object detection task.
-
-    :param y_true: True labels.
-    :type y_true: list
-    :param y_pred: Predicted labels.
-    :type y_pred: list
-    :return: Average precision.
-    :rtype: float
-    """
-    return 2.0
-
-
-def average_recall(y_true, y_pred):
-    """Compute average recall for object detection task.
-
-    :param y_true: True labels.
-    :type y_true: list
-    :param y_pred: Predicted labels.
-    :type y_pred: list
-    :return: Average recall.
-    :rtype: float
-    """
-    return 3.0
-
-
 metric_to_func = {
     Metrics.MEAN_PREDICTION: mean_prediction,
     Metrics.MEAN_ABSOLUTE_ERROR: mean_absolute_error,
@@ -295,10 +256,7 @@ metric_to_func = {
     Metrics.FALSE_POSITIVE_RATE: false_positive_rate,
     Metrics.FALSE_NEGATIVE_RATE: false_negative_rate,
     Metrics.SELECTION_RATE: selection_rate,
-    Metrics.ERROR_RATE: error_rate,
-    Metrics.MEAN_AVERAGE_PRECISION: mean_average_precision,
-    Metrics.AVERAGE_PRECISION: average_precision,
-    Metrics.AVERAGE_RECALL: average_recall,
+    Metrics.ERROR_RATE: error_rate
 }
 
 metric_to_task = {
@@ -318,8 +276,5 @@ metric_to_task = {
     Metrics.MACRO_RECALL_SCORE: ModelTask.CLASSIFICATION,
     Metrics.FALSE_NEGATIVE_RATE: ModelTask.CLASSIFICATION,
     Metrics.FALSE_POSITIVE_RATE: ModelTask.CLASSIFICATION,
-    Metrics.SELECTION_RATE: ModelTask.CLASSIFICATION,
-    Metrics.MEAN_AVERAGE_PRECISION: ModelTask.CLASSIFICATION,
-    Metrics.AVERAGE_PRECISION: ModelTask.CLASSIFICATION,
-    Metrics.AVERAGE_RECALL: ModelTask.CLASSIFICATION
+    Metrics.SELECTION_RATE: ModelTask.CLASSIFICATION
 }
