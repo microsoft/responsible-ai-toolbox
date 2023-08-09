@@ -34,7 +34,10 @@ export class ToolBar extends React.Component<IToolBarProps> {
       });
     return (
       <Stack>
-        <Stack.Item className={classNames.cohortPickerLabelWrapper}>
+        <Stack.Item
+          className={classNames.cohortPickerLabelWrapper}
+          id="dataExplorerCohortPickerLabel"
+        >
           <Text variant="mediumPlus" className={classNames.cohortPickerLabel}>
             {localization.Interpret.ModelPerformance.cohortPickerLabel}
           </Text>
@@ -58,6 +61,7 @@ export class ToolBar extends React.Component<IToolBarProps> {
             <Stack.Item>
               <SearchBox
                 className={classNames.searchBox}
+                id="dataExplorerSearchBox"
                 placeholder={localization.InterpretVision.Dashboard.search}
                 value={this.props.searchValue}
                 onChange={this.props.onSearch}

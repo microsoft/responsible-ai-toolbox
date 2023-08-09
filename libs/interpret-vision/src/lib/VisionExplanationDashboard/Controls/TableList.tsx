@@ -151,7 +151,7 @@ export class TableList extends React.Component<
     const classNames = visionExplanationDashboardStyles();
     return (
       <FocusZone className={classNames.tableListContainer}>
-        <Stack>
+        <Stack id="tabsViewTableList">
           <Stack.Item>
             <MarqueeSelection selection={this._selection}>
               <DetailsList

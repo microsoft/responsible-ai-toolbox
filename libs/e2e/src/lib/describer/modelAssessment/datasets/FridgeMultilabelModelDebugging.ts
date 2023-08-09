@@ -40,5 +40,10 @@ export const FridgeMultilabelModelDebugging = {
       name: "CohortCreateE2E-multilabel",
       sampleSize: "3"
     }
+  },
+  visionDataExplorerData: {
+    errorInstances: 0,
+    hasVisionDataExplorerComponent: true,
+    successInstances: 10
   }
 };
