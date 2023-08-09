@@ -29,7 +29,8 @@ from erroranalysis._internal.version_checker import check_pandas_version
 from erroranalysis.error_correlation_methods import (
     compute_ebm_global_importance, compute_gbm_global_importance)
 from erroranalysis.report import ErrorReport
-from vision_explanation_methods.error_labeling.error_labeling import ErrorLabeling
+from vision_explanation_methods.error_labeling.error_labeling \
+    import ErrorLabeling
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 IMPORTANCES_THRESHOLD = 50000
@@ -94,7 +95,6 @@ class BaseAnalyzer(ABC):
         self._category_dictionary = {}
         self._model_task = model_task
         self._classes = classes
-        print(model_task)
         if model_task == ModelTask.CLASSIFICATION:
             if metric is None:
                 metric = Metrics.ERROR_RATE
@@ -495,7 +495,7 @@ class BaseAnalyzer(ABC):
         if error_correlation_method == ErrorCorrelationMethods.MUTUAL_INFO:
             n_neighbors = min(3, input_data.shape[0] - 1)
             if self._model_task == ModelTask.CLASSIFICATION \
-                or self._model_task == ModelTask.OBJECT_DETECTION:
+               or self._model_task == ModelTask.OBJECT_DETECTION:
                 return mutual_info_classif(
                     input_data, diff, n_neighbors=n_neighbors).tolist()
             else:
@@ -646,8 +646,6 @@ class ModelAnalyzer(BaseAnalyzer):
                  metric=None,
                  classes=None):
         self._model = model
-        print('Model Analyzer')
-        print(model_task)
         if model_task == ModelTask.UNKNOWN:
             # Try to automatically infer the model task
             predict_proba_flag = hasattr(model, 'predict_proba')
@@ -693,7 +691,16 @@ class ModelAnalyzer(BaseAnalyzer):
             return self.model.predict(self.dataset) != self.true_y
         elif self._model_task == ModelTask.OBJECT_DETECTION:
             pred_y = self.model.predict(self.dataset)
-            diff = [len(ErrorLabeling(ModelTask.OBJECT_DETECTION, pred_y[image_idx], self.true_y[image_idx]).compute_error_labels()) > 0 for image_idx in range(len(self.true_y))]
+            diff = [
+                len(
+                    ErrorLabeling(
+                        ModelTask.OBJECT_DETECTION,
+                        pred_y[image_idx],
+                        self.true_y[image_idx]
+                    ).compute_error_list()
+                ) > 0
+                for image_idx in range(len(self.true_y))
+            ]
             return diff
         else:
             return self.model.predict(self.dataset) - self.true_y

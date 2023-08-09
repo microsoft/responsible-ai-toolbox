@@ -441,7 +441,8 @@ class RAIInsights(RAIBaseInsights):
         Add data balance measures to be computed on categorical features
         if it is a classification task.
         """
-        if ((self.task_type == ModelTask.CLASSIFICATION or self.task_type == ModelTask.OBJECT_DETECTION) and
+        if ((self.task_type == ModelTask.CLASSIFICATION or
+             self.task_type == ModelTask.OBJECT_DETECTION) and
                 len(self.categorical_features) > 0 and
                 self._classes is not None):
             self._data_balance_manager.add(
@@ -664,7 +665,8 @@ class RAIInsights(RAIBaseInsights):
                         'provided has a predict_proba function. '
                         'Please check the task_type.')
 
-        if task_type == ModelTask.CLASSIFICATION or task_type == ModelTask.OBJECT_DETECTION:
+        if task_type == ModelTask.CLASSIFICATION or\
+           task_type == ModelTask.OBJECT_DETECTION:
             self._validate_classes(
                 model, train, test, target_column, feature_metadata, classes)
 

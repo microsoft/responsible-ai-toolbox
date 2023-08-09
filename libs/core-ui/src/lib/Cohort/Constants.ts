@@ -22,9 +22,6 @@ export class Metrics {
   public static PrecisionScore = "Precision score";
   public static RecallScore = "Recall score";
   public static SampleSize = "Sample size";
-  public static MeanAveragePrecision = "Mean average precision";
-  public static AveragePrecision = "Average precision";
-  public static AverageRecall = "Average recall";
 }
 
 export enum CohortSource {

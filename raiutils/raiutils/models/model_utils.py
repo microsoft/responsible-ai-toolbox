@@ -7,7 +7,8 @@ from enum import Enum
 class ModelTask(str, Enum):
     """Provide model task constants.
 
-    Can be 'classification', 'regression', 'object_detection', 'forecasting', or 'unknown'.
+    Can be 'classification', 'regression', 'object_detection',
+    'forecasting', or 'unknown'.
 
     Note: Keeping sentence case constants (Classification, Regression)
     for backwards compatibility, please use ALL_UPPER_CASE instead.
