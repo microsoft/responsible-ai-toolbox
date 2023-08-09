@@ -8,15 +8,7 @@ import {
   TotalCohortSamples
 } from "../Interfaces/IStatistic";
 
-export enum ImageClassificationMetrics {
-  Accuracy = "accuracy",
-  MacroF1 = "f1",
-  MacroPrecision = "precision",
-  MacroRecall = "recall",
-  MicroF1 = "microF1",
-  MicroPrecision = "microPrecision",
-  MicroRecall = "microRecall"
-}
+import { MulticlassClassificationMetrics } from "./StatisticsUtilsEnums";
 
 interface IMicroMacroRetVal {
   macroScore: number;
@@ -64,7 +56,7 @@ export const generateMicroMacroMetrics = (
   };
 };
 
-export const generateImageStats: (
+export const generateMulticlassStats: (
   trueYs: number[],
   predYs: number[]
 ) => ILabeledStatistic[] = (
@@ -90,37 +82,37 @@ export const generateImageStats: (
       stat: predYs.length
     },
     {
-      key: ImageClassificationMetrics.Accuracy,
+      key: MulticlassClassificationMetrics.Accuracy,
       label: localization.Interpret.Statistics.accuracy,
       stat: accuracy
     },
     {
-      key: ImageClassificationMetrics.MicroPrecision,
+      key: MulticlassClassificationMetrics.MicroPrecision,
       label: localization.Interpret.Statistics.precision,
       stat: microP
     },
     {
-      key: ImageClassificationMetrics.MicroRecall,
+      key: MulticlassClassificationMetrics.MicroRecall,
       label: localization.Interpret.Statistics.recall,
       stat: microR
     },
     {
-      key: ImageClassificationMetrics.MicroF1,
+      key: MulticlassClassificationMetrics.MicroF1,
       label: localization.Interpret.Statistics.f1Score,
       stat: microF1
     },
     {
-      key: ImageClassificationMetrics.MacroPrecision,
+      key: MulticlassClassificationMetrics.MacroPrecision,
       label: localization.Interpret.Statistics.precision,
       stat: macroP
     },
     {
-      key: ImageClassificationMetrics.MacroRecall,
+      key: MulticlassClassificationMetrics.MacroRecall,
       label: localization.Interpret.Statistics.recall,
       stat: macroR
     },
     {
-      key: ImageClassificationMetrics.MacroF1,
+      key: MulticlassClassificationMetrics.MacroF1,
       label: localization.Interpret.Statistics.f1Score,
       stat: macroF1
     }
