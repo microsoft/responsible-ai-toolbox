@@ -19,5 +19,11 @@ export enum RegressionMetrics {
 }
 
 export enum MulticlassClassificationMetrics {
-  Accuracy = "accuracy"
+  Accuracy = "accuracy",
+  MacroF1 = "f1",
+  MacroPrecision = "precision",
+  MacroRecall = "recall",
+  MicroF1 = "microF1",
+  MicroPrecision = "microPrecision",
+  MicroRecall = "microRecall"
 }
