@@ -13,7 +13,7 @@ export const FridgeImageClassificationModelDebugging = {
     featureBalanceMeasuresComputed: false
   },
   errorAnalysisData: {
-    hasErrorAnalysisComponent: false
+    hasErrorAnalysisComponent: true
   },
   featureImportanceData: {
     hasFeatureImportanceComponent: false
@@ -50,5 +50,10 @@ export const FridgeImageClassificationModelDebugging = {
       name: "CohortCreateE2E-image-classification",
       sampleSize: "5"
     }
+  },
+  visionDataExplorerData: {
+    errorInstances: 0,
+    hasVisionDataExplorerComponent: true,
+    successInstances: 10
   }
 };

@@ -176,5 +176,21 @@ export enum Locators {
   AggregateBalanceMeasuresHeader = "#aggregateBalanceMeasures #aggregateBalanceMeasuresHeader",
   AggregateBalanceMeasuresTable = "#aggregateBalanceMeasures .ms-DetailsList",
   AggregateBalanceMeasuresTableColumns = "#aggregateBalanceMeasures .ms-DetailsList-headerWrapper div[aria-label]",
-  AggregateBalanceMeasuresTableRows = "#aggregateBalanceMeasures .ms-DetailsRow"
+  AggregateBalanceMeasuresTableRows = "#aggregateBalanceMeasures .ms-DetailsRow",
+  VisionDataExplorer = "#VisionDataExplorer",
+  VisionDataExplorerCohortDropDown = "#VisionDataExplorer #dataExplorerCohortDropdown",
+  VisionDataExplorerSearchBox = "#VisionDataExplorer #dataExplorerSearchBox",
+  VisionDataExplorerThumbnailSize = "#VisionDataExplorer #dataExplorerThumbnailSize",
+  VisionDataExplorerCohortPickerLabel = "#VisionDataExplorer #dataExplorerCohortPickerLabel",
+  VisionDataExplorerImageExplorerViewButton = "#VisionDataExplorer button[name='Image explorer view']",
+  VisionDataExplorerTableViewButton = "#VisionDataExplorer button[name='Table view']",
+  VisionDataExplorerClassViewButton = "#VisionDataExplorer button[name='Class view']",
+  VisionDataExplorerTabsViewTableList = "#VisionDataExplorer #tabsViewTableList",
+  VisionDataExplorerTabsViewItemsSelectedStatement = "#VisionDataExplorer #itemsSelectedStatement",
+  VisionDataExplorerTabsViewSaveCohortButton = "#VisionDataExplorer #saveCohortButton",
+  VisionDataExplorerPageSizeSelector = "#VisionDataExplorer #pageSizeSelector",
+  VisionDataExplorerClassViewLabelTypeDropdown = "#VisionDataExplorer #labelTypeDropdown",
+  VisionDataExplorerClassViewLabelDisplayDropdown = "#VisionDataExplorer #labelVisibilitySelectorsDropdown",
+  VisionDataExplorerClassViewDataCharacteristicsLegend = "#VisionDataExplorer #dataCharacteristicsLegend",
+  VisionDataExplorerClassViewContainer = "#VisionDataExplorer #classViewContainer"
 }

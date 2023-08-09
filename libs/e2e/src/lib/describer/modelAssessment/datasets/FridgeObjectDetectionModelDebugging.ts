@@ -12,6 +12,7 @@ export const FridgeObjectDetectionModelDebugging = {
     distributionBalanceMeasuresComputed: false,
     featureBalanceMeasuresComputed: false
   },
+  // TODO: switch to true after EA support
   errorAnalysisData: {
     hasErrorAnalysisComponent: false
   },
@@ -42,5 +43,10 @@ export const FridgeObjectDetectionModelDebugging = {
       name: "CohortCreateE2E-object-detection",
       sampleSize: "2"
     }
+  },
+  visionDataExplorerData: {
+    errorInstances: 0,
+    hasVisionDataExplorerComponent: true,
+    successInstances: 5
   }
 };

@@ -11,7 +11,12 @@ export class DataCharacteristicsLegend extends React.Component {
   public render(): React.ReactNode {
     const classNames = dataCharacteristicsStyles();
     return (
-      <Stack horizontal tokens={{ childrenGap: "l1" }} verticalAlign="center">
+      <Stack
+        horizontal
+        tokens={{ childrenGap: "l1" }}
+        verticalAlign="center"
+        id="dataCharacteristicsLegend"
+      >
         <Stack.Item>
           <div
             className={classNames.successIndicator}
