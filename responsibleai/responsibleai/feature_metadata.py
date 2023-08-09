@@ -119,7 +119,7 @@ class FeatureMetadata:
     def _validate_column_list(
             column_purpose: str,
             column_names: Any):
-        """Ensure the provided column list is valid list of strings.
+        """Ensure the provided column list is a list of strings.
 
         :param column_purpose: The purpose the column fulfills in the dataset.
         :type column_purpose: str
