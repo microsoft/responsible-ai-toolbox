@@ -123,6 +123,16 @@ MODEL_METHODS = {
             optional=False,
             purpose=MethodPurpose.PREDICTION)
     ],
+    ModelTask.OBJECT_DETECTION: [
+        ModelMethod(
+            name=SKLearn.PREDICT,
+            optional=False,
+            purpose=MethodPurpose.PREDICTION),
+        ModelMethod(
+            name=SKLearn.PREDICT_PROBA,
+            optional=False,
+            purpose=MethodPurpose.PROBABILITY)
+    ],
     ModelTask.FORECASTING: [
         ModelMethod(
             name=Forecasting.FORECAST,
@@ -397,7 +407,7 @@ class RAIInsights(RAIBaseInsights):
             self.model, self.test, self.target_column,
             self._classes,
             categorical_features=self.categorical_features,
-            dropped_features=dropped_features)
+            dropped_features=dropped_features, model_task=self.task_type)
 
         self._explainer_manager = ExplainerManager(
             self.model, self.get_train_data(), self.get_test_data(),
@@ -421,6 +431,8 @@ class RAIInsights(RAIBaseInsights):
                 return classes
             else:
                 return classes
+        elif task_type == ModelTask.OBJECT_DETECTION:
+            return classes
         else:
             return None
 
@@ -429,7 +441,8 @@ class RAIInsights(RAIBaseInsights):
         Add data balance measures to be computed on categorical features
         if it is a classification task.
         """
-        if (self.task_type == ModelTask.CLASSIFICATION and
+        if ((self.task_type == ModelTask.CLASSIFICATION or
+             self.task_type == ModelTask.OBJECT_DETECTION) and
                 len(self.categorical_features) > 0 and
                 self._classes is not None):
             self._data_balance_manager.add(
@@ -474,7 +487,8 @@ class RAIInsights(RAIBaseInsights):
         """
         valid_tasks = [
             ModelTask.CLASSIFICATION.value,
-            ModelTask.REGRESSION.value
+            ModelTask.REGRESSION.value,
+            ModelTask.OBJECT_DETECTION.value
         ]
         # Check if forecasting feature flag was passed as kwarg.
         # We specifically do not advertise for this until we want people to
@@ -651,7 +665,8 @@ class RAIInsights(RAIBaseInsights):
                         'provided has a predict_proba function. '
                         'Please check the task_type.')
 
-        if task_type == ModelTask.CLASSIFICATION:
+        if task_type == ModelTask.CLASSIFICATION or\
+           task_type == ModelTask.OBJECT_DETECTION:
             self._validate_classes(
                 model, train, test, target_column, feature_metadata, classes)
 
