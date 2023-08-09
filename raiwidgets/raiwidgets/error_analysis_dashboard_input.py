@@ -346,6 +346,8 @@ class ErrorAnalysisDashboardInput:
                 metric = Metrics.ERROR_RATE
             else:
                 metric = self._error_analyzer.metric
+        elif self._error_analyzer.model_task == ModelTask.OBJECT_DETECTION:
+            metric = Metrics.ERROR_RATE
         else:
             if self._error_analyzer.metric is None:
                 metric = Metrics.MEAN_SQUARED_ERROR
