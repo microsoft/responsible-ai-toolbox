@@ -51,7 +51,7 @@ export class App extends React.Component<IAppProps> {
       ...this.props,
       locale: this.props.language,
       localUrl: "https://www.bing.com/",
-      requestObjectDetectionMetrics: (selectionIndexes, _, className) =>
+      requestObjectDetectionMetrics: (selectionIndexes, className) =>
         this.generateRandomObjectDetectionMetrics(selectionIndexes, className),
       stringParams: { contextualHelp: this.messages },
       theme: this.props.theme
