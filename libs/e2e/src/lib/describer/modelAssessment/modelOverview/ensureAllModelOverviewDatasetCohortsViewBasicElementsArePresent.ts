@@ -75,6 +75,12 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
         "falseNegativeRate",
         "selectionRate"
       );
+    } else {
+      metricsOrder.push(
+        "macroF1Score",
+        "macroPrecisionScore",
+        "macroRecallScore"
+      );
     }
   }
 
