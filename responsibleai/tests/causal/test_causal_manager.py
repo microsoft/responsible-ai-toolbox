@@ -85,7 +85,8 @@ class TestCausalManager:
                                 ModelTask.REGRESSION, ['state', 'attraction'])
 
         expected = "Increase the value 50"
-        with pytest.raises(ValueError, match=expected):
+        with pytest.raises(
+                UserConfigValidationException, match=expected):
             manager.add(['state'])
             manager.compute()
 
