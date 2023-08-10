@@ -1,9 +1,9 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from raiutils.models import (is_classifier, is_forecaster,
-                             is_quantile_forecaster,
-                             is_object_detection_model)
+from raiutils.models import (SKLearn, is_classifier,
+                             is_forecaster,
+                             is_quantile_forecaster)
 
 
 class Classifier:
@@ -55,7 +55,8 @@ class TestModel:
         assert is_quantile_forecaster(forecaster)
 
     def test_object_detection_model(self):
-        forecaster = ObjectDetectionModel()
-        assert is_object_detection_model(forecaster)
-        assert not is_forecaster(forecaster)
-        assert not is_quantile_forecaster(forecaster)
+        object_detector = ObjectDetectionModel()
+        assert is_classifier(object_detector)
+        assert hasattr(object_detector, SKLearn.PREDICT)
+        assert not is_forecaster(object_detector)
+        assert not is_quantile_forecaster(object_detector)
