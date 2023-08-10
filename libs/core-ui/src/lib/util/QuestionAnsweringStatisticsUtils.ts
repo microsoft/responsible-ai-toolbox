@@ -18,12 +18,32 @@ export enum QuestionAnsweringMetrics {
 }
 
 export const generateQuestionAnsweringStats: (
-  selectionIndexes: number[][]
+  selectionIndexes: number[][],
+  questionAnsweringCache: Map<
+    string,
+    [number, number, number, number, number, number]
+  >
 ) => ILabeledStatistic[][] = (
-  selectionIndexes: number[][]
+  selectionIndexes: number[][],
+  questionAnsweringCache: Map<
+    string,
+    [number, number, number, number, number, number]
+  >
 ): ILabeledStatistic[][] => {
   return selectionIndexes.map((selectionArray) => {
     const count = selectionArray.length;
+
+    const value = questionAnsweringCache.get(selectionArray.toString());
+    const stat = value
+      ? value
+      : [
+          Number.NaN,
+          Number.NaN,
+          Number.NaN,
+          Number.NaN,
+          Number.NaN,
+          Number.NaN
+        ];
 
     return [
       {
@@ -34,32 +54,32 @@ export const generateQuestionAnsweringStats: (
       {
         key: QuestionAnsweringMetrics.ExactMatchRatio,
         label: localization.Interpret.Statistics.exactMatchRatio,
-        stat: Number.NaN
+        stat: stat[0]
       },
       {
         key: QuestionAnsweringMetrics.F1Score,
         label: localization.Interpret.Statistics.f1Score,
-        stat: Number.NaN
+        stat: stat[1]
       },
       {
         key: QuestionAnsweringMetrics.MeteorScore,
         label: localization.Interpret.Statistics.meteorScore,
-        stat: Number.NaN
+        stat: stat[2]
       },
       {
         key: QuestionAnsweringMetrics.BleuScore,
         label: localization.Interpret.Statistics.bleuScore,
-        stat: Number.NaN
+        stat: stat[3]
       },
       {
         key: QuestionAnsweringMetrics.BertScore,
         label: localization.Interpret.Statistics.bertScore,
-        stat: Number.NaN
+        stat: stat[4]
       },
       {
         key: QuestionAnsweringMetrics.RougeScore,
         label: localization.Interpret.Statistics.rougeScore,
-        stat: Number.NaN
+        stat: stat[5]
       }
     ];
   });

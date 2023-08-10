@@ -383,6 +383,24 @@
         "Short": "Micro F1 score",
         "Title": "Additional information on micro averaged F1 score"
       },
+      "MeanAveragePrecision": {
+        "Name": "Mean average precision score",
+        "Info": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall.",
+        "Short": "Mean avg precision",
+        "Title": "Additional information on mean average precision score"
+      },
+      "AveragePrecision": {
+        "Name": "Average precision score",
+        "Info": "Average precision for object detection models is calculated for a selected class.",
+        "Short": "Avg precision",
+        "Title": "Additional information on average precision score"
+      },
+      "AverageRecall": {
+        "Name": "Average recall score",
+        "Info": "Average recall for object detection models is calculated for a selected class.",
+        "Short": "Avg recall",
+        "Title": "Additional information on average recall score"
+      },
       "metricName": "Metric name",
       "metricValue": "Metric value"
     },
@@ -1370,13 +1388,23 @@
       "negButton": "NEGATIVE FEATURES",
       "posButton": "POSITIVE FEATURES",
       "legendText": "Positive scalar feature importances represent the extent that the words were important towards the classification of your selected label, and negative scalar feature importances represent words that encouraged your model away from your selected label.",
+      "legendTextForQA": "The left text box and the bar chart display the predictions of the model. The right text box shows the feature importance associated with a selected token. Positive feature importances represent the extent that the words were important towards marking the selected token as the starting/ending position of the answer.",
       "label": "Label",
-      "colon": ": "
+      "colon": ": ",
+      "startingPosition": "STARTING POSITION",
+      "endingPosition": "ENDING POSITION",
+      "predictedAnswer": "Predicted answer: ",
+      "trueAnswer": "True answer: ",
+      "inputs": "Inputs",
+      "outputs": "Outputs"
     },
     "Legend": {
       "featureLegend": "TEXT FEATURE LEGEND",
       "posFeatureImportance": "POSITIVE FEATURE IMPORTANCE",
-      "negFeatureImportance": "NEGATIVE FEATURE IMPORTANCE"
+      "negFeatureImportance": "NEGATIVE FEATURE IMPORTANCE",
+      "cls": "CLS: start of the sentence",
+      "sep": "SEP: end of the sentence",
+      "selectedWord": "Selected word: "
     },
     "BarChart": {
       "featureImportance": "FEATURE IMPORTANCE"

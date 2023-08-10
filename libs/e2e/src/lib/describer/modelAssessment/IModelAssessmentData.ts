@@ -6,6 +6,7 @@ export interface IModelAssessmentData {
   modelStatisticsData?: IModelStatisticsData;
   modelOverviewData?: IModelOverviewData;
   datasetExplorerData?: IDatasetExplorerData;
+  visionDataExplorerData?: IVisionDataExplorerData;
   featureImportanceData?: IFeatureImportanceData;
   dataBalanceData?: IDataBalanceData;
   causalAnalysisData?: ICausalAnalysisData;
@@ -17,6 +18,9 @@ export interface IModelAssessmentData {
   isMulticlass?: boolean;
   isRegression?: boolean;
   isBinary?: boolean;
+  isObjectDetection?: boolean;
+  isMultiLabel?: boolean;
+  isImageClassification?: boolean;
 }
 
 export interface IErrorAnalysisData {
@@ -85,6 +89,12 @@ export interface IDatasetExplorerData {
   colorValueButton?: string;
   noY?: boolean;
   cohortDatasetNewValue?: string;
+}
+
+export interface IVisionDataExplorerData {
+  hasVisionDataExplorerComponent?: boolean;
+  errorInstances?: number;
+  successInstances?: number;
 }
 
 export interface IDEWhiskerPlotData {
@@ -190,5 +200,8 @@ export enum RAINotebookNames {
   "MulticlassDnnModelDebugging" = "responsibleaidashboard-multiclass-dnn-model-debugging.py",
   "MulticlassDnnModelDebuggingDataBalanceExperience" = "responsibleaidashboard-multiclass-dnn-model-debugging.py",
   "OrangeJuiceForecasting" = "responsibleaidashboard-orange-juice-forecasting.py",
-  "OrangeJuiceForecastingDataBalanceExperience" = "responsibleaidashboard-orange-juice-forecasting.py"
+  "OrangeJuiceForecastingDataBalanceExperience" = "responsibleaidashboard-orange-juice-forecasting.py",
+  "FridgeImageClassificationModelDebugging" = "responsibleaidashboard-fridge-image-classification-model-debugging.py",
+  "FridgeMultilabelModelDebugging" = "responsibleaidashboard-fridge-multilabel-image-classification-model-debugging.py",
+  "FridgeObjectDetectionModelDebugging" = "responsibleaidashboard-fridge-object-detection-model-debugging.py"
 }

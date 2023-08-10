@@ -118,14 +118,19 @@ class ExplainerManager(BaseManager):
         elif self._task_type == ModelTask.QUESTION_ANSWERING:
             qa_predictor = QAPredictor(self._model)
             qa_start = qa_predictor.predict_qa_start
-            qa_start.__func__.output_names = qa_predictor.output_names
-            explainer = shap.Explainer(qa_start, self._model.tokenizer)
+            qa_output_names_func = qa_predictor.output_names
+            qa_start.__func__.output_names = qa_output_names_func
+            explainer_start = shap.Explainer(qa_start, self._model.tokenizer)
+            qa_end = qa_predictor.predict_qa_end
+            qa_end.__func__.output_names = qa_output_names_func
+            explainer_end = shap.Explainer(qa_end, self._model.tokenizer)
             context = self._evaluation_examples[CONTEXT]
             questions = self._evaluation_examples[QUESTIONS]
             eval_examples = []
             for context, question in zip(context, questions):
                 eval_examples.append(question + SEP + context)
-            self._explanation = explainer(eval_examples)
+            self._explanation = [explainer_start(eval_examples),
+                                 explainer_end(eval_examples)]
         else:
             raise ValueError("Unknown task type: {}".format(self._task_type))
 
@@ -223,22 +228,30 @@ class ExplainerManager(BaseManager):
             scores = convert_to_list(np.abs(global_exp.values).mean(1))
             intercept = global_exp.base_values.mean(0)
         elif self._task_type == ModelTask.QUESTION_ANSWERING:
-            flattened_features = explanation._flatten_feature_names()
+            flattened_start_features = explanation[0]._flatten_feature_names()
+            flattened_end_features = explanation[1]._flatten_feature_names()
             scores = []
             features = []
-            for key in flattened_features.keys():
+            for key in flattened_start_features.keys():
                 features.append(key)
                 token_importances = []
-                for importances in flattened_features[key]:
-                    token_importances.append(np.mean(np.abs(importances)))
+                for importances_start, importances_end in zip(
+                        flattened_start_features[key],
+                        flattened_end_features[key]):
+                    abs_start_imps = np.abs(importances_start)
+                    abs_end_imps = np.abs(importances_end)
+                    importances = (abs_start_imps + abs_end_imps) / 2
+                    mean_importances = np.mean(importances)
+                    token_importances.append(mean_importances)
                 scores.append(np.mean(token_importances))
+                start_base_values = explanation[0].base_values
+                end_base_values = explanation[1].base_values
                 base_values = [
-                    base_values.mean()
-                    for base_values in explanation.base_values]
+                    sbv.mean() + ebv.mean() / 2
+                    for sbv, ebv in zip(start_base_values, end_base_values)]
                 intercept = sum(base_values) / len(base_values)
         else:
             raise ValueError("Unknown task type: {}".format(self._task_type))
-
         return features, scores, intercept
 
     def _compute_text_feature_importances(self, explanation):
@@ -251,21 +264,25 @@ class ExplainerManager(BaseManager):
         """
         text_feature_importances = []
         is_classif_task = self._is_classification_task
-        for instance in explanation:
-            text_feature_importance = TextFeatureImportance()
-            if is_classif_task:
+        if is_classif_task:
+            for instance in explanation:
+                text_feature_importance = TextFeatureImportance()
                 text_feature_importance.localExplanations = \
                     instance.values.tolist()
                 text_feature_importance.text = instance.data
-            elif self._task_type == ModelTask.QUESTION_ANSWERING:
-                # TODO: This is a bit more complicated, as it's
-                # a map of importances for each token from question
-                # to answer and the other way around.
-                continue
-            else:
-                raise ValueError("Unknown task type: {}".format(
-                    self._task_type))
-            text_feature_importances.append(text_feature_importance)
+                text_feature_importances.append(text_feature_importance)
+        elif self._task_type == ModelTask.QUESTION_ANSWERING:
+            for i_start, i_end in zip(explanation[0], explanation[1]):
+                text_feature_importance = TextFeatureImportance()
+                text_feature_importance.localExplanations = \
+                    [i_start.values.tolist(), i_end.values.tolist()]
+                text_feature_importance.text = i_start.data
+                text_feature_importance.baseValues = \
+                    [i_start.base_values.tolist(), i_end.base_values.tolist()]
+                text_feature_importances.append(text_feature_importance)
+        else:
+            raise ValueError("Unknown task type: {}".format(
+                self._task_type))
         return text_feature_importances
 
     @property

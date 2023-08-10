@@ -76,8 +76,6 @@ class WrappedIndexPredictorModel:
         self.image_mode = image_mode
         self.transformations = transformations
         self.task_type = task_type
-        if task_type == ModelTask.OBJECT_DETECTION:
-            return
         if is_automl_image_model(self.model):
             test = np.array(
                 self.dataset.iloc[:, 0].tolist()
@@ -104,6 +102,21 @@ class WrappedIndexPredictorModel:
                 # concatenate all predicted labels into a single string
                 predictions_joined.append(','.join(pred_labels))
             self.predictions = np.array(predictions_joined)
+        elif task_type == ModelTask.OBJECT_DETECTION:
+            # TODO: change logic after success/error labels
+            # are updated to `x correct, y incorrect`
+            predictions_joined = []
+            for image_pred in self.predictions:
+                # get all labels where prediction is 1
+                pred_labels = [int(object_pred[0] - 1)
+                               for object_pred in image_pred]
+                if self.classes is not None:
+                    pred_labels = [self.classes[i] for i in pred_labels]
+                else:
+                    pred_labels = [str(i) for i in pred_labels]
+                # concatenate all predicted labels into a single string
+                predictions_joined.append(','.join(pred_labels))
+            self.predictions = np.array(predictions_joined)
         self.predict_proba = self.model.predict_proba(test)
 
     def predict(self, X):
@@ -116,7 +129,8 @@ class WrappedIndexPredictorModel:
         """
         index = X.index
         predictions = self.predictions[index]
-        if self.task_type == ModelTask.MULTILABEL_IMAGE_CLASSIFICATION:
+        if self.task_type == ModelTask.MULTILABEL_IMAGE_CLASSIFICATION or \
+                self.task_type == ModelTask.OBJECT_DETECTION:
             return predictions
         if self.classes is not None:
             predictions = [self.classes[y] for y in predictions]
@@ -174,8 +188,7 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
         :type categorical_features: list[str]
         """
         index_classes = classes
-        is_od = task_type == ModelTask.OBJECT_DETECTION
-        if isinstance(target_column, list) and not is_od:
+        if isinstance(target_column, list):
             # create copy of dataset as we will make modifications to it
             dataset = dataset.copy()
             index_classes = target_column
@@ -297,9 +310,8 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
                                    device=rai_insights.device)
         inst.__dict__['_task_type'] = task_type
         index_classes = rai_insights._classes
-        is_od = task_type == ModelTask.OBJECT_DETECTION
         index_dataset = rai_insights.test
-        if isinstance(target_column, list) and not is_od:
+        if isinstance(target_column, list):
             # create copy of dataset as we will make modifications to it
             index_dataset = index_dataset.copy()
             index_classes = target_column

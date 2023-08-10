@@ -14,7 +14,8 @@ import { getNumberOfCohorts } from "./numberOfCohorts";
 export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   datasetShape: IModelAssessmentData,
   includeNewCohort: boolean,
-  isNotebookTest: boolean
+  isNotebookTest: boolean,
+  isVision: boolean
 ): void {
   const data = datasetShape.modelOverviewData;
   const initialCohorts = data?.initialCohorts;
@@ -23,7 +24,10 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     "not.exist"
   );
   if (isNotebookTest) {
-    if (getNumberOfCohorts(datasetShape, includeNewCohort) <= 1) {
+    if (
+      getNumberOfCohorts(datasetShape, includeNewCohort) <= 1 ||
+      datasetShape.isObjectDetection
+    ) {
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
         "not.exist"
       );
@@ -45,6 +49,24 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
       "meanSquaredError",
       "meanPrediction"
     );
+  } else if (datasetShape.isImageClassification) {
+    metricsOrder.push(
+      "accuracy",
+      "f1Score",
+      "precisionScore",
+      "recallScore",
+      "falsePositiveRate",
+      "falseNegativeRate",
+      "selectionRate"
+    );
+  } else if (datasetShape.isMultiLabel) {
+    metricsOrder.push("exactMatchRatio", "hammingScore");
+  } else if (datasetShape.isObjectDetection) {
+    metricsOrder.push(
+      "meanAveragePrecision",
+      "averagePrecision",
+      "averageRecall"
+    );
   } else {
     metricsOrder.push("accuracy");
     if (!datasetShape.isMulticlass) {
@@ -52,6 +74,12 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
         "falsePositiveRate",
         "falseNegativeRate",
         "selectionRate"
+      );
+    } else {
+      metricsOrder.push(
+        "macroF1Score",
+        "macroPrecisionScore",
+        "macroRecallScore"
       );
     }
   }
@@ -69,17 +97,6 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     });
   });
 
-  if (isNotebookTest) {
-    cy.get(Locators.ModelOverviewHeatmapCells)
-      .should("have.length", (cohorts?.length || 0) * (metricsOrder.length + 1))
-      .each(($cell) => {
-        // somehow the cell string is one invisible character longer, trim
-        expect($cell.text().slice(0, $cell.text().length - 1)).to.be.oneOf(
-          heatmapCellContents
-        );
-      });
-  }
-
   cy.get(
     Locators.ModelOverviewDisaggregatedAnalysisBaseCohortDisclaimer
   ).should("not.exist");
@@ -87,17 +104,32 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     "not.exist"
   );
 
-  const defaultVisibleChart = getDefaultVisibleChart(
-    datasetShape.isRegression,
-    datasetShape.isBinary
-  );
-  assertChartVisibility(datasetShape, defaultVisibleChart);
-
-  if (defaultVisibleChart === Locators.ModelOverviewMetricChart) {
-    ensureNotebookModelOverviewMetricChartIsCorrect(
-      isNotebookTest,
-      datasetShape,
-      includeNewCohort
+  if (!isVision) {
+    if (isNotebookTest) {
+      cy.get(Locators.ModelOverviewHeatmapCells)
+        .should(
+          "have.length",
+          (cohorts?.length || 0) * (metricsOrder.length + 1)
+        )
+        .each(($cell) => {
+          // somehow the cell string is one invisible character longer, trim
+          expect($cell.text().slice(0, $cell.text().length - 1)).to.be.oneOf(
+            heatmapCellContents
+          );
+        });
+    }
+    const defaultVisibleChart = getDefaultVisibleChart(
+      datasetShape.isRegression,
+      datasetShape.isBinary
     );
+    assertChartVisibility(datasetShape, defaultVisibleChart);
+
+    if (defaultVisibleChart === Locators.ModelOverviewMetricChart) {
+      ensureNotebookModelOverviewMetricChartIsCorrect(
+        isNotebookTest,
+        datasetShape,
+        includeNewCohort
+      );
+    }
   }
 }

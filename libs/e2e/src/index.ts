@@ -12,4 +12,5 @@ export * from "./lib/describer/modelAssessment/whatIfCounterfactuals/describeWha
 export * from "./lib/describer/modelAssessment/whatIfForecasting/describeWhatIfForecasting";
 export * from "./lib/describer/modelAssessment/datasets/modelAssessmentDatasets";
 export * from "./lib/describer/modelAssessment/IModelAssessmentData";
+export * from "./lib/describer/modelAssessment/visionDataExplorer/describeVisionDataExplorer";
 export * from "./util/visit";

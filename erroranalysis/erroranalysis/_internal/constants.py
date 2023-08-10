@@ -96,9 +96,6 @@ class Metrics(str, Enum):
     FALSE_POSITIVE_RATE = 'false_positive_rate'
     FALSE_NEGATIVE_RATE = 'false_negative_rate'
     SELECTION_RATE = 'selection_rate'
-    MEAN_AVERAGE_PRECISION = 'mean_average_precision'
-    AVERAGE_PRECISION = 'average_precision'
-    AVERAGE_RECALL = 'average_recall'
 
 
 class MetricKeys(str, Enum):
@@ -207,3 +204,8 @@ multiclass_classification_metrics = [
     Metrics.MICRO_F1_SCORE,
     Metrics.ACCURACY_SCORE,
     Metrics.ERROR_RATE]
+
+
+object_detection_metrics = [
+    Metrics.ERROR_RATE
+]

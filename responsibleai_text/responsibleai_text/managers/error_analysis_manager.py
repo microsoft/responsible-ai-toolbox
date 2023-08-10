@@ -105,7 +105,7 @@ class WrappedIndexPredictorModel:
         predictions = self.predictions[index]
         if self.task_type == ModelTask.MULTILABEL_TEXT_CLASSIFICATION:
             return predictions
-        if self.classes is not None:
+        if self.classes is not None and isinstance(predictions[0], int):
             predictions = [self.classes[y] for y in predictions]
         return predictions
 

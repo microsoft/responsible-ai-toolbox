@@ -117,6 +117,7 @@ export class DataCharacteristics extends React.Component<
           </Stack.Item>
           <Stack.Item
             className={classNames.mainContainer}
+            id="classViewContainer"
             style={{ height: this.props.numRows * this.props.imageDim * 1.8 }}
           >
             {keys.map((label, index) => {
@@ -269,9 +270,7 @@ export class DataCharacteristics extends React.Component<
     this.props.selectItem(item);
   };
 
-  private getPageHeight = (): number => {
-    return this.rowHeight;
-  };
+  private getPageHeight = (): number => this.rowHeight;
 
   private getItemCountForPageWrapper = (
     index: number

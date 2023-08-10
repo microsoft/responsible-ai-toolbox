@@ -8,7 +8,6 @@ import {
   ErrorCohort,
   HighchartsNull,
   ILabeledStatistic,
-  ImageClassificationMetrics,
   MulticlassClassificationMetrics,
   MultilabelMetrics,
   ObjectDetectionMetrics,
@@ -141,9 +140,7 @@ export function generateCohortsStatsTable(
             // only 1 unique value in the set, set color to 0
             colorValue = 0;
           }
-          const colorConfig = { color: "transparent" };
           items.push({
-            ...colorConfig,
             colorValue,
             value: Number(labeledStat.stat.toFixed(3)),
             x: metricIndex + 1,
@@ -260,74 +257,63 @@ export function getSelectableMetrics(
     taskType === DatasetTaskType.ImageClassification
   ) {
     if (isMulticlass) {
-      if (taskType === DatasetTaskType.ImageClassification) {
-        selectableMetrics.push(
-          {
-            description:
-              localization.ModelAssessment.ModelOverview.metrics.accuracy
-                .description,
-            key: ImageClassificationMetrics.Accuracy,
-            text: localization.ModelAssessment.ModelOverview.metrics.accuracy
-              .name
-          },
-          {
-            description:
-              localization.ModelAssessment.ModelOverview.metrics.precisionMacro
-                .description,
-            key: ImageClassificationMetrics.MacroPrecision,
-            text: localization.ModelAssessment.ModelOverview.metrics
-              .precisionMacro.name
-          },
-          {
-            description:
-              localization.ModelAssessment.ModelOverview.metrics.recallMacro
-                .description,
-            key: ImageClassificationMetrics.MacroRecall,
-            text: localization.ModelAssessment.ModelOverview.metrics.recallMacro
-              .name
-          },
-          {
-            description:
-              localization.ModelAssessment.ModelOverview.metrics.f1ScoreMacro
-                .description,
-            key: ImageClassificationMetrics.MacroF1,
-            text: localization.ModelAssessment.ModelOverview.metrics
-              .f1ScoreMacro.name
-          },
-          {
-            description:
-              localization.ModelAssessment.ModelOverview.metrics.precisionMicro
-                .description,
-            key: ImageClassificationMetrics.MicroPrecision,
-            text: localization.ModelAssessment.ModelOverview.metrics
-              .precisionMicro.name
-          },
-          {
-            description:
-              localization.ModelAssessment.ModelOverview.metrics.recallMicro
-                .description,
-            key: ImageClassificationMetrics.MicroRecall,
-            text: localization.ModelAssessment.ModelOverview.metrics.recallMicro
-              .name
-          },
-          {
-            description:
-              localization.ModelAssessment.ModelOverview.metrics.f1ScoreMicro
-                .description,
-            key: ImageClassificationMetrics.MicroF1,
-            text: localization.ModelAssessment.ModelOverview.metrics
-              .f1ScoreMicro.name
-          }
-        );
-      } else {
-        selectableMetrics.push({
+      selectableMetrics.push(
+        {
           description:
             localization.ModelAssessment.ModelOverview.metrics.accuracy
               .description,
           key: MulticlassClassificationMetrics.Accuracy,
           text: localization.ModelAssessment.ModelOverview.metrics.accuracy.name
-        });
-      }
+        },
+        {
+          description:
+            localization.ModelAssessment.ModelOverview.metrics.precisionMacro
+              .description,
+          key: MulticlassClassificationMetrics.MacroPrecision,
+          text: localization.ModelAssessment.ModelOverview.metrics
+            .precisionMacro.name
+        },
+        {
+          description:
+            localization.ModelAssessment.ModelOverview.metrics.recallMacro
+              .description,
+          key: MulticlassClassificationMetrics.MacroRecall,
+          text: localization.ModelAssessment.ModelOverview.metrics.recallMacro
+            .name
+        },
+        {
+          description:
+            localization.ModelAssessment.ModelOverview.metrics.f1ScoreMacro
+              .description,
+          key: MulticlassClassificationMetrics.MacroF1,
+          text: localization.ModelAssessment.ModelOverview.metrics.f1ScoreMacro
+            .name
+        },
+        {
+          description:
+            localization.ModelAssessment.ModelOverview.metrics.precisionMicro
+              .description,
+          key: MulticlassClassificationMetrics.MicroPrecision,
+          text: localization.ModelAssessment.ModelOverview.metrics
+            .precisionMicro.name
+        },
+        {
+          description:
+            localization.ModelAssessment.ModelOverview.metrics.recallMicro
+              .description,
+          key: MulticlassClassificationMetrics.MicroRecall,
+          text: localization.ModelAssessment.ModelOverview.metrics.recallMicro
+            .name
+        },
+        {
+          description:
+            localization.ModelAssessment.ModelOverview.metrics.f1ScoreMicro
+              .description,
+          key: MulticlassClassificationMetrics.MicroF1,
+          text: localization.ModelAssessment.ModelOverview.metrics.f1ScoreMicro
+            .name
+        }
+      );
     } else {
       selectableMetrics.push(
         {
