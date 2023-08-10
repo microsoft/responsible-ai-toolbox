@@ -9,6 +9,15 @@ from tempfile import TemporaryDirectory
 import numpy as np
 import pandas as pd
 import pytest
+
+try:
+    import torch
+    import torchvision
+    from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
+    torch_installed = True
+except ImportError:
+    torch_installed = False
+
 from tests.causal_manager_validator import validate_causal
 from tests.common_utils import create_iris_data
 from tests.counterfactual_manager_validator import validate_counterfactual
@@ -197,17 +206,33 @@ class TestRAIInsights(object):
             run_rai_insights(model, X_train, X_test, LABELS, [],
                              manager_type, manager_args)
 
+    @pytest.mark.parametrize('manager_type', [ManagerNames.ERROR_ANALYSIS,
+                                              ManagerNames.EXPLAINER])
+    @pytest.mark.skipif(not torch_installed,
+                        reason="requires torch & torchvision")
+    def test_rai_insights_object_detection(self, manager_type):
+        model = get_object_detection_model()
+        dataset = load_fridge_object_detection_dataset()
+        classes = np.array(['can', 'carton', 'milk_bottle', 'water_bottle'])
+
+        data_train = dataset[["image"]]
+        data_test = dataset[["label"]]
+
+        run_rai_insights(model, data_train, data_test, "label",
+                         None, manager_type, classes=classes,
+                         task_type=ModelTask.OBJECT_DETECTION)
+
 
 def run_rai_insights(model, train_data, test_data, target_column,
                      categorical_features, manager_type,
                      manager_args=None, classes=None,
-                     feature_metadata=None):
+                     feature_metadata=None, task_type=None):
     if manager_args is None:
         manager_args = {}
 
     if classes is not None:
         task_type = ModelTask.CLASSIFICATION
-    else:
+    elif task_type is None:
         task_type = ModelTask.REGRESSION
 
     if manager_type == ManagerNames.COUNTERFACTUAL:
@@ -262,7 +287,7 @@ def run_rai_insights(model, train_data, test_data, target_column,
     elif manager_type == ManagerNames.ERROR_ANALYSIS:
         validate_error_analysis(rai_insights)
     elif manager_type == ManagerNames.EXPLAINER:
-        validate_explainer(rai_insights, train_data, test_data, classes)
+        validate_explainer(rai_insights, train_data, test_data, classes, task_type)
 
     with TemporaryDirectory() as tmpdir:
         path = Path(tmpdir) / 'rai_test_path'
@@ -291,10 +316,10 @@ def run_rai_insights(model, train_data, test_data, target_column,
             setup_error_analysis(rai_insights, max_depth=4)
             validate_error_analysis(rai_insights, expected_reports=2)
         elif manager_type == ManagerNames.EXPLAINER:
-            validate_explainer(rai_insights, train_data, test_data, classes)
+            validate_explainer(rai_insights, train_data, test_data, classes, task_type)
             # validate adding new explainer config after deserialization works
             setup_explainer(rai_insights)
-            validate_explainer(rai_insights, train_data, test_data, classes)
+            validate_explainer(rai_insights, train_data, test_data, classes, task_type)
 
 
 def validate_common_state_directories(path, task_type):
@@ -312,7 +337,8 @@ def validate_common_state_directories(path, task_type):
     all_predictions_files = os.listdir(predictions_path)
     if model is not None:
         assert SerializationAttributes.PREDICT_JSON in all_predictions_files
-        if task_type == ModelTask.CLASSIFICATION:
+        if task_type == ModelTask.CLASSIFICATION or \
+           task_type == ModelTask.OBJECT_DETECTION:
             assert SerializationAttributes.PREDICT_PROBA_JSON in \
                 all_predictions_files
         else:
@@ -409,6 +435,11 @@ def validate_rai_insights(
             assert isinstance(rai_insights._predict_proba_output, np.ndarray)
             assert len(rai_insights._predict_proba_output.tolist()[0]) == \
                 len(rai_insights._classes)
+        elif task_type == ModelTask.OBJECT_DETECTION:
+            assert rai_insights._predict_output is not None
+            assert isinstance(rai_insights._predict_output, list)
+            assert rai_insights._predict_proba_output is not None
+            assert isinstance(rai_insights._predict_proba_output, list)
 
     if task_type == ModelTask.CLASSIFICATION:
         classes = train_data[target_column].unique()
