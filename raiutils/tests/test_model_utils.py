@@ -1,7 +1,8 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from raiutils.models import (is_classifier, is_forecaster,
+from raiutils.models import (is_classifier,
+                             is_forecaster,
                              is_object_detection_model,
                              is_quantile_forecaster)
 
