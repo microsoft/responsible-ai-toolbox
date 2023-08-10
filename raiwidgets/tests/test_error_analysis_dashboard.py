@@ -235,7 +235,7 @@ def load_fridge_object_detection_dataset_labels():
     label_dict = {'can': 1, 'carton': 2, 'milk_bottle': 3, 'water_bottle': 4}
 
     # Read each annotation
-    for i, filename in enumerate(os.listdir(annotations_folder)):
+    for _, filename in enumerate(os.listdir(annotations_folder)):
         if filename.endswith(".xml"):
             print("Parsing " + os.path.join(src_images, filename))
 
