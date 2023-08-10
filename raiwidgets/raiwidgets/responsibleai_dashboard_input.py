@@ -331,13 +331,11 @@ class ResponsibleAIDashboardInput:
         """
         try:
             selection_indexes = post_data[0]
-            aggregate_method = post_data[1]
-            class_name = post_data[2]
-            iou_threshold = post_data[3]
-            object_detection_cache = post_data[4]
+            class_name = post_data[1]
+            iou_threshold = post_data[2]
+            object_detection_cache = post_data[3]
             exp = self._analysis.compute_object_detection_metrics(
                 selection_indexes,
-                aggregate_method,
                 class_name,
                 iou_threshold,
                 object_detection_cache

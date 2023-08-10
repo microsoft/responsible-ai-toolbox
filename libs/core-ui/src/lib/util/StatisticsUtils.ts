@@ -148,14 +148,14 @@ export const generateMetrics: (
   selectionIndexes: number[][],
   modelType: ModelTypes,
   objectDetectionCache?: Map<string, [number, number, number]>,
-  objectDetectionInputs?: [string, string, number],
+  objectDetectionInputs?: [string, number],
   questionAnsweringCache?: QuestionAnsweringCacheType
 ) => ILabeledStatistic[][] = (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
   modelType: ModelTypes,
   objectDetectionCache?: Map<string, [number, number, number]>,
-  objectDetectionInputs?: [string, string, number],
+  objectDetectionInputs?: [string, number],
   questionAnsweringCache?: QuestionAnsweringCacheType
 ): ILabeledStatistic[][] => {
   if (

@@ -27,7 +27,6 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       };
       callBack.requestObjectDetectionMetrics = async (
         selectionIndexes: number[][],
-        aggregateMethod: string,
         className: string,
         iouThreshold: number,
         objectDetectionCache: Map<string, [number, number, number]>,
@@ -37,7 +36,6 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
           this.props.config,
           [
             selectionIndexes,
-            aggregateMethod,
             className,
             iouThreshold,
             objectDetectionCache

@@ -55,7 +55,6 @@ interface IModelOverviewProps {
   telemetryHook?: (message: ITelemetryEvent) => void;
   requestObjectDetectionMetrics?: (
     selectionIndexes: number[][],
-    aggregateMethod: string,
     className: string,
     iouThreshold: number,
     objectDetectionCache: Map<string, [number, number, number]>
@@ -77,7 +76,6 @@ interface IModelOverviewState {
   selectedFeatureBasedCohorts?: number[];
   chartConfigurationIsVisible: boolean;
   datasetCohortViewIsVisible: boolean;
-  aggregateMethod: string;
   datasetCohortChartIsVisible: boolean;
   featureConfigurationIsVisible: boolean;
   metricConfigurationIsVisible: boolean;
@@ -112,8 +110,6 @@ export class ModelOverview extends React.Component<
     super(props);
 
     this.state = {
-      aggregateMethod:
-        localization.ModelAssessment.ModelOverview.metricTypes.macro,
       chartConfigurationIsVisible: false,
       className: "",
       datasetBasedCohorts: [],
@@ -357,7 +353,6 @@ export class ModelOverview extends React.Component<
               <ObjectDetectionWidgets
                 classNames={classNames}
                 dataset={this.context.dataset}
-                setAggregateMethod={this.setAggregateMethod}
                 setClassName={this.setClassName}
                 setIoUThreshold={this.setIoUThreshold}
                 updateDatasetCohortStats={this.updateDatasetCohortStats}
@@ -566,20 +561,6 @@ export class ModelOverview extends React.Component<
     );
   }
 
-  private setAggregateMethod = (value: string): void => {
-    this.setState({ aggregateMethod: value }, () => {
-      if (this.state.datasetCohortChartIsVisible) {
-        this.updateDatasetCohortStats();
-      } else {
-        this.updateFeatureCohortStats();
-      }
-    });
-
-    this.logButtonClick(
-      TelemetryEventName.ModelOverviewMetricsSelectionUpdated
-    );
-  };
-
   private setClassName = (value: string): void => {
     this.setState({ className: value }, () => {
       if (this.state.datasetCohortChartIsVisible) {
@@ -618,7 +599,6 @@ export class ModelOverview extends React.Component<
       this.context.modelMetadata.modelType,
       this.objectDetectionCache,
       [
-        this.state.aggregateMethod,
         this.state.className,
         this.state.iouThreshold
       ],
@@ -646,14 +626,12 @@ export class ModelOverview extends React.Component<
     if (
       this.context.requestObjectDetectionMetrics &&
       selectionIndexes.length > 0 &&
-      this.state.aggregateMethod.length > 0 &&
       this.state.className.length > 0 &&
       this.state.iouThreshold
     ) {
       this.context
         .requestObjectDetectionMetrics(
           selectionIndexes,
-          this.state.aggregateMethod,
           this.state.className,
           this.state.iouThreshold,
           this.objectDetectionCache,
@@ -683,9 +661,8 @@ export class ModelOverview extends React.Component<
               for (const [i, cohortMetric] of cohortMetrics.entries()) {
                 const [mAP, aP, aR] = cohortMetric;
 
-                const key: [number[], string, string, number] = [
+                const key: [number[], string, number] = [
                   selectionIndexes[cohortIndex],
-                  this.state.aggregateMethod,
                   cohortClasses[i],
                   this.state.iouThreshold
                 ];
@@ -861,7 +838,6 @@ export class ModelOverview extends React.Component<
       this.context.modelMetadata.modelType,
       this.objectDetectionCache,
       [
-        this.state.aggregateMethod,
         this.state.className,
         this.state.iouThreshold
       ],

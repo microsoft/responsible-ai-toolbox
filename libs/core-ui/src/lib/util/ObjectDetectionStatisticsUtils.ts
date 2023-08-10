@@ -17,20 +17,19 @@ export enum ObjectDetectionMetrics {
 export const generateObjectDetectionStats: (
   selectionIndexes: number[][],
   objectDetectionCache: Map<string, [number, number, number]>,
-  objectDetectionInputs: [string, string, number]
+  objectDetectionInputs: [string, number]
 ) => ILabeledStatistic[][] = (
   selectionIndexes: number[][],
   objectDetectionCache: Map<string, [number, number, number]>,
-  objectDetectionInputs: [string, string, number]
+  objectDetectionInputs: [string, number]
 ): ILabeledStatistic[][] => {
   return selectionIndexes.map((selectionArray) => {
     const count = selectionArray.length;
 
-    const key: [number[], string, string, number] = [
+    const key: [number[], string, number] = [
       selectionArray,
       objectDetectionInputs[0],
       objectDetectionInputs[1],
-      objectDetectionInputs[2]
     ];
     const value = objectDetectionCache.get(key.toString());
     const stat = value ? value : [Number.NaN, Number.NaN, Number.NaN];

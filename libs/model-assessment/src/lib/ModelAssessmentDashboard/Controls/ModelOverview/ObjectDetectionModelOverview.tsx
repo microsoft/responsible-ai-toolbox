@@ -20,19 +20,6 @@ import React from "react";
 
 import { IModelOverviewStyles } from "./ModelOverview.styles";
 
-export function getSelectableAggregateMethod(): IComboBoxOption[] {
-  const selectableAggregateMethods: IComboBoxOption[] = [
-    {
-      key: "macro",
-      text: localization.ModelAssessment.ModelOverview.metricTypes.macro
-    },
-    {
-      key: "micro",
-      text: localization.ModelAssessment.ModelOverview.metricTypes.micro
-    }
-  ];
-  return selectableAggregateMethods;
-}
 
 export function getSelectableClassNames(dataset: IDataset): IComboBoxOption[] {
   const selectableClassNames: IComboBoxOption[] = [];
@@ -50,7 +37,6 @@ export function getSelectableClassNames(dataset: IDataset): IComboBoxOption[] {
 export interface IObjectDetectionWidgetsProps {
   classNames: IProcessedStyleSet<IModelOverviewStyles>;
   dataset: IDataset;
-  setAggregateMethod: (value: string) => void;
   setClassName: (value: string) => void;
   setIoUThreshold: (value: number) => void;
   updateDatasetCohortStats: () => void;
@@ -62,15 +48,6 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
   public render(): React.ReactNode {
     return (
       <Stack horizontal tokens={{ childrenGap: "10px" }}>
-        <ComboBox
-          id="modelOverviewAggregateMethod"
-          label={localization.ModelAssessment.ModelOverview.metricsTypeDropdown}
-          defaultSelectedKey={"macro"}
-          options={getSelectableAggregateMethod()}
-          onChange={this.onAggregateMethodChange}
-          className={this.props.classNames.dropdown}
-          styles={FluentUIStyles.smallDropdownStyle}
-        />
         <ComboBox
           id="modelOverviewClassSelection"
           placeholder={
@@ -114,15 +91,6 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
       </Stack>
     );
   }
-
-  private onAggregateMethodChange = (
-    _: React.FormEvent<IComboBox>,
-    item?: IComboBoxOption
-  ): void => {
-    if (item) {
-      this.props.setAggregateMethod(item.text.toString());
-    }
-  };
 
   private onClassNameChange = (
     _: React.FormEvent<IComboBox>,

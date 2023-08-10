@@ -18,7 +18,6 @@ export interface IVisionExplanationDashboardProps {
   ) => Promise<any[]>;
   requestObjectDetectionMetrics?: (
     selectionIndexes: number[][],
-    aggregateMethod: string,
     className: string,
     iouThreshold: number,
     objectDetectionCache: Map<string, [number, number, number]>,
