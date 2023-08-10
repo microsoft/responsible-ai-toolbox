@@ -8,7 +8,7 @@ import setuptools
 # Version will be read from version.py
 version = ""
 # Fetch Version
-with open(os.path.join('raiwidgets', '__version__.py')) as f:
+with open(os.path.join('model_server', '__version__.py')) as f:
     code = compile(f.read(), f.name, 'exec')
     exec(code)
 
@@ -22,7 +22,7 @@ with open('requirements.txt') as f:
         ["responsibleai==%s" % version]
 
 setuptools.setup(
-    name="raiwidgets",
+    name="model_server",
     version=version,
     author="Roman Lutz, Ilya Matiach, Ke Xu",
     author_email="raiwidgets-maintain@microsoft.com",
@@ -45,11 +45,4 @@ setuptools.setup(
         "Operating System :: OS Independent",
         "Development Status :: 3 - Alpha"
     ],
-    include_package_data=True,
-    package_data={
-        '': [
-            'widget/**'
-        ]
-    },
-    zip_safe=False,
 )

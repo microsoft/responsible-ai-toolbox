@@ -1,2 +1,5 @@
 rai-core-flask==0.5.0
 raiutils>=0.4.0
+azureml-core>=1.52.0
+# azure-ai-ml>=1.9.0
+mlflow>=2.5.0
