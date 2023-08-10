@@ -1,8 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from raiutils.models import (SKLearn, is_classifier,
-                             is_forecaster,
+from raiutils.models import (SKLearn, is_classifier, is_forecaster,
                              is_quantile_forecaster)
 
 
