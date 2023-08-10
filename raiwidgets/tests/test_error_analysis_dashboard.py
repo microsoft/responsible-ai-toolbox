@@ -1,9 +1,10 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from zipfile import ZipFile
-import numpy as np
 import os
+from zipfile import ZipFile
+
+import numpy as np
 import pandas as pd
 import pytest
 import shap
