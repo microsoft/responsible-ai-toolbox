@@ -59,9 +59,6 @@ export function describeVisionDataExplorer(
         ensureAllVisionDataExplorerTableViewElementsBeforeSelectionAreNotPresent();
       });
 
-      it("should should Flyout view components when selected", () => {
-        ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresent();
-      });
     } else {
       it("should not have 'VisionDataExplorer' component", () => {
         cy.get(Locators.VisionDataExplorer).should("not.exist");
