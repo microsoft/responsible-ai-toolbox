@@ -36,19 +36,31 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
 
       // checks the toggle is on
-      cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should('have.attr', 'aria-checked', 'true');
+      cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
+        "have.attr",
+        "aria-checked",
+        "true"
+      );
 
-      cy.get(Locators.ModelOverviewDatasetCohortStatsTable).find('path').should('have.attr', 'fill').and('include', 'rgb');
+      cy.get(Locators.ModelOverviewDatasetCohortStatsTable)
+        .find("path")
+        .should("have.attr", "fill")
+        .and("include", "rgb");
 
       // turns off the toggle
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).click();
 
       // checks the toggle is off
-      cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should('have.attr', 'aria-checked', 'false');
+      cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
+        "have.attr",
+        "aria-checked",
+        "false"
+      );
 
       // checks there are no RGB colors in the heatmap table
-      cy.get(Locators.ModelOverviewDatasetCohortStatsTable).find('path').should('not.have.attr', 'fill', 'rgb');
-
+      cy.get(Locators.ModelOverviewDatasetCohortStatsTable)
+        .find("path")
+        .should("not.have.attr", "fill", "rgb");
     }
   }
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("not.exist");
