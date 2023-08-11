@@ -62,6 +62,17 @@ def is_forecaster(model):
             model.forecast is not None)
 
 
+def is_object_detector(model):
+    """Check if the model is an object detection model.
+
+    :return: True if the model is an object detector, False otherwise.
+    :rtype: bool
+    """
+    return (is_classifier(model) and
+            hasattr(model, SKLearn.PREDICT) and
+            model.predict is not None)
+
+
 def is_quantile_forecaster(model):
     """Check if the model is a quantile forecaster.
 
