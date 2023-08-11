@@ -190,7 +190,7 @@ export enum Locators {
   ForecastingTransformationOperationDropdown = "#ForecastingWhatIfTransformationOperationDropdown",
   ForecastingTransformationOperationDropdownOptions = "#ForecastingWhatIfTransformationOperationDropdown button[role='option']",
   ForecastingScenarioChart = "#ForecastingDashboard #ForecastScenarioChart",
-  ForecastingScenarioChartLegendItems = "#ForecastingDashboard .highcharts-a11y-proxy-button"
+  ForecastingScenarioChartLegendItems = "#ForecastingDashboard .highcharts-a11y-proxy-button",
   VisionDataExplorer = "#VisionDataExplorer",
   VisionDataExplorerCohortDropDown = "#VisionDataExplorer #dataExplorerCohortDropdown",
   VisionDataExplorerSearchBox = "#VisionDataExplorer #dataExplorerSearchBox",
