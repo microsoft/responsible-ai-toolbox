@@ -23,6 +23,7 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should(
     "not.exist"
   );
+  cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("exist");
   if (isNotebookTest) {
     if (
       getNumberOfCohorts(datasetShape, includeNewCohort) <= 1 ||
@@ -33,9 +34,23 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
       );
     } else {
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
+
+      // checks the toggle is on
+      cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should('have.attr', 'aria-checked', 'true');
+
+      cy.get(Locators.ModelOverviewDatasetCohortStatsTable).find('path').should('have.attr', 'fill').and('include', 'rgb');
+
+      // turns off the toggle
+      cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).click();
+
+      // checks the toggle is off
+      cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should('have.attr', 'aria-checked', 'false');
+
+      // checks there are no RGB colors in the heatmap table
+      cy.get(Locators.ModelOverviewDatasetCohortStatsTable).find('path').should('not.have.attr', 'fill', 'rgb');
+
     }
   }
-  cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("exist");
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("not.exist");
   cy.get(Locators.ModelOverviewTableYAxisGrid).should(
     "include.text",
