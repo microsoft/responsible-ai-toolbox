@@ -6,13 +6,34 @@
 import base64
 from io import BytesIO
 from typing import Any, Tuple, Union
+from urllib.parse import urlparse
 
 import requests
 from numpy import asarray
 from PIL import Image
+from requests.adapters import HTTPAdapter, Retry
 
 from responsibleai_vision.common.constants import (AutoMLImagesModelIdentifier,
                                                    CommonTags)
+
+# domain mapped session for reuse
+_requests_sessions = {}
+
+
+def _get_retry_session(url):
+    domain = urlparse(url.lower()).netloc
+    if domain in _requests_sessions:
+        return _requests_sessions[domain]
+
+    session = requests.Session()
+    retries = Retry(
+        total=5, backoff_factor=1, status_forcelist=[500, 502, 503, 504]
+    )
+    session.mount("http://", HTTPAdapter(max_retries=retries))
+    session.mount("https://", HTTPAdapter(max_retries=retries))
+    _requests_sessions[domain] = session
+
+    return session
 
 
 def get_image_from_path(image_path, image_mode):
@@ -29,7 +50,7 @@ def get_image_from_path(image_path, image_mode):
     """
     image_open_pointer = image_path
     if image_path.startswith("http://") or image_path.startswith("https://"):
-        response = requests.get(image_path)
+        response = _get_retry_session(image_path).get(image_path)
         image_open_pointer = BytesIO(response.content)
     with Image.open(image_open_pointer) as im:
         if image_mode is not None:
@@ -38,9 +59,9 @@ def get_image_from_path(image_path, image_mode):
     return image_array
 
 
-def get_base64_string_from_path(img_path: str,
-                                return_image_size: bool = False) \
-        -> Union[str, Tuple[str, Tuple[int, int]]]:
+def get_base64_string_from_path(
+    img_path: str, return_image_size: bool = False
+) -> Union[str, Tuple[str, Tuple[int, int]]]:
     """Load and convert pillow image to base64-encoded image
 
     :param img_path: image path
@@ -55,6 +76,7 @@ def get_base64_string_from_path(img_path: str,
     except Exception as e:
         print("file not found", str(e))
         import urllib.request
+
         urllib.request.urlretrieve(img_path, "tempfile")
         img = Image.open("tempfile")
     imgio = BytesIO()

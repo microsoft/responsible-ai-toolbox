@@ -13,7 +13,7 @@ export const FridgeImageClassificationModelDebugging = {
     featureBalanceMeasuresComputed: false
   },
   errorAnalysisData: {
-    hasErrorAnalysisComponent: false
+    hasErrorAnalysisComponent: true
   },
   featureImportanceData: {
     hasFeatureImportanceComponent: false
