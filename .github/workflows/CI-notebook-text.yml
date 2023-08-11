@@ -5,6 +5,10 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+    paths:
+      - "raiwidgets/**"
+      - "responsibleai_text/**"
+      - ".github/workflows/CI-notebook-text.yml"
 
 jobs:
   ci-notebook-text:
