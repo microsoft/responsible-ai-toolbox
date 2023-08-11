@@ -57,7 +57,6 @@ export function describeVisionDataExplorer(
         ensureAllVisionDataExplorerImageExplorerViewElementsBeforeSelectionAreNotPresent();
         ensureAllVisionDataExplorerTableViewElementsBeforeSelectionAreNotPresent();
       });
-
     } else {
       it("should not have 'VisionDataExplorer' component", () => {
         cy.get(Locators.VisionDataExplorer).should("not.exist");

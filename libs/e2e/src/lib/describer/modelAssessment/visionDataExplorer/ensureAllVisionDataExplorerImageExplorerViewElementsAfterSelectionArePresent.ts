@@ -26,11 +26,13 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
     Locators.VisionDataExplorerImageExplorerViewSuccessImageContainer
   ).should("exist");
 
-  cy.get(Locators.VisionDataExplorerImageExplorerViewImage).should(
+  cy.get(Locators.VisionDataExplorerImageExplorerViewImage).should("exist");
+  cy.get(Locators.VisionDataExplorerImageExplorerViewImagePredictedY).should(
     "exist"
   );
-  cy.get(Locators.VisionDataExplorerImageExplorerViewImagePredictedY).should("exist");
-  cy.get(Locators.VisionDataExplorerImageExplorerViewImageTrueY).should("exist");
+  cy.get(Locators.VisionDataExplorerImageExplorerViewImageTrueY).should(
+    "exist"
+  );
 
   cy.get(Locators.VisionDataExplorerPageSizeSelector).should("not.exist");
 }
