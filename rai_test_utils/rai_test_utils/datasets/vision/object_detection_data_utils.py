@@ -2,11 +2,11 @@
 # Licensed under the MIT License.
 
 import os
-from zipfile import ZipFile
-import pandas as pd
-import xml.etree.ElementTree as ET
-
 import urllib.request as request_file
+import xml.etree.ElementTree as ET
+from zipfile import ZipFile
+
+import pandas as pd
 
 
 def load_fridge_object_detection_dataset_labels():

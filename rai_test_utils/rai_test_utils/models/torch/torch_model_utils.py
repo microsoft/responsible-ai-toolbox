@@ -2,12 +2,11 @@
 # Licensed under the MIT License.
 
 import os
+import urllib.request as request_file
 
 import torch
 import torchvision
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
-
-import urllib.request as request_file
 
 
 # download fine-tuned recycling model from url
