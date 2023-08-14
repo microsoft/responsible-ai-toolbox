@@ -29,7 +29,7 @@ class RAIBaseInsights(ABC):
     This class is abstract and should not be instantiated.
     """
 
-    def r__init__(self, model: Optional[Any], train: Optional[pd.DataFrame],
+    def __init__(self, model: Optional[Any], train: Optional[pd.DataFrame],
                  test: pd.DataFrame, target_column: str, task_type: str,
                  serializer: Optional[Any] = None):
         """Creates an RAIBaseInsights object.

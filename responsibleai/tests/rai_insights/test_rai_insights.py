@@ -10,14 +10,6 @@ import numpy as np
 import pandas as pd
 import pytest
 
-try:
-    import torch
-    import torchvision
-    from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
-    torch_installed = True
-except ImportError:
-    torch_installed = False
-
 from tests.causal_manager_validator import validate_causal
 from tests.common_utils import create_iris_data
 from tests.counterfactual_manager_validator import validate_counterfactual
@@ -29,12 +21,10 @@ from tests.explainer_manager_validator import (setup_explainer,
 from rai_test_utils.datasets.tabular import (
     create_binary_classification_dataset, create_cancer_data,
     create_housing_data)
-from rai_test_utils.datasets.vision import load_fridge_object_detection_dataset
 from rai_test_utils.models.model_utils import (create_models_classification,
                                                create_models_regression)
 from rai_test_utils.models.sklearn import \
     create_complex_classification_pipeline
-from rai_test_utils.models.torch import get_object_detection_fridge_model
 from rai_test_utils.utilities import is_valid_uuid
 from raiutils.models import ModelTask
 from responsibleai import RAIInsights
@@ -207,22 +197,6 @@ class TestRAIInsights(object):
         for model in models:
             run_rai_insights(model, X_train, X_test, LABELS, [],
                              manager_type, manager_args)
-
-    @pytest.mark.parametrize('manager_type', [ManagerNames.ERROR_ANALYSIS,
-                                              ManagerNames.EXPLAINER])
-    @pytest.mark.skipif(not torch_installed,
-                        reason="requires torch & torchvision")
-    def test_rai_insights_object_detection(self, manager_type):
-        model = get_object_detection_fridge_model()
-        dataset = load_fridge_object_detection_dataset()
-        classes = np.array(['can', 'carton', 'milk_bottle', 'water_bottle'])
-
-        data_train = dataset.sample(5, random_state=42)
-        data_test = dataset.sample(5, random_state=42)
-
-        run_rai_insights(model, data_train, data_test, "label",
-                         None, manager_type, classes=classes,
-                         task_type=ModelTask.OBJECT_DETECTION)
 
 
 def run_rai_insights(model, train_data, test_data, target_column,
@@ -437,9 +411,6 @@ def validate_rai_insights(
             assert isinstance(rai_insights._predict_proba_output, np.ndarray)
             assert len(rai_insights._predict_proba_output.tolist()[0]) == \
                 len(rai_insights._classes)
-        elif task_type == ModelTask.OBJECT_DETECTION:
-            assert rai_insights._predict_output is not None
-            assert isinstance(rai_insights._predict_output, list)
 
     if task_type == ModelTask.CLASSIFICATION:
         classes = train_data[target_column].unique()

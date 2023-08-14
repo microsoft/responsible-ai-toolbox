@@ -15,8 +15,6 @@ import pandas as pd
 
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
-from ml_wrappers import wrap_model
-from ml_wrappers.common.constants import Device
 from raiutils.data_processing import convert_to_list
 from raiutils.exceptions import (SystemErrorException,
                                  UserConfigValidationException)
@@ -34,7 +32,6 @@ from responsibleai.managers.data_balance_manager import DataBalanceManager
 from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai.managers.explainer_manager import ExplainerManager
 from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
-from responsibleai.utils import get_images
 
 _TRAIN_LABELS = 'train_labels'
 _MODEL = "model"
@@ -126,16 +123,6 @@ MODEL_METHODS = {
             optional=False,
             purpose=MethodPurpose.PREDICTION)
     ],
-    ModelTask.OBJECT_DETECTION: [
-        ModelMethod(
-            name=SKLearn.PREDICT,
-            optional=False,
-            purpose=MethodPurpose.PREDICTION),
-        ModelMethod(
-            name=SKLearn.PREDICT_PROBA,
-            optional=False,
-            purpose=MethodPurpose.PROBABILITY)
-    ],
     ModelTask.FORECASTING: [
         ModelMethod(
             name=Forecasting.FORECAST,
@@ -180,7 +167,7 @@ class RAIInsights(RAIBaseInsights):
         :param target_column: The name of the label column.
         :type target_column: str
         :param task_type: The task to run, can be `classification`,
-            `regression`, `object_detection`, or `forecasting`.
+            `regression`, or `forecasting`.
         :type task_type: str
         :param categorical_features: The categorical feature names.
             categorical_features is deprecated. Please provide categorical
@@ -227,13 +214,6 @@ class RAIInsights(RAIBaseInsights):
         self._large_forecast_output = None
         self._large_predict_proba_output = None
         self._large_forecast_quantiles_output = None
-
-        sample = test.iloc[0:2]
-        sample = get_images(sample, "RGB", None)
-        if task_type == ModelTask.OBJECT_DETECTION:
-            print('yes')
-            model = wrap_model(
-                model, sample, task_type, classes=classes, device=Device.AUTO.value)
 
         self._validate_rai_insights_input_parameters(
             model=model,
@@ -481,8 +461,8 @@ class RAIInsights(RAIBaseInsights):
         :type test: pandas.DataFrame
         :param target_column: The name of the label column.
         :type target_column: str
-        :param task_type: The task to run, can be `classification`, `regression`,
-            or `object_detection`.
+        :param task_type: The task to run, can be `classification` or
+            `regression`.
         :type task_type: str
         :param classes: The class labels in the training dataset
         :type classes: numpy.ndarray
@@ -497,8 +477,7 @@ class RAIInsights(RAIBaseInsights):
         """
         valid_tasks = [
             ModelTask.CLASSIFICATION.value,
-            ModelTask.REGRESSION.value,
-            ModelTask.OBJECT_DETECTION.value
+            ModelTask.REGRESSION.value
         ]
         # Check if forecasting feature flag was passed as kwarg.
         # We specifically do not advertise for this until we want people to
@@ -619,7 +598,7 @@ class RAIInsights(RAIBaseInsights):
                 string_features_set - set(feature_metadata.datetime_features)
         non_categorical_or_time_string_columns = \
             string_features_set - set(categorical_features)
-        if len(non_categorical_or_time_string_columns) > 0 and task_type != ModelTask.OBJECT_DETECTION:
+        if len(non_categorical_or_time_string_columns) > 0:
             raise UserConfigValidationException(
                 "The following string features were not "
                 "identified as categorical features: "
@@ -675,8 +654,7 @@ class RAIInsights(RAIBaseInsights):
                         'provided has a predict_proba function. '
                         'Please check the task_type.')
 
-        if task_type == ModelTask.CLASSIFICATION or\
-           task_type == ModelTask.OBJECT_DETECTION:
+        if task_type == ModelTask.CLASSIFICATION:
             self._validate_classes(
                 model, train, test, target_column, feature_metadata, classes)
 
@@ -1244,12 +1222,7 @@ class RAIInsights(RAIBaseInsights):
                     _MODEL_METHOD_EXCEPTION_MESSAGE.format(method.name))
             try:
                 model_method = getattr(self.model, method.name)
-                if self.task_type == ModelTask.OBJECT_DETECTION:
-                    sample = input_data.iloc[0:2]
-                    sample = get_images(sample, "RGB", None)
-                    model_method(sample)
-                else:
-                    model_method(input_data)
+                model_method(input_data)
             except Exception:
                 raise UserConfigValidationException(
                     _MODEL_METHOD_EXCEPTION_MESSAGE.format(method.name))
