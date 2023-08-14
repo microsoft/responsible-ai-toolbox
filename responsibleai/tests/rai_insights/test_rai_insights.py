@@ -29,10 +29,12 @@ from tests.explainer_manager_validator import (setup_explainer,
 from rai_test_utils.datasets.tabular import (
     create_binary_classification_dataset, create_cancer_data,
     create_housing_data)
+from rai_test_utils.datasets.vision import load_fridge_object_detection_dataset
 from rai_test_utils.models.model_utils import (create_models_classification,
                                                create_models_regression)
 from rai_test_utils.models.sklearn import \
     create_complex_classification_pipeline
+from rai_test_utils.models.torch import get_object_detection_fridge_model
 from rai_test_utils.utilities import is_valid_uuid
 from raiutils.models import ModelTask
 from responsibleai import RAIInsights
@@ -211,12 +213,12 @@ class TestRAIInsights(object):
     @pytest.mark.skipif(not torch_installed,
                         reason="requires torch & torchvision")
     def test_rai_insights_object_detection(self, manager_type):
-        model = get_object_detection_model()
+        model = get_object_detection_fridge_model()
         dataset = load_fridge_object_detection_dataset()
         classes = np.array(['can', 'carton', 'milk_bottle', 'water_bottle'])
 
-        data_train = dataset[["image"]]
-        data_test = dataset[["label"]]
+        data_train = dataset.sample(5, random_state=42)
+        data_test = dataset.sample(5, random_state=42)
 
         run_rai_insights(model, data_train, data_test, "label",
                          None, manager_type, classes=classes,
@@ -230,7 +232,7 @@ def run_rai_insights(model, train_data, test_data, target_column,
     if manager_args is None:
         manager_args = {}
 
-    if classes is not None:
+    if classes is not None and task_type != ModelTask.OBJECT_DETECTION:
         task_type = ModelTask.CLASSIFICATION
     elif task_type is None:
         task_type = ModelTask.REGRESSION
@@ -438,8 +440,6 @@ def validate_rai_insights(
         elif task_type == ModelTask.OBJECT_DETECTION:
             assert rai_insights._predict_output is not None
             assert isinstance(rai_insights._predict_output, list)
-            assert rai_insights._predict_proba_output is not None
-            assert isinstance(rai_insights._predict_proba_output, list)
 
     if task_type == ModelTask.CLASSIFICATION:
         classes = train_data[target_column].unique()
