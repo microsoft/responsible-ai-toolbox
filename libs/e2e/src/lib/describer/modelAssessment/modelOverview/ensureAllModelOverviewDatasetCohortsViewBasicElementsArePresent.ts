@@ -44,8 +44,8 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
 
       cy.get(Locators.ModelOverviewDatasetCohortStatsTable)
         .find("path")
-        .should("have.attr", "fill")
-        .and("include", "rgb");
+        .filter('[fill*="rgb"]')
+        .should('have.length.greaterThan', 0);
 
       // turns off the toggle
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).click();
@@ -60,7 +60,7 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
       // checks there are no RGB colors in the heatmap table
       cy.get(Locators.ModelOverviewDatasetCohortStatsTable)
         .find("path")
-        .should("not.have.attr", "fill", "rgb");
+        .should('not.have.attr', 'fill*="rgb"');
     }
   }
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("not.exist");

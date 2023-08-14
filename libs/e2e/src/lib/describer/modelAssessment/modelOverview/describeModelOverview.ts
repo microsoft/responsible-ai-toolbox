@@ -67,6 +67,7 @@ export function describeModelOverview(
         );
         ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
           datasetShape,
+          isVision,
           1
         );
       });
@@ -79,6 +80,7 @@ export function describeModelOverview(
         );
         ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
           datasetShape,
+          isVision,
           2
         );
       });

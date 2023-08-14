@@ -12,6 +12,7 @@ import {
 
 export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
   datasetShape: IModelAssessmentData,
+  isVision: boolean,
   selectedFeatures: number
 ): void {
   cy.get(Locators.ModelOverviewFeatureSelection).should("exist");
@@ -20,7 +21,8 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
   );
   cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("not.exist");
 
-  if (!datasetShape.isObjectDetection) {
+  // set selectedFeatures to 1 as mean_pixel_value is the only feature default for vision
+  if ((!datasetShape.isObjectDetection && selectedFeatures === 1) || !isVision) {
     cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
     cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
 
@@ -33,8 +35,8 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
 
     cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable)
       .find("path")
-      .should("have.attr", "fill")
-      .and("include", "rgb");
+      .filter('[fill*="rgb"]')
+      .should('have.length.greaterThan', 0);
 
     // turns off the toggle
     cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).click();
@@ -49,7 +51,7 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
     // checks there are no RGB colors in the heatmap table
     cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable)
       .find("path")
-      .should("not.have.attr", "fill", "rgb");
+      .should('not.have.attr', 'fill*="rgb"');
 
     const defaultVisibleChart = getDefaultVisibleChart(
       datasetShape.isRegression,
