@@ -398,7 +398,7 @@ class TestRAIInsightsValidations:
             str(ucve.value)
 
     def test_dirty_train_test_data(self):
-        X_train = pd.DataFrame(data=[['1', np.nan], ['2', '3']],
+        X_train = pd.DataFrame(data=[['1', 1], ['2', '3']],
                                columns=['c1', 'c2'])
         y_train = np.array([1, 0])
         X_test = pd.DataFrame(data=[['1', '2'], ['2', '3']],

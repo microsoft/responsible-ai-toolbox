@@ -382,6 +382,24 @@
         "Short": "Micro F1 score",
         "Title": "Additional information on micro averaged F1 score"
       },
+      "MeanAveragePrecision": {
+        "Name": "Mean average precision score",
+        "Info": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall.",
+        "Short": "Mean avg precision",
+        "Title": "Additional information on mean average precision score"
+      },
+      "AveragePrecision": {
+        "Name": "Average precision score",
+        "Info": "Average precision for object detection models is calculated for a selected class.",
+        "Short": "Avg precision",
+        "Title": "Additional information on average precision score"
+      },
+      "AverageRecall": {
+        "Name": "Average recall score",
+        "Info": "Average recall for object detection models is calculated for a selected class.",
+        "Short": "Avg recall",
+        "Title": "Additional information on average recall score"
+      },
       "metricName": "Ölçüm adı",
       "metricValue": "Ölçüm değeri"
     },
@@ -1133,12 +1151,19 @@
       "label": "Etiket",
       "colon": ": ",
       "startingPosition": "STARTING POSITION",
-      "endingPosition": "ENDING POSITION"
+      "endingPosition": "ENDING POSITION",
+      "predictedAnswer": "Predicted answer: ",
+      "trueAnswer": "True answer: ",
+      "inputs": "Inputs",
+      "outputs": "Outputs"
     },
     "Legend": {
       "featureLegend": "METİN ÖZELLİĞİ GÖSTERGESİ",
       "posFeatureImportance": "POZİTİF ÖZELLİK ÖNEM DERECESİ",
-      "negFeatureImportance": "NEGATİF ÖZELLİK ÖNEM DERECESİ"
+      "negFeatureImportance": "NEGATİF ÖZELLİK ÖNEM DERECESİ",
+      "cls": "CLS: start of the sentence",
+      "sep": "SEP: end of the sentence",
+      "selectedWord": "Selected word: "
     },
     "BarChart": {
       "featureImportance": "ÖZELLİK ÖNEM DERECESİ"
