@@ -534,6 +534,10 @@ class RAIInsights(RAIBaseInsights):
             raise UserConfigValidationException(
                 f'Target name {target_column} not present in train/test data')
 
+        # Check if any of the data is missing in test and train data
+        self._validate_data_is_not_missing(test, "test")
+        self._validate_data_is_not_missing(train, "train")
+
         categorical_features = feature_metadata.categorical_features
         if (categorical_features is not None and
                 len(categorical_features) > 0):
@@ -596,10 +600,6 @@ class RAIInsights(RAIBaseInsights):
                 "The following string features were not "
                 "identified as categorical features: "
                 f"{non_categorical_or_time_string_columns}")
-
-        # Check if any of the data is missing in test and train data
-        self._validate_data_is_not_missing(test, "test")
-        self._validate_data_is_not_missing(train, "train")
 
         self._validate_feature_metadata(
             feature_metadata, train, task_type, model, target_column)
