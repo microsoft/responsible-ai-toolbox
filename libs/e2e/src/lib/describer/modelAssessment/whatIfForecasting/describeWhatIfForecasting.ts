@@ -7,6 +7,7 @@ import { modelAssessmentDatasets } from "../datasets/modelAssessmentDatasets";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
 import { describeWhatIfForecastingCreate } from "./describeWhatIfForecastingCreate";
+import { describeWhatIfForecastingCreateWhatIf } from "./describeWhatIfForecastingCreateWhatIf";
 
 const testName = "What If Forecasting";
 
@@ -25,6 +26,7 @@ export function describeWhatIfForecasting(
       });
     } else {
       describeWhatIfForecastingCreate(datasetShape);
+      describeWhatIfForecastingCreateWhatIf(datasetShape);
     }
   });
 }

@@ -480,6 +480,8 @@ class RAIInsights(RAIBaseInsights):
         # We specifically do not advertise for this until we want people to
         # use it.
         if kwargs.get(_FORECASTING_RAI_INSIGHTS_ENABLED, False):
+            print("WARNING: Support for the forecasting task type is not yet "
+                  "stable. Please do not use it except for testing purposes.")
             valid_tasks.append(ModelTask.FORECASTING.value)
         if task_type not in valid_tasks:
             message = (f"Unsupported task type '{task_type}'. "

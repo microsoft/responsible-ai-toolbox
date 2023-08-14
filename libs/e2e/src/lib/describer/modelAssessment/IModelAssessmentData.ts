@@ -182,6 +182,7 @@ export interface IWhatIfForecastingData {
   testTransformation?: {
     featureToSelect?: string;
     operationToSelect?: string;
+    operationToSelectIndex?: number;
     valueToSelect?: number;
   };
 }

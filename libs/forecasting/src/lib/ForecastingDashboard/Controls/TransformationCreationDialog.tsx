@@ -98,82 +98,88 @@ export class TransformationCreationDialog extends React.Component<
       }
     }
     return (
-      <Dialog
-        hidden={!this.props.isVisible}
-        dialogContentProps={{
-          closeButtonAriaLabel: "Close",
-          title: localization.Forecasting.TransformationCreation.title,
-          type: DialogType.normal
-        }}
-        modalProps={{
-          isBlocking: true
-        }}
-        minWidth={740}
-        maxWidth={1000}
-        onDismiss={this.props.onDismiss}
-      >
-        <Stack
-          tokens={{
-            childrenGap: "l1"
+        <Dialog
+          hidden={!this.props.isVisible}
+          dialogContentProps={{
+            closeButtonAriaLabel: "Close",
+            title: localization.Forecasting.TransformationCreation.title,
+            type: DialogType.normal
           }}
+          modalProps={{
+            isBlocking: true
+          }}
+          minWidth={740}
+          maxWidth={1000}
+          onDismiss={this.props.onDismiss}
         >
-          <Stack.Item>
-            <TextField
-              id={"ForecastingWhatIfTransformationNameField"}
-              label={localization.Forecasting.TransformationCreation.nameLabel}
-              placeholder={
+          <Stack
+            tokens={{
+              childrenGap: "l1"
+            }}
+          >
+            <Stack.Item>
+              <TextField
+                id={"ForecastingWhatIfTransformationNameField"}
+                label={
+                  localization.Forecasting.TransformationCreation.nameLabel
+                }
+                placeholder={
+                  localization.Forecasting.TransformationCreation
+                    .scenarioNamingInstructionsPlaceholder
+                }
+                value={this.state.transformationName}
+                onChange={this.onChangeTransformationName}
+                className={classNames.smallTextField}
+                onGetErrorMessage={this.getTransformationNameErrorMessage}
+                validateOnLoad={false}
+              />
+            </Stack.Item>
+            <Stack.Item>
+              <TransformationCreation
+                onChangeTransformationFeature={
+                  this.onChangeTransformationFeature
+                }
+                onChangeTransformationValue={this.onChangeTransformationValue}
+                onChangeTransformationOperation={
+                  this.onChangeTransformationOperation
+                }
+                transformationValue={this.state.transformationValue}
+                transformationFeature={this.state.transformationFeature}
+                transformationName={this.state.transformationName}
+                transformationOperation={this.state.transformationOperation}
+                transformationValueErrorMessage={
+                  transformationValueErrorMessage
+                }
+              />
+            </Stack.Item>
+            <Stack.Item>
+              {transformationCombinationErrorMessage && (
+                <Text variant={"small"} className={classNames.errorText}>
+                  {transformationCombinationErrorMessage}
+                </Text>
+              )}
+            </Stack.Item>
+          </Stack>
+          <DialogFooter>
+            <PrimaryButton
+              id={"ForecastingWhatIfAddTransformationButton"}
+              disabled={
+                transformationCombinationErrorMessage !== undefined ||
+                this.getTransformationNameErrorMessage(
+                  this.state.transformationName
+                ) !== undefined ||
+                transformationValueErrorMessage !== undefined ||
+                this.state.transformationOperation === undefined ||
+                this.state.transformationFeature === undefined
+              }
+              onClick={this.addTransformation}
+              text={
                 localization.Forecasting.TransformationCreation
-                  .scenarioNamingInstructionsPlaceholder
+                  .addTransformationButton
               }
-              value={this.state.transformationName}
-              onChange={this.onChangeTransformationName}
-              className={classNames.smallTextField}
-              onGetErrorMessage={this.getTransformationNameErrorMessage}
-              validateOnLoad={false}
             />
-          </Stack.Item>
-          <Stack.Item>
-            <TransformationCreation
-              onChangeTransformationFeature={this.onChangeTransformationFeature}
-              onChangeTransformationValue={this.onChangeTransformationValue}
-              onChangeTransformationOperation={
-                this.onChangeTransformationOperation
-              }
-              transformationValue={this.state.transformationValue}
-              transformationFeature={this.state.transformationFeature}
-              transformationName={this.state.transformationName}
-              transformationOperation={this.state.transformationOperation}
-              transformationValueErrorMessage={transformationValueErrorMessage}
-            />
-          </Stack.Item>
-          <Stack.Item>
-            {transformationCombinationErrorMessage && (
-              <Text variant={"small"} className={classNames.errorText}>
-                {transformationCombinationErrorMessage}
-              </Text>
-            )}
-          </Stack.Item>
-        </Stack>
-        <DialogFooter>
-          <PrimaryButton
-            id={"ForecastingWhatIfAddTransformationButton"}
-            disabled={
-              transformationCombinationErrorMessage !== undefined ||
-              this.getTransformationNameErrorMessage(
-                this.state.transformationName
-              ) !== undefined ||
-              transformationValueErrorMessage !== undefined ||
-              this.state.transformationOperation === undefined ||
-              this.state.transformationFeature === undefined
-            }
-            onClick={this.addTransformation}
-            text={
-              localization.Forecasting.TransformationCreation
-                .addTransformationButton
-            }
-          />
-        </DialogFooter>
-      </Dialog>
+          </DialogFooter>
+        </Dialog>
     );
   }
 
