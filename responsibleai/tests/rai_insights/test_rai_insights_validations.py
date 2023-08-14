@@ -48,7 +48,7 @@ class TestRAIInsightsValidations:
                 task_type='regre',
                 forecasting_enabled=forecasting_enabled)
 
-    def test_missing_test_data(self):
+    def test_missing_and_non_finite_test_data(self):
         train_data = {
             'Column1': [10, 20, 90, 40, 50],
             'Column2': [10, 20, 90, 40, 50],
@@ -58,7 +58,7 @@ class TestRAIInsightsValidations:
 
         test_data = {
             'Column1': [10, 20, 90, 40, 50],
-            'Column2': [10, 20, 90, 40, 50],
+            'Column2': [10, 20, np.inf, 40, 50],
             'Target': [10, 20, np.nan, 40, 50]
         }
         test = pd.DataFrame(test_data)
@@ -77,12 +77,12 @@ class TestRAIInsightsValidations:
                 test=test,
                 target_column='Target',
                 task_type='classification')
-        assert "Features ['Target'] have missing values in " + \
+        assert "Features ['Column2', 'Target'] have missing or non-finite values in " + \
             "test data" in str(ucve.value)
 
     def test_missing_train_data(self):
         train_data = {
-            'Column1': [10, 20, 90, 40, 50],
+            'Column1': [10, 20, -np.inf, 40, 50],
             'Column2': [10, 20, np.nan, 40, 50],
             'Target': [10, 20, 90, 40, 50]
         }
@@ -109,7 +109,7 @@ class TestRAIInsightsValidations:
                 test=test,
                 target_column='Target',
                 task_type='classification')
-        assert "Features ['Column2'] have missing values in " + \
+        assert "Features ['Column1', 'Column2'] have missing or non-finite values in " + \
             "train data" in str(ucve.value)
 
     def test_validate_test_data_size(self):
