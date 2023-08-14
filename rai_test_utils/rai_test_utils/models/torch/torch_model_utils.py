@@ -12,10 +12,9 @@ from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 # download fine-tuned recycling model from url
 def download_assets(filepath, force=False):
     if force or not os.path.exists(filepath):
-        request_file.urlretrieve(
-            "https://publictestdatasets.blob.core.windows.net\
-            /models/fastrcnn.pt",
-            os.path.join(filepath))
+        url = ("https://publictestdatasets.blob.core.windows.net" +
+               "/models/fastrcnn.pt")
+        request_file.urlretrieve(url, os.path.join(filepath))
     else:
         print('Found' + filepath)
 
