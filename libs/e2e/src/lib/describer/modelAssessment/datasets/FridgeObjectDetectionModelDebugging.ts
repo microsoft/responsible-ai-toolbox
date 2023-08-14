@@ -43,5 +43,10 @@ export const FridgeObjectDetectionModelDebugging = {
       name: "CohortCreateE2E-object-detection",
       sampleSize: "2"
     }
+  },
+  visionDataExplorerData: {
+    errorInstances: 0,
+    hasVisionDataExplorerComponent: true,
+    successInstances: 5
   }
 };

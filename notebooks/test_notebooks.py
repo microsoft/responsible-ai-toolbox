@@ -271,8 +271,10 @@ def test_responsibleaidashboard_fridge_image_classification_model_debugging():
 @pytest.mark.vision_notebooks
 def test_responsibleaidashboard_fridge_multilabel_ic_model_debugging():
     nb_path = RESPONSIBLEAIDASHBOARD
-    nb_name = "responsibleaidashboard-fridge-multilabel-" + \
-              "image-classification-model-debugging"
+    nb_name = (
+        "responsibleaidashboard-fridge-multilabel-"
+        "image-classification-model-debugging"
+    )
 
     test_values = {}
     assay_one_notebook(nb_path, nb_name, test_values)
@@ -301,6 +303,26 @@ def test_responsibleaidashboard_dbpedia_text_classification_model_debugging():
     nb_path = TEXT
     nb_name = ("responsibleaidashboard-DBPedia-text-classification-" +
                "model-debugging")
+
+    test_values = {}
+    assay_one_notebook(nb_path, nb_name, test_values)
+
+
+@pytest.mark.text_notebooks
+def test_responsibleaidashboard_covid19_event_text_model_debugging():
+    nb_path = TEXT
+    nb_name = ("responsibleaidashboard-covid19-event-multilabel-" +
+               "text-classification-model-debugging")
+
+    test_values = {}
+    assay_one_notebook(nb_path, nb_name, test_values)
+
+
+@pytest.mark.text_notebooks
+def test_responsibleaidashboard_blbooksgenre_text_model_debugging():
+    nb_path = TEXT
+    nb_name = ("responsibleaidashboard-blbooksgenre-binary-" +
+               "text-classification-model-debugging")
 
     test_values = {}
     assay_one_notebook(nb_path, nb_name, test_values)

@@ -382,6 +382,24 @@
         "Short": "Micro F1 score",
         "Title": "Additional information on micro averaged F1 score"
       },
+      "MeanAveragePrecision": {
+        "Name": "Mean average precision score",
+        "Info": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall.",
+        "Short": "Mean avg precision",
+        "Title": "Additional information on mean average precision score"
+      },
+      "AveragePrecision": {
+        "Name": "Average precision score",
+        "Info": "Average precision for object detection models is calculated for a selected class.",
+        "Short": "Avg precision",
+        "Title": "Additional information on average precision score"
+      },
+      "AverageRecall": {
+        "Name": "Average recall score",
+        "Info": "Average recall for object detection models is calculated for a selected class.",
+        "Short": "Avg recall",
+        "Title": "Additional information on average recall score"
+      },
       "metricName": "Nom de la métrique",
       "metricValue": "Valeur de métrique"
     },
@@ -1133,12 +1151,19 @@
       "label": "Étiquette",
       "colon": ": ",
       "startingPosition": "STARTING POSITION",
-      "endingPosition": "ENDING POSITION"
+      "endingPosition": "ENDING POSITION",
+      "predictedAnswer": "Predicted answer: ",
+      "trueAnswer": "True answer: ",
+      "inputs": "Inputs",
+      "outputs": "Outputs"
     },
     "Legend": {
       "featureLegend": "LÉGENDE DE FONCTIONNALITÉ DE TEXTE",
       "posFeatureImportance": "IMPORTANCE DE LA FONCTIONNALITÉ POSITIVE",
-      "negFeatureImportance": "IMPORTANCE DE LA FONCTIONNALITÉ NÉGATIVE"
+      "negFeatureImportance": "IMPORTANCE DE LA FONCTIONNALITÉ NÉGATIVE",
+      "cls": "CLS: start of the sentence",
+      "sep": "SEP: end of the sentence",
+      "selectedWord": "Selected word: "
     },
     "BarChart": {
       "featureImportance": "IMPORTANCE DES FONCTIONNALITÉS"

@@ -41,7 +41,12 @@ const stackTokens = {
 export class PageSizeSelectors extends React.Component<IPageSizeSelectorsProps> {
   public render(): React.ReactNode {
     return (
-      <Stack horizontal tokens={stackTokens} verticalAlign="center">
+      <Stack
+        horizontal
+        tokens={stackTokens}
+        verticalAlign="center"
+        id="pageSizeSelector"
+      >
         <Stack.Item>
           <Text>
             {this.props.selectedKey ===
