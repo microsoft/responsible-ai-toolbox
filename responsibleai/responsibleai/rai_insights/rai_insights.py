@@ -123,16 +123,6 @@ MODEL_METHODS = {
             optional=False,
             purpose=MethodPurpose.PREDICTION)
     ],
-    ModelTask.OBJECT_DETECTION: [
-        ModelMethod(
-            name=SKLearn.PREDICT,
-            optional=False,
-            purpose=MethodPurpose.PREDICTION),
-        ModelMethod(
-            name=SKLearn.PREDICT_PROBA,
-            optional=False,
-            purpose=MethodPurpose.PROBABILITY)
-    ],
     ModelTask.FORECASTING: [
         ModelMethod(
             name=Forecasting.FORECAST,
@@ -487,8 +477,7 @@ class RAIInsights(RAIBaseInsights):
         """
         valid_tasks = [
             ModelTask.CLASSIFICATION.value,
-            ModelTask.REGRESSION.value,
-            ModelTask.OBJECT_DETECTION.value
+            ModelTask.REGRESSION.value
         ]
         # Check if forecasting feature flag was passed as kwarg.
         # We specifically do not advertise for this until we want people to
@@ -665,8 +654,7 @@ class RAIInsights(RAIBaseInsights):
                         'provided has a predict_proba function. '
                         'Please check the task_type.')
 
-        if task_type == ModelTask.CLASSIFICATION or\
-           task_type == ModelTask.OBJECT_DETECTION:
+        if task_type == ModelTask.CLASSIFICATION:
             self._validate_classes(
                 model, train, test, target_column, feature_metadata, classes)
 
