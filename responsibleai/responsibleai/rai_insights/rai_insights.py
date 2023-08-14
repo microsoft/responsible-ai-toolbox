@@ -8,6 +8,7 @@ import pickle
 import warnings
 from enum import Enum
 from pathlib import Path
+from sklearn.utils.validation import assert_all_finite
 from typing import Any, List, Optional, Union
 
 import numpy as np
@@ -712,16 +713,18 @@ class RAIInsights(RAIBaseInsights):
                     if_predictions=True
                 )
 
-    def _validate_data_is_not_missing(self, data, data_name):
+    def _validate_data_all_exist_and_finite(self, data, data_name):
         """Validates that data is not missing (ie null)"""
-        list_of_feature_having_missing_values = []
+        list_of_feature_with_non_finite_or_missing_values = []
         for feature in data.columns.tolist():
-            if np.any(data[feature].isnull()):
-                list_of_feature_having_missing_values.append(feature)
-        if len(list_of_feature_having_missing_values) > 0:
+            try:
+                assert_all_finite(data[feature])
+            except ValueError:
+                list_of_feature_with_non_finite_or_missing_values.append(feature)
+        if len(list_of_feature_with_non_finite_or_missing_values) > 0:
             raise UserConfigValidationException(
-                f"Features {list_of_feature_having_missing_values} "
-                f"have missing values in {data_name} data.")
+                f"Features {list_of_feature_with_non_finite_or_missing_values} "
+                f"have missing or non-finite values in {data_name} data.")
 
     def _validate_feature_metadata(
             self, feature_metadata, train, task_type, model, target_column):
