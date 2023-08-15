@@ -167,9 +167,7 @@ class RAIInsights(RAIBaseInsights):
         :param target_column: The name of the label column.
         :type target_column: str
         :param task_type: The task to run, can be `classification`,
-            `regression`, or `forecasting` on the user side.
-            Internally, `object_detection` may be passed for
-            corresponding Error Analysis support.
+            `regression`, or `forecasting`.
         :type task_type: str
         :param categorical_features: The categorical feature names.
             categorical_features is deprecated. Please provide categorical
@@ -399,7 +397,7 @@ class RAIInsights(RAIBaseInsights):
             self.model, self.test, self.target_column,
             self._classes,
             categorical_features=self.categorical_features,
-            dropped_features=dropped_features, model_task=self.task_type)
+            dropped_features=dropped_features)
 
         self._explainer_manager = ExplainerManager(
             self.model, self.get_train_data(), self.get_test_data(),
@@ -423,8 +421,6 @@ class RAIInsights(RAIBaseInsights):
                 return classes
             else:
                 return classes
-        elif task_type == ModelTask.OBJECT_DETECTION:
-            return classes
         else:
             return None
 
@@ -485,8 +481,7 @@ class RAIInsights(RAIBaseInsights):
         # use it.
         if kwargs.get(_FORECASTING_RAI_INSIGHTS_ENABLED, False):
             valid_tasks.append(ModelTask.FORECASTING.value)
-        if task_type not in valid_tasks and \
-           task_type != ModelTask.OBJECT_DETECTION.value:
+        if task_type not in valid_tasks:
             message = (f"Unsupported task type '{task_type}'. "
                        f"Should be one of {valid_tasks}")
             raise UserConfigValidationException(message)
