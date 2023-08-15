@@ -63,7 +63,6 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
         .filter('[fill*="rgb"]')
         .should('have.length.greaterThan', 0);
     }
-  }
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("not.exist");
   cy.get(Locators.ModelOverviewTableYAxisGrid).should(
     "include.text",
