@@ -162,7 +162,6 @@ class ModelTask(str, Enum):
 
     CLASSIFICATION = 'classification'
     REGRESSION = 'regression'
-    OBJECT_DETECTION = 'object_detection'
     UNKNOWN = 'unknown'
 
 
