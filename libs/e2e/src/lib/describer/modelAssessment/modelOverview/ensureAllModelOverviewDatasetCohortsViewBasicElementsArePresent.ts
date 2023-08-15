@@ -35,6 +35,9 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     } else {
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
 
+      // turn on the toggle
+      cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).click();
+
       // checks the toggle is on
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
         "have.attr",
