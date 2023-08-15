@@ -397,7 +397,7 @@ class RAIInsights(RAIBaseInsights):
             self.model, self.test, self.target_column,
             self._classes,
             categorical_features=self.categorical_features,
-            dropped_features=dropped_features, model_task=self.task_type)
+            dropped_features=dropped_features)
 
         self._explainer_manager = ExplainerManager(
             self.model, self.get_train_data(), self.get_test_data(),
@@ -421,8 +421,6 @@ class RAIInsights(RAIBaseInsights):
                 return classes
             else:
                 return classes
-        elif task_type == ModelTask.OBJECT_DETECTION:
-            return classes
         else:
             return None
 
