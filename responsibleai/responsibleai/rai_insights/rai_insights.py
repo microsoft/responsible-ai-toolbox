@@ -167,7 +167,9 @@ class RAIInsights(RAIBaseInsights):
         :param target_column: The name of the label column.
         :type target_column: str
         :param task_type: The task to run, can be `classification`,
-            `regression`, or `forecasting`.
+            `regression`, or `forecasting` on the user side.
+            Internally, `object_detection` may be passed for
+            corresponding Error Analysis support.
         :type task_type: str
         :param categorical_features: The categorical feature names.
             categorical_features is deprecated. Please provide categorical
@@ -476,15 +478,15 @@ class RAIInsights(RAIBaseInsights):
         """
         valid_tasks = [
             ModelTask.CLASSIFICATION.value,
-            ModelTask.REGRESSION.value,
-            ModelTask.OBJECT_DETECTION.value
+            ModelTask.REGRESSION.value
         ]
         # Check if forecasting feature flag was passed as kwarg.
         # We specifically do not advertise for this until we want people to
         # use it.
         if kwargs.get(_FORECASTING_RAI_INSIGHTS_ENABLED, False):
             valid_tasks.append(ModelTask.FORECASTING.value)
-        if task_type not in valid_tasks:
+        if task_type not in valid_tasks and \
+           task_type != ModelTask.OBJECT_DETECTION.value:
             message = (f"Unsupported task type '{task_type}'. "
                        f"Should be one of {valid_tasks}")
             raise UserConfigValidationException(message)

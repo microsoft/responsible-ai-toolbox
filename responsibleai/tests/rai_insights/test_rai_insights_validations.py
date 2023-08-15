@@ -37,8 +37,8 @@ class TestRAIInsightsValidations:
         forecasting_extension = \
             ", 'forecasting'" if forecasting_enabled else ""
         message = ("Unsupported task type 'regre'. "
-                   "Should be one of \\['classification', 'regression',"
-                   " 'object_detection'"f"{forecasting_extension}\\]")
+                   "Should be one of \\['classification', 'regression'"
+                   f"{forecasting_extension}\\]")
         with pytest.raises(UserConfigValidationException, match=message):
             RAIInsights(
                 model=model,
