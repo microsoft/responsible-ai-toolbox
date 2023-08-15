@@ -30,7 +30,7 @@ def setup_explainer(rai_insights, add_explainer=True):
     rai_insights.explainer.compute()
 
 
-def validate_explainer(rai_insights, X_train, X_test, classes, task_type=None):
+def validate_explainer(rai_insights, X_train, X_test, classes):
     if rai_insights.model is None:
         return
     explanations = rai_insights.explainer.get()
@@ -57,7 +57,7 @@ def validate_explainer(rai_insights, X_train, X_test, classes, task_type=None):
     assert properties['method'] == LIGHTGBM_METHOD
     if classes is not None:
         assert properties['model_task'] == ModelTask.CLASSIFICATION
-    elif task_type is None:
+    else:
         assert properties['model_task'] == ModelTask.REGRESSION
     assert properties['model_type'] is None
     assert properties['is_raw'] is False

@@ -9,7 +9,6 @@ from tempfile import TemporaryDirectory
 import numpy as np
 import pandas as pd
 import pytest
-
 from tests.causal_manager_validator import validate_causal
 from tests.common_utils import create_iris_data
 from tests.counterfactual_manager_validator import validate_counterfactual
@@ -202,13 +201,13 @@ class TestRAIInsights(object):
 def run_rai_insights(model, train_data, test_data, target_column,
                      categorical_features, manager_type,
                      manager_args=None, classes=None,
-                     feature_metadata=None, task_type=None):
+                     feature_metadata=None):
     if manager_args is None:
         manager_args = {}
 
-    if classes is not None and task_type != ModelTask.OBJECT_DETECTION:
+    if classes is not None:
         task_type = ModelTask.CLASSIFICATION
-    elif task_type is None:
+    else:
         task_type = ModelTask.REGRESSION
 
     if manager_type == ManagerNames.COUNTERFACTUAL:
@@ -263,7 +262,7 @@ def run_rai_insights(model, train_data, test_data, target_column,
     elif manager_type == ManagerNames.ERROR_ANALYSIS:
         validate_error_analysis(rai_insights)
     elif manager_type == ManagerNames.EXPLAINER:
-        validate_explainer(rai_insights, train_data, test_data, classes, task_type)
+        validate_explainer(rai_insights, train_data, test_data, classes)
 
     with TemporaryDirectory() as tmpdir:
         path = Path(tmpdir) / 'rai_test_path'
@@ -292,10 +291,10 @@ def run_rai_insights(model, train_data, test_data, target_column,
             setup_error_analysis(rai_insights, max_depth=4)
             validate_error_analysis(rai_insights, expected_reports=2)
         elif manager_type == ManagerNames.EXPLAINER:
-            validate_explainer(rai_insights, train_data, test_data, classes, task_type)
+            validate_explainer(rai_insights, train_data, test_data, classes)
             # validate adding new explainer config after deserialization works
             setup_explainer(rai_insights)
-            validate_explainer(rai_insights, train_data, test_data, classes, task_type)
+            validate_explainer(rai_insights, train_data, test_data, classes)
 
 
 def validate_common_state_directories(path, task_type):
@@ -313,8 +312,7 @@ def validate_common_state_directories(path, task_type):
     all_predictions_files = os.listdir(predictions_path)
     if model is not None:
         assert SerializationAttributes.PREDICT_JSON in all_predictions_files
-        if task_type == ModelTask.CLASSIFICATION or \
-           task_type == ModelTask.OBJECT_DETECTION:
+        if task_type == ModelTask.CLASSIFICATION:
             assert SerializationAttributes.PREDICT_PROBA_JSON in \
                 all_predictions_files
         else:
