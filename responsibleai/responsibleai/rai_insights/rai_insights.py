@@ -476,7 +476,8 @@ class RAIInsights(RAIBaseInsights):
         """
         valid_tasks = [
             ModelTask.CLASSIFICATION.value,
-            ModelTask.REGRESSION.value
+            ModelTask.REGRESSION.value,
+            ModelTask.OBJECT_DETECTION.value
         ]
         # Check if forecasting feature flag was passed as kwarg.
         # We specifically do not advertise for this until we want people to
