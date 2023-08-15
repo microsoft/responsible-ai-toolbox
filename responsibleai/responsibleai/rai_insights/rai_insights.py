@@ -132,7 +132,7 @@ MODEL_METHODS = {
             name=SKLearn.PREDICT_PROBA,
             optional=False,
             purpose=MethodPurpose.PROBABILITY),
-    ]
+    ],
     ModelTask.FORECASTING: [
         ModelMethod(
             name=Forecasting.FORECAST,
