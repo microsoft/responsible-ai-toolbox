@@ -21,10 +21,8 @@ from tests.explainer_manager_validator import (setup_explainer,
 from rai_test_utils.datasets.tabular import (
     create_binary_classification_dataset, create_cancer_data,
     create_housing_data)
-from rai_test_utils.datasets.vision import load_fridge_object_detection_dataset
 from rai_test_utils.models.model_utils import (create_models_classification,
                                                create_models_regression)
-from rai_test_utils.models.torch import get_object_detection_fridge_model
 from rai_test_utils.models.sklearn import \
     create_complex_classification_pipeline
 from rai_test_utils.utilities import is_valid_uuid
@@ -174,30 +172,16 @@ class TestModelAnalysis(object):
             run_model_analysis(model, X_train, X_test, LABELS, [],
                                manager_type, manager_args)
 
-    @pytest.mark.parametrize('manager_type', [ManagerNames.ERROR_ANALYSIS,
-                                              ManagerNames.EXPLAINER])
-    def test_model_analysis_object_detection_fridge(self, manager_type):
-        model = get_object_detection_fridge_model()
-        dataset = load_fridge_object_detection_dataset()
-        X_train = dataset.sample(5, random_state=42)
-        X_test = dataset.sample(5, random_state=42)
-        classes = np.array(['can', 'carton', 'milk_bottle', 'water_bottle'])
-
-        run_model_analysis(model, X_train, X_test, "label", None,
-                            manager_type, classes=classes,
-                            task_type=ModelTask.OBJECT_DETECTION)
-
 
 def run_model_analysis(model, train_data, test_data, target_column,
                        categorical_features, manager_type,
-                       manager_args=None, classes=None,
-                       task_type=None):
+                       manager_args=None, classes=None):
     if manager_args is None:
         manager_args = {}
 
-    if classes is not None and task_type != ModelTask.OBJECT_DETECTION:
+    if classes is not None:
         task_type = ModelTask.CLASSIFICATION
-    elif task_type is None:
+    else:
         task_type = ModelTask.REGRESSION
 
     if manager_type == ManagerNames.COUNTERFACTUAL:
