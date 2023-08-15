@@ -10,6 +10,11 @@ import pandas as pd
 
 
 def load_fridge_object_detection_dataset_labels():
+    """Loads the labels for the fridge object detection dataset.
+
+    return: list of labels
+    rtype: list
+    """
 
     src_images = "./data/odFridgeObjects/"
 
@@ -54,6 +59,11 @@ def load_fridge_object_detection_dataset_labels():
 
 
 def load_fridge_object_detection_dataset():
+    """Loads the fridge object detection dataset.
+
+    return: pandas dataframe with image paths and labels
+    rtype: pd.DataFrame
+    """
     # create data folder if it doesnt exist.
     os.makedirs("data", exist_ok=True)
 
