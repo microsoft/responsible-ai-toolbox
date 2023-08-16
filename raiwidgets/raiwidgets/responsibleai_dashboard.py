@@ -5,11 +5,11 @@
 
 from flask import jsonify, request
 
+from raiutils.models import ModelTask
 from raiwidgets.dashboard import Dashboard
 from raiwidgets.responsibleai_dashboard_input import \
     ResponsibleAIDashboardInput
 from responsibleai import RAIInsights
-from raiutils.models import ModelTask
 
 
 class ResponsibleAIDashboard(Dashboard):
