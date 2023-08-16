@@ -129,6 +129,7 @@ export class ImageList extends React.Component<
             <Image
               {...imageProps}
               alt={alt}
+              id={`visionImage_${item?.index}`}
               src={`data:image/jpg;base64,${item?.image}`}
               onClick={this.callbackWrapper(item)}
               width={this.props.imageDim}
@@ -144,6 +145,7 @@ export class ImageList extends React.Component<
             style={{
               left: ImagePadding
             }}
+            id={`predictedY_${item?.index}`}
           >
             <Text className={classNames.labelPredicted}>{predictedY}</Text>
           </Stack.Item>
@@ -156,6 +158,7 @@ export class ImageList extends React.Component<
                   ? this.props.imageDim
                   : this.props.imageDim - 1.35 * ImagePadding
             }}
+            id={`trueY_${item?.index}`}
           >
             <Text
               className={classNames.label}
