@@ -507,7 +507,5 @@ class ErrorAnalysisManager(BaseManager):
             dataset,
             true_y,
             feature_names,
-            categorical_features,
-            model_task=self._model_task,
-            classes=self._classes)
+            categorical_features)
         return inst
