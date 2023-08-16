@@ -254,6 +254,7 @@ class ErrorAnalysisManager(BaseManager):
         self._true_y = dataset[target_column]
         self._dataset = dataset.drop(columns=[target_column])
         self._feature_names = list(self._dataset.columns)
+        self._model_task = model_task
         self._classes = classes
         self._categorical_features = categorical_features
         self._ea_config_list = []
@@ -267,7 +268,7 @@ class ErrorAnalysisManager(BaseManager):
             self._true_y,
             self._feature_names,
             self._categorical_features,
-            model_task=model_task,
+            model_task=self._model_task,
             classes=self._classes)
 
     def add(self, max_depth: int = 3, num_leaves: int = 31,
@@ -506,5 +507,7 @@ class ErrorAnalysisManager(BaseManager):
             dataset,
             true_y,
             feature_names,
-            categorical_features)
+            categorical_features,
+            model_task=self._model_task,
+            classes=self._classes)
         return inst
