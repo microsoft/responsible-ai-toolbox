@@ -92,7 +92,7 @@ export class TransformationsTable extends React.Component<
     }
 
     return (
-      <Stack tokens={stackTokens} id={"ForecastingWhatIfTransformationsList"}>
+      <Stack tokens={stackTokens}>
         <Stack.Item>
           <Text className={classNames.mediumText}>
             {localization.formatString(

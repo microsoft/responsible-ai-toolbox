@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import traceback
-from typing import List, Optional, Union
+from typing import List, Optional
 
 import numpy as np
 import pandas as pd
@@ -13,7 +13,6 @@ from erroranalysis._internal.constants import display_name_to_metric
 from raiutils.cohort import Cohort, CohortFilter, CohortFilterMethods
 from raiutils.data_processing import convert_to_list, serialize_json_safe
 from raiutils.exceptions import UserConfigValidationException
-from raiutils.models import is_classifier
 from raiwidgets.constants import ErrorMessages
 from raiwidgets.error_handling import _format_exception
 from raiwidgets.interfaces import WidgetRequestResponseConstants
@@ -73,13 +72,14 @@ class ResponsibleAIDashboardInput:
 
     def _validate_cohort_list(self, cohort_list=None):
         task_type = self.dashboard_input.dataset.task_type
-        if (task_type in [ModelTask.CLASSIFICATION, ModelTask.REGRESSION]
-                and cohort_list is None):
+        if (task_type in [ModelTask.CLASSIFICATION, ModelTask.REGRESSION] and
+                cohort_list is None):
             self.dashboard_input.cohortData = []
             return
 
         if task_type == ModelTask.FORECASTING:
-            # Ensure user did not pass cohort_list and use the generated time series.
+            # Ensure user did not pass cohort_list and
+            # use the generated time series.
             if cohort_list is not None:
                 raise UserConfigValidationException(
                     "cohort_list is not supported for forecasting analysis.")
@@ -387,7 +387,7 @@ class ResponsibleAIDashboardInput:
                     "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }
-    
+
     def forecast(self, post_data):
         # This is a separate function from predict since we apply
         # transformations to an entire time series. That enables us
@@ -407,21 +407,36 @@ class ResponsibleAIDashboardInput:
             if len(transformation) > 0:
                 op, feature, value = transformation
                 if op == "add":
-                    transformation_func = lambda x: x + float(value)
+                    def add(x):
+                        return x + float(value)
+                    transformation_func = add
                 elif op == "subtract":
-                    transformation_func = lambda x: x - float(value)
+                    def subtract(x):
+                        return x - float(value)
+                    transformation_func = subtract
                 elif op == "multiply":
-                    transformation_func = lambda x: x * float(value)
+                    def multiply(x):
+                        return x * float(value)
+                    transformation_func = multiply
                 elif op == "divide":
-                    transformation_func = lambda x: x / float(value)
+                    def divide(x):
+                        return x / float(value)
+                    transformation_func = divide
                 elif op == "change":
-                    transformation_func = lambda x: value
+                    def change(x):
+                        return float(value)
+                    transformation_func = change
                 else:
-                    raise ValueError(f"An invalid transformation operation {op} was provided.")
+                    raise ValueError(
+                        f"An invalid transformation operation {op} "
+                        "was provided.")
 
-                filtered_data_df[feature] = filtered_data_df[feature].map(transformation_func)
+                filtered_data_df[feature] = \
+                    filtered_data_df[feature].map(transformation_func)
 
-            predictions = convert_to_list(self._analysis.model.forecast(filtered_data_df), EXP_VIZ_ERR_MSG)
+            predictions = convert_to_list(
+                self._analysis.model.forecast(filtered_data_df),
+                EXP_VIZ_ERR_MSG)
             # forecast should return a flat list of predictions
             if all([len(p) == 1 for p in predictions]):
                 predictions = [p[0] for p in predictions]
@@ -435,7 +450,7 @@ class ResponsibleAIDashboardInput:
             return {
                 WidgetRequestResponseConstants.error:
                     "Failed to generate forecast for time series, "
-                "inner error: {}".format(e_str),
+                    "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }
 

@@ -3,8 +3,6 @@
 
 """Defines the Model Analysis Dashboard class."""
 
-from typing import Union
-
 from flask import jsonify, request
 
 from raiwidgets.dashboard import Dashboard
@@ -65,19 +63,26 @@ class ResponsibleAIDashboard(Dashboard):
             def causal_whatif():
                 data = request.get_json(force=True)
                 return jsonify(self.input.causal_whatif(data))
-            self.add_url_rule(causal_whatif, '/causal_whatif', methods=["POST"])
+            self.add_url_rule(
+                causal_whatif,
+                '/causal_whatif',
+                methods=["POST"])
 
             def global_causal_effects():
                 data = request.get_json(force=True)
                 return jsonify(self.input.get_global_causal_effects(data))
-            self.add_url_rule(global_causal_effects, '/global_causal_effects',
-                            methods=["POST"])
+            self.add_url_rule(
+                global_causal_effects,
+                '/global_causal_effects',
+                methods=["POST"])
 
             def global_causal_policy():
                 data = request.get_json(force=True)
                 return jsonify(self.input.get_global_causal_policy(data))
-            self.add_url_rule(global_causal_policy, '/global_causal_policy',
-                            methods=["POST"])
+            self.add_url_rule(
+                global_causal_policy,
+                '/global_causal_policy',
+                methods=["POST"])
 
             def importances():
                 return jsonify(self.input.importances())
@@ -93,7 +98,7 @@ class ResponsibleAIDashboard(Dashboard):
                 data = request.get_json(force=True)
                 return jsonify(self.input.forecast(data))
             self.add_url_rule(forecast, '/forecast', methods=["POST"])
-        
+
         def get_object_detection_metrics():
             data = request.get_json(force=True)
             return jsonify(self.input.get_object_detection_metrics(data))

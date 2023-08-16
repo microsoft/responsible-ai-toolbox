@@ -25,7 +25,6 @@ export function describeWhatIfForecastingCreateWhatIf(
       cy.get(Locators.ForecastingTransformationOperationDropdownOptions).should("have.length", 4);
       // click again to close dropdown ahead of selectComboBox
       cy.get(Locators.ForecastingTransformationOperationDropdownWrapper).should("exist").click();
-      //selectComboBox(Locators.ForecastingTransformationOperationDropdown, dataShape.whatIfForecastingData?.testTransformation?.operationToSelectIndex!);
       cy.get(`${Locators.ForecastingTransformationOperationDropdown} button.ms-ComboBox-CaretDown-button`)
         .click()
         .get(
