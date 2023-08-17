@@ -57,6 +57,18 @@ jobs:
           pip install --upgrade setuptools
           pip install --upgrade "pip-tools<=7.1.0"
 
+      - if: ${{ matrix.operatingSystem != 'macos-latest' }}
+        name: Install pytorch on non-MacOS
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
+
+      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
+        name: Install Anaconda packages on MacOS, which should not include cpuonly according to official docs
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet pytorch torchvision captum -c pytorch
+
       - name: Pip compile
         run: |
           pip-compile requirements-dev.txt -o requirements-dev-comp.txt
