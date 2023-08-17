@@ -1,13 +1,20 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+from ml_wrappers import wrap_model
+import numpy as np
+
 from rai_test_utils.datasets.tabular import (create_housing_data,
                                              create_iris_data,
                                              create_simple_titanic_data)
+from rai_test_utils.datasets.vision import \
+    load_fridge_object_detection_dataset
 from rai_test_utils.models import (create_models_classification,
+                                   create_models_object_detection,
                                    create_models_regression)
 from rai_test_utils.models.sklearn import \
     create_complex_classification_pipeline
+from rai_test_utils.utilities import get_images
 
 
 class TestModelUtils:
@@ -32,3 +39,15 @@ class TestModelUtils:
         pipeline = create_complex_classification_pipeline(
             X_train, y_train, num_feature_names, cat_feature_names)
         assert pipeline.predict(X_test) is not None
+
+    def test_object_detection_models(self):
+        dataset = load_fridge_object_detection_dataset().iloc[:2]
+
+        X_train = dataset[["image"]]
+        y_train = dataset[["label"]]
+
+        model_list = create_models_object_detection()
+        for model in model_list:
+            dataset = get_images(X_train, "RGB", None)
+            wrapped_model = wrap_model(model, dataset, "object_detection", classes=np.array(['can', 'carton', 'milk_bottle', 'water_bottle']))
+            assert wrapped_model.predict(dataset) is not None
