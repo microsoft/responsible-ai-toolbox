@@ -18,11 +18,13 @@ export function describeWhatIfForecastingCreate(
       );
       // click again to close dropdown ahead of selectDropdown
       cy.get(Locators.ForecastingTimeSeriesDropdown).click();
-      selectDropdown(
-        Locators.ForecastingTimeSeriesDropdown,
-        dataShape.whatIfForecastingData?.timeSeriesToSelect!
-      );
-      
+      if (dataShape.whatIfForecastingData?.timeSeriesToSelect) {
+        selectDropdown(
+          Locators.ForecastingTimeSeriesDropdown,
+          dataShape.whatIfForecastingData?.timeSeriesToSelect
+        );
+      }
+
       cy.get(Locators.ForecastingScenarioChart).should("exist");
       cy.get(Locators.ForecastingScenarioChartCurves).should("have.length", 2);
     });

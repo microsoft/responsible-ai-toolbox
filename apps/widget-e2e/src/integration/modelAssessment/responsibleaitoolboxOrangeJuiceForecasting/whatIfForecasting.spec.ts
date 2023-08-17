@@ -7,7 +7,4 @@ import {
 } from "@responsible-ai/e2e";
 
 const datasetShape = modelAssessmentDatasets.OrangeJuiceForecasting;
-describeWhatIfForecasting(
-  datasetShape,
-  "OrangeJuiceForecasting"
-);
+describeWhatIfForecasting(datasetShape, "OrangeJuiceForecasting");

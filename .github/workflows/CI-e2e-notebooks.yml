@@ -131,7 +131,7 @@ jobs:
           yarn e2e-widget -n "responsibleaidashboard-housing-classification-model-debugging" -f ${{ matrix.flights }}
           yarn e2e-widget -n "responsibleaidashboard-diabetes-decision-making" -f ${{ matrix.flights }}
           yarn e2e-widget -n "responsibleaidashboard-multiclass-dnn-model-debugging" -f ${{ matrix.flights }}
-      
+
       - if: ${{ matrix.notebookGroup == 'nb_group_3'}}
         name: Run widget tests
         shell: bash -l {0}

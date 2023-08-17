@@ -20,12 +20,12 @@ export const OrangeJuiceForecasting = {
   whatIfForecastingData: {
     hasWhatIfForecastingComponent: true,
     numberOfTimeSeriesOptions: 9,
-    timeSeriesToSelect: "Store = 8, Brand = tropicana",
     testTransformation: {
       featureToSelect: "INCOME",
       operationToSelect: "multiply",
       operationToSelectIndex: 0,
       valueToSelect: 10
-    }
+    },
+    timeSeriesToSelect: "Store = 8, Brand = tropicana"
   }
 };
