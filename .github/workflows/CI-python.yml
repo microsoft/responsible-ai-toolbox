@@ -66,7 +66,7 @@ jobs:
       - name: Install pytorch
         shell: bash -l {0}
         run: |
-          pip install --quiet pytorch==1.13.1 torchvision==0.14.1
+          pip install --quiet torch torchvision
 
       - name: Upload requirements
         uses: actions/upload-artifact@v3
