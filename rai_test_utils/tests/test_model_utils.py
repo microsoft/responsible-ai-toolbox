@@ -1,14 +1,13 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from ml_wrappers import wrap_model
 import numpy as np
+from ml_wrappers import wrap_model
 
 from rai_test_utils.datasets.tabular import (create_housing_data,
                                              create_iris_data,
                                              create_simple_titanic_data)
-from rai_test_utils.datasets.vision import \
-    load_fridge_object_detection_dataset
+from rai_test_utils.datasets.vision import load_fridge_object_detection_dataset
 from rai_test_utils.models import (create_models_classification,
                                    create_models_object_detection,
                                    create_models_regression)

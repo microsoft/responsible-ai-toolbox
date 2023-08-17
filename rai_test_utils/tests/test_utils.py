@@ -1,8 +1,8 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from rai_test_utils.utilities import is_valid_uuid, get_images
 from rai_test_utils.datasets.vision import load_fridge_object_detection_dataset
+from rai_test_utils.utilities import get_images, is_valid_uuid
 
 
 class TestUtils:

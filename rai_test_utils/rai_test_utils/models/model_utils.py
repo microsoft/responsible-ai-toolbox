@@ -5,8 +5,8 @@ from rai_test_utils.models.lightgbm import create_lightgbm_classifier
 from rai_test_utils.models.sklearn import (
     create_sklearn_logistic_regressor, create_sklearn_random_forest_classifier,
     create_sklearn_random_forest_regressor, create_sklearn_svm_classifier)
-from rai_test_utils.models.xgboost import create_xgboost_classifier
 from rai_test_utils.models.torch import get_object_detection_fridge_model
+from rai_test_utils.models.xgboost import create_xgboost_classifier
 
 
 def create_models_classification(X_train, y_train):
