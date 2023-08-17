@@ -3,26 +3,26 @@
     "close": "닫기",
     "tooltipButton": "도구 설명 단추",
     "identityFeature": "ID 기능",
-    "infoTitle": "Additional information",
-    "spinButton": "Spin",
-    "editButton": "Edit",
-    "decreaseValue": "Decrease value",
-    "increaseValue": "Increase value",
-    "decreaseValueByOne": "Decrease value by 1",
-    "increaseValueByOne": "Increase value by 1",
-    "loading": "Loading..."
+    "infoTitle": "추가 정보",
+    "spinButton": "스핀",
+    "editButton": "편집",
+    "decreaseValue": "값 감소",
+    "increaseValue": "값 늘리기",
+    "decreaseValueByOne": "값을 1씩 줄이기",
+    "increaseValueByOne": "값을 1씩 늘리기",
+    "loading": "로드하는 중..."
   },
   "ChartContextMenu": {
-    "hideData": "Hide data table",
-    "viewData": "View data table",
-    "viewInFullScreen": "View in full screen",
-    "printChart": "Print chart",
-    "downloadCSV": "Download CSV",
-    "downloadPNG": "Download PNG image",
-    "downloadJPEG": "Download JPEG image",
-    "downloadPDF": "Download PDF document",
-    "downloadSVG": "Download SVG vector image",
-    "downloadXLS": "Download XLS"
+    "hideData": "데이터 테이블 숨기기",
+    "viewData": "데이터 테이블 보기",
+    "viewInFullScreen": "전체 화면으로 보기",
+    "printChart": "차트 인쇄",
+    "downloadCSV": "CSV 다운로드",
+    "downloadPNG": "PNG 이미지 다운로드",
+    "downloadJPEG": "JPEG 이미지 다운로드",
+    "downloadPDF": "PDF 문서 다운로드",
+    "downloadSVG": "SVG 벡터 이미지 다운로드",
+    "downloadXLS": "XLS 다운로드"
   },
   "CausalAnalysis": {
     "AggregateView": {
@@ -39,7 +39,7 @@
       "description": "인과 관계 분석은 제품에 대해 다른 가격 책정 전략을 추구하거나 환자에 대한 대체 치료와 같은 다양한 정책 선택 하에서 실제 결과가 어떻게 변화되었을지에 대한 '가상'의 질문에 답을 합니다. 중요한 상관 관계 패턴을 식별하는 모델 예측과 달리 이러한 도구는 관심 결과에 직접적인 영향을 주는 가장 중요한 인과 관계 기능을 식별할 수 있습니다. 이러한 모델은 다른 교란 기능을 일정하게 유지하며 한 기능(일반적으로 “처리”라고 함)의 인과 관계 효과를 식별합니다. 최상의 결과를 위해 전체 데이터 세트에 교란 요인으로 결과와 상관 관계가 될 수 있는 모든 사용 가능한 기능을 포함하는지 확인합니다.",
       "directAggregate": "95% 신뢰 구간이 있는 각 처리의 직접적인 집계 인과 효과",
       "here": "여기",
-      "infoTitle": "Additional information on aggregated causal effects",
+      "infoTitle": "집계된 인과 효과에 대한 추가 정보",
       "lasso": "올가미(또는 y가 이진인 경우 로지스틱 회귀)는 X[-i]에서 y를 예측하는 데 적합했으며, 올가미(또는 X[i]가 범주형인 경우 로지스틱 회귀)는 Χ[-i]에서 X[i]를 예측하는 데 적합했습니다. 인과 관계 효과는 두 예측 작업의 잔차/기습 변형의 평균 상관 관계로 볼 수 있습니다. Double Machine Learning에 대해 자세히 알아보기",
       "unconfounding": "교란 기능은 무엇인가요?"
     },
@@ -51,7 +51,7 @@
       "description": "개별 인과 관계 효과는 고객을 대상으로 하는 프로모션 또는 개별화된 치료 계획과 같은 맞춤화된 해결책을 제공할 수 있습니다. 특정 기능 집합이 포함된 개인이 인과 관계 기능 또는 치료의 변화에 어떻게 반응할까요? 치료 수준을 변경하는 경우, 인과 관계의 가상 도구는 특정 개인에 대한 실제 결과의 한계적 변화를 계산합니다. 이 분석을 통해 제품에 대한 다른 가격 책정 전략이나 환자에 대한 대체 치료 등의 다양한 정책 선택에서 실제 결과가 변화한 방식을 파악할 수 있습니다. 관심 가는 치료를 지정하여 실제 결과가 변화하는 방식을 관찰합니다.",
       "directIndividual": "95% 신뢰 구간이 있는 각 처리에 대한 직접적인 개별 인과 효과",
       "index": "데이터 포인트 인덱스",
-      "infoTitle": "Additional information on individual causal what-if",
+      "infoTitle": "개별 인과 관계(what-if)에 대한 추가 정보",
       "missingParameters": "이 탭에서 평가 데이터 세트를 제공해야 합니다.",
       "newOutcome": "새 결과",
       "selectTreatment": "처리 선택",
@@ -85,7 +85,7 @@
       "averageGainBinary": "처리 {0}을(를) 기준 값 {1}(으)로 설정했을 때의 평균 게인입니다.",
       "averageGainContinuous": "‘{0}’ 처리가 없는 경우에 대한 대체 정책의 평균 이익입니다.",
       "header": "이러한 도구는 향후 개입을 위한 정책을 만드는 데 도움이 됩니다. 샘플의 어떤 부분에서 인과적 기능 또는 처리의 변화에 대해 가장 큰 응답을 경험하는지 식별하고 특정 개입의 대상이 되어야 하는 향후 데이터 집합을 정의하는 규칙을 구성할 수 있습니다.",
-      "infoTitle": "Additional information on treatment policy",
+      "infoTitle": "처리 정책에 대한 추가 정보",
       "nSample": "n = {0}",
       "noData": "데이터 없음"
     }
@@ -116,8 +116,8 @@
       "cancel": "취소",
       "title": "코호트 전환",
       "subText": "코호트 목록에서 코호트를 선택합니다. 대시보드에 코호트를 적용합니다.",
-      "selectCohort": "Select a cohort",
-      "cohortList": "Cohort list"
+      "selectCohort": "코호트 선택",
+      "cohortList": "코호트 목록"
     },
     "PreBuiltCohort": {
       "featureNameNotFound": "데이터 세트에서 기능 이름을 찾을 수 없습니다.",
@@ -148,13 +148,13 @@
       "predictedClass": "예측 클래스",
       "predictedValue": "예측된 값"
     },
-    "Size": "Size",
-    "loading": "Loading...",
+    "Size": "크기",
+    "loading": "로드하는 중...",
     "counterfactualEx": "반사실적 예 {0}",
     "counterfactualName": "가상 반사실적 서술 이름",
     "createWhatIfCounterfactual": "가상 반사실적 서술 만들기",
     "createCounterfactual": "반사실적",
-    "revertToBubbleChart": "View bubble chart",
+    "revertToBubbleChart": "거품형 차트 보기",
     "createOwn": "사용자 고유의 반사실적 기능을 만듭니다.",
     "currentClass": "현재 클래스",
     "currentRange": "현재 범위",
@@ -167,9 +167,9 @@
     "listDescription": "이 목록은 추정 인과 관계 모델에 포함된 모든 기능을 기반으로 현재 데이터 샘플에서 선택한 처리에 대해 가장 큰 인과 관계 응답을 갖는 데이터 포인트를 보여 줍니다. 왼쪽 5개 열은 관찰에 대한 처리 권장 여부, 현재 처리, 처리의 추정 효과(이원 처리에 대한 처리가 없는 기준선에서 처리를 적용하거나 일번적인 처리의 10%만큼 처리 기능을 증가/감소시키는 효과: [동적: 사용한 처리의 수치적 변화 보고])와 이 효과에 대한 상위와 하위 CI(신뢰 구간)를 보고합니다. 나머지 열은 각 관찰의 현재 처리 상태 및 기타 기능을 표시합니다.",
     "localImportanceDescription": "원하는 모델 예측을 달성하기 위해 교란할 행 {0}의 최상위 기능입니다. 예측에 대한 가상 분석 기준: {1}",
     "localImportanceSelectData": "로컬 중요도 차트를 볼 데이터 요소 선택",
-    "largeLocalImportanceSelectData": "Select a bubble, followed by a data point to view local importance chart",
-    "localImportanceFetchError": "There was an error while fetching the local importance data. Error details: {0} Please check the data used.",
-    "BubbleChartFetchError": "There was an error while fetching the data. Error details: {0} Please check the data used.",
+    "largeLocalImportanceSelectData": "거품형을 선택한 다음 데이터 요소로 로컬 중요도 차트를 봅니다.",
+    "localImportanceFetchError": "로컬 중요도 데이터를 가져오는 동안 오류가 발생했습니다. 오류 세부 정보: {0} 사용된 데이터를 확인하세요.",
+    "BubbleChartFetchError": "데이터를 가져오는 동안 오류가 발생했습니다. 오류 세부 정보: {0} 사용된 데이터를 확인하세요.",
     "noData": "데이터 없음",
     "noFeatures": "사용 가능한 기능 없음",
     "panelDescription": "카운터페이스를 찾아보고 직접 만듭니다. 다양한 반시상 예제 집합에서 제안된 값을 보려면 기능을 검색합니다. 각 반대쪽 이름 아래에서 값” 설정 텍스트를 클릭하여 “제안된 반대쪽 기능 값을 설정합니다. 반대의 이름을 지정하고 저장합니다.",
@@ -217,13 +217,13 @@
       "subText": "선택한 코호트에 대해 자세히 알아봅니다. 해당 코호트 이름을 편집합니다. 이 코호트를 삭제합니다."
     },
     "FeatureList": {
-      "featureList": "Feature List",
+      "featureList": "기능 목록",
       "apply": "적용",
       "features": "기능",
       "importances": "중요도",
       "treeMapDescription": "트리 맵을 재학습시키려면 아래 기능을 선택하고 저장합니다. 기능 중요도는 실제 레이블에 오류가 있는 상호 정보를 사용하여 계산된 것입니다.  트리 맵을 교육하기 위한 지침으로 사용하세요.",
       "staticTreeMapDescription": "트리 맵을 학습하는 데 사용된 기능을 봅니다. 기능 중요도는 실제 레이블에 오류가 있는 상호 정보를 사용하여 계산되었습니다.",
-      "searchResultMessage": "Results displayed out of {resultLength} for {searchValue}"
+      "searchResultMessage": "{searchValue}에 대해 {resultLength}에서 결과가 표시됨"
     },
     "TreeViewParameters": {
       "maximumDepth": "최대 깊이",
@@ -289,7 +289,7 @@
       "disabledWarning": "전체 데이터 세트에 대해 열 지도가 생성되고 있기 때문에 전역 코호트가 \"모든 데이터\"를 나타내도록 전환되지 않는 한 오류 열 지도를 사용할 수 없습니다. 오류 열 지도를 보려면 전체 데이터 세트로 다시 전환하세요."
     },
     "MatrixSummary": {
-      "heatMapInfoTitle": "Additional information on heat map",
+      "heatMapInfoTitle": "열 지도에 대한 추가 정보",
       "heatMapDescription": "열 지도를 사용하면 특정 교차 기능 필터에 집중하여 세분화된 오류율을 계산할 수 있습니다. 비교할 두 데이터 세트 기능으로 시작합니다.",
       "heatMapStaticDescription": "열 지도를 사용하면 특정 교집합 기능 필터에 초점을 맞추고 세분화된 오류 비율을 계산할 수 있습니다. 대시보드를 보기 전에 SDK를 통해 열 지도를 만들려면 최대 두 개의 기능을 선택해야 합니다."
     },
@@ -305,108 +305,108 @@
     },
     "Metrics": {
       "AccuracyScore": {
-        "Name": "Accuracy score",
-        "Info": "The accuracy score represents the ratio of correct to total instances in the data.",
-        "Short": "Accuracy",
-        "Title": "Additional information on accuracy score"
+        "Name": "정확도 점수",
+        "Info": "정확도 점수는 데이터의 전체 인스턴스에 대한 올바른 비율을 나타냅니다.",
+        "Short": "정확도",
+        "Title": "정확도 점수에 대한 추가 정보"
       },
       "ErrorRate": {
-        "Name": "Error rate",
-        "Info": "The error rate represents the percentage of instances in the node for which the system has failed.",
-        "Short": "Error rate",
-        "Title": "Additional information on error rate"
+        "Name": "오류 비율",
+        "Info": "오류 비율은 시스템이 실패한 노드에 있는 인스턴스의 백분율을 나타내는 데 사용할 수 있습니다.",
+        "Short": "오류 비율",
+        "Title": "오류 비율에 대한 추가 정보"
       },
       "F1Score": {
-        "Name": "F1 score",
-        "Info": "The F1 score is the harmonic mean of the precision and recall metrics.",
-        "Short": "F1 score",
-        "Title": "Additional information on F1 score"
+        "Name": "F1 점수",
+        "Info": "F1 점수는 정밀도 및 회수 메트릭의 하모니 평균입니다.",
+        "Short": "F1 점수",
+        "Title": "F1 점수에 대한 추가 정보"
       },
       "MeanAbsoluteError": {
-        "Name": "Mean absolute error",
-        "Info": "The mean absolute error is the average of the sum of the errors.",
-        "Short": "Mean abs. error",
-        "Title": "Additional information on mean absolute error"
+        "Name": "평균 절대 오차",
+        "Info": "평균 절대 오차는 오류 합계의 평균입니다.",
+        "Short": "평균 abs. 오류",
+        "Title": "평균 절대 오차에 대한 추가 정보"
       },
       "MeanSquaredError": {
-        "Name": "Mean squared error",
-        "Info": "The mean squared error is the average of the squares of the errors.",
-        "Short": "Mean sq. error",
-        "Title": "Additional information on mean squared error"
+        "Name": "제곱 평균 오차",
+        "Info": "평균 제곱 오차는 오류 제곱의 평균입니다.",
+        "Short": "평균 sq. 오류",
+        "Title": "평균 제곱 오차에 대한 추가 정보"
       },
       "Precision": {
-        "Name": "Precision score",
-        "Info": "The precision is the ratio of true positives over all predicted positives.",
-        "Short": "Precision",
-        "Title": "Additional information on precision"
+        "Name": "정밀도 점수",
+        "Info": "정밀도는 모든 예측 긍정에 대한 진양성 비율입니다.",
+        "Short": "정밀도",
+        "Title": "정밀도에 대한 추가 정보"
       },
       "Recall": {
-        "Name": "Recall score",
-        "Info": "The recall is the ratio of true positives over all actual positives.",
-        "Short": "Recall",
-        "Title": "Additional information on recall"
+        "Name": "회수 점수",
+        "Info": "회수는 모든 실제 긍정에 대한 진양성 비율입니다.",
+        "Short": "회수",
+        "Title": "회수에 대한 추가 정보"
       },
       "MacroPrecision": {
-        "Name": "Macro averaged precision score",
-        "Info": "The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.",
-        "Short": "Macro precision",
-        "Title": "Additional information on macro averaged precision"
+        "Name": "매크로 평균 정밀도 점수",
+        "Info": "매크로 평균 정밀도는 클래스별로 독립적으로 계산되고 평균을 계산한 모든 예측 긍정에 대한 진양성 비율입니다.",
+        "Short": "매크로 정밀도",
+        "Title": "매크로 평균 정밀도에 대한 추가 정보"
       },
       "MicroPrecision": {
-        "Name": "Micro averaged precision score",
-        "Info": "The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.",
-        "Short": "Micro precision",
-        "Title": "Additional information on micro averaged precision"
+        "Name": "마이크로 평균 정밀도 점수",
+        "Info": "마이크로 평균 정밀도는 모든 클래스에 대해 집계된 모든 예측 긍정에 대한 진양성 비율입니다.",
+        "Short": "마이크로 정밀도",
+        "Title": "마이크로 평균 정밀도에 대한 추가 정보"
       },
       "MacroRecall": {
-        "Name": "Macro averaged recall score",
-        "Info": "The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.",
-        "Short": "Macro recall",
-        "Title": "Additional information on macro averaged recall"
+        "Name": "매크로 평균 회수 점수",
+        "Info": "매크로 평균 회수는 클래스별로 독립적으로 계산되고 평균을 계산한 모든 실제 긍정에 대한 진양성 비율입니다.",
+        "Short": "매크로 회수",
+        "Title": "매크로 평균 회수에 대한 추가 정보"
       },
       "MicroRecall": {
-        "Name": "Micro averaged recall score",
-        "Info": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
-        "Short": "Micro recall",
-        "Title": "Additional information on micro averaged recall"
+        "Name": "마이크로 평균 회수 점수",
+        "Info": "마이크로 평균 회수는 모든 클래스에 대해 집계된 모든 실제 긍정에 대한 진양성 비율입니다.",
+        "Short": "마이크로 회수",
+        "Title": "마이크로 평균 회수에 대한 추가 정보"
       },
       "MacroF1Score": {
-        "Name": "Macro averaged F1 score",
-        "Info": "The macro averaged F1 score is the harmonic mean of the macro averaged precision and recall metrics.",
-        "Short": "Macro F1 score",
-        "Title": "Additional information on macro averaged F1 score"
+        "Name": "매크로 평균 F1 점수",
+        "Info": "매크로 평균 F1 점수는 매크로 평균 정밀도 및 회수 메트릭의 평균입니다.",
+        "Short": "매크로 F1 점수",
+        "Title": "매크로 평균 F1 점수에 대한 추가 정보"
       },
       "MicroF1Score": {
-        "Name": "Micro averaged F1 score",
-        "Info": "The micro averaged F1 score is the harmonic mean of the micro averaged precision and recall metrics.",
-        "Short": "Micro F1 score",
-        "Title": "Additional information on micro averaged F1 score"
+        "Name": "마이크로 평균 F1 점수",
+        "Info": "마이크로 평균 F1 점수는 마이크로 평균 정밀도 및 회수 메트릭의 하모니 평균입니다.",
+        "Short": "마이크로 F1 점수",
+        "Title": "마이크로 평균 F1 점수에 대한 추가 정보"
       },
       "MeanAveragePrecision": {
-        "Name": "Mean average precision score",
-        "Info": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall.",
-        "Short": "Mean avg precision",
-        "Title": "Additional information on mean average precision score"
+        "Name": "평균 정밀도 점수",
+        "Info": "개체 검색 모델의 평균 정밀도는 모든 클래스의 평균 AP(평균 정밀도)입니다. 이것은 개체 검색 모델의 견고성을 평가하고 정밀도와 재현율 사이의 절충안을 캡슐화합니다.",
+        "Short": "평균 평균 정밀도",
+        "Title": "평균 평균 정밀도 점수에 대한 추가 정보"
       },
       "AveragePrecision": {
-        "Name": "Average precision score",
-        "Info": "Average precision for object detection models is calculated for a selected class.",
-        "Short": "Avg precision",
-        "Title": "Additional information on average precision score"
+        "Name": "평균 정밀도 점수",
+        "Info": "개체 검색 모델의 평균 정밀도는 선택한 클래스에 대해 계산됩니다.",
+        "Short": "평균 정밀도",
+        "Title": "평균 정밀도 점수에 대한 추가 정보"
       },
       "AverageRecall": {
-        "Name": "Average recall score",
-        "Info": "Average recall for object detection models is calculated for a selected class.",
-        "Short": "Avg recall",
-        "Title": "Additional information on average recall score"
+        "Name": "평균 재현율 점수",
+        "Info": "개체 검색 모델의 평균 재현율은 선택한 클래스에 대해 계산됩니다.",
+        "Short": "평균 회수",
+        "Title": "평균 회수 점수에 대한 추가 정보"
       },
       "metricName": "메트릭 이름",
       "metricValue": "메트릭 값"
     },
     "MetricSelector": {
       "selectorLabel": "메트릭 선택",
-      "feature1SelectorLabel": "Rows: Feature 1",
-      "feature2SelectorLabel": "Columns: Feature 2"
+      "feature1SelectorLabel": "행: 기능 1",
+      "feature2SelectorLabel": "열: 기능 2"
     },
     "Navigation": {
       "cohortSaved": "새 코호트가 저장되었습니다! 코호트 설정에서 코호트 목록을 참조하세요.",
@@ -427,9 +427,9 @@
       "defaultLabelCopy": "모든 데이터 복사"
     },
     "TreeView": {
-      "ariaLabel": "Interactive chart",
-      "disabledArialLabel": "Disabled interactive chart",
-      "treeMapInfoTitle": "Additional information on tree map",
+      "ariaLabel": "대화형 차트",
+      "disabledArialLabel": "비활성화된 대화형 차트",
+      "treeMapInfoTitle": "트리 맵에 대한 추가 정보",
       "treeDescription": "트리 시각화는 각 기능과 오류 간의 상호 정보를 사용하여 오류 인스턴스를 데이터에서 계층적으로 성공 인스턴스와 가장 잘 구분합니다. 이렇게 하면 일반적인 오류 패턴을 검색하고 강조 표시하는 프로세스가 간소화됩니다. 중요한 오류 패턴을 찾으려면 더 강한 빨간색(예: 높은 오류 비율) 및 더 높은 채우기 선(즉, 높은 오류 검사)을 가진 노드를 찾습니다. 트리에서 사용 중인 기능 목록을 편집하려면 \"기능 목록\"을 클릭합니다. \"메트릭 선택\" 드롭다운 메뉴를 사용하여 오류 및 성공 노드의 성능에 대해 자세히 알아보세요. 이 메트릭 선택은 오류 트리가 생성되는 방식에 영향을 주지 않습니다.",
       "treeStaticDescription": "트리 시각화는 각 기능과 오류 간의 상호 정보를 사용하여 오류 인스턴스를 데이터에서 계층적으로 성공 인스턴스와 가장 잘 구분합니다. 이렇게 하면 일반적인 오류 패턴을 검색하고 강조 표시하는 프로세스가 간소화됩니다. 중요한 오류 패턴을 찾으려면 더 강한 빨간색(예: 높은 오류 비율) 및 더 높은 채우기 선(즉, 높은 오류 검사)을 가진 노드를 찾습니다. 이 오류 트리를 만드는 데 사용되는 기능 목록을 보려면 \"기능 목록\"을 클릭합니다. \"메트릭 선택\" 드롭다운 메뉴를 사용하여 오류 및 성공 노드의 성능에 대해 자세히 알아보세요. 이 메트릭 선택은 오류 트리가 생성되는 방식에 영향을 주지 않습니다.",
       "disabledWarning": "전체 데이터 세트에 대해 트리 지도가 생성되고 있기 때문에 전역 코호트가 \"모든 데이터\"를 나타내도록 전환되지 않는 한 오류 트리 지도를 사용할 수 없습니다. 오류 트리 지도를 보려면 전체 데이터 세트로 다시 전환하세요."
@@ -764,7 +764,7 @@
       "countHelperText": "점수의 히스토그램",
       "ditherLabel": "디더링해야 함",
       "groupByCohort": "코호트별 그룹",
-      "logarithmicScaling": "Enable logarithmic scaling",
+      "logarithmicScaling": "로그 크기 조정 사용",
       "numOfBins": "bin 개수",
       "selectClass": "클래스 선택",
       "selectFeature": "기능 선택",
@@ -788,7 +788,7 @@
       "importancePrefix": "중요도",
       "numberOfDatapoints": "데이터 포인트 수",
       "rowIndex": "행 인덱스",
-      "absoluteIndex": "Absolute index",
+      "absoluteIndex": "절대 인덱스",
       "xValue": "X 값",
       "yValue": "Y 값"
     },
@@ -816,12 +816,12 @@
     },
     "CohortEditor": {
       "columns": {
-        "index": "Index",
-        "dataset": "Dataset",
-        "predictedY": "Predicted Y",
+        "index": "인덱스",
+        "dataset": "데이터 세트",
+        "predictedY": "예측 Y",
         "trueY": "True Y",
-        "classificationOutcome": "Classification outcome",
-        "regressionError": "Error"
+        "classificationOutcome": "분류 결과",
+        "regressionError": "오류"
       },
       "TreatAsCategorical": "범주로 처리",
       "addFilter": "필터 추가",
@@ -846,8 +846,8 @@
       "save": "저장",
       "saveAndSwitch": "저장 및 전환",
       "selectFilter": "필터 선택",
-      "noFiltersApplied": "No filters applied",
-      "filterAdded": "Filter added"
+      "noFiltersApplied": "필터가 적용되지 않음",
+      "filterAdded": "필터가 추가됨"
     },
     "Columns": {
       "classificationOutcome": "분류 결과",
@@ -857,8 +857,8 @@
       "falsePositive": "가양성",
       "none": "개수",
       "predictedProbabilities": "예측 확률",
-      "predictedLabels": "Predicted labels",
-      "trueLabels": "True labels",
+      "predictedLabels": "예측된 레이블",
+      "trueLabels": "True 레이블",
       "regressionError": "회귀 오류",
       "trueNegative": "진음성",
       "truePositive": "진양성",
@@ -879,7 +879,7 @@
       "aggregatePlots": "집계 플롯",
       "chartType": "차트 유형",
       "colorValue": "색 값",
-      "infoTitle": "Additional information on data analysis chart view",
+      "infoTitle": "데이터 분석 차트 보기에 대한 추가 정보",
       "helperText": "데이터 세트 코호트를 만들어 예측 결과, 데이터 세트 기능 및 오류 그룹과 같은 필터를 따라 데이터 세트 통계를 분석합니다. 데이터 세트의 오버/밑 프레젠테이션에 대해 알아봅니다.",
       "individualDatapoints": "개별 데이터 포인트",
       "missingParameters": "이 탭에서 평가 데이터 세트를 제공해야 합니다.",
@@ -968,10 +968,10 @@
       "dependencePlotHelperText": "이 종속도는 기능 값과 해당 기능 중요도 값의 관계를 보여줍니다.",
       "dependencePlotTitle": "종속 플롯",
       "helperText": "전체 모델 예측에 영향을 주는 최상위 중요 기능을 탐색합니다(전역 설명이라고도 함). 슬라이더를 사용하여 기능 중요도를 내림차순으로 표시합니다. 모든 코호트의 기능 중요도는 나란히 표시되며 범례에서 코호트를 선택하여 전환할 수 있습니다. 그래프의 기능 중 하나를 클릭하여 선택한 기능의 값이 예측에 미치는 영향에 대한 조밀도를 아래에 표시합니다.",
-      "infoTitle": "Additional information on aggregate feature importance",
+      "infoTitle": "집계 기능 중요도에 대한 추가 정보",
       "legendHelpText": "범례 항목을 클릭하여 그림에서 코호트를 토글하여 켜거나 끕니다.",
       "missingParameters": "이 탭에서 로컬 기능 중요도 매개 변수를 제공해야 합니다.",
-      "sortByCohort": "Sort by cohort",
+      "sortByCohort": "코호트별로 정렬",
       "sortBy": "데이터 요소별로 정렬",
       "topAtoB": "중요도별 상위 {0}개 기능",
       "viewDependencePlotFor": "다음에 대한 종속성 플롯 보기:",
@@ -1014,15 +1014,15 @@
     },
     "Statistics": {
       "accuracy": "정확도: {0}",
-      "bleuScore": "Bleu score: {0}",
-      "bertScore": "Bert score: {0}",
-      "exactMatchRatio": "Exact match ratio: {0}",
-      "rougeScore": "Rouge Score: {0}",
+      "bleuScore": "Bleu 점수: {0}",
+      "bertScore": "Bert 점수: {0}",
+      "exactMatchRatio": "정확한 일치 비율: {0}",
+      "rougeScore": "내보내기 점수: {0}",
       "fnr": "거짓 음수 비율: {0}",
       "fpr": "가양성 비율: {0}",
-      "hammingScore": "Hamming score: {0}",
+      "hammingScore": "채점 점수: {0}",
       "meanPrediction": "평균 예측 {0}",
-      "meteorScore": "Meteor Score: {0}",
+      "meteorScore": "유성 점수: {0}",
       "mse": "평균 제곱 오차: {0}",
       "precision": "정밀도: {0}",
       "rSquared": "R²: {0}",
@@ -1030,10 +1030,10 @@
       "selectionRate": "선택 속도: {0}",
       "mae": "절대 평균 오류: {0}",
       "f1Score": "F1 점수: {0}",
-      "samples": "Sample size: {0}",
-      "meanAveragePrecision": "Mean average precision: {0}",
-      "averagePrecision": "Average precision: {0}",
-      "averageRecall": "Average recall: {0}"
+      "samples": "샘플 크기: {0}",
+      "meanAveragePrecision": "평균 정밀도: {0}",
+      "averagePrecision": "평균 정밀도: {0}",
+      "averageRecall": "평균 재현율: {0}"
     },
     "ValidationErrors": {
       "addFilters": "필터 추가",
@@ -1141,29 +1141,29 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "해석 가능성 대시보드",
-      "importantWords": "Show most Important Words",
+      "importantWords": "가장 중요한 단어 표시",
       "topFeatureList": "상위 기능 목록 분석",
       "allButton": "모든 기능",
       "negButton": "부정적인 기능",
       "posButton": "양(+)의 기능",
-      "legendText": "Positive scalar feature importances represent the extent that the words were important towards the classification of your selected label, and negative scalar feature importances represent words that encouraged your model away from your selected label.",
-      "legendTextForQA": "The left text box and the bar chart display the predictions of the model. The right text box shows the feature importance associated with a selected token. Positive feature importances represent the extent that the words were important towards marking the selected token as the starting/ending position of the answer.",
+      "legendText": "양의 스칼라 기능 중요도는 단어가 선택한 레이블의 분류에 중요했던 정도를 나타내고 음수 스칼라 특성 중요도는 모델을 선택한 레이블에서 멀어지게 한 단어를 나타냅니다.",
+      "legendTextForQA": "왼쪽 텍스트 상자와 막대형 차트는 모델의 예측을 표시합니다. 오른쪽 텍스트 상자에는 선택한 토큰과 연결된 기능 중요도가 표시됩니다. 긍정적인 기능 중요도는 선택한 토큰을 답변의 시작/끝 위치로 표시하는 데 단어가 중요한 정도를 나타냅니다.",
       "label": "레이블",
       "colon": ": ",
-      "startingPosition": "STARTING POSITION",
-      "endingPosition": "ENDING POSITION",
-      "predictedAnswer": "Predicted answer: ",
-      "trueAnswer": "True answer: ",
-      "inputs": "Inputs",
-      "outputs": "Outputs"
+      "startingPosition": "시작 위치",
+      "endingPosition": "끝 위치",
+      "predictedAnswer": "예측된 답변: ",
+      "trueAnswer": "실제 답변: ",
+      "inputs": "입력",
+      "outputs": "출력"
     },
     "Legend": {
       "featureLegend": "텍스트 기능 범례",
       "posFeatureImportance": "양(+)의 기능 중요성",
       "negFeatureImportance": "음(-)의 기능 중요성",
-      "cls": "CLS: start of the sentence",
-      "sep": "SEP: end of the sentence",
-      "selectedWord": "Selected word: "
+      "cls": "CLS: 문장의 시작",
+      "sep": "SEP: 문장의 끝",
+      "selectedWord": "선택한 단어: "
     },
     "BarChart": {
       "featureImportance": "기능 중요도"
@@ -1171,55 +1171,55 @@
   },
   "InterpretVision": {
     "Cohort": {
-      "close": "Close",
-      "errorCohortName": "Please choose a unique cohort name.",
-      "errorNumSelected": "Please select at least one (1) item.",
-      "itemsSelectedSingular": "item selected",
-      "itemsSelectedPlural": "items selected",
-      "save": "Save cohort",
-      "saveAndClose": "Save and close",
-      "saveAndSwitch": "Save and switch",
-      "textField": "New cohort name",
-      "title": "Save new cohort"
+      "close": "닫기",
+      "errorCohortName": "고유한 코호트 이름을 선택하세요.",
+      "errorNumSelected": "하나 이상의 항목을 선택하세요.",
+      "itemsSelectedSingular": "항목이 선택됨",
+      "itemsSelectedPlural": "선택한 항목",
+      "save": "코호트 저장",
+      "saveAndClose": "저장 후 닫기",
+      "saveAndSwitch": "저장 및 전환",
+      "textField": "새 코호트 이름",
+      "title": "새 코호트 저장"
     },
     "Dashboard": {
       "allData": "모든 데이터",
-      "columnOne": "Image",
+      "columnOne": "이미지",
       "columnTwo": "지수",
       "columnThree": "True Y",
       "columnFour": "예측 Y",
       "columnFive": "기타 메타데이터",
-      "chooseObject": "Choose a detected object",
-      "examples": "examples",
+      "chooseObject": "검색된 개체 선택",
+      "examples": "예제",
       "filter": "필터",
-      "indexLabel": "Image ",
-      "labelTypeDropdown": "Select label type",
-      "labelVisibilityDropdown": "Select labels to display",
-      "legendFailure": "failure",
-      "legendSuccess": "success",
-      "loading": "Computing explanation for index",
-      "multiselect": "Multiselect",
-      "notdefined": "object scenario not defined",
-      "objectSelect": "Object Selection",
+      "indexLabel": "이미지 ",
+      "labelTypeDropdown": "레이블 유형 선택",
+      "labelVisibilityDropdown": "표시할 레이블 선택",
+      "legendFailure": "실패",
+      "legendSuccess": "성공",
+      "loading": "인덱스 계산 설명",
+      "multiselect": "다중 선택",
+      "notdefined": "개체 시나리오가 정의되지 않음",
+      "objectSelect": "개체 선택",
       "pageSize": "페이지 크기: ",
-      "panelTitle": "Selected instance",
-      "panelExplanation": "Explanation",
-      "panelInformation": "Information",
-      "predictedLabel": "Predicted label",
-      "predictedY": "Predicted: ",
-      "prefix": "Object: ",
-      "rows": "Rows: ",
+      "panelTitle": "선택한 인스턴스",
+      "panelExplanation": "설명",
+      "panelInformation": "정보",
+      "predictedLabel": "예측 레이블",
+      "predictedY": "예측: ",
+      "prefix": "개체: ",
+      "rows": "행: ",
       "search": "검색",
-      "selectAll": "Select all",
+      "selectAll": "모두 선택",
       "settings": "설정",
-      "showAll": "Show all",
+      "showAll": "모두 표시",
       "tabOptionFirst": "이미지 탐색기 보기",
       "tabOptionSecond": "테이블 보기",
-      "tabOptionThird": "Class view",
+      "tabOptionThird": "클래스 뷰",
       "thumbnailSize": "썸네일 크기",
       "titleBarError": "오류 인스턴스",
       "titleBarSuccess": "성공 사례",
-      "trueY": "Ground truth: "
+      "trueY": "실측 "
     }
   },
   "ModelAssessment": {
@@ -1228,15 +1228,15 @@
       "CalloutContent": "일부 구성 요소(오류 트리 보기, 오류 열 지도)를 추가하면 아래 구성 요소에 있는 전역 코호트의 데이터를 필터링할 수 있습니다.",
       "CalloutTitle": "구성 요소 추가",
       "TabAddedMessage": {
-        "DataAnalysis": "Data analysis component added",
-        "FeatureImportances": "Feature importances component added",
-        "ErrorAnalysis": "Error analysis component added",
-        "Fairness": "Fairness component added",
-        "ModelOverview": "Model overview component added",
-        "CausalAnalysis": "Causal analysis component added",
-        "Counterfactuals": "Counterfactuals component added",
-        "Vision": "Vision data explorer component added",
-        "Forecasting": "Forecasting what-if component added"
+        "DataAnalysis": "데이터 분석 구성 요소 추가됨",
+        "FeatureImportances": "기능 중요도 구성 요소 추가됨",
+        "ErrorAnalysis": "오류 분석 구성 요소가 추가됨",
+        "Fairness": "공정성 구성 요소가 추가됨",
+        "ModelOverview": "모델 개요 구성 요소 추가됨",
+        "CausalAnalysis": "인과 분석 구성 요소 추가됨",
+        "Counterfactuals": "반사실적 구성 요소가 추가됨",
+        "Vision": "비전 데이터 탐색기 구성 요소가 추가됨",
+        "Forecasting": "추가된 예측 구성 요소"
       }
     },
     "CausalAnalysis": {
@@ -1264,7 +1264,7 @@
     },
     "CohortInformation": {
       "ShiftCohort": "코호트 전환",
-      "SwitchTimeSeries": "Switch time series",
+      "SwitchTimeSeries": "시계열 전환",
       "NewCohort": "새 코호트",
       "DataPoints": "데이터 포인트 수",
       "DefaultCohort": " (기본값)",
@@ -1276,7 +1276,7 @@
       "CohortSettingsTitle": "코호트 설정"
     },
     "ComponentNames": {
-      "ChartView": "Chart view",
+      "ChartView": "차트 보기",
       "CausalAnalysis": "인과 분석",
       "Counterfactuals": "반대 사실",
       "DataAnalysis": "데이터 분석",
@@ -1285,10 +1285,10 @@
       "ErrorAnalysis": "오류 분석",
       "Fairness": "공정성",
       "FeatureImportances": "기능 중요도",
-      "Forecasting": "Forecasting",
+      "Forecasting": "예측",
       "ModelOverview": "모델 개요",
-      "TableView": "Table view",
-      "VisionTab": "Vision data explorer"
+      "TableView": "테이블 보기",
+      "VisionTab": "비전 데이터 탐색기"
     },
     "DashboardSettings": {
       "Content": "이 목록에는 대시보드의 레이아웃이 표시됩니다. 아래 구성 요소에서 볼 수 있도록 오류 분석 구성 요소를 사용하여 데이터를 필터링할 수 있습니다.",
@@ -1446,17 +1446,17 @@
       "CorrectPredictions": "올바른 예측",
       "GlobalExplanation": "집계 기능 중요도",
       "IncorrectPredictions": "잘못된 예측",
-      "InfoTitle": "Additional information on data analysis table view",
-      "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).",
+      "InfoTitle": "데이터 분석 테이블 뷰에 대한 추가 정보",
+      "IndividualFeatureTabular": "테이블에서 데이터 요소(최대 5개의 데이터 요소)를 클릭하여 데이터포인트를 선택하여 로컬 기능 중요도 값(로컬 설명) 및 ICE(개별 조건부 기대) 플롯을 확인합니다.",
+      "IndividualFeatureText": "로컬 특성 중요도 값(로컬 설명)을 보려면 테이블에서 데이터 포인트를 클릭하여 데이터 포인트를 선택하세요.",
       "LocalExplanation": "개별 기능 중요도",
       "SelectionCounter": "선택한 데이터 요소 {0}/{1}",
       "SelectionLimit": "현재 최대 5개의 데이터 포인트를 선택할 수 있습니다.",
-      "RowCheckboxAriaLabel": "Row checkbox",
-      "SelectionColumnAriaLabel": "Toggle selection"
+      "RowCheckboxAriaLabel": "행 확인란",
+      "SelectionColumnAriaLabel": "선택 사항 전환"
     },
     "IndividualFeatureImportanceView": {
-      "SmallInstanceSelection": "Instance selection"
+      "SmallInstanceSelection": "인스턴스 선택"
     },
     "MainMenu": {
       "DashboardSettings": "대시보드 구성",
@@ -1472,44 +1472,44 @@
     "ModelOverview": {
       "metrics": {
         "accuracy": {
-          "name": "Accuracy score",
+          "name": "정확도 점수",
           "description": "제대로 분류된 데이터 요소의 비율입니다."
         },
         "exactMatchRatio": {
-          "name": "Exact match ratio",
-          "description": "The ratio of instances classified correctly for every label."
+          "name": "정확한 일치 비율",
+          "description": "모든 레이블에 대해 올바르게 분류된 인스턴스의 비율입니다."
         },
         "meteorScore": {
-          "name": "Meteor Score",
-          "description": "METEOR Score is calculated based on the harmonic mean of precision and recall, with recall weighted more than precision in question answering task."
+          "name": "유성 점수",
+          "description": "유성 점수는 정밀도 및 재현율의 하모니 평균을 기반으로 계산되며, 재현율은 질문 응답 태스크에서 정밀도보다 많은 가중치를 가집니다."
         },
         "bleuScore": {
-          "name": "Bleu Score",
-          "description": "Bleu Score measures the ratio of words (and/or n-grams) in the machine generated text that appeared in the reference text in question answering task."
+          "name": "Bleu 점수",
+          "description": "Bleu Score는 질문 응답 작업의 참조 텍스트에 나타난 컴퓨터에서 생성된 텍스트의 단어 비율(및/또는 n-gram)을 측정합니다."
         },
         "bertScore": {
-          "name": "Bert Score",
-          "description": "BERTScore focuses on computing semantic similarity between tokens of reference and machine generated text in question answering task."
+          "name": "버트 점수",
+          "description": "BERTScore는 질의 응답 작업에서 참조 토큰과 기계 생성 텍스트 간의 의미론적 유사성을 계산하는 데 중점을 둡니다."
         },
         "rougeScore": {
-          "name": "Rouge Score",
-          "description": "Rouge Score measures the ratio of words (and/or n-grams) in the reference text that appeared in the machine generated text in question answering task."
+          "name": "점수 매기기",
+          "description": "Scor Score는 컴퓨터에서 생성된 질문 응답 작업에 표시된 참조 텍스트의 단어 비율(및/또는 n-gram)을 측정합니다."
         },
         "hammingScore": {
-          "name": "Hamming score",
-          "description": "The average ratio of labels classified correctly among those classified as 1 in multilabel task."
+          "name": "채점 점수",
+          "description": "다중 레이블 작업에서 1로 분류된 레이블 중에서 올바르게 분류된 레이블의 평균 비율입니다."
         },
         "f1Score": {
           "name": "F1 점수",
           "description": "F1 점수는 정밀도와 재현율의 조화 평균입니다."
         },
         "f1ScoreMacro": {
-          "name": "Macro F1 score",
-          "description": "Macro F1 score is the harmonic mean of precision and recall for each class, with each class weighted equally."
+          "name": "매크로 F1 점수",
+          "description": "매크로 F1 점수는 각 클래스에 동일한 가중치가 부여된 각 클래스에 대한 정밀도 및 재현율의 조화 평균입니다."
         },
         "f1ScoreMicro": {
-          "name": "Micro F1 score",
-          "description": "Micro F1 score is the harmonic mean of precision and recall for each class, with each class weighted according to how many instances it contains."
+          "name": "마이크로 F1 점수",
+          "description": "Micro F1 점수는 각 클래스에 대한 정밀도 및 재현율의 하모니 평균이며, 각 클래스는 포함된 인스턴스 수에 따라 가중치가 적용됩니다."
         },
         "meanAbsoluteError": {
           "name": "평균 절대 오차",
@@ -1524,24 +1524,24 @@
           "description": "1로 분류된 데이터 요소 중에서 제대로 분류된 데이터 요소의 비율입니다."
         },
         "precisionMacro": {
-          "name": "Macro Precision score",
-          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted equally."
+          "name": "매크로 정밀도 점수",
+          "description": "각 클래스의 가중치가 동일하게 지정된 각 클래스에 대해 1로 분류된 데이터 요소 중에서 올바르게 분류된 데이터 요소의 비율입니다."
         },
         "precisionMicro": {
-          "name": "Micro Precision score",
-          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted according to how many instances it contains."
+          "name": "마이크로 정밀도 점수",
+          "description": "각 클래스가 포함된 인스턴스 수에 따라 가중치가 적용된 각 클래스에 대해 1로 분류된 데이터 요소 중에서 올바르게 분류된 데이터 요소의 비율입니다."
         },
         "recall": {
           "name": "회수 점수",
           "description": "실제 레이블이 1인 데이터 요소 중 제대로 분류된 데이터 요소의 비율입니다. 대체 이름: 진양성 비율, 민감도."
         },
         "recallMacro": {
-          "name": "Macro Recall score",
-          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted equally."
+          "name": "매크로 재현율 점수",
+          "description": "각 클래스의 가중치가 동일하게 지정된 각 클래스에 대해 true 레이블이 1인 데이터 요소 중에서 데이터 요소의 일부가 올바르게 분류되었습니다."
         },
         "recallMicro": {
-          "name": "Micro Recall score",
-          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted according to how many instances it contains."
+          "name": "마이크로 재현율 점수",
+          "description": "포함된 인스턴스 수에 따라 각 클래스에 가중치가 적용된 각 클래스에 대해 실제 레이블이 1인 데이터 요소 중에서 데이터 요소의 일부가 올바르게 분류되었습니다."
         },
         "falsePositiveRate": {
           "name": "가양성 비율",
@@ -1560,32 +1560,32 @@
           "description": "모든 예측의 평균입니다."
         },
         "meanAveragePrecision": {
-          "name": "Mean Average Precision score",
-          "description": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall."
+          "name": "평균 정밀도 점수",
+          "description": "개체 검색 모델의 평균 정밀도는 모든 클래스의 평균 AP(평균 정밀도)입니다. 이것은 개체 검색 모델의 견고성을 평가하고 정밀도와 재현율 사이의 절충안을 캡슐화합니다."
         },
         "averagePrecision": {
-          "name": "Average Precision score",
-          "description": "Average precision for object detection models is calculated for a selected class."
+          "name": "평균 정밀도 점수",
+          "description": "개체 검색 모델의 평균 정밀도는 선택한 클래스에 대해 계산됩니다."
         },
         "averageRecall": {
-          "name": "Average Recall score",
-          "description": "Average recall for object detection models is calculated for a selected class."
+          "name": "평균 재현율 점수",
+          "description": "개체 검색 모델의 평균 재현율은 선택한 클래스에 대해 계산됩니다."
         },
         "fairnessMetricDifference": "차이",
         "fairnessMetricRatio": "비율"
       },
       "metricsDropdown": "메트릭",
-      "metricsTypeDropdown": "Aggregate method",
+      "metricsTypeDropdown": "집계 메서드",
       "metricTypes": {
-        "macro": "Macro",
-        "micro": "Micro"
+        "macro": "매크로",
+        "micro": "마이크로"
       },
-      "classSelectionDropdown": "Select class(es)",
+      "classSelectionDropdown": "클래스 선택",
       "iouThresholdDropdown": {
-        "name": "IoU Threshold",
-        "description": "Intersection over Union quantifies the degree of overlap between the prediction and ground truth bounding box of a detected object in an image. For example, setting an IoU threshold of 70% means that a prediction with greater than 70% overlap with ground truth is True, thus influencing the definition of prediction correctness and calculation of other performance metrics.",
+        "name": "IoU 임계값",
+        "description": "합집합을 통한 교집합은 이미지에서 검색된 개체의 예측과 실측 경계 상자 간의 중첩 정도를 정량화합니다. 예를 들어 IoU 임계값을 70%로 설정하면 실측 데이터와 70% 이상 겹치는 예측이 True라는 의미이므로 예측 정확성의 정의 및 기타 성능 메트릭 계산에 영향을 미칩니다.",
         "iconId": "iouThresholdIconId",
-        "title": "Learn about the IoU threshold"
+        "title": "IoU 임계값에 대해 알아보기"
       },
       "notAvailable": "N/A",
       "countColumnHeader": "샘플 크기",
@@ -1597,14 +1597,14 @@
       "featuresDropdown": "기능",
       "metricChartDropdownSelectionHeader": "메트릭",
       "probabilityForClassSelectionHeader": "클래스의 확률",
-      "targetSelectionHeader": "Target",
+      "targetSelectionHeader": "대상",
       "metricSelectionDropdownPlaceholder": "코호트를 비교할 메트릭을 선택합니다.",
-      "classSelectionDropdownPlaceholder": "Select class name for class-based analysis.",
+      "classSelectionDropdownPlaceholder": "클래스 기반 분석의 클래스 이름을 선택합니다.",
       "featureSelectionDropdownPlaceholder": "기능 기반 분석에 사용할 기능을 선택합니다.",
       "probabilityDistributionPivotItem": "확률 분포",
-      "regressionDistributionPivotItem": "Target distribution",
+      "regressionDistributionPivotItem": "대상 배포",
       "metricsVisualizationsPivotItem": "메트릭 시각화",
-      "confusionMatrixPivotItem": "Confusion matrix",
+      "confusionMatrixPivotItem": "혼동 행렬",
       "disaggregatedAnalysisFeatureSelectionPlaceholder": "기능 기반 분석을 생성할 기능을 선택합니다.",
       "tableCountTooltip": "코호트 {0} {1} 인스턴스를 포함합니다.",
       "tableMetricTooltip": "코호트 {1} 모델의 {0} {2}",
@@ -1615,36 +1615,36 @@
       "metricSelectionButton": "메트릭 선택",
       "cohortSelectionButton": "코호트 선택",
       "probabilityLabelSelectionButton": "레이블 선택",
-      "regressionTargetSelectionButton": "Choose target",
+      "regressionTargetSelectionButton": "대상 선택",
       "selectAllCohortsOption": "모두 선택",
       "other": "기타",
       "BoxPlot": {
         "outlierProbability": "확률",
         "outlierLabel": "이상값",
         "boxPlotSeriesLabel": "상자 그림",
-        "lowerWhisker": "Lower whisker",
-        "upperWhisker": "Upper whisker",
-        "median": "Median",
-        "lowerQuartile": "Lower quartile",
-        "upperQuartile": "Upper quartile"
+        "lowerWhisker": "최소값 수염",
+        "upperWhisker": "상위 수염",
+        "median": "중앙값",
+        "lowerQuartile": "하한 사분위수",
+        "upperQuartile": "상한 사분위수"
       },
       "chartConfigApply": "적용",
       "chartConfigCancel": "취소",
       "chartConfigDatasetCohortSelectionPlaceholder": "데이터 세트 코호트 선택",
       "chartConfigFeatureBasedCohortSelectionPlaceholder": "기능 기반 코호트 선택",
       "confusionMatrix": {
-        "confusionMatrixCohortSelectionLabel": "Select dataset cohort",
-        "confusionMatrixClassSelectionLabel": "Select classes",
-        "confusionMatrixClassMinSelectionError": "Select at least {0} classes to visualize the confusion matrix.",
-        "confusionMatrixClassMaxSelectionError": "Select at most {0} classes to visualize the confusion matrix.",
-        "confusionMatrixClassSelectionDefaultPlaceholder": "Choose classes",
-        "confusionMatrixHeatmapTooltip": "{0} datapoints should be {1}, predicted to be {2}",
-        "confusionMatrixYAxisLabel": "True Class",
-        "confusionMatrixXAxisLabel": "Predicted Class",
-        "class": "Class"
+        "confusionMatrixCohortSelectionLabel": "데이터 세트 코호트 선택",
+        "confusionMatrixClassSelectionLabel": "수업 선택",
+        "confusionMatrixClassMinSelectionError": "적어도 {0}개 이상의 클래스를 선택하여 혼동 행렬을 시각화합니다.",
+        "confusionMatrixClassMaxSelectionError": "혼동 행렬을 시각화하려면 최대 {0}개의 클래스를 선택합니다.",
+        "confusionMatrixClassSelectionDefaultPlaceholder": "클래스 선택",
+        "confusionMatrixHeatmapTooltip": "{0} 데이터 포인트는 {1}이어야 하며, {2}(으)로 예측됩니다.",
+        "confusionMatrixYAxisLabel": "True 클래스",
+        "confusionMatrixXAxisLabel": "예측 클래스",
+        "class": "클래스"
       },
       "nA": "N/A",
-      "disaggregatedAnalysisBaseCohortDisclaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
+      "disaggregatedAnalysisBaseCohortDisclaimer": "다음 기능 기반 분석의 코호트는 {0}전역 코호트를 기반으로 합니다.",
       "disaggregatedAnalysisBaseCohortWarning": " {0} 코호트와 달리 {1} 필터를 포함합니다. 따라서 전체 데이터 세트의 하위 집합만 캡처하며 인사이트는 전체 데이터 세트로 일반화되지 않을 수 있습니다.",
       "probabilitySplineChartToggleLabel": "스플라인 차트 사용",
       "countAxisLabel": "개수",
@@ -1674,76 +1674,76 @@
         "flyoutDescription": "데이터 세트 코호트 또는 기능 코호트를 보도록 선택할 수 있습니다. 기능 코호트를 사용할 수 없는 경우 먼저 기능 코호트 보기에서 하나 이상의 기능을 선택해야 합니다. 그러면 기능 코호트가 생성되고 여기에서 기능 코호트를 선택할 수 있습니다."
       },
       "regressionTargetOptions": {
-        "predictedY": "Predicted Y",
+        "predictedY": "예측 Y",
         "trueY": "True Y",
-        "error": "Error"
+        "error": "오류"
       },
       "topLevelDescription": "예측 값의 분포와 모델 성능 메트릭의 값을 탐색하여 모델의 성능을 평가합니다. \"데이터 세트 코호트\" 탭을 사용하여 미리 빌드되거나 새로 만든 여러 데이터 세트 코호트에서 성능에 대한 비교 분석을 확인하여 모델을 조사할 수 있습니다. \"기능 코호트\"를 사용하여 민감하거나 민감하지 않은 기능 하위 코호트에서 성능에 대한 비교 분석을 확인하여 모델을 조사합니다. (예: 다양한 성별의 성과, 소득 수준).",
-      "infoTitle": "Additional information on model overview",
+      "infoTitle": "모델 개요에 대한 추가 정보",
       "visualDisplayToggleLabel": "열 지도 표시",
       "featureBasedViewDescription": "기능 기반 코호트(한 기능이 선택된 경우) 또는 교집합 코호트(두 기능을 선택한 경우)에서 모델 성능 분석을 보려면 최대 두 개의 기능을 선택합니다."
     },
     "TableViewTab": {
-      "Heading": "View the dataset in a table format for all features and rows."
+      "Heading": "모든 기능 및 행에 대한 테이블 형식으로 데이터 세트를 봅니다."
     }
   },
   "Forecasting": {
-    "target": "Target",
-    "whatIfForecastingHeader": "What-if analysis",
-    "forecastHeader": "Forecast analysis",
-    "whatIfForecastingDescription": "What-if allows you to perturb features for your entire time series and observe how the model's forecast changes.",
-    "whatIfForecastingChooseTimeSeries": "To start, choose a time series from the options below.",
-    "forecastDescription": "Forecast analysis compares your model's forecast to the actual values of your time series. To enable what-if analysis, provide a dataset with features.",
-    "timeSeries": "Time series",
-    "selectTimeSeries": "Select a time series.",
-    "singleTimeSeries": "The dataset contains only a single time series '{0}' which has been selected by default.",
+    "target": "대상",
+    "whatIfForecastingHeader": "가상 분석",
+    "forecastHeader": "예측 분석",
+    "whatIfForecastingDescription": "가상 기능을 사용하면 전체 시계열의 기능을 변경하고 모델의 예측이 어떻게 변경되는지 관찰할 수 있습니다.",
+    "whatIfForecastingChooseTimeSeries": "시작하려면 아래 옵션에서 시계열을 선택합니다.",
+    "forecastDescription": "예측 분석은 모델의 예측을 시계열의 실제 값과 비교합니다. 가상 분석을 사용하려면 기능이 있는 데이터 세트를 제공하세요.",
+    "timeSeries": "시계열",
+    "selectTimeSeries": "시계열 선택",
+    "singleTimeSeries": "데이터 세트에는 기본적으로 선택된 단일 시계열 '{0}'만 포함됩니다.",
     "trueY": "True Y",
-    "baselinePrediction": "Baseline prediction",
-    "forecastComparisonHeader": "Compare What-if Forecasts",
-    "forecastComparisonChartTitle": "Forecasts",
-    "forecastComparisonChartTimeAxisLabel": "Time",
+    "baselinePrediction": "기준 예측",
+    "forecastComparisonHeader": "가상 예측 비교",
+    "forecastComparisonChartTitle": "예측",
+    "forecastComparisonChartTimeAxisLabel": "시간",
     "Transformations": {
-      "multiply": "multiply",
-      "divide": "divide",
-      "add": "add",
-      "subtract": "subtract",
-      "change": "change to"
+      "multiply": "곱하기",
+      "divide": "나누기",
+      "add": "추가",
+      "subtract": "빼기",
+      "change": "변경 대상"
     },
     "TransformationCreation": {
-      "title": "Create what-if scenario",
-      "nameLabel": "What-if scenario name",
-      "featureInstructions": "Choose a feature to perturb.",
-      "operationInstructions": "Choose an operation to apply to the feature.",
-      "operationDropdownHeader": "Operation",
-      "featureDropdownHeader": "Feature",
-      "valueSpinButtonHeader": "Value",
-      "scenarioNamingInstructionsPlaceholder": "Enter a unique name",
-      "scenarioNamingInstructions": "Enter a name for your what-if scenario.",
-      "scenarioNamingCollisionMessage": "This name exists already. Please enter a unique name.",
-      "scenarioNamingLengthMessage": "The name must be between 1 and 50 characters. The actual length is {0}.",
-      "scenarioNamingInvalidCharactersMessage": "The name can only contain alphanumeric characters, whitespaces, dashes, or underscores, and needs to start with an alphanumeric character.",
-      "valueErrorMessage": "For operation {0} please select a value other than {1}.",
-      "invalidCombinationErrorMessage": "This is identical to an existing what-if scenario. Please change the feature, operation, or value.",
-      "addTransformationButton": "Add Transformation",
-      "divisionAndMultiplicationBy": "by"
+      "title": "가상 시나리오 만들기",
+      "nameLabel": "가상 시나리오 이름",
+      "featureInstructions": "교란할 기능을 선택합니다.",
+      "operationInstructions": "기능에 적용할 작업을 선택합니다.",
+      "operationDropdownHeader": "작업",
+      "featureDropdownHeader": "기능",
+      "valueSpinButtonHeader": "값",
+      "scenarioNamingInstructionsPlaceholder": "고유한 이름 입력",
+      "scenarioNamingInstructions": "가상 시나리오의 이름을 입력합니다.",
+      "scenarioNamingCollisionMessage": "이 이름은 이미 있습니다. 고유한 이름을 입력하세요.",
+      "scenarioNamingLengthMessage": "이름은 1자에서 50자 사이여야 합니다. 실제 길이는 {0}입니다.",
+      "scenarioNamingInvalidCharactersMessage": "이름은 영숫자 문자, 공백, 대시 또는 밑줄만 포함할 수 있으며 영숫자 문자로 시작해야 합니다.",
+      "valueErrorMessage": "작업 {0}을(를) 수행하려면 {1}이(가) 아닌 값을 선택하세요.",
+      "invalidCombinationErrorMessage": "이는 기존 가상 시나리오와 동일합니다. 기능, 작업 또는 값을 변경하세요.",
+      "addTransformationButton": "변환 추가",
+      "divisionAndMultiplicationBy": "작성자"
     },
     "TransformationTable": {
-      "nameColumnHeader": "Name",
-      "methodColumnHeader": "Method",
-      "divisionAndMultiplicationBy": "by ",
-      "header": "What-if Forecasts ({0})"
+      "nameColumnHeader": "이름",
+      "methodColumnHeader": "메서드",
+      "divisionAndMultiplicationBy": "작성자 ",
+      "header": "가상 예측({0})"
     },
     "TimeSeries": {
-      "apply": "Apply",
-      "cancel": "Cancel",
-      "cohortList": "Time series list",
-      "selectCohort": "Select a time series",
-      "shiftCohort": "Switch time series",
-      "shiftCohortDescription": "Select a time series from the time series list. Apply the time series to the dashboard."
+      "apply": "적용",
+      "cancel": "취소",
+      "cohortList": "시계열 목록",
+      "selectCohort": "시계열 선택",
+      "shiftCohort": "시계열 전환",
+      "shiftCohortDescription": "시계열 목록에서 시계열을 선택합니다. 대시보드에 시계열을 적용합니다."
     },
     "TimeSeriesSettings": {
-      "CohortSettingsDescription": "Time series are pre-defined based on time series identifying columns.",
-      "CohortSettingsTitle": "Time series settings"
+      "CohortSettingsDescription": "시계열은 열을 식별하는 시계열에 따라 미리 정의됩니다.",
+      "CohortSettingsTitle": "시계열 설정"
     }
   }
 }
