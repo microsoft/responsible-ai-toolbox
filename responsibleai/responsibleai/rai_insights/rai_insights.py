@@ -387,7 +387,7 @@ class RAIInsights(RAIBaseInsights):
             model=self.model, train=self.get_train_data(),
             test=self.get_test_data(),
             target_column=self.target_column, task_type=self.task_type,
-            categorical_features=self.categorical_features)
+            categorical_features=self.get_categorical_features_after_drop())
 
         self._data_balance_manager = DataBalanceManager(
             train=self.train, test=self.test, target_column=self.target_column,
