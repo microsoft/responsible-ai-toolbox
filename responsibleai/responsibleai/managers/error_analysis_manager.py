@@ -16,6 +16,7 @@ from erroranalysis._internal.error_report import as_error_report
 from erroranalysis._internal.error_report import \
     json_converter as report_json_converter
 from raiutils.exceptions import UserConfigValidationException
+from raiutils.models import ModelTask
 from responsibleai._config.base_config import BaseConfig
 from responsibleai._interfaces import ErrorAnalysisData
 from responsibleai._internal.constants import ErrorAnalysisManagerKeys as Keys
@@ -253,6 +254,7 @@ class ErrorAnalysisManager(BaseManager):
         self._true_y = dataset[target_column]
         self._dataset = dataset.drop(columns=[target_column])
         self._feature_names = list(self._dataset.columns)
+        self._model_task = model_task
         self._classes = classes
         self._categorical_features = categorical_features
         self._ea_config_list = []
@@ -266,7 +268,7 @@ class ErrorAnalysisManager(BaseManager):
             self._true_y,
             self._feature_names,
             self._categorical_features,
-            model_task=model_task,
+            model_task=self._model_task,
             classes=self._classes)
 
     def add(self, max_depth: int = 3, num_leaves: int = 31,

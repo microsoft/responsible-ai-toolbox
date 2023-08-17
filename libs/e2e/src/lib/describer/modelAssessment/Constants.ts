@@ -185,6 +185,15 @@ export enum Locators {
   VisionDataExplorerImageExplorerViewButton = "#VisionDataExplorer button[name='Image explorer view']",
   VisionDataExplorerTableViewButton = "#VisionDataExplorer button[name='Table view']",
   VisionDataExplorerClassViewButton = "#VisionDataExplorer button[name='Class view']",
+  VisionDataExplorerPredictedLabel = "#VisionDataExplorer #predictedLabel",
+  VisionDataExplorerLegendFailure = "#VisionDataExplorer #legendFailure",
+  VisionDataExplorerLegendSuccess = "#VisionDataExplorer #legendSuccess",
+  VisionDataExplorerImageExplorerViewErrorInstances = "#VisionDataExplorer #errorInstances",
+  VisionDataExplorerImageExplorerViewErrorInstanceCount = "#VisionDataExplorer #errorInstances #instanceCount",
+  VisionDataExplorerImageExplorerViewSuccessInstances = "#VisionDataExplorer #successInstances",
+  VisionDataExplorerImageExplorerViewSuccessInstanceCount = "#VisionDataExplorer #successInstances #instanceCount",
+  VisionDataExplorerImageExplorerViewErrorImageContainer = "#VisionDataExplorer #errorImageContainer",
+  VisionDataExplorerImageExplorerViewSuccessImageContainer = "#VisionDataExplorer #successImageContainer",
   VisionDataExplorerTabsViewTableList = "#VisionDataExplorer #tabsViewTableList",
   VisionDataExplorerTabsViewItemsSelectedStatement = "#VisionDataExplorer #itemsSelectedStatement",
   VisionDataExplorerTabsViewSaveCohortButton = "#VisionDataExplorer #saveCohortButton",
@@ -192,5 +201,8 @@ export enum Locators {
   VisionDataExplorerClassViewLabelTypeDropdown = "#VisionDataExplorer #labelTypeDropdown",
   VisionDataExplorerClassViewLabelDisplayDropdown = "#VisionDataExplorer #labelVisibilitySelectorsDropdown",
   VisionDataExplorerClassViewDataCharacteristicsLegend = "#VisionDataExplorer #dataCharacteristicsLegend",
-  VisionDataExplorerClassViewContainer = "#VisionDataExplorer #classViewContainer"
+  VisionDataExplorerClassViewContainer = "#VisionDataExplorer #classViewContainer",
+  VisionDataExplorerImageExplorerViewImage = "#VisionDataExplorer #visionImage_0",
+  VisionDataExplorerImageExplorerViewImagePredictedY = "#VisionDataExplorer #predictedY_0",
+  VisionDataExplorerImageExplorerViewImageTrueY = "#VisionDataExplorer #trueY_0"
 }

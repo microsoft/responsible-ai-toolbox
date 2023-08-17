@@ -78,6 +78,13 @@ jobs:
           pip install .
         working-directory: responsibleai_vision
 
+      - if: ${{ matrix.operatingSystem == 'windows-latest' }}
+        name: Install older pyarrow to fix CI getting stuck on Windows
+        shell: bash -l {0}
+        run: |
+          pip install --force-reinstall pyarrow==11.0.0
+          pip install "numpy<=1.22.4"
+
       - name: Pip freeze
         shell: bash -l {0}
         run: |
