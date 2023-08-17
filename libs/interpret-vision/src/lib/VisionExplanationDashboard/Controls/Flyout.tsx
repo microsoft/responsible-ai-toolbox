@@ -149,7 +149,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                           }
                         />
                       </Stack.Item>
-                      <Stack.Item>
+                      <Stack.Item id="predictionTitle">
                         {predictedY !== trueY ? (
                           <Text
                             variant="large"
@@ -179,13 +179,13 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                         {item?.index}
                       </Text>
                     </Stack.Item>
-                    <Stack.Item>
+                    <Stack.Item id="predLabel">
                       <Text variant="large">
                         {localization.InterpretVision.Dashboard.predictedY}
                         {predictedY}
                       </Text>
                     </Stack.Item>
-                    <Stack.Item>
+                    <Stack.Item id="gtLabel">
                       <Text variant="large">
                         {localization.InterpretVision.Dashboard.trueY}
                         {trueY}
@@ -195,6 +195,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                 </Stack.Item>
                 <Stack.Item className={classNames.imageContainer}>
                   <Image
+                    id={`flyoutImage_${item?.index}`}
                     src={`data:image/jpg;base64,${item?.image}`}
                     className={classNames.image}
                     imageFit={ImageFit.contain}
