@@ -57,23 +57,16 @@ jobs:
           pip install --upgrade setuptools
           pip install --upgrade "pip-tools<=7.1.0"
 
-      - if: ${{ matrix.operatingSystem != 'macos-latest' }}
-        name: Install pytorch on non-MacOS
-        shell: bash -l {0}
-        run: |
-          conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
-
-      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
-        name: Install Anaconda packages on MacOS, which should not include cpuonly according to official docs
-        shell: bash -l {0}
-        run: |
-          conda install --yes --quiet pytorch torchvision captum -c pytorch
-
       - name: Pip compile
         run: |
           pip-compile requirements-dev.txt -o requirements-dev-comp.txt
           cat requirements-dev-comp.txt
         working-directory: ${{ matrix.packageDirectory }}
+
+      - name: Install pytorch
+        shell: bash -l {0}
+        run: |
+          pip install --yes --quiet pytorch==1.13.1 torchvision==0.14.1 captum cpuonly -c pytorch
 
       - name: Upload requirements
         uses: actions/upload-artifact@v3
