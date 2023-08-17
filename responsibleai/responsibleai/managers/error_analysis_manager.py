@@ -10,7 +10,7 @@ from typing import Any, List, Optional
 import jsonschema
 import pandas as pd
 
-from erroranalysis._internal.constants import ModelTask, metric_to_display_name
+from erroranalysis._internal.constants import metric_to_display_name
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.error_report import as_error_report
 from erroranalysis._internal.error_report import \
