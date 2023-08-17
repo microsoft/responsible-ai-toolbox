@@ -14,7 +14,6 @@ class TestUtils:
         assert not is_valid_uuid("123e4567-e89b-12d3-a456-42661417400-143")
 
     def test_get_images(self):
-        # initialize the fridge dataset, invoke the get_image method, and perform assertions
         fridge_dataset = load_fridge_object_detection_dataset().iloc[:2]
         images = get_images(fridge_dataset, "RGB", None)
         assert len(images) == 2

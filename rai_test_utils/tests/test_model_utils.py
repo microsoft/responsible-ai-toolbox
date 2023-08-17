@@ -44,10 +44,12 @@ class TestModelUtils:
         dataset = load_fridge_object_detection_dataset().iloc[:2]
 
         X_train = dataset[["image"]]
-        y_train = dataset[["label"]]
+        classes = np.array(['can', 'carton', 'milk_bottle', 'water_bottle'])
 
         model_list = create_models_object_detection()
         for model in model_list:
             dataset = get_images(X_train, "RGB", None)
-            wrapped_model = wrap_model(model, dataset, "object_detection", classes=np.array(['can', 'carton', 'milk_bottle', 'water_bottle']))
+            wrapped_model = wrap_model(
+                model, dataset, "object_detection",
+                classes=classes)
             assert wrapped_model.predict(dataset) is not None
