@@ -161,6 +161,9 @@ def get_images(dataset, image_mode, transformations=None):
     :return: The images.
     :rtype: numpy.ndarray
     """
+    IMAGE = "image"
+    IMAGE_URL = "image_url"
+
     column_names = dataset.columns
     is_transformations_str = isinstance(transformations, str)
     if is_transformations_str:
