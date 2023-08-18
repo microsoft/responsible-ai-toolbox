@@ -53,7 +53,7 @@ jobs:
       fail-fast: false
       matrix:
         # TODO: add macos
-        operatingSystem: [ubuntu-latest, windows-latest]
+        operatingSystem: [ubuntu-latest, windows-latest, macos-latest]
         pythonVersion: [3.7, 3.8, 3.9, "3.10"]
         flights: [""]
         notebookGroup: ["nb_group_1"]
@@ -85,10 +85,17 @@ jobs:
           auto-update-conda: true
           python-version: ${{ matrix.pythonVersion }}
 
-      - name: Install pytorch
+      - if: ${{ matrix.operatingSystem != 'macos-latest' }}
+        name: Install pytorch on non-MacOS
         shell: bash -l {0}
         run: |
           conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
+
+      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
+        name: Install Anaconda packages on MacOS, which should not include cpuonly according to official docs
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet pytorch torchvision captum -c pytorch
 
       - name: Setup tools
         shell: bash -l {0}
