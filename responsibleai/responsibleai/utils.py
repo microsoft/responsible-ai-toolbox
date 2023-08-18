@@ -2,6 +2,10 @@
 # Licensed under the MIT License.
 
 import timeit
+from typing import List
+
+import numpy as np
+import pandas as pd
 
 
 def _measure_time(manager_compute_func):
@@ -19,3 +23,18 @@ def _measure_time(manager_compute_func):
 
 def _separator(max_len):
     print('=' * max_len)
+
+
+def _find_features_having_missing_values(
+        data: pd.DataFrame) -> List[str]:
+    """Return list of features which have missing values.
+
+    parame data: The dataset to check.
+    type data: pd.Dataframe
+    return: List of feature names which have missing values.
+    """
+    list_of_feature_having_missing_values = []
+    for feature in data.columns.tolist():
+        if np.any(data[feature].isnull()):
+            list_of_feature_having_missing_values.append(feature)
+    return list_of_feature_having_missing_values
