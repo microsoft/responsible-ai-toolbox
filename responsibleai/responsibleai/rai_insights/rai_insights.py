@@ -1186,7 +1186,6 @@ class RAIInsights(RAIBaseInsights):
         if methods[0].optional and not hasattr(self.model, methods[0].name):
             return None
         return getattr(self.model, methods[0].name)
-        
 
     def _get_model_output(self, *, input_data: Union[None, np.array],
                           purpose: MethodPurpose):
@@ -1315,8 +1314,10 @@ class RAIInsights(RAIBaseInsights):
                 res_object[_UNIQUE_VALUES] = unique_value.tolist()
             elif datetime_features is not None and col in datetime_features:
                 res_object[_RANGE_TYPE] = "datetime"
-                res_object[_MIN_VALUE] = test[col].min().strftime("%Y-%m-%d %H:%M:%S")
-                res_object[_MAX_VALUE] = test[col].max().strftime("%Y-%m-%d %H:%M:%S")
+                res_object[_MIN_VALUE] = \
+                    test[col].min().strftime("%Y-%m-%d %H:%M:%S")
+                res_object[_MAX_VALUE] = \
+                    test[col].max().strftime("%Y-%m-%d %H:%M:%S")
             else:
                 col_min = test[col].min()
                 col_max = test[col].max()
