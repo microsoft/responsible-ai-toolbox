@@ -253,7 +253,8 @@ class CausalManager(BaseManager):
                 "upper_bound_on_cat_expansion={})."
             ).format(max_cat_expansion, max_cat_expansion)
             if expected in message:
-                raise ValueError(message + clarification)
+                raise UserConfigValidationException(
+                    message + clarification)
             raise e
 
     def _create_policy(

@@ -479,11 +479,26 @@ def create_surrogate_model(analyzer,
                                   num_leaves=num_leaves,
                                   min_child_samples=min_child_samples,
                                   verbosity=-1)
-    if cat_ind_reindexed:
-        surrogate.fit(dataset_sub_features, diff,
-                      categorical_feature=cat_ind_reindexed)
-    else:
-        surrogate.fit(dataset_sub_features, diff)
+    try:
+        if cat_ind_reindexed:
+            surrogate.fit(dataset_sub_features, diff,
+                          categorical_feature=cat_ind_reindexed)
+        else:
+            surrogate.fit(dataset_sub_features, diff)
+    except ValueError as ve:
+        # throw user exception for bad model prediction output
+        if "y should be a 1d array, got an array of shape" in str(ve):
+            diff_shape = diff.shape
+            invalid_shape = len(diff_shape) > 2
+            invalid_2d_dims = len(diff_shape) == 2 and diff_shape[1] != 1
+            if invalid_shape or invalid_2d_dims:
+                raise UserConfigValidationException(
+                    "The surrogate model could not be trained. " +
+                    "The shape of the diff array is invalid: {}. ".format(
+                        diff_shape) +
+                    "Please check the prediction function of the model.")
+        # re-raise any unknown system error
+        raise ve
     return surrogate
 
 

@@ -5,6 +5,13 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+    paths:
+      - "raiwidgets/**"
+      - "responsibleai_vision/**"
+      - ".github/workflows/CI-e2e-notebooks-vision.yml"
+      - "libs/e2e/src/lib/describer/modelAssessment/**"
+      - "libs/interpret-vision/**"
+      - "notebooks/**"
 
 jobs:
   ui-build:

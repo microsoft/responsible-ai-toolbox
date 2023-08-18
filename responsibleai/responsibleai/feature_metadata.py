@@ -40,6 +40,19 @@ class FeatureMetadata:
             for other tasks will result in validation errors.
         :type time_series_id_features: Optional[List[str]]
         """
+        if identity_feature_name is not None and not isinstance(
+                identity_feature_name, str):
+            raise UserConfigValidationException(
+                'identity_feature_name must be a string.')
+        FeatureMetadata._validate_column_list(
+            _DATETIME_FEATURE_PURPOSE, datetime_features)
+        FeatureMetadata._validate_column_list(
+            _CATEGORICAL_FEATURE_PURPOSE, categorical_features)
+        FeatureMetadata._validate_column_list(
+            _DROPPED_FEATURE_PURPOSE, dropped_features)
+        FeatureMetadata._validate_column_list(
+            _TIME_SERIES_ID_FEATURE_PURPOSE, time_series_id_features)
+
         self.identity_feature_name = identity_feature_name
         self.datetime_features = datetime_features
         self.categorical_features = categorical_features
@@ -55,16 +68,16 @@ class FeatureMetadata:
         """
         identity_feature = ([self.identity_feature_name]
                             if self.identity_feature_name else None)
-        self._validate_columns(
+        FeatureMetadata._validate_columns(
             _DROPPED_FEATURE_PURPOSE, self.dropped_features, feature_names)
-        self._validate_columns(
+        FeatureMetadata._validate_columns(
             _CATEGORICAL_FEATURE_PURPOSE,
             self.categorical_features, feature_names)
-        self._validate_columns(
+        FeatureMetadata._validate_columns(
             _IDENTITY_FEATURE_PURPOSE, identity_feature, feature_names)
-        self._validate_columns(
+        FeatureMetadata._validate_columns(
             _DATETIME_FEATURE_PURPOSE, self.datetime_features, feature_names)
-        self._validate_columns(
+        FeatureMetadata._validate_columns(
             _TIME_SERIES_ID_FEATURE_PURPOSE, self.time_series_id_features,
             feature_names)
 
@@ -101,6 +114,29 @@ class FeatureMetadata:
             other_feature_metadata.dropped_features and \
             self.time_series_id_features == \
             other_feature_metadata.time_series_id_features
+
+    @staticmethod
+    def _validate_column_list(
+            column_purpose: str,
+            column_names: Any):
+        """Ensure the provided column list is a list of strings.
+
+        :param column_purpose: The purpose the column fulfills in the dataset.
+        :type column_purpose: str
+        :param column_names: Column names to be validate.
+        :type column_names: Any
+        """
+        if column_names is None:
+            return
+        if column_names is not None and not isinstance(
+                column_names, list):
+            raise UserConfigValidationException(
+                '{} must be a list.'.format(column_purpose))
+
+        for column_name in column_names:
+            if not isinstance(column_name, str):
+                raise UserConfigValidationException(
+                    'Entries in {} must be strings.'.format(column_purpose))
 
     @staticmethod
     def _validate_columns(

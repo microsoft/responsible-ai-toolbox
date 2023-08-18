@@ -145,6 +145,7 @@ export class ImageList extends React.Component<
             style={{
               left: ImagePadding
             }}
+            id={`predictedY_${item?.index}`}
           >
             <Text className={classNames.labelPredicted}>{predictedY}</Text>
           </Stack.Item>
@@ -157,6 +158,7 @@ export class ImageList extends React.Component<
                   ? this.props.imageDim
                   : this.props.imageDim - 1.35 * ImagePadding
             }}
+            id={`trueY_${item?.index}`}
           >
             <Text
               className={classNames.label}

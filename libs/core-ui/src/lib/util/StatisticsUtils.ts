@@ -10,18 +10,14 @@ import {
 } from "../Interfaces/IStatistic";
 import { IsBinary } from "../util/ExplanationUtils";
 
-import { generateImageStats } from "./ImageStatisticsUtils";
 import { JointDataset } from "./JointDataset";
-import {
-  ClassificationEnum,
-  MulticlassClassificationEnum
-} from "./JointDatasetUtils";
+import { ClassificationEnum } from "./JointDatasetUtils";
+import { generateMulticlassStats } from "./MulticlassStatisticsUtils";
 import { generateMultilabelStats } from "./MultilabelStatisticsUtils";
 import { generateObjectDetectionStats } from "./ObjectDetectionStatisticsUtils";
 import { generateQuestionAnsweringStats } from "./QuestionAnsweringStatisticsUtils";
 import {
   BinaryClassificationMetrics,
-  MulticlassClassificationMetrics,
   RegressionMetrics
 } from "./StatisticsUtilsEnums";
 
@@ -147,27 +143,6 @@ const generateRegressionStats: (
   ];
 };
 
-const generateMulticlassStats: (outcomes: number[]) => ILabeledStatistic[] = (
-  outcomes: number[]
-): ILabeledStatistic[] => {
-  const correctCount = outcomes.filter(
-    (x) => x === MulticlassClassificationEnum.Correct
-  ).length;
-  const total = outcomes.length;
-  return [
-    {
-      key: TotalCohortSamples,
-      label: localization.Interpret.Statistics.samples,
-      stat: total
-    },
-    {
-      key: MulticlassClassificationMetrics.Accuracy,
-      label: localization.Interpret.Statistics.accuracy,
-      stat: correctCount / total
-    }
-  ];
-};
-
 export const generateMetrics: (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
@@ -206,13 +181,6 @@ export const generateMetrics: (
       return generateRegressionStats(trueYSubset, predYSubset, errorsSubset);
     });
   }
-  if (modelType === ModelTypes.ImageMulticlass) {
-    return selectionIndexes.map((selectionArray) => {
-      const trueYSubset = selectionArray.map((i) => trueYs[i]);
-      const predYSubset = selectionArray.map((i) => predYs[i]);
-      return generateImageStats(trueYSubset, predYSubset);
-    });
-  }
   if (
     modelType === ModelTypes.ObjectDetection &&
     objectDetectionCache &&
@@ -225,12 +193,17 @@ export const generateMetrics: (
     );
   }
   const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
-  return selectionIndexes.map((selectionArray) => {
-    const outcomeSubset = selectionArray.map((i) => outcomes[i]);
-    if (IsBinary(modelType)) {
+  if (IsBinary(modelType)) {
+    return selectionIndexes.map((selectionArray) => {
+      const outcomeSubset = selectionArray.map((i) => outcomes[i]);
+
       return generateBinaryStats(outcomeSubset);
-    }
-    // modelType === ModelTypes.Multiclass
-    return generateMulticlassStats(outcomeSubset);
+    });
+  }
+  // modelType === ModelTypes.Multiclass
+  return selectionIndexes.map((selectionArray) => {
+    const trueYSubset = selectionArray.map((i) => trueYs[i]);
+    const predYSubset = selectionArray.map((i) => predYs[i]);
+    return generateMulticlassStats(trueYSubset, predYSubset);
   });
 };

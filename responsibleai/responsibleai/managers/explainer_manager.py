@@ -117,7 +117,7 @@ class ExplainerManager(BaseManager):
             self._surrogate_model = LinearExplainableModel
 
     def _compute_explanations(self, local: bool, data: Any):
-        """Compute explanations using MimicWrapper.
+        """Compute explanations using MimicExplainer.
 
         :param local: True if local explanations are requested
                 and False otherwise.
