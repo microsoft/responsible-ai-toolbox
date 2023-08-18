@@ -51,6 +51,8 @@ _CATEGORICAL_FEATURES = 'categorical_features'
 _DROPPED_FEATURES = 'dropped_features'
 _FORECASTING_RAI_INSIGHTS_ENABLED = "forecasting_enabled"
 
+_STRF_TIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
+
 _MODEL_METHOD_EXCEPTION_MESSAGE = (
     'The passed model cannot be used for getting predictions via {0}')
 
@@ -1042,7 +1044,7 @@ class RAIInsights(RAIBaseInsights):
                         self._feature_metadata.datetime_features[0]
                     dashboard_dataset.index = convert_to_list(
                         pd.to_datetime(self.test[time_column_name])
-                        .apply(lambda dt: dt.strftime("%Y-%m-%dT%H:%M:%SZ")))
+                        .apply(lambda dt: dt.strftime(_STRF_TIME_FORMAT)))
             except Exception as ex:
                 raise ValueError(
                     "The datetime feature should be parseable by "
@@ -1315,9 +1317,9 @@ class RAIInsights(RAIBaseInsights):
             elif datetime_features is not None and col in datetime_features:
                 res_object[_RANGE_TYPE] = "datetime"
                 res_object[_MIN_VALUE] = \
-                    test[col].min().strftime("%Y-%m-%d %H:%M:%S")
+                    test[col].min().strftime(_STRF_TIME_FORMAT)
                 res_object[_MAX_VALUE] = \
-                    test[col].max().strftime("%Y-%m-%d %H:%M:%S")
+                    test[col].max().strftime(_STRF_TIME_FORMAT)
             else:
                 col_min = test[col].min()
                 col_max = test[col].max()
