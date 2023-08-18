@@ -38,27 +38,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: conda-incubator/setup-miniconda@v2
+      - name: Set up Python ${{ matrix.pythonVersion }}
+        uses: actions/setup-python@v4
         with:
-          auto-update-conda: true
           python-version: ${{ matrix.pythonVersion }}
-      
-      - if: ${{ matrix.operatingSystem != 'macos-latest' }}
-        name: Install pytorch on non-MacOS
-        shell: bash -l {0}
-        run: |
-          conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
-
-      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
-        name: Install Anaconda packages on MacOS, which should not include cpuonly according to official docs
-        shell: bash -l {0}
-        run: |
-          conda install --yes --quiet pytorch torchvision captum -c pytorch
-
-      # - name: Set up Python ${{ matrix.pythonVersion }}
-      #   uses: actions/setup-python@v4
-      #   with:
-      #     python-version: ${{ matrix.pythonVersion }}
 
       - if: ${{ matrix.pythonVersion == '3.7' }}
         name: Setup tools for python lt 3.8
@@ -73,13 +56,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install --upgrade setuptools
           pip install --upgrade "pip-tools<=7.1.0"
-      
-      - if: ${{ matrix.packageDirectory == 'rai_test_utils' }}
-        name: Install pytorch
-        shell: bash -l {0}
-        run: |
-          python -m pip install --upgrade pip
-          pip install --quiet torch torchvision
 
       - name: Pip compile
         run: |
