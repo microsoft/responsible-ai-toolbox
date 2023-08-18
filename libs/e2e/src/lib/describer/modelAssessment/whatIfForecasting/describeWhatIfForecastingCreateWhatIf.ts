@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { selectDropdown } from "../../../util/dropdown";
+import { selectDropdown } from "../../../../util/dropdown";
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
@@ -58,11 +58,13 @@ export function describeWhatIfForecastingCreateWhatIf(
         )
         .click();
 
-      cy.get(Locators.ForecastingTransformationValueField)
-        .should("exist")
-        .type(
-          dataShape.whatIfForecastingData?.testTransformation?.valueToSelect?.toString()
-        );
+      const transformationValue =
+        dataShape.whatIfForecastingData?.testTransformation?.valueToSelect?.toString();
+      if (transformationValue) {
+        cy.get(Locators.ForecastingTransformationValueField)
+          .should("exist")
+          .type(transformationValue);
+      }
       cy.get(Locators.ForecastingTransformationAddButton)
         .should("exist")
         .click();
