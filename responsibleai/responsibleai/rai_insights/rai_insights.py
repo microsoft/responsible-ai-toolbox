@@ -1183,11 +1183,8 @@ class RAIInsights(RAIBaseInsights):
         if len(methods) == 0:
             return None
         # If a method is optional don't fail
-        if methods[0].optional:
-            try:
-                return getattr(self.model, methods[0].name)
-            except:
-                return None
+        if methods[0].optional and not hasattr(self.model, methods[0].name):
+            return None
         return getattr(self.model, methods[0].name)
         
 
