@@ -14,6 +14,10 @@ from rai_test_utils.datasets.tabular import \
     create_iris_data as _create_iris_data
 from raiutils.common.retries import retry_function
 
+ADULT_DROPPED_FEATURES = ['workclass', 'education', 'marital_status',
+                          'occupation', 'race', 'gender']
+ADULT_CATEGORICAL_FEATURES_AFTER_DROP = ['age', 'hours_per_week']
+
 
 def create_iris_data():
     (
