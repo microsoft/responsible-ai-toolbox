@@ -1226,11 +1226,17 @@ class RAIInsights(RAIBaseInsights):
                     _MODEL_METHOD_EXCEPTION_MESSAGE.format(method.name))
             try:
                 model_method = getattr(self.model, method.name)
-                model_method(input_data)
             except Exception:
                 if not method.optional:
                     raise UserConfigValidationException(
                         _MODEL_METHOD_EXCEPTION_MESSAGE.format(method.name))
+                # skip if method is optional and unavailable
+                continue
+            try:
+                model_method(input_data)
+            except Exception:
+                raise UserConfigValidationException(
+                    _MODEL_METHOD_EXCEPTION_MESSAGE.format(method.name))
             self._validate_features_same(input_features, input_data,
                                          method.name)
 
