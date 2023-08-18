@@ -1305,8 +1305,8 @@ class RAIInsights(RAIBaseInsights):
                 res_object[_UNIQUE_VALUES] = unique_value.tolist()
             elif datetime_features is not None and col in datetime_features:
                 res_object[_RANGE_TYPE] = "datetime"
-                res_object[_MIN_VALUE] = test[col].min()
-                res_object[_MAX_VALUE] = test[col].max()
+                res_object[_MIN_VALUE] = test[col].min().strftime("%Y-%m-%d %H:%M:%S")
+                res_object[_MAX_VALUE] = test[col].max().strftime("%Y-%m-%d %H:%M:%S")
             else:
                 col_min = test[col].min()
                 col_max = test[col].max()
