@@ -36,7 +36,7 @@ export function describeVisionDataExplorer(
     }
 
     if (datasetShape.visionDataExplorerData?.hasVisionDataExplorerComponent) {
-      it("should should Flyout view components when selected", () => {
+      it("should Flyout view components when selected", () => {
         ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresent(
           datasetShape
         );
