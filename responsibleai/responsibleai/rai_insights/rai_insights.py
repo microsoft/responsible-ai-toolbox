@@ -1182,7 +1182,14 @@ class RAIInsights(RAIBaseInsights):
                    if m.purpose == purpose]
         if len(methods) == 0:
             return None
+        # If a method is optional don't fail
+        if methods[0].optional:
+            try:
+                return getattr(self.model, methods[0].name)
+            except:
+                return None
         return getattr(self.model, methods[0].name)
+        
 
     def _get_model_output(self, *, input_data: Union[None, np.array],
                           purpose: MethodPurpose):
