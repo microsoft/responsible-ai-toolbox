@@ -9,6 +9,9 @@ on:
       - "raiwidgets/**"
       - "responsibleai_vision/**"
       - ".github/workflows/CI-notebook-vision.yml"
+      - "libs/e2e/src/lib/describer/modelAssessment/**"
+      - "libs/interpret-vision/**"
+      - "notebooks/**"
 
 jobs:
   ci-notebook-vision:
