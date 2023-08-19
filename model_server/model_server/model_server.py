@@ -46,7 +46,7 @@ class ModelServer(object):
         # tracking_uri = ml_client.workspaces.get(name=ml_client.workspace_name).mlflow_tracking_uri
         
         
-        # server = ModelServer(subscription_id="b3b0e63c-e8fd-4f5c-bab9-1ed82844ef1f", resource_group="romanlutz", workspace_name="romanlutz", experiment_name="single-model-experiment-dnn-false20230818"",run_id="bold_bucket_vhv71f86dc_0", public_ip=None, port=None)
+        # server = ModelServer(subscription_id="b3b0e63c-e8fd-4f5c-bab9-1ed82844ef1f", resource_group="romanlutz", workspace_name="romanlutz", experiment_name="single-model-experiment-dnn-false20230818",run_id="bold_bucket_vhv71f86dc_0", public_ip=None, port=None)
         
         from azureml.core import Workspace
         workspace = Workspace.get(name=workspace_name, subscription_id=subscription_id, resource_group=resource_group)
@@ -79,6 +79,8 @@ class ModelServer(object):
         #     raise Exception("Docker image not found in the workspace.")
         # image = image_details.image
         # There's a bug that returns the registry name twice right now!
+        # Then:
+        # pip install model_server==0.1.0
 
 
         print(f"Retrieved model: {self.model}")
@@ -87,7 +89,7 @@ class ModelServer(object):
 
         def predict():
             data = request.get_json(force=True)
-            return jsonify(self.model.predict(data))
+            return jsonify(self.model.predict(data["X"]))
         self.add_url_rule(predict, '/predict', methods=["POST"])
 
         # def predict_proba():
