@@ -51,6 +51,8 @@ _CATEGORICAL_FEATURES = 'categorical_features'
 _DROPPED_FEATURES = 'dropped_features'
 _FORECASTING_RAI_INSIGHTS_ENABLED = "forecasting_enabled"
 
+_STRF_TIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
+
 _MODEL_METHOD_EXCEPTION_MESSAGE = (
     'The passed model cannot be used for getting predictions via {0}')
 
@@ -1044,7 +1046,7 @@ class RAIInsights(RAIBaseInsights):
                         self._feature_metadata.datetime_features[0]
                     dashboard_dataset.index = convert_to_list(
                         pd.to_datetime(self.test[time_column_name])
-                        .apply(lambda dt: dt.strftime("%Y-%m-%dT%H:%M:%SZ")))
+                        .apply(lambda dt: dt.strftime(_STRF_TIME_FORMAT)))
             except Exception as ex:
                 raise ValueError(
                     "The datetime feature should be parseable by "
@@ -1184,6 +1186,9 @@ class RAIInsights(RAIBaseInsights):
                    if m.purpose == purpose]
         if len(methods) == 0:
             return None
+        # If a method is optional don't fail
+        if methods[0].optional and not hasattr(self.model, methods[0].name):
+            return None
         return getattr(self.model, methods[0].name)
 
     def _get_model_output(self, *, input_data: Union[None, np.array],
@@ -1221,6 +1226,13 @@ class RAIInsights(RAIBaseInsights):
                     _MODEL_METHOD_EXCEPTION_MESSAGE.format(method.name))
             try:
                 model_method = getattr(self.model, method.name)
+            except Exception:
+                if not method.optional:
+                    raise UserConfigValidationException(
+                        _MODEL_METHOD_EXCEPTION_MESSAGE.format(method.name))
+                # skip if method is optional and unavailable
+                continue
+            try:
                 model_method(input_data)
             except Exception:
                 raise UserConfigValidationException(
@@ -1306,8 +1318,10 @@ class RAIInsights(RAIBaseInsights):
                 res_object[_UNIQUE_VALUES] = unique_value.tolist()
             elif datetime_features is not None and col in datetime_features:
                 res_object[_RANGE_TYPE] = "datetime"
-                res_object[_MIN_VALUE] = test[col].min()
-                res_object[_MAX_VALUE] = test[col].max()
+                res_object[_MIN_VALUE] = \
+                    test[col].min().strftime(_STRF_TIME_FORMAT)
+                res_object[_MAX_VALUE] = \
+                    test[col].max().strftime(_STRF_TIME_FORMAT)
             else:
                 col_min = test[col].min()
                 col_max = test[col].max()
