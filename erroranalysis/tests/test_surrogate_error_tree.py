@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import re
 import time
 from enum import Enum
 
@@ -46,6 +47,22 @@ class AnalyzerType(Enum):
     """Enum for the type of error analyzer to use."""
     MODEL = "Model"
     PREDICTIONS = "Predictions"
+
+
+class DummyInvalidShapeModel:
+    """Dummy model that returns invalid shape predictions."""
+    def predict(self, X):
+        """Return predictions with invalid shape.
+
+        :param X: Input data.
+        :type X: numpy.ndarray
+        :return: Predictions with an invalid 2d shape.
+            This will create an invalid square shaped diff.
+            During surrogate model training, the diff
+            will cause an error.
+        :rtype: numpy.ndarray
+        """
+        return np.zeros((X.shape[0], 1))
 
 
 class TestSurrogateErrorTree(object):
@@ -291,6 +308,16 @@ class TestSurrogateErrorTree(object):
             run_error_analyzer(model, X_test, y_test, feature_names,
                                AnalyzerType.MODEL,
                                tree_features=['invalid_feature'])
+
+    def test_invalid_multidim_label(self):
+        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
+        model = DummyInvalidShapeModel()
+        err = re.escape("The surrogate model could not be trained. "
+                        "The shape of the diff array is invalid: (30, 30). "
+                        "Please check the prediction function of the model.")
+        with pytest.raises(UserConfigValidationException, match=err):
+            run_error_analyzer(model, X_test, y_test, feature_names,
+                               AnalyzerType.MODEL)
 
 
 def run_error_analyzer(model, X_test, y_test, feature_names,

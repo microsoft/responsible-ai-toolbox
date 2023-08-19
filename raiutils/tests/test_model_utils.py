@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from raiutils.models import (is_classifier, is_forecaster,
+from raiutils.models import (is_classifier, is_forecaster, is_object_detector,
                              is_quantile_forecaster)
 
 
@@ -26,7 +26,15 @@ class Forecaster:
         pass
 
 
-class TestIsClassifier:
+class ObjectDetectionModel:
+    def predict_proba(self):
+        pass
+
+    def predict(self):
+        pass
+
+
+class TestModel:
     def test_classifier(self):
         classifier = Classifier()
         assert is_classifier(classifier)
@@ -44,3 +52,9 @@ class TestIsClassifier:
         assert not is_classifier(forecaster)
         assert is_forecaster(forecaster)
         assert is_quantile_forecaster(forecaster)
+
+    def test_object_detector(self):
+        object_detector = ObjectDetectionModel()
+        assert is_object_detector(object_detector)
+        assert not is_forecaster(object_detector)
+        assert not is_quantile_forecaster(object_detector)

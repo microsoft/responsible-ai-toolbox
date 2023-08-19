@@ -115,7 +115,19 @@ class ExplainerManager(BaseManager):
         self._image_mode = image_mode
         if task_type == ModelTask.OBJECT_DETECTION:
             if is_automl_image_model(model):
-                self._model = MLflowDRiseWrapper(model._model, classes)
+                try:
+                    python_model = model._model._model_impl.python_model
+                    automl_wrapper = python_model._model
+                    inner_model = automl_wrapper._model
+                    number_of_classes = automl_wrapper._number_of_classes
+                    self._model = PytorchDRiseWrapper(
+                        inner_model, number_of_classes, device=device)
+                except Exception as e:
+                    warnings.warn(("Could not extract inner automl model." +
+                                   "Explanation may take longer to compute." +
+                                   "Inner exception: {}").format(str(e)),
+                                  UserWarning)
+                    self._model = MLflowDRiseWrapper(model._model, classes)
             else:
                 self._model = PytorchDRiseWrapper(
                     model._model, len(classes), device=device)
