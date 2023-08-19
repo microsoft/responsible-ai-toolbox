@@ -37,8 +37,7 @@ class ModelServer(object):
               f"in resource group {resource_group} "
               f"in subscription {subscription_id} "
               f"for experiment {experiment_name} "
-              f"and run {run_id}."
-              )
+              f"and run {run_id}.")
 
         # from azure.ai.ml import MLClient
         # from azure.identity import DefaultAzureCredential
@@ -47,21 +46,27 @@ class ModelServer(object):
         # tracking_uri = ml_client.workspaces.get(name=ml_client.workspace_name).mlflow_tracking_uri
         
         
-        # server = ModelServer(subscription_id="b3b0e63c-e8fd-4f5c-bab9-1ed82844ef1f", resource_group="romanlutz", workspace_name="romanlutz", experiment_name="single-model-experiment-train-only20230807",run_id="olive_sugar_6dbzx3b4p9_0", public_ip=None, port=None)
+        # server = ModelServer(subscription_id="b3b0e63c-e8fd-4f5c-bab9-1ed82844ef1f", resource_group="romanlutz", workspace_name="romanlutz", experiment_name="single-model-experiment-dnn-false20230818"",run_id="bold_bucket_vhv71f86dc_0", public_ip=None, port=None)
         
         from azureml.core import Workspace
-        workspace = Workspace(subscription_id, resource_group, workspace_name)
+        workspace = Workspace.get(name=workspace_name, subscription_id=subscription_id, resource_group=resource_group)
         tracking_uri = workspace.get_mlflow_tracking_uri()
         mlflow.set_tracking_uri(tracking_uri)
         local_dir = "./artifact_downloads/"
-        artifact_path = "outputs"
+        artifact_path = "outputs/mlflow-model"
         os.makedirs(local_dir, exist_ok=True)
         local_path = mlflow.artifacts.download_artifacts(
             run_id=run_id,
             artifact_path=artifact_path,
             dst_path=local_dir
         )
-        self.model = mlflow.pyfunc.load_model(f"{local_dir}{artifact_path}/mlflow-model")
+        self.model = mlflow.pyfunc.load_model(local_dir + artifact_path)
+        # unwrap model from mlflow
+        if hasattr(self.model._model_impl, "forecast"):
+            self.model = self.model._model_impl
+
+
+
         # The following is only for the TerminalContainer to pull the right Docker image
         # from azureml.core import Experiment, Workspace
         # from azureml.train.automl.run import AutoMLRun
@@ -73,6 +78,7 @@ class ModelServer(object):
         # if not image_details.image_exist:
         #     raise Exception("Docker image not found in the workspace.")
         # image = image_details.image
+        # There's a bug that returns the registry name twice right now!
 
 
         print(f"Retrieved model: {self.model}")
