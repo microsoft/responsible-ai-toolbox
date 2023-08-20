@@ -96,25 +96,22 @@ def compute_matrix_on_dataset(analyzer, features, dataset,
             'One or two features must be specified to compute the heat map')
 
     true_y = dataset[TRUE_Y]
-    dropped_cols = [TRUE_Y, ROW_INDEX]
-    is_model_analyzer = hasattr(analyzer, 'model')
-    if not is_model_analyzer:
-        pred_y = dataset[PRED_Y]
-        dropped_cols.append(PRED_Y)
+    pred_y = dataset[PRED_Y]
+    dropped_cols = [TRUE_Y, ROW_INDEX, PRED_Y]
     input_data = dataset.drop(columns=dropped_cols)
+
     is_pandas = isinstance(analyzer.dataset, pd.DataFrame)
     metric = analyzer.metric
     if is_pandas:
         true_y = true_y.to_numpy()
     else:
         input_data = input_data.to_numpy()
-    if is_model_analyzer:
-        pred_y = analyzer.model.predict(input_data)
 
     if analyzer.model_task == ModelTask.CLASSIFICATION:
         diff = pred_y != true_y
     else:
         diff = pred_y - true_y
+
     if not isinstance(diff, np.ndarray):
         diff = np.array(diff)
     if not isinstance(pred_y, np.ndarray):

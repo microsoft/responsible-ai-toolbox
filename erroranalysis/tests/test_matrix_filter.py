@@ -6,9 +6,9 @@ import pandas as pd
 import pytest
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
-from erroranalysis._internal.constants import (ARG, COLUMN, METHOD, ROW_INDEX,
-                                               TRUE_Y, MatrixParams, Metrics,
-                                               ModelTask, f1_metrics,
+from erroranalysis._internal.constants import (ARG, COLUMN, METHOD, PRED_Y,
+                                               ROW_INDEX, TRUE_Y, MatrixParams,
+                                               Metrics, ModelTask, f1_metrics,
                                                metric_to_display_name,
                                                precision_metrics,
                                                recall_metrics)
@@ -434,8 +434,9 @@ def run_error_analyzer(model,
         validation_data = filter_from_cohort(error_analyzer,
                                              filters,
                                              composite_filters)
-        y_test_validation = validation_data[TRUE_Y]
-        validation_data = validation_data.drop(columns=[TRUE_Y, ROW_INDEX])
+        y_test = validation_data[TRUE_Y]
+        validation_data = validation_data.drop(
+            columns=[TRUE_Y, ROW_INDEX, PRED_Y])
         if not isinstance(X_test, pd.DataFrame):
             validation_data = validation_data.values
     expected_count = len(validation_data)

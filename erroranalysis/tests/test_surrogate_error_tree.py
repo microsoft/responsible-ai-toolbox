@@ -354,7 +354,9 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
         validation_data = filter_from_cohort(error_analyzer,
                                              filters,
                                              composite_filters)
-        validation_data = validation_data.drop(columns=[TRUE_Y, ROW_INDEX])
+        y_test = validation_data[TRUE_Y]
+        validation_data = validation_data.drop(columns=[
+            TRUE_Y, ROW_INDEX, PRED_Y])
         if not isinstance(X_test, pd.DataFrame):
             validation_data = validation_data.values
     is_regression_task = error_analyzer.model_task == ModelTask.REGRESSION
