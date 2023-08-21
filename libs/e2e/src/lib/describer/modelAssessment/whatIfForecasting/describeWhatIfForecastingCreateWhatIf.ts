@@ -37,7 +37,6 @@ export function describeWhatIfForecastingCreateWhatIf(
           dataShape.whatIfForecastingData?.testTransformation?.featureToSelect
         );
       }
-      //cy.get(Locators.ForecastingTransformationOperationDropdown).should("exist").click();
       cy.get(Locators.ForecastingTransformationOperationDropdownWrapper)
         .should("exist")
         .click();
