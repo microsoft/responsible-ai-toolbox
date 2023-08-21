@@ -19,17 +19,9 @@ jobs:
         packageDirectory:
           ["responsibleai", "erroranalysis", "raiutils", "rai_test_utils"]
         operatingSystem:
-          [ubuntu-20.04, ubuntu-latest, macos-latest, windows-latest]
+          [ubuntu-latest, macos-latest, windows-latest]
         pythonVersion: ["3.7", "3.8", "3.9", "3.10"]
         exclude:
-          - operatingSystem: ubuntu-20.04
-            pythonVersion: "3.7"
-          - operatingSystem: ubuntu-20.04
-            pythonVersion: "3.8"
-          - operatingSystem: ubuntu-20.04
-            pythonVersion: "3.9"
-          - operatingSystem: ubuntu-20.04
-            pythonVersion: "3.10"
           - operatingSystem: macos-latest
             pythonVersion: "3.7"
 
@@ -38,10 +30,27 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up Python ${{ matrix.pythonVersion }}
-        uses: actions/setup-python@v4
+      - uses: conda-incubator/setup-miniconda@v2
         with:
+          auto-update-conda: true
           python-version: ${{ matrix.pythonVersion }}
+
+      - if: ${{ matrix.operatingSystem != 'macos-latest' }}
+        name: Install pytorch on non-MacOS
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
+
+      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
+        name: Install Anaconda packages on MacOS, which should not include cpuonly according to official docs
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet pytorch torchvision captum -c pytorch
+
+      # - name: Set up Python ${{ matrix.pythonVersion }}
+      #   uses: actions/setup-python@v4
+      #   with:
+      #     python-version: ${{ matrix.pythonVersion }}
 
       - if: ${{ matrix.pythonVersion == '3.7' }}
         name: Setup tools for python lt 3.8
