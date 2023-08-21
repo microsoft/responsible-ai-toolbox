@@ -430,7 +430,7 @@ class ExplainerManager(BaseManager):
         inst.__dict__['_' + Metadata.MODEL] = rai_insights.model
         inst.__dict__['_' + CLASSES] = rai_insights._classes
         inst.__dict__['_' + CATEGORICAL_FEATURES] = \
-            rai_insights.categorical_features
+            rai_insights.get_categorical_features_after_drop()
         target_column = rai_insights.target_column
         train = rai_insights.get_train_data().drop(columns=[target_column])
         test = rai_insights.get_test_data().drop(columns=[target_column])
