@@ -534,10 +534,6 @@ class RAIInsights(RAIBaseInsights):
             raise UserConfigValidationException(
                 f'Target name {target_column} not present in train/test data')
 
-        # Check if any of the data is missing in test and train data
-        # self._validate_data_is_not_missing(test, "test")
-        # self._validate_data_is_not_missing(train, "train")
-
         categorical_features = feature_metadata.categorical_features
         if (categorical_features is not None and
                 len(categorical_features) > 0):
@@ -553,22 +549,6 @@ class RAIInsights(RAIBaseInsights):
                            "do not exist in train data: "
                            f"{list(difference_set)}")
                 raise UserConfigValidationException(message)
-
-            # for column in categorical_features:
-            #     try:
-            #         np.unique(train[column])
-            #     except Exception:
-            #         raise UserConfigValidationException(
-            #             f"Error finding unique values in column {column}."
-            #             " Please check your train data."
-            #         )
-
-            #     try:
-            #         np.unique(test[column])
-            #     except Exception:
-            #         raise UserConfigValidationException(
-            #             f"Error finding unique values in column {column}. "
-            #             "Please check your test data.")
 
         # Validate that the target column isn't continuous if the
         # user is running classification scenario
@@ -709,17 +689,6 @@ class RAIInsights(RAIBaseInsights):
                     if_train_data=False,
                     if_predictions=True
                 )
-
-    def _validate_data_is_not_missing(self, data, data_name):
-        """Validates that data is not missing (ie null)"""
-        list_of_feature_having_missing_values = []
-        for feature in data.columns.tolist():
-            if np.any(data[feature].isnull()):
-                list_of_feature_having_missing_values.append(feature)
-        if len(list_of_feature_having_missing_values) > 0:
-            raise UserConfigValidationException(
-                f"Features {list_of_feature_having_missing_values} "
-                f"have missing values in {data_name} data.")
 
     def _validate_feature_metadata(
             self, feature_metadata, train, task_type, model, target_column):
