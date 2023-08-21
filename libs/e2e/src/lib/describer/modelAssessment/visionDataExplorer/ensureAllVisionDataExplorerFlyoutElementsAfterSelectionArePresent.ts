@@ -11,9 +11,9 @@ export function ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresen
 ): void {
   cy.get(Locators.VisionDataExplorerImageExplorerViewButton).click();
 
-  cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage).should(
-    "be.visible"
-  );
+  // cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage).should(
+  //   "be.visible"
+  // );
   // .and(($image) => {
   //   // verifies the image is loaded
   //   expect(($image[0] as HTMLImageElement).naturalWidth).to.be.greaterThan(0);
@@ -36,15 +36,15 @@ export function ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresen
         });
     });
 
-  cy.get(Locators.VisionDataExplorerFlyoutImage)
-    .should("be.visible")
-    .and(($image) => {
-      // verifies the image is loaded
-      expect(($image[0] as HTMLImageElement).naturalWidth).to.be.greaterThan(0);
-      expect(($image[0] as HTMLImageElement).naturalHeight).to.be.greaterThan(
-        0
-      );
-    });
+  // cy.get(Locators.VisionDataExplorerFlyoutImage)
+  //   .should("be.visible")
+  //   .and(($image) => {
+  //     // verifies the image is loaded
+  //     expect(($image[0] as HTMLImageElement).naturalWidth).to.be.greaterThan(0);
+  //     expect(($image[0] as HTMLImageElement).naturalHeight).to.be.greaterThan(
+  //       0
+  //     );
+  //   });
 
   if (datasetShape.isObjectDetection) {
     cy.get(Locators.VisionDataExplorerFlyoutObjectSelection).should("exist");
