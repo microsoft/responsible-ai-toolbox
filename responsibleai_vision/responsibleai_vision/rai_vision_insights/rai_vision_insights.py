@@ -1091,9 +1091,6 @@ class RAIVisionInsights(RAIBaseInsights):
         dashboard_dataset = self.get_data().dataset
         true_y = dashboard_dataset.object_detection_true_y
         predicted_y = dashboard_dataset.object_detection_predicted_y
-        dashboard_dataset = self.get_data().dataset
-        true_y = dashboard_dataset.object_detection_true_y
-        predicted_y = dashboard_dataset.object_detection_predicted_y
 
         normalized_iou_threshold = [iou_threshold / 100.0]
         all_cohort_metrics = []
@@ -1106,8 +1103,7 @@ class RAIVisionInsights(RAIBaseInsights):
 
             metric_OD = MeanAveragePrecision(
                 class_metrics=True,
-                iou_thresholds=normalized_iou_threshold,
-                average=aggregate_method)
+                iou_thresholds=normalized_iou_threshold)
             true_y_cohort = [true_y[cohort_index] for cohort_index
                              in cohort_indices]
             predicted_y_cohort = [predicted_y[cohort_index] for cohort_index
@@ -1169,5 +1165,4 @@ class RAIVisionInsights(RAIBaseInsights):
                 all_submetrics = [[mAP, APs[i], ARs[i]]
                                   for i in range(len(APs))]
                 all_cohort_metrics.append(all_submetrics)
-
         return [all_cohort_metrics, cohort_classes]
