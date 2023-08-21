@@ -11,3 +11,4 @@ opencv-python
 
 fastai
 mlflow
+pydantic<2.0.0
