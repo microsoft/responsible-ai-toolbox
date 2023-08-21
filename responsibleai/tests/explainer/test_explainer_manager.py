@@ -5,11 +5,16 @@ import pandas as pd
 import pytest
 
 from rai_test_utils.models.lightgbm import create_lightgbm_classifier
+from rai_test_utils.models.sklearn import \
+    create_complex_classification_pipeline
 from raiutils.exceptions import UserConfigValidationException
 from responsibleai._interfaces import ModelExplanationData
+from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.rai_insights import RAIInsights
 
-from ..common_utils import create_iris_data
+from ..common_utils import (ADULT_CATEGORICAL_FEATURES_AFTER_DROP,
+                            ADULT_DROPPED_FEATURES,
+                            create_adult_income_dataset, create_iris_data)
 
 
 class TestExplainerManager:
@@ -96,3 +101,36 @@ class TestExplainerManager:
                   ' but it must be a pandas DataFrame.'):
             rai_insights.explainer.request_explanations(
                 local=True, data=X_test.drop(['target'], axis=1).values)
+
+    def test_explainer_manager_dropped_categorical_features(self):
+        data_train, data_test, _, _, categorical_features, \
+            continuous_features, target_name, classes, _, _ = \
+            create_adult_income_dataset()
+
+        dropped_features = ADULT_DROPPED_FEATURES
+        categorical_features_after_drop = \
+            ADULT_CATEGORICAL_FEATURES_AFTER_DROP
+
+        X = data_train.drop([target_name] + dropped_features, axis=1)
+        y = data_train[target_name]
+
+        model = create_complex_classification_pipeline(
+            X, y, continuous_features,
+            categorical_features_after_drop)
+
+        # create feature metadata
+        feature_metadata = FeatureMetadata(dropped_features=dropped_features)
+
+        rai_insights = RAIInsights(
+            model=model,
+            train=data_train,
+            test=data_test,
+            task_type='classification',
+            target_column=target_name,
+            categorical_features=categorical_features,
+            classes=classes,
+            feature_metadata=feature_metadata
+        )
+
+        rai_insights.explainer.add()
+        rai_insights.compute()
