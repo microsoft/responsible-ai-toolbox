@@ -29,16 +29,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
       - uses: conda-incubator/setup-miniconda@v2
         with:
           auto-update-conda: true
           python-version: ${{ matrix.pythonVersion }}
-
-      # - name: Set up Python ${{ matrix.pythonVersion }}
-      #   uses: actions/setup-python@v4
-      #   with:
-      #     python-version: ${{ matrix.pythonVersion }}
 
       - if: ${{ matrix.operatingSystem != 'macos-latest' }}
         name: Install pytorch on non-MacOS
