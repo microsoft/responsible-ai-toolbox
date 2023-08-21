@@ -68,7 +68,7 @@ jobs:
         run: pip install torch torchvision
 
       - if: ${{ (matrix.operatingSystem == 'ubuntu-latest') || (matrix.operatingSystem == 'ubuntu-20.04') }}
-        name: Install Anaconda packages on Ubuntu
+        name: Install pytorch on Ubuntu
         shell: bash -l {0}
         run: |
           pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
