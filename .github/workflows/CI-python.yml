@@ -57,6 +57,19 @@ jobs:
           pip install --upgrade setuptools
           pip install --upgrade "pip-tools<=7.1.0"
 
+      - if: ${{ (matrix.operatingSystem == 'windows-latest') || (matrix.operatingSystem == 'macos-latest') }}
+        name: Install pytorch on Windows / MacOS
+        shell: bash -l {0}
+        run: |
+          pip install torch torchvision captum
+
+      - if: ${{ (matrix.operatingSystem == 'ubuntu-latest') || (matrix.operatingSystem == 'ubuntu-20.04') }}
+        name: Install Anaconda packages on Ubuntu
+        shell: bash -l {0}
+        run: |
+          pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+          pip install captum
+
       - name: Pip compile
         run: |
           pip-compile requirements-dev.txt -o requirements-dev-comp.txt
