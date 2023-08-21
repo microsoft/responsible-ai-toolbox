@@ -6,6 +6,7 @@ import _ from "lodash";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
 import { CensusClassificationModelDebugging } from "./CensusClassificationModelDebugging";
+import { DBPediaTextClassificationModelDebugging } from "./DBPediaTextClassificationModelDebugging";
 import { DiabetesDecisionMaking } from "./DiabetesDecisionMaking";
 import { DiabetesRegressionModelDebugging } from "./DiabetesRegressionModelDebugging";
 import { FridgeImageClassificationModelDebugging } from "./FridgeImageClassificationModelDebugging";
@@ -20,6 +21,7 @@ export const regExForNumbersWithBrackets = /^\((\d+)\)$/; // Ex: (60)
 
 const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
   CensusClassificationModelDebugging,
+  DBPediaTextClassificationModelDebugging,
   DiabetesDecisionMaking,
   DiabetesRegressionModelDebugging,
   FridgeImageClassificationModelDebugging,
