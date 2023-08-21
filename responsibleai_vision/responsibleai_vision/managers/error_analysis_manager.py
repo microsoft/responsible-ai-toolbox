@@ -80,12 +80,23 @@ class WrappedIndexPredictorModel:
             test = np.array(
                 self.dataset.iloc[:, 0].tolist()
             )
-            test = pd.DataFrame(
-                data=[
-                    get_base64_string_from_path(img_path) for img_path in test
-                ],
-                columns=[MLFlowSchemaLiterals.INPUT_COLUMN_IMAGE],
-            )
+            if self.task_type == ModelTask.OBJECT_DETECTION:
+                test = pd.DataFrame(
+                    data=[[x for x in get_base64_string_from_path(
+                        img_path, return_image_size=True)] for
+                        img_path in test],
+                    columns=[
+                        MLFlowSchemaLiterals.INPUT_COLUMN_IMAGE,
+                        MLFlowSchemaLiterals.INPUT_IMAGE_SIZE],
+                )
+            else:
+                test = pd.DataFrame(
+                    data=[
+                        get_base64_string_from_path(
+                            img_path) for img_path in test
+                    ],
+                    columns=[MLFlowSchemaLiterals.INPUT_COLUMN_IMAGE],
+                )
         else:
             test = get_images(self.dataset, self.image_mode,
                               self.transformations)

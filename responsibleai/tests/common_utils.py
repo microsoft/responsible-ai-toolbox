@@ -36,6 +36,30 @@ def create_iris_data():
     return X_train, X_test, y_train, y_test, feature_names, classes
 
 
+def create_tiny_forecasting_dataset():
+    X_train = pd.DataFrame({
+        "time": [
+            pd.Timestamp("2023-08-18T06:00:00"),
+            pd.Timestamp("2023-08-18T07:00:00"),
+            pd.Timestamp("2023-08-18T08:00:00"),
+            pd.Timestamp("2023-08-18T09:00:00")
+        ],
+        "id": [1, 1, 1, 1]
+    })
+    X_test = pd.DataFrame({
+        "time": [
+            pd.Timestamp("2023-08-18T10:00:00"),
+            pd.Timestamp("2023-08-18T11:00:00"),
+            pd.Timestamp("2023-08-18T12:00:00"),
+            pd.Timestamp("2023-08-18T13:00:00")
+        ],
+        "id": [1, 1, 1, 1]
+    })
+    y_train = [0, 1, 2, 3]
+    y_test = [4, 5, 6, 7]
+    return X_train, X_test, y_train, y_test
+
+
 class FetchDiceAdultCensusIncomeDataset(object):
     def __init__(self):
         pass

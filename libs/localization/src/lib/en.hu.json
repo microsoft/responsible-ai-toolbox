@@ -3,26 +3,26 @@
     "close": "Bezárás",
     "tooltipButton": "Elemleírás gomb",
     "identityFeature": "Identitásjellemző",
-    "infoTitle": "Additional information",
-    "spinButton": "Spin",
-    "editButton": "Edit",
-    "decreaseValue": "Decrease value",
-    "increaseValue": "Increase value",
-    "decreaseValueByOne": "Decrease value by 1",
-    "increaseValueByOne": "Increase value by 1",
-    "loading": "Loading..."
+    "infoTitle": "További információ",
+    "spinButton": "Léptetőgomb",
+    "editButton": "Szerkesztés",
+    "decreaseValue": "Érték csökkentése",
+    "increaseValue": "Érték növelése",
+    "decreaseValueByOne": "Érték csökkentése 1-gyel",
+    "increaseValueByOne": "Érték növelése 1-gyel",
+    "loading": "Betöltés..."
   },
   "ChartContextMenu": {
-    "hideData": "Hide data table",
-    "viewData": "View data table",
-    "viewInFullScreen": "View in full screen",
-    "printChart": "Print chart",
-    "downloadCSV": "Download CSV",
-    "downloadPNG": "Download PNG image",
-    "downloadJPEG": "Download JPEG image",
-    "downloadPDF": "Download PDF document",
-    "downloadSVG": "Download SVG vector image",
-    "downloadXLS": "Download XLS"
+    "hideData": "Adattábla elrejtése",
+    "viewData": "Adattábla megtekintése",
+    "viewInFullScreen": "Megtekintés teljes képernyőn",
+    "printChart": "Diagram nyomtatása",
+    "downloadCSV": "CSV letöltése",
+    "downloadPNG": "PNG-kép letöltése",
+    "downloadJPEG": "JPEG-kép letöltése",
+    "downloadPDF": "PDF-dokumentum letöltése",
+    "downloadSVG": "SVG-vektorkép letöltése",
+    "downloadXLS": "XLS letöltése"
   },
   "CausalAnalysis": {
     "AggregateView": {
@@ -39,7 +39,7 @@
       "description": "Az okozati elemzés olyan, „mi lett volna, ha” jellegű kérdésekre ad választ, amelyek azt firtatják, hogyan változtak volna a tényleges eredmények más szabályzat választásakor, például más díjszabási stratégia követésekor egy termékre vonatkozóan, vagy eltérő kezelést alkalmazásakor egy betegre. A fontos korrelációs minták azonosítására szolgáló modell-előrejelzésektől eltérően ezek az eszközök segítenek azonosítani azokat a legfontosabb okozati jellemzőket, amelyek közvetlenül befolyásolják a vizsgálni kívánt eredményt. Ezek a modellek meghatározzák egy adott jellemző okozati hatását, (jellemzően „kezelésként” hivatkoznak rá) miközben állandó értéken tartják az egyéb zavaró jellemzőket. A legjobb eredmények eléréséért bizonyosodjon meg arról, hogy az egész adathalmaz tartalmazza az összes olyan elérhető jellemzőt, amely esetleg zavaró tényezőként áll összefüggésben az eredménnyel.",
       "directAggregate": "Az egyes kezelések közvetlen összesített okozati hatása 95%-os konfidencia-intervallummal",
       "here": "itt",
-      "infoTitle": "Additional information on aggregated causal effects",
+      "infoTitle": "További információ az összesített okozati hatásokról",
       "lasso": "A lasszó (vagy bináris y esetén logisztikai regresszió) alkalmas volt az X[-i] y-ból való előrejelzésére, és a lasszó (vagy logisztikai regresszió, ha az X[i] kategorikus) alkalmas volt az X[i] előrejelzésére Χ [-i] alapján. Az okozati hatás a két előrejelzési feladat reziduálisainak/váratlan variációjának átlagos korrelációjaként tekinthető meg. További információ a Double Machine Learningről",
       "unconfounding": "Mik azok a zavaró jellemzők?"
     },
@@ -51,7 +51,7 @@
       "description": "Az egyéni okozati hatások személyre szabott beavatkozásokat, például célzott promóciót, vagy egy személyre szabott kezelési tervet nyújthatnak az ügyfeleknek. Hogyan reagálna egy adott funkciókészlettel rendelkező személy az okozati funkció vagy kezelés változására?  Az okozati lehetőségelemzési eszköz kiszámítja egy adott személy valós eredményeinek marginális változásait, ha megváltoztatja a kezelés szintjét. Ez az elemzés lehetővé teszi annak megértését, hogy a valós eredmények hogyan változtak volna a különböző szabályzati döntések alapján, például egy termék eltérő díjszabási stratégiája vagy egy páciens alternatív kezelése esetén. Adja meg az érdeklődési körök kezelését, és figyelje meg hogyan változna a valós eredmény.",
       "directIndividual": "Az egyes kezelések közvetlen önálló okozati hatása 95%-os konfidencia-intervallummal",
       "index": "Adatpontindex",
-      "infoTitle": "Additional information on individual causal what-if",
+      "infoTitle": "További információ az egyéni okozati lehetőségelemzésről",
       "missingParameters": "Ehhez a laphoz meg kell adni egy kiértékelési adathalmazt.",
       "newOutcome": "Új eredmény",
       "selectTreatment": "Kezelés kiválasztása",
@@ -85,7 +85,7 @@
       "averageGainBinary": "A(z) {0} kezelés átlagos nyeresége a(z) {1} alapértékre állításával.",
       "averageGainContinuous": "Az alternatív szabályzatok átlagos nyeresége a(z) {0} kezelési móddal szemben.",
       "header": "Ezek az eszközök segítenek a jövőbeli beavatkozásokhoz szükséges szabályzatok létrehozásában. Beazonosíthatja, hogy a minta mely részeinél vannak legnagyobb válaszok az okozati jellemzők vagy kezelések esetében és hozzon létre szabályokat ahhoz, hogy mely jövőbeli populációk legyenek megcélozva egyes beavatkozásoknál.",
-      "infoTitle": "Additional information on treatment policy",
+      "infoTitle": "További információ a kezelési szabályzatról",
       "nSample": "n = {0}",
       "noData": "Nincs adat"
     }
@@ -116,8 +116,8 @@
       "cancel": "Mégse",
       "title": "Kohorszváltás",
       "subText": "Válasszon ki egy kohorszt a kohorszok listájából. Alakalmazza a kohorszt az irányítópultra.",
-      "selectCohort": "Select a cohort",
-      "cohortList": "Cohort list"
+      "selectCohort": "Kohorsz kiválasztása",
+      "cohortList": "Kohorszlista"
     },
     "PreBuiltCohort": {
       "featureNameNotFound": "A funkciónév nem található az adathalmazban",
@@ -148,13 +148,13 @@
       "predictedClass": "Előrejelzett osztály",
       "predictedValue": "Előrejelzett érték"
     },
-    "Size": "Size",
-    "loading": "Loading...",
+    "Size": "Méret",
+    "loading": "Betöltés...",
     "counterfactualEx": "Ellenpélda {0}",
     "counterfactualName": "Lehetőségelemzési ellenpélda neve",
     "createWhatIfCounterfactual": "Lehetőségelemzési ellenpélda létrehozása",
     "createCounterfactual": "Ellenpélda",
-    "revertToBubbleChart": "View bubble chart",
+    "revertToBubbleChart": "Buborékdiagram megtekintése",
     "createOwn": "Hozza létre a saját ellenpéldáját:",
     "currentClass": "Aktuális osztály",
     "currentRange": "Aktuális tartomány",
@@ -167,9 +167,9 @@
     "listDescription": "Ez a lista azt mutatja, hogy az aktuális adatmintának mely adatpontjai rendelkeznek a legnagyobb okozati válasszal a kiválasztott kezelésre, a becsült okozati modellben szereplő összes jellemző alapján. A bal oldali öt oszlopban a következők találhatók: ajánlott-e kezelés a megfigyeléshez, a jelenlegi kezelés, a kezelés becsült hatása (az alapterv szerinti bináris kezelésekre vonatkozó kezelés nélküli kezelés hatása, illetve a kezelési jellemző növelése vagy csökkentése a minta tipikus kezelési méretének 10% szerint: [dinamikus: jelentse a numerikus változást a kezelésben, amelyet használtunk]), valamint az alsó és felső konfidencia-intervallum (CI). A fennmaradó oszlopok az egyes megfigyelések jelenlegi kezelési állapotát és egyéb jellemzőit mutatják.",
     "localImportanceDescription": "A perturbálási {0} sor top rangsorolt jellemzői a kívánt modell-előrejelzés eléréséhez. Az előrejelzési lehetőségelemzés alapján: {1}",
     "localImportanceSelectData": "Adatpont kiválasztása a helyi fontossági diagram megjelenítéséhez",
-    "largeLocalImportanceSelectData": "Select a bubble, followed by a data point to view local importance chart",
-    "localImportanceFetchError": "There was an error while fetching the local importance data. Error details: {0} Please check the data used.",
-    "BubbleChartFetchError": "There was an error while fetching the data. Error details: {0} Please check the data used.",
+    "largeLocalImportanceSelectData": "Jelöljön ki egy buborékot, majd egy adatpontot a helyi fontossági diagram megtekintéséhez",
+    "localImportanceFetchError": "Hiba történt az helyi fontosságú adatok beolvasása közben. Hiba részletei: {0} Ellenőrizze a használt adatokat.",
+    "BubbleChartFetchError": "Hiba történt az adatok beolvasása közben. Hiba részletei: {0} Ellenőrizze a használt adatokat.",
     "noData": "Nincs adat",
     "noFeatures": "Nem érhetők el szolgáltatások",
     "panelDescription": "Böngésszen az ellenpéldák között, és hozzon létre sajátot. A keresési funkciók segítségével megtekintheti a javasolt értékeket az ellenpéldák változatos halmazában. Állítsa be a javasolt ellenpéldák jellemzőinek értékeit az egyes ellenpéldák neve alatt található „Értékek beállítása“ szövegre kattintva. Adjon nevet az ellenpéldáknak, és mentse őket.",
@@ -217,13 +217,13 @@
       "subText": "Megtekintheti a kijelölt kohorszra vonatkozó tudnivalókat, szerkesztheti a kohorsz nevét, illetve törölheti ezt a kohorszt."
     },
     "FeatureList": {
-      "featureList": "Feature List",
+      "featureList": "Jellemzők listája",
       "apply": "Alkalmaz",
       "features": "Jellemzők",
       "importances": "Fontosságok",
       "treeMapDescription": "A fatérkép újratanítása: jelölje ki és mentse az alábbi jellemzőket. A jellemző fontosságának kiszámítása kölcsönös információk alapján történt, a valódi címkéken lévő hibával. Kérjük, használja útmutatóként a fatérkép betanításához.",
       "staticTreeMapDescription": "A faszerkezetes térkép betanítása során használt funkciók megtekintése. A funkciófontosságok kiszámítása kölcsönös információval történt, ahol a hiba a valódi címkéken van.",
-      "searchResultMessage": "Results displayed out of {resultLength} for {searchValue}"
+      "searchResultMessage": "A(z) {searchValue} találatai közül {resultLength} jelenik meg"
     },
     "TreeViewParameters": {
       "maximumDepth": "Maximális mélység",
@@ -289,7 +289,7 @@
       "disabledWarning": "A hibák intenzitástérképe le van tiltva, kivéve, ha a globális kohorsz „Minden adat” értékre van állítva a teljes adatkészlethez generált intenzitástérkép miatt. A hibák intenzitástérképének megtekintéséhez váltson vissza a teljes adatkészletre."
     },
     "MatrixSummary": {
-      "heatMapInfoTitle": "Additional information on heat map",
+      "heatMapInfoTitle": "További információ az intenzitástérképről",
       "heatMapDescription": "Az intenzitástérképpel adott szakaszok közötti szűrőkre összpontosíthat, és kiszámíthatja a nem összesített hibaarányokat. Kezdje két összehasonlítható adathalmaz-jellemzővel.",
       "heatMapStaticDescription": "Az intenzitástérképpel adott metszeti jellemzőszűrőkre összpontosíthat, és kiszámíthatja a nem összesített hibaarányokat. Az irányítópult megtekintése előtt legfeljebb két jellemzőt kell kiválasztani ahhoz, hogy intenzitástérképet lehessen létrehozni az SDK-n keresztül."
     },
@@ -305,90 +305,108 @@
     },
     "Metrics": {
       "AccuracyScore": {
-        "Name": "Accuracy score",
-        "Info": "The accuracy score represents the ratio of correct to total instances in the data.",
-        "Short": "Accuracy",
-        "Title": "Additional information on accuracy score"
+        "Name": "Pontossági pontszám",
+        "Info": "A pontossági pontszám az adatokban található helyes és az összes példány arányát jelöli.",
+        "Short": "Pontosság",
+        "Title": "További információ a pontossági pontszámról"
       },
       "ErrorRate": {
-        "Name": "Error rate",
-        "Info": "The error rate represents the percentage of instances in the node for which the system has failed.",
-        "Short": "Error rate",
-        "Title": "Additional information on error rate"
+        "Name": "Hibaarány",
+        "Info": "A hibaarány a csomópont azon példányainak százalékos arányát jelzi, amelyeknél a rendszer meghibásodott.",
+        "Short": "Hibaarány",
+        "Title": "További információ a hibaarányról"
       },
       "F1Score": {
-        "Name": "F1 score",
-        "Info": "The F1 score is the harmonic mean of the precision and recall metrics.",
-        "Short": "F1 score",
-        "Title": "Additional information on F1 score"
+        "Name": "F1-mérték",
+        "Info": "Az F1-mérték a precizitás és a felidézés harmonikus átlaga.",
+        "Short": "F1-mérték",
+        "Title": "További információ az F1-mértékről"
       },
       "MeanAbsoluteError": {
-        "Name": "Mean absolute error",
-        "Info": "The mean absolute error is the average of the sum of the errors.",
-        "Short": "Mean abs. error",
-        "Title": "Additional information on mean absolute error"
+        "Name": "Átlagos abszolút hiba",
+        "Info": "Az átlagos abszolút hiba a hibák összegének átlaga.",
+        "Short": "Átlagos abs. hiba",
+        "Title": "További információ az átlagos abszolút hibáról"
       },
       "MeanSquaredError": {
-        "Name": "Mean squared error",
-        "Info": "The mean squared error is the average of the squares of the errors.",
-        "Short": "Mean sq. error",
-        "Title": "Additional information on mean squared error"
+        "Name": "Átlagos négyzetes hiba",
+        "Info": "Az átlagos négyzetes hiba a hibák négyzetének átlaga.",
+        "Short": "Átlagos sq. hiba",
+        "Title": "További információ az átlagos négyzetes hibáról"
       },
       "Precision": {
-        "Name": "Precision score",
-        "Info": "The precision is the ratio of true positives over all predicted positives.",
-        "Short": "Precision",
-        "Title": "Additional information on precision"
+        "Name": "Pontossági pontszám",
+        "Info": "A pontosság a valós pozitívok aránya az összes előre jelzett pozitív értékhez képest.",
+        "Short": "Pontosság",
+        "Title": "További információ a pontosságról"
       },
       "Recall": {
-        "Name": "Recall score",
-        "Info": "The recall is the ratio of true positives over all actual positives.",
-        "Short": "Recall",
-        "Title": "Additional information on recall"
+        "Name": "Felidézési pontszám",
+        "Info": "A felidézés a valós pozitívok arányát adja meg az összes tényleges pozitív értékhez képest.",
+        "Short": "Felidézés",
+        "Title": "További információ a felidézésről"
       },
       "MacroPrecision": {
-        "Name": "Macro averaged precision score",
-        "Info": "The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.",
-        "Short": "Macro precision",
-        "Title": "Additional information on macro averaged precision"
+        "Name": "Makroátlagos pontossági pontszám",
+        "Info": "A makroátlagos pontosság az osztályonként egymástól függetlenül kiszámított és átlagolt előre jelzett pozitívok arányát adja meg.",
+        "Short": "Makropontosság",
+        "Title": "További információ a makroátlagos pontosságáról"
       },
       "MicroPrecision": {
-        "Name": "Micro averaged precision score",
-        "Info": "The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.",
-        "Short": "Micro precision",
-        "Title": "Additional information on micro averaged precision"
+        "Name": "Mikroátlagos pontossági pontszám",
+        "Info": "A mikroátlagolt pontosság az összes osztályra vonatkozóan összesített előre jelzett pozitívok arányát adja meg.",
+        "Short": "Mikropontosság",
+        "Title": "További információ a mikroátlagos pontosságáról"
       },
       "MacroRecall": {
-        "Name": "Macro averaged recall score",
-        "Info": "The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.",
-        "Short": "Macro recall",
-        "Title": "Additional information on macro averaged recall"
+        "Name": "Makroátlagos felidézési pontszám",
+        "Info": "A makroátlagos felidézés az osztályonként egymástól függetlenül kiszámított és átlagolt valós pozitívok arányát adja meg.",
+        "Short": "Makrofelidézés",
+        "Title": "További információ a makroátlagos felidézésről"
       },
       "MicroRecall": {
-        "Name": "Micro averaged recall score",
-        "Info": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
-        "Short": "Micro recall",
-        "Title": "Additional information on micro averaged recall"
+        "Name": "Mikroátlagos felidézési pontszám",
+        "Info": "A mikroátlagolt felidézés az összes osztályra vonatkozóan összesített valós pozitívok arányát adja meg.",
+        "Short": "Mikrofelidézés",
+        "Title": "További információ a mikroátlagos felidézésről"
       },
       "MacroF1Score": {
-        "Name": "Macro averaged F1 score",
-        "Info": "The macro averaged F1 score is the harmonic mean of the macro averaged precision and recall metrics.",
-        "Short": "Macro F1 score",
-        "Title": "Additional information on macro averaged F1 score"
+        "Name": "Makroátlagolt F1-mérték",
+        "Info": "A makroátlagolt F1-mérték a makroátlagolt pontosság és felidézési metrikák harmonikus középértéke.",
+        "Short": "Makro F1-mérték",
+        "Title": "További információ a makroátlagolt F1-mértékről"
       },
       "MicroF1Score": {
-        "Name": "Micro averaged F1 score",
-        "Info": "The micro averaged F1 score is the harmonic mean of the micro averaged precision and recall metrics.",
-        "Short": "Micro F1 score",
-        "Title": "Additional information on micro averaged F1 score"
+        "Name": "Mikroátlagolt F1-mérték",
+        "Info": "A mikroátlagolt F1-mérték a mikroátlagolt pontosság és felidézési metrikák harmonikus középértéke.",
+        "Short": "Mikro F1-mérték",
+        "Title": "További információ a mikroátlagolt F1-mértékről"
+      },
+      "MeanAveragePrecision": {
+        "Name": "Középértéki pontossági pontszám",
+        "Info": "Az objektumészlelési modellek középértéki pontossága az összes osztály középértéki pontossága. Ez kiértékeli az objektumészlelési modell robusztusságát, és magában foglalja a pontosság és a felidézés közötti kompromisszumot.",
+        "Short": "Középértéki pontosság",
+        "Title": "További információ a középértéki pontossági pontszámról"
+      },
+      "AveragePrecision": {
+        "Name": "Átlagos pontossági pontszám",
+        "Info": "Az objektumészlelési modellek átlagos pontosságát a rendszer egy kiválasztott osztályhoz tartozóan számítja ki.",
+        "Short": "Átlagos pontosság",
+        "Title": "További információ az átlagos pontossági pontszámról"
+      },
+      "AverageRecall": {
+        "Name": "Átlagos felidézési pontszám",
+        "Info": "Az objektumészlelési modellek átlagos felidézését a rendszer egy kiválasztott osztályra vonatkozóan számítja ki.",
+        "Short": "Átlagos felidézés",
+        "Title": "További információ az átlagos felidézési pontszámról"
       },
       "metricName": "Metrika neve",
       "metricValue": "Metrikaérték"
     },
     "MetricSelector": {
       "selectorLabel": "Metrika kiválasztása",
-      "feature1SelectorLabel": "Rows: Feature 1",
-      "feature2SelectorLabel": "Columns: Feature 2"
+      "feature1SelectorLabel": "Sorok: 1. jellemző",
+      "feature2SelectorLabel": "Oszlopok: 2. jellemző"
     },
     "Navigation": {
       "cohortSaved": "Az új kohorsz mentve! Lásd a kohorszlistát a Kohorszbeállítások között.",
@@ -409,9 +427,9 @@
       "defaultLabelCopy": "Minden adatmásolás"
     },
     "TreeView": {
-      "ariaLabel": "Interactive chart",
-      "disabledArialLabel": "Disabled interactive chart",
-      "treeMapInfoTitle": "Additional information on tree map",
+      "ariaLabel": "Interaktív diagram",
+      "disabledArialLabel": "Interaktív diagram letiltva",
+      "treeMapInfoTitle": "További információ a faleképezésről",
       "treeDescription": "A favizualizáció az egyes funkciók és a hiba közötti kölcsönös információkat használja a hibapéldányok és a sikeres példányok hierarchikus elkülönítéséhez az adatokban. Ez leegyszerűsíti a gyakori hibaminták felderítésének és kiemelésének folyamatát. Ha fontos hibamintákat szeretne keresni, keressen erősebb piros színnel (azaz magas hibaarányú) és magasabb kitöltési vonallal (pl. magas hibalefedettséggel) rendelkező csomópontokat. A fában használt jellemzők listájának szerkesztéséhez kattintson a Jellemzőlista lehetőségre. A Metrika kiválasztása legördülő menüből többet is megtudhat a hibás és a sikeres csomópontok teljesítményéről. Vegye figyelembe, hogy ez a metrikaválasztás nem befolyásolja a hibafa generálásának módját.",
       "treeStaticDescription": "A favizualizáció az egyes funkciók és a hiba közötti kölcsönös információkat használja a hibapéldányok és a sikeres példányok hierarchikus elkülönítéséhez az adatokban. Ez leegyszerűsíti a gyakori hibaminták felderítésének és kiemelésének folyamatát. Ha fontos hibamintákat szeretne keresni, keressen erősebb piros színnel (azaz magas hibaarányú) és magasabb kitöltési vonallal (pl. magas hibalefedettséggel) rendelkező csomópontokat. A hibafa keletkezésében részt vevő jellemzők listájának megtekintéséhez kattintson a Jellemzőlista lehetőségre. A Metrika kiválasztása legördülő menüből többet is megtudhat a hibás és a sikeres csomópontok teljesítményéről. Vegye figyelembe, hogy ez a metrikaválasztás nem befolyásolja a hibafa generálásának módját.",
       "disabledWarning": "A hibák fatérképe le van tiltva, kivéve, ha a globális kohorsz „Minden adat” értékre van állítva a teljes adatkészlethez generált fatérkép miatt. A hibák fatérképének megtekintéséhez váltson vissza a teljes adatkészletre."
@@ -746,7 +764,7 @@
       "countHelperText": "A pontok számának hisztogramja",
       "ditherLabel": "Simítandó",
       "groupByCohort": "Csoportosítás kohorsz alapján",
-      "logarithmicScaling": "Enable logarithmic scaling",
+      "logarithmicScaling": "Logaritmikus skálázás engedélyezése",
       "numOfBins": "Dobozok száma",
       "selectClass": "Osztály kijelölése",
       "selectFeature": "Jellemző kiválasztása",
@@ -770,7 +788,7 @@
       "importancePrefix": "Fontosság",
       "numberOfDatapoints": "Adatpontok száma",
       "rowIndex": "Sorindex",
-      "absoluteIndex": "Absolute index",
+      "absoluteIndex": "Abszolút index",
       "xValue": "X-érték",
       "yValue": "Y-érték"
     },
@@ -799,11 +817,11 @@
     "CohortEditor": {
       "columns": {
         "index": "Index",
-        "dataset": "Dataset",
-        "predictedY": "Predicted Y",
-        "trueY": "True Y",
-        "classificationOutcome": "Classification outcome",
-        "regressionError": "Error"
+        "dataset": "Adathalmaz",
+        "predictedY": "Előrejelzett Y",
+        "trueY": "Valódi Y",
+        "classificationOutcome": "Besorolás eredménye",
+        "regressionError": "Hiba"
       },
       "TreatAsCategorical": "Kezelés kategorikusként",
       "addFilter": "Szűrő hozzáadása",
@@ -828,8 +846,8 @@
       "save": "Mentés",
       "saveAndSwitch": "Mentés és váltás",
       "selectFilter": "Szűrő kiválasztása",
-      "noFiltersApplied": "No filters applied",
-      "filterAdded": "Filter added"
+      "noFiltersApplied": "Nincsenek aktív szűrők",
+      "filterAdded": "Szűrő hozzáadva"
     },
     "Columns": {
       "classificationOutcome": "Besorolás eredménye",
@@ -839,8 +857,8 @@
       "falsePositive": "Hamis pozitív",
       "none": "Darabszám",
       "predictedProbabilities": "Előrejelzési valószínűségek",
-      "predictedLabels": "Predicted labels",
-      "trueLabels": "True labels",
+      "predictedLabels": "Előrejelzett címkék",
+      "trueLabels": "Valódi címkék",
       "regressionError": "Regressziós hiba",
       "trueNegative": "Valós negatív",
       "truePositive": "Valós pozitív",
@@ -861,7 +879,7 @@
       "aggregatePlots": "Aggregált ábrák",
       "chartType": "Diagramtípus",
       "colorValue": "Színérték",
-      "infoTitle": "Additional information on data analysis chart view",
+      "infoTitle": "További információ az adatelemzés diagramnézetéről",
       "helperText": "Adathalmaz-kohorszokat hozhat létre az adathalmazok statisztikáinak elemzéséhez olyan szűrők mentén, mint az előrejelzett eredmény, az adathalmaz jellemzői és a hibacsoportok. További információ az adathalmaz túl-/alulbesorolásáról.",
       "individualDatapoints": "Egyéni adatpontok",
       "missingParameters": "Ehhez a laphoz meg kell adni egy kiértékelési adathalmazt.",
@@ -950,10 +968,10 @@
       "dependencePlotHelperText": "Ez a függőségi diagram egy jellemző értékeinek és a megfelelő jellemzőfontossági értékeknek a kapcsolatát mutatja.",
       "dependencePlotTitle": "Függőségi ábrák",
       "helperText": "Ismerje meg azokat a legfontosabb funkciókat, amelyek hatással vannak a modell általános előrejelzésére (más néven globális magyarázat). A csúszka segítségével megjelenítheti a jellemzők fontosságát csökkenő sorrendben. Minden kohorszfunkció fontossága egymás mellett jelenik meg, és a jelmagyarázatban a kohorsz kiválasztásával kapcsolható ki. Kattintson a gráf bármelyik funkciójára, és alább egy sűrűségdiagramot tekinthet meg, amely azt mutatja, hogy a kiválasztott jellemző értékei hogyan befolyásolják az előrejelzést.",
-      "infoTitle": "Additional information on aggregate feature importance",
+      "infoTitle": "További információ az összesített jellemzőfontosságról",
       "legendHelpText": "A jelmagyarázat elemeire kattintva be- és kikapcsolhatja a kohorszokat a diagramon.",
       "missingParameters": "Ezen a lapon meg kell adni a helyi jellemzőfontossági paramétert.",
-      "sortByCohort": "Sort by cohort",
+      "sortByCohort": "Rendezés kohorsz szerint",
       "sortBy": "Rendezés adatpont szerint",
       "topAtoB": "A legfontosabb {0} funkció fontosságuk szerint",
       "viewDependencePlotFor": "A következő függőségi ábrájának megtekintése:",
@@ -996,15 +1014,15 @@
     },
     "Statistics": {
       "accuracy": "Pontosság: {0}",
-      "bleuScore": "Bleu score: {0}",
-      "bertScore": "Bert score: {0}",
-      "exactMatchRatio": "Exact match ratio: {0}",
-      "rougeScore": "Rouge Score: {0}",
+      "bleuScore": "Bleu-pontszám: {0}",
+      "bertScore": "BERT-pontszám: {0}",
+      "exactMatchRatio": "Pontos egyezés aránya: {0}",
+      "rougeScore": "Rouge-pontszám: {0}",
       "fnr": "Hamis negatív arány: {0}",
       "fpr": "Hamis pozitív arány: {0}",
-      "hammingScore": "Hamming score: {0}",
+      "hammingScore": "Hamming-pontszám: {0}",
       "meanPrediction": "Előrejelzési átlag: {0}",
-      "meteorScore": "Meteor Score: {0}",
+      "meteorScore": "METEOR-pontszám: {0}",
       "mse": "Átlagos négyzetes hiba: {0}",
       "precision": "Precizitás: {0}",
       "rSquared": "R²: {0}",
@@ -1012,10 +1030,10 @@
       "selectionRate": "Kiválasztási arány: {0}",
       "mae": "Átlagos abszolút hiba: {0}",
       "f1Score": "F1-mérték: {0}",
-      "samples": "Sample size: {0}",
-      "meanAveragePrecision": "Mean average precision: {0}",
-      "averagePrecision": "Average precision: {0}",
-      "averageRecall": "Average recall: {0}"
+      "samples": "Mintaméret: {0}",
+      "meanAveragePrecision": "Középértéki pontosság: {0}",
+      "averagePrecision": "Átlagos pontosság: {0}",
+      "averageRecall": "Átlagos felidézés: {0}"
     },
     "ValidationErrors": {
       "addFilters": "Szűrők hozzáadása",
@@ -1123,22 +1141,29 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Értelmezhetőségi irányítópult",
-      "importantWords": "Show most Important Words",
+      "importantWords": "A legfontosabb szavak megjelenítése",
       "topFeatureList": "Kiemelt jellemzők listájának elemzése",
       "allButton": "MINDEN JELLEMZŐ",
       "negButton": "NEGATÍV JELLEMZŐK",
       "posButton": "POZITÍV JELLEMZŐK",
-      "legendText": "Positive scalar feature importances represent the extent that the words were important towards the classification of your selected label, and negative scalar feature importances represent words that encouraged your model away from your selected label.",
-      "legendTextForQA": "The left text box and the bar chart display the predictions of the model. The right text box shows the feature importance associated with a selected token. Positive feature importances represent the extent that the words were important towards marking the selected token as the starting/ending position of the answer.",
+      "legendText": "A pozitív skaláris jellemzőfontosság azt jelzi, hogy a szó mennyire volt fontos a kiválasztott címke osztályozása szempontjából, a negatív skaláris jellemzőfontosság pedig azokat a szavakat jelzi, amelyek a kiválasztott címkétől távolították el a modellt.",
+      "legendTextForQA": "A bal oldali szövegmező és a sávdiagram a modell előrejelzéseit jeleníti meg. A jobb oldali szövegmező a kijelölt jogkivonathoz társított funkciófontosságot jeleníti meg. A pozitív jellemzőfontosságok azt jelzik, hogy a szavak mennyire voltak fontosak a kiválasztott jogkivonatnak a válasz kezdő/záró pozíciójaként való megjelöléséhez.",
       "label": "Címke",
       "colon": ": ",
-      "startingPosition": "STARTING POSITION",
-      "endingPosition": "ENDING POSITION"
+      "startingPosition": "KEZDŐ POZÍCIÓ",
+      "endingPosition": "ZÁRÓ POZÍCIÓ",
+      "predictedAnswer": "Előre jelzett válasz: ",
+      "trueAnswer": "Igaz válasz: ",
+      "inputs": "Bemenetek",
+      "outputs": "Kimenetek"
     },
     "Legend": {
       "featureLegend": "SZÖVEGJELLEMZŐ JELMAGYARÁZATA",
       "posFeatureImportance": "POZITÍV JELLEMZŐFONTOSSÁG",
-      "negFeatureImportance": "NEGATÍV JELLEMZŐFONTOSSÁG"
+      "negFeatureImportance": "NEGATÍV JELLEMZŐFONTOSSÁG",
+      "cls": "CLS: mondat kezdete",
+      "sep": "SEP: a mondat vége",
+      "selectedWord": "Kijelölt szó: "
     },
     "BarChart": {
       "featureImportance": "JELLEMZŐFONTOSSÁG"
@@ -1146,55 +1171,55 @@
   },
   "InterpretVision": {
     "Cohort": {
-      "close": "Close",
-      "errorCohortName": "Please choose a unique cohort name.",
-      "errorNumSelected": "Please select at least one (1) item.",
-      "itemsSelectedSingular": "item selected",
-      "itemsSelectedPlural": "items selected",
-      "save": "Save cohort",
-      "saveAndClose": "Save and close",
-      "saveAndSwitch": "Save and switch",
-      "textField": "New cohort name",
-      "title": "Save new cohort"
+      "close": "Bezárás",
+      "errorCohortName": "Válasszon egyedi kohorsznevet.",
+      "errorNumSelected": "Jelöljön ki legalább egy (1) elemet.",
+      "itemsSelectedSingular": "elem van kijelölve",
+      "itemsSelectedPlural": "elem van kijelölve",
+      "save": "Kohorsz mentése",
+      "saveAndClose": "Mentés és bezárás",
+      "saveAndSwitch": "Mentés és váltás",
+      "textField": "Új kohorsznév",
+      "title": "Új kohorsz mentése"
     },
     "Dashboard": {
       "allData": "Minden adat",
-      "columnOne": "Image",
+      "columnOne": "Kép",
       "columnTwo": "Index",
       "columnThree": "Valós Y",
       "columnFour": "Előrejelzett Y",
       "columnFive": "Egyéb metaadatok",
-      "chooseObject": "Choose a detected object",
-      "examples": "examples",
+      "chooseObject": "Észlelt objektum kiválasztása",
+      "examples": "példák",
       "filter": "Szűrő",
-      "indexLabel": "Image ",
-      "labelTypeDropdown": "Select label type",
-      "labelVisibilityDropdown": "Select labels to display",
-      "legendFailure": "failure",
-      "legendSuccess": "success",
-      "loading": "Computing explanation for index",
-      "multiselect": "Multiselect",
-      "notdefined": "object scenario not defined",
-      "objectSelect": "Object Selection",
+      "indexLabel": "Kép ",
+      "labelTypeDropdown": "Címketípus kiválasztása",
+      "labelVisibilityDropdown": "Megjelenítendő címkék kiválasztása",
+      "legendFailure": "hiba",
+      "legendSuccess": "sikeres",
+      "loading": "Az index kiszámítási magyarázata",
+      "multiselect": "Többszörös kijelölés",
+      "notdefined": "az objektum forgatókönyve nincs definiálva",
+      "objectSelect": "Objektumválasztás",
       "pageSize": "Oldalméret: ",
-      "panelTitle": "Selected instance",
-      "panelExplanation": "Explanation",
-      "panelInformation": "Information",
-      "predictedLabel": "Predicted label",
-      "predictedY": "Predicted: ",
-      "prefix": "Object: ",
-      "rows": "Rows: ",
+      "panelTitle": "Kiválasztott példány",
+      "panelExplanation": "Magyarázat",
+      "panelInformation": "Információ",
+      "predictedLabel": "Előrejelzett címke",
+      "predictedY": "Előre jelzett: ",
+      "prefix": "Objektum: ",
+      "rows": "Sorok: ",
       "search": "Keresés",
-      "selectAll": "Select all",
+      "selectAll": "Az összes kijelölése",
       "settings": "Beállítások",
-      "showAll": "Show all",
+      "showAll": "Összes megjelenítése",
       "tabOptionFirst": "Képtallózó nézet",
       "tabOptionSecond": "Táblázatos nézet",
-      "tabOptionThird": "Class view",
+      "tabOptionThird": "Osztálynézet",
       "thumbnailSize": "Miniatűr mérete",
       "titleBarError": "Hibapéldányok",
       "titleBarSuccess": "Sikeres példányok",
-      "trueY": "Ground truth: "
+      "trueY": "Alapigazság: "
     }
   },
   "ModelAssessment": {
@@ -1203,15 +1228,15 @@
       "CalloutContent": "Bizonyos összetevők (hibafanézet vagy hibahőtérkép) hozzáadásával szűrheti az adatokat az alábbi összetevőkben látható globális kohorszból.",
       "CalloutTitle": "Összetevő hozzáadása",
       "TabAddedMessage": {
-        "DataAnalysis": "Data analysis component added",
-        "FeatureImportances": "Feature importances component added",
-        "ErrorAnalysis": "Error analysis component added",
-        "Fairness": "Fairness component added",
-        "ModelOverview": "Model overview component added",
-        "CausalAnalysis": "Causal analysis component added",
-        "Counterfactuals": "Counterfactuals component added",
-        "Vision": "Vision data explorer component added",
-        "Forecasting": "Forecasting what-if component added"
+        "DataAnalysis": "Adatelemzési összetevő hozzáadva",
+        "FeatureImportances": "Jellemzőfontossági összetevő hozzáadva",
+        "ErrorAnalysis": "Hibaelemzési összetevő hozzáadva",
+        "Fairness": "Méltányossági összetevő hozzáadva",
+        "ModelOverview": "Modelláttekintő összetevő hozzáadva",
+        "CausalAnalysis": "Okozati elemzési összetevő hozzáadva",
+        "Counterfactuals": "Ellenpélda-összetevő hozzáadva",
+        "Vision": "Képfelismerési adatkezelő-összetevő hozzáadva",
+        "Forecasting": "Előrejelzési lehetőségelemzési összetevő hozzáadva"
       }
     },
     "CausalAnalysis": {
@@ -1239,7 +1264,7 @@
     },
     "CohortInformation": {
       "ShiftCohort": "Kohorszváltás",
-      "SwitchTimeSeries": "Switch time series",
+      "SwitchTimeSeries": "Idősor váltása",
       "NewCohort": "Új kohorsz",
       "DataPoints": "Adatpontok száma",
       "DefaultCohort": " (alapértelmezett)",
@@ -1251,7 +1276,7 @@
       "CohortSettingsTitle": "Kohorsz beállításai"
     },
     "ComponentNames": {
-      "ChartView": "Chart view",
+      "ChartView": "Diagramnézet",
       "CausalAnalysis": "Okozati elemzés",
       "Counterfactuals": "Ellenpéldák",
       "DataAnalysis": "Adatelemzés",
@@ -1260,10 +1285,10 @@
       "ErrorAnalysis": "Hibaelemzés",
       "Fairness": "Semlegesség",
       "FeatureImportances": "Jellemzőfontosságok",
-      "Forecasting": "Forecasting",
+      "Forecasting": "Előrejelzés",
       "ModelOverview": "Modell áttekintése",
-      "TableView": "Table view",
-      "VisionTab": "Vision data explorer"
+      "TableView": "Táblanézet",
+      "VisionTab": "Képfelismerési adatkezelő"
     },
     "DashboardSettings": {
       "Content": "Ez a lista az irányítópult elrendezését mutatja. A hibaelemzési összetevőt használva szűrni tudja az alatta lévő összetevőkben megtekinthető adatokat.",
@@ -1421,17 +1446,17 @@
       "CorrectPredictions": "Helyes előrejelzések",
       "GlobalExplanation": "Aggregált jellemzőfontosság",
       "IncorrectPredictions": "Helytelen előrejelzések",
-      "InfoTitle": "Additional information on data analysis table view",
-      "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).",
+      "InfoTitle": "További információ az adatelemzés táblanézetéről",
+      "IndividualFeatureTabular": "Jelöljön ki egy adatpontot. Ehhez kattintson egy adatpontra (legfeljebb 5 adatpontra) a táblában a helyi jellemzőfontossági értékek (helyi magyarázat) és az egyéni feltételes elvárások (ICE) diagram megtekintéséhez.",
+      "IndividualFeatureText": "Jelöljön ki egy adatpontot. Ehhez kattintson egy adatpontra a táblában a helyi jellemzőfontossági értékek (helyi magyarázat) megtekintéséhez.",
       "LocalExplanation": "Egyéni jellemzőfontosság",
       "SelectionCounter": "{0}/{1} adatpont kiválasztva",
       "SelectionLimit": "Jelenleg legfeljebb 5 adatpont választható ki.",
-      "RowCheckboxAriaLabel": "Row checkbox",
-      "SelectionColumnAriaLabel": "Toggle selection"
+      "RowCheckboxAriaLabel": "Sor jelölőnégyzete",
+      "SelectionColumnAriaLabel": "Kijelölés váltása"
     },
     "IndividualFeatureImportanceView": {
-      "SmallInstanceSelection": "Instance selection"
+      "SmallInstanceSelection": "Példányválasztás"
     },
     "MainMenu": {
       "DashboardSettings": "Vezérlőpult konfiguráció",
@@ -1447,44 +1472,44 @@
     "ModelOverview": {
       "metrics": {
         "accuracy": {
-          "name": "Accuracy score",
+          "name": "Pontossági pontszám",
           "description": "A megfelelően osztályozott adatpontok hányada."
         },
         "exactMatchRatio": {
-          "name": "Exact match ratio",
-          "description": "The ratio of instances classified correctly for every label."
+          "name": "Pontos egyezés aránya",
+          "description": "Az egyes címkékhez megfelelően besorolt példányok aránya."
         },
         "meteorScore": {
-          "name": "Meteor Score",
-          "description": "METEOR Score is calculated based on the harmonic mean of precision and recall, with recall weighted more than precision in question answering task."
+          "name": "METEOR-pontszám",
+          "description": "A METEOR-pontszám kiszámítása a pontosság és a felidézés harmonikus középértéke alapján történik, amely során a felidézés nagyobb súllyal rendelkezik mint a pontosság a kérdésmegválaszolási feladatban."
         },
         "bleuScore": {
-          "name": "Bleu Score",
-          "description": "Bleu Score measures the ratio of words (and/or n-grams) in the machine generated text that appeared in the reference text in question answering task."
+          "name": "Bleu-pontszám",
+          "description": "A Bleu-pontszám a gép által létrehozott szövegben lévő szavak (és/vagy n-grammok) arányát méri a kérdésmegválaszolási feladatban szereplő referenciaszövegben."
         },
         "bertScore": {
-          "name": "Bert Score",
-          "description": "BERTScore focuses on computing semantic similarity between tokens of reference and machine generated text in question answering task."
+          "name": "BERT-pontszám",
+          "description": "A BERTScore a hivatkozási tokenek és a gép által létrehozott szöveg szemantikai hasonlóságának kiszámítására összpontosít a kérdésmegválaszolási feladatban."
         },
         "rougeScore": {
-          "name": "Rouge Score",
-          "description": "Rouge Score measures the ratio of words (and/or n-grams) in the reference text that appeared in the machine generated text in question answering task."
+          "name": "Rouge-pontszám",
+          "description": "A Rouge-pontszám a referenciaszövegben lévő szavak (és/vagy n-grammok) arányát méri a kérdésmegválaszolási feladatban szereplő, gép által létrehozott szövegben."
         },
         "hammingScore": {
-          "name": "Hamming score",
-          "description": "The average ratio of labels classified correctly among those classified as 1 in multilabel task."
+          "name": "Hamming-pontszám",
+          "description": "Azon címkék átlagos aránya, amelyek megfelelően lettek osztályozva azok közül, amelyek 1-es besorolást kaptak a többcímkés feladatban."
         },
         "f1Score": {
           "name": "F1-mérték",
           "description": "Az F1-pontszám a precizitás és a visszahívás harmonikus átlaga."
         },
         "f1ScoreMacro": {
-          "name": "Macro F1 score",
-          "description": "Macro F1 score is the harmonic mean of precision and recall for each class, with each class weighted equally."
+          "name": "F1-makromérték",
+          "description": "Az F1-makropontszám az egyes osztályokhoz tartozó pontosság és felidézés harmonikus középértéke, amely az egyes osztályok egyenlő súlyozásával jön létre."
         },
         "f1ScoreMicro": {
-          "name": "Micro F1 score",
-          "description": "Micro F1 score is the harmonic mean of precision and recall for each class, with each class weighted according to how many instances it contains."
+          "name": "F1-mikromérték",
+          "description": "Az F1-mikropontszám az egyes osztályok pontosságának és felidézésének harmonikus középértéke, amelyben minden osztályt annak megfelelően súlyoznak, hogy mennyi példányt tartalmaznak."
         },
         "meanAbsoluteError": {
           "name": "Átlagos abszolút hiba",
@@ -1499,24 +1524,24 @@
           "description": "Az 1-es osztályozású adatpontok hányada, amelyek helyesen vannak osztályozva."
         },
         "precisionMacro": {
-          "name": "Macro Precision score",
-          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted equally."
+          "name": "Makropontossági pontszám",
+          "description": "Az adatpontok egy része, amely megfelelően lett osztályozva azok közül, amelyek 1-es besorolást kaptak minden osztály esetében 1. Ebben a halmazban mindegyik osztály egyformán lett súlyozva."
         },
         "precisionMicro": {
-          "name": "Micro Precision score",
-          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted according to how many instances it contains."
+          "name": "Mikropontossági pontszám",
+          "description": "Az adatpontok egy része, amely megfelelően lett osztályozva azok közül, amelyek 1-es besorolást kaptak minden osztály esetében. Ebben a halmazban mindegyik osztály annak megfelelően lett súlyozva, hogy mennyi példányt tartalmaz."
         },
         "recall": {
           "name": "Felidézési pontszám",
           "description": "Az 1-es valós címkével rendelkező adatpontok hányada, amelyek helyesen vannak osztályozva. Alternatív megnevezés: valós pozitív arány, érzékenység."
         },
         "recallMacro": {
-          "name": "Macro Recall score",
-          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted equally."
+          "name": "Makrofelidézési pontszám",
+          "description": "Az adatpontok egy része, amelyet megfelelően osztályoztak azok közül, amelyeknek a valódi címkéje minden osztály esetében 1. Ebben a halmazban mindegyik osztály egyformán lett súlyozva."
         },
         "recallMicro": {
-          "name": "Micro Recall score",
-          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted according to how many instances it contains."
+          "name": "Mikrofelidézési pontszám",
+          "description": "Az adatpontok egy része, amelyet megfelelően osztályoztak azok közül, amelyeknek a valódi címkéje minden osztály esetében 1. Ebben a halmazban mindegyik osztály annak megfelelően lett súlyozva, hogy mennyi példányt tartalmaz."
         },
         "falsePositiveRate": {
           "name": "Hamis pozitív arány",
@@ -1535,32 +1560,32 @@
           "description": "Az összes előrejelzés átlaga."
         },
         "meanAveragePrecision": {
-          "name": "Mean Average Precision score",
-          "description": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall."
+          "name": "Középértéki pontszám",
+          "description": "Az objektumészlelési modellek középértéki pontossága az összes osztály középértéki pontossága. Ez kiértékeli az objektumészlelési modell robusztusságát, és magában foglalja a pontosság és a felidézés közötti kompromisszumot."
         },
         "averagePrecision": {
-          "name": "Average Precision score",
-          "description": "Average precision for object detection models is calculated for a selected class."
+          "name": "Átlagos pontossági pontszám",
+          "description": "Az objektumészlelési modellek átlagos pontosságát a rendszer egy kiválasztott osztályhoz tartozóan számítja ki."
         },
         "averageRecall": {
-          "name": "Average Recall score",
-          "description": "Average recall for object detection models is calculated for a selected class."
+          "name": "Átlagos felidézési pontszám",
+          "description": "Az objektumészlelési modellek átlagos felidézését a rendszer egy kiválasztott osztályra vonatkozóan számítja ki."
         },
         "fairnessMetricDifference": "Különbség",
         "fairnessMetricRatio": "Arány"
       },
       "metricsDropdown": "Metrika",
-      "metricsTypeDropdown": "Aggregate method",
+      "metricsTypeDropdown": "Összesítési metódus",
       "metricTypes": {
-        "macro": "Macro",
-        "micro": "Micro"
+        "macro": "Makro-",
+        "micro": "Mikro-"
       },
-      "classSelectionDropdown": "Select class(es)",
+      "classSelectionDropdown": "Osztály kijelölése",
       "iouThresholdDropdown": {
-        "name": "IoU Threshold",
-        "description": "Intersection over Union quantifies the degree of overlap between the prediction and ground truth bounding box of a detected object in an image. For example, setting an IoU threshold of 70% means that a prediction with greater than 70% overlap with ground truth is True, thus influencing the definition of prediction correctness and calculation of other performance metrics.",
+        "name": "IoU-küszöbérték",
+        "description": "Az unió feletti metszet egy képen észlelt objektum előrejelzési és alapigazsággal kapcsolatos határolókerete közötti átfedés mértékét számszerűsíti. Ha például egy IoU-küszöbértéket 70%-ra állít be, az azt jelenti, hogy a 70%-nál nagyobb eltéréssel rendelkező előrejelzés valódi, ami hatással van az előrejelzés helyességének meghatározására és más teljesítménymetrikák kiszámítására.",
         "iconId": "iouThresholdIconId",
-        "title": "Learn about the IoU threshold"
+        "title": "Tudnivalók az IoU-küszöbértékről"
       },
       "notAvailable": "N/A",
       "countColumnHeader": "Mintaméret",
@@ -1572,14 +1597,14 @@
       "featuresDropdown": "Funkció(k)",
       "metricChartDropdownSelectionHeader": "Metrika",
       "probabilityForClassSelectionHeader": "Osztály valószínűsége",
-      "targetSelectionHeader": "Target",
+      "targetSelectionHeader": "Cél",
       "metricSelectionDropdownPlaceholder": "Válassza ki a kohorszok összehasonlításához használandó metrikákat.",
-      "classSelectionDropdownPlaceholder": "Select class name for class-based analysis.",
+      "classSelectionDropdownPlaceholder": "Az osztályalapú elemzéshez válassza ki az osztály nevét.",
       "featureSelectionDropdownPlaceholder": "Válassza ki a funkcióalapú elemzéshez használni kívánt funkciókat.",
       "probabilityDistributionPivotItem": "Valószínűség eloszlása",
-      "regressionDistributionPivotItem": "Target distribution",
+      "regressionDistributionPivotItem": "Cél elosztása",
       "metricsVisualizationsPivotItem": "Metrikák vizualizációi",
-      "confusionMatrixPivotItem": "Confusion matrix",
+      "confusionMatrixPivotItem": "Keveredési mátrix",
       "disaggregatedAnalysisFeatureSelectionPlaceholder": "Funkciók kiválasztása a funkcióalapú elemzés létrehozásához.",
       "tableCountTooltip": "A(z) {0} kohorsz {1} példányt tartalmaz.",
       "tableMetricTooltip": "A modell {0} értéke a(z) {1} kohorszon {2}.",
@@ -1590,36 +1615,36 @@
       "metricSelectionButton": "Metrika kiválasztása",
       "cohortSelectionButton": "Kohorszok kiválasztása",
       "probabilityLabelSelectionButton": "Címke kiválasztása",
-      "regressionTargetSelectionButton": "Choose target",
+      "regressionTargetSelectionButton": "Cél kiválasztása",
       "selectAllCohortsOption": "Az összes kijelölése",
       "other": "Egyéb",
       "BoxPlot": {
         "outlierProbability": "valószínűség",
         "outlierLabel": "Kiugró értékek",
         "boxPlotSeriesLabel": "Dobozdiagram",
-        "lowerWhisker": "Lower whisker",
-        "upperWhisker": "Upper whisker",
-        "median": "Median",
-        "lowerQuartile": "Lower quartile",
-        "upperQuartile": "Upper quartile"
+        "lowerWhisker": "Legkisebb nem kiugró érték",
+        "upperWhisker": "Legnagyobb nem kiugró érték",
+        "median": "Medián",
+        "lowerQuartile": "Alsó kvartilis",
+        "upperQuartile": "Felső kvartilis"
       },
       "chartConfigApply": "Alkalmaz",
       "chartConfigCancel": "Mégse",
       "chartConfigDatasetCohortSelectionPlaceholder": "Adathalmaz kohorszainak kiválasztása",
       "chartConfigFeatureBasedCohortSelectionPlaceholder": "Funkcióalapú kohorszok kiválasztása",
       "confusionMatrix": {
-        "confusionMatrixCohortSelectionLabel": "Select dataset cohort",
-        "confusionMatrixClassSelectionLabel": "Select classes",
-        "confusionMatrixClassMinSelectionError": "Select at least {0} classes to visualize the confusion matrix.",
-        "confusionMatrixClassMaxSelectionError": "Select at most {0} classes to visualize the confusion matrix.",
-        "confusionMatrixClassSelectionDefaultPlaceholder": "Choose classes",
-        "confusionMatrixHeatmapTooltip": "{0} datapoints should be {1}, predicted to be {2}",
-        "confusionMatrixYAxisLabel": "True Class",
-        "confusionMatrixXAxisLabel": "Predicted Class",
-        "class": "Class"
+        "confusionMatrixCohortSelectionLabel": "Adatkészlet kohorszának kiválasztása",
+        "confusionMatrixClassSelectionLabel": "Osztályok kijelölése",
+        "confusionMatrixClassMinSelectionError": "Válasszon ki legalább {0} osztályt a keveredési mátrix megjelenítéséhez.",
+        "confusionMatrixClassMaxSelectionError": "Válasszon ki legfeljebb {0} osztályt a keveredési mátrix megjelenítéséhez.",
+        "confusionMatrixClassSelectionDefaultPlaceholder": "Osztályok kiválasztása",
+        "confusionMatrixHeatmapTooltip": "{0} adatpontnak, amely(ek)nek {1} értékűnek kellene lenniük, várhatóan {2} értékűek lesznek",
+        "confusionMatrixYAxisLabel": "Valódi osztály",
+        "confusionMatrixXAxisLabel": "Előrejelzett osztály",
+        "class": "Osztály"
       },
       "nA": "N/A",
-      "disaggregatedAnalysisBaseCohortDisclaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
+      "disaggregatedAnalysisBaseCohortDisclaimer": "A következő funkcióalapú elemzésben szereplő kohorszok a(z) {0} globális kohorszon alapulnak.",
       "disaggregatedAnalysisBaseCohortWarning": "A(z) {0} kohorsztól eltérően a(z) {1} szűrőket is tartalmaz. Ennek következtében csak a teljes adathalmaz egy részét rögzíti, és előfordulhat, hogy a betekintések nem általánosítják a teljes adathalmazt.",
       "probabilitySplineChartToggleLabel": "Spline diagram használata",
       "countAxisLabel": "Darabszám",
@@ -1649,76 +1674,76 @@
         "flyoutDescription": "Választhat, hogy az adathalmaz kohorszait vagy a funkció kohorszait tekinti-e meg. Ha a funkció kohorszok nem érhetők el, először ki kell választania egy vagy több funkciót a funkció kohorsznézetében. Ezt követően létrejönnek a funkció kohorszok, amelyeket itt választhat ki."
       },
       "regressionTargetOptions": {
-        "predictedY": "Predicted Y",
-        "trueY": "True Y",
-        "error": "Error"
+        "predictedY": "Előrejelzett Y",
+        "trueY": "Valódi Y",
+        "error": "Hiba"
       },
       "topLevelDescription": "Mérje fel a modell teljesítményét az előrejelzési értékek és a modell teljesítménymetrikái értékeinek eloszlása alapján. Az „Adathalmaz-kohorszok“ lapon vizsgálhatja meg a modellt úgy, hogy összehasonlítja a teljesítményét a különböző előre létrehozott vagy újonnan létrehozott kohorszokban. A „Funkciókohorszok“ segítségével úgy vizsgálhatja meg a modellt, hogy összehasonlító elemzést kászít a teljesítményéről az érzékeny/nem érzékeny paraméter alhorszok között. (például a teljesítmény különböző nemek, jövedelemszintek között).",
-      "infoTitle": "Additional information on model overview",
+      "infoTitle": "További információ a modell áttekintéséről",
       "visualDisplayToggleLabel": "Intenzitástértkép megjelenítése",
       "featureBasedViewDescription": "Válasszon ki legfeljebb két funkciót a modell teljesítményének funkcióalapú kohorszokban (ha egy jellemző van kiválasztva) vagy metszeti kohorszokban (ha két funkciót választ ki) való megtekintéséhez."
     },
     "TableViewTab": {
-      "Heading": "View the dataset in a table format for all features and rows."
+      "Heading": "Az adatkészletet táblázatos formátumban tekintheti meg az összes jellemző és sor esetében."
     }
   },
   "Forecasting": {
-    "target": "Target",
-    "whatIfForecastingHeader": "What-if analysis",
-    "forecastHeader": "Forecast analysis",
-    "whatIfForecastingDescription": "What-if allows you to perturb features for your entire time series and observe how the model's forecast changes.",
-    "whatIfForecastingChooseTimeSeries": "To start, choose a time series from the options below.",
-    "forecastDescription": "Forecast analysis compares your model's forecast to the actual values of your time series. To enable what-if analysis, provide a dataset with features.",
-    "timeSeries": "Time series",
-    "selectTimeSeries": "Select a time series.",
-    "singleTimeSeries": "The dataset contains only a single time series '{0}' which has been selected by default.",
-    "trueY": "True Y",
-    "baselinePrediction": "Baseline prediction",
-    "forecastComparisonHeader": "Compare What-if Forecasts",
-    "forecastComparisonChartTitle": "Forecasts",
-    "forecastComparisonChartTimeAxisLabel": "Time",
+    "target": "Cél",
+    "whatIfForecastingHeader": "Lehetőségelemzés",
+    "forecastHeader": "Előrejelzési elemzés",
+    "whatIfForecastingDescription": "A lehetőségelemzés lehetővé teszi, hogy a teljes idősor jellemzőit módosíthassa, és hogy megfigyelhesse hogyan változik a modell előrejelzése.",
+    "whatIfForecastingChooseTimeSeries": "Kezdésként válasszon egy idősort az alábbi lehetőségek közül.",
+    "forecastDescription": "Az előrejelzés-elemzés összehasonlítja a modell előrejelzését az idősor tényleges értékeivel. A lehetőségelemzés engedélyezéséhez adjon meg egy jellemzőkkel rendelkező adatkészletet.",
+    "timeSeries": "Idősorok",
+    "selectTimeSeries": "Idősorozat kiválasztása.",
+    "singleTimeSeries": "Az adathalmaz csak egyetlen „{0}” idősort tartalmaz, amely alapértelmezés szerint ki van választva.",
+    "trueY": "Valódi Y",
+    "baselinePrediction": "Alapértékek előrejelzése",
+    "forecastComparisonHeader": "Lehetőségelemzési előrejelzések összehasonlítása",
+    "forecastComparisonChartTitle": "Előrejelzések",
+    "forecastComparisonChartTimeAxisLabel": "Idő",
     "Transformations": {
-      "multiply": "multiply",
-      "divide": "divide",
-      "add": "add",
-      "subtract": "subtract",
-      "change": "change to"
+      "multiply": "szorzás",
+      "divide": "osztás",
+      "add": "hozzáadás",
+      "subtract": "kivonás",
+      "change": "módosítás erre:"
     },
     "TransformationCreation": {
-      "title": "Create what-if scenario",
-      "nameLabel": "What-if scenario name",
-      "featureInstructions": "Choose a feature to perturb.",
-      "operationInstructions": "Choose an operation to apply to the feature.",
-      "operationDropdownHeader": "Operation",
-      "featureDropdownHeader": "Feature",
-      "valueSpinButtonHeader": "Value",
-      "scenarioNamingInstructionsPlaceholder": "Enter a unique name",
-      "scenarioNamingInstructions": "Enter a name for your what-if scenario.",
-      "scenarioNamingCollisionMessage": "This name exists already. Please enter a unique name.",
-      "scenarioNamingLengthMessage": "The name must be between 1 and 50 characters. The actual length is {0}.",
-      "scenarioNamingInvalidCharactersMessage": "The name can only contain alphanumeric characters, whitespaces, dashes, or underscores, and needs to start with an alphanumeric character.",
-      "valueErrorMessage": "For operation {0} please select a value other than {1}.",
-      "invalidCombinationErrorMessage": "This is identical to an existing what-if scenario. Please change the feature, operation, or value.",
-      "addTransformationButton": "Add Transformation",
-      "divisionAndMultiplicationBy": "by"
+      "title": "Lehetőségelemzési forgatókönyv létrehozása",
+      "nameLabel": "Lehetőségelemzési forgatókönyv neve",
+      "featureInstructions": "Válassza ki a módosítani kívánt jellemzőt.",
+      "operationInstructions": "Válassza ki a jellemzőre alkalmazandó műveletet.",
+      "operationDropdownHeader": "Művelet",
+      "featureDropdownHeader": "Jellemző",
+      "valueSpinButtonHeader": "Érték",
+      "scenarioNamingInstructionsPlaceholder": "Adjon meg egy egyedi nevet.",
+      "scenarioNamingInstructions": "Adja meg a lehetőségelemzési forgatókönyv nevét.",
+      "scenarioNamingCollisionMessage": "Ez a név már létezik. Adjon meg egy egyedi nevet.",
+      "scenarioNamingLengthMessage": "A névnek 1 és 50 karakter közötti hosszúságúnak kell lennie. A tényleges hossz {{0}}.",
+      "scenarioNamingInvalidCharactersMessage": "A név csak alfanumerikus karaktereket, szóközöket, kötőjeleket vagy aláhúzásjeleket tartalmazhat, és alfanumerikus karakterrel kell kezdődnie.",
+      "valueErrorMessage": "A(z) {0} művelethez válasszon ki egy olyan értéket, amely nem {1}.",
+      "invalidCombinationErrorMessage": "Ez megegyezik egy meglévő lehetőségelemzési forgatókönyvvel. Módosítsa a jellemzőt, a műveletet vagy az értéket.",
+      "addTransformationButton": "Átalakítás hozzáadása",
+      "divisionAndMultiplicationBy": ":"
     },
     "TransformationTable": {
-      "nameColumnHeader": "Name",
-      "methodColumnHeader": "Method",
-      "divisionAndMultiplicationBy": "by ",
-      "header": "What-if Forecasts ({0})"
+      "nameColumnHeader": "Név",
+      "methodColumnHeader": "Módszer",
+      "divisionAndMultiplicationBy": ": ",
+      "header": "Lehetőségelemzési előrejelzések ({0})"
     },
     "TimeSeries": {
-      "apply": "Apply",
-      "cancel": "Cancel",
-      "cohortList": "Time series list",
-      "selectCohort": "Select a time series",
-      "shiftCohort": "Switch time series",
-      "shiftCohortDescription": "Select a time series from the time series list. Apply the time series to the dashboard."
+      "apply": "Alkalmaz",
+      "cancel": "Mégse",
+      "cohortList": "Idősorozatok listája",
+      "selectCohort": "Idősorozat kiválasztása",
+      "shiftCohort": "Idősor váltása",
+      "shiftCohortDescription": "Válasszon ki egy idősort az idősorlistából, majd alkalmazza azt az irányítópultra."
     },
     "TimeSeriesSettings": {
-      "CohortSettingsDescription": "Time series are pre-defined based on time series identifying columns.",
-      "CohortSettingsTitle": "Time series settings"
+      "CohortSettingsDescription": "Az idősorok előre vannak definiálva vannak az oszlopok azonosítására szolgáló idősor alapján.",
+      "CohortSettingsTitle": "Idősorozatok beállításai"
     }
   }
 }

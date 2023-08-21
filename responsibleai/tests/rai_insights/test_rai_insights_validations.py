@@ -2,13 +2,15 @@
 # Licensed under the MIT License.
 
 import logging
+import random
 from unittest.mock import MagicMock
 
 import numpy as np
 import pandas as pd
 import pytest
 from lightgbm import LGBMClassifier
-from tests.common_utils import create_iris_data
+from tests.common_utils import (create_iris_data,
+                                create_tiny_forecasting_dataset)
 
 from rai_test_utils.datasets.tabular import (
     create_binary_classification_dataset, create_cancer_data,
@@ -20,6 +22,8 @@ from rai_test_utils.models.sklearn import (
 from raiutils.exceptions import UserConfigValidationException
 from responsibleai import RAIInsights
 from responsibleai.feature_metadata import FeatureMetadata
+from responsibleai.rai_insights.rai_insights import \
+    _MODEL_METHOD_EXCEPTION_MESSAGE
 
 TARGET = 'target'
 
@@ -398,7 +402,7 @@ class TestRAIInsightsValidations:
             str(ucve.value)
 
     def test_dirty_train_test_data(self):
-        X_train = pd.DataFrame(data=[['1', np.nan], ['2', '3']],
+        X_train = pd.DataFrame(data=[['1', 1], ['2', '3']],
                                columns=['c1', 'c2'])
         y_train = np.array([1, 0])
         X_test = pd.DataFrame(data=[['1', '2'], ['2', '3']],
@@ -1185,3 +1189,118 @@ class TestCounterfactualUserConfigValidations:
                 test=X_test,
                 target_column=TARGET,
                 task_type='classification')
+
+    def test_optional_method_not_present(self):
+        X_train, X_test, y_train, y_test = create_tiny_forecasting_dataset()
+
+        class ForecastModelWithoutQuantiles():
+            def forecast(self, X):
+                return [random.random() for _ in range(len(X))]
+
+        model = ForecastModelWithoutQuantiles()
+        X_train = X_train.copy()
+        X_test = X_test.copy()
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        RAIInsights(
+            model=model,
+            train=X_train,
+            test=X_test,
+            target_column=TARGET,
+            task_type='forecasting',
+            feature_metadata=FeatureMetadata(
+                datetime_features=['time'],
+                time_series_id_features=['id']
+            ),
+            forecasting_enabled=True)
+
+    def test_optional_method_present(self):
+        X_train, X_test, y_train, y_test = create_tiny_forecasting_dataset()
+
+        class ForecastModelWithoutQuantiles():
+            def forecast(self, X):
+                return [random.random() for _ in range(len(X))]
+
+            def forecast_quantiles(self, X, quantiles):
+                return [
+                    [random.random() for _ in range(len(X))],
+                    [random.random() for _ in range(len(X))]
+                ]
+
+        model = ForecastModelWithoutQuantiles()
+        X_train = X_train.copy()
+        X_test = X_test.copy()
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        RAIInsights(
+            model=model,
+            train=X_train,
+            test=X_test,
+            target_column=TARGET,
+            task_type='forecasting',
+            feature_metadata=FeatureMetadata(
+                datetime_features=['time'],
+                time_series_id_features=['id']
+            ),
+            forecasting_enabled=True)
+
+    def test_optional_method_failing(self):
+        X_train, X_test, y_train, y_test = create_tiny_forecasting_dataset()
+
+        class ForecastModelWithFailingQuantiles():
+            def forecast(self, X):
+                return [random.random() for _ in range(len(X))]
+
+            def forecast_quantiles(self, X):
+                raise Exception("Failed to forecast quantiles!")
+
+        model = ForecastModelWithFailingQuantiles()
+        X_train = X_train.copy()
+        X_test = X_test.copy()
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        message = _MODEL_METHOD_EXCEPTION_MESSAGE.format("forecast_quantiles")
+        with pytest.raises(
+                UserConfigValidationException, match=message):
+            RAIInsights(
+                model=model,
+                train=X_train,
+                test=X_test,
+                target_column=TARGET,
+                task_type='forecasting',
+                feature_metadata=FeatureMetadata(
+                    datetime_features=['time'],
+                    time_series_id_features=['id']
+                ),
+                forecasting_enabled=True)
+
+    def test_required_method_failing(self):
+        X_train, X_test, y_train, y_test = create_tiny_forecasting_dataset()
+
+        class ForecastModelWithFailingForecast():
+            def forecast(self, X):
+                raise Exception("Failed to forecast!")
+
+        model = ForecastModelWithFailingForecast()
+        X_train = X_train.copy()
+        X_test = X_test.copy()
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        message = _MODEL_METHOD_EXCEPTION_MESSAGE.format("forecast")
+        with pytest.raises(
+                UserConfigValidationException, match=message):
+            RAIInsights(
+                model=model,
+                train=X_train,
+                test=X_test,
+                target_column=TARGET,
+                task_type='forecasting',
+                feature_metadata=FeatureMetadata(
+                    datetime_features=['time'],
+                    time_series_id_features=['id']
+                ),
+                forecasting_enabled=True)
