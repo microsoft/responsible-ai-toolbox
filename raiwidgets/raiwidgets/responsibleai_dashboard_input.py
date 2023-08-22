@@ -71,7 +71,7 @@ class ResponsibleAIDashboardInput:
 
     def _validate_cohort_list(self, cohort_list=None):
         task_type = self.dashboard_input.dataset.task_type
-        if (task_type in [ModelTask.CLASSIFICATION, ModelTask.REGRESSION] and
+        if (task_type !== ModelTask.FORECASTING and
                 cohort_list is None):
             self.dashboard_input.cohortData = []
             return

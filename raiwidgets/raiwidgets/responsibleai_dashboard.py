@@ -48,8 +48,12 @@ class ResponsibleAIDashboard(Dashboard):
             return jsonify(self.input.on_predict(data))
         self.add_url_rule(predict, '/predict', methods=["POST"])
 
-        if analysis.task_type in [
-                ModelTask.CLASSIFICATION, ModelTask.REGRESSION]:
+        if analysis.task_type == ModelTask.FORECASTING:
+            def forecast():
+                data = request.get_json(force=True)
+                return jsonify(self.input.forecast(data))
+            self.add_url_rule(forecast, '/forecast', methods=["POST"])
+        else:
             def tree():
                 data = request.get_json(force=True)
                 return jsonify(self.input.debug_ml(data))
@@ -92,12 +96,6 @@ class ResponsibleAIDashboard(Dashboard):
                 data = request.get_json(force=True)
                 return jsonify(self.input.get_exp(data))
             self.add_url_rule(get_exp, '/get_exp', methods=["POST"])
-
-        if analysis.task_type == ModelTask.FORECASTING:
-            def forecast():
-                data = request.get_json(force=True)
-                return jsonify(self.input.forecast(data))
-            self.add_url_rule(forecast, '/forecast', methods=["POST"])
 
         def get_object_detection_metrics():
             data = request.get_json(force=True)
