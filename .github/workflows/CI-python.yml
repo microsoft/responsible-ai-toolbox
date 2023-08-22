@@ -24,6 +24,8 @@ jobs:
         exclude:
           - operatingSystem: macos-latest
             pythonVersion: "3.7"
+          - operatingSystem: ubuntu-latest
+            pythonVersion: "3.7"
 
     runs-on: ${{ matrix.operatingSystem }}
 
