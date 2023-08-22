@@ -29,6 +29,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.pythonVersion }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.pythonVersion }}
+
       - uses: conda-incubator/setup-miniconda@v2
         with:
           auto-update-conda: true
@@ -54,7 +60,6 @@ jobs:
           pip install --upgrade "pip-tools<=7.1.0"
 
       - name: Pip compile
-        shell: bash -l {0}
         run: |
           pip-compile requirements-dev.txt -o requirements-dev-comp.txt
           cat requirements-dev-comp.txt
