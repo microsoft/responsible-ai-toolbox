@@ -88,6 +88,7 @@ interface IModelOverviewState {
   featureBasedCohortLabeledStatistics: ILabeledStatistic[][];
   featureBasedCohorts: ErrorCohort[];
   iouThreshold: number;
+  objectDetectionAbortController: AbortController | undefined;
 }
 
 const datasetCohortViewPivotKey = "datasetCohortView";
@@ -128,7 +129,8 @@ export class ModelOverview extends React.Component<
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
       selectedMetrics: [],
-      showHeatmapColors: true
+      showHeatmapColors: true,
+      objectDetectionAbortController: undefined
     };
   }
 
@@ -362,6 +364,7 @@ export class ModelOverview extends React.Component<
                 setIoUThreshold={this.setIoUThreshold}
                 updateDatasetCohortStats={this.updateDatasetCohortStats}
                 updateFeatureCohortStats={this.updateFeatureCohortStats}
+                abortController={this.state.objectDetectionAbortController}
               />
             )}
           </Stack>
@@ -650,6 +653,8 @@ export class ModelOverview extends React.Component<
       this.state.className.length > 0 &&
       this.state.iouThreshold
     ) {
+      var newAbortController = new AbortController();
+      this.setState({ objectDetectionAbortController: newAbortController });
       this.context
         .requestObjectDetectionMetrics(
           selectionIndexes,
@@ -657,7 +662,7 @@ export class ModelOverview extends React.Component<
           this.state.className,
           this.state.iouThreshold,
           this.objectDetectionCache,
-          new AbortController().signal
+          newAbortController.signal
         )
         .then((result) => {
           const [allCohortMetrics, cohortClasses] = result;
