@@ -84,6 +84,12 @@ jobs:
           pip install -v -e .
         working-directory: ${{ matrix.packageDirectory }}
 
+      - if: ${{ matrix.packageDirectory == 'raiutils' }}
+        name: Install mkl
+        run: |
+          conda install --yes --quiet mkl-service
+        working-directory: ${{ matrix.packageDirectory }}
+
       - name: Run tests
         shell: bash -l {0}
         run: |
