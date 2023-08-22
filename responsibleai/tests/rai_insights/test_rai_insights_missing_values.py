@@ -120,12 +120,12 @@ class TestRAIInsightsMissingValues(object):
                         missing_value_combination == \
                             MISSING_VALUE.BOTH_TRAIN_TEST_MISSING_VALUES:
                         error_message = \
-                            "Categorical features cannot have missing " + \
+                            "Categorical features workclass cannot have missing " + \
                             "values for computing explanations. " + \
                             "Please check your training data."
                     else:
                         error_message = \
-                            "Categorical features cannot have " + \
+                            "Categorical features workclass cannot have " + \
                             "missing values for computing explanations. " + \
                             "Please check your test data."
                     with pytest.raises(

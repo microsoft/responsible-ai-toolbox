@@ -159,11 +159,11 @@ class CausalManager(BaseManager):
         :param random_state: Controls the randomness of the estimator.
         :type random_state: int or RandomState or None
         """
-        if len(_find_features_having_missing_values(self._train)) > 0:
+        if any(_find_features_having_missing_values(self._train)):
             raise UserConfigValidationException(
                 'Missing values are not allowed in '
                 'the train dataset while computing causal effects.')
-        if len(_find_features_having_missing_values(self._test)) > 0:
+        if any(_find_features_having_missing_values(self._test)):
             raise UserConfigValidationException(
                 'Missing values are not allowed in '
                 'the test dataset while computing causal effects.')

@@ -316,8 +316,8 @@ class ErrorAnalysisManager(BaseManager):
         """
         print("Error Analysis")
         print('Current Status: Generating error analysis reports.')
-        compute_importances = len(_find_features_having_missing_values(
-            self._dataset)) == 0
+        compute_importances = not any(_find_features_having_missing_values(
+            self._dataset))
         if not compute_importances:
             warnings.warn(
                 'Test dataset has missing values, '

@@ -98,21 +98,27 @@ class ExplainerManager(BaseManager):
             raise UserConfigValidationException(
                 'Model is required for model explanations')
 
-        if len(set(_find_features_having_missing_values(
-            self._initialization_examples)) &
-                set(self._categorical_features)) > 0:
+        categorical_features_with_missing_values_train = \
+            set(_find_features_having_missing_values(
+                self._initialization_examples)) & set(
+                self._categorical_features)
+        if any(categorical_features_with_missing_values_train):
             raise UserConfigValidationException(
-                "Categorical features cannot have missing "
+                "Categorical features {0} cannot have missing "
                 "values for computing explanations. "
-                "Please check your training data.")
+                "Please check your training data.".format(
+                    ",".join(categorical_features_with_missing_values_train)))
 
-        if len(set(_find_features_having_missing_values(
-            self._evaluation_examples)) &
-                set(self._categorical_features)) > 0:
+        categorical_features_with_missing_values_test = \
+            set(_find_features_having_missing_values(
+                self._evaluation_examples)) & set(
+                self._categorical_features)
+        if any(categorical_features_with_missing_values_test):
             raise UserConfigValidationException(
-                "Categorical features cannot have missing "
+                "Categorical features {0} cannot have missing "
                 "values for computing explanations. "
-                "Please check your test data.")
+                "Please check your test data.".format(
+                    ",".join(categorical_features_with_missing_values_test)))
 
         if self._is_added:
             warnings.warn(("DUPLICATE-EXPLAINER-CONFIG: Ignoring. "

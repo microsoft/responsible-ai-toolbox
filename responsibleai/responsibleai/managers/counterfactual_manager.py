@@ -419,11 +419,11 @@ class CounterfactualManager(BaseManager):
         return dice_explainer
 
     def _add_counterfactual_config(self, new_counterfactual_config):
-        if len(_find_features_having_missing_values(self._train)) > 0:
+        if any(_find_features_having_missing_values(self._train)):
             raise UserConfigValidationException(
                 'Missing values are not allowed in the '
                 'train dataset while computing counterfactuals.')
-        if len(_find_features_having_missing_values(self._test)) > 0:
+        if any(_find_features_having_missing_values(self._test)):
             raise UserConfigValidationException(
                 'Missing values are not allowed in the '
                 'test dataset while computing counterfactuals.')
