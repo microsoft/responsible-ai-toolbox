@@ -1091,8 +1091,10 @@ class RAIVisionInsights(RAIBaseInsights):
         dashboard_dataset = self.get_data().dataset
         true_y = dashboard_dataset.object_detection_true_y
         predicted_y = dashboard_dataset.object_detection_predicted_y
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
+        if self.device == Device.AUTO.value:
+            device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        else:
+            device = torch.device(self.device)
         normalized_iou_threshold = [iou_threshold / 100.0]
         all_cohort_metrics = []
         for cohort_indices in selection_indexes:
