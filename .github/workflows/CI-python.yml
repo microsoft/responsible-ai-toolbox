@@ -83,6 +83,7 @@ jobs:
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Run tests
+        shell: bash -l {0}
         run: |
           pytest --durations=10 --doctest-modules --junitxml=junit/test-results.xml --cov=${{ matrix.packageDirectory }} --cov-report=xml --cov-report=html
         working-directory: ${{ matrix.packageDirectory }}
