@@ -536,10 +536,6 @@ class RAIInsights(RAIBaseInsights):
             raise UserConfigValidationException(
                 f'Target name {target_column} not present in train/test data')
 
-        # Check if any of the data is missing in test and train data
-        self._validate_data_is_not_missing(test, "test")
-        self._validate_data_is_not_missing(train, "train")
-
         categorical_features = feature_metadata.categorical_features
         if (categorical_features is not None and
                 len(categorical_features) > 0):
@@ -555,22 +551,6 @@ class RAIInsights(RAIBaseInsights):
                            "do not exist in train data: "
                            f"{list(difference_set)}")
                 raise UserConfigValidationException(message)
-
-            for column in categorical_features:
-                try:
-                    np.unique(train[column])
-                except Exception:
-                    raise UserConfigValidationException(
-                        f"Error finding unique values in column {column}."
-                        " Please check your train data."
-                    )
-
-                try:
-                    np.unique(test[column])
-                except Exception:
-                    raise UserConfigValidationException(
-                        f"Error finding unique values in column {column}. "
-                        "Please check your test data.")
 
         # Validate that the target column isn't continuous if the
         # user is running classification scenario
@@ -608,8 +588,6 @@ class RAIInsights(RAIBaseInsights):
 
         if model is not None:
             # Pick one row from train and test data
-            small_train_data = train[0:1]
-            small_test_data = test[0:1]
             has_dropped_features = False
             if feature_metadata is not None and \
                 (feature_metadata.dropped_features is not None and
@@ -620,12 +598,12 @@ class RAIInsights(RAIBaseInsights):
             else:
                 features_to_drop = [target_column]
 
-            small_train_data = small_train_data.drop(
+            actual_train_data = train.drop(
                 columns=features_to_drop, axis=1)
-            small_test_data = small_test_data.drop(
+            actual_test_data = test.drop(
                 columns=features_to_drop, axis=1)
-            if (len(small_train_data.columns) == 0 or
-                    len(small_test_data.columns) == 0):
+            if (len(actual_train_data.columns) == 0 or
+                    len(actual_test_data.columns) == 0):
                 if has_dropped_features:
                     raise UserConfigValidationException(
                         'All features have been dropped from the dataset.'
@@ -643,8 +621,8 @@ class RAIInsights(RAIBaseInsights):
             # Ensure that the model has the required methods and that they
             # do not change the input data.
             if task_type != ModelTask.FORECASTING:
-                self._ensure_model_outputs(input_data=small_train_data)
-            self._ensure_model_outputs(input_data=small_test_data)
+                self._ensure_model_outputs(input_data=actual_train_data)
+            self._ensure_model_outputs(input_data=actual_test_data)
 
             if task_type == ModelTask.REGRESSION:
                 if hasattr(model, SKLearn.PREDICT_PROBA):
@@ -713,17 +691,6 @@ class RAIInsights(RAIBaseInsights):
                     if_train_data=False,
                     if_predictions=True
                 )
-
-    def _validate_data_is_not_missing(self, data, data_name):
-        """Validates that data is not missing (ie null)"""
-        list_of_feature_having_missing_values = []
-        for feature in data.columns.tolist():
-            if np.any(data[feature].isnull()):
-                list_of_feature_having_missing_values.append(feature)
-        if len(list_of_feature_having_missing_values) > 0:
-            raise UserConfigValidationException(
-                f"Features {list_of_feature_having_missing_values} "
-                f"have missing values in {data_name} data.")
 
     def _validate_feature_metadata(
             self, feature_metadata, train, task_type, model, target_column):

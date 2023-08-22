@@ -29,7 +29,8 @@ from responsibleai._tools.shared.state_directory_management import \
 from responsibleai.exceptions import (DuplicateManagerConfigException,
                                       SchemaErrorException)
 from responsibleai.managers.base_manager import BaseManager
-from responsibleai.utils import _measure_time
+from responsibleai.utils import (_find_features_having_missing_values,
+                                 _measure_time)
 
 
 class CounterfactualConstants:
@@ -418,6 +419,15 @@ class CounterfactualManager(BaseManager):
         return dice_explainer
 
     def _add_counterfactual_config(self, new_counterfactual_config):
+        if any(_find_features_having_missing_values(self._train)):
+            raise UserConfigValidationException(
+                'Missing values are not allowed in the '
+                'train dataset while computing counterfactuals.')
+        if any(_find_features_having_missing_values(self._test)):
+            raise UserConfigValidationException(
+                'Missing values are not allowed in the '
+                'test dataset while computing counterfactuals.')
+
         if self._model is None:
             raise UserConfigValidationException(
                 'Model is required for counterfactual example generation and '
