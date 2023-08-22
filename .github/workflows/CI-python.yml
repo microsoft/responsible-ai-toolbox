@@ -54,6 +54,7 @@ jobs:
           pip install --upgrade "pip-tools<=7.1.0"
 
       - name: Pip compile
+        shell: bash -l {0}
         run: |
           pip-compile requirements-dev.txt -o requirements-dev-comp.txt
           cat requirements-dev-comp.txt
