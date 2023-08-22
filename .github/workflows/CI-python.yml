@@ -87,7 +87,7 @@ jobs:
       - if: ${{ matrix.packageDirectory == 'raiutils' }}
         name: Install mkl
         run: |
-          conda install --yes --quiet mkl-service
+          conda install --yes --quiet mkl
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Run tests
