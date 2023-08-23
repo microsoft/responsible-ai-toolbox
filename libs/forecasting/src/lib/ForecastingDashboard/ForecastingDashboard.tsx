@@ -101,7 +101,7 @@ export class ForecastingDashboard extends React.Component<
         <Stack
           className={classNames.sectionStack}
           tokens={{ childrenGap: "24px", padding: "0 0 100px 0" }}
-          id="ForecastingDashboard"
+          id={"ForecastingDashboard"}
         >
           <Stack.Item className={classNames.topLevelDescriptionText}>
             <Text>{description}</Text>
@@ -116,6 +116,7 @@ export class ForecastingDashboard extends React.Component<
               </Text>
             ) : (
               <Dropdown
+                id={"ForecastingTimeSeriesDropdown"}
                 label={localization.Forecasting.timeSeries}
                 className={classNames.dropdown}
                 options={this.state.timeSeriesOptions}
