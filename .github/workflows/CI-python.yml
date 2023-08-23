@@ -44,13 +44,21 @@ jobs:
           auto-update-conda: true
           python-version: ${{ matrix.pythonVersion }}
 
+      - name: Install numpy with mkl support
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet numpy "blas=*=mkl"
+        working-directory: ${{ matrix.packageDirectory }}
+
       - if: ${{ matrix.operatingSystem != 'macos-latest' }}
         name: Install pytorch on non-MacOS
+        shell: bash -l {0}
         run: |
           conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
 
       - if: ${{ matrix.operatingSystem == 'macos-latest' }}
         name: Install Anaconda packages on MacOS, which should not include cpuonly according to official docs
+        shell: bash -l {0}
         run: |
           conda install --yes --quiet pytorch torchvision captum -c pytorch
 
@@ -84,12 +92,6 @@ jobs:
         shell: bash -l {0}
         run: |
           pip install -v -e .
-        working-directory: ${{ matrix.packageDirectory }}
-
-      - if: ${{ matrix.packageDirectory == 'raiutils' }}
-        name: Install mkl
-        run: |
-          conda install --yes --quiet mkl
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Run tests
