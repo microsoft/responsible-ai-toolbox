@@ -69,12 +69,6 @@ jobs:
           name: requirements-dev-comp.txt
           path: ${{ matrix.packageDirectory }}/requirements-dev-comp.txt
 
-      - name: Install dependencies
-        shell: bash -l {0}
-        run: |
-          pip-sync requirements-dev-comp.txt
-        working-directory: ${{ matrix.packageDirectory }}
-
       - name: Install package
         shell: bash -l {0}
         run: |
