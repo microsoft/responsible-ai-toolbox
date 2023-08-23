@@ -12,6 +12,7 @@ on:
       - "libs/e2e/src/lib/describer/modelAssessment/**"
       - "libs/interpret-vision/**"
       - "notebooks/**"
+      - "docs/**"
 
 jobs:
   ui-build:
