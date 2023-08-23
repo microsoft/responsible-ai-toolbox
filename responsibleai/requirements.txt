@@ -11,7 +11,7 @@ pandas>=0.25.1,<2.0.0
 scikit-learn>=0.22.1,!=1.1 # See PR 1429 about upper bound
 scipy>=1.4.1
 semver~=2.13.0
-ml-wrappers>=0.5.1
+ml-wrappers
 
 # Pinned dependencies
 networkx<=2.5

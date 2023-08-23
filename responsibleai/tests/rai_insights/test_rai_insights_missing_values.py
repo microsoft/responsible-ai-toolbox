@@ -6,9 +6,10 @@ from enum import Enum
 import numpy as np
 import pandas as pd
 import pytest
+from ml_wrappers.model.predictions_wrapper import \
+    PredictionsModelWrapperClassification
 from tests.common_utils import create_iris_data
-from ml_wrappers.model.predictions_wrapper import (
-    PredictionsModelWrapperClassification, PredictionsModelWrapperRegression)
+
 from rai_test_utils.models.sklearn import (
     create_complex_classification_pipeline, create_sklearn_svm_classifier)
 from raiutils.exceptions import UserConfigValidationException
@@ -115,8 +116,7 @@ class TestRAIInsightsMissingValues(object):
             model_wrapper = PredictionsModelWrapperClassification(
                 all_data,
                 model_predict_output,
-                model_predict_proba_output,
-                should_construct_pandas_query=False)
+                model_predict_proba_output)
             model = model_wrapper
 
         rai_insights = RAIInsights(
