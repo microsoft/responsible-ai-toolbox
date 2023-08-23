@@ -21,6 +21,7 @@ export interface IModelAssessmentData {
   isObjectDetection?: boolean;
   isMultiLabel?: boolean;
   isImageClassification?: boolean;
+  isTextClassification?: boolean;
 }
 
 export interface IErrorAnalysisData {
@@ -204,5 +205,6 @@ export enum RAINotebookNames {
   "OrangeJuiceForecastingDataBalanceExperience" = "responsibleaidashboard-orange-juice-forecasting.py",
   "FridgeImageClassificationModelDebugging" = "responsibleaidashboard-fridge-image-classification-model-debugging.py",
   "FridgeMultilabelModelDebugging" = "responsibleaidashboard-fridge-multilabel-image-classification-model-debugging.py",
-  "FridgeObjectDetectionModelDebugging" = "responsibleaidashboard-fridge-object-detection-model-debugging.py"
+  "FridgeObjectDetectionModelDebugging" = "responsibleaidashboard-fridge-object-detection-model-debugging.py",
+  "DBPediaTextClassificationModelDebugging" = "responsibleaidashboard-DBPedia-text-classification-model-debugging.py"
 }
