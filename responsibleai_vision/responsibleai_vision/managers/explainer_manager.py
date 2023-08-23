@@ -7,6 +7,7 @@ import base64
 import io
 import json
 import pickle
+import traceback
 import warnings
 from pathlib import Path
 from typing import Any, List, Optional
@@ -120,12 +121,15 @@ class ExplainerManager(BaseManager):
                     automl_wrapper = python_model._model
                     inner_model = automl_wrapper._model
                     number_of_classes = automl_wrapper._number_of_classes
+                    transforms = automl_wrapper.get_inference_transform()
                     self._model = PytorchDRiseWrapper(
-                        inner_model, number_of_classes, device=device)
-                except Exception as e:
+                        inner_model, number_of_classes, device=device,
+                        transforms=transforms)
+                except Exception:
+                    tb = traceback.format_exc()
                     warnings.warn(("Could not extract inner automl model." +
                                    "Explanation may take longer to compute." +
-                                   "Inner exception: {}").format(str(e)),
+                                   "Inner exception: {}").format(tb),
                                   UserWarning)
                     self._model = MLflowDRiseWrapper(model._model, classes)
             else:
@@ -299,6 +303,10 @@ class ExplainerManager(BaseManager):
                     return fl
                 b64_string = fl[object_index]
             except BaseException:
+                tb = traceback.format_exc()
+                warnings.warn(("Could not generate saliency map. " +
+                               "Inner exception: {}").format(tb),
+                              UserWarning)
                 if object_index is None:
                     return [self._get_fail_str()]
                 b64_string = self._get_fail_str()
