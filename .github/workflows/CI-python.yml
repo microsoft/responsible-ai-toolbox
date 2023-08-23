@@ -18,8 +18,7 @@ jobs:
       matrix:
         packageDirectory:
           ["responsibleai", "erroranalysis", "raiutils", "rai_test_utils"]
-        operatingSystem: 
-          [ubuntu-latest, macos-latest, windows-latest]
+        operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
         pythonVersion: ["3.7", "3.8", "3.9", "3.10"]
         exclude:
           - operatingSystem: macos-latest
