@@ -18,7 +18,8 @@ const tabularFileNames = [
   "responsibleaidashboard-housing-classification-model-debugging",
   "responsibleaidashboard-diabetes-decision-making",
   "responsibleaidashboard-housing-decision-making",
-  "responsibleaidashboard-multiclass-dnn-model-debugging"
+  "responsibleaidashboard-multiclass-dnn-model-debugging",
+  "responsibleaidashboard-orange-juice-forecasting"
 ];
 const visionFileNames = [
   "responsibleaidashboard-fridge-image-classification-model-debugging",
