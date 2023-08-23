@@ -44,12 +44,6 @@ jobs:
           auto-update-conda: true
           python-version: ${{ matrix.pythonVersion }}
 
-      - name: Install numpy with mkl support
-        shell: bash -l {0}
-        run: |
-          conda install --yes --quiet numpy "blas=*=mkl"
-        working-directory: ${{ matrix.packageDirectory }}
-
       - if: ${{ matrix.operatingSystem != 'macos-latest' }}
         name: Install pytorch on non-MacOS
         shell: bash -l {0}
