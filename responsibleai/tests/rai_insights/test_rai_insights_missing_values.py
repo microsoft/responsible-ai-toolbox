@@ -4,7 +4,10 @@
 from enum import Enum
 
 import numpy as np
+import pandas as pd
 import pytest
+from ml_wrappers.model.predictions_wrapper import \
+    PredictionsModelWrapperClassification
 from tests.common_utils import create_iris_data
 
 from rai_test_utils.models.sklearn import (
@@ -54,10 +57,12 @@ class TestRAIInsightsMissingValues(object):
         MISSING_VALUE.TEST_ONLY_MISSING_VALUES,
         MISSING_VALUE.BOTH_TRAIN_TEST_MISSING_VALUES
     ])
+    @pytest.mark.parametrize('wrapper', [True, False])
     def test_model_handles_missing_values(
             self, manager_type, adult_data,
             categorical_missing_values,
-            missing_value_combination):
+            missing_value_combination,
+            wrapper):
 
         data_train, data_test, y_train, y_test, categorical_features, \
             continuous_features, target_name, classes, \
@@ -97,9 +102,22 @@ class TestRAIInsightsMissingValues(object):
                         'workclass'] == 'Private', 'workclass'] = np.nan
 
         X_train = data_train_copy.drop([target_name], axis=1)
+        X_test = data_test_copy.drop([target_name], axis=1)
+
         model = create_complex_classification_pipeline(
             X_train, y_train, continuous_features,
             categorical_features)
+
+        if wrapper:
+            all_data = pd.concat(
+                [X_test, X_train])
+            model_predict_output = model.predict(all_data)
+            model_predict_proba_output = model.predict_proba(all_data)
+            model_wrapper = PredictionsModelWrapperClassification(
+                all_data,
+                model_predict_output,
+                model_predict_proba_output)
+            model = model_wrapper
 
         rai_insights = RAIInsights(
             model, data_train_copy, data_test_copy, target_name,
@@ -141,30 +159,32 @@ class TestRAIInsightsMissingValues(object):
             rai_insights.compute()
             assert len(rai_insights.error_analysis.get()) == 1
         elif manager_type == ManagerNames.COUNTERFACTUAL:
-            if missing_value_combination != \
-                    MISSING_VALUE.NO_MISSING_VALUES:
-                if missing_value_combination == \
-                    MISSING_VALUE.TRAIN_ONLY_MISSING_VALUES or \
-                    missing_value_combination == \
-                        MISSING_VALUE.BOTH_TRAIN_TEST_MISSING_VALUES:
-                    error_message = \
-                        'Missing values are not allowed in ' + \
-                        'the train dataset while computing ' + \
-                        'counterfactuals.'
+            if not wrapper:
+                if missing_value_combination != \
+                        MISSING_VALUE.NO_MISSING_VALUES:
+                    if missing_value_combination == \
+                        MISSING_VALUE.TRAIN_ONLY_MISSING_VALUES or \
+                        missing_value_combination == \
+                            MISSING_VALUE.BOTH_TRAIN_TEST_MISSING_VALUES:
+                        error_message = \
+                            'Missing values are not allowed in ' + \
+                            'the train dataset while computing ' + \
+                            'counterfactuals.'
+                    else:
+                        error_message = \
+                            'Missing values are not allowed in ' + \
+                            'the test dataset while computing ' + \
+                            'counterfactuals.'
+                    with pytest.raises(
+                            UserConfigValidationException,
+                            match=error_message):
+                        rai_insights.counterfactual.add(
+                            total_CFs=10, desired_class="opposite")
                 else:
-                    error_message = \
-                        'Missing values are not allowed in ' + \
-                        'the test dataset while computing ' + \
-                        'counterfactuals.'
-                with pytest.raises(
-                        UserConfigValidationException, match=error_message):
                     rai_insights.counterfactual.add(
                         total_CFs=10, desired_class="opposite")
-            else:
-                rai_insights.counterfactual.add(
-                    total_CFs=10, desired_class="opposite")
-                rai_insights.compute()
-                assert len(rai_insights.counterfactual.get()) == 1
+                    rai_insights.compute()
+                    assert len(rai_insights.counterfactual.get()) == 1
         elif manager_type == ManagerNames.CAUSAL:
             if missing_value_combination != \
                     MISSING_VALUE.NO_MISSING_VALUES:
