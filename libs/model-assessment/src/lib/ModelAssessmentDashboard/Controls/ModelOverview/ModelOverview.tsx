@@ -126,11 +126,11 @@ export class ModelOverview extends React.Component<
       featureConfigurationIsVisible: false,
       iouThreshold: 70,
       metricConfigurationIsVisible: false,
+      objectDetectionAbortController: undefined,
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
       selectedMetrics: [],
-      showHeatmapColors: true,
-      objectDetectionAbortController: undefined
+      showHeatmapColors: true
     };
   }
 
@@ -653,7 +653,7 @@ export class ModelOverview extends React.Component<
       this.state.className.length > 0 &&
       this.state.iouThreshold
     ) {
-      var newAbortController = new AbortController();
+      const newAbortController = new AbortController();
       this.setState({ objectDetectionAbortController: newAbortController });
       this.context
         .requestObjectDetectionMetrics(
