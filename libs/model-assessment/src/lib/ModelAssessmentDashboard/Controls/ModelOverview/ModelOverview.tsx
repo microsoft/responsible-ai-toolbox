@@ -88,6 +88,7 @@ interface IModelOverviewState {
   featureBasedCohortLabeledStatistics: ILabeledStatistic[][];
   featureBasedCohorts: ErrorCohort[];
   iouThreshold: number;
+  questionAnsweringAbortController: AbortController | undefined;
 }
 
 const datasetCohortViewPivotKey = "datasetCohortView";
@@ -740,6 +741,11 @@ export class ModelOverview extends React.Component<
     selectionIndexes: number[][],
     isDatasetCohort: boolean
   ): void {
+    if (this.state.questionAnsweringAbortController !== undefined) {
+      this.state.questionAnsweringAbortController.abort();
+    }
+    const newAbortController = new AbortController();
+    this.setState({ questionAnsweringAbortController: newAbortController });
     if (
       this.context.requestQuestionAnsweringMetrics &&
       selectionIndexes.length > 0
@@ -748,7 +754,7 @@ export class ModelOverview extends React.Component<
         .requestQuestionAnsweringMetrics(
           selectionIndexes,
           this.questionAnsweringCache,
-          new AbortController().signal
+          newAbortController.signal
         )
         .then((result) => {
           // Assumption: the lengths of `result` and `selectionIndexes` are the same.
