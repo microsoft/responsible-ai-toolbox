@@ -126,11 +126,11 @@ export class ModelOverview extends React.Component<
       featureConfigurationIsVisible: false,
       iouThreshold: 70,
       metricConfigurationIsVisible: false,
+      questionAnsweringAbortController: undefined,
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
       selectedMetrics: [],
-      showHeatmapColors: true,
-      questionAnsweringAbortController: undefined
+      showHeatmapColors: true
     };
   }
 
