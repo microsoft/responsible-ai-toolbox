@@ -1093,7 +1093,9 @@ class RAIVisionInsights(RAIBaseInsights):
         predicted_y = dashboard_dataset.object_detection_predicted_y
         if self.device == Device.AUTO.value:
             # currently only supports single GPU instance
-            device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+            device = torch.device(
+                'cuda:0' if torch.cuda.is_available() else 'cpu'
+            )
         else:
             device = torch.device(self.device)
         normalized_iou_threshold = [iou_threshold / 100.0]
