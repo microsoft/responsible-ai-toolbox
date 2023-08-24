@@ -97,10 +97,18 @@ jobs:
         run: |
           pip install -r ${{ matrix.packageDirectory }}/requirements-automl.txt
 
-      - name: Install package
+      - if: ${{ (matrix.packageDirectory == 'responsibleai_vision') }}
+        name: Install vision package
         shell: bash -l {0}
         run: |
           pip install -v -e .
+        working-directory: ${{ matrix.packageDirectory }}
+
+      - if: ${{ (matrix.packageDirectory == 'responsibleai_text') }}
+        name: Install text package
+        shell: bash -l {0}
+        run: |
+          pip install -v -e .[qa]
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Run tests
