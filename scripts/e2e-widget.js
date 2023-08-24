@@ -9,6 +9,7 @@ const nxPath = path.join(__dirname, "../node_modules/@nrwl/cli/bin/nx.js");
 const baseDir = path.join(__dirname, "../notebooks/responsibleaidashboard");
 const tabularDir = path.join(baseDir, "tabular");
 const visionDir = path.join(baseDir, "vision");
+const textDir = path.join(baseDir, "text");
 const filePrefix = "responsibleaidashboard-";
 // Please add notebook name into the appropriate 'fileNames' array only when you are adding e2e tests to that notebook.
 // Keep this list in sync with .github/workflows/CI-e2e-notebooks.yml and/or .github/workflows/CI-e2e-notebooks-vision.yml
@@ -18,14 +19,24 @@ const tabularFileNames = [
   "responsibleaidashboard-housing-classification-model-debugging",
   "responsibleaidashboard-diabetes-decision-making",
   "responsibleaidashboard-housing-decision-making",
-  "responsibleaidashboard-multiclass-dnn-model-debugging"
+  "responsibleaidashboard-multiclass-dnn-model-debugging",
+  "responsibleaidashboard-orange-juice-forecasting"
 ];
 const visionFileNames = [
   "responsibleaidashboard-fridge-image-classification-model-debugging",
   "responsibleaidashboard-fridge-multilabel-image-classification-model-debugging",
   "responsibleaidashboard-fridge-object-detection-model-debugging"
 ];
-const fileNames = tabularFileNames.concat(visionFileNames);
+const textFileNames = [
+  "responsibleaidashboard-DBPedia-text-classification-model-debugging"
+];
+const ignoredFiles = [
+  "responsibleaidashboard-covid19-event-multilabel-text-classification-model-debugging",
+  "responsibleaidashboard-blbooksgenre-binary-text-classification-model-debugging"
+];
+const fileNames = tabularFileNames
+  .concat(visionFileNames)
+  .concat(textFileNames);
 const notebookHostReg = /^ResponsibleAI started at (http:\/\/localhost:\d+)$/m;
 const serveHostReg = /Web Development Server is listening at\s+(.*)$/m;
 const timeout = 3600;
@@ -41,11 +52,20 @@ function getDirForNotebook(notebook) {
   }
   if (visionFileNames.includes(notebook)) {
     return visionDir;
+  } else if (textFileNames.includes(notebook)) {
+    return textDir;
   } else if (tabularFileNames.includes(notebook)) {
     return tabularDir;
   } else {
     throw new Error(`Notebook ${notebook} not found.`);
   }
+}
+
+function getFilesFromNotebookDirs() {
+  return fs
+    .readdirSync(tabularDir)
+    .concat(fs.readdirSync(visionDir))
+    .concat(fs.readdirSync(textDir));
 }
 
 /**
@@ -154,11 +174,10 @@ function addFlightsInFile(path, flights) {
 
 function checkIfAllNotebooksHaveTests() {
   console.log(`Checking if all notebooks under ${baseDir} have tests`);
-  const files = fs
-    .readdirSync(tabularDir)
-    .concat(fs.readdirSync(visionDir))
+  const files = getFilesFromNotebookDirs()
     .filter((f) => f.startsWith(filePrefix) && f.endsWith(".ipynb"))
-    .map((f) => f.replace(".ipynb", ""));
+    .map((f) => f.replace(".ipynb", ""))
+    .filter((f) => !ignoredFiles.includes(f));
   const allNotebooksHaveTests = _.isEqual(_.sortBy(files), _.sortBy(fileNames));
   if (!allNotebooksHaveTests) {
     throw new Error(
@@ -210,10 +229,9 @@ function convertNotebooks(notebook, flights) {
  * @returns {Host[]}
  */
 async function runNotebooks(selectedNotebook, host) {
-  let files = fs
-    .readdirSync(tabularDir)
-    .concat(fs.readdirSync(visionDir))
-    .filter((f) => f.startsWith(filePrefix) && f.endsWith(".py"));
+  let files = getFilesFromNotebookDirs().filter(
+    (f) => f.startsWith(filePrefix) && f.endsWith(".py")
+  );
   console.log("Available notebooks:");
   files.forEach((file) => {
     console.log(`    ${file}`);

@@ -13,7 +13,7 @@ import {
 export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
   datasetShape: IModelAssessmentData,
   selectedFeatures: number,
-  isVision: boolean
+  isTabular: boolean
 ): void {
   cy.get(Locators.ModelOverviewFeatureSelection).should("exist");
   cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should(
@@ -21,7 +21,7 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
   );
   cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("not.exist");
 
-  if (!isVision) {
+  if (isTabular) {
     cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist"); // TODO: check!
     cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
 

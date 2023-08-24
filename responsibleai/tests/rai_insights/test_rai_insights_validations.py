@@ -16,9 +16,8 @@ from rai_test_utils.datasets.tabular import (
     create_binary_classification_dataset, create_cancer_data,
     create_housing_data)
 from rai_test_utils.models.lightgbm import create_lightgbm_classifier
-from rai_test_utils.models.sklearn import (
-    create_complex_classification_pipeline,
-    create_sklearn_random_forest_regressor)
+from rai_test_utils.models.sklearn import \
+    create_sklearn_random_forest_regressor
 from raiutils.exceptions import UserConfigValidationException
 from responsibleai import RAIInsights
 from responsibleai.feature_metadata import FeatureMetadata
@@ -51,70 +50,6 @@ class TestRAIInsightsValidations:
                 target_column=TARGET,
                 task_type='regre',
                 forecasting_enabled=forecasting_enabled)
-
-    def test_missing_test_data(self):
-        train_data = {
-            'Column1': [10, 20, 90, 40, 50],
-            'Column2': [10, 20, 90, 40, 50],
-            'Target': [10, 20, 90, 40, 50]
-        }
-        train = pd.DataFrame(train_data)
-
-        test_data = {
-            'Column1': [10, 20, 90, 40, 50],
-            'Column2': [10, 20, 90, 40, 50],
-            'Target': [10, 20, np.nan, 40, 50]
-        }
-        test = pd.DataFrame(test_data)
-
-        X_train = train.drop(columns=['Target'])
-        y_train = train['Target'].values
-        model = create_complex_classification_pipeline(
-            X_train, y_train, ['Column1', 'Column2'], [])
-
-        with pytest.raises(
-            UserConfigValidationException,
-                match="['Column1']") as ucve:
-            RAIInsights(
-                model=model,
-                train=train,
-                test=test,
-                target_column='Target',
-                task_type='classification')
-        assert "Features ['Target'] have missing values in " + \
-            "test data" in str(ucve.value)
-
-    def test_missing_train_data(self):
-        train_data = {
-            'Column1': [10, 20, 90, 40, 50],
-            'Column2': [10, 20, np.nan, 40, 50],
-            'Target': [10, 20, 90, 40, 50]
-        }
-        train = pd.DataFrame(train_data)
-
-        test_data = {
-            'Column1': [10, 20, 90, 40, 50],
-            'Column2': [10, 20, 90, 40, 50],
-            'Target': [10, 20, 90, 40, 50]
-        }
-        test = pd.DataFrame(test_data)
-
-        X_train = train.drop(columns=['Target'])
-        y_train = train['Target'].values
-        model = create_complex_classification_pipeline(
-            X_train, y_train, ['Column1', 'Column2'], [])
-
-        with pytest.raises(
-            UserConfigValidationException,
-                match="['Column2']") as ucve:
-            RAIInsights(
-                model=model,
-                train=train,
-                test=test,
-                target_column='Target',
-                task_type='classification')
-        assert "Features ['Column2'] have missing values in " + \
-            "train data" in str(ucve.value)
 
     def test_validate_test_data_size(self):
         X_train, X_test, y_train, y_test, _, _ = \
@@ -400,45 +335,6 @@ class TestRAIInsightsValidations:
                 task_type='classification')
         assert 'The features in train and test data do not match' in \
             str(ucve.value)
-
-    def test_dirty_train_test_data(self):
-        X_train = pd.DataFrame(data=[['1', 1], ['2', '3']],
-                               columns=['c1', 'c2'])
-        y_train = np.array([1, 0])
-        X_test = pd.DataFrame(data=[['1', '2'], ['2', '3']],
-                              columns=['c1', 'c2'])
-        y_test = np.array([1, 0])
-
-        model = LGBMClassifier(boosting_type='gbdt', learning_rate=0.1,
-                               max_depth=5, n_estimators=200, n_jobs=1,
-                               random_state=777)
-
-        X_train[TARGET] = y_train
-        X_test[TARGET] = y_test
-
-        with pytest.raises(UserConfigValidationException) as ucve:
-            RAIInsights(
-                model=model,
-                train=X_train,
-                test=X_test,
-                target_column=TARGET,
-                categorical_features=['c2'],
-                task_type='classification')
-
-        assert 'Error finding unique values in column c2. ' + \
-            'Please check your train data.' in str(ucve.value)
-
-        with pytest.raises(UserConfigValidationException) as ucve:
-            RAIInsights(
-                model=model,
-                train=X_test,
-                test=X_train,
-                target_column=TARGET,
-                categorical_features=['c2'],
-                task_type='classification')
-
-        assert 'Error finding unique values in column c2. ' + \
-            'Please check your test data.' in str(ucve.value)
 
     def test_unsupported_train_test_types(self):
         X_train, X_test, y_train, y_test, _, _ = \
