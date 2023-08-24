@@ -17,7 +17,7 @@ import responsibleai
 from raiutils.exceptions import UserConfigValidationException
 from responsibleai._internal.constants import (FileFormats, Metadata,
                                                SerializationAttributes,
-                                               RAI_MODEL_SERVING_PORT_ENV_VAR)
+                                               ModelServingConstants)
 from responsibleai._internal._served_model_wrapper import (
     ServedModelWrapper)
 
@@ -269,7 +269,8 @@ class RAIBaseInsights(ABC):
         """
         # Communicate with locally served model 
         # if the environment variable RAI_MODEL_SERVING_PORT is set.
-        model_serving_port = os.getenv(RAI_MODEL_SERVING_PORT_ENV_VAR)
+        model_serving_port = os.getenv(
+            ModelServingConstants.RAI_MODEL_SERVING_PORT_ENV_VAR)
         if model_serving_port is not None:
             inst.__dict__['_' + _SERIALIZER] = None
             inst.__dict__[Metadata.MODEL] = ServedModelWrapper(port=model_serving_port)

@@ -4,6 +4,7 @@
 """Defines the model server class."""
 
 from flask import jsonify, request
+import pandas as pd
 import uuid
 
 from rai_core_flask import FlaskHelper
@@ -89,7 +90,7 @@ class ModelServer(object):
 
         def predict():
             data = request.get_json(force=True)
-            return jsonify(self.model.predict(data["X"]))
+            return jsonify(self.model.predict(pd.DataFrame(data["X"])))
         self.add_url_rule(predict, '/predict', methods=["POST"])
 
         # def predict_proba():

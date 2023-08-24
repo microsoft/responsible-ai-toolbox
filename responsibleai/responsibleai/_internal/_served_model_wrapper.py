@@ -2,18 +2,16 @@
 # Licensed under the MIT License.
 
 import requests
-from flask import jsonify
 
 
 class ServedModelWrapper:
     def __init__(self, port):
-        self.ip = ip
         self.port = port
     
     def forecast(self, X):
         response = requests.post(
-            url=f"https://localhost:{self.port}/predict",
-            data=jsonify({"X": X}))
+            url=f"http://localhost:{self.port}/predict",
+            json={"X": X.to_json(orient='split')})
         if response.status_code < 300:
             return response.content
         else:
