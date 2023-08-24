@@ -10,20 +10,20 @@ import { ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent } from 
 export function ensureNewCohortsShowUpInCharts(
   datasetShape: IModelAssessmentData,
   isNotebookTest: boolean,
-  isVision: boolean
+  isTabular: boolean
 ): void {
   cy.get(Locators.ModelOverviewCohortViewDatasetCohortViewButton).click();
   ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     datasetShape,
     false,
     isNotebookTest,
-    isVision
+    isTabular
   );
   createCohort(datasetShape.modelOverviewData?.newCohort?.name);
   ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     datasetShape,
     true,
     isNotebookTest,
-    isVision
+    isTabular
   );
 }
