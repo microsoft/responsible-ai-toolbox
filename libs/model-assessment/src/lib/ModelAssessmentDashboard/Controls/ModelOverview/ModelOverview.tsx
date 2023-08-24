@@ -129,7 +129,8 @@ export class ModelOverview extends React.Component<
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
       selectedMetrics: [],
-      showHeatmapColors: true
+      showHeatmapColors: true,
+      questionAnsweringAbortController: undefined
     };
   }
 
