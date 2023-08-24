@@ -53,7 +53,7 @@ jobs:
         name: Install Anaconda packages on MacOS, which should not include cpuonly according to official docs
         shell: bash -l {0}
         run: |
-          conda install --yes --quiet pytorch==1.13.1 torchvision==0.14.1 captum -c pytorch
+          conda install --yes --quiet pytorch torchvision captum -c pytorch
 
       - if: ${{ matrix.operatingSystem == 'macos-latest' }}
         name: Install latest lightgbm from conda-forge for MacOS
