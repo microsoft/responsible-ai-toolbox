@@ -27,6 +27,8 @@ jobs:
             pythonVersion: "3.7"
           - operatingSystem: windows-latest
             pythonVersion: "3.7"
+          - operatingSystem: macos-latest
+            pythonVersion: "3.8"
 
     runs-on: ${{ matrix.operatingSystem }}
 
