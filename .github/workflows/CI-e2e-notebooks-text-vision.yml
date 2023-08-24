@@ -1,4 +1,4 @@
-name: CI e2e notebooks vision
+name: CI e2e notebooks text vision
 
 on:
   push:
@@ -8,9 +8,11 @@ on:
     paths:
       - "raiwidgets/**"
       - "responsibleai_vision/**"
+      - "responsibleai_text/**"
       - ".github/workflows/CI-e2e-notebooks-vision.yml"
       - "libs/e2e/src/lib/describer/modelAssessment/**"
       - "libs/interpret-vision/**"
+      - "libs/interpret-text/**"
       - "notebooks/**"
 
 jobs:
@@ -43,7 +45,7 @@ jobs:
           name: raiwidgets-js
           path: raiwidgets/raiwidgets/widget
 
-  ci-e2e-notebook-vision:
+  ci-e2e-notebook-text-vision:
     needs: ui-build
 
     env:
@@ -55,7 +57,7 @@ jobs:
         operatingSystem: [ubuntu-latest, windows-latest, macos-latest]
         pythonVersion: [3.7, 3.8, 3.9, "3.10"]
         flights: [""]
-        notebookGroup: ["nb_group_1"]
+        notebookGroup: ["vis_nb_group_1", "text_nb_group_1"]
         exclude:
           - operatingSystem: macos-latest
             pythonVersion: "3.7"
@@ -113,12 +115,27 @@ jobs:
           pip install -v -e .
         working-directory: raiwidgets
 
-      - name: Install vision dependencies
+      - if: ${{ matrix.notebookGroup == 'vis_nb_group_1'}}
+        name: Install vision dependencies
         shell: bash -l {0}
         run: |
           pip install -r requirements-dev.txt
           pip install .
         working-directory: responsibleai_vision
+
+      - if: ${{ matrix.notebookGroup == 'text_nb_group_1'}}
+        name: Install text dependencies
+        shell: bash -l {0}
+        run: |
+          pip install -r requirements-dev.txt
+          pip install .
+        working-directory: responsibleai_text
+
+      - if: ${{ matrix.notebookGroup == 'text_nb_group_1'}}
+        name: Setup spacy
+        shell: bash -l {0}
+        run: |
+          python -m spacy download en_core_web_sm
 
       - name: Pip freeze
         shell: bash -l {0}
@@ -134,13 +151,19 @@ jobs:
           path: raiwidgets/installed-requirements-dev.txt
 
       # keep list of notebooks in sync with scripts/e2e-widget.js, create new notebook group if necessary
-      - if: ${{ matrix.notebookGroup == 'nb_group_1'}}
+      - if: ${{ matrix.notebookGroup == 'vis_nb_group_1'}}
         name: Run widget tests
         shell: bash -l {0}
         run: |
           yarn e2e-widget -n "responsibleaidashboard-fridge-image-classification-model-debugging" -f ${{ matrix.flights }}
           yarn e2e-widget -n "responsibleaidashboard-fridge-multilabel-image-classification-model-debugging" -f ${{ matrix.flights }}
           yarn e2e-widget -n "responsibleaidashboard-fridge-object-detection-model-debugging" -f ${{ matrix.flights }}
+
+      - if: ${{ matrix.notebookGroup == 'text_nb_group_1'}}
+        name: Run widget tests
+        shell: bash -l {0}
+        run: |
+          yarn e2e-widget -n "responsibleaidashboard-DBPedia-text-classification-model-debugging" -f ${{ matrix.flights }}
 
       - name: Upload e2e test screen shot
         if: always()

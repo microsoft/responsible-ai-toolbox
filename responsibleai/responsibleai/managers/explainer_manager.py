@@ -31,7 +31,8 @@ from responsibleai._internal.constants import (ExplanationKeys, ListProperties,
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.managers.base_manager import BaseManager
-from responsibleai.utils import _measure_time
+from responsibleai.utils import (_find_features_having_missing_values,
+                                 _measure_time)
 
 SPARSE_NUM_FEATURES_THRESHOLD = 1000
 IS_RUN = 'is_run'
@@ -96,6 +97,28 @@ class ExplainerManager(BaseManager):
         if self._model is None:
             raise UserConfigValidationException(
                 'Model is required for model explanations')
+
+        categorical_features_with_missing_values_train = \
+            set(_find_features_having_missing_values(
+                self._initialization_examples)) & set(
+                self._categorical_features)
+        if any(categorical_features_with_missing_values_train):
+            raise UserConfigValidationException(
+                "Categorical features {0} cannot have missing "
+                "values for computing explanations. "
+                "Please check your training data.".format(
+                    ",".join(categorical_features_with_missing_values_train)))
+
+        categorical_features_with_missing_values_test = \
+            set(_find_features_having_missing_values(
+                self._evaluation_examples)) & set(
+                self._categorical_features)
+        if any(categorical_features_with_missing_values_test):
+            raise UserConfigValidationException(
+                "Categorical features {0} cannot have missing "
+                "values for computing explanations. "
+                "Please check your test data.".format(
+                    ",".join(categorical_features_with_missing_values_test)))
 
         if self._is_added:
             warnings.warn(("DUPLICATE-EXPLAINER-CONFIG: Ignoring. "
