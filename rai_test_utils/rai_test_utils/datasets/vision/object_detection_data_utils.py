@@ -4,14 +4,12 @@
 import os
 import urllib.request as request_file
 import xml.etree.ElementTree as ET
-from zipfile import ZipFile
-
-import pandas as pd
-
 from io import BytesIO
 from urllib.parse import urlparse
+from zipfile import ZipFile
 
 import numpy as np
+import pandas as pd
 import requests
 from PIL import Image
 from requests.adapters import HTTPAdapter
