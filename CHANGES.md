@@ -87,7 +87,7 @@ this file to understand what changed.
     - fix RAI explanation error for dropped categorical features after serialization by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2261
     - Tabular Only: Address missing values as per each manager in responsibleai by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2263
     - responsibleai: Add prediction wrapper to missing value tests by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2270
-  - ## error analysis
+  - ## Error Analysis
     - Update text insights and error_analysis_manager to handle pd.DataFrame predictions and prediction with type of string by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/2179
     - Error Analysis testing for IC & multilabel by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2205
     - change erroranalysis valueerror caused by invalid model prediction shape to user error by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2254
