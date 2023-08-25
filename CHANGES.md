@@ -49,7 +49,6 @@ this file to understand what changed.
     - GPU support for OD metrics by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2266
   - ## RAI Tabular
     - OD model type support in responsibleai for EA by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2230
-- breaking changes
 - bug fixes and tests
   - ## Responsible AI Dashboard
     - ModelAssessmentVision UI Test Template by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2174
