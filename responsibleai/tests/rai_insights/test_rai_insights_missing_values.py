@@ -116,7 +116,8 @@ class TestRAIInsightsMissingValues(object):
             model_wrapper = PredictionsModelWrapperClassification(
                 all_data,
                 model_predict_output,
-                model_predict_proba_output)
+                model_predict_proba_output,
+                should_construct_pandas_query=False)
             model = model_wrapper
 
         rai_insights = RAIInsights(
