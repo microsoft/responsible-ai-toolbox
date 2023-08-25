@@ -9,7 +9,7 @@ on:
       - "raiwidgets/**"
       - "responsibleai_vision/**"
       - "responsibleai_text/**"
-      - ".github/workflows/CI-e2e-notebooks-vision.yml"
+      - ".github/workflows/ci-e2e-notebook-text-vision.yml"
       - "libs/e2e/src/lib/describer/modelAssessment/**"
       - "libs/interpret-vision/**"
       - "libs/interpret-text/**"
