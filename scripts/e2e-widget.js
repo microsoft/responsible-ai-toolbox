@@ -28,11 +28,11 @@ const visionFileNames = [
   "responsibleaidashboard-fridge-object-detection-model-debugging"
 ];
 const textFileNames = [
-  "responsibleaidashboard-DBPedia-text-classification-model-debugging"
+  "responsibleaidashboard-DBPedia-text-classification-model-debugging",
+  "responsibleaidashboard-blbooksgenre-binary-text-classification-model-debugging"
 ];
 const ignoredFiles = [
-  "responsibleaidashboard-covid19-event-multilabel-text-classification-model-debugging",
-  "responsibleaidashboard-blbooksgenre-binary-text-classification-model-debugging"
+  "responsibleaidashboard-covid19-event-multilabel-text-classification-model-debugging"
 ];
 const fileNames = tabularFileNames
   .concat(visionFileNames)
