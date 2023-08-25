@@ -66,6 +66,7 @@ this file to understand what changed.
     - Add forecasting to raiwidgets and add a forecasting notebook by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/2252
     - add e2e UI notebook tests to DBPedia text classification notebook by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2265
     - Endpoint Interruption Logic for Model Overview with OD by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2268
+    - add e2e UI notebook tests to blbooksgenre text classification notebook by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2273
   - ## RAI Vision
     - Require pillow>=10.0.0, catch drise failure due to low mask_res or num_masks by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/2181
     - Add retry logic to image reader by @kicha0 in https://github.com/microsoft/responsible-ai-toolbox/pull/2206
@@ -116,6 +117,9 @@ this file to understand what changed.
   - update responsibleai and raiwidgets to erroranalysis 0.4.5 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2264
   - convert CI-python to use conda and install pytorch dependencies by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2272
   - update responsibleai to interpret-community 0.30.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2275
+  - Remove deprecated module `cohort.py` from `raiwidgets` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2278
+  - Turn off flag `should_construct_pandas_query` in `PredictionsModelWrapperClassification` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2277
+  - Update CODEOWNERS to include romanlutz for responsibleai by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/2280
 
 ## v0.29.0
 
