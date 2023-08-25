@@ -100,7 +100,7 @@ this file to understand what changed.
   - release scikit-learn upper bound in responsibleai package by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2173
   - improve notebook test logging and verbosity to diagnose timeouts by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2202
   - Widget spacing for OD MO widgets by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2213
-  - Update _NOTICE.md file by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/2231
+  - Update \_NOTICE.md file by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/2231
   - LEGO: Pull request from JUNO/hb_a12a4630-4852-4e7d-9cbc-c0e1117da1ab_20230811114026921 to main by @csigs in https://github.com/microsoft/responsible-ai-toolbox/pull/2237
   - Localized file check-in by OneLocBuild Task: Build definition ID 21368: Build ID 101597327 by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/2236
   - reduce PR execution time for tabular RAI dashboard changes by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2238
