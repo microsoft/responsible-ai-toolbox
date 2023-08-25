@@ -8,6 +8,18 @@ from zipfile import ZipFile
 
 import pandas as pd
 
+from io import BytesIO
+from urllib.parse import urlparse
+
+import numpy as np
+import requests
+from PIL import Image
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
+
+# domain mapped session for reuse
+_requests_sessions = {}
+
 
 def _get_retry_session(url):
     domain = urlparse(url.lower()).netloc
