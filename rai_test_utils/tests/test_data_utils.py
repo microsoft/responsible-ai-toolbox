@@ -9,7 +9,8 @@ from rai_test_utils.datasets.tabular import (
     create_energy_data, create_housing_data, create_iris_data, create_msx_data,
     create_multiclass_classification_dataset, create_reviews_data,
     create_simple_titanic_data, create_timeseries_data, create_wine_data)
-from rai_test_utils.datasets.vision import get_images, load_fridge_object_detection_dataset
+from rai_test_utils.datasets.vision import (
+    get_images, load_fridge_object_detection_dataset)
 
 
 class TestDataUtils:
