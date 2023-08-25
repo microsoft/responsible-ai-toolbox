@@ -3,10 +3,9 @@
 
 """Namespace for utility functions used in tests."""
 
-from .utils import get_images, is_valid_uuid, retrieve_dataset
+from .utils import is_valid_uuid, retrieve_dataset
 
 __all__ = [
     "is_valid_uuid",
-    "retrieve_dataset",
-    "get_images"
+    "retrieve_dataset"
 ]

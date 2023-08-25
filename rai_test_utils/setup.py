@@ -15,12 +15,9 @@ with open("README.md", "r") as fh:
 with open('requirements.txt') as f:
     install_requires = [line.strip() for line in f]
 
-extras_require = {
-    "object_detection": [
-        "torch==1.13.1",
-        "torchvision==0.14.1",
-    ]
-}
+# Use requirements-object-detection.txt to set the install_requires
+with open('requirements-object-detection.txt') as f:
+    extras_require = [line.strip() for line in f]
 
 setuptools.setup(
     name=name,  # noqa: F821
