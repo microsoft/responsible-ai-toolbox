@@ -72,10 +72,10 @@ class WrappedIndexPredictorModel:
                          ModelTask.MULTILABEL_TEXT_CLASSIFICATION]
         if self.task_type in classif_tasks:
             dataset = self.dataset.iloc[:, 0].tolist()
-            self.predictions = self._raise_user_error_on_failure(
+            self.predictions = self._raise_user_error_on_prediction_failure(
                 self.model.predict, dataset
             )
-            self.predict_proba = self._raise_user_error_on_failure(
+            self.predict_proba = self._raise_user_error_on_prediction_failure(
                 self.model.predict_proba, dataset
             )
         elif self.task_type == ModelTask.QUESTION_ANSWERING:
@@ -126,7 +126,7 @@ class WrappedIndexPredictorModel:
         pred_proba = self.predict_proba[index]
         return pred_proba
 
-    def _raise_user_error_on_prediction_failure(func, *args, **kwargs):
+    def _raise_user_error_on_prediction_failure(self, func, *args, **kwargs):
         try:
             return func(*args, **kwargs)
         except Exception as ex:
