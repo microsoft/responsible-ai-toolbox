@@ -1,12 +1,20 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import logging
 import os
 import urllib.request as request_file
 
-import torch
-import torchvision
-from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
+module_logger = logging.getLogger(__name__)
+module_logger.setLevel(logging.INFO)
+
+try:
+    import torch
+    import torchvision
+    from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
+except ImportError:
+    module_logger.debug(
+        'Could not import torch/torchvision, required for object detection.')
 
 
 # download fine-tuned recycling model from url
