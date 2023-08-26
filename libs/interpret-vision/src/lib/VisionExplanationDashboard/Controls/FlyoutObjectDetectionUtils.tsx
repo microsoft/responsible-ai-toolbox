@@ -6,7 +6,6 @@ import { IDataset, IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { CanvasTools } from "vott-ct";
 import { Editor } from "vott-ct/lib/js/CanvasTools/CanvasTools.Editor";
-import { Color } from "vott-ct/lib/js/CanvasTools/Core/Colors/Color";
 import { RegionData } from "vott-ct/lib/js/CanvasTools/Core/RegionData";
 
 export interface IFlyoutProps {
@@ -83,7 +82,7 @@ export function drawBox(
   );
 
   // Initializing bounding box tag
-  const predTag = new CanvasTools.Core.Tag(annotation, new Color(colorCode));
+  const predTag = new CanvasTools.Core.Tag(annotation, colorCode);
   const predTagDesc = new CanvasTools.Core.TagsDescriptor([predTag]);
 
   // Drawing bounding box with vott

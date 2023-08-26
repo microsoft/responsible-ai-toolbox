@@ -8,7 +8,8 @@ from tempfile import TemporaryDirectory
 import numpy as np
 import pandas as pd
 import pytest
-from tests.common_utils import create_iris_data
+from tests.common_utils import (ADULT_CATEGORICAL_FEATURES_AFTER_DROP,
+                                ADULT_DROPPED_FEATURES, create_iris_data)
 
 from rai_test_utils.datasets.tabular import \
     create_binary_classification_dataset
@@ -86,59 +87,17 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
         if manager_type == ManagerNames.COUNTERFACTUAL:
             data_test = data_test[0:1]
 
-        rai_insights = RAIInsights(
-            model, data_train, data_test,
-            target_name,
+        feature_metadata = FeatureMetadata(identity_feature_name="age")
+        save_load_add_rai_insights(
+            manager_type=manager_type,
+            data_train=data_train,
+            data_test=data_test,
+            target_name=target_name,
             categorical_features=categorical_features,
-            task_type=ModelTask.CLASSIFICATION,
-            feature_metadata=FeatureMetadata(identity_feature_name="age"))
-
-        with TemporaryDirectory() as tmpdir:
-            save_1 = Path(tmpdir) / "first_save"
-            save_2 = Path(tmpdir) / "second_save"
-
-            # Save it
-            rai_insights.save(save_1)
-
-            # Load
-            rai_2 = RAIInsights.load(save_1)
-
-            # Call a single manager
-            if manager_type == ManagerNames.CAUSAL:
-                rai_2.causal.add(
-                    treatment_features=['age', 'hours_per_week']
-                )
-            elif manager_type == ManagerNames.COUNTERFACTUAL:
-                rai_2.counterfactual.add(
-                    total_CFs=10,
-                    desired_class='opposite',
-                    feature_importance=False
-                )
-            elif manager_type == ManagerNames.DATA_BALANCE:
-                rai_2._data_balance_manager.add(
-                    cols_of_interest=categorical_features
-                )
-            elif manager_type == ManagerNames.ERROR_ANALYSIS:
-                rai_2.error_analysis.add()
-            elif manager_type == ManagerNames.EXPLAINER:
-                rai_2.explainer.add()
-            else:
-                raise ValueError(
-                    "Bad manager_type: {0}".format(manager_type))
-
-            rai_2.compute()
-
-            # Validate, but this isn't the main check
-            validate_rai_insights(
-                rai_2, data_train, data_test,
-                target_name, ModelTask.CLASSIFICATION,
-                categorical_features=categorical_features,
-                feature_range_keys=feature_range_keys,
-                feature_columns=feature_columns,
-                feature_metadata=FeatureMetadata(identity_feature_name="age"))
-
-            # Save again (this is where Issue #1046 manifested)
-            rai_2.save(save_2)
+            feature_columns=feature_columns,
+            feature_range_keys=feature_range_keys,
+            feature_metadata=feature_metadata,
+            model=model)
 
     @pytest.mark.parametrize('target_dir', [ManagerNames.CAUSAL,
                                             ManagerNames.ERROR_ANALYSIS,
@@ -277,6 +236,110 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
 
             # Save again (this is where Issue #1081 manifested)
             rai_2.save(save_2)
+
+    @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
+                                              ManagerNames.ERROR_ANALYSIS,
+                                              ManagerNames.EXPLAINER,
+                                              ManagerNames.COUNTERFACTUAL,
+                                              ManagerNames.DATA_BALANCE])
+    def test_rai_insights_save_load_add_dropped_features(self, manager_type,
+                                                         adult_data):
+        data_train, data_test, y_train, y_test, categorical_features, \
+            continuous_features, target_name, classes, \
+            feature_columns, feature_range_keys = adult_data
+
+        dropped_features = ADULT_DROPPED_FEATURES
+        categorical_features_after_drop = \
+            ADULT_CATEGORICAL_FEATURES_AFTER_DROP
+
+        X_train = data_train.drop([target_name] + dropped_features, axis=1)
+
+        model = create_complex_classification_pipeline(
+            X_train, y_train, continuous_features,
+            categorical_features_after_drop)
+
+        # Cut down size for counterfactuals, in the interests of speed
+        if manager_type == ManagerNames.COUNTERFACTUAL:
+            data_test = data_test[0:1]
+
+        feature_metadata = FeatureMetadata(dropped_features=dropped_features)
+
+        save_load_add_rai_insights(
+            manager_type=manager_type,
+            data_train=data_train,
+            data_test=data_test,
+            target_name=target_name,
+            categorical_features=categorical_features,
+            feature_columns=feature_columns,
+            feature_range_keys=feature_range_keys,
+            feature_metadata=feature_metadata,
+            model=model)
+
+
+def save_load_add_rai_insights(
+    manager_type,
+    data_train,
+    data_test,
+    target_name,
+    categorical_features,
+    feature_columns,
+    feature_range_keys,
+    feature_metadata,
+    model
+):
+    rai_insights = RAIInsights(
+        model, data_train, data_test,
+        target_name,
+        categorical_features=categorical_features,
+        task_type=ModelTask.CLASSIFICATION,
+        feature_metadata=feature_metadata)
+
+    with TemporaryDirectory() as tmpdir:
+        save_1 = Path(tmpdir) / "first_save"
+        save_2 = Path(tmpdir) / "second_save"
+
+        # Save it
+        rai_insights.save(save_1)
+
+        # Load
+        rai_2 = RAIInsights.load(save_1)
+
+        # Call a single manager
+        if manager_type == ManagerNames.CAUSAL:
+            rai_2.causal.add(
+                treatment_features=['age', 'hours_per_week']
+            )
+        elif manager_type == ManagerNames.COUNTERFACTUAL:
+            rai_2.counterfactual.add(
+                total_CFs=10,
+                desired_class='opposite',
+                feature_importance=False
+            )
+        elif manager_type == ManagerNames.DATA_BALANCE:
+            rai_2._data_balance_manager.add(
+                cols_of_interest=categorical_features
+            )
+        elif manager_type == ManagerNames.ERROR_ANALYSIS:
+            rai_2.error_analysis.add()
+        elif manager_type == ManagerNames.EXPLAINER:
+            rai_2.explainer.add()
+        else:
+            raise ValueError(
+                "Bad manager_type: {0}".format(manager_type))
+
+        rai_2.compute()
+
+        # Validate, but this isn't the main check
+        validate_rai_insights(
+            rai_2, data_train, data_test,
+            target_name, ModelTask.CLASSIFICATION,
+            categorical_features=categorical_features,
+            feature_range_keys=feature_range_keys,
+            feature_columns=feature_columns,
+            feature_metadata=feature_metadata)
+
+        # Save again (this is where Issue #1046 manifested)
+        rai_2.save(save_2)
 
 
 def validate_rai_insights(
