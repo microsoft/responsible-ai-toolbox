@@ -26,6 +26,23 @@ jobs:
         with:
           python-version: 3.8
 
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: ${{ matrix.pythonVersion }}
+
+      - if: ${{ matrix.operatingSystem != 'macos-latest' }}
+        name: Install pytorch on non-MacOS
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
+
+      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
+        name: Install Anaconda packages on MacOS, which should not include cpuonly according to official docs
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet pytorch torchvision captum -c pytorch
+
       - name: update and upgrade pip, setuptools, wheel, and twine
         run: |
           python -m pip install --upgrade pip
