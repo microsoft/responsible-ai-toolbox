@@ -9,6 +9,8 @@ import numpy as np
 import pandas as pd
 from sklearn.feature_selection import (mutual_info_classif,
                                        mutual_info_regression)
+from vision_explanation_methods.error_labeling.error_labeling import \
+    ErrorLabeling
 
 from erroranalysis._internal.constants import (ErrorCorrelationMethods,
                                                MatrixParams, Metrics,
@@ -29,8 +31,6 @@ from erroranalysis._internal.version_checker import check_pandas_version
 from erroranalysis.error_correlation_methods import (
     compute_ebm_global_importance, compute_gbm_global_importance)
 from erroranalysis.report import ErrorReport
-from vision_explanation_methods.error_labeling.error_labeling \
-    import ErrorLabeling
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 IMPORTANCES_THRESHOLD = 50000

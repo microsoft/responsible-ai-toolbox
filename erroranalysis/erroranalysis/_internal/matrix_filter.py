@@ -8,6 +8,8 @@ from abc import ABC, abstractmethod
 import numpy as np
 import pandas as pd
 from sklearn.metrics import multilabel_confusion_matrix
+from vision_explanation_methods.error_labeling.error_labeling import \
+    ErrorLabeling
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (DIFF, PRED_Y, ROW_INDEX, TRUE_Y,
@@ -18,8 +20,6 @@ from erroranalysis._internal.metrics import (get_ordered_classes,
                                              is_multi_agg_metric,
                                              metric_to_func)
 from raiutils.exceptions import UserConfigValidationException
-from vision_explanation_methods.error_labeling.error_labeling \
-    import ErrorLabeling
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 CATEGORY1 = 'category1'

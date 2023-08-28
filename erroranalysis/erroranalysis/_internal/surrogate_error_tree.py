@@ -9,6 +9,8 @@ import pandas as pd
 from lightgbm import Booster, LGBMClassifier, LGBMRegressor
 from sklearn.metrics import (mean_absolute_error, mean_squared_error,
                              median_absolute_error, r2_score)
+from vision_explanation_methods.error_labeling.error_labeling import \
+    ErrorLabeling
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
@@ -25,8 +27,6 @@ from erroranalysis._internal.metrics import get_ordered_classes, metric_to_func
 from erroranalysis._internal.process_categoricals import process_categoricals
 from erroranalysis._internal.utils import is_spark
 from raiutils.exceptions import UserConfigValidationException
-from vision_explanation_methods.error_labeling.error_labeling \
-    import ErrorLabeling
 
 # imports required for pyspark support
 try:
