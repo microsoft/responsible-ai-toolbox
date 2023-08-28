@@ -1,4 +1,4 @@
-name: Release to responsibleai and raiwidgets to PyPI
+name: Release responsibleai and raiwidgets to PyPI
 
 env:
   node-version: 16.x
