@@ -56,8 +56,8 @@ class TestMetrics:
 
     @pytest.mark.parametrize('metric', object_detection_metrics)
     def test_object_detection_metrics(self, metric):
-        y_true = np.array([[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]])
-        y_pred = np.array([[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]])
+        y_true = np.array([[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]])
+        y_pred = np.array([[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]])
         if metric == Metrics.ERROR_RATE:
             diff = [
                 len(
