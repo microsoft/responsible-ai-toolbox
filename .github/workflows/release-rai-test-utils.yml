@@ -34,6 +34,7 @@ jobs:
         run: |
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
+          pip install -r requirements-object-detection.txt
         working-directory: rai_test_utils
 
       - name: pip freeze

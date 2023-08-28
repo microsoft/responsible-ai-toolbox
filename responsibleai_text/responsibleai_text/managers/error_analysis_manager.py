@@ -15,6 +15,7 @@ from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.error_report import as_error_report
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
+from responsibleai.exceptions import UserErrorException
 from responsibleai.managers.error_analysis_manager import \
     ErrorAnalysisManager as BaseErrorAnalysisManager
 from responsibleai.managers.error_analysis_manager import as_error_config
@@ -71,8 +72,12 @@ class WrappedIndexPredictorModel:
                          ModelTask.MULTILABEL_TEXT_CLASSIFICATION]
         if self.task_type in classif_tasks:
             dataset = self.dataset.iloc[:, 0].tolist()
-            self.predictions = self.model.predict(dataset)
-            self.predict_proba = self.model.predict_proba(dataset)
+            self.predictions = self._raise_user_error_on_prediction_failure(
+                self.model.predict, dataset
+            )
+            self.predict_proba = self._raise_user_error_on_prediction_failure(
+                self.model.predict_proba, dataset
+            )
         elif self.task_type == ModelTask.QUESTION_ANSWERING:
             self.predictions = self.model.predict(
                 self.dataset.loc[:, ['context', 'questions']])
@@ -120,6 +125,15 @@ class WrappedIndexPredictorModel:
         index = X.index
         pred_proba = self.predict_proba[index]
         return pred_proba
+
+    def _raise_user_error_on_prediction_failure(self, func, *args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as ex:
+            raise UserErrorException(
+                "Unable to use user model to retrieve predictions"
+                f" from given dataset. Original exception: {ex}"
+            )
 
 
 class ErrorAnalysisManager(BaseErrorAnalysisManager):

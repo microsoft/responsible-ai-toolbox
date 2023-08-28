@@ -9,6 +9,9 @@ on:
       - "raiwidgets/**"
       - "responsibleai_text/**"
       - ".github/workflows/CI-notebook-text.yml"
+      - "libs/e2e/src/lib/describer/modelAssessment/**"
+      - "libs/interpret-text/**"
+      - "notebooks/**"
 
 jobs:
   ci-notebook-text:

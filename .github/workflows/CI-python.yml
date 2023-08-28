@@ -27,6 +27,8 @@ jobs:
             pythonVersion: "3.7"
           - operatingSystem: windows-latest
             pythonVersion: "3.7"
+          - operatingSystem: macos-latest
+            pythonVersion: "3.8"
 
     runs-on: ${{ matrix.operatingSystem }}
 
@@ -72,6 +74,13 @@ jobs:
         shell: bash -l {0}
         run: |
           pip install -r requirements-dev.txt
+        working-directory: ${{ matrix.packageDirectory }}
+
+      - if: ${{ matrix.packageDirectory == 'rai_test_utils' }}
+        name: Install package extras
+        shell: bash -l {0}
+        run: |
+          pip install -r requirements-object-detection.txt
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Install package
