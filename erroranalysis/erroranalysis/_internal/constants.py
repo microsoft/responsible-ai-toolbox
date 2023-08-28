@@ -39,10 +39,23 @@ class CohortFilterOps:
     OR = 'or'
 
 
+class ImageColumns(str, Enum):
+    """Provide constants related to the input image dataframe columns.
+
+    Can be 'image' or 'label'.
+    """
+
+    IMAGE = 'image'
+    LABEL = 'label'
+
+
 class ModelTask(str, Enum):
     """Provide model task constants.
 
-    Can be 'classification', 'regression' or 'unknown'.
+    Can be 'classification', 'regression', 'object_detection' or 'unknown'.
+
+    Provides a separate constant for object detection due to the
+    custom logic involved in evaluating predictions.
 
     Note: Keeping sentence case constants (Classification, Regression)
     for backwards compatibility, please use ALL_UPPER_CASE instead.
@@ -50,6 +63,7 @@ class ModelTask(str, Enum):
 
     CLASSIFICATION = 'classification'
     REGRESSION = 'regression'
+    OBJECT_DETECTION = 'object_detection'
     UNKNOWN = 'unknown'
     Classification = 'classification'
     Regression = 'regression'

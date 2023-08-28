@@ -145,7 +145,9 @@ class FilterDataWithCohortFilters:
         # For classification task, check if classification
         # outcome is included in filters, and if it is then
         # compute the necessary column data on the fly
-        if model_task == ModelTask.CLASSIFICATION and filters:
+        if (model_task == ModelTask.CLASSIFICATION or
+            model_task == ModelTask.OBJECT_DETECTION) \
+                and filters:
             for filter in filters:
                 if COLUMN in filter:
                     column = filter[COLUMN]
@@ -264,7 +266,8 @@ class FilterDataWithCohortFilters:
         return regression_error
 
     def _add_filter_cols(self, df, filters):
-        """Adds special columns to the dataset for filtering and postprocessing.
+        """Adds special columns to the dataset for filtering
+        and postprocessing.
 
         :param df: The dataset as a pandas dataframe.
         :type df: pandas.DataFrame
@@ -437,7 +440,8 @@ class FilterDataWithCohortFilters:
 
     def _build_bounds_query(self, filter, colname, method,
                             categorical_features, categories):
-        """Builds a pandas query for the given include or exclude bounds filter.
+        """Builds a pandas query for the given include or
+        exclude bounds filter.
 
         :param filter: The categorical filter or composite_filter to apply to
             the dataset.
