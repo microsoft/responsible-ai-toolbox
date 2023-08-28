@@ -9,6 +9,8 @@ import numpy as np
 import pandas as pd
 from sklearn.feature_selection import (mutual_info_classif,
                                        mutual_info_regression)
+from vision_explanation_methods.error_labeling.error_labeling import \
+    ErrorLabeling
 
 from erroranalysis._internal.constants import (ErrorCorrelationMethods,
                                                MatrixParams, Metrics,
@@ -96,6 +98,8 @@ class BaseAnalyzer(ABC):
         if model_task == ModelTask.CLASSIFICATION:
             if metric is None:
                 metric = Metrics.ERROR_RATE
+        elif model_task == ModelTask.OBJECT_DETECTION:
+            metric = Metrics.ERROR_RATE
         else:
             if metric is None:
                 metric = Metrics.MEAN_SQUARED_ERROR
@@ -490,7 +494,8 @@ class BaseAnalyzer(ABC):
             diff = np.concatenate((diff, diff))
         if error_correlation_method == ErrorCorrelationMethods.MUTUAL_INFO:
             n_neighbors = min(3, input_data.shape[0] - 1)
-            if self._model_task == ModelTask.CLASSIFICATION:
+            if self._model_task == ModelTask.CLASSIFICATION \
+               or self._model_task == ModelTask.OBJECT_DETECTION:
                 return mutual_info_classif(
                     input_data, diff, n_neighbors=n_neighbors).tolist()
             else:
@@ -684,6 +689,19 @@ class ModelAnalyzer(BaseAnalyzer):
         """
         if self._model_task == ModelTask.CLASSIFICATION:
             return self.model.predict(self.dataset) != self.true_y
+        elif self._model_task == ModelTask.OBJECT_DETECTION:
+            pred_y = self.model.predict(self.dataset)
+            diff = [
+                len(
+                    ErrorLabeling(
+                        ModelTask.OBJECT_DETECTION,
+                        pred_y[image_idx],
+                        self.true_y[image_idx]
+                    ).compute_error_list()
+                ) > 0
+                for image_idx in range(len(self.true_y))
+            ]
+            return diff
         else:
             return self.model.predict(self.dataset) - self.true_y
 

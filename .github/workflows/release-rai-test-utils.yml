@@ -26,11 +26,24 @@ jobs:
         with:
           python-version: 3.8
 
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: ${{ matrix.pythonVersion }}
+
+      - name: Install pytorch
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
+
       - name: update and upgrade pip, setuptools, wheel, and twine
+        shell: bash -l {0}
         run: |
           python -m pip install --upgrade pip
           pip install --upgrade setuptools wheel twine
+
       - name: install requirements.txt for rai_test_utils
+        shell: bash -l {0}
         run: |
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
@@ -38,19 +51,23 @@ jobs:
         working-directory: rai_test_utils
 
       - name: pip freeze
+        shell: bash -l {0}
         run: pip freeze
 
       - name: build wheel for rai_test_utils
+        shell: bash -l {0}
         run: python setup.py sdist bdist_wheel
         working-directory: rai_test_utils
 
       # run tests before publishing to PyPI
 
       - name: install rai_test_utils wheel locally
+        shell: bash -l {0}
         run: find ./dist/ -name '*.whl' -exec pip install {} \;
         working-directory: rai_test_utils
 
       - name: run rai_test_utils tests
+        shell: bash -l {0}
         run: pytest ./tests/
         working-directory: rai_test_utils
 
