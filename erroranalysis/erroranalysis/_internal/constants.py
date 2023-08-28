@@ -39,6 +39,16 @@ class CohortFilterOps:
     OR = 'or'
 
 
+class ImageColumns(str, Enum):
+    """Provide constants related to the input image dataframe columns.
+
+    Can be 'image' or 'label'.
+    """
+
+    IMAGE = 'image'
+    LABEL = 'label'
+
+
 class ModelTask(str, Enum):
     """Provide model task constants.
 

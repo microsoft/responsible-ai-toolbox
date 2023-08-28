@@ -7,7 +7,8 @@ import pytest
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (ARG, COLUMN, METHOD, PRED_Y,
-                                               ROW_INDEX, TRUE_Y, ModelTask)
+                                               ROW_INDEX, TRUE_Y, ImageColumns,
+                                               ModelTask)
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from rai_test_utils.datasets.tabular import (create_diabetes_data,
                                              create_iris_data,
@@ -353,11 +354,11 @@ class TestCohortFilter(object):
         model = get_object_detection_fridge_model()
 
         dataset = load_fridge_object_detection_dataset()
-        X_test = dataset[["image"]]
-        y_test = dataset[["label"]]
+        X_test = dataset[[ImageColumns.IMAGE]]
+        y_test = dataset[[ImageColumns.LABEL]]
         validation_data = create_validation_data(X_test, y_test)
 
-        feature_names = ["image"]
+        feature_names = [ImageColumns.IMAGE]
 
         run_error_analyzer(validation_data,
                            model,
