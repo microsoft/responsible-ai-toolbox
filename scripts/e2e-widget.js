@@ -32,7 +32,8 @@ const textFileNames = [
   "responsibleaidashboard-blbooksgenre-binary-text-classification-model-debugging"
 ];
 const ignoredFiles = [
-  "responsibleaidashboard-covid19-event-multilabel-text-classification-model-debugging"
+  "responsibleaidashboard-covid19-event-multilabel-text-classification-model-debugging",
+  "responsibleaidashboard-question-answering-model-debugging"
 ];
 const fileNames = tabularFileNames
   .concat(visionFileNames)
