@@ -64,40 +64,40 @@ jobs:
         shell: bash -l {0}
         run: |
           pip install -r requirements-dev.txt
-          pip install -r requirements.txt
+          pip install .
         working-directory: ${{ matrix.packageDirectory }}
       
       - name: Install dependencies
         shell: bash -l {0}
         run: |
           pip install -r requirements-dev.txt
-          pip install -r requirements.txt
+          pip install .
         working-directory: responsibleai
 
       - name: Pip freeze
         shell: bash -l {0}
         run: pip freeze
       
-      - name: build wheel for raiwidgets
-        shell: bash -l {0}
-        run: python setup.py sdist bdist_wheel
-        working-directory: raiwidgets
+      # - name: build wheel for raiwidgets
+      #   shell: bash -l {0}
+      #   run: python setup.py sdist bdist_wheel
+      #   working-directory: raiwidgets
 
-      - name: build wheel for responsibleai
-        shell: bash -l {0}
-        run: python setup.py sdist bdist_wheel
-        working-directory: responsibleai
+      # - name: build wheel for responsibleai
+      #   shell: bash -l {0}
+      #   run: python setup.py sdist bdist_wheel
+      #   working-directory: responsibleai
 
-      # run tests before publishing to PyPI
-      - name: install raiwidgets wheel locally
-        shell: bash -l {0}
-        run: find ./dist/ -name '*.whl' -exec pip install {} \;
-        working-directory: raiwidgets
+      # # run tests before publishing to PyPI
+      # - name: install raiwidgets wheel locally
+      #   shell: bash -l {0}
+      #   run: find ./dist/ -name '*.whl' -exec pip install {} \;
+      #   working-directory: raiwidgets
 
-      - name: install responsibleai wheel locally
-        shell: bash -l {0}
-        run: find ./dist/ -name '*.whl' -exec pip install {} \;
-        working-directory: responsibleai
+      # - name: install responsibleai wheel locally
+      #   shell: bash -l {0}
+      #   run: find ./dist/ -name '*.whl' -exec pip install {} \;
+      #   working-directory: responsibleai
 
       - name: Run tests
         shell: bash -l {0}
