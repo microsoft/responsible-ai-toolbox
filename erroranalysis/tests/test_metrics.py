@@ -59,7 +59,7 @@ class TestMetrics:
         y_true = np.array([[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]])
         y_pred = np.array([[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]])
         if metric == Metrics.ERROR_RATE:
-            diff = [
+            diff = np.array([
                 len(
                     ErrorLabeling(
                         ModelTask.OBJECT_DETECTION,
@@ -68,7 +68,7 @@ class TestMetrics:
                     ).compute_error_list()
                 ) > 0
                 for image_idx in range(len(y_true))
-            ]
+            ])
             metric_value = metric_to_func[metric](y_true, y_pred, diff)
         else:
             metric_value = metric_to_func[metric](y_true, y_pred)
