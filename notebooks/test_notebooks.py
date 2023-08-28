@@ -343,3 +343,13 @@ def test_responsibleaidashboard_blbooksgenre_text_model_debugging():
 
     test_values = {}
     assay_one_notebook(nb_path, nb_name, test_values)
+
+
+@pytest.mark.text_notebooks
+def test_responsibleaidashboard_question_answering_model_debugging():
+    nb_path = TEXT
+    nb_name = ("responsibleaidashboard-question-" +
+               "answering-model-debugging")
+
+    test_values = {}
+    assay_one_notebook(nb_path, nb_name, test_values)
