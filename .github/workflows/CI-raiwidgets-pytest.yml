@@ -80,23 +80,23 @@ jobs:
       - name: build wheel for raiwidgets
         shell: bash -l {0}
         run: python setup.py sdist bdist_wheel
-        working-directory: ${{ env.widgetDirectory }}
+        working-directory: raiwidgets
 
       - name: build wheel for responsibleai
         shell: bash -l {0}
         run: python setup.py sdist bdist_wheel
-        working-directory: ${{ env.raiDirectory }}
+        working-directory: responsibleai
 
       # run tests before publishing to PyPI
       - name: install raiwidgets wheel locally
         shell: bash -l {0}
         run: find ./dist/ -name '*.whl' -exec pip install {} \;
-        working-directory: ${{ env.widgetDirectory }}
+        working-directory: raiwidgets
 
       - name: install responsibleai wheel locally
         shell: bash -l {0}
         run: find ./dist/ -name '*.whl' -exec pip install {} \;
-        working-directory: ${{ env.raiDirectory }}
+        working-directory: responsibleai
 
       - name: Run tests
         shell: bash -l {0}
