@@ -4,6 +4,7 @@
 import numbers
 import warnings
 from enum import Enum
+import logging
 
 import numpy as np
 import pandas as pd
@@ -11,11 +12,16 @@ from lightgbm import Booster, LGBMClassifier, LGBMRegressor
 from sklearn.metrics import (mean_absolute_error, mean_squared_error,
                              median_absolute_error, r2_score)
 
+module_logger = logging.getLogger(__name__)
+module_logger.setLevel(logging.INFO)
+
 try:
     from vision_explanation_methods.error_labeling.error_labeling import \
         ErrorLabeling
+    pytorch_installed = True
 except ImportError:
-    warnings.warn("Can't import vision_explanation_methods"
+    pytorch_installed = False
+    module_logger.debug("Can't import vision_explanation_methods"
                   "or underlying torch dependencies, "
                   "required for Object Detection scenario.")
 
@@ -317,6 +323,11 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
     if analyzer.model_task == ModelTask.CLASSIFICATION:
         diff = pred_y != true_y
     elif analyzer.model_task == ModelTask.OBJECT_DETECTION:
+        if not pytorch_installed:
+            raise ValueError(
+                "User Error: torch & torchvision are not installed "
+                "and are needed for Object Detection scenario."
+            )
         diff = [
             len(
                 ErrorLabeling(

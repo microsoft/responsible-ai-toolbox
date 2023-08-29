@@ -4,16 +4,22 @@
 import math
 import warnings
 from abc import ABC, abstractmethod
+import logging
 
 import numpy as np
 import pandas as pd
 from sklearn.metrics import multilabel_confusion_matrix
 
+module_logger = logging.getLogger(__name__)
+module_logger.setLevel(logging.INFO)
+
 try:
     from vision_explanation_methods.error_labeling.error_labeling import \
         ErrorLabeling
+    pytorch_installed = True
 except ImportError:
-    warnings.warn("Can't import vision_explanation_methods"
+    pytorch_installed = False
+    module_logger.debug("Can't import vision_explanation_methods"
                   "or underlying torch dependencies, "
                   "required for Object Detection scenario.")
 
@@ -121,6 +127,11 @@ def compute_matrix_on_dataset(analyzer, features, dataset,
     if analyzer.model_task == ModelTask.CLASSIFICATION:
         diff = pred_y != true_y
     elif analyzer.model_task == ModelTask.OBJECT_DETECTION:
+        if not pytorch_installed:
+            raise ValueError(
+                "User Error: torch & torchvision are not installed "
+                "and are needed for Object Detection scenario."
+            )
         diff = [
             len(
                 ErrorLabeling(

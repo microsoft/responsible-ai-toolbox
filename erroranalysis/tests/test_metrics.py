@@ -6,15 +6,18 @@ import warnings
 import numpy as np
 import pytest
 
+module_logger = logging.getLogger(__name__)
+module_logger.setLevel(logging.INFO)
+
 try:
     from vision_explanation_methods.error_labeling.error_labeling import \
         ErrorLabeling
     vem_installed = True
 except ImportError:
-    warnings.warn("Can't import vision_explanation_methods "
+    vem_installed = False
+    module_logger.debug("Can't import vision_explanation_methods "
                   "or underlying torch dependencies, "
                   "required for Object Detection scenario.")
-    vem_installed = False
 
 from erroranalysis._internal.constants import (
     Metrics, ModelTask, binary_classification_metrics,
