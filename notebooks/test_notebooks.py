@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import os
+import sys
 
 import nbformat as nbf
 import papermill as pm
@@ -293,6 +294,18 @@ def test_responsibleaidashboard_fridge_object_detection_model_debugging():
     assay_one_notebook(nb_path, nb_name, test_values)
 
 
+# skip forecasting in Python 3.6 because of dependency incompatibilities
+@pytest.mark.notebooks
+@pytest.mark.skipif(sys.version_info < (3, 7),
+                    reason="skip forecasting for Python 3.6")
+def test_responsibleaidashboard_orange_juice_forecasting():
+    nb_path = TABULAR
+    nb_name = "responsibleaidashboard-orange-juice-forecasting"
+
+    test_values = {}
+    assay_one_notebook(nb_path, nb_name, test_values)
+
+
 @pytest.mark.notebooks
 def test_responsibleaidashboard_getting_started():
     nb_path = TABULAR
@@ -327,6 +340,16 @@ def test_responsibleaidashboard_blbooksgenre_text_model_debugging():
     nb_path = TEXT
     nb_name = ("responsibleaidashboard-blbooksgenre-binary-" +
                "text-classification-model-debugging")
+
+    test_values = {}
+    assay_one_notebook(nb_path, nb_name, test_values)
+
+
+@pytest.mark.text_notebooks
+def test_responsibleaidashboard_question_answering_model_debugging():
+    nb_path = TEXT
+    nb_name = ("responsibleaidashboard-question-" +
+               "answering-model-debugging")
 
     test_values = {}
     assay_one_notebook(nb_path, nb_name, test_values)

@@ -88,6 +88,8 @@ interface IModelOverviewState {
   featureBasedCohortLabeledStatistics: ILabeledStatistic[][];
   featureBasedCohorts: ErrorCohort[];
   iouThreshold: number;
+  objectDetectionAbortController: AbortController | undefined;
+  questionAnsweringAbortController: AbortController | undefined;
 }
 
 const datasetCohortViewPivotKey = "datasetCohortView";
@@ -125,6 +127,8 @@ export class ModelOverview extends React.Component<
       featureConfigurationIsVisible: false,
       iouThreshold: 70,
       metricConfigurationIsVisible: false,
+      objectDetectionAbortController: undefined,
+      questionAnsweringAbortController: undefined,
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
       selectedMetrics: [],
@@ -362,6 +366,7 @@ export class ModelOverview extends React.Component<
                 setIoUThreshold={this.setIoUThreshold}
                 updateDatasetCohortStats={this.updateDatasetCohortStats}
                 updateFeatureCohortStats={this.updateFeatureCohortStats}
+                abortController={this.state.objectDetectionAbortController}
               />
             )}
           </Stack>
@@ -650,6 +655,8 @@ export class ModelOverview extends React.Component<
       this.state.className.length > 0 &&
       this.state.iouThreshold
     ) {
+      const newAbortController = new AbortController();
+      this.setState({ objectDetectionAbortController: newAbortController });
       this.context
         .requestObjectDetectionMetrics(
           selectionIndexes,
@@ -657,7 +664,7 @@ export class ModelOverview extends React.Component<
           this.state.className,
           this.state.iouThreshold,
           this.objectDetectionCache,
-          new AbortController().signal
+          newAbortController.signal
         )
         .then((result) => {
           const [allCohortMetrics, cohortClasses] = result;
@@ -740,6 +747,11 @@ export class ModelOverview extends React.Component<
     selectionIndexes: number[][],
     isDatasetCohort: boolean
   ): void {
+    if (this.state.questionAnsweringAbortController !== undefined) {
+      this.state.questionAnsweringAbortController.abort();
+    }
+    const newAbortController = new AbortController();
+    this.setState({ questionAnsweringAbortController: newAbortController });
     if (
       this.context.requestQuestionAnsweringMetrics &&
       selectionIndexes.length > 0
@@ -748,7 +760,7 @@ export class ModelOverview extends React.Component<
         .requestQuestionAnsweringMetrics(
           selectionIndexes,
           this.questionAnsweringCache,
-          new AbortController().signal
+          newAbortController.signal
         )
         .then((result) => {
           // Assumption: the lengths of `result` and `selectionIndexes` are the same.

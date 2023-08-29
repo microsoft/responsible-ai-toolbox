@@ -4,6 +4,7 @@
 """Defines the Error Analysis Manager class."""
 
 import json
+import warnings
 from pathlib import Path
 from typing import Any, List, Optional
 
@@ -27,7 +28,8 @@ from responsibleai._tools.shared.state_directory_management import \
 from responsibleai.exceptions import (ConfigAndResultMismatchException,
                                       DuplicateManagerConfigException)
 from responsibleai.managers.base_manager import BaseManager
-from responsibleai.utils import _measure_time
+from responsibleai.utils import (_find_features_having_missing_values,
+                                 _measure_time)
 
 REPORTS = 'reports'
 CONFIG = 'config'
@@ -314,6 +316,12 @@ class ErrorAnalysisManager(BaseManager):
         """
         print("Error Analysis")
         print('Current Status: Generating error analysis reports.')
+        compute_importances = not any(_find_features_having_missing_values(
+            self._dataset))
+        if not compute_importances:
+            warnings.warn(
+                'Test dataset has missing values, '
+                'skipping feature importance computation in error analysis.')
         for config in self._ea_config_list:
             if config.is_computed:
                 continue
@@ -326,7 +334,7 @@ class ErrorAnalysisManager(BaseManager):
                 filter_features, max_depth=max_depth,
                 min_child_samples=min_child_samples,
                 num_leaves=num_leaves,
-                compute_importances=True,
+                compute_importances=compute_importances,
                 compute_root_stats=True)
 
             # Validate the serialized output against schema
