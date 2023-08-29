@@ -22,7 +22,8 @@ from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.managers.base_manager import BaseManager
-from responsibleai.utils import _measure_time
+from responsibleai.utils import (_find_features_having_missing_values,
+                                 _measure_time)
 
 
 class CausalManager(BaseManager):
@@ -158,6 +159,14 @@ class CausalManager(BaseManager):
         :param random_state: Controls the randomness of the estimator.
         :type random_state: int or RandomState or None
         """
+        if any(_find_features_having_missing_values(self._train)):
+            raise UserConfigValidationException(
+                'Missing values are not allowed in '
+                'the train dataset while computing causal effects.')
+        if any(_find_features_having_missing_values(self._test)):
+            raise UserConfigValidationException(
+                'Missing values are not allowed in '
+                'the test dataset while computing causal effects.')
         if not isinstance(treatment_features, list):
             raise UserConfigValidationException(
                 "Expecting a list for treatment_features but got {0}".format(

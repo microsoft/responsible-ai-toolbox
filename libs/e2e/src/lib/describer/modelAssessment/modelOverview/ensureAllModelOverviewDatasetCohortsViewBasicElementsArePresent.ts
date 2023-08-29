@@ -15,7 +15,7 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   datasetShape: IModelAssessmentData,
   includeNewCohort: boolean,
   isNotebookTest: boolean,
-  isVision: boolean
+  isTabular: boolean
 ): void {
   const data = datasetShape.modelOverviewData;
   const initialCohorts = data?.initialCohorts;
@@ -104,7 +104,7 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     "not.exist"
   );
 
-  if (!isVision) {
+  if (isTabular) {
     if (isNotebookTest) {
       cy.get(Locators.ModelOverviewHeatmapCells)
         .should(

@@ -266,7 +266,8 @@ class RAIVisionInsights(RAIBaseInsights):
             self.image_mode,
             self.max_evals,
             self.num_masks,
-            self.mask_res)
+            self.mask_res,
+            self.device)
         self._error_analysis_manager = ErrorAnalysisManager(
             self._wrapped_model, self.test, self._ext_test_df,
             self.target_column,
@@ -1091,10 +1092,13 @@ class RAIVisionInsights(RAIBaseInsights):
         dashboard_dataset = self.get_data().dataset
         true_y = dashboard_dataset.object_detection_true_y
         predicted_y = dashboard_dataset.object_detection_predicted_y
-        dashboard_dataset = self.get_data().dataset
-        true_y = dashboard_dataset.object_detection_true_y
-        predicted_y = dashboard_dataset.object_detection_predicted_y
-
+        if self.device == Device.AUTO.value:
+            # currently only supports single GPU instance
+            device = torch.device(
+                'cuda:0' if torch.cuda.is_available() else 'cpu'
+            )
+        else:
+            device = torch.device(self.device)
         normalized_iou_threshold = [iou_threshold / 100.0]
         all_cohort_metrics = []
         for cohort_indices in selection_indexes:
@@ -1106,8 +1110,7 @@ class RAIVisionInsights(RAIBaseInsights):
 
             metric_OD = MeanAveragePrecision(
                 class_metrics=True,
-                iou_thresholds=normalized_iou_threshold,
-                average=aggregate_method)
+                iou_thresholds=normalized_iou_threshold).to(device)
             true_y_cohort = [true_y[cohort_index] for cohort_index
                              in cohort_indices]
             predicted_y_cohort = [predicted_y[cohort_index] for cohort_index
@@ -1128,15 +1131,15 @@ class RAIVisionInsights(RAIBaseInsights):
             # creating the list of dictionaries for pred and gt
             cohort_pred = [
                 dict(
-                    boxes=torch.tensor(pred_boxes),
-                    scores=torch.tensor(pred_scores),
-                    labels=torch.tensor(pred_labels),
+                    boxes=torch.tensor(pred_boxes).to(device),
+                    scores=torch.tensor(pred_scores).to(device),
+                    labels=torch.tensor(pred_labels).to(device),
                 )
             ]
             cohort_gt = [
                 dict(
-                    boxes=torch.tensor(gt_boxes),
-                    labels=torch.tensor(gt_labels),
+                    boxes=torch.tensor(gt_boxes).to(device),
+                    labels=torch.tensor(gt_labels).to(device),
                 )
             ]
 
@@ -1169,5 +1172,4 @@ class RAIVisionInsights(RAIBaseInsights):
                 all_submetrics = [[mAP, APs[i], ARs[i]]
                                   for i in range(len(APs))]
                 all_cohort_metrics.append(all_submetrics)
-
         return [all_cohort_metrics, cohort_classes]
