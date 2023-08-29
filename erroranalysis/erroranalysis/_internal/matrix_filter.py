@@ -1,14 +1,24 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import logging
 import math
 import warnings
 from abc import ABC, abstractmethod
-import logging
 
 import numpy as np
 import pandas as pd
 from sklearn.metrics import multilabel_confusion_matrix
+
+from erroranalysis._internal.cohort_filter import filter_from_cohort
+from erroranalysis._internal.constants import (DIFF, PRED_Y, ROW_INDEX, TRUE_Y,
+                                               MatrixParams, MetricKeys,
+                                               Metrics, ModelTask,
+                                               metric_to_display_name)
+from erroranalysis._internal.metrics import (get_ordered_classes,
+                                             is_multi_agg_metric,
+                                             metric_to_func)
+from raiutils.exceptions import UserConfigValidationException
 
 module_logger = logging.getLogger(__name__)
 module_logger.setLevel(logging.INFO)
@@ -20,18 +30,8 @@ try:
 except ImportError:
     pytorch_installed = False
     module_logger.debug("Can't import vision_explanation_methods"
-                  "or underlying torch dependencies, "
-                  "required for Object Detection scenario.")
-
-from erroranalysis._internal.cohort_filter import filter_from_cohort
-from erroranalysis._internal.constants import (DIFF, PRED_Y, ROW_INDEX, TRUE_Y,
-                                               MatrixParams, MetricKeys,
-                                               Metrics, ModelTask,
-                                               metric_to_display_name)
-from erroranalysis._internal.metrics import (get_ordered_classes,
-                                             is_multi_agg_metric,
-                                             metric_to_func)
-from raiutils.exceptions import UserConfigValidationException
+                        "or underlying torch dependencies, "
+                        "required for Object Detection scenario.")
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 CATEGORY1 = 'category1'

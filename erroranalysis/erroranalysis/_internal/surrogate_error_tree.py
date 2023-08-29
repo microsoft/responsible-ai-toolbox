@@ -1,29 +1,15 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import numbers
-import warnings
-from enum import Enum
 import logging
+import numbers
+from enum import Enum
 
 import numpy as np
 import pandas as pd
 from lightgbm import Booster, LGBMClassifier, LGBMRegressor
 from sklearn.metrics import (mean_absolute_error, mean_squared_error,
                              median_absolute_error, r2_score)
-
-module_logger = logging.getLogger(__name__)
-module_logger.setLevel(logging.INFO)
-
-try:
-    from vision_explanation_methods.error_labeling.error_labeling import \
-        ErrorLabeling
-    pytorch_installed = True
-except ImportError:
-    pytorch_installed = False
-    module_logger.debug("Can't import vision_explanation_methods"
-                  "or underlying torch dependencies, "
-                  "required for Object Detection scenario.")
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
@@ -40,6 +26,19 @@ from erroranalysis._internal.metrics import get_ordered_classes, metric_to_func
 from erroranalysis._internal.process_categoricals import process_categoricals
 from erroranalysis._internal.utils import is_spark
 from raiutils.exceptions import UserConfigValidationException
+
+module_logger = logging.getLogger(__name__)
+module_logger.setLevel(logging.INFO)
+
+try:
+    from vision_explanation_methods.error_labeling.error_labeling import \
+        ErrorLabeling
+    pytorch_installed = True
+except ImportError:
+    pytorch_installed = False
+    module_logger.debug("Can't import vision_explanation_methods"
+                        "or underlying torch dependencies, "
+                        "required for Object Detection scenario.")
 
 # imports required for pyspark support
 try:
