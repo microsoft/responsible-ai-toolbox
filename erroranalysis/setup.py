@@ -15,9 +15,10 @@ with open("README.md", "r") as fh:
 with open('requirements.txt') as f:
     install_requires = [line.strip() for line in f]
 
-extras_require = {
-    'od': ['vision_explanation_methods']
-}
+with open('requirements-object-detection.txt') as f:
+    extras_require = {
+        'object_detection': [line.strip() for line in f]
+    }
 
 setuptools.setup(
     name=name,  # noqa: F821

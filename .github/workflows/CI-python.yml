@@ -76,7 +76,7 @@ jobs:
           pip install -r requirements-dev.txt
         working-directory: ${{ matrix.packageDirectory }}
 
-      - if: ${{ matrix.packageDirectory == 'rai_test_utils' }}
+      - if: ${{ (matrix.packageDirectory == 'rai_test_utils') || (matrix.packageDirectory == 'erroranalysis') }}
         name: Install package extras
         shell: bash -l {0}
         run: |
