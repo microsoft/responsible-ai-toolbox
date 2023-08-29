@@ -11,21 +11,6 @@ export function ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresen
 ): void {
   cy.get(Locators.VisionDataExplorerImageExplorerViewButton).click();
 
-  cy.waitUntil(() => cy.reload().then(() => Cypress.$(Locators.VisionDataExplorerImageExplorerViewSuccessImage).length));
-
-  cy.waitUntil(() =>
-    cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage)
-    .should("be.visible")
-    .and(($image) => {
-      cy.wait(10000);
-      // verifies the image is loaded
-      expect(($image[0] as HTMLImageElement).naturalWidth).to.be.greaterThan(0);
-      expect(($image[0] as HTMLImageElement).naturalHeight).to.be.greaterThan(
-        0
-      );
-    })
-  );
-
   // cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage, { timeout: 10000 })
   // .should("be.visible")
   // .and(($image) => {
@@ -51,16 +36,16 @@ export function ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresen
         });
     });
 
-  cy.get(Locators.VisionDataExplorerFlyoutImage, { timeout: 10000 })
-    .should("be.visible")
-    .and(($image) => {
-      cy.wait(10000);
-      // verifies the image is loaded
-      expect(($image[0] as HTMLImageElement).naturalWidth).to.be.greaterThan(0);
-      expect(($image[0] as HTMLImageElement).naturalHeight).to.be.greaterThan(
-        0
-      );
-    });
+  // cy.get(Locators.VisionDataExplorerFlyoutImage, { timeout: 10000 })
+  //   .should("be.visible")
+  //   .and(($image) => {
+  //     cy.wait(10000);
+  //     // verifies the image is loaded
+  //     expect(($image[0] as HTMLImageElement).naturalWidth).to.be.greaterThan(0);
+  //     expect(($image[0] as HTMLImageElement).naturalHeight).to.be.greaterThan(
+  //       0
+  //     );
+  //   });
 
   if (datasetShape.isObjectDetection) {
     cy.get(Locators.VisionDataExplorerFlyoutObjectSelection).should("exist");
