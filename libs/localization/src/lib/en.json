@@ -1382,7 +1382,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Interpretability Dashboard",
-      "importantWords": "Show most Important Words",
+      "importantWords": "Show most important words",
       "topFeatureList": "Top feature list analysis",
       "allButton": "ALL FEATURES",
       "negButton": "NEGATIVE FEATURES",
@@ -1396,7 +1396,8 @@
       "predictedAnswer": "Predicted answer: ",
       "trueAnswer": "True answer: ",
       "inputs": "Inputs",
-      "outputs": "Outputs"
+      "outputs": "Outputs",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "TEXT FEATURE LEGEND",
