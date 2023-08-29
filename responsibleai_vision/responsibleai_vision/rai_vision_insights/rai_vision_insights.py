@@ -266,7 +266,8 @@ class RAIVisionInsights(RAIBaseInsights):
             self.image_mode,
             self.max_evals,
             self.num_masks,
-            self.mask_res)
+            self.mask_res,
+            self.device)
         self._error_analysis_manager = ErrorAnalysisManager(
             self._wrapped_model, self.test, self._ext_test_df,
             self.target_column,
