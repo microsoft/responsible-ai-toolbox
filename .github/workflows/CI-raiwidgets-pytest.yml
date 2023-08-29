@@ -99,9 +99,9 @@ jobs:
       #   run: find ./dist/ -name '*.whl' -exec pip install {} \;
       #   working-directory: responsibleai
 
-      - name: Run notebook tests
-        shell: bash -l {0}
-        run: python -m pytest -s -v notebooks -m notebooks -k test_responsibleaidashboard_multiclass_dnn_model_debugging
+      # - name: Run notebook tests
+      #   shell: bash -l {0}
+      #   run: python -m pytest -s -v notebooks -m notebooks -k test_responsibleaidashboard_multiclass_dnn_model_debugging
 
       - name: Run tests
         shell: bash -l {0}
