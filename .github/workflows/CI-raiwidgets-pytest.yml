@@ -67,12 +67,12 @@ jobs:
           pip install .
         working-directory: ${{ matrix.packageDirectory }}
       
-      # - name: Install dependencies
-      #   shell: bash -l {0}
-      #   run: |
-      #     pip install -r requirements-dev.txt
-      #     pip install .
-      #   working-directory: responsibleai
+      - name: Install dependencies
+        shell: bash -l {0}
+        run: |
+          pip install -r requirements-dev.txt
+          pip install .
+        working-directory: responsibleai
 
       - name: Pip freeze
         shell: bash -l {0}
