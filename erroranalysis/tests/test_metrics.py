@@ -1,6 +1,8 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import warnings
+
 import numpy as np
 import pytest
 
@@ -9,7 +11,8 @@ try:
         ErrorLabeling
     vem_installed = True
 except ImportError:
-    warnings.warn("Can't import vision_explanation_methods or underlying torch dependencies, "
+    warnings.warn("Can't import vision_explanation_methods "
+                  "or underlying torch dependencies, "
                   "required for Object Detection scenario.")
     vem_installed = False
 
@@ -62,7 +65,7 @@ class TestMetrics:
         assert isinstance(metric_value, float)
 
     @pytest.mark.skipif(not vem_installed,
-        reason="vision_explanation_methods not installed")
+                        reason="vision_explanation_methods not installed")
     @pytest.mark.parametrize('metric', object_detection_metrics)
     def test_object_detection_metrics(self, metric):
         y_true = np.array([[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]])

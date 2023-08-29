@@ -3,6 +3,7 @@
 
 """Defines the BaseAnalyzer, the ModelAnalyzer and PredictionsAnalyzer."""
 
+import warnings
 from abc import ABC, abstractmethod
 
 import numpy as np
@@ -14,7 +15,8 @@ try:
     from vision_explanation_methods.error_labeling.error_labeling import \
         ErrorLabeling
 except ImportError:
-    warnings.warn("Can't import vision_explanation_methods or underlying torch dependencies, "
+    warnings.warn("Can't import vision_explanation_methods"
+                  "or underlying torch dependencies, "
                   "required for Object Detection scenario.")
 
 from erroranalysis._internal.constants import (ErrorCorrelationMethods,
