@@ -11,7 +11,20 @@ export function ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresen
 ): void {
   cy.get(Locators.VisionDataExplorerImageExplorerViewButton).click();
 
-  // cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage, { timeout: 10000 })
+  // waits until the image is actually visible, and then performs assertions
+  cy.waitUntil(() =>
+    cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage, { timeout: 30000 }).should("be.visible"),
+    {timeout: 30000}
+  ).then(($image) => {
+    cy.wait(10000);
+    // verifies the image is loaded
+    expect(($image[0] as HTMLImageElement).naturalWidth).to.be.greaterThan(0);
+    expect(($image[0] as HTMLImageElement).naturalHeight).to.be.greaterThan(
+      0
+    );
+  });
+
+  // cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage, { timeout: 30000 })
   // .should("be.visible")
   // .and(($image) => {
   //   cy.wait(10000);
