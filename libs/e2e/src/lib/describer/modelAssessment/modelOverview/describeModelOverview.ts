@@ -33,11 +33,14 @@ export function describeModelOverview(
   describe(testName, () => {
     const isVision =
       datasetShape.isObjectDetection ||
-      datasetShape.isMultiLabel ||
+      datasetShape.isImageMultiLabel ||
       datasetShape.isImageClassification
         ? true
         : false;
-    const isText = datasetShape.isTextClassification ? true : false;
+    const isText =
+      datasetShape.isTextClassification || datasetShape.isTextMultiLabel
+        ? true
+        : false;
     const isTabular = !isVision && !isText;
     if (isNotebookTest) {
       before(() => {
