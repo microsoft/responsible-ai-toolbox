@@ -8,8 +8,13 @@ from abc import ABC, abstractmethod
 import numpy as np
 import pandas as pd
 from sklearn.metrics import multilabel_confusion_matrix
-from vision_explanation_methods.error_labeling.error_labeling import \
-    ErrorLabeling
+
+try:
+    from vision_explanation_methods.error_labeling.error_labeling import \
+        ErrorLabeling
+except ImportError:
+    warnings.warn("Can't import vision_explanation_methods or underlying torch dependencies, "
+                  "required for Object Detection scenario.")
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (DIFF, PRED_Y, ROW_INDEX, TRUE_Y,

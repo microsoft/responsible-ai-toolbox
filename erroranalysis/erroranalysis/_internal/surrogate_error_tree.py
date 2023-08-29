@@ -9,8 +9,13 @@ import pandas as pd
 from lightgbm import Booster, LGBMClassifier, LGBMRegressor
 from sklearn.metrics import (mean_absolute_error, mean_squared_error,
                              median_absolute_error, r2_score)
-from vision_explanation_methods.error_labeling.error_labeling import \
-    ErrorLabeling
+
+try:
+    from vision_explanation_methods.error_labeling.error_labeling import \
+        ErrorLabeling
+except ImportError:
+    warnings.warn("Can't import vision_explanation_methods or underlying torch dependencies, "
+                  "required for Object Detection scenario.")
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,

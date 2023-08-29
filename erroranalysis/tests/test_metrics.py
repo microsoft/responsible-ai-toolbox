@@ -3,8 +3,15 @@
 
 import numpy as np
 import pytest
-from vision_explanation_methods.error_labeling.error_labeling import \
-    ErrorLabeling
+
+try:
+    from vision_explanation_methods.error_labeling.error_labeling import \
+        ErrorLabeling
+    vem_installed = True
+except ImportError:
+    warnings.warn("Can't import vision_explanation_methods or underlying torch dependencies, "
+                  "required for Object Detection scenario.")
+    vem_installed = False
 
 from erroranalysis._internal.constants import (
     Metrics, ModelTask, binary_classification_metrics,
@@ -54,6 +61,8 @@ class TestMetrics:
             metric_value = metric_to_func[metric](y_true, y_pred)
         assert isinstance(metric_value, float)
 
+    @pytest.mark.skipif(not vem_installed,
+        reason="vision_explanation_methods not installed")
     @pytest.mark.parametrize('metric', object_detection_metrics)
     def test_object_detection_metrics(self, metric):
         y_true = np.array([[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]])
