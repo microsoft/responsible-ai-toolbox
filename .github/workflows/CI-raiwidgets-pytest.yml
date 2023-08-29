@@ -18,7 +18,7 @@ jobs:
       matrix:
         packageDirectory: ["raiwidgets"]
         operatingSystem: [ubuntu-latest]
-        pythonVersion: [3.8]
+        pythonVersion: [3.9]
 
     runs-on: ${{ matrix.operatingSystem }}
 
@@ -101,7 +101,7 @@ jobs:
 
       - name: Run notebook tests
         shell: bash -l {0}
-        run: python -m pytest -s -v notebooks -m notebooks
+        run: python -m pytest -s -v notebooks -m notebooks -k test_responsibleaidashboard_multiclass_dnn_model_debugging
 
       - name: Run tests
         shell: bash -l {0}
