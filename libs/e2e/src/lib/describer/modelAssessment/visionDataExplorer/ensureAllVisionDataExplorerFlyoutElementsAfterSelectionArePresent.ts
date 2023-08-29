@@ -11,9 +11,8 @@ export function ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresen
 ): void {
   cy.get(Locators.VisionDataExplorerImageExplorerViewButton).click();
 
-  cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage).should(
-    "be.visible"
-  );
+  cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage)
+  .should("be.visible")
   .and(($image) => {
     cy.wait(10000);
     // verifies the image is loaded
