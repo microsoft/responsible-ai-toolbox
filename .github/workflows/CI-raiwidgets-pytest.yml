@@ -48,10 +48,10 @@ jobs:
       - name: Build Typescript
         run: yarn buildall
       
-      - name: Install pytorch
-        shell: bash -l {0}
-        run: |
-          conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
+      # - name: Install pytorch
+      #   shell: bash -l {0}
+      #   run: |
+      #     conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
 
       - name: Setup tools
         shell: bash -l {0}
