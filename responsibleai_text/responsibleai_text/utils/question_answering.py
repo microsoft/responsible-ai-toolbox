@@ -43,10 +43,12 @@ class QAPredictor:
         for q in questions:
             question, context = q.split(SEP)
             d = self._qa_model.tokenizer(question, context)
+            device = self._qa_model.device
             out = self._qa_model.model.forward(
-                **{k: torch.tensor(d[k]).reshape(1, -1) for k in d})
+                **{k: torch.tensor(
+                    d[k], device=device).reshape(1, -1) for k in d})
             logits = out.start_logits if start else out.end_logits
-            outs.append(logits.reshape(-1).detach().numpy())
+            outs.append(logits.reshape(-1).detach().cpu().numpy())
         return outs
 
     def predict_qa_start(self, questions):
