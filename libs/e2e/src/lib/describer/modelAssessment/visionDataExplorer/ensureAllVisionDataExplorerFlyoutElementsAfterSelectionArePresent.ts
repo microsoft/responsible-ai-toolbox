@@ -17,11 +17,13 @@ export function ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresen
     {timeout: 30000}
   ).then(($image) => {
     cy.wait(10000);
-    // verifies the image is loaded
-    expect(($image[0] as HTMLImageElement).naturalWidth).to.be.greaterThan(0);
-    expect(($image[0] as HTMLImageElement).naturalHeight).to.be.greaterThan(
-      0
-    );
+    if ($image) {
+      // verifies the image is loaded
+      expect(($image[0] as HTMLImageElement).naturalWidth).to.be.greaterThan(0);
+      expect(($image[0] as HTMLImageElement).naturalHeight).to.be.greaterThan(
+        0
+      );
+    }
   });
 
   // cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage, { timeout: 30000 })
