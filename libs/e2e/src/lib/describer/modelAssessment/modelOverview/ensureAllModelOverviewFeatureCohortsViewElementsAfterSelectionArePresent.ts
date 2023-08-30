@@ -13,7 +13,8 @@ import {
 export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
   datasetShape: IModelAssessmentData,
   selectedFeatures: number,
-  isTabular: boolean
+  isTabular: boolean,
+  isVision: boolean
 ): void {
   cy.get(Locators.ModelOverviewFeatureSelection).should("exist");
   cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should(
@@ -22,7 +23,7 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
   cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("not.exist");
 
   // no vision condition as there's no second feature to select
-  if (isTabular) {
+  if (isTabular || isVision) {
     cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
     cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
 
@@ -38,10 +39,6 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
       datasetShape,
       selectedFeatures,
       defaultVisibleChart
-    );
-  } else {
-    cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
-      "not.exist"
     );
   }
 }
