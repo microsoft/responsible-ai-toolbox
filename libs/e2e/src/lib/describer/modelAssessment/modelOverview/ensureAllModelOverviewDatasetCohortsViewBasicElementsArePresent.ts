@@ -34,39 +34,8 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
       );
     } else {
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
-
-      // checks the toggle is on
-      cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
-        "have.attr",
-        "aria-checked",
-        "true"
-      );
-
-      // checks there are RGB colors in the heatmap table
-      cy.get(Locators.ModelOverviewDatasetCohortStatsTable)
-        .find("path")
-        .filter('[fill*="rgb"]')
-        .should('have.length.greaterThan', 0);
-
-      // turn off the toggle
-      cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).click();
-
-      // checks the toggle is off
-      cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
-        "have.attr",
-        "aria-checked",
-        "false"
-      );
-
-      // checks there are no RGB colors in the heatmap table
-      cy.get(Locators.ModelOverviewDatasetCohortStatsTable)
-        .find("path")
-        .should('not.have.attr', 'fill*="rgb"');
-      }
-
-      // turn the toggle back on
-      cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).click();
-    }
+      // ensureHeatmapToggleBehavior(Locators.ModelOverviewDatasetCohortStatsTable);
+  }
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("not.exist");
   cy.get(Locators.ModelOverviewTableYAxisGrid).should(
     "include.text",

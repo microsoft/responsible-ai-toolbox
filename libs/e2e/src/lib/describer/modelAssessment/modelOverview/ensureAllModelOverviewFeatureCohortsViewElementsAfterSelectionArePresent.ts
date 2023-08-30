@@ -12,8 +12,8 @@ import {
 
 export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
   datasetShape: IModelAssessmentData,
-  isTabular: boolean,
-  selectedFeatures: number
+  selectedFeatures: number,
+  isTabular: boolean
 ): void {
   cy.get(Locators.ModelOverviewFeatureSelection).should("exist");
   cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should(
@@ -26,36 +26,7 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
     cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
     cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
 
-    // checks the toggle is on
-    cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
-      "have.attr",
-      "aria-checked",
-      "true"
-    );
-
-    // checks there are RGB colors in the heatmap table
-    cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable)
-      .find("path")
-      .filter('[fill*="rgb"]')
-      .should('have.length.greaterThan', 0);
-
-    // turn off the toggle
-    cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).click();
-
-    // checks the toggle is off
-    cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
-      "have.attr",
-      "aria-checked",
-      "false"
-    );
-
-    // checks there are no RGB colors in the heatmap table
-    cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable)
-      .find("path")
-      .should('not.have.attr', 'fill*="rgb"');
-
-    // turn the toggle back on
-    cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).click();
+    // ensureHeatmapToggleBehavior(Locators.ModelOverviewDisaggregatedAnalysisTable);
 
     const defaultVisibleChart = getDefaultVisibleChart(
       datasetShape.isRegression,

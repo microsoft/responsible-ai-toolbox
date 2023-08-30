@@ -79,8 +79,8 @@ export function describeModelOverview(
         );
         ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
           datasetShape,
-          isTabular,
-          1
+          1,
+          isTabular
         );
       });
 
@@ -92,8 +92,8 @@ export function describeModelOverview(
         );
         ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
           datasetShape,
-          isTabular,
-          2
+          2,
+          isTabular
         );
       });
 
