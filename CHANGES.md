@@ -49,6 +49,8 @@ this file to understand what changed.
     - GPU support for OD metrics by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2266
   - ## RAI Tabular
     - OD model type support in responsibleai for EA by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2230
+  - ## Error analysis
+    - Error Analysis backend support for Object Detection by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2225
 - bug fixes and tests
   - ## Responsible AI Dashboard
     - ModelAssessmentVision UI Test Template by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2174
@@ -67,6 +69,8 @@ this file to understand what changed.
     - Endpoint Interruption Logic for Model Overview with OD by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2268
     - Endpoint Interruption Logic for Model Overview with QA by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2274
     - add e2e UI notebook tests to blbooksgenre text classification notebook by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2273
+    - add RAITextInsights question answering notebook example and tests by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2279
+    - add e2e UI notebook tests to covid19 event multilabel text classification notebook by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2282
   - ## RAI Vision
     - Require pillow>=10.0.0, catch drise failure due to low mask_res or num_masks by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/2181
     - Add retry logic to image reader by @kicha0 in https://github.com/microsoft/responsible-ai-toolbox/pull/2206
@@ -77,6 +81,10 @@ this file to understand what changed.
     - add RAITextInsights DBPedia notebook example and tests by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2204
     - add RAITextInsights covid19 multilabel classification notebook example and tests by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2221
     - add RAITextInsights blbooksgenre binary classification notebook example and tests by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2226
+    - Raise usererror on prediction failure. by @kicha0 in https://github.com/microsoft/responsible-ai-toolbox/pull/2248
+    - add RAITextInsights question answering notebook example and tests by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2279
+    - fix question answering error when running pipeline model on cuda by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2291
+    - add e2e UI notebook tests to covid19 event multilabel text classification notebook by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2282
   - ## RAI Tabular
     - Change `ValueError` to `UserConfigValidationException` in casual_manager.py by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2209
     - Add input type validation for FeatureMetadata class by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2218
@@ -120,6 +128,13 @@ this file to understand what changed.
   - Remove deprecated module `cohort.py` from `raiwidgets` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2278
   - Turn off flag `should_construct_pandas_query` in `PredictionsModelWrapperClassification` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2277
   - Update CODEOWNERS to include romanlutz for responsibleai by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/2280
+  - OD model and data util functions in rai_test_utils by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2246
+  - Release new version of rai test utils by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2284
+  - Updated release gate for rai test utils to install OD dependencies by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2285
+  - Add torch installation support for rai test utils release by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2286
+  - Release new version of `erroranalysis` with OD support by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2288
+  - remove vision e2e notebook tests from raiwidgets and responsibleai release workflow by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2292
+  - Rename `release-rai.yml` to `release-rai-tabular.yml` by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2283
 
 ## v0.29.0
 
