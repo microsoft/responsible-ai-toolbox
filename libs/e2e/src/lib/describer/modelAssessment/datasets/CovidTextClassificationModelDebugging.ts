@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export const FridgeMultilabelModelDebugging = {
+export const CovidTextClassificationModelDebugging = {
   causalAnalysisData: {
     hasCausalAnalysisComponent: false
   },
@@ -18,32 +18,33 @@ export const FridgeMultilabelModelDebugging = {
   featureImportanceData: {
     hasFeatureImportanceComponent: false
   },
-  featureNames: ["image"],
-  isImageMultiLabel: true,
+  featureNames: ["text"],
+  isTextMultiLabel: true,
   modelOverviewData: {
+    featureCohortView: {
+      firstFeatureToSelect: "positive_words",
+      multiFeatureCohorts: 3,
+      secondFeatureToSelect: "negative_words",
+      singleFeatureCohorts: 3
+    },
     hasModelOverviewComponent: true,
     initialCohorts: [
       {
         metrics: {
-          exactMatchRatio: "0.925",
-          hammingScore: "0.729"
+          exactMatchRatio: "0.958",
+          hammingScore: "0.333"
         },
         name: "All data",
-        sampleSize: "10"
+        sampleSize: "3"
       }
     ],
     newCohort: {
       metrics: {
         exactMatchRatio: "1",
-        hammingScore: "1"
+        hammingScore: "0.375"
       },
-      name: "CohortCreateE2E-multilabel",
-      sampleSize: "3"
+      name: "CohortCreateE2E-multilabel-text",
+      sampleSize: "2"
     }
-  },
-  visionDataExplorerData: {
-    errorInstances: 0,
-    hasVisionDataExplorerComponent: true,
-    successInstances: 10
   }
 };

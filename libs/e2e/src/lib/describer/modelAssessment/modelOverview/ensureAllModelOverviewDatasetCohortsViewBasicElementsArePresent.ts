@@ -59,7 +59,7 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
       "falseNegativeRate",
       "selectionRate"
     );
-  } else if (datasetShape.isMultiLabel) {
+  } else if (datasetShape.isTextMultiLabel || datasetShape.isImageMultiLabel) {
     metricsOrder.push("exactMatchRatio", "hammingScore");
   } else if (datasetShape.isObjectDetection) {
     metricsOrder.push(
