@@ -60,11 +60,6 @@ jobs:
         run: |
           yarn buildall
 
-      - name: Install pytorch
-        shell: bash -l {0}
-        run: |
-          conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
-
       - name: update and upgrade pip, setuptools, wheel, and twine
         shell: bash -l {0}
         run: |
@@ -109,44 +104,6 @@ jobs:
         run: python setup.py sdist bdist_wheel
         working-directory: ${{ env.raiDirectory }}
 
-      # run tests before publishing to PyPI
-      - name: install raiwidgets wheel locally
-        shell: bash -l {0}
-        run: find ./dist/ -name '*.whl' -exec pip install {} \;
-        working-directory: ${{ env.widgetDirectory }}
-
-      - name: install responsibleai wheel locally
-        shell: bash -l {0}
-        run: find ./dist/ -name '*.whl' -exec pip install {} \;
-        working-directory: ${{ env.raiDirectory }}
-
-      - name: run raiwidgets tests
-        shell: bash -l {0}
-        run: pytest ./tests/
-        working-directory: ${{ env.widgetDirectory }}
-
-      - name: run responsibleai tests
-        shell: bash -l {0}
-        run: pytest ./tests/
-        working-directory: ${{ env.raiDirectory }}
-
-      - name: Run widget tests without flights
-        shell: bash -l {0}
-        run: |
-          yarn e2e-widget -n "responsibleaidashboard-census-classification-model-debugging" -f ""
-          yarn e2e-widget -n "responsibleaidashboard-diabetes-regression-model-debugging" -f ""
-          yarn e2e-widget -n "responsibleaidashboard-housing-decision-making" -f ""
-          yarn e2e-widget -n "responsibleaidashboard-housing-classification-model-debugging" -f ""
-          yarn e2e-widget -n "responsibleaidashboard-diabetes-decision-making" -f ""
-          yarn e2e-widget -n "responsibleaidashboard-multiclass-dnn-model-debugging" -f ""
-
-      - name: Upload e2e test screen shot
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: raiwidgets-e2e-screen-shot
-          path: ./dist/cypress
-
       - name: Upload a raiwidgets build result
         uses: actions/upload-artifact@v3
         with:
@@ -165,8 +122,142 @@ jobs:
           name: ${{ env.typescriptBuildArtifactName }}
           path: ${{ env.typescriptBuildOutput }}
 
-  release-python:
+  test-unittests:
     needs: release-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: 3.8
+
+      - name: install requirements.txt for raiwidgets
+        shell: bash -l {0}
+        run: pip install -r requirements-dev.txt
+        working-directory: ${{ env.widgetDirectory }}
+
+      - name: install requirements.txt for responsibleai
+        shell: bash -l {0}
+        run: pip install -r requirements-dev.txt
+        working-directory: ${{ env.raiDirectory }}
+
+      - id: download_rai_unit
+        name: Download responsibleai wheel
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ env.raiDirectory }}
+          path: ${{ env.raiDirectory }}
+
+      - id: download_raiwidgets_unit
+        name: Download raiwidgets wheel
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ env.widgetDirectory }}
+          path: ${{ env.widgetDirectory }}
+
+      - name: install responsibleai wheel locally
+        shell: bash -l {0}
+        run: find ./ -name '*.whl' -exec pip install {} \;
+        working-directory: ${{ env.raiDirectory }}
+
+      - name: install raiwidgets wheel locally
+        shell: bash -l {0}
+        run: find ./ -name '*.whl' -exec pip install {} \;
+        working-directory: ${{ env.widgetDirectory }}
+
+      - name: run raiwidgets tests
+        shell: bash -l {0}
+        run: pytest ./tests/
+        working-directory: ${{ env.widgetDirectory }}
+
+      - name: run responsibleai tests
+        shell: bash -l {0}
+        run: pytest ./tests/
+        working-directory: ${{ env.raiDirectory }}
+
+  test-e2e-notebooks:
+    needs: release-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ env.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node-version }}
+
+      - name: Install yarn
+        run: |
+          npm install yarn -g
+
+      - name: install typescript dependencies
+        run: |
+          yarn install --frozen-lock-file
+
+      - name: build typescript
+        run: |
+          yarn build e2e
+
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: 3.8
+
+      - id: download_rai_e2e
+        name: Download responsibleai wheel
+        uses: actions/download-artifact@v2
+        with:
+          name: responsibleai
+          path: responsibleai
+
+      - id: download_raiwidgets_e2e
+        name: Download raiwidgets wheel
+        uses: actions/download-artifact@v2
+        with:
+          name: raiwidgets
+          path: raiwidgets
+
+      - name: Install pytorch
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
+
+      - name: install requirements.txt for raiwidgets
+        shell: bash -l {0}
+        run: pip install -r requirements-dev.txt
+        working-directory: ${{ env.widgetDirectory }}
+
+      - name: install responsibleai wheel locally
+        shell: bash -l {0}
+        run: find ./ -name '*.whl' -exec pip install {} \;
+        working-directory: ${{ env.raiDirectory }}
+
+      - name: install raiwidgets wheel locally
+        shell: bash -l {0}
+        run: find ./ -name '*.whl' -exec pip install {} \;
+        working-directory: ${{ env.widgetDirectory }}
+
+      - name: Run widget tests without flights
+        shell: bash -l {0}
+        run: |
+          yarn e2e-widget -n "responsibleaidashboard-census-classification-model-debugging" -f ""
+          yarn e2e-widget -n "responsibleaidashboard-diabetes-regression-model-debugging" -f ""
+          yarn e2e-widget -n "responsibleaidashboard-housing-decision-making" -f ""
+          yarn e2e-widget -n "responsibleaidashboard-housing-classification-model-debugging" -f ""
+          yarn e2e-widget -n "responsibleaidashboard-diabetes-decision-making" -f ""
+          yarn e2e-widget -n "responsibleaidashboard-multiclass-dnn-model-debugging" -f ""
+
+      - name: Upload e2e test screen shot
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: raiwidgets-e2e-screen-shot
+          path: ./dist/cypress
+
+  release-python:
+    needs: [test-unittests, test-e2e-notebooks]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -176,7 +267,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v2
         with:
           auto-update-conda: true
-          python-version: 3.7
+          python-version: 3.8
 
       - id: download
         name: Download a Build Artifact
@@ -220,7 +311,7 @@ jobs:
           packages_dir: ${{steps.download.outputs.download-path}}
 
   release-typescript:
-    needs: release-build
+    needs: [test-unittests, test-e2e-notebooks]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -238,7 +329,8 @@ jobs:
             interpret-vision,
             localization,
             error-analysis,
-            model-assessment
+            model-assessment,
+            e2e
           ]
 
     steps:
