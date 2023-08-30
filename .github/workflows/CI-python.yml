@@ -17,10 +17,10 @@ jobs:
     strategy:
       matrix:
         packageDirectory:
-          ["responsibleai", "erroranalysis", "erroranalysis[object_detection]",
-           "raiutils", "rai_test_utils", "rai_test_utils[object_detection]"]
+          ["responsibleai", "erroranalysis", "raiutils", "rai_test_utils"]
         operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
         pythonVersion: ["3.7", "3.8", "3.9", "3.10"]
+        extras: [true, false]
         exclude:
           - operatingSystem: macos-latest
             pythonVersion: "3.7"
@@ -30,6 +30,10 @@ jobs:
             pythonVersion: "3.7"
           - operatingSystem: macos-latest
             pythonVersion: "3.8"
+          - extras: true
+            packageDirectory: responsibleai
+          - extras: true
+            packageDirectory: raiutils
 
     runs-on: ${{ matrix.operatingSystem }}
 
@@ -75,6 +79,13 @@ jobs:
         shell: bash -l {0}
         run: |
           pip install -r requirements-dev.txt
+        working-directory: ${{ matrix.packageDirectory }}
+
+      - if: ${{ matrix.extras }}
+        name: Install package extras
+        shell: bash -l {0}
+        run: |
+          pip install -r requirements-object-detection.txt
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Install package
