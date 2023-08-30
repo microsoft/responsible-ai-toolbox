@@ -60,11 +60,6 @@ jobs:
         run: |
           yarn buildall
 
-      - name: Install pytorch
-        shell: bash -l {0}
-        run: |
-          conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
-
       - name: update and upgrade pip, setuptools, wheel, and twine
         shell: bash -l {0}
         run: |
@@ -108,18 +103,70 @@ jobs:
         shell: bash -l {0}
         run: python setup.py sdist bdist_wheel
         working-directory: ${{ env.raiDirectory }}
+      
+      - name: Upload a raiwidgets build result
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.widgetDirectory }}
+          path: ${{ env.widgetDirectory }}/dist/
 
-      # run tests before publishing to PyPI
+      - name: Upload a responsibleai build result
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.raiDirectory }}
+          path: ${{ env.raiDirectory }}/dist/
+      
+      - name: Upload a typescript build result
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.typescriptBuildArtifactName }}
+          path: ${{ env.typescriptBuildOutput }} 
+
+  test-unittests:
+    needs: release-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: 3.8
+      
+      - name: install requirements.txt for raiwidgets
+        shell: bash -l {0}
+        run: pip install -r requirements-dev.txt
+        working-directory: ${{ env.widgetDirectory }}
+
+      - name: install requirements.txt for responsibleai
+        shell: bash -l {0}
+        run: pip install -r requirements-dev.txt
+        working-directory: ${{ env.raiDirectory }}
+      
+      - id: download_rai_unit
+        name: Download responsibleai wheel
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ env.raiDirectory }}
+          path: ${{ env.raiDirectory }}
+      
+      - id: download_raiwidgets_unit
+        name: Download raiwidgets wheel
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ env.widgetDirectory }}
+          path: ${{ env.widgetDirectory }}
+      
       - name: install raiwidgets wheel locally
         shell: bash -l {0}
-        run: find ./dist/ -name '*.whl' -exec pip install {} \;
+        run: find ./ -name '*.whl' -exec pip install {} \;
         working-directory: ${{ env.widgetDirectory }}
 
       - name: install responsibleai wheel locally
         shell: bash -l {0}
-        run: find ./dist/ -name '*.whl' -exec pip install {} \;
+        run: find ./ -name '*.whl' -exec pip install {} \;
         working-directory: ${{ env.raiDirectory }}
-
+      
       - name: run raiwidgets tests
         shell: bash -l {0}
         run: pytest ./tests/
@@ -128,6 +175,51 @@ jobs:
       - name: run responsibleai tests
         shell: bash -l {0}
         run: pytest ./tests/
+        working-directory: ${{ env.raiDirectory }}
+
+  test-e2e-notebooks:
+    needs: release-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: 3.8
+      
+      - name: install requirements.txt for raiwidgets
+        shell: bash -l {0}
+        run: pip install -r requirements-dev.txt
+        working-directory: ${{ env.widgetDirectory }}
+
+      - id: download_rai_e2e
+        name: Download responsibleai wheel
+        uses: actions/download-artifact@v2
+        with:
+          name: responsibleai
+          path: responsibleai
+      
+      - id: download_raiwidgets_e2e
+        name: Download raiwidgets wheel
+        uses: actions/download-artifact@v2
+        with:
+          name: raiwidgets
+          path: raiwidgets
+      
+      - name: Install pytorch
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
+      
+      - name: install raiwidgets wheel locally
+        shell: bash -l {0}
+        run: find ./ -name '*.whl' -exec pip install {} \;
+        working-directory: ${{ env.widgetDirectory }}
+
+      - name: install responsibleai wheel locally
+        shell: bash -l {0}
+        run: find ./ -name '*.whl' -exec pip install {} \;
         working-directory: ${{ env.raiDirectory }}
 
       - name: Run widget tests without flights
@@ -147,26 +239,8 @@ jobs:
           name: raiwidgets-e2e-screen-shot
           path: ./dist/cypress
 
-      - name: Upload a raiwidgets build result
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.widgetDirectory }}
-          path: ${{ env.widgetDirectory }}/dist/
-
-      - name: Upload a responsibleai build result
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.raiDirectory }}
-          path: ${{ env.raiDirectory }}/dist/
-
-      - name: Upload a typescript build result
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.typescriptBuildArtifactName }}
-          path: ${{ env.typescriptBuildOutput }}
-
   release-python:
-    needs: release-build
+    needs: [test-unittests, test-e2e-notebooks]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -176,7 +250,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v2
         with:
           auto-update-conda: true
-          python-version: 3.7
+          python-version: 3.8
 
       - id: download
         name: Download a Build Artifact
@@ -220,7 +294,7 @@ jobs:
           packages_dir: ${{steps.download.outputs.download-path}}
 
   release-typescript:
-    needs: release-build
+    needs: [test-unittests, test-e2e-notebooks]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -238,7 +312,8 @@ jobs:
             interpret-vision,
             localization,
             error-analysis,
-            model-assessment
+            model-assessment,
+            e2e
           ]
 
     steps:
