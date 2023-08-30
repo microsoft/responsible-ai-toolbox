@@ -26,19 +26,6 @@ this file to understand what changed.
 
 ## v0.30.0
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 - educational materials
   - ## RAI Text
     - Doc update for `responsibleai_text` by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2169
