@@ -204,11 +204,6 @@ jobs:
         with:
           auto-update-conda: true
           python-version: 3.8
-      
-      - name: install requirements.txt for raiwidgets
-        shell: bash -l {0}
-        run: pip install -r requirements-dev.txt
-        working-directory: ${{ env.widgetDirectory }}
 
       - id: download_rai_e2e
         name: Download responsibleai wheel
@@ -228,6 +223,11 @@ jobs:
         shell: bash -l {0}
         run: |
           conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
+      
+      - name: install requirements.txt for raiwidgets
+        shell: bash -l {0}
+        run: pip install -r requirements-dev.txt
+        working-directory: ${{ env.widgetDirectory }}
       
       - name: install responsibleai wheel locally
         shell: bash -l {0}
