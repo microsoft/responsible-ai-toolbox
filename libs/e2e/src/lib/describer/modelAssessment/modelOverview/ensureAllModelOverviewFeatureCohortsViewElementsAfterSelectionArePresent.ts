@@ -33,12 +33,13 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
       "true"
     );
 
+    // checks there are RGB colors in the heatmap table
     cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable)
       .find("path")
       .filter('[fill*="rgb"]')
       .should('have.length.greaterThan', 0);
 
-    // turns off the toggle
+    // turn off the toggle
     cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).click();
 
     // checks the toggle is off
@@ -52,6 +53,10 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
     cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable)
       .find("path")
       .should('not.have.attr', 'fill*="rgb"');
+    }
+
+    // turn the toggle back on
+    cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).click();
 
     const defaultVisibleChart = getDefaultVisibleChart(
       datasetShape.isRegression,
