@@ -323,9 +323,9 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
         diff = pred_y != true_y
     elif analyzer.model_task == ModelTask.OBJECT_DETECTION:
         if not pytorch_installed:
-            raise ValueError(
+            raise ModuleNotFoundError(
                 "User Error: torch & torchvision are not installed "
-                "and are needed for Object Detection scenario."
+                "and are needed for the Object Detection scenario."
             )
         diff = [
             len(

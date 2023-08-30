@@ -703,9 +703,9 @@ class ModelAnalyzer(BaseAnalyzer):
             return self.model.predict(self.dataset) != self.true_y
         elif self._model_task == ModelTask.OBJECT_DETECTION:
             if not pytorch_installed:
-                raise ValueError(
+                raise ModuleNotFoundError(
                     "User Error: torch & torchvision are not installed "
-                    "and are needed for Object Detection scenario."
+                    "and are needed for the Object Detection scenario."
                 )
             pred_y = self.model.predict(self.dataset)
             diff = [
