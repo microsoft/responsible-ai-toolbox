@@ -53,7 +53,6 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
     cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable)
       .find("path")
       .should('not.have.attr', 'fill*="rgb"');
-    }
 
     // turn the toggle back on
     cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).click();
