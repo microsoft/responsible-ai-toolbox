@@ -8,6 +8,8 @@ from abc import ABC, abstractmethod
 import numpy as np
 import pandas as pd
 from sklearn.metrics import multilabel_confusion_matrix
+from vision_explanation_methods.error_labeling.error_labeling import \
+    ErrorLabeling
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (DIFF, PRED_Y, ROW_INDEX, TRUE_Y,
@@ -110,9 +112,19 @@ def compute_matrix_on_dataset(analyzer, features, dataset,
         input_data = input_data.to_numpy()
     if is_model_analyzer:
         pred_y = analyzer.model.predict(input_data)
-
     if analyzer.model_task == ModelTask.CLASSIFICATION:
         diff = pred_y != true_y
+    elif analyzer.model_task == ModelTask.OBJECT_DETECTION:
+        diff = [
+            len(
+                ErrorLabeling(
+                    ModelTask.OBJECT_DETECTION,
+                    pred_y[image_idx],
+                    true_y[image_idx]
+                ).compute_error_list()
+            ) > 0
+            for image_idx in range(len(true_y))
+        ]
     else:
         diff = pred_y - true_y
     if not isinstance(diff, np.ndarray):

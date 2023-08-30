@@ -7,23 +7,67 @@ const { exit } = require("process");
 
 const nxPath = path.join(__dirname, "../node_modules/@nrwl/cli/bin/nx.js");
 const baseDir = path.join(__dirname, "../notebooks/responsibleaidashboard");
+const tabularDir = path.join(baseDir, "tabular");
+const visionDir = path.join(baseDir, "vision");
+const textDir = path.join(baseDir, "text");
 const filePrefix = "responsibleaidashboard-";
-// Please add notebook name into 'fileNames' array only when you are adding e2e tests to that notebook.
+// Please add notebook name into the appropriate 'fileNames' array only when you are adding e2e tests to that notebook.
 // Keep this list in sync with .github/workflows/CI-e2e-notebooks.yml and/or .github/workflows/CI-e2e-notebooks-vision.yml
-const fileNames = [
+const tabularFileNames = [
   "responsibleaidashboard-census-classification-model-debugging",
   "responsibleaidashboard-diabetes-regression-model-debugging",
   "responsibleaidashboard-housing-classification-model-debugging",
   "responsibleaidashboard-diabetes-decision-making",
   "responsibleaidashboard-housing-decision-making",
   "responsibleaidashboard-multiclass-dnn-model-debugging",
+  "responsibleaidashboard-orange-juice-forecasting"
+];
+const visionFileNames = [
   "responsibleaidashboard-fridge-image-classification-model-debugging",
   "responsibleaidashboard-fridge-multilabel-image-classification-model-debugging",
   "responsibleaidashboard-fridge-object-detection-model-debugging"
 ];
+const textFileNames = [
+  "responsibleaidashboard-DBPedia-text-classification-model-debugging",
+  "responsibleaidashboard-blbooksgenre-binary-text-classification-model-debugging",
+  "responsibleaidashboard-covid-event-multilabel-text-classification-model-debugging"
+];
+const ignoredFiles = [
+  "responsibleaidashboard-question-answering-model-debugging"
+];
+const fileNames = tabularFileNames
+  .concat(visionFileNames)
+  .concat(textFileNames);
 const notebookHostReg = /^ResponsibleAI started at (http:\/\/localhost:\d+)$/m;
 const serveHostReg = /Web Development Server is listening at\s+(.*)$/m;
 const timeout = 3600;
+
+/**
+ *
+ * @param {string} notebook
+ * @returns {string}
+ */
+function getDirForNotebook(notebook) {
+  if (notebook.endsWith(".py")) {
+    notebook = notebook.replace(".py", "");
+  }
+  if (visionFileNames.includes(notebook)) {
+    return visionDir;
+  } else if (textFileNames.includes(notebook)) {
+    return textDir;
+  } else if (tabularFileNames.includes(notebook)) {
+    return tabularDir;
+  } else {
+    throw new Error(`Notebook ${notebook} not found.`);
+  }
+}
+
+function getFilesFromNotebookDirs() {
+  return fs
+    .readdirSync(tabularDir)
+    .concat(fs.readdirSync(visionDir))
+    .concat(fs.readdirSync(textDir));
+}
 
 /**
  *
@@ -73,7 +117,8 @@ async function runNotebook(name) {
   const timer = setTimeout(() => {
     throw new Error(`${name} timeout.`);
   }, timeout * 1000);
-  const nbProcess = spawn("python", ["-i", path.join(baseDir, name)]);
+  const dir = getDirForNotebook(name);
+  const nbProcess = spawn("python", ["-i", path.join(dir, name)]);
   nbProcess.on("exit", () => {
     throw new Error(`Failed to run notebook ${name}`);
   });
@@ -130,10 +175,10 @@ function addFlightsInFile(path, flights) {
 
 function checkIfAllNotebooksHaveTests() {
   console.log(`Checking if all notebooks under ${baseDir} have tests`);
-  const files = fs
-    .readdirSync(baseDir)
+  const files = getFilesFromNotebookDirs()
     .filter((f) => f.startsWith(filePrefix) && f.endsWith(".ipynb"))
-    .map((f) => f.replace(".ipynb", ""));
+    .map((f) => f.replace(".ipynb", ""))
+    .filter((f) => !ignoredFiles.includes(f));
   const allNotebooksHaveTests = _.isEqual(_.sortBy(files), _.sortBy(fileNames));
   if (!allNotebooksHaveTests) {
     throw new Error(
@@ -150,6 +195,7 @@ function convertNotebooks(notebook, flights) {
       console.log(`Skipping ${fileName}. Looking for ${notebook} only.`);
       continue;
     }
+    const dir = getDirForNotebook(fileName);
     if (flights) {
       // flights were passed (not just -f without flights arg)
       console.log(
@@ -161,7 +207,7 @@ function convertNotebooks(notebook, flights) {
     }
     const { status, stderr } = spawnSync(
       "jupyter",
-      ["nbconvert", path.join(baseDir, `${fileName}.ipynb`), "--to", "script"],
+      ["nbconvert", path.join(dir, `${fileName}.ipynb`), "--to", "script"],
       {
         stdio: "inherit"
       }
@@ -170,7 +216,7 @@ function convertNotebooks(notebook, flights) {
       throw new Error(`Failed to convert notebook:\r\n\r\n${stderr}`);
     }
     if (flights) {
-      addFlightsInFile(path.join(baseDir, `${fileName}.py`), flights);
+      addFlightsInFile(path.join(dir, `${fileName}.py`), flights);
     }
     console.log(`Converted notebook ${fileName}\r\n`);
   }
@@ -184,9 +230,9 @@ function convertNotebooks(notebook, flights) {
  * @returns {Host[]}
  */
 async function runNotebooks(selectedNotebook, host) {
-  let files = fs
-    .readdirSync(baseDir)
-    .filter((f) => f.startsWith(filePrefix) && f.endsWith(".py"));
+  let files = getFilesFromNotebookDirs().filter(
+    (f) => f.startsWith(filePrefix) && f.endsWith(".py")
+  );
   console.log("Available notebooks:");
   files.forEach((file) => {
     console.log(`    ${file}`);

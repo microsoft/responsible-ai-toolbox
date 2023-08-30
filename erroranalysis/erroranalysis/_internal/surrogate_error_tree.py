@@ -9,6 +9,8 @@ import pandas as pd
 from lightgbm import Booster, LGBMClassifier, LGBMRegressor
 from sklearn.metrics import (mean_absolute_error, mean_squared_error,
                              median_absolute_error, r2_score)
+from vision_explanation_methods.error_labeling.error_labeling import \
+    ErrorLabeling
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
@@ -307,6 +309,17 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
         pred_y = analyzer.model.predict(input_data)
     if analyzer.model_task == ModelTask.CLASSIFICATION:
         diff = pred_y != true_y
+    elif analyzer.model_task == ModelTask.OBJECT_DETECTION:
+        diff = [
+            len(
+                ErrorLabeling(
+                    ModelTask.OBJECT_DETECTION,
+                    pred_y[image_idx],
+                    true_y[image_idx]
+                ).compute_error_list()
+            ) > 0
+            for image_idx in range(len(true_y))
+        ]
     else:
         diff = pred_y - true_y
     if not isinstance(diff, np.ndarray):
@@ -479,11 +492,26 @@ def create_surrogate_model(analyzer,
                                   num_leaves=num_leaves,
                                   min_child_samples=min_child_samples,
                                   verbosity=-1)
-    if cat_ind_reindexed:
-        surrogate.fit(dataset_sub_features, diff,
-                      categorical_feature=cat_ind_reindexed)
-    else:
-        surrogate.fit(dataset_sub_features, diff)
+    try:
+        if cat_ind_reindexed:
+            surrogate.fit(dataset_sub_features, diff,
+                          categorical_feature=cat_ind_reindexed)
+        else:
+            surrogate.fit(dataset_sub_features, diff)
+    except ValueError as ve:
+        # throw user exception for bad model prediction output
+        if "y should be a 1d array, got an array of shape" in str(ve):
+            diff_shape = diff.shape
+            invalid_shape = len(diff_shape) > 2
+            invalid_2d_dims = len(diff_shape) == 2 and diff_shape[1] != 1
+            if invalid_shape or invalid_2d_dims:
+                raise UserConfigValidationException(
+                    "The surrogate model could not be trained. " +
+                    "The shape of the diff array is invalid: {}. ".format(
+                        diff_shape) +
+                    "Please check the prediction function of the model.")
+        # re-raise any unknown system error
+        raise ve
     return surrogate
 
 

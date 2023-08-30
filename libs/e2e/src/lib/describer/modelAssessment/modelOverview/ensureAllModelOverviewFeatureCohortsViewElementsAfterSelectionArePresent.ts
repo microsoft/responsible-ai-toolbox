@@ -12,7 +12,7 @@ import {
 
 export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
   datasetShape: IModelAssessmentData,
-  isVision: boolean,
+  isTabular: boolean,
   selectedFeatures: number
 ): void {
   cy.get(Locators.ModelOverviewFeatureSelection).should("exist");
@@ -21,8 +21,8 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
   );
   cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("not.exist");
 
-  // set selectedFeatures to 1 as mean_pixel_value is the only feature default for vision
-  if ((!datasetShape.isObjectDetection && selectedFeatures === 1) || !isVision) {
+  // no vision condition as there's no second feature to select
+  if (isTabular) {
     cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
     cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
 

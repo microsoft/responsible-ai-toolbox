@@ -5,7 +5,10 @@ import _ from "lodash";
 
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
+import { BlbooksgenreTextClassificationModelDebugging } from "./BlbooksgenreTextClassificationModelDebugging";
 import { CensusClassificationModelDebugging } from "./CensusClassificationModelDebugging";
+import { CovidTextClassificationModelDebugging } from "./CovidTextClassificationModelDebugging";
+import { DBPediaTextClassificationModelDebugging } from "./DBPediaTextClassificationModelDebugging";
 import { DiabetesDecisionMaking } from "./DiabetesDecisionMaking";
 import { DiabetesRegressionModelDebugging } from "./DiabetesRegressionModelDebugging";
 import { FridgeImageClassificationModelDebugging } from "./FridgeImageClassificationModelDebugging";
@@ -15,11 +18,15 @@ import { HousingClassificationModelDebugging } from "./HousingClassificationMode
 import { HousingDecisionMaking } from "./HousingDecisionMaking";
 import { HousingRegression } from "./HousingRegression";
 import { MulticlassDnnModelDebugging } from "./MulticlassDnnModelDebugging";
+import { OrangeJuiceForecasting } from "./OrangeJuiceForecasting";
 
 export const regExForNumbersWithBrackets = /^\((\d+)\)$/; // Ex: (60)
 
 const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
+  BlbooksgenreTextClassificationModelDebugging,
   CensusClassificationModelDebugging,
+  CovidTextClassificationModelDebugging,
+  DBPediaTextClassificationModelDebugging,
   DiabetesDecisionMaking,
   DiabetesRegressionModelDebugging,
   FridgeImageClassificationModelDebugging,
@@ -28,7 +35,8 @@ const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
   HousingClassificationModelDebugging,
   HousingDecisionMaking,
   HousingRegression,
-  MulticlassDnnModelDebugging
+  MulticlassDnnModelDebugging,
+  OrangeJuiceForecasting
 };
 
 const modelAssessmentDatasetsDataBalanceExperience: {

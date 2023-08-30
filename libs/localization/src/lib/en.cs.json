@@ -3,26 +3,26 @@
     "close": "Zavřít",
     "tooltipButton": "Tlačítko popisku",
     "identityFeature": "Funkce identity",
-    "infoTitle": "Additional information",
-    "spinButton": "Spin",
-    "editButton": "Edit",
-    "decreaseValue": "Decrease value",
-    "increaseValue": "Increase value",
-    "decreaseValueByOne": "Decrease value by 1",
-    "increaseValueByOne": "Increase value by 1",
-    "loading": "Loading..."
+    "infoTitle": "Další informace",
+    "spinButton": "Číselník",
+    "editButton": "Upravit",
+    "decreaseValue": "Snížit hodnotu",
+    "increaseValue": "Zvýšit hodnotu",
+    "decreaseValueByOne": "Snížit hodnotu o 1",
+    "increaseValueByOne": "Zvýšit hodnotu o 1",
+    "loading": "Načítá se..."
   },
   "ChartContextMenu": {
-    "hideData": "Hide data table",
-    "viewData": "View data table",
-    "viewInFullScreen": "View in full screen",
-    "printChart": "Print chart",
-    "downloadCSV": "Download CSV",
-    "downloadPNG": "Download PNG image",
-    "downloadJPEG": "Download JPEG image",
-    "downloadPDF": "Download PDF document",
-    "downloadSVG": "Download SVG vector image",
-    "downloadXLS": "Download XLS"
+    "hideData": "Skrýt tabulku dat",
+    "viewData": "Zobrazit tabulku dat",
+    "viewInFullScreen": "Zobrazit na celé obrazovce",
+    "printChart": "Vytisknout graf",
+    "downloadCSV": "Stáhnout CSV",
+    "downloadPNG": "Stáhnout obrázek PNG",
+    "downloadJPEG": "Stáhnout obrázek JPEG",
+    "downloadPDF": "Stáhnout dokument PDF",
+    "downloadSVG": "Stáhnout vektorový obrázek SVG",
+    "downloadXLS": "Stáhnout XLS"
   },
   "CausalAnalysis": {
     "AggregateView": {
@@ -39,7 +39,7 @@
       "description": "Analýza příčin odpovídá na otázky typu: Co kdyby? a popisuje, jak by se v reálném světe změnily výstupy v rámci různých voleb zásad, jako je například jiná cenová strategie pro produkt nebo alternativní léčba pacienta. Na rozdíl od modelových predikcí, které rozpoznávají důležité korelační vzorce vám tyto nástroje pomůžou rozpoznat nejdůležitější příčiny, které mají přímý vliv na výstupy faktoru, který vás zajímá. Tyto modely rozpoznávají důsledky jediného faktoru, zatímco ostatní současně působící faktory zůstávají konstantní. Ujistěte se, že zahrnujete širokou sadu faktorů, které by mohly korelovat s výstupem jakožto současně působící faktory.",
       "directAggregate": "Přímý agregát důsledků jednotlivých ošetření v 95% intervalu spolehlivosti",
       "here": "tady",
-      "infoTitle": "Additional information on aggregated causal effects",
+      "infoTitle": "Další informace o agregovaných příčinných účincích",
       "lasso": "Laso (nebo logistická regrese, pokud je y binární) bylo vhodné pro předpověď y z X[-i] a laso (nebo logistické regrese, pokud je X[i] kategorické) bylo vhodné predikovat X[i] z Χ [-i]. Kauzální účinek lze zobrazit jako průměrnou korelaci reziduí nebo překvapivé odchylky dvou úloh předpovědi. Další informace o dvojitém strojovém učení",
       "unconfounding": "Co jsou zavádějící funkce?"
     },
@@ -51,7 +51,7 @@
       "description": "Jednotlivé kauzální účinky mohou informovat přizpůsobené zákroky, jako je cílová propagace zákazníkům nebo plán individuální léčby. Jak by jednotlivec s určitou sadou funkcí reagoval na změnu v příčinné funkci nebo v léčbě?  Pokud změníte úroveň léčby, příčinný nástroj citlivostní analýzy počítá mezní změny v reálných výsledcích konkrétního jednotlivce, pokud změníte jejich úroveň léčby. Tato analýza vám umožní pochopit, jak by se reálné výsledky změnily v rámci různých voleb zásad, jako je například jiná cenová strategie pro produkt nebo alternativní léčba pacienta. Určete léčbu, která vás zaujala a sledujte, jak by se změnil skutečný výsledek.",
       "directIndividual": "Přímý individuální důsledek jednotlivých ošetření v 95% intervalu spolehlivosti",
       "index": "Index datového bodu",
-      "infoTitle": "Additional information on individual causal what-if",
+      "infoTitle": "Další informace o jednotlivých příčinných eventualitách",
       "missingParameters": "Tato karta vyžaduje zadání datové sady pro vyhodnocení.",
       "newOutcome": "Nový výsledek",
       "selectTreatment": "Vyberte ošetření",
@@ -85,7 +85,7 @@
       "averageGainBinary": "Průměrné nárůsty nastavení léčby {0} na jeho základní hodnotu {1}.",
       "averageGainContinuous": "Průměrné přírůstky jiných zásad oproti žádnému ošetření {0}",
       "header": "Tyto nástroje pomáhají vytvářet zásady pro budoucí intervence. Můžete zjistit, které části vašeho ukázkového prostředí mají největší odpovědi na změny příčinných funkcí nebo léčeb, a vytvořit pravidla, která definují, které budoucí populace by měly být určeny pro konkrétní intervence.",
-      "infoTitle": "Additional information on treatment policy",
+      "infoTitle": "Další informace o zásadách řešení",
       "nSample": "n = {0}",
       "noData": "Žádná data"
     }
@@ -116,8 +116,8 @@
       "cancel": "Zrušit",
       "title": "Přepnout kohortu",
       "subText": "Vyberte kohortu ze seznamu kohort. Použije kohortu na řídicí panel.",
-      "selectCohort": "Select a cohort",
-      "cohortList": "Cohort list"
+      "selectCohort": "Vybrat kohortu",
+      "cohortList": "Seznam kohort"
     },
     "PreBuiltCohort": {
       "featureNameNotFound": "Název funkce se v datové sadě nenašel.",
@@ -148,13 +148,13 @@
       "predictedClass": "Predikovaná třída",
       "predictedValue": "Predikovaná hodnota"
     },
-    "Size": "Size",
-    "loading": "Loading...",
+    "Size": "Velikost",
+    "loading": "Načítá se...",
     "counterfactualEx": "Př. protifaktoru {0}",
     "counterfactualName": "Název protifaktoru citlivostní analýzy",
     "createWhatIfCounterfactual": "Vytvořit protifaktory citlivostní analýzy",
     "createCounterfactual": "Protifaktor",
-    "revertToBubbleChart": "View bubble chart",
+    "revertToBubbleChart": "Zobrazit bublinový graf",
     "createOwn": "Vytvořte si vlastní protifaktoru:",
     "currentClass": "Aktuální třída",
     "currentRange": "Aktuální rozsah",
@@ -167,9 +167,9 @@
     "listDescription": "Tento seznam ukazuje, které datové body v aktuálním vzorku dat mají největší kauzální odezvu na zvolenou léčbu, na základě všech vlastností obsažených v odhadovaném kauzálním modelu. Levých pět sloupců uvádí, zda se doporučuje léčbu sledovat, současnou léčbu, odhadovaný účinek léčby (účinek aplikace léčby od výchozí hodnoty bez léčby pro binární léčby nebo zvýšení nebo snížení hodnoty funkce léčby o 10% typických velikostí léčiva ve vzorku: [dynamická: uveďte numerickou změnu v léčbě, kterou jsme použili]) a dolní a horní intervaly spolehlivosti (CI) pro tento efekt. Zbývající sloupce ukazují aktuální stav léčby a další funkce každého pozorování.",
     "localImportanceDescription": "Funkce s nejvyšším pořadím v řádku {0} perturb, aby se dosáhlo požadované predikce modelu. Na základě citlivostní analýzy pro predikci: {1}",
     "localImportanceSelectData": "Výběrem datového bodu zobrazíte graf místní důležitosti.",
-    "largeLocalImportanceSelectData": "Select a bubble, followed by a data point to view local importance chart",
-    "localImportanceFetchError": "There was an error while fetching the local importance data. Error details: {0} Please check the data used.",
-    "BubbleChartFetchError": "There was an error while fetching the data. Error details: {0} Please check the data used.",
+    "largeLocalImportanceSelectData": "Vyberte bublinu a potom datový bod pro zobrazení grafu místní důležitosti",
+    "localImportanceFetchError": "Při načítání dat místní důležitosti došlo k chybě. Podrobnosti o chybě: {0} Zkontrolujte prosím použitá data.",
+    "BubbleChartFetchError": "Při načítání dat došlo k chybě. Podrobnosti o chybě: {0} Zkontrolujte prosím použitá data.",
     "noData": "Žádná data",
     "noFeatures": "Nejsou k dispozici žádné funkce.",
     "panelDescription": "Projděte si protifaktory a vytvořte si své vlastní. Vyhledejte funkce, abyste se mohli podívat na doporučené hodnoty z jiné sady vzorových protifaktorů. Nastavení doporučených hodnot funkce protifaktorů uděláte tak, že pod názvem každého protifaktoru kliknete na text „Nastavit hodnoty“. Svoje protifaktory pojmenujte a pak je uložte.",
@@ -217,13 +217,13 @@
       "subText": "Zjistit více o vybrané kohortě. Upravit název kohorty. Smazat tuto kohortu."
     },
     "FeatureList": {
-      "featureList": "Feature List",
+      "featureList": "Seznam funkcí",
       "apply": "Použít",
       "features": "Atributy",
       "importances": "Významné prvky",
       "treeMapDescription": "Chcete-li znovu trénovat stromovou mapu, vyberte a uložte níže uvedené atributy. Významnost atributů byla vypočítána pomocí vzájemných informací s chybou na skutečných štítcích. Použijte jej jako vodítko pro trénink stromové mapy.",
       "staticTreeMapDescription": "Umožňuje zobrazit funkce, které byly použity k trénování stromové mapy. Důležitosti funkcí se vypočítaly pomocí vzájemných informací s chybou u skutečných popisků.",
-      "searchResultMessage": "Results displayed out of {resultLength} for {searchValue}"
+      "searchResultMessage": "Výsledky zobrazené z {resultLength} pro {searchValue}"
     },
     "TreeViewParameters": {
       "maximumDepth": "Maximální hloubka",
@@ -289,7 +289,7 @@
       "disabledWarning": "Heat mapa chyb je zakázaná, pokud globální kohorta není přepnutá tak, aby představovala všechna data, protože heat mapa se generuje pro úplnou datovou sadu. Pokud si chcete zobrazit heat mapu chyb, přepněte zpět na úplnou datovou sadu."
     },
     "MatrixSummary": {
-      "heatMapInfoTitle": "Additional information on heat map",
+      "heatMapInfoTitle": "Další informace o teplotní mapě heat map",
       "heatMapDescription": "S heat mapou se můžete zaměřit na konkrétní průnikové filtry funkcí a vypočítat členěné míry chyb. Začněte se dvěma funkcemi datové sady, které můžete porovnat.",
       "heatMapStaticDescription": "S heat mapou se můžete zaměřit na konkrétní průnikové filtry funkcí a na počítačově disagregované míry chyb. Před zobrazením řídicího panelu je třeba vybrat až dvě funkce, aby se vytvořila heat mapa prostřednictvím sady SDK."
     },
@@ -305,108 +305,108 @@
     },
     "Metrics": {
       "AccuracyScore": {
-        "Name": "Accuracy score",
-        "Info": "The accuracy score represents the ratio of correct to total instances in the data.",
-        "Short": "Accuracy",
-        "Title": "Additional information on accuracy score"
+        "Name": "Skóre přesnosti",
+        "Info": "Skóre přesnosti představuje poměr správných k celkovému počtu instancí v datech.",
+        "Short": "Úspěšnost",
+        "Title": "Další informace o skóre přesnosti"
       },
       "ErrorRate": {
-        "Name": "Error rate",
-        "Info": "The error rate represents the percentage of instances in the node for which the system has failed.",
-        "Short": "Error rate",
-        "Title": "Additional information on error rate"
+        "Name": "Chybovost",
+        "Info": "Míra chyb představuje procento instancí v uzlu, pro které systém selhal.",
+        "Short": "Chybovost",
+        "Title": "Další informace o chybovosti"
       },
       "F1Score": {
-        "Name": "F1 score",
-        "Info": "The F1 score is the harmonic mean of the precision and recall metrics.",
-        "Short": "F1 score",
-        "Title": "Additional information on F1 score"
+        "Name": "Skóre F1",
+        "Info": "Skóre F1 je střední hodnota metrik přesnosti a úplnosti.",
+        "Short": "Skóre F1",
+        "Title": "Další informace o skóre F1"
       },
       "MeanAbsoluteError": {
-        "Name": "Mean absolute error",
-        "Info": "The mean absolute error is the average of the sum of the errors.",
-        "Short": "Mean abs. error",
-        "Title": "Additional information on mean absolute error"
+        "Name": "Střední absolutní chyba",
+        "Info": "Střední absolutní chyba představuje průměr celkového součtu chyb.",
+        "Short": "Střední absolutní chyba",
+        "Title": "Další informace o střední absolutní chybě"
       },
       "MeanSquaredError": {
-        "Name": "Mean squared error",
-        "Info": "The mean squared error is the average of the squares of the errors.",
-        "Short": "Mean sq. error",
-        "Title": "Additional information on mean squared error"
+        "Name": "Střední kvadratická chyba",
+        "Info": "Střední kvadratická chyba představuje průměr druhých mocnin chyb.",
+        "Short": "Střední kvadratická chyba",
+        "Title": "Další informace o střední kvadratické chybě (MSE)"
       },
       "Precision": {
-        "Name": "Precision score",
-        "Info": "The precision is the ratio of true positives over all predicted positives.",
-        "Short": "Precision",
-        "Title": "Additional information on precision"
+        "Name": "Skóre přesnosti",
+        "Info": "Přesnost je poměr pravdivě pozitivních hodnot ke všem predikovaným pozitivním hodnotám.",
+        "Short": "Přesnost",
+        "Title": "Další informace o přesnosti"
       },
       "Recall": {
-        "Name": "Recall score",
-        "Info": "The recall is the ratio of true positives over all actual positives.",
-        "Short": "Recall",
-        "Title": "Additional information on recall"
+        "Name": "Skóre úplnosti",
+        "Info": "Úplnost je poměr pravdivě pozitivních výsledků ke všem skutečně pozitivním výsledkům.",
+        "Short": "Úplnost",
+        "Title": "Další informace o úplnosti"
       },
       "MacroPrecision": {
-        "Name": "Macro averaged precision score",
-        "Info": "The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.",
-        "Short": "Macro precision",
-        "Title": "Additional information on macro averaged precision"
+        "Name": "Skóre makroprůměrné přesnosti",
+        "Info": "Makroprůměrná přesnost je poměr pravdivě pozitivních výsledků ke všem predikovaným pozitivním hodnotám vypočítaným nezávisle podle třídy a průměru.",
+        "Short": "Makropřesnost",
+        "Title": "Další informace o makroprůměrné přesnosti"
       },
       "MicroPrecision": {
-        "Name": "Micro averaged precision score",
-        "Info": "The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.",
-        "Short": "Micro precision",
-        "Title": "Additional information on micro averaged precision"
+        "Name": "Skóre mikroprůměrné přesnosti",
+        "Info": "Mikroprůměrná přesnost je poměr pravdivě pozitivních výsledků ke všem predikovaným pozitivním hodnotám agregovaným pro všechny třídy.",
+        "Short": "Mikropřesnost",
+        "Title": "Další informace o mikroprůměrné přesnosti"
       },
       "MacroRecall": {
-        "Name": "Macro averaged recall score",
-        "Info": "The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.",
-        "Short": "Macro recall",
-        "Title": "Additional information on macro averaged recall"
+        "Name": "Skóre makroprůměrné úplnosti",
+        "Info": "Makroprůměrná úplnost je poměr pravdivě pozitivních výsledků ke všem skutečně pozitivním hodnotám vypočítaným nezávisle podle třídy a průměru.",
+        "Short": "Makroúplnost",
+        "Title": "Další informace o makroprůměrné úplnosti"
       },
       "MicroRecall": {
-        "Name": "Micro averaged recall score",
-        "Info": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
-        "Short": "Micro recall",
-        "Title": "Additional information on micro averaged recall"
+        "Name": "Skóre mikroprůměrné úplnosti",
+        "Info": "Mikroprůměrná úplnost je poměr pravdivě pozitivních výsledků ke všem skutečně pozitivním hodnotám agregovaným pro všechny třídy.",
+        "Short": "Mikroúplnost",
+        "Title": "Další informace o mikroprůměrné úplnosti"
       },
       "MacroF1Score": {
-        "Name": "Macro averaged F1 score",
-        "Info": "The macro averaged F1 score is the harmonic mean of the macro averaged precision and recall metrics.",
-        "Short": "Macro F1 score",
-        "Title": "Additional information on macro averaged F1 score"
+        "Name": "Makroprůměrované skóre F1",
+        "Info": "Makroprůměrované skóre F1 je střední hodnota makroprůměrované přesnosti a metriky úplnost.",
+        "Short": "Skóre Macro F1",
+        "Title": "Další informace o makroprůměrovaném skóre F1"
       },
       "MicroF1Score": {
-        "Name": "Micro averaged F1 score",
-        "Info": "The micro averaged F1 score is the harmonic mean of the micro averaged precision and recall metrics.",
-        "Short": "Micro F1 score",
-        "Title": "Additional information on micro averaged F1 score"
+        "Name": "Mikroprůměrované skóre F1",
+        "Info": "Mikroprůměrované skóre F1 je střední hodnota mikroprůměrované přesnosti a metriky úplnost.",
+        "Short": "Skóre Micro F1",
+        "Title": "Další informace o mikroprůměrovaném skóre F1"
       },
       "MeanAveragePrecision": {
-        "Name": "Mean average precision score",
-        "Info": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall.",
-        "Short": "Mean avg precision",
-        "Title": "Additional information on mean average precision score"
+        "Name": "Průměrné skóre přesnosti",
+        "Info": "Průměrná přesnost modelů detekce objektů je průměr AP (average precision = průměrná přesnost) ve všech třídách. Tím se vyhodnotí robustnost modelu rozpoznávání objektů a zapouzdří se kompromis mezi přesností a úplností.",
+        "Short": "Průměrná přesnost",
+        "Title": "Další informace o průměrném skóre přesnosti"
       },
       "AveragePrecision": {
-        "Name": "Average precision score",
-        "Info": "Average precision for object detection models is calculated for a selected class.",
-        "Short": "Avg precision",
-        "Title": "Additional information on average precision score"
+        "Name": "Průměrné skóre přesnosti",
+        "Info": "Průměrná přesnost modelů detekce objektů se počítá pro vybranou třídu.",
+        "Short": "Průměrná přesnost",
+        "Title": "Další informace o průměrném skóre přesnosti"
       },
       "AverageRecall": {
-        "Name": "Average recall score",
-        "Info": "Average recall for object detection models is calculated for a selected class.",
-        "Short": "Avg recall",
-        "Title": "Additional information on average recall score"
+        "Name": "Průměrné skóre úplnosti",
+        "Info": "Průměrná úplnost modelů detekce objektů se počítá pro vybranou třídu.",
+        "Short": "Prům. odvolání",
+        "Title": "Další informace o průměrném skóre odvolání"
       },
       "metricName": "Název metriky",
       "metricValue": "Hodnota metriky"
     },
     "MetricSelector": {
       "selectorLabel": "Vybrat metriku",
-      "feature1SelectorLabel": "Rows: Feature 1",
-      "feature2SelectorLabel": "Columns: Feature 2"
+      "feature1SelectorLabel": "Řádky: Funkce 1",
+      "feature2SelectorLabel": "Sloupce: Funkce 2"
     },
     "Navigation": {
       "cohortSaved": "Nová kohorta se uložila! V nastavení kohorty najdete seznam kohort.",
@@ -427,9 +427,9 @@
       "defaultLabelCopy": "Kopírování všech dat"
     },
     "TreeView": {
-      "ariaLabel": "Interactive chart",
-      "disabledArialLabel": "Disabled interactive chart",
-      "treeMapInfoTitle": "Additional information on tree map",
+      "ariaLabel": "Interaktivní graf",
+      "disabledArialLabel": "Zakázaný interaktivní graf",
+      "treeMapInfoTitle": "Dodatečné informace o stromové mapě",
       "treeDescription": "Stromová vizualizace používá vzájemné informace mezi každým atributem a chybou k co nejlepšímu oddělení chybových instancí od úspěšných instancí hierarchicky v datech. To zjednodušuje proces zjišťování a zvýrazňování běžných vzorů selhání. To zjednodušuje proces objevování a zvýrazňování běžných vzorců selhání. Pokud chcete najít důležité vzorce selhání, vyhledejte uzly se silnější červenou barvou (tj. vysokou chybovostí) a vyšší čárou výplně (tj. s vysokým pokrytím chyb). Pokud chcete upravit seznam funkcí používaných ve stromu, klikněte na Seznam funkcí. Další informace o výkonu chybových a úspěšných uzlů najdete v rozevírací nabídce Vybrat metriku. Upozorňujeme, že tento výběr metrik nebude mít vliv na způsob generování stromu chyb.",
       "treeStaticDescription": "Stromová vizualizace používá vzájemné informace mezi každým atributem a chybou k co nejlepšímu oddělení chybových instancí od úspěšných instancí hierarchicky v datech. To zjednodušuje proces zjišťování a zvýrazňování běžných vzorů selhání. To zjednodušuje proces objevování a zvýrazňování běžných vzorců selhání. Pokud chcete najít důležité vzorce selhání, vyhledejte uzly se silnější červenou barvou (tj. vysokou chybovostí) a vyšší čárou výplně (tj. s vysokým pokrytím chyb). Pokud chcete zobrazit seznam funkcí používaných při vytváření stromu chyb, klikněte na Seznam funkcí. Další informace o výkonu chybových a úspěšných uzlů najdete v rozevírací nabídce Vybrat metriku. Upozorňujeme, že tento výběr metrik nebude mít vliv na způsob generování stromu chyb.",
       "disabledWarning": "Stromová mapa chyb je zakázaná, pokud globální kohorta není přepnutá tak, aby představovala všechna data, protože stromová mapa se generuje pro úplnou datovou sadu. Pokud si chcete zobrazit stromovou mapu chyb, přepněte zpět na úplnou datovou sadu."
@@ -764,7 +764,7 @@
       "countHelperText": "Histogram počtu bodů",
       "ditherLabel": "Použít dithering",
       "groupByCohort": "Seskupit podle kohorty",
-      "logarithmicScaling": "Enable logarithmic scaling",
+      "logarithmicScaling": "Povolit logaritmické škálování",
       "numOfBins": "Počet binování",
       "selectClass": "Vybrat třídu",
       "selectFeature": "Vyberte atribut",
@@ -788,7 +788,7 @@
       "importancePrefix": "Významnost",
       "numberOfDatapoints": "Počet datových bodů",
       "rowIndex": "Index řádku",
-      "absoluteIndex": "Absolute index",
+      "absoluteIndex": "Absolutní index",
       "xValue": "Hodnota X",
       "yValue": "Hodnota Y"
     },
@@ -817,11 +817,11 @@
     "CohortEditor": {
       "columns": {
         "index": "Index",
-        "dataset": "Dataset",
-        "predictedY": "Predicted Y",
-        "trueY": "True Y",
-        "classificationOutcome": "Classification outcome",
-        "regressionError": "Error"
+        "dataset": "Datová sada",
+        "predictedY": "Predikované Y",
+        "trueY": "Skutečné Y",
+        "classificationOutcome": "Výsledek klasifikace",
+        "regressionError": "Chyba"
       },
       "TreatAsCategorical": "Považovat za kategorické",
       "addFilter": "Přidat filtr",
@@ -846,8 +846,8 @@
       "save": "Uložit",
       "saveAndSwitch": "Uložit a přepnout",
       "selectFilter": "Vybrat filtr",
-      "noFiltersApplied": "No filters applied",
-      "filterAdded": "Filter added"
+      "noFiltersApplied": "Nejsou použité žádné filtry",
+      "filterAdded": "Přidal se filtr."
     },
     "Columns": {
       "classificationOutcome": "Výsledek klasifikace",
@@ -857,8 +857,8 @@
       "falsePositive": "Falešně pozitivní",
       "none": "Počet",
       "predictedProbabilities": "Pravděpodobnosti predikce",
-      "predictedLabels": "Predicted labels",
-      "trueLabels": "True labels",
+      "predictedLabels": "Predikované popisky",
+      "trueLabels": "Skutečné popisky",
       "regressionError": "Chyba regrese",
       "trueNegative": "Pravdivě negativní",
       "truePositive": "Pravdivě pozitivní",
@@ -879,7 +879,7 @@
       "aggregatePlots": "Agregované diagramy",
       "chartType": "Typ grafu",
       "colorValue": "Hodnota barvy",
-      "infoTitle": "Additional information on data analysis chart view",
+      "infoTitle": "Další informace o zobrazení grafu analýzy dat",
       "helperText": "Vytvářejte kohorty datových sad, které analyzují statistiky datové sady podle filtrů, jako jsou předpokládané výsledky, funkce datových sad a skupiny chyb. Přečtěte si o nadměrném nebo nedostatečném zastoupení ve vaší datové sadě.",
       "individualDatapoints": "Jednotlivé datové body",
       "missingParameters": "Tato karta vyžaduje zadání datové sady pro vyhodnocení.",
@@ -968,10 +968,10 @@
       "dependencePlotHelperText": "Tento znázornění závislosti zobrazuje vztah hodnot funkce s odpovídajícími hodnotami důležitosti funkce.",
       "dependencePlotTitle": "Závislostní diagramy",
       "helperText": "Prozkoumejte nejdůležitější funkce, které ovlivňují celkové predikce modelů (nebo také globální vysvětlení). Pomocí posuvníku zobrazte důležitosti funkcí sestupně. Všechny důležitosti funkcí kohorty se zobrazují vedle sebe a je možné je vypnout výběrem kohorty v legendě. Kliknutím na některý z prvků v grafu zobrazíte graf hustoty ukazující, jak hodnoty vybraného prvku ovlivňují předpověď.",
-      "infoTitle": "Additional information on aggregate feature importance",
+      "infoTitle": "Další informace o důležitosti agregovaných funkcí",
       "legendHelpText": "Kliknutím na položky legendy v diagramu můžete zapínat nebo vypínat kohorty.",
       "missingParameters": "Tato karta vyžaduje, aby se zadal parametr významnosti místního příznaku.",
-      "sortByCohort": "Sort by cohort",
+      "sortByCohort": "Seřadit podle kohorty",
       "sortBy": "Seřadit podle datového bodu",
       "topAtoB": "Hlavní {0} funkce podle důležitosti",
       "viewDependencePlotFor": "Zobrazit závislostní diagram pro:",
@@ -1014,15 +1014,15 @@
     },
     "Statistics": {
       "accuracy": "Úspěšnost: {0}",
-      "bleuScore": "Bleu score: {0}",
-      "bertScore": "Bert score: {0}",
-      "exactMatchRatio": "Exact match ratio: {0}",
-      "rougeScore": "Rouge Score: {0}",
+      "bleuScore": "Skóre Bleu: {0}",
+      "bertScore": "Skóre Bert: {0}",
+      "exactMatchRatio": "Přesný poměr shody: {0}",
+      "rougeScore": "Skóre: {0}",
       "fnr": "Falešně negativní hodnoty: {0}",
       "fpr": "Falešně pozitivní výsledek: {0}",
-      "hammingScore": "Hamming score: {0}",
+      "hammingScore": "Hammingovo skóre: {0}",
       "meanPrediction": "Střední predikce: {0}",
-      "meteorScore": "Meteor Score: {0}",
+      "meteorScore": "Meteorické skóre: {0}",
       "mse": "Střední kvadratická chyba: {0}",
       "precision": "Přesnost: {0}",
       "rSquared": "R²: {0}",
@@ -1030,10 +1030,10 @@
       "selectionRate": "Rychlost výběru: {0}",
       "mae": "Střední absolutní chyba: {0}",
       "f1Score": "Skóre F1: {0}",
-      "samples": "Sample size: {0}",
-      "meanAveragePrecision": "Mean average precision: {0}",
-      "averagePrecision": "Average precision: {0}",
-      "averageRecall": "Average recall: {0}"
+      "samples": "Velikost vzorku: {0}",
+      "meanAveragePrecision": "Průměrná přesnost: {0}",
+      "averagePrecision": "Průměrná přesnost: {0}",
+      "averageRecall": "Průměrná úplnost: {0}"
     },
     "ValidationErrors": {
       "addFilters": "Přidat filtry",
@@ -1141,29 +1141,29 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Řídicí panel interpretovatelnosti",
-      "importantWords": "Show most Important Words",
+      "importantWords": "Zobrazit nejdůležitější slova",
       "topFeatureList": "Analýza seznamu hlavních funkcí",
       "allButton": "VŠECHNY FUNKCE",
       "negButton": "NEGATIVNÍ FUNKCE",
       "posButton": "POZITIVNÍ FUNKCE",
-      "legendText": "Positive scalar feature importances represent the extent that the words were important towards the classification of your selected label, and negative scalar feature importances represent words that encouraged your model away from your selected label.",
-      "legendTextForQA": "The left text box and the bar chart display the predictions of the model. The right text box shows the feature importance associated with a selected token. Positive feature importances represent the extent that the words were important towards marking the selected token as the starting/ending position of the answer.",
+      "legendText": "Pozitivní skalární důležitosti příznaků představují rozsah, v jakém byla slova důležitá pro klasifikaci vybraného popisku, a záporné důležitosti skalárních funkcí představují slova, která váš model podpořila pryč od vámi vybraného popisku.",
+      "legendTextForQA": "Levé textové pole a pruhový graf zobrazují predikce modelu. V pravém textovém poli se zobrazuje důležitost atributu přidružená k vybranému tokenu. Pozitivní významnosti atributů představují rozsah, ve kterém byla slova důležitá pro označení vybraného tokenu jako počáteční/koncové pozice odpovědi.",
       "label": "Popisek",
       "colon": ": ",
-      "startingPosition": "STARTING POSITION",
-      "endingPosition": "ENDING POSITION",
-      "predictedAnswer": "Predicted answer: ",
-      "trueAnswer": "True answer: ",
-      "inputs": "Inputs",
-      "outputs": "Outputs"
+      "startingPosition": "POČÁTEČNÍ POZICE",
+      "endingPosition": "KONCOVÁ POZICE",
+      "predictedAnswer": "Předpokládaná odpověď: ",
+      "trueAnswer": "Skutečná odpověď: ",
+      "inputs": "Vstupy",
+      "outputs": "Výstupy"
     },
     "Legend": {
       "featureLegend": "LEGENDA TEXTOVÉ FUNKCE",
       "posFeatureImportance": "POZITIVNÍ DŮLEŽITOST PŘÍZNAKŮ",
       "negFeatureImportance": "NEGATIVNÍ DŮLEŽITOST PŘÍZNAKŮ",
-      "cls": "CLS: start of the sentence",
-      "sep": "SEP: end of the sentence",
-      "selectedWord": "Selected word: "
+      "cls": "CLS: začátek věty",
+      "sep": "SEP: konec věty",
+      "selectedWord": "Vybrané slovo: "
     },
     "BarChart": {
       "featureImportance": "DŮLEŽITOST PŘÍZNAKŮ"
@@ -1171,55 +1171,55 @@
   },
   "InterpretVision": {
     "Cohort": {
-      "close": "Close",
-      "errorCohortName": "Please choose a unique cohort name.",
-      "errorNumSelected": "Please select at least one (1) item.",
-      "itemsSelectedSingular": "item selected",
-      "itemsSelectedPlural": "items selected",
-      "save": "Save cohort",
-      "saveAndClose": "Save and close",
-      "saveAndSwitch": "Save and switch",
-      "textField": "New cohort name",
-      "title": "Save new cohort"
+      "close": "Zavřít",
+      "errorCohortName": "Zvolte prosím jedinečný název kohorty.",
+      "errorNumSelected": "Vyberte prosím aspoň jednu (1) položku.",
+      "itemsSelectedSingular": "vybraná položka",
+      "itemsSelectedPlural": "vybraných položek",
+      "save": "Uložit kohortu",
+      "saveAndClose": "Uložit a zavřít",
+      "saveAndSwitch": "Uložit a přepnout",
+      "textField": "Nový název kohorty",
+      "title": "Uložit novou kohortu"
     },
     "Dashboard": {
       "allData": "Všechna data",
-      "columnOne": "Image",
+      "columnOne": "Obrázek",
       "columnTwo": "Index",
       "columnThree": "Skutečné Y",
       "columnFour": "Predikované Y",
       "columnFive": "Další metadata",
-      "chooseObject": "Choose a detected object",
-      "examples": "examples",
+      "chooseObject": "Zvolte zjištěný objekt",
+      "examples": "Příklady",
       "filter": "Filtrovat",
-      "indexLabel": "Image ",
-      "labelTypeDropdown": "Select label type",
-      "labelVisibilityDropdown": "Select labels to display",
-      "legendFailure": "failure",
-      "legendSuccess": "success",
-      "loading": "Computing explanation for index",
-      "multiselect": "Multiselect",
-      "notdefined": "object scenario not defined",
-      "objectSelect": "Object Selection",
+      "indexLabel": "Obrázek ",
+      "labelTypeDropdown": "Vybrat typ popisku",
+      "labelVisibilityDropdown": "Vyberte popisky, které se mají zobrazit.",
+      "legendFailure": "selhání",
+      "legendSuccess": "úspěch",
+      "loading": "Vysvětlení výpočtu indexu",
+      "multiselect": "Vícenásobný výběr",
+      "notdefined": "scénář objektu není definovaný.",
+      "objectSelect": "Výběr objektu",
       "pageSize": "Velikost stránky: ",
-      "panelTitle": "Selected instance",
-      "panelExplanation": "Explanation",
-      "panelInformation": "Information",
-      "predictedLabel": "Predicted label",
-      "predictedY": "Predicted: ",
-      "prefix": "Object: ",
-      "rows": "Rows: ",
+      "panelTitle": "Vybraná instance",
+      "panelExplanation": "Vysvětlení",
+      "panelInformation": "Informace",
+      "predictedLabel": "Predikovaný popisek",
+      "predictedY": "Předpověď: ",
+      "prefix": "Objekt: ",
+      "rows": "Řádky: ",
       "search": "Hledat",
-      "selectAll": "Select all",
+      "selectAll": "Vybrat vše",
       "settings": "Nastavení",
-      "showAll": "Show all",
+      "showAll": "Zobrazit vše",
       "tabOptionFirst": "Zobrazení Průzkumníka obrázků",
       "tabOptionSecond": "Zobrazení tabulky",
-      "tabOptionThird": "Class view",
+      "tabOptionThird": "Zobrazení tříd",
       "thumbnailSize": "Velikost miniatury",
       "titleBarError": "Chybové instance",
       "titleBarSuccess": "Instance úspěchu",
-      "trueY": "Ground truth: "
+      "trueY": "Základní pravda: "
     }
   },
   "ModelAssessment": {
@@ -1228,15 +1228,15 @@
       "CalloutContent": "Přidání některých komponent (stromové zobrazení chyb, heat mapa chyb) vám umožní filtrovat data z globální kohorty, kterou vidíte v níže uvedených komponentách.",
       "CalloutTitle": "Přidat komponentu",
       "TabAddedMessage": {
-        "DataAnalysis": "Data analysis component added",
-        "FeatureImportances": "Feature importances component added",
-        "ErrorAnalysis": "Error analysis component added",
-        "Fairness": "Fairness component added",
-        "ModelOverview": "Model overview component added",
-        "CausalAnalysis": "Causal analysis component added",
-        "Counterfactuals": "Counterfactuals component added",
-        "Vision": "Vision data explorer component added",
-        "Forecasting": "Forecasting what-if component added"
+        "DataAnalysis": "Byla přidána komponenta analýzy dat",
+        "FeatureImportances": "Přidala se komponenta důležitosti funkcí",
+        "ErrorAnalysis": "Byla přidána komponenta analýzy chyb",
+        "Fairness": "Přidaná komponenta nestrannosti",
+        "ModelOverview": "Přidala se komponenta přehledu modelu",
+        "CausalAnalysis": "Přidala se komponenta kauzální analýzy",
+        "Counterfactuals": "Byla přidána komponenta counterfactuals.",
+        "Vision": "Přidala se komponenta Průzkumník dat zpracování obrazu",
+        "Forecasting": "Byla přidána komponenta eventuality předpovědi."
       }
     },
     "CausalAnalysis": {
@@ -1264,7 +1264,7 @@
     },
     "CohortInformation": {
       "ShiftCohort": "Přepnout kohortu",
-      "SwitchTimeSeries": "Switch time series",
+      "SwitchTimeSeries": "Přepnout časovou řadu",
       "NewCohort": "Nová kohorta",
       "DataPoints": "Počet datových bodů",
       "DefaultCohort": " (výchozí)",
@@ -1276,7 +1276,7 @@
       "CohortSettingsTitle": "Nastavení kohorty"
     },
     "ComponentNames": {
-      "ChartView": "Chart view",
+      "ChartView": "Zobrazení grafu",
       "CausalAnalysis": "Analýza příčin",
       "Counterfactuals": "Kontrafaktuály",
       "DataAnalysis": "Analýza dat",
@@ -1285,10 +1285,10 @@
       "ErrorAnalysis": "Analýza chyb",
       "Fairness": "Nestrannost",
       "FeatureImportances": "Významnost atributů",
-      "Forecasting": "Forecasting",
+      "Forecasting": "Prognózování",
       "ModelOverview": "Přehled modelu",
-      "TableView": "Table view",
-      "VisionTab": "Vision data explorer"
+      "TableView": "Zobrazení tabulky",
+      "VisionTab": "Průzkumník dat zpracování obrazu"
     },
     "DashboardSettings": {
       "Content": "Tento seznam zobrazuje rozložení řídicího panelu. Data můžete filtrovat pomocí komponenty analýzy chyb, která se zobrazí v následujících komponentách.",
@@ -1446,17 +1446,17 @@
       "CorrectPredictions": "Správné predikce",
       "GlobalExplanation": "Význam agregovaného atributu",
       "IncorrectPredictions": "Nesprávné predikce",
-      "InfoTitle": "Additional information on data analysis table view",
-      "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).",
+      "InfoTitle": "Další informace o zobrazení tabulky analýzy dat",
+      "IndividualFeatureTabular": "Výběrem datového bodu kliknutím na datový bod (až 5 datových bodů) v tabulce zobrazíte jejich místní hodnoty důležitosti funkcí (místní vysvětlení) a grafy jednotlivých podmíněných očekávání (ICE).",
+      "IndividualFeatureText": "Výběrem datového bodu kliknutím na datový bod v tabulce zobrazíte hodnoty důležitosti místních funkcí (místní vysvětlení).",
       "LocalExplanation": "Významnost jednotlivých atributů",
       "SelectionCounter": "{0}/{1} vybraných datových bodů",
       "SelectionLimit": "V tuto chvíli je možné vybrat až 5 datových bodů.",
-      "RowCheckboxAriaLabel": "Row checkbox",
-      "SelectionColumnAriaLabel": "Toggle selection"
+      "RowCheckboxAriaLabel": "Zaškrtávací políčko řádku",
+      "SelectionColumnAriaLabel": "Přepnout výběr"
     },
     "IndividualFeatureImportanceView": {
-      "SmallInstanceSelection": "Instance selection"
+      "SmallInstanceSelection": "Výběr instance"
     },
     "MainMenu": {
       "DashboardSettings": "Konfigurace řídicího panelu",
@@ -1472,44 +1472,44 @@
     "ModelOverview": {
       "metrics": {
         "accuracy": {
-          "name": "Accuracy score",
+          "name": "Skóre přesnosti",
           "description": "Část správně klasifikovaných datových bodů"
         },
         "exactMatchRatio": {
-          "name": "Exact match ratio",
-          "description": "The ratio of instances classified correctly for every label."
+          "name": "Poměr přesných shod",
+          "description": "Poměr instancí klasifikovaných správně pro každý popisek."
         },
         "meteorScore": {
-          "name": "Meteor Score",
-          "description": "METEOR Score is calculated based on the harmonic mean of precision and recall, with recall weighted more than precision in question answering task."
+          "name": "Skóre Meteor",
+          "description": "Skóre METEOR se počítá na základě středního průměru přesnosti a úplnosti, přičemž v úloze odpovídání na otázky má úplnost větší váhu než přesnost."
         },
         "bleuScore": {
-          "name": "Bleu Score",
-          "description": "Bleu Score measures the ratio of words (and/or n-grams) in the machine generated text that appeared in the reference text in question answering task."
+          "name": "Skóre Bleu",
+          "description": "Skóre Bleu měří poměr slov (nebo n-gramů) v strojově generovaném textu, který se objevil v referenčním textu v úloze zodpovězení otázky."
         },
         "bertScore": {
-          "name": "Bert Score",
-          "description": "BERTScore focuses on computing semantic similarity between tokens of reference and machine generated text in question answering task."
+          "name": "Skóre Bert",
+          "description": "BERTScore se zaměřuje na výpočet sémantické podobnosti mezi tokeny odkazu a strojově generovaným textem v úloze odpovědi na otázky."
         },
         "rougeScore": {
-          "name": "Rouge Score",
-          "description": "Rouge Score measures the ratio of words (and/or n-grams) in the reference text that appeared in the machine generated text in question answering task."
+          "name": "Skóre Rouge",
+          "description": "Score Rouge měří poměr slov (nebo n-gramů) v referenčním textu, který se objevil v strojově generovaném textu v úloze zodpovězení otázky."
         },
         "hammingScore": {
-          "name": "Hamming score",
-          "description": "The average ratio of labels classified correctly among those classified as 1 in multilabel task."
+          "name": "Hammingovo skóre",
+          "description": "Průměrný poměr popisků klasifikovaných správně mezi popisky klasifikovanými jako 1 v úloze s více popisky."
         },
         "f1Score": {
           "name": "Skóre F1",
           "description": "Skóre F1 je harmonický průměr přesnosti a úplnosti."
         },
         "f1ScoreMacro": {
-          "name": "Macro F1 score",
-          "description": "Macro F1 score is the harmonic mean of precision and recall for each class, with each class weighted equally."
+          "name": "Skóre Macro F1",
+          "description": "Skóre makra F1 je střední průměr přesnosti a úplnosti pro každou třídu, přičemž každá třída má stejnou váhu."
         },
         "f1ScoreMicro": {
-          "name": "Micro F1 score",
-          "description": "Micro F1 score is the harmonic mean of precision and recall for each class, with each class weighted according to how many instances it contains."
+          "name": "Skóre Micro F1",
+          "description": "Skóre Micro F1 je střední průměr přesnosti a úplnosti pro každou třídu, přičemž každá třída má váhu podle toho, kolik instancí obsahuje."
         },
         "meanAbsoluteError": {
           "name": "Střední absolutní chyba",
@@ -1524,24 +1524,24 @@
           "description": "Část správně klasifikovaných datových bodů mezi body klasifikovanými jako 1"
         },
         "precisionMacro": {
-          "name": "Macro Precision score",
-          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted equally."
+          "name": "Skóre makropřesnosti",
+          "description": "Zlomek datových bodů klasifikovaných správně mezi těmi, jejichž skutečný popisek je 1 pro každou třídu se stejnou váhou každé třídy."
         },
         "precisionMicro": {
-          "name": "Micro Precision score",
-          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted according to how many instances it contains."
+          "name": "Skóre mikropřesnosti",
+          "description": "Podíl správně klasifikovaných datových bodů mezi body klasifikovanými jako 1 pro každou třídu s váženou každou třídou podle toho, kolik instancí obsahuje."
         },
         "recall": {
           "name": "Skóre úplnosti",
           "description": "Část správně klasifikovaných datových bodů mezi body, jejichž skutečný popisek je 1. Alternativní názvy: míra pravdivě pozitivních predikcí, citlivost"
         },
         "recallMacro": {
-          "name": "Macro Recall score",
-          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted equally."
+          "name": "Skóre úplnosti makra",
+          "description": "Podíl správně klasifikovaných datových bodů mezi těmi, jejichž skutečný popisek je 1 pro každou třídu se stejnou váhou každé třídy."
         },
         "recallMicro": {
-          "name": "Micro Recall score",
-          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted according to how many instances it contains."
+          "name": "Skóre mikroúplnosti",
+          "description": "Podíl správně klasifikovaných datových bodů mezi těmi, jejichž skutečný popisek je 1 pro každou třídu s každou třídou váženou podle toho, kolik instancí obsahuje."
         },
         "falsePositiveRate": {
           "name": "Falešně pozitivní výsledek",
@@ -1560,32 +1560,32 @@
           "description": "Průměr všech predikcí."
         },
         "meanAveragePrecision": {
-          "name": "Mean Average Precision score",
-          "description": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall."
+          "name": "Průměrné skóre přesnosti",
+          "description": "Průměrná přesnost modelů detekce objektů je průměr AP (average precision = průměrná přesnost) ve všech třídách. Tím se vyhodnotí robustnost modelu rozpoznávání objektů a zapouzdří se kompromis mezi přesností a úplností."
         },
         "averagePrecision": {
-          "name": "Average Precision score",
-          "description": "Average precision for object detection models is calculated for a selected class."
+          "name": "Průměrné skóre přesnosti",
+          "description": "Průměrná přesnost modelů detekce objektů se počítá pro vybranou třídu."
         },
         "averageRecall": {
-          "name": "Average Recall score",
-          "description": "Average recall for object detection models is calculated for a selected class."
+          "name": "Průměrné skóre úplnosti",
+          "description": "Průměrná úplnost modelů detekce objektů se počítá pro vybranou třídu."
         },
         "fairnessMetricDifference": "Rozdíl",
         "fairnessMetricRatio": "Poměr"
       },
       "metricsDropdown": "Metriky",
-      "metricsTypeDropdown": "Aggregate method",
+      "metricsTypeDropdown": "Agregační metoda",
       "metricTypes": {
-        "macro": "Macro",
-        "micro": "Micro"
+        "macro": "Makro",
+        "micro": "Mikro"
       },
-      "classSelectionDropdown": "Select class(es)",
+      "classSelectionDropdown": "Výběr tříd(y)",
       "iouThresholdDropdown": {
-        "name": "IoU Threshold",
-        "description": "Intersection over Union quantifies the degree of overlap between the prediction and ground truth bounding box of a detected object in an image. For example, setting an IoU threshold of 70% means that a prediction with greater than 70% overlap with ground truth is True, thus influencing the definition of prediction correctness and calculation of other performance metrics.",
+        "name": "Prahová hodnota IoU",
+        "description": "Průnik přes sjednocení kvantifikuje stupeň překrytí mezi predikcí a ohraničujícím rámečkem ohraničující pravdu u zjištěného objektu na obrázku. Například nastavení prahové hodnoty IoU na 70 % znamená, že predikce s více než 70 % překrytí se základní pravdivostí je True, což ovlivňuje definici správnosti předpovědi a výpočtu jiných metrik výkonu.",
         "iconId": "iouThresholdIconId",
-        "title": "Learn about the IoU threshold"
+        "title": "Další informace o prahové hodnotě IoU"
       },
       "notAvailable": "Není k dispozici",
       "countColumnHeader": "Ukázková velikost",
@@ -1597,14 +1597,14 @@
       "featuresDropdown": "Funkce",
       "metricChartDropdownSelectionHeader": "Metrika",
       "probabilityForClassSelectionHeader": "Pravděpodobnost pro třídu",
-      "targetSelectionHeader": "Target",
+      "targetSelectionHeader": "Cíl",
       "metricSelectionDropdownPlaceholder": "Vyberte metriky pro porovnání kohort.",
-      "classSelectionDropdownPlaceholder": "Select class name for class-based analysis.",
+      "classSelectionDropdownPlaceholder": "Vyberte název třídy pro analýzu založenou na třídě.",
       "featureSelectionDropdownPlaceholder": "Vyberte funkce, které se mají použít pro analýzu založenou na funkcích.",
       "probabilityDistributionPivotItem": "Rozdělení pravděpodobnosti",
-      "regressionDistributionPivotItem": "Target distribution",
+      "regressionDistributionPivotItem": "Cílová distribuce",
       "metricsVisualizationsPivotItem": "Vizualizace metrik",
-      "confusionMatrixPivotItem": "Confusion matrix",
+      "confusionMatrixPivotItem": "Konfuzní matice",
       "disaggregatedAnalysisFeatureSelectionPlaceholder": "Vyberte funkce pro vygenerování analýzy založené na funkcích.",
       "tableCountTooltip": "Kohorta {0} obsahuje {1} instance.",
       "tableMetricTooltip": "{0} modelu na kohortě {1} je {2}.",
@@ -1615,36 +1615,36 @@
       "metricSelectionButton": "Zvolit metriku",
       "cohortSelectionButton": "Zvolit kohorty",
       "probabilityLabelSelectionButton": "Zvolit popisek",
-      "regressionTargetSelectionButton": "Choose target",
+      "regressionTargetSelectionButton": "Zvolte cíl.",
       "selectAllCohortsOption": "Vybrat vše",
       "other": "Jiné",
       "BoxPlot": {
         "outlierProbability": "pravděpodobnost",
         "outlierLabel": "Odlehlé hodnoty",
         "boxPlotSeriesLabel": "Krabicový graf",
-        "lowerWhisker": "Lower whisker",
-        "upperWhisker": "Upper whisker",
-        "median": "Median",
-        "lowerQuartile": "Lower quartile",
-        "upperQuartile": "Upper quartile"
+        "lowerWhisker": "Dolní vous",
+        "upperWhisker": "Horní vous",
+        "median": "Medián",
+        "lowerQuartile": "Dolní kvartil",
+        "upperQuartile": "Horní kvartil"
       },
       "chartConfigApply": "Použít",
       "chartConfigCancel": "Zrušit",
       "chartConfigDatasetCohortSelectionPlaceholder": "Vybrat kohorty datových sad",
       "chartConfigFeatureBasedCohortSelectionPlaceholder": "Vybrat kohorty založené na funkcích",
       "confusionMatrix": {
-        "confusionMatrixCohortSelectionLabel": "Select dataset cohort",
-        "confusionMatrixClassSelectionLabel": "Select classes",
-        "confusionMatrixClassMinSelectionError": "Select at least {0} classes to visualize the confusion matrix.",
-        "confusionMatrixClassMaxSelectionError": "Select at most {0} classes to visualize the confusion matrix.",
-        "confusionMatrixClassSelectionDefaultPlaceholder": "Choose classes",
-        "confusionMatrixHeatmapTooltip": "{0} datapoints should be {1}, predicted to be {2}",
-        "confusionMatrixYAxisLabel": "True Class",
-        "confusionMatrixXAxisLabel": "Predicted Class",
-        "class": "Class"
+        "confusionMatrixCohortSelectionLabel": "Vybrat kohortu datové sady",
+        "confusionMatrixClassSelectionLabel": "Vybrat třídy",
+        "confusionMatrixClassMinSelectionError": "Vyberte alespoň {0} tříd(y) pro vizualizaci matice záměn.",
+        "confusionMatrixClassMaxSelectionError": "Pokud chcete vizualizovat matici záměn, vyberte maximálně {0} tříd(y).",
+        "confusionMatrixClassSelectionDefaultPlaceholder": "Zvolte třídy",
+        "confusionMatrixHeatmapTooltip": "{0} datové body by měly být {1}, předpovězeny jako {2}",
+        "confusionMatrixYAxisLabel": "Skutečná třída",
+        "confusionMatrixXAxisLabel": "Predikovaná třída",
+        "class": "Třída"
       },
       "nA": "Není k dispozici",
-      "disaggregatedAnalysisBaseCohortDisclaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
+      "disaggregatedAnalysisBaseCohortDisclaimer": "Kohorty v následující analýze založené na funkcích jsou založené na globální kohortě, {0}.",
       "disaggregatedAnalysisBaseCohortWarning": "Na rozdíl od kohorty {0} {1} zahrnuje filtry. V důsledku toho zachycuje jen podmnožinu celé datové sady a přehledy se nemusí zobecnit na úplnou datovou sadu.",
       "probabilitySplineChartToggleLabel": "Použít spojnicový graf",
       "countAxisLabel": "Počet",
@@ -1674,76 +1674,76 @@
         "flyoutDescription": "Můžete se rozhodnout zobrazit kohorty datových sad nebo kohorty funkcí. Pokud jsou kohorty funkcí nedostupné, musíte nejdřív vybrat jednu nebo více funkcí v zobrazení kohort funkcí. Následně se vygenerují kohorty funkcí a tady je můžete vybrat."
       },
       "regressionTargetOptions": {
-        "predictedY": "Predicted Y",
-        "trueY": "True Y",
-        "error": "Error"
+        "predictedY": "Predikované Y",
+        "trueY": "Skutečné Y",
+        "error": "Chyba"
       },
       "topLevelDescription": "Vyhodnoťte výkon modelu zkoumáním distribuce hodnot predikce a hodnot metrik výkonu modelu. Kartu Kohorty datových sad můžete použít k prozkoumání modelu tím, že se podíváte na srovnávací analýzu jeho výkonu v různých předem vytvořených nebo nově vytvořených kohortách datových sad. Pomocí kohort funkcí prozkoumejte model tím, že se podíváte na srovnávací analýzu jeho výkonu napříč citlivými a necitlivými dílčími kohortami funkcí. (například výkon napříč různými pohlavími, úrovně příjmu).",
-      "infoTitle": "Additional information on model overview",
+      "infoTitle": "Další informace o přehledu modelu",
       "visualDisplayToggleLabel": "Zobrazit heat mapu",
       "featureBasedViewDescription": "Pokud si chcete zobrazit rozpis výkonu modelu v kohortách založených na funkcích (pokud je vybraná jedna funkce), nebo průnikových kohortách (pokud jsou vybrané dvě funkce), vyberte až dvě funkce."
     },
     "TableViewTab": {
-      "Heading": "View the dataset in a table format for all features and rows."
+      "Heading": "Umožňuje zobrazit datovou sadu ve formátu tabulky pro všechny funkce a řádky."
     }
   },
   "Forecasting": {
-    "target": "Target",
-    "whatIfForecastingHeader": "What-if analysis",
-    "forecastHeader": "Forecast analysis",
-    "whatIfForecastingDescription": "What-if allows you to perturb features for your entire time series and observe how the model's forecast changes.",
-    "whatIfForecastingChooseTimeSeries": "To start, choose a time series from the options below.",
-    "forecastDescription": "Forecast analysis compares your model's forecast to the actual values of your time series. To enable what-if analysis, provide a dataset with features.",
-    "timeSeries": "Time series",
-    "selectTimeSeries": "Select a time series.",
-    "singleTimeSeries": "The dataset contains only a single time series '{0}' which has been selected by default.",
-    "trueY": "True Y",
-    "baselinePrediction": "Baseline prediction",
-    "forecastComparisonHeader": "Compare What-if Forecasts",
-    "forecastComparisonChartTitle": "Forecasts",
-    "forecastComparisonChartTimeAxisLabel": "Time",
+    "target": "Cíl",
+    "whatIfForecastingHeader": "Citlivostní analýza",
+    "forecastHeader": "Analýza prognózy",
+    "whatIfForecastingDescription": "Eventualita vám umožňuje perturbovat funkce pro celou časovou řadu a sledovat, jak se prognóza modelu mění.",
+    "whatIfForecastingChooseTimeSeries": "Začněte tím, že z možností níže zvolíte časovou řadu.",
+    "forecastDescription": "Analýza prognózy porovná prognózu vašeho modelu se skutečnými hodnotami vaší časové řady. Pokud chcete povolit citlivostní analýzu, poskytněte datovou sadu s funkcemi.",
+    "timeSeries": "Časová řada",
+    "selectTimeSeries": "Vyberte časovou řadu.",
+    "singleTimeSeries": "Datová sada obsahuje pouze jednu časovou řadu „{0}“, která byla ve výchozím nastavení vybrána.",
+    "trueY": "Skutečné Y",
+    "baselinePrediction": "Predikce základní úrovně",
+    "forecastComparisonHeader": "Porovnání prognóz eventualit",
+    "forecastComparisonChartTitle": "Prognózy",
+    "forecastComparisonChartTimeAxisLabel": "Čas",
     "Transformations": {
-      "multiply": "multiply",
-      "divide": "divide",
-      "add": "add",
-      "subtract": "subtract",
-      "change": "change to"
+      "multiply": "násobení",
+      "divide": "dělení",
+      "add": "sčítání",
+      "subtract": "odčítání",
+      "change": "změnit na"
     },
     "TransformationCreation": {
-      "title": "Create what-if scenario",
-      "nameLabel": "What-if scenario name",
-      "featureInstructions": "Choose a feature to perturb.",
-      "operationInstructions": "Choose an operation to apply to the feature.",
-      "operationDropdownHeader": "Operation",
-      "featureDropdownHeader": "Feature",
-      "valueSpinButtonHeader": "Value",
-      "scenarioNamingInstructionsPlaceholder": "Enter a unique name",
-      "scenarioNamingInstructions": "Enter a name for your what-if scenario.",
-      "scenarioNamingCollisionMessage": "This name exists already. Please enter a unique name.",
-      "scenarioNamingLengthMessage": "The name must be between 1 and 50 characters. The actual length is {0}.",
-      "scenarioNamingInvalidCharactersMessage": "The name can only contain alphanumeric characters, whitespaces, dashes, or underscores, and needs to start with an alphanumeric character.",
-      "valueErrorMessage": "For operation {0} please select a value other than {1}.",
-      "invalidCombinationErrorMessage": "This is identical to an existing what-if scenario. Please change the feature, operation, or value.",
-      "addTransformationButton": "Add Transformation",
-      "divisionAndMultiplicationBy": "by"
+      "title": "Vytvoření scénáře eventuality",
+      "nameLabel": "Název scénáře eventuality",
+      "featureInstructions": "Zvolte funkci, která se má perturbovat.",
+      "operationInstructions": "Zvolte operaci, která se má použít u vlastnosti.",
+      "operationDropdownHeader": "Operace",
+      "featureDropdownHeader": "Atribut",
+      "valueSpinButtonHeader": "Hodnota",
+      "scenarioNamingInstructionsPlaceholder": "Zadejte jedinečný název",
+      "scenarioNamingInstructions": "Zadejte název pro scénář eventuality.",
+      "scenarioNamingCollisionMessage": "Tento název již existuje. Zadejte jedinečný název.",
+      "scenarioNamingLengthMessage": "Název musí mít 1 až 50 znaků. Skutečná délka je {0}.",
+      "scenarioNamingInvalidCharactersMessage": "Název může obsahovat jenom alfanumerické znaky, prázdné znaky, spojovníky nebo podtržítka a musí začínat alfanumerickým znakem.",
+      "valueErrorMessage": "Pro operaci {0} vyberte jinou hodnotu než {1}.",
+      "invalidCombinationErrorMessage": "Je to stejné jako u existujícího scénáře eventuality. Změňte prosím funkci, operaci nebo hodnotu.",
+      "addTransformationButton": "Přidat transformaci",
+      "divisionAndMultiplicationBy": "podle"
     },
     "TransformationTable": {
-      "nameColumnHeader": "Name",
-      "methodColumnHeader": "Method",
-      "divisionAndMultiplicationBy": "by ",
-      "header": "What-if Forecasts ({0})"
+      "nameColumnHeader": "Název",
+      "methodColumnHeader": "Metoda",
+      "divisionAndMultiplicationBy": "podle ",
+      "header": "Prognózy eventualit ({0})"
     },
     "TimeSeries": {
-      "apply": "Apply",
-      "cancel": "Cancel",
-      "cohortList": "Time series list",
-      "selectCohort": "Select a time series",
-      "shiftCohort": "Switch time series",
-      "shiftCohortDescription": "Select a time series from the time series list. Apply the time series to the dashboard."
+      "apply": "Použít",
+      "cancel": "Zrušit",
+      "cohortList": "Seznam časových řad",
+      "selectCohort": "Vyberte časovou řadu",
+      "shiftCohort": "Přepnout časovou řadu",
+      "shiftCohortDescription": "Vyberte časovou řadu ze seznamu časových řad. Použije časovou řadu na řídicí panel."
     },
     "TimeSeriesSettings": {
-      "CohortSettingsDescription": "Time series are pre-defined based on time series identifying columns.",
-      "CohortSettingsTitle": "Time series settings"
+      "CohortSettingsDescription": "Časové řady jsou předem definované na základě časových řad identifikujících sloupce.",
+      "CohortSettingsTitle": "Nastavení časových řad"
     }
   }
 }

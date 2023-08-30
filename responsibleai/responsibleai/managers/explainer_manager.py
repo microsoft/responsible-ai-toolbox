@@ -31,7 +31,8 @@ from responsibleai._internal.constants import (ExplanationKeys, ListProperties,
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.managers.base_manager import BaseManager
-from responsibleai.utils import _measure_time
+from responsibleai.utils import (_find_features_having_missing_values,
+                                 _measure_time)
 
 SPARSE_NUM_FEATURES_THRESHOLD = 1000
 IS_RUN = 'is_run'
@@ -97,6 +98,28 @@ class ExplainerManager(BaseManager):
             raise UserConfigValidationException(
                 'Model is required for model explanations')
 
+        categorical_features_with_missing_values_train = \
+            set(_find_features_having_missing_values(
+                self._initialization_examples)) & set(
+                self._categorical_features)
+        if any(categorical_features_with_missing_values_train):
+            raise UserConfigValidationException(
+                "Categorical features {0} cannot have missing "
+                "values for computing explanations. "
+                "Please check your training data.".format(
+                    ",".join(categorical_features_with_missing_values_train)))
+
+        categorical_features_with_missing_values_test = \
+            set(_find_features_having_missing_values(
+                self._evaluation_examples)) & set(
+                self._categorical_features)
+        if any(categorical_features_with_missing_values_test):
+            raise UserConfigValidationException(
+                "Categorical features {0} cannot have missing "
+                "values for computing explanations. "
+                "Please check your test data.".format(
+                    ",".join(categorical_features_with_missing_values_test)))
+
         if self._is_added:
             warnings.warn(("DUPLICATE-EXPLAINER-CONFIG: Ignoring. "
                            "Explanation has already been added, "
@@ -117,7 +140,7 @@ class ExplainerManager(BaseManager):
             self._surrogate_model = LinearExplainableModel
 
     def _compute_explanations(self, local: bool, data: Any):
-        """Compute explanations using MimicWrapper.
+        """Compute explanations using MimicExplainer.
 
         :param local: True if local explanations are requested
                 and False otherwise.
@@ -413,7 +436,7 @@ class ExplainerManager(BaseManager):
         inst.__dict__['_' + Metadata.MODEL] = rai_insights.model
         inst.__dict__['_' + CLASSES] = rai_insights._classes
         inst.__dict__['_' + CATEGORICAL_FEATURES] = \
-            rai_insights.categorical_features
+            rai_insights.get_categorical_features_after_drop()
         target_column = rai_insights.target_column
         train = rai_insights.get_train_data().drop(columns=[target_column])
         test = rai_insights.get_test_data().drop(columns=[target_column])

@@ -16,6 +16,15 @@ import { ensureNewCohortsShowUpInCharts } from "./ensureNewCohortsShowUpInCharts
 
 const testName = "Model Overview v2";
 
+function getDashboardName(isVision: boolean, isText: boolean): string {
+  if (isVision) {
+    return "modelAssessmentVision";
+  } else if (isText) {
+    return "modelAssessmentText";
+  }
+  return "modelAssessment";
+}
+
 export function describeModelOverview(
   datasetShape: IModelAssessmentData,
   name?: keyof typeof modelAssessmentDatasetsIncludingFlights,
@@ -24,19 +33,22 @@ export function describeModelOverview(
   describe(testName, () => {
     const isVision =
       datasetShape.isObjectDetection ||
-      datasetShape.isMultiLabel ||
+      datasetShape.isImageMultiLabel ||
       datasetShape.isImageClassification
         ? true
         : false;
+    const isText =
+      datasetShape.isTextClassification || datasetShape.isTextMultiLabel
+        ? true
+        : false;
+    const isTabular = !isVision && !isText;
     if (isNotebookTest) {
       before(() => {
         visit(name);
       });
     } else {
       before(() => {
-        const dashboardName = isVision
-          ? "modelAssessmentVision"
-          : "modelAssessment";
+        const dashboardName = getDashboardName(isVision, isText);
         cy.visit(`#/${dashboardName}/${name}/light/english/Version-2`);
       });
     }
@@ -48,7 +60,7 @@ export function describeModelOverview(
           datasetShape,
           false,
           isNotebookTest,
-          isVision
+          isTabular
         );
       });
 
@@ -67,7 +79,7 @@ export function describeModelOverview(
         );
         ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
           datasetShape,
-          isVision,
+          isTabular,
           1
         );
       });
@@ -80,17 +92,17 @@ export function describeModelOverview(
         );
         ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
           datasetShape,
-          isVision,
+          isTabular,
           2
         );
       });
 
       it("should show new cohorts in charts", () => {
-        ensureNewCohortsShowUpInCharts(datasetShape, isNotebookTest, isVision);
+        ensureNewCohortsShowUpInCharts(datasetShape, isNotebookTest, isTabular);
       });
 
       it("should pivot between charts when clicking", () => {
-        if (!isVision) {
+        if (isTabular) {
           ensureChartsPivot(datasetShape, isNotebookTest, true);
         }
       });

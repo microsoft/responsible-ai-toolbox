@@ -11,6 +11,7 @@ export interface IModelAssessmentData {
   dataBalanceData?: IDataBalanceData;
   causalAnalysisData?: ICausalAnalysisData;
   whatIfCounterfactualsData?: IWhatIfCounterfactualsData;
+  whatIfForecastingData?: IWhatIfForecastingData;
   featureNames?: string[];
   cohortDefaultName?: string;
   checkDupCohort?: boolean;
@@ -18,8 +19,10 @@ export interface IModelAssessmentData {
   isRegression?: boolean;
   isBinary?: boolean;
   isObjectDetection?: boolean;
-  isMultiLabel?: boolean;
+  isImageMultiLabel?: boolean;
+  isTextMultiLabel?: boolean;
   isImageClassification?: boolean;
+  isTextClassification?: boolean;
 }
 
 export interface IErrorAnalysisData {
@@ -174,6 +177,18 @@ export interface IWhatIfCounterfactualsData {
   newClassValue?: string;
 }
 
+export interface IWhatIfForecastingData {
+  hasWhatIfForecastingComponent?: boolean;
+  numberOfTimeSeriesOptions?: number;
+  timeSeriesToSelect?: string;
+  testTransformation?: {
+    featureToSelect?: string;
+    operationToSelect?: string;
+    operationToSelectIndex?: number;
+    valueToSelect?: number;
+  };
+}
+
 export enum RAINotebookNames {
   "CensusClassificationModelDebugging" = "responsibleaidashboard-census-classification-model-debugging.py",
   "CensusClassificationModelDebuggingDataBalanceExperience" = "responsibleaidashboard-census-classification-model-debugging.py",
@@ -187,7 +202,12 @@ export enum RAINotebookNames {
   "HousingDecisionMakingDataBalanceExperience" = "responsibleaidashboard-housing-decision-making.py",
   "MulticlassDnnModelDebugging" = "responsibleaidashboard-multiclass-dnn-model-debugging.py",
   "MulticlassDnnModelDebuggingDataBalanceExperience" = "responsibleaidashboard-multiclass-dnn-model-debugging.py",
+  "OrangeJuiceForecasting" = "responsibleaidashboard-orange-juice-forecasting.py",
+  "OrangeJuiceForecastingDataBalanceExperience" = "responsibleaidashboard-orange-juice-forecasting.py",
   "FridgeImageClassificationModelDebugging" = "responsibleaidashboard-fridge-image-classification-model-debugging.py",
   "FridgeMultilabelModelDebugging" = "responsibleaidashboard-fridge-multilabel-image-classification-model-debugging.py",
-  "FridgeObjectDetectionModelDebugging" = "responsibleaidashboard-fridge-object-detection-model-debugging.py"
+  "FridgeObjectDetectionModelDebugging" = "responsibleaidashboard-fridge-object-detection-model-debugging.py",
+  "DBPediaTextClassificationModelDebugging" = "responsibleaidashboard-DBPedia-text-classification-model-debugging.py",
+  "BlbooksgenreTextClassificationModelDebugging" = "responsibleaidashboard-blbooksgenre-binary-text-classification-model-debugging.py",
+  "CovidTextClassificationModelDebugging" = "responsibleaidashboard-covid-event-multilabel-text-classification-model-debugging.py"
 }

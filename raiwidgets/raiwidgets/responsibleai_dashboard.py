@@ -5,6 +5,7 @@
 
 from flask import jsonify, request
 
+from raiutils.models import ModelTask
 from raiwidgets.dashboard import Dashboard
 from raiwidgets.responsibleai_dashboard_input import \
     ResponsibleAIDashboardInput
@@ -13,7 +14,6 @@ from responsibleai import RAIInsights
 
 class ResponsibleAIDashboard(Dashboard):
     """The dashboard class, wraps the dashboard component.
-
     :param analysis: An object that represents an RAIInsights.
     :type analysis: RAIInsights
     :param public_ip: Optional. If running on a remote vm,
@@ -48,41 +48,54 @@ class ResponsibleAIDashboard(Dashboard):
             return jsonify(self.input.on_predict(data))
         self.add_url_rule(predict, '/predict', methods=["POST"])
 
-        def tree():
-            data = request.get_json(force=True)
-            return jsonify(self.input.debug_ml(data))
-        self.add_url_rule(tree, '/tree', methods=["POST"])
+        if analysis.task_type == ModelTask.FORECASTING:
+            def forecast():
+                data = request.get_json(force=True)
+                return jsonify(self.input.forecast(data))
+            self.add_url_rule(forecast, '/forecast', methods=["POST"])
+        else:
+            def tree():
+                data = request.get_json(force=True)
+                return jsonify(self.input.debug_ml(data))
+            self.add_url_rule(tree, '/tree', methods=["POST"])
 
-        def matrix():
-            data = request.get_json(force=True)
-            return jsonify(self.input.matrix(data))
-        self.add_url_rule(matrix, '/matrix', methods=["POST"])
+            def matrix():
+                data = request.get_json(force=True)
+                return jsonify(self.input.matrix(data))
+            self.add_url_rule(matrix, '/matrix', methods=["POST"])
 
-        def causal_whatif():
-            data = request.get_json(force=True)
-            return jsonify(self.input.causal_whatif(data))
-        self.add_url_rule(causal_whatif, '/causal_whatif', methods=["POST"])
+            def causal_whatif():
+                data = request.get_json(force=True)
+                return jsonify(self.input.causal_whatif(data))
+            self.add_url_rule(
+                causal_whatif,
+                '/causal_whatif',
+                methods=["POST"])
 
-        def global_causal_effects():
-            data = request.get_json(force=True)
-            return jsonify(self.input.get_global_causal_effects(data))
-        self.add_url_rule(global_causal_effects, '/global_causal_effects',
-                          methods=["POST"])
+            def global_causal_effects():
+                data = request.get_json(force=True)
+                return jsonify(self.input.get_global_causal_effects(data))
+            self.add_url_rule(
+                global_causal_effects,
+                '/global_causal_effects',
+                methods=["POST"])
 
-        def global_causal_policy():
-            data = request.get_json(force=True)
-            return jsonify(self.input.get_global_causal_policy(data))
-        self.add_url_rule(global_causal_policy, '/global_causal_policy',
-                          methods=["POST"])
+            def global_causal_policy():
+                data = request.get_json(force=True)
+                return jsonify(self.input.get_global_causal_policy(data))
+            self.add_url_rule(
+                global_causal_policy,
+                '/global_causal_policy',
+                methods=["POST"])
 
-        def importances():
-            return jsonify(self.input.importances())
-        self.add_url_rule(importances, '/importances', methods=["POST"])
+            def importances():
+                return jsonify(self.input.importances())
+            self.add_url_rule(importances, '/importances', methods=["POST"])
 
-        def get_exp():
-            data = request.get_json(force=True)
-            return jsonify(self.input.get_exp(data))
-        self.add_url_rule(get_exp, '/get_exp', methods=["POST"])
+            def get_exp():
+                data = request.get_json(force=True)
+                return jsonify(self.input.get_exp(data))
+            self.add_url_rule(get_exp, '/get_exp', methods=["POST"])
 
         def get_object_detection_metrics():
             data = request.get_json(force=True)
