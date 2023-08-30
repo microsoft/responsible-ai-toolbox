@@ -72,7 +72,8 @@ export interface IModelOverviewData {
     singleFeatureCohorts: number;
     multiFeatureCohorts: number;
     firstFeatureToSelect: string;
-    secondFeatureToSelect: string;
+    // made optional as image dashboards don't have a second default feature
+    secondFeatureToSelect?: string;
   };
 }
 
