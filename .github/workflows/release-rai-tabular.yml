@@ -183,6 +183,23 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Use Node.js ${{ env.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node-version }}
+
+      - name: Install yarn
+        run: |
+          npm install yarn -g
+
+      - name: install typescript dependencies
+        run: |
+          yarn install --frozen-lock-file
+
+      - name: build typescript
+        run: |
+          yarn build e2e
+
       - uses: conda-incubator/setup-miniconda@v2
         with:
           auto-update-conda: true
