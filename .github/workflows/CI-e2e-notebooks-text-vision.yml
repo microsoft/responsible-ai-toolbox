@@ -156,6 +156,7 @@ jobs:
         run: |
           yarn e2e-widget -n "responsibleaidashboard-DBPedia-text-classification-model-debugging" -f ${{ matrix.flights }}
           yarn e2e-widget -n "responsibleaidashboard-blbooksgenre-binary-text-classification-model-debugging" -f ${{ matrix.flights }}
+          yarn e2e-widget -n "responsibleaidashboard-covid-event-multilabel-text-classification-model-debugging" -f ${{ matrix.flights }}
 
       - name: Upload e2e test screen shot
         if: always()
