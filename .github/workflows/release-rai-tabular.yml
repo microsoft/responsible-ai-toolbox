@@ -103,7 +103,7 @@ jobs:
         shell: bash -l {0}
         run: python setup.py sdist bdist_wheel
         working-directory: ${{ env.raiDirectory }}
-      
+
       - name: Upload a raiwidgets build result
         uses: actions/upload-artifact@v3
         with:
@@ -115,12 +115,12 @@ jobs:
         with:
           name: ${{ env.raiDirectory }}
           path: ${{ env.raiDirectory }}/dist/
-      
+
       - name: Upload a typescript build result
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.typescriptBuildArtifactName }}
-          path: ${{ env.typescriptBuildOutput }} 
+          path: ${{ env.typescriptBuildOutput }}
 
   test-unittests:
     needs: release-build
@@ -132,7 +132,7 @@ jobs:
         with:
           auto-update-conda: true
           python-version: 3.8
-      
+
       - name: install requirements.txt for raiwidgets
         shell: bash -l {0}
         run: pip install -r requirements-dev.txt
@@ -142,21 +142,21 @@ jobs:
         shell: bash -l {0}
         run: pip install -r requirements-dev.txt
         working-directory: ${{ env.raiDirectory }}
-      
+
       - id: download_rai_unit
         name: Download responsibleai wheel
         uses: actions/download-artifact@v2
         with:
           name: ${{ env.raiDirectory }}
           path: ${{ env.raiDirectory }}
-      
+
       - id: download_raiwidgets_unit
         name: Download raiwidgets wheel
         uses: actions/download-artifact@v2
         with:
           name: ${{ env.widgetDirectory }}
           path: ${{ env.widgetDirectory }}
-      
+
       - name: install responsibleai wheel locally
         shell: bash -l {0}
         run: find ./ -name '*.whl' -exec pip install {} \;
@@ -211,24 +211,24 @@ jobs:
         with:
           name: responsibleai
           path: responsibleai
-      
+
       - id: download_raiwidgets_e2e
         name: Download raiwidgets wheel
         uses: actions/download-artifact@v2
         with:
           name: raiwidgets
           path: raiwidgets
-      
+
       - name: Install pytorch
         shell: bash -l {0}
         run: |
           conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
-      
+
       - name: install requirements.txt for raiwidgets
         shell: bash -l {0}
         run: pip install -r requirements-dev.txt
         working-directory: ${{ env.widgetDirectory }}
-      
+
       - name: install responsibleai wheel locally
         shell: bash -l {0}
         run: find ./ -name '*.whl' -exec pip install {} \;
