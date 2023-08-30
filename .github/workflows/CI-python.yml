@@ -17,7 +17,8 @@ jobs:
     strategy:
       matrix:
         packageDirectory:
-          ["responsibleai", "erroranalysis", "raiutils", "rai_test_utils"]
+          ["responsibleai", "erroranalysis", "erroranalysis[object_detection]",
+           "raiutils", "rai_test_utils", "rai_test_utils[object_detection]"]
         operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
         pythonVersion: ["3.7", "3.8", "3.9", "3.10"]
         exclude:
@@ -74,13 +75,6 @@ jobs:
         shell: bash -l {0}
         run: |
           pip install -r requirements-dev.txt
-        working-directory: ${{ matrix.packageDirectory }}
-
-      - if: ${{ (matrix.packageDirectory == 'rai_test_utils') || (matrix.packageDirectory == 'erroranalysis') }}
-        name: Install package extras
-        shell: bash -l {0}
-        run: |
-          pip install -r requirements-object-detection.txt
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Install package
