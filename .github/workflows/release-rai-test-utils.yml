@@ -68,7 +68,7 @@ jobs:
 
       - name: run rai_test_utils tests
         shell: bash -l {0}
-        run: pytest ./tests/
+        run: pytest -s -v ./tests/
         working-directory: rai_test_utils
 
       # publish to PyPI
