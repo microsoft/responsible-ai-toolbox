@@ -546,8 +546,10 @@ export class ModelOverview extends React.Component<
       this.state.selectedFeatures.length > 0 &&
       this.state.featureBasedCohorts.length > 1;
 
-    return showHeatmapToggleInDatasetCohortView ||
-    showHeatmapToggleInFeatureCohortView;
+    return (
+      showHeatmapToggleInDatasetCohortView ||
+      showHeatmapToggleInFeatureCohortView
+    );
   }
 
   private shouldRenderModelOverviewChartPivot(): boolean {
