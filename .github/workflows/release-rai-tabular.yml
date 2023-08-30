@@ -157,16 +157,16 @@ jobs:
           name: ${{ env.widgetDirectory }}
           path: ${{ env.widgetDirectory }}
       
+      - name: install responsibleai wheel locally
+        shell: bash -l {0}
+        run: find ./ -name '*.whl' -exec pip install {} \;
+        working-directory: ${{ env.raiDirectory }}
+
       - name: install raiwidgets wheel locally
         shell: bash -l {0}
         run: find ./ -name '*.whl' -exec pip install {} \;
         working-directory: ${{ env.widgetDirectory }}
 
-      - name: install responsibleai wheel locally
-        shell: bash -l {0}
-        run: find ./ -name '*.whl' -exec pip install {} \;
-        working-directory: ${{ env.raiDirectory }}
-      
       - name: run raiwidgets tests
         shell: bash -l {0}
         run: pytest ./tests/
@@ -212,15 +212,15 @@ jobs:
         run: |
           conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
       
-      - name: install raiwidgets wheel locally
-        shell: bash -l {0}
-        run: find ./ -name '*.whl' -exec pip install {} \;
-        working-directory: ${{ env.widgetDirectory }}
-
       - name: install responsibleai wheel locally
         shell: bash -l {0}
         run: find ./ -name '*.whl' -exec pip install {} \;
         working-directory: ${{ env.raiDirectory }}
+
+      - name: install raiwidgets wheel locally
+        shell: bash -l {0}
+        run: find ./ -name '*.whl' -exec pip install {} \;
+        working-directory: ${{ env.widgetDirectory }}
 
       - name: Run widget tests without flights
         shell: bash -l {0}
