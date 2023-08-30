@@ -223,7 +223,11 @@ class TestRAIVisionInsights(object):
         task_type = ModelTask.OBJECT_DETECTION
         class_names = np.array(['can', 'carton',
                                 'milk_bottle', 'water_bottle'])
-        dropped_features = [i for i in range(0, 10)]
+        dropped_cols_num = [i for i in range(0, 10)]
+        dropped_features = ["{}".format(i) for i in dropped_cols_num]
+        # rename column names to strings since RAI validation fails otherwise
+        data = data.rename(columns={i: j for i, j in zip(
+            dropped_cols_num, dropped_features)}).reset_index(drop=True)
         run_rai_insights(model, data[:3], ImageColumns.LABEL,
                          task_type, class_names,
                          dropped_features=dropped_features)
