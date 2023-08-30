@@ -6,7 +6,7 @@ import { IModelAssessmentData } from "../IModelAssessmentData";
 
 export function ensureAllModelOverviewBasicElementsArePresent(
   datasetShape: IModelAssessmentData
-  ): void {
+): void {
   cy.get(Locators.ModelOverviewHeader).should("exist");
   cy.get(Locators.ModelOverviewDescription).should("exist");
   cy.get(Locators.ModelOverviewCohortViewSelector).should("exist");
@@ -22,5 +22,4 @@ export function ensureAllModelOverviewBasicElementsArePresent(
     cy.get(Locators.ModelOverviewClassSelector).should("exist");
     cy.get(Locators.ModelOverviewIoUThresholdSlider).should("exist");
   }
-
 }
