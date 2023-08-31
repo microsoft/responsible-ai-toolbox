@@ -20,7 +20,6 @@ jobs:
           ["responsibleai", "erroranalysis", "raiutils", "rai_test_utils"]
         operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
         pythonVersion: ["3.7", "3.8", "3.9", "3.10"]
-        extras: [true, false]
         exclude:
           - operatingSystem: macos-latest
             pythonVersion: "3.7"
@@ -30,10 +29,6 @@ jobs:
             pythonVersion: "3.7"
           - operatingSystem: macos-latest
             pythonVersion: "3.8"
-          - extras: true
-            packageDirectory: responsibleai
-          - extras: true
-            packageDirectory: raiutils
 
     runs-on: ${{ matrix.operatingSystem }}
 
@@ -81,7 +76,7 @@ jobs:
           pip install -r requirements-dev.txt
         working-directory: ${{ matrix.packageDirectory }}
 
-      - if: ${{ matrix.extras }}
+      - if: ${{ matrix.packageDirectory == 'rai_test_utils' }}
         name: Install package extras
         shell: bash -l {0}
         run: |
