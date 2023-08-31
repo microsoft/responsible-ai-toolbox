@@ -19,6 +19,7 @@ interface IDatasetCohortStatsTableProps {
   selectableMetrics: IDropdownOption[];
   selectedMetrics: string[];
   showHeatmapColors: boolean;
+  modelType: string;
 }
 
 class IDatasetCohortStatsTableState {}
@@ -37,7 +38,8 @@ export class DatasetCohortStatsTable extends React.Component<
       this.props.selectableMetrics,
       this.props.labeledStatistics,
       this.props.selectedMetrics,
-      this.props.showHeatmapColors
+      this.props.showHeatmapColors,
+      this.props.modelType
     ).items;
 
     const showColors =
