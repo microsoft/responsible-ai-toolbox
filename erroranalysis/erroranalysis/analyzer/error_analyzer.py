@@ -3,13 +3,14 @@
 
 """Defines the BaseAnalyzer, the ModelAnalyzer and PredictionsAnalyzer."""
 
-import logging
 from abc import ABC, abstractmethod
 
 import numpy as np
 import pandas as pd
 from sklearn.feature_selection import (mutual_info_classif,
                                        mutual_info_regression)
+from vision_explanation_methods.error_labeling.error_labeling import \
+    ErrorLabeling
 
 from erroranalysis._internal.constants import (ErrorCorrelationMethods,
                                                MatrixParams, Metrics,
@@ -30,19 +31,6 @@ from erroranalysis._internal.version_checker import check_pandas_version
 from erroranalysis.error_correlation_methods import (
     compute_ebm_global_importance, compute_gbm_global_importance)
 from erroranalysis.report import ErrorReport
-
-module_logger = logging.getLogger(__name__)
-module_logger.setLevel(logging.INFO)
-
-try:
-    from vision_explanation_methods.error_labeling.error_labeling import \
-        ErrorLabeling
-    pytorch_installed = True
-except ImportError:
-    pytorch_installed = False
-    module_logger.debug("Can't import vision_explanation_methods"
-                        "or underlying torch dependencies, "
-                        "required for Object Detection scenario.")
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 IMPORTANCES_THRESHOLD = 50000
@@ -702,11 +690,6 @@ class ModelAnalyzer(BaseAnalyzer):
         if self._model_task == ModelTask.CLASSIFICATION:
             return self.model.predict(self.dataset) != self.true_y
         elif self._model_task == ModelTask.OBJECT_DETECTION:
-            if not pytorch_installed:
-                raise ModuleNotFoundError(
-                    "User Error: torch & torchvision are not installed "
-                    "and are needed for the Object Detection scenario."
-                )
             pred_y = self.model.predict(self.dataset)
             diff = [
                 len(
