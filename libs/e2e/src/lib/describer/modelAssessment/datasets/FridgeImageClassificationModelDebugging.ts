@@ -23,8 +23,8 @@ export const FridgeImageClassificationModelDebugging = {
   modelOverviewData: {
     featureCohortView: {
       firstFeatureToSelect: "mean_pixel_value",
-      multiFeatureCohorts: 3,
-      singleFeatureCohorts: 3
+      multiFeatureCohorts: 1,
+      singleFeatureCohorts: 2
     },
     hasModelOverviewComponent: true,
     initialCohorts: [
