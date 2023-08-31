@@ -11,12 +11,14 @@ from rai_test_utils.datasets.tabular import (create_housing_data,
 from rai_test_utils.datasets.vision import (
     get_images, load_fridge_object_detection_dataset)
 from rai_test_utils.models import (create_models_classification,
+                                   create_models_object_detection,
                                    create_models_regression)
 from rai_test_utils.models.sklearn import \
     create_complex_classification_pipeline
 
 try:
-    from rai_test_utils.models import create_models_object_detection
+    import torch
+    import torchvision
     pytorch_installed = True
 except ImportError:
     pytorch_installed = False
