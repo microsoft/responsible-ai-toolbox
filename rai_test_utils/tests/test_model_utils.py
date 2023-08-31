@@ -3,6 +3,7 @@
 
 import numpy as np
 from ml_wrappers import wrap_model
+import pytest
 
 from rai_test_utils.datasets.tabular import (create_housing_data,
                                              create_iris_data,
