@@ -8,6 +8,7 @@ import {
   ErrorCohort,
   HighchartsNull,
   ILabeledStatistic,
+  ModelTypes,
   MulticlassClassificationMetrics,
   MultilabelMetrics,
   ObjectDetectionMetrics,
@@ -32,7 +33,8 @@ export function generateCohortsStatsTable(
   selectableMetrics: IDropdownOption[],
   labeledStatistics: ILabeledStatistic[][],
   selectedMetrics: string[],
-  useTexturedBackgroundForNaN: boolean
+  useTexturedBackgroundForNaN: boolean,
+  modelType: string
 ): {
   fairnessStats: IFairnessStats[];
   items: PointOptionsObject[];
@@ -149,26 +151,29 @@ export function generateCohortsStatsTable(
         } else {
           const theme = getTheme();
           // not a numeric value (NaN), so just put null and use textured color
-          const colorConfig = useTexturedBackgroundForNaN
-            ? {
-                color: {
-                  pattern: {
-                    aspectRatio: 1,
-                    backgroundColor: theme.semanticColors.bodyBackground,
-                    color: theme.palette.magentaLight,
-                    height: 10,
-                    image: "",
-                    opacity: 0.5,
-                    path: {
-                      d: "M 0 0 L 10 10 M 9 -1 L 11 1 M -1 9 L 1 11",
-                      strokeWidth: 3
-                    },
-                    patternTransform: "",
-                    width: 10
+          const colorConfig =
+            useTexturedBackgroundForNaN &&
+            modelType !== ModelTypes.ObjectDetection &&
+            modelType !== ModelTypes.QuestionAnswering
+              ? {
+                  color: {
+                    pattern: {
+                      aspectRatio: 1,
+                      backgroundColor: theme.semanticColors.bodyBackground,
+                      color: theme.palette.magentaLight,
+                      height: 10,
+                      image: "",
+                      opacity: 0.5,
+                      path: {
+                        d: "M 0 0 L 10 10 M 9 -1 L 11 1 M -1 9 L 1 11",
+                        strokeWidth: 3
+                      },
+                      patternTransform: "",
+                      width: 10
+                    }
                   }
                 }
-              }
-            : { color: "transparent" };
+              : { color: "transparent" };
           items.push({
             ...colorConfig,
             // null is treated as a special value by highcharts
