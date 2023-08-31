@@ -9,6 +9,7 @@ import {
   getDefaultVisibleChart,
   ensureNotebookModelOverviewMetricChartIsCorrect
 } from "./charts";
+import { ensureHeatmapToggleBehavior } from "./ensureHeatmapToggleBehavior";
 import { getNumberOfCohorts } from "./numberOfCohorts";
 
 export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
