@@ -55,7 +55,7 @@ export function describeModelOverview(
 
     if (datasetShape.modelOverviewData?.hasModelOverviewComponent) {
       it("should have 'Model overview' component in the initial state", () => {
-        ensureAllModelOverviewBasicElementsArePresent();
+        ensureAllModelOverviewBasicElementsArePresent(datasetShape);
         ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
           datasetShape,
           false,
@@ -65,7 +65,7 @@ export function describeModelOverview(
       });
 
       it("should show 'Feature cohorts' view when selected", () => {
-        ensureAllModelOverviewBasicElementsArePresent();
+        ensureAllModelOverviewBasicElementsArePresent(datasetShape);
         cy.get(Locators.ModelOverviewCohortViewFeatureCohortViewButton).click();
         ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent(
           datasetShape,

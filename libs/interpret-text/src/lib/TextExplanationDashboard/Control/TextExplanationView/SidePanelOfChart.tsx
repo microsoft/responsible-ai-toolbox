@@ -109,6 +109,7 @@ export class SidePanelOfChart extends React.PureComponent<ISidePanelOfChartProps
                 value={this.props.topK}
                 showValue
                 onChange={this.props.setTopK}
+                ariaLabel={localization.InterpretText.View.sliderAriaLabel}
               />
             </Stack.Item>
             {!this.props.isQA && (
