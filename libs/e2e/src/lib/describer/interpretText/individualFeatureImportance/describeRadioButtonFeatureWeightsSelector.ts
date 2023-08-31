@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Locators } from "../../../util/Constants";
-import { validateBarChart } from "../../../util/validateBarChart";
+import { Locators } from "../Constants";
+import { validateBarChart } from "../validateBarChart";
 
 function validateTextBarChart(expectedNumValues: number): void {
   validateBarChart(Locators.TextExplanationChart, expectedNumValues);

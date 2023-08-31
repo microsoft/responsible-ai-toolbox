@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Locators } from "../../../util/Constants";
+import { Locators } from "../Constants";
 import {
   checkNumBars,
   checkYAxisLabel,
   checkNumLabels
-} from "../../../util/validateBarChart";
+} from "../validateBarChart";
 
 export function describeBarChart(expectedNumValues: number): void {
   describe("Sub bar chart", () => {
