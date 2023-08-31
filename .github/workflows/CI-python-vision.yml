@@ -49,12 +49,6 @@ jobs:
         run: |
           conda install --yes --quiet pytorch torchvision captum -c pytorch
 
-      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
-        name: Install latest lightgbm from conda-forge for MacOS
-        shell: bash -l {0}
-        run: |
-          conda install --yes --quiet lightgbm -c conda-forge
-
       - name: Setup tools
         shell: bash -l {0}
         run: |
@@ -68,16 +62,10 @@ jobs:
           pip install -r requirements-dev.txt
         working-directory: ${{ matrix.packageDirectory }}
 
-      - name: Install package extras
+      - name: Install package + extras
         shell: bash -l {0}
         run: |
-          pip install -r requirements-object-detection.txt
-        working-directory: ${{ matrix.packageDirectory }}
-
-      - name: Install package
-        shell: bash -l {0}
-        run: |
-          pip install -v -e .
+          pip install -v -e .[object-detection]
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Upload requirements
