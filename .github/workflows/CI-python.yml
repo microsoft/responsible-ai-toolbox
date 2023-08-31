@@ -51,11 +51,6 @@ jobs:
           pip install -r requirements-dev.txt
         working-directory: ${{ matrix.packageDirectory }}
 
-      - name: Install test extras
-        run: |
-          pip install -r requirements-object-detection.txt
-        working-directory: ${{ rai_test_utils }}
-
       - name: Install package
         run: |
           pip install -v -e .
