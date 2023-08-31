@@ -424,11 +424,8 @@ export class ModelOverview extends React.Component<
               labeledStatistics={this.state.datasetCohortLabeledStatistics}
               selectableMetrics={selectableMetrics}
               selectedMetrics={this.state.selectedMetrics}
-              showHeatmapColors={
-                this.state.showHeatmapColors &&
-                this.context.dataset.task_type !==
-                  DatasetTaskType.ObjectDetection
-              }
+              showHeatmapColors={this.state.showHeatmapColors}
+              modelType={this.context.modelMetadata.modelType}
             />
           ) : (
             <>
@@ -478,11 +475,8 @@ export class ModelOverview extends React.Component<
                 selectedMetrics={this.state.selectedMetrics}
                 selectedFeatures={this.state.selectedFeatures}
                 featureBasedCohorts={this.state.featureBasedCohorts}
-                showHeatmapColors={
-                  this.state.showHeatmapColors &&
-                  this.context.dataset.task_type !==
-                    DatasetTaskType.ObjectDetection
-                }
+                showHeatmapColors={this.state.showHeatmapColors}
+                modelType={this.context.modelMetadata.modelType}
               />
             </>
           )}
@@ -553,10 +547,8 @@ export class ModelOverview extends React.Component<
       this.state.featureBasedCohorts.length > 1;
 
     return (
-      (showHeatmapToggleInDatasetCohortView ||
-        showHeatmapToggleInFeatureCohortView) &&
-      // excluding object detection scenario
-      this.context.dataset.task_type !== DatasetTaskType.ObjectDetection
+      showHeatmapToggleInDatasetCohortView ||
+      showHeatmapToggleInFeatureCohortView
     );
   }
 
