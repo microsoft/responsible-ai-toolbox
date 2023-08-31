@@ -7,14 +7,17 @@ import pytest
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (ARG, COLUMN, METHOD, PRED_Y,
-                                               ROW_INDEX, TRUE_Y, ModelTask)
+                                               ROW_INDEX, TRUE_Y, ImageColumns,
+                                               ModelTask)
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from rai_test_utils.datasets.tabular import (create_diabetes_data,
                                              create_iris_data,
                                              create_simple_titanic_data)
+from rai_test_utils.datasets.vision import load_fridge_object_detection_dataset
 from rai_test_utils.models.sklearn import (
     create_sklearn_random_forest_regressor, create_sklearn_svm_classifier,
     create_titanic_pipeline)
+from rai_test_utils.models.torch import get_object_detection_fridge_model
 from raiutils.cohort import CohortFilterMethods
 
 TOL = 1e-10
@@ -345,6 +348,25 @@ class TestCohortFilter(object):
                            categorical_features,
                            model_task,
                            filters=filters)
+
+    def test_cohort_filter_object_detection(self):
+        model_task = ModelTask.OBJECT_DETECTION
+        model = get_object_detection_fridge_model()
+
+        dataset = load_fridge_object_detection_dataset()
+        X_test = dataset[[ImageColumns.IMAGE]]
+        y_test = dataset[[ImageColumns.LABEL]]
+        validation_data = create_validation_data(X_test, y_test)
+
+        feature_names = [ImageColumns.IMAGE]
+
+        run_error_analyzer(validation_data,
+                           model,
+                           X_test,
+                           y_test,
+                           feature_names,
+                           categorical_features=[],
+                           model_task=model_task)
 
 
 def create_iris_pandas(use_str_labels=False):

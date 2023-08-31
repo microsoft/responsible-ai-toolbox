@@ -19,7 +19,8 @@ export interface IModelAssessmentData {
   isRegression?: boolean;
   isBinary?: boolean;
   isObjectDetection?: boolean;
-  isMultiLabel?: boolean;
+  isImageMultiLabel?: boolean;
+  isTextMultiLabel?: boolean;
   isImageClassification?: boolean;
   isTextClassification?: boolean;
 }
@@ -206,5 +207,7 @@ export enum RAINotebookNames {
   "FridgeImageClassificationModelDebugging" = "responsibleaidashboard-fridge-image-classification-model-debugging.py",
   "FridgeMultilabelModelDebugging" = "responsibleaidashboard-fridge-multilabel-image-classification-model-debugging.py",
   "FridgeObjectDetectionModelDebugging" = "responsibleaidashboard-fridge-object-detection-model-debugging.py",
-  "DBPediaTextClassificationModelDebugging" = "responsibleaidashboard-DBPedia-text-classification-model-debugging.py"
+  "DBPediaTextClassificationModelDebugging" = "responsibleaidashboard-DBPedia-text-classification-model-debugging.py",
+  "BlbooksgenreTextClassificationModelDebugging" = "responsibleaidashboard-blbooksgenre-binary-text-classification-model-debugging.py",
+  "CovidTextClassificationModelDebugging" = "responsibleaidashboard-covid-event-multilabel-text-classification-model-debugging.py"
 }

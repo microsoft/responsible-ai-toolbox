@@ -9,6 +9,8 @@ from rai_test_utils.datasets.tabular import (
     create_energy_data, create_housing_data, create_iris_data, create_msx_data,
     create_multiclass_classification_dataset, create_reviews_data,
     create_simple_titanic_data, create_timeseries_data, create_wine_data)
+from rai_test_utils.datasets.vision import (
+    get_images, load_fridge_object_detection_dataset)
 
 
 class TestDataUtils:
@@ -141,3 +143,19 @@ class TestDataUtils:
         assert X_test is not None
         assert y_train is not None
         assert y_test is not None
+
+    def test_create_fridge_data(self):
+        dataset = load_fridge_object_detection_dataset()
+        X_train = X_test = dataset[["image"]]
+        y_train = y_test = dataset[["label"]]
+        assert X_train is not None
+        assert X_test is not None
+        assert y_train is not None
+        assert y_test is not None
+
+    def test_get_images(self):
+        fridge_dataset = load_fridge_object_detection_dataset().iloc[:2]
+        images = get_images(fridge_dataset, "RGB", None)
+        assert len(images) == 2
+        assert images[0].shape == (666, 499, 3)
+        assert images[1].shape == (666, 499, 3)

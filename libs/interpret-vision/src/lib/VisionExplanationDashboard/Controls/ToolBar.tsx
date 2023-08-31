@@ -56,6 +56,9 @@ export class ToolBar extends React.Component<IToolBarProps> {
                 options={dropdownOptions}
                 selectedKey={this.props.selectedCohort.cohort.name}
                 onChange={this.onSelect}
+                ariaLabel={
+                  localization.Interpret.DatasetExplorer.datasetCohortDropdown
+                }
               />
             </Stack.Item>
             <Stack.Item>
