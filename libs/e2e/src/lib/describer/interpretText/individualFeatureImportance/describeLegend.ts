@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Locators } from "../../../util/Constants";
+import { Locators } from "../Constants";
 
 export function describeLegend(): void {
   describe("Legend", () => {

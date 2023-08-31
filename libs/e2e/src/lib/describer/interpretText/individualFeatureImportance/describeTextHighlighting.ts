@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Locators } from "../../../util/Constants";
+import { Locators } from "../Constants";
 import { IInterpretTextData } from "../IInterpretTextData";
 
 export function describeTextHighlighting(dataShape: IInterpretTextData): void {
