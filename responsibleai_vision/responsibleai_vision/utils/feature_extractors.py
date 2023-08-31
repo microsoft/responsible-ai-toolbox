@@ -45,7 +45,7 @@ def extract_features(image_dataset: pd.DataFrame,
             continue
         feature_names.append(column_names[j])
     for i in tqdm(range(image_dataset.shape[0])):
-        image = image_dataset.iloc[i][0]
+        image = image_dataset.iloc[i, 0]
         if isinstance(image, str):
             image = get_image_from_path(image, image_mode)
         mean_pixel_value = image.mean()
@@ -54,6 +54,6 @@ def extract_features(image_dataset: pd.DataFrame,
         for j in range(start_meta_index, image_dataset.shape[1]):
             if has_dropped_features and column_names[j] in dropped_features:
                 continue
-            row_feature_values.append(image_dataset.iloc[i][j])
+            row_feature_values.append(image_dataset.iloc[i, j])
         results.append(row_feature_values)
     return results, feature_names
