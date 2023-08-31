@@ -1,8 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IInterpretTextData } from "../interpretText/IInterpretTextData";
+
 export interface IModelAssessmentData {
   errorAnalysisData?: IErrorAnalysisData;
+  textExplanationData?: IInterpretTextData;
   modelStatisticsData?: IModelStatisticsData;
   modelOverviewData?: IModelOverviewData;
   datasetExplorerData?: IDatasetExplorerData;

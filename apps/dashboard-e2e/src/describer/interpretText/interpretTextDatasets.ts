@@ -5,6 +5,12 @@ import { IInterpretTextData } from "@responsible-ai/e2e";
 
 const interpretTextDatasets = {
   newsgroupBinaryData: {
+    classNames: ["spam", "not spam"],
+    expectedFeaturesValues: {
+      allFeaturesExpectedValues: 5,
+      negativeFeaturesExpectedValues: 5,
+      positiveFeaturesExpectedValues: 5
+    },
     localExplanations: [
       [0, 0],
       [-0.5, 0.5],
