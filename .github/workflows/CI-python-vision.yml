@@ -80,13 +80,6 @@ jobs:
           pip install -v -e .
         working-directory: ${{ matrix.packageDirectory }}
 
-      - name: Pip freeze
-        shell: bash -l {0}
-        run: |
-          pip freeze > installed-requirements-dev.txt
-          cat installed-requirements-dev.txt
-        working-directory: raiwidgets
-
       - name: Upload requirements
         uses: actions/upload-artifact@v3
         with:
@@ -98,49 +91,3 @@ jobs:
         run: |
           pytest --durations=10 --doctest-modules --junitxml=junit/test-results.xml --cov=${{ matrix.packageDirectory }} --cov-report=xml --cov-report=html
         working-directory: ${{ matrix.packageDirectory }}
-
-      - name: Upload code coverage results
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.packageDirectory }}-code-coverage-results
-          path: ${{ matrix.packageDirectory }}/htmlcov
-        # Use always() to always run this step to publish test results when there are test failures
-        if: ${{ always() }}
-
-      - if: ${{ (matrix.operatingSystem == 'windows-latest') && (matrix.pythonVersion == '3.8') }}
-        name: Upload to codecov
-        id: codecovupload1
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ${{ matrix.packageDirectory }}
-          env_vars: OS,PYTHON
-          fail_ci_if_error: false
-          files: ./${{ matrix.packageDirectory }}/coverage.xml
-          flags: unittests
-          name: codecov-umbrella
-          verbose: true
-
-      - if: ${{ (steps.codecovupload1.outcome == 'failure') && (matrix.pythonVersion == '3.8') && (matrix.operatingSystem == 'windows-latest') }}
-        name: Retry upload to codecov
-        id: codecovupload2
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ${{ matrix.packageDirectory }}
-          env_vars: OS,PYTHON
-          fail_ci_if_error: false
-          files: ./${{ matrix.packageDirectory }}/coverage.xml
-          flags: unittests
-          name: codecov-umbrella
-          verbose: true
-
-      - name: Set codecov status
-        if: ${{ (matrix.pythonVersion == '3.8') && (matrix.operatingSystem == 'windows-latest') }}
-        shell: bash
-        run: |
-          if ${{ (steps.codecovupload1.outcome == 'success') || (steps.codecovupload2.outcome == 'success') }} ; then
-            echo fine
-          else
-            exit 1
-          fi
