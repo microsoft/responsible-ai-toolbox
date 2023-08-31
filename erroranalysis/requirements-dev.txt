@@ -5,4 +5,3 @@ pytest-mock==3.6.1
 requirements-parser==0.2.0
 rai_test_utils
 interpret-core[required]<=0.3.2
-vision_explanation_methods
