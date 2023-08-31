@@ -68,11 +68,18 @@ export function assertChartVisibility(
   const charts = getAvailableCharts(isRegression, isBinary);
   if (expectedVisibleChart) {
     cy.get(Locators.ModelOverviewChartPivot).should("exist");
-    // With n pivot items the total length is n+1 due to a hidden overflow button.
-    cy.get(Locators.ModelOverviewChartPivotItems).should(
-      "have.length",
-      charts.length + 1
-    );
+    if (datasetShape.isImageMultiLabel || datasetShape.isObjectDetection) {
+      cy.get(Locators.ModelOverviewChartPivotItems).should(
+        "have.length",
+        charts.length
+      );
+    } else {
+      // With n pivot items the total length is n+1 due to a hidden overflow button.
+      cy.get(Locators.ModelOverviewChartPivotItems).should(
+        "have.length",
+        charts.length + 1
+      );
+    }
   } else {
     // no charts should be visible
     cy.get(Locators.ModelOverviewChartPivot).should("not.exist");
