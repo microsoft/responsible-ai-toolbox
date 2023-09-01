@@ -17,6 +17,7 @@ class ServedModelWrapper:
         # JSON safe serialization takes care of datetime columns
         response = requests.post(
             url=f"http://localhost:{self.port}/invocations",
+            headers={"Content-Type": "application/json"},
             data=json.dumps(
                 {"dataframe_split": X.to_dict(orient='split')},
                 default=serialize_json_safe))
