@@ -92,8 +92,7 @@ export class VisionExplanationDashboard extends React.Component<
           />
         </Stack.Item>
         {this.state.panelOpen &&
-        this.context.dataset.task_type === "object_detection" ?
-          (
+        this.context.dataset.task_type === "object_detection" ? (
           <FlyoutObjectDetection
             dataset={this.context.dataset}
             explanations={this.state.computedExplanations}
@@ -104,16 +103,16 @@ export class VisionExplanationDashboard extends React.Component<
             callback={this.onPanelClose}
             onChange={this.onItemSelectObjectDetection}
           />
-        ) :
-          (<Flyout
+        ) : (
+          <Flyout
             explanations={this.state.computedExplanations}
             isOpen={this.state.panelOpen}
             item={this.state.selectedItem}
             loadingExplanation={this.state.loadingExplanation}
             otherMetadataFieldNames={this.state.otherMetadataFieldNames}
             callback={this.onPanelClose}
-          />)
-        }
+          />
+        )}
       </Stack>
     );
   }
