@@ -70,9 +70,8 @@ export interface IModelOverviewData {
   newCohort?: IExpectedCohortData;
   featureCohortView?: {
     singleFeatureCohorts: number;
-    multiFeatureCohorts: number;
+    multiFeatureCohorts?: number;
     firstFeatureToSelect: string;
-    // made optional as image dashboards don't have a second default feature
     secondFeatureToSelect?: string;
   };
 }
