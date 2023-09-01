@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Locators } from "../../../util/Constants";
-import { getDefaultTopKWords } from "../../../util/getDefaultTopKWords";
-import { validateBarChart } from "../../../util/validateBarChart";
+import { Locators } from "../Constants";
+import { getDefaultTopKWords } from "../getDefaultTopKWords";
 import { IInterpretTextData } from "../IInterpretTextData";
+import { validateBarChart } from "../validateBarChart";
 
 function getSlider(): Cypress.Chainable<JQuery<HTMLElement>> {
   return cy.get(`${Locators.TextTopKSlider} .ms-Slider-slideBox`);

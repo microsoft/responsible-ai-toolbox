@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IInterpretTextData } from "./IInterpretTextData";
+import { IInterpretTextData } from "@responsible-ai/e2e";
 
 const interpretTextDatasets = {
   newsgroupBinaryData: {
