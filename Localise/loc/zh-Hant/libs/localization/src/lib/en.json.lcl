@@ -9144,12 +9144,12 @@
       </Item>
       <Item ItemId=";InterpretText.View.importantWords" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Show most Important Words]]></Val>
+          <Val><![CDATA[Show most important words]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[顯示最重要的字詞]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Most Important Words]]></Val>
+            <Val><![CDATA[Show most Important Words]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
@@ -9234,6 +9234,15 @@
           <Val><![CDATA[Predicted answer: ]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[預測的答案:]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretText.View.sliderAriaLabel" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Slider for most important words]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[重要字詞的滑桿]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
