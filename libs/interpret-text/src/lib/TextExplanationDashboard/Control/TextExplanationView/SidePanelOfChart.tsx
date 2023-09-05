@@ -4,7 +4,6 @@
 import {
   ChoiceGroup,
   IChoiceGroupOption,
-  Label,
   Slider,
   Stack,
   Text
@@ -97,10 +96,6 @@ export class SidePanelOfChart extends React.PureComponent<ISidePanelOfChartProps
               </Stack.Item>
             )}
 
-            <Stack.Item>
-              <Label>{localization.InterpretText.View.importantWords}</Label>
-            </Stack.Item>
-
             <Stack.Item id="TextTopKSlider">
               <Slider
                 min={1}
@@ -110,6 +105,7 @@ export class SidePanelOfChart extends React.PureComponent<ISidePanelOfChartProps
                 showValue
                 onChange={this.props.setTopK}
                 ariaLabel={localization.InterpretText.View.sliderAriaLabel}
+                label={localization.InterpretText.View.importantWords}
               />
             </Stack.Item>
             {!this.props.isQA && (
