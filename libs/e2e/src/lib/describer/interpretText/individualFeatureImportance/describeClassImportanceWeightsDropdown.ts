@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Locators } from "../../../util/Constants";
-import { selectDropdown, getDropdownValue } from "../../../util/dropdown";
-import { getDefaultTopKWords } from "../../../util/getDefaultTopKWords";
-import { validateBarChart } from "../../../util/validateBarChart";
+import { Locators } from "../Constants";
+import { selectDropdown, getDropdownValue } from "../dropdown";
+import { getDefaultTopKWords } from "../getDefaultTopKWords";
 import { IInterpretTextData } from "../IInterpretTextData";
+import { validateBarChart } from "../validateBarChart";
 
 function validateTextBarChart(expectedNumValues: number): void {
   validateBarChart(Locators.TextExplanationChart, expectedNumValues);

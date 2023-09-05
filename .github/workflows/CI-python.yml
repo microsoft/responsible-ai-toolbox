@@ -18,20 +18,17 @@ jobs:
       matrix:
         packageDirectory:
           ["responsibleai", "erroranalysis", "raiutils", "rai_test_utils"]
-        operatingSystem:
-          [ubuntu-20.04, ubuntu-latest, macos-latest, windows-latest]
+        operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
         pythonVersion: ["3.7", "3.8", "3.9", "3.10"]
         exclude:
-          - operatingSystem: ubuntu-20.04
-            pythonVersion: "3.7"
-          - operatingSystem: ubuntu-20.04
-            pythonVersion: "3.8"
-          - operatingSystem: ubuntu-20.04
-            pythonVersion: "3.9"
-          - operatingSystem: ubuntu-20.04
-            pythonVersion: "3.10"
           - operatingSystem: macos-latest
             pythonVersion: "3.7"
+          - operatingSystem: ubuntu-latest
+            pythonVersion: "3.7"
+          - operatingSystem: windows-latest
+            pythonVersion: "3.7"
+          - operatingSystem: macos-latest
+            pythonVersion: "3.8"
 
     runs-on: ${{ matrix.operatingSystem }}
 
@@ -43,41 +40,33 @@ jobs:
         with:
           python-version: ${{ matrix.pythonVersion }}
 
-      - if: ${{ matrix.pythonVersion == '3.7' }}
-        name: Setup tools for python lt 3.8
-        run: |
-          python -m pip install --upgrade "pip<=23.1.2"
-          pip install --upgrade setuptools
-          pip install --upgrade "pip-tools<=6.13.0"
-
-      - if: ${{ matrix.pythonVersion == '3.8' || matrix.pythonVersion == '3.9' || matrix.pythonVersion == '3.10' }}
-        name: Setup tools for python gte 3.8
+      - name: Setup tools
         run: |
           python -m pip install --upgrade pip
           pip install --upgrade setuptools
           pip install --upgrade "pip-tools<=7.1.0"
 
-      - name: Pip compile
+      - name: Install package dependencies
         run: |
-          pip-compile requirements-dev.txt -o requirements-dev-comp.txt
-          cat requirements-dev-comp.txt
-        working-directory: ${{ matrix.packageDirectory }}
-
-      - name: Upload requirements
-        uses: actions/upload-artifact@v3
-        with:
-          name: requirements-dev-comp.txt
-          path: ${{ matrix.packageDirectory }}/requirements-dev-comp.txt
-
-      - name: Install dependencies
-        run: |
-          pip-sync requirements-dev-comp.txt
+          pip install -r requirements-dev.txt
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Install package
         run: |
           pip install -v -e .
         working-directory: ${{ matrix.packageDirectory }}
+
+      - name: Pip freeze
+        run: |
+          pip freeze > installed-requirements-dev.txt
+          cat installed-requirements-dev.txt
+        working-directory: raiwidgets
+
+      - name: Upload requirements
+        uses: actions/upload-artifact@v3
+        with:
+          name: requirements-dev.txt
+          path: raiwidgets/installed-requirements-dev.txt
 
       - name: Run tests
         run: |

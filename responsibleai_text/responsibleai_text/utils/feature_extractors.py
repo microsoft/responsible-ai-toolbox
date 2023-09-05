@@ -134,7 +134,7 @@ def append_metadata_values(start_meta_index, text_dataset, i,
     for j in range(start_meta_index, text_dataset.shape[1]):
         if has_dropped_features and column_names[j] in dropped_features:
             continue
-        extracted_features.append(text_dataset.iloc[i][j])
+        extracted_features.append(text_dataset.iloc[i, j])
     return extracted_features
 
 

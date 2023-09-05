@@ -15,7 +15,7 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   datasetShape: IModelAssessmentData,
   includeNewCohort: boolean,
   isNotebookTest: boolean,
-  isVision: boolean
+  isTabular: boolean
 ): void {
   const data = datasetShape.modelOverviewData;
   const initialCohorts = data?.initialCohorts;
@@ -24,10 +24,7 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     "not.exist"
   );
   if (isNotebookTest) {
-    if (
-      getNumberOfCohorts(datasetShape, includeNewCohort) <= 1 ||
-      datasetShape.isObjectDetection
-    ) {
+    if (getNumberOfCohorts(datasetShape, includeNewCohort) <= 1) {
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
         "not.exist"
       );
@@ -59,7 +56,7 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
       "falseNegativeRate",
       "selectionRate"
     );
-  } else if (datasetShape.isMultiLabel) {
+  } else if (datasetShape.isTextMultiLabel || datasetShape.isImageMultiLabel) {
     metricsOrder.push("exactMatchRatio", "hammingScore");
   } else if (datasetShape.isObjectDetection) {
     metricsOrder.push(
@@ -104,7 +101,7 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     "not.exist"
   );
 
-  if (!isVision) {
+  if (isTabular) {
     if (isNotebookTest) {
       cy.get(Locators.ModelOverviewHeatmapCells)
         .should(

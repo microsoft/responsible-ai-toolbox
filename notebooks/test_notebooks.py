@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import os
+import sys
 
 import nbformat as nbf
 import papermill as pm
@@ -18,6 +19,8 @@ RACE_GROUP_SIZES_ADULT = {
 INDIVIDUAL_DASHBOARDS = 'individual-dashboards/'
 RESPONSIBLEAIDASHBOARD = 'responsibleaidashboard/'
 TEXT = RESPONSIBLEAIDASHBOARD + 'text/'
+TABULAR = RESPONSIBLEAIDASHBOARD + 'tabular/'
+VISION = RESPONSIBLEAIDASHBOARD + 'vision/'
 ERROR_ANALYSIS_DASHBOARD = INDIVIDUAL_DASHBOARDS + 'erroranalysis-dashboard/'
 EXPLANATION_DASHBOARD = INDIVIDUAL_DASHBOARDS + 'explanation-dashboard/'
 FAIRNESS_DASHBOARD = INDIVIDUAL_DASHBOARDS + 'fairness-dashboard/'
@@ -206,7 +209,7 @@ def test_erroranalysis_dashboard_housing():
 
 @pytest.mark.notebooks
 def test_responsibleaidashboard_census_classification_model_debugging():
-    nb_path = RESPONSIBLEAIDASHBOARD
+    nb_path = TABULAR
     nb_name = "responsibleaidashboard-census-classification-model-debugging"
 
     test_values = {}
@@ -215,7 +218,7 @@ def test_responsibleaidashboard_census_classification_model_debugging():
 
 @pytest.mark.notebooks
 def test_responsibleaidashboard_diabetes_decision_making():
-    nb_path = RESPONSIBLEAIDASHBOARD
+    nb_path = TABULAR
     nb_name = "responsibleaidashboard-diabetes-decision-making"
 
     test_values = {}
@@ -224,7 +227,7 @@ def test_responsibleaidashboard_diabetes_decision_making():
 
 @pytest.mark.notebooks
 def test_responsibleaidashboard_diabetes_regression_model_debugging():
-    nb_path = RESPONSIBLEAIDASHBOARD
+    nb_path = TABULAR
     nb_name = "responsibleaidashboard-diabetes-regression-model-debugging"
 
     test_values = {}
@@ -233,7 +236,7 @@ def test_responsibleaidashboard_diabetes_regression_model_debugging():
 
 @pytest.mark.notebooks
 def test_responsibleaidashboard_housing_classification_model_debugging():
-    nb_path = RESPONSIBLEAIDASHBOARD
+    nb_path = TABULAR
     nb_name = "responsibleaidashboard-housing-classification-model-debugging"
 
     test_values = {}
@@ -242,7 +245,7 @@ def test_responsibleaidashboard_housing_classification_model_debugging():
 
 @pytest.mark.notebooks
 def test_responsibleaidashboard_housing_decision_making():
-    nb_path = RESPONSIBLEAIDASHBOARD
+    nb_path = TABULAR
     nb_name = "responsibleaidashboard-housing-decision-making"
 
     test_values = {}
@@ -251,7 +254,7 @@ def test_responsibleaidashboard_housing_decision_making():
 
 @pytest.mark.notebooks
 def test_responsibleaidashboard_multiclass_dnn_model_debugging():
-    nb_path = RESPONSIBLEAIDASHBOARD
+    nb_path = TABULAR
     nb_name = "responsibleaidashboard-multiclass-dnn-model-debugging"
 
     test_values = {}
@@ -260,7 +263,7 @@ def test_responsibleaidashboard_multiclass_dnn_model_debugging():
 
 @pytest.mark.vision_notebooks
 def test_responsibleaidashboard_fridge_image_classification_model_debugging():
-    nb_path = RESPONSIBLEAIDASHBOARD
+    nb_path = VISION
     nb_name = (
         "responsibleaidashboard-fridge-"
         "image-classification-model-debugging"
@@ -272,7 +275,7 @@ def test_responsibleaidashboard_fridge_image_classification_model_debugging():
 
 @pytest.mark.vision_notebooks
 def test_responsibleaidashboard_fridge_multilabel_ic_model_debugging():
-    nb_path = RESPONSIBLEAIDASHBOARD
+    nb_path = VISION
     nb_name = (
         "responsibleaidashboard-fridge-multilabel-"
         "image-classification-model-debugging"
@@ -284,8 +287,20 @@ def test_responsibleaidashboard_fridge_multilabel_ic_model_debugging():
 
 @pytest.mark.vision_notebooks
 def test_responsibleaidashboard_fridge_object_detection_model_debugging():
-    nb_path = RESPONSIBLEAIDASHBOARD
+    nb_path = VISION
     nb_name = "responsibleaidashboard-fridge-object-detection-model-debugging"
+
+    test_values = {}
+    assay_one_notebook(nb_path, nb_name, test_values)
+
+
+# skip forecasting in Python 3.6 because of dependency incompatibilities
+@pytest.mark.notebooks
+@pytest.mark.skipif(sys.version_info < (3, 7),
+                    reason="skip forecasting for Python 3.6")
+def test_responsibleaidashboard_orange_juice_forecasting():
+    nb_path = TABULAR
+    nb_name = "responsibleaidashboard-orange-juice-forecasting"
 
     test_values = {}
     assay_one_notebook(nb_path, nb_name, test_values)
@@ -293,7 +308,7 @@ def test_responsibleaidashboard_fridge_object_detection_model_debugging():
 
 @pytest.mark.notebooks
 def test_responsibleaidashboard_getting_started():
-    nb_path = RESPONSIBLEAIDASHBOARD
+    nb_path = TABULAR
     nb_name = "getting-started"
 
     test_values = {}
@@ -313,7 +328,7 @@ def test_responsibleaidashboard_dbpedia_text_classification_model_debugging():
 @pytest.mark.text_notebooks
 def test_responsibleaidashboard_covid19_event_text_model_debugging():
     nb_path = TEXT
-    nb_name = ("responsibleaidashboard-covid19-event-multilabel-" +
+    nb_name = ("responsibleaidashboard-covid-event-multilabel-" +
                "text-classification-model-debugging")
 
     test_values = {}
@@ -325,6 +340,16 @@ def test_responsibleaidashboard_blbooksgenre_text_model_debugging():
     nb_path = TEXT
     nb_name = ("responsibleaidashboard-blbooksgenre-binary-" +
                "text-classification-model-debugging")
+
+    test_values = {}
+    assay_one_notebook(nb_path, nb_name, test_values)
+
+
+@pytest.mark.text_notebooks
+def test_responsibleaidashboard_question_answering_model_debugging():
+    nb_path = TEXT
+    nb_name = ("responsibleaidashboard-question-" +
+               "answering-model-debugging")
 
     test_values = {}
     assay_one_notebook(nb_path, nb_name, test_values)
