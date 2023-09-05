@@ -17,12 +17,11 @@ from rai_test_utils.models.sklearn import \
     create_complex_classification_pipeline
 
 try:
-    import torch
-    import torchvision
+    import torch  # noqa: F401
+    import torchvision  # noqa: F401
     pytorch_installed = True
 except ImportError:
     pytorch_installed = False
-
 
 
 class TestModelUtils:
@@ -48,9 +47,11 @@ class TestModelUtils:
             X_train, y_train, num_feature_names, cat_feature_names)
         assert pipeline.predict(X_test) is not None
 
-    @pytest.mark.skipif(not pytorch_installed, reason="requires torch/torchvision")
+    @pytest.mark.skipif(not pytorch_installed,
+                        reason="requires torch/torchvision")
     def test_object_detection_models(self):
-        dataset = load_fridge_object_detection_dataset().iloc[:2]
+        dataset = \
+            load_fridge_object_detection_dataset().iloc[:2]
 
         X_train = dataset[["image"]]
         classes = np.array(['can', 'carton', 'milk_bottle', 'water_bottle'])

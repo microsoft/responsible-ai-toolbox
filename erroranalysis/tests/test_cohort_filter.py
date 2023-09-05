@@ -21,8 +21,8 @@ from rai_test_utils.models.torch import get_object_detection_fridge_model
 from raiutils.cohort import CohortFilterMethods
 
 try:
-    import torch
-    import torchvision
+    import torch  # noqa: F401
+    import torchvision  # noqa: F401
     pytorch_installed = True
 except ImportError:
     pytorch_installed = False
@@ -356,7 +356,8 @@ class TestCohortFilter(object):
                            model_task,
                            filters=filters)
 
-    @pytest.mark.skipif(not pytorch_installed, reason="requires torch/torchvision")
+    @pytest.mark.skipif(not pytorch_installed,
+                        reason="requires torch/torchvision")
     def test_cohort_filter_object_detection(self):
         model_task = ModelTask.OBJECT_DETECTION
         model = get_object_detection_fridge_model()
