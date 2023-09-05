@@ -63,6 +63,8 @@ class ModelTask(str, Enum):
 
     CLASSIFICATION = 'classification'
     REGRESSION = 'regression'
+    IMAGE_CLASSIFICATION = 'image_classification'
+    MULTILABEL_IMAGE_CLASSIFICATION = 'multilabel_image_classification'
     OBJECT_DETECTION = 'object_detection'
     UNKNOWN = 'unknown'
     Classification = 'classification'
