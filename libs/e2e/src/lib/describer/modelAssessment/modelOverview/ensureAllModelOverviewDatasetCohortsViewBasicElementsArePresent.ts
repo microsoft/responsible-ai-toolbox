@@ -32,7 +32,9 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
       );
     } else {
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
-      ensureHeatmapToggleBehavior(Locators.ModelOverviewDatasetCohortStatsTable);
+      ensureHeatmapToggleBehavior(
+        Locators.ModelOverviewDatasetCohortStatsTable
+      );
     }
   }
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("not.exist");
