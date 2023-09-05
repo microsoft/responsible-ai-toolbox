@@ -106,7 +106,8 @@ class BaseAnalyzer(ABC):
         self._categorical_indexes = []
         self._category_dictionary = {}
         self._classes = classes
-        if model_task == ModelTask.IMAGE_CLASSIFICATION or model_task == ModelTask.MULTILABEL_IMAGE_CLASSIFICATION:
+        if model_task == ModelTask.IMAGE_CLASSIFICATION or \
+           model_task == ModelTask.MULTILABEL_IMAGE_CLASSIFICATION:
             model_task = ModelTask.CLASSIFICATION
         self._model_task = model_task
         if model_task == ModelTask.CLASSIFICATION:
