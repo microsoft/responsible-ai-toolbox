@@ -105,8 +105,10 @@ class BaseAnalyzer(ABC):
         self._categories = []
         self._categorical_indexes = []
         self._category_dictionary = {}
-        self._model_task = model_task
         self._classes = classes
+        if model_task == ModelTask.IMAGE_CLASSIFICATION or model_task == ModelTask.MULTILABEL_IMAGE_CLASSIFICATION:
+            model_task = ModelTask.CLASSIFICATION
+        self._model_task = model_task
         if model_task == ModelTask.CLASSIFICATION:
             if metric is None:
                 metric = Metrics.ERROR_RATE
