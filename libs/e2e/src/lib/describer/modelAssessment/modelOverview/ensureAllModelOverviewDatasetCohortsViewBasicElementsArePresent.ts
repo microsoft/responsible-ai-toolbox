@@ -9,6 +9,7 @@ import {
   getDefaultVisibleChart,
   ensureNotebookModelOverviewMetricChartIsCorrect
 } from "./charts";
+import { ensureHeatmapToggleBehavior } from "./ensureHeatmapToggleBehavior";
 import { getNumberOfCohorts } from "./numberOfCohorts";
 
 export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
@@ -23,19 +24,19 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should(
     "not.exist"
   );
+  cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("exist");
   if (isNotebookTest) {
-    if (
-      getNumberOfCohorts(datasetShape, includeNewCohort) <= 1 ||
-      datasetShape.isObjectDetection
-    ) {
+    if (getNumberOfCohorts(datasetShape, includeNewCohort) <= 1) {
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
         "not.exist"
       );
     } else {
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
+      ensureHeatmapToggleBehavior(
+        Locators.ModelOverviewDatasetCohortStatsTable
+      );
     }
   }
-  cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("exist");
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("not.exist");
   cy.get(Locators.ModelOverviewTableYAxisGrid).should(
     "include.text",
@@ -59,7 +60,7 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
       "falseNegativeRate",
       "selectionRate"
     );
-  } else if (datasetShape.isMultiLabel) {
+  } else if (datasetShape.isTextMultiLabel || datasetShape.isImageMultiLabel) {
     metricsOrder.push("exactMatchRatio", "hammingScore");
   } else if (datasetShape.isObjectDetection) {
     metricsOrder.push(

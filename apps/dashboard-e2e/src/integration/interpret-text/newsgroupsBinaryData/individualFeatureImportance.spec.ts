@@ -1,6 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { describeIndividualFeatureImportance } from "../../../describer/interpretText/individualFeatureImportance/describeIndividualFeatureImportance";
+import { interpretTextDatasets } from "../../../../src/describer/interpretText/interpretTextDatasets";
+import { describeInterpretTextIndividualFeatureImportance } from "../../../describer/interpretText/describeInterpretTextIndividualFeatureImportance";
 
-describeIndividualFeatureImportance("newsgroupBinaryData");
+describeInterpretTextIndividualFeatureImportance(
+  "newsgroupBinaryData",
+  interpretTextDatasets.newsgroupBinaryData
+);

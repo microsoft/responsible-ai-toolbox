@@ -3,6 +3,6 @@
 
 name = 'responsibleai_vision'
 _major = '0'
-_minor = '2'
-_patch = '4'
+_minor = '3'
+_patch = '1'
 version = '{}.{}.{}'.format(_major, _minor, _patch)

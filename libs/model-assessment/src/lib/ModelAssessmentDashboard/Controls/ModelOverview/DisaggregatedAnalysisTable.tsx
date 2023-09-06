@@ -21,6 +21,7 @@ interface IDisaggregatedAnalysisTableProps {
   selectedFeatures: number[];
   featureBasedCohorts: ErrorCohort[];
   showHeatmapColors: boolean;
+  modelType: string;
 }
 
 class IDisaggregatedAnalysisTableState {}
@@ -39,7 +40,8 @@ export class DisaggregatedAnalysisTable extends React.Component<
       this.props.selectableMetrics,
       this.props.labeledStatistics,
       this.props.selectedMetrics,
-      this.props.showHeatmapColors
+      this.props.showHeatmapColors,
+      this.props.modelType
     );
     if (this.props.selectedFeatures.length === 0) {
       return React.Fragment;

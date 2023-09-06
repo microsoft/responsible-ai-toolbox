@@ -35,7 +35,10 @@ export class TextHighlighting extends React.Component<IChartProps> {
     const sortedList = Utils.sortedTopK(importances, k, this.props.radio);
     return (
       <Stack styles={scrollablePaneStyles}>
-        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+        <ScrollablePane
+          scrollbarVisibility={ScrollbarVisibility.auto}
+          scrollContainerFocus
+        >
           <Stack
             id="TextHighlighting"
             horizontal

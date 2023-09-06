@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Locators } from "../../../util/Constants";
-import { validateBarChart } from "../../../util/validateBarChart";
+import { Locators } from "../Constants";
+import { IInterpretTextData } from "../IInterpretTextData";
+import { validateBarChart } from "../validateBarChart";
 
 function validateTextBarChart(expectedNumValues: number): void {
   validateBarChart(Locators.TextExplanationChart, expectedNumValues);
@@ -24,30 +25,35 @@ function switchRadioButtonValidateSelection(
     });
 }
 
-export function describeRadioButtonFeatureWeightsSelector(): void {
+export function describeRadioButtonFeatureWeightsSelector(
+  dataShape: IInterpretTextData
+): void {
   describe("Radio button", () => {
     it("should be set to all features by default", () => {
       cy.get(`${Locators.TextChoiceGroup} [type='radio'][checked]`)
         .next()
         .should("have.class", "is-checked")
         .contains("ALL FEATURES");
-      const notSpamExpectedNumValues = 5;
-      validateTextBarChart(notSpamExpectedNumValues);
+      const expectedNumValues =
+        dataShape.expectedFeaturesValues?.allFeaturesExpectedValues ?? 5;
+      validateTextBarChart(expectedNumValues);
     });
     it("should be able to set radio button to all positive features", () => {
-      const notSpamPositiveExpectedNumValues = 5;
+      const positiveExpectedNumValues =
+        dataShape.expectedFeaturesValues?.positiveFeaturesExpectedValues ?? 5;
       switchRadioButtonValidateSelection(
         1,
         "POSITIVE FEATURES",
-        notSpamPositiveExpectedNumValues
+        positiveExpectedNumValues
       );
     });
     it("should be able to set radio button to all negative features", () => {
-      const notSpamNegativeExpectedNumValues = 5;
+      const negativeExpectedNumValues =
+        dataShape.expectedFeaturesValues?.negativeFeaturesExpectedValues ?? 5;
       switchRadioButtonValidateSelection(
         2,
         "NEGATIVE FEATURES",
-        notSpamNegativeExpectedNumValues
+        negativeExpectedNumValues
       );
     });
   });

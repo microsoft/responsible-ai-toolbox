@@ -33,11 +33,14 @@ export function describeModelOverview(
   describe(testName, () => {
     const isVision =
       datasetShape.isObjectDetection ||
-      datasetShape.isMultiLabel ||
+      datasetShape.isImageMultiLabel ||
       datasetShape.isImageClassification
         ? true
         : false;
-    const isText = datasetShape.isTextClassification ? true : false;
+    const isText =
+      datasetShape.isTextClassification || datasetShape.isTextMultiLabel
+        ? true
+        : false;
     const isTabular = !isVision && !isText;
     if (isNotebookTest) {
       before(() => {
@@ -52,7 +55,7 @@ export function describeModelOverview(
 
     if (datasetShape.modelOverviewData?.hasModelOverviewComponent) {
       it("should have 'Model overview' component in the initial state", () => {
-        ensureAllModelOverviewBasicElementsArePresent();
+        ensureAllModelOverviewBasicElementsArePresent(datasetShape);
         ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
           datasetShape,
           false,
@@ -62,7 +65,7 @@ export function describeModelOverview(
       });
 
       it("should show 'Feature cohorts' view when selected", () => {
-        ensureAllModelOverviewBasicElementsArePresent();
+        ensureAllModelOverviewBasicElementsArePresent(datasetShape);
         cy.get(Locators.ModelOverviewCohortViewFeatureCohortViewButton).click();
         ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent(
           datasetShape,
@@ -77,7 +80,8 @@ export function describeModelOverview(
         ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
           datasetShape,
           1,
-          isTabular
+          isTabular,
+          isVision
         );
       });
 
@@ -87,11 +91,17 @@ export function describeModelOverview(
           datasetShape.modelOverviewData?.featureCohortView
             ?.secondFeatureToSelect || ""
         );
-        ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
-          datasetShape,
-          2,
-          isTabular
-        );
+        if (
+          datasetShape.modelOverviewData?.featureCohortView
+            ?.secondFeatureToSelect
+        ) {
+          ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
+            datasetShape,
+            2,
+            isTabular,
+            isVision
+          );
+        }
       });
 
       it("should show new cohorts in charts", () => {
