@@ -101,8 +101,6 @@ class TestRAIVisionInsights(object):
         run_rai_insights(model, data[:3], FRIDGE_MULTILABEL_TARGETS,
                          task_type, test_error_analysis=True)
 
-    @pytest.mark.skip("This test seems to fail due to issues in the \
-                      MacOS/Linux versions of the build/PR gate.")
     @pytest.mark.parametrize('num_masks', [None, 25, DEFAULT_NUM_MASKS])
     @pytest.mark.parametrize('mask_res', [None, DEFAULT_MASK_RES, 8])
     def test_rai_insights_object_detection_fridge(self, num_masks, mask_res):
@@ -113,7 +111,8 @@ class TestRAIVisionInsights(object):
                                 'milk_bottle', 'water_bottle'])
         run_rai_insights(model, data[:2], ImageColumns.LABEL,
                          task_type, class_names,
-                         num_masks=num_masks, mask_res=mask_res)
+                         num_masks=num_masks, mask_res=mask_res,
+                         test_error_analysis=True)
 
     @pytest.mark.parametrize('num_masks', [-100, -1, 0])
     def test_rai_insights_invalid_num_masks(self, num_masks):

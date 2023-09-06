@@ -598,6 +598,8 @@ def retrieve_fridge_object_detection_model():
 
     num_classes = 5
     model = get_object_detection_model(num_classes)
+    _ = download_object_detection_assets('Recycling_finetuned_FastRCNN.pt')
+    model.load_state_dict(torch.load('Recycling_finetuned_FastRCNN.pt', map_location=device))
 
     # To use general torchvision pretrained model,
     # comment above and uncomment below
