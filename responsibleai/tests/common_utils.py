@@ -3,9 +3,11 @@
 
 import json
 
+import mlflow
 import numpy as np
 import pandas as pd
 import pytest
+import random
 from dice_ml.utils import helpers
 # Defines common utilities for responsibleai tests
 from sklearn.model_selection import train_test_split
@@ -63,6 +65,11 @@ def create_tiny_forecasting_dataset():
     y_test = [4, 5, 6, 7]
     return X_train, X_test, y_train, y_test
 
+
+class RandomForecastingModel():
+    def forecast(self, X):
+        return np.array([random.random() for _ in range(len(X))])
+    
 
 class FetchDiceAdultCensusIncomeDataset(object):
     def __init__(self):
