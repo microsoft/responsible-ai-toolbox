@@ -3,7 +3,6 @@
 
 import json
 
-import mlflow
 import numpy as np
 import pandas as pd
 import pytest
@@ -69,7 +68,7 @@ def create_tiny_forecasting_dataset():
 class RandomForecastingModel():
     def forecast(self, X):
         return np.array([random.random() for _ in range(len(X))])
-    
+
 
 class FetchDiceAdultCensusIncomeDataset(object):
     def __init__(self):

@@ -44,11 +44,11 @@ def test_served_model(mock_post, rai_forecasting_insights_for_served_model):
     X_train, X_test, _, _ = create_tiny_forecasting_dataset()
 
     mock_post.return_value = Mock(
-            status_code=200,
-            content=json.dumps({
-                "predictions": [random.random() for _ in range(len(X_train))]
-            })
-        )
+        status_code=200,
+        content=json.dumps({
+            "predictions": [random.random() for _ in range(len(X_train))]
+        })
+    )
 
     # set port number for served model before loading RAI Insights
     os.environ["RAI_MODEL_SERVING_PORT"] = "5123"
@@ -59,21 +59,24 @@ def test_served_model(mock_post, rai_forecasting_insights_for_served_model):
 
 
 @patch("requests.post")
-def test_served_model_failed(mock_post, rai_forecasting_insights_for_served_model):
+def test_served_model_failed(
+        mock_post,
+        rai_forecasting_insights_for_served_model):
     X_train, X_test, _, _ = create_tiny_forecasting_dataset()
 
-    response_content = "Could not connect to host since it actively refuses the connection."
+    response_content = "Could not connect to host since it actively " \
+        "refuses the connection."
     mock_post.return_value = Mock(
-            status_code=400,
-            content=response_content
-        )
+        status_code=400,
+        content=response_content
+    )
 
     # set port number for served model before loading RAI Insights
     os.environ["RAI_MODEL_SERVING_PORT"] = "5123"
     rai_insights = RAIInsights.load(RAI_INSIGHTS_DIR_NAME)
     with pytest.raises(Exception) as exc:
-        forecasts = rai_insights.model.forecast(X_test)
+        rai_insights.model.forecast(X_test)
         assert ("Could not retrieve predictions. "
-               "Model server returned status code 400 "
-               f"and the following response: {response_content}"
-               in exc.value.args[0])
+                "Model server returned status code 400 "
+                f"and the following response: {response_content}"
+                in exc.value.args[0])
