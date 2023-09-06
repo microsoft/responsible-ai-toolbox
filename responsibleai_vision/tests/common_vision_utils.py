@@ -591,17 +591,23 @@ def download_object_detection_assets(filepath, force=False):
     return filepath
 
 
-def retrieve_fridge_object_detection_model():
+def retrieve_fridge_object_detection_model(load_fridge_weights=False):
     """Retrieves the recycling model fine-tuned on fridge.
+
+    :param load_fridge_weights: whether to load weights from fridge model
+    :type load_fridge_weights: bool
+    :return: fine-tuned model
+    :rtype: torchvision.models.detection.faster_rcnn.FasterRCNN
     """
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     num_classes = 5
     model = get_object_detection_model(num_classes)
-    _ = download_object_detection_assets('Recycling_finetuned_FastRCNN.pt')
-    model.load_state_dict(
-        torch.load('Recycling_finetuned_FastRCNN.pt',
-                   map_location=device))
+    if load_fridge_weights:
+        _ = download_object_detection_assets('Recycling_finetuned_FastRCNN.pt')
+        model.load_state_dict(
+            torch.load('Recycling_finetuned_FastRCNN.pt',
+                    map_location=device))
 
     # To use general torchvision pretrained model,
     # comment above and uncomment below

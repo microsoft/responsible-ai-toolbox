@@ -102,12 +102,14 @@ class TestRAIVisionInsights(object):
                          task_type, test_error_analysis=True)
 
     @pytest.mark.skipif(sys.platform == 'linux' or sys.version_info[:2] == (3, 8),  # and?
-                        reason='incompatible fridge weights')
+                        reason='Incompatible torch weights for fridge model')
     @pytest.mark.parametrize('num_masks', [None, 25, DEFAULT_NUM_MASKS])
     @pytest.mark.parametrize('mask_res', [None, DEFAULT_MASK_RES, 8])
     def test_rai_insights_object_detection_fridge(self, num_masks, mask_res):
         data = load_fridge_object_detection_dataset()
-        model = retrieve_fridge_object_detection_model()
+        model = retrieve_fridge_object_detection_model(
+            load_fridge_weights=True
+        )
         task_type = ModelTask.OBJECT_DETECTION
         class_names = np.array(['can', 'carton',
                                 'milk_bottle', 'water_bottle'])
