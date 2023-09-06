@@ -4,4 +4,10 @@
 export interface IInterpretTextData {
   text: string[];
   localExplanations: number[][];
+  classNames: string[];
+  expectedFeaturesValues?: {
+    allFeaturesExpectedValues: number;
+    negativeFeaturesExpectedValues: number;
+    positiveFeaturesExpectedValues: number;
+  };
 }

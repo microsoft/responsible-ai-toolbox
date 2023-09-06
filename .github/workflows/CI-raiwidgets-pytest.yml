@@ -93,7 +93,7 @@ jobs:
         shell: bash -l {0}
         id: raiwidgettests
         run: |
-          pytest --durations=10 --junitxml=junit/test-results.xml --cov=${{ matrix.packageDirectory }} --cov-report=xml --cov-report=html
+          pytest -s -v --durations=10 --junitxml=junit/test-results.xml --cov=${{ matrix.packageDirectory }} --cov-report=xml --cov-report=html
         working-directory: ${{ matrix.packageDirectory }}
 
       - if: ${{ (steps.raiwidgettests.outcome == 'success') }}

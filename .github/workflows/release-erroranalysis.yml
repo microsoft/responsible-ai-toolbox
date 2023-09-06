@@ -52,7 +52,7 @@ jobs:
         working-directory: erroranalysis
 
       - name: run erroranalysis tests
-        run: pytest ./tests/
+        run: pytest -s -v ./tests/
         working-directory: erroranalysis
 
       # publish to PyPI
