@@ -1,8 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IInterpretTextData } from "../interpretText/IInterpretTextData";
+
 export interface IModelAssessmentData {
   errorAnalysisData?: IErrorAnalysisData;
+  textExplanationData?: IInterpretTextData;
   modelStatisticsData?: IModelStatisticsData;
   modelOverviewData?: IModelOverviewData;
   datasetExplorerData?: IDatasetExplorerData;
@@ -70,9 +73,9 @@ export interface IModelOverviewData {
   newCohort?: IExpectedCohortData;
   featureCohortView?: {
     singleFeatureCohorts: number;
-    multiFeatureCohorts: number;
+    multiFeatureCohorts?: number;
     firstFeatureToSelect: string;
-    secondFeatureToSelect: string;
+    secondFeatureToSelect?: string;
   };
 }
 

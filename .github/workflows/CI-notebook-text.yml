@@ -101,7 +101,7 @@ jobs:
 
       - name: Run notebook tests
         shell: bash -l {0}
-        run: python -m pytest notebooks -m text_notebooks
+        run: python -m pytest -s -v notebooks -m text_notebooks
 
       - name: Upload notebook test result
         if: always()

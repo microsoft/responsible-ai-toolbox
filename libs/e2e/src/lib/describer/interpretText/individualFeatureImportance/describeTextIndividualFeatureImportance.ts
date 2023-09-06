@@ -14,18 +14,14 @@ import { describeTextHighlighting } from "./describeTextHighlighting";
 const testName = "Individual feature importance";
 
 export function describeTextIndividualFeatureImportance(
-  name: string,
   datasetShape: IInterpretTextData
 ): void {
   describe(testName, () => {
-    before(() => {
-      cy.visit(`#/interpretText/${name}/light/english/Version-1`);
-    });
     describeLegend();
     describeTextHighlighting(datasetShape);
     describeBarChart(getDefaultTopKWords(datasetShape.localExplanations));
     describeClassImportanceWeightsDropdown(datasetShape);
     describeSlider(datasetShape);
-    describeRadioButtonFeatureWeightsSelector();
+    describeRadioButtonFeatureWeightsSelector(datasetShape);
   });
 }

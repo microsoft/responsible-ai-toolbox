@@ -52,7 +52,7 @@ jobs:
         working-directory: raiutils
 
       - name: run raiutils tests
-        run: pytest ./tests/
+        run: pytest -s -v ./tests/
         working-directory: raiutils
 
       # publish to PyPI
