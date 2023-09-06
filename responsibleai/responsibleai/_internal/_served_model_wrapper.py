@@ -1,10 +1,11 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from responsibleai.serialization_utilities import serialize_json_safe
-
 import json
+
 import requests
+
+from responsibleai.serialization_utilities import serialize_json_safe
 
 
 class ServedModelWrapper:

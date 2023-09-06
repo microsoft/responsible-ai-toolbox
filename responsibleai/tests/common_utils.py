@@ -2,11 +2,11 @@
 # Licensed under the MIT License.
 
 import json
+import random
 
 import numpy as np
 import pandas as pd
 import pytest
-import random
 from dice_ml.utils import helpers
 # Defines common utilities for responsibleai tests
 from sklearn.model_selection import train_test_split

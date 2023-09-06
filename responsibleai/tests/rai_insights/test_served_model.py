@@ -3,13 +3,14 @@
 
 import json
 import os
-import pytest
 import random
-from responsibleai import RAIInsights, FeatureMetadata
-from tests.common_utils import (
-    create_tiny_forecasting_dataset, RandomForecastingModel)
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
 
+import pytest
+from tests.common_utils import (RandomForecastingModel,
+                                create_tiny_forecasting_dataset)
+
+from responsibleai import FeatureMetadata, RAIInsights
 
 RAI_INSIGHTS_DIR_NAME = "rai_insights_test_served_model"
 

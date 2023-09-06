@@ -15,11 +15,10 @@ import pandas as pd
 
 import responsibleai
 from raiutils.exceptions import UserConfigValidationException
+from responsibleai._internal._served_model_wrapper import ServedModelWrapper
 from responsibleai._internal.constants import (FileFormats, Metadata,
-                                               SerializationAttributes,
-                                               ModelServingConstants)
-from responsibleai._internal._served_model_wrapper import (
-    ServedModelWrapper)
+                                               ModelServingConstants,
+                                               SerializationAttributes)
 
 _DTYPES = 'dtypes'
 _MODEL_PKL = Metadata.MODEL + FileFormats.PKL

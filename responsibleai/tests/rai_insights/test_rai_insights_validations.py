@@ -9,10 +9,10 @@ import numpy as np
 import pandas as pd
 import pytest
 from lightgbm import LGBMClassifier
-from tests.common_utils import (create_iris_data,
-                                create_tiny_forecasting_dataset,
-                                RandomForecastingModel,
-                                RandomForecastingModelWithQuantiles)
+from tests.common_utils import (RandomForecastingModel,
+                                RandomForecastingModelWithQuantiles,
+                                create_iris_data,
+                                create_tiny_forecasting_dataset)
 
 from rai_test_utils.datasets.tabular import (
     create_binary_classification_dataset, create_cancer_data,
