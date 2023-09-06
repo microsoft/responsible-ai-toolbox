@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from raiutils.data_processing import serialize_json_safe
+from responsibleai.serialization_utilities import serialize_json_safe
 
 import json
 import requests
