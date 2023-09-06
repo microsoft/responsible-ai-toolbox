@@ -241,6 +241,7 @@ export const textExplanationData = {
     negativeFeaturesExpectedValues: 13,
     positiveFeaturesExpectedValues: 10
   },
+  explanationIndex: 13,
   localExplanations: localExplanationData,
   text: [
     "",

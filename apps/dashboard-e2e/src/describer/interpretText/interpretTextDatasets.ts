@@ -11,6 +11,7 @@ const interpretTextDatasets = {
       negativeFeaturesExpectedValues: 5,
       positiveFeaturesExpectedValues: 5
     },
+    explanationIndex: 0,
     localExplanations: [
       [0, 0],
       [-0.5, 0.5],

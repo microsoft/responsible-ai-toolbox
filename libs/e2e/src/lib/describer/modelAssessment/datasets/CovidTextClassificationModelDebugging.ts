@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { textExplanationData } from "./CovidTextExplanationData";
+
 export const CovidTextClassificationModelDebugging = {
   causalAnalysisData: {
     hasCausalAnalysisComponent: false
@@ -46,5 +48,6 @@ export const CovidTextClassificationModelDebugging = {
       name: "CohortCreateE2E-multilabel-text",
       sampleSize: "2"
     }
-  }
+  },
+  textExplanationData
 };
