@@ -607,7 +607,7 @@ def retrieve_fridge_object_detection_model(load_fridge_weights=False):
         _ = download_object_detection_assets('Recycling_finetuned_FastRCNN.pt')
         model.load_state_dict(
             torch.load('Recycling_finetuned_FastRCNN.pt',
-                    map_location=device))
+                       map_location=device))
 
     # To use general torchvision pretrained model,
     # comment above and uncomment below
