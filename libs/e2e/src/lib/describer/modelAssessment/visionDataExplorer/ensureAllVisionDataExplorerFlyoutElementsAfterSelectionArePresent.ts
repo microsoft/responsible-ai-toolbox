@@ -14,19 +14,12 @@ export function ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresen
 ): void {
   cy.get(Locators.VisionDataExplorerImageExplorerViewButton).click();
 
-  cy.waitUntil(() =>
-    cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage, { timeout: 30000 })
-    .should("be.visible")
-    .then(($image) => {
-      cy.wait(10000);
-      // verifies the image is loaded
-      expect(($image[0] as HTMLImageElement).naturalWidth).to.be.greaterThan(0);
-      expect(($image[0] as HTMLImageElement).naturalHeight).to.be.greaterThan(
-        0
-      );
-    }),
-    {timeout: 30000}
-  );
+  cy.waitUntil(() => {
+    cy.reload()
+    return Cypress.$(Locators.VisionDataExplorerImageExplorerViewSuccessImage).length > 0
+    && (Cypress.$(Locators.VisionDataExplorerImageExplorerViewSuccessImage)[0] as HTMLImageElement).naturalWidth > 0
+    && (Cypress.$(Locators.VisionDataExplorerImageExplorerViewSuccessImage)[0] as HTMLImageElement).naturalHeight > 0;
+  });
 
   // cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage, { timeout: 30000 })
   // .should("be.visible")
@@ -51,6 +44,13 @@ export function ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresen
         .should((gtLabel) => {
           expect(predLabel.split(": ")[1]).to.equal(gtLabel.split(": ")[1]);
         });
+    });
+
+    cy.waitUntil(() => {
+      cy.reload()
+      return Cypress.$(Locators.VisionDataExplorerFlyoutImage).length > 0
+      && (Cypress.$(Locators.VisionDataExplorerFlyoutImage)[0] as HTMLImageElement).naturalWidth > 0
+      && (Cypress.$(Locators.VisionDataExplorerFlyoutImage)[0] as HTMLImageElement).naturalHeight > 0;
     });
 
   // cy.get(Locators.VisionDataExplorerFlyoutImage, { timeout: 10000 })
