@@ -113,21 +113,6 @@ class WrappedIndexPredictorModel:
                 # concatenate all predicted labels into a single string
                 predictions_joined.append(','.join(pred_labels))
             self.predictions = np.array(predictions_joined)
-        elif task_type == ModelTask.OBJECT_DETECTION:
-            # TODO: change logic after success/error labels
-            # are updated to `x correct, y incorrect`
-            predictions_joined = []
-            for image_pred in self.predictions:
-                # get all labels where prediction is 1
-                pred_labels = [int(object_pred[0] - 1)
-                               for object_pred in image_pred]
-                if self.classes is not None:
-                    pred_labels = [self.classes[i] for i in pred_labels]
-                else:
-                    pred_labels = [str(i) for i in pred_labels]
-                # concatenate all predicted labels into a single string
-                predictions_joined.append(','.join(pred_labels))
-            self.predictions = np.array(predictions_joined)
         self.predict_proba = self.model.predict_proba(test)
 
     def predict(self, X):
@@ -215,7 +200,7 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
             transformations, index_classes)
         super(ErrorAnalysisManager, self).__init__(
             index_predictor, ext_dataset, target_column,
-            classes, categorical_features)
+            classes, categorical_features, model_task=task_type)
 
     def compute(self, **kwargs):
         """Compute the error analysis data.
@@ -316,7 +301,7 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
         inst.__dict__['_feature_names'] = feature_names
         task_type = rai_insights.task_type
         wrapped_model = wrap_model(rai_insights.model, dataset,
-                                   rai_insights.task_type,
+                                   task_type,
                                    classes=rai_insights._classes,
                                    device=rai_insights.device)
         inst.__dict__['_task_type'] = task_type
@@ -342,5 +327,6 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
                                                    dataset,
                                                    true_y,
                                                    feature_names,
-                                                   categorical_features)
+                                                   categorical_features,
+                                                   model_task=task_type)
         return inst
