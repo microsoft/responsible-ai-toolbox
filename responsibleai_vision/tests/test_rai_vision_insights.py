@@ -101,8 +101,10 @@ class TestRAIVisionInsights(object):
         run_rai_insights(model, data[:3], FRIDGE_MULTILABEL_TARGETS,
                          task_type, test_error_analysis=True)
 
-    @pytest.mark.skipif(sys.platform == 'linux' or sys.version_info[:2] == (3, 8),  # and?
-                        reason='Incompatible torch weights for fridge model')
+    @pytest.mark.skipif(
+        (sys.platform == 'linux' and sys.version_info[:2] == (3, 8)) or
+        ('win' in sys.platform and sys.version_info[:2] == (3, 7)),
+        reason='Incompatible torch weights for fridge model')
     @pytest.mark.parametrize('num_masks', [None, 25, DEFAULT_NUM_MASKS])
     @pytest.mark.parametrize('mask_res', [None, DEFAULT_MASK_RES, 8])
     def test_rai_insights_object_detection_fridge(self, num_masks, mask_res):
