@@ -9,6 +9,7 @@ import {
   getDefaultVisibleChart,
   ensureNotebookModelOverviewMetricChartIsCorrect
 } from "./charts";
+import { ensureHeatmapToggleBehavior } from "./ensureHeatmapToggleBehavior";
 import { getNumberOfCohorts } from "./numberOfCohorts";
 
 export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
@@ -23,6 +24,7 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should(
     "not.exist"
   );
+  cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("exist");
   if (isNotebookTest) {
     if (getNumberOfCohorts(datasetShape, includeNewCohort) <= 1) {
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
@@ -30,9 +32,11 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
       );
     } else {
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
+      ensureHeatmapToggleBehavior(
+        Locators.ModelOverviewDatasetCohortStatsTable
+      );
     }
   }
-  cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("exist");
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("not.exist");
   cy.get(Locators.ModelOverviewTableYAxisGrid).should(
     "include.text",
