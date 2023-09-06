@@ -9,7 +9,7 @@ import requests
 
 class ServedModelWrapper:
     """Wrapper for locally served model.
-    
+
     The purpose of ServedModelWrapper is to provide an abstraction
     for locally served models. This allows us to use the same code in
     RAIInsights for loaded models that can run in the same environment and
