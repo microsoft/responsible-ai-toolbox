@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { textExplanationData } from "./DBPediaTextExplanationData";
+
 export const DBPediaTextClassificationModelDebugging = {
   causalAnalysisData: {
     hasCausalAnalysisComponent: false
@@ -50,5 +52,6 @@ export const DBPediaTextClassificationModelDebugging = {
       name: "CohortCreateE2E-text-classification",
       sampleSize: "5"
     }
-  }
+  },
+  textExplanationData
 };
