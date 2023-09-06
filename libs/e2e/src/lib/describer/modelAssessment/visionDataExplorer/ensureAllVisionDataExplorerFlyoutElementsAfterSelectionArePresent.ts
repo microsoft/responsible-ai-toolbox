@@ -6,6 +6,9 @@ import { expect } from "chai";
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
+import "cypress-wait-until";
+
+
 export function ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresent(
   datasetShape: IModelAssessmentData
 ): void {
