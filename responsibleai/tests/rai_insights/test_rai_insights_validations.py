@@ -10,7 +10,9 @@ import pandas as pd
 import pytest
 from lightgbm import LGBMClassifier
 from tests.common_utils import (create_iris_data,
-                                create_tiny_forecasting_dataset)
+                                create_tiny_forecasting_dataset,
+                                RandomForecastingModel,
+                                RandomForecastingModelWithQuantiles)
 
 from rai_test_utils.datasets.tabular import (
     create_binary_classification_dataset, create_cancer_data,
@@ -1089,11 +1091,7 @@ class TestCounterfactualUserConfigValidations:
     def test_optional_method_not_present(self):
         X_train, X_test, y_train, y_test = create_tiny_forecasting_dataset()
 
-        class ForecastModelWithoutQuantiles():
-            def forecast(self, X):
-                return [random.random() for _ in range(len(X))]
-
-        model = ForecastModelWithoutQuantiles()
+        model = RandomForecastingModel()
         X_train = X_train.copy()
         X_test = X_test.copy()
         X_train[TARGET] = y_train
@@ -1114,17 +1112,7 @@ class TestCounterfactualUserConfigValidations:
     def test_optional_method_present(self):
         X_train, X_test, y_train, y_test = create_tiny_forecasting_dataset()
 
-        class ForecastModelWithoutQuantiles():
-            def forecast(self, X):
-                return [random.random() for _ in range(len(X))]
-
-            def forecast_quantiles(self, X, quantiles):
-                return [
-                    [random.random() for _ in range(len(X))],
-                    [random.random() for _ in range(len(X))]
-                ]
-
-        model = ForecastModelWithoutQuantiles()
+        model = RandomForecastingModelWithQuantiles()
         X_train = X_train.copy()
         X_test = X_test.copy()
         X_train[TARGET] = y_train

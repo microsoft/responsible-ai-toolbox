@@ -70,6 +70,14 @@ class RandomForecastingModel():
         return np.array([random.random() for _ in range(len(X))])
 
 
+class RandomForecastingModelWithQuantiles(RandomForecastingModel):
+    def forecast_quantiles(self, X, quantiles):
+        return [
+            [random.random() for _ in range(len(X))],
+            [random.random() for _ in range(len(X))]
+        ]
+
+
 class FetchDiceAdultCensusIncomeDataset(object):
     def __init__(self):
         pass
