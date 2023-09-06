@@ -70,9 +70,9 @@ export interface IModelOverviewData {
   newCohort?: IExpectedCohortData;
   featureCohortView?: {
     singleFeatureCohorts: number;
-    multiFeatureCohorts: number;
+    multiFeatureCohorts?: number;
     firstFeatureToSelect: string;
-    secondFeatureToSelect: string;
+    secondFeatureToSelect?: string;
   };
 }
 
