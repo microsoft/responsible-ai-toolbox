@@ -22,11 +22,14 @@ export function describeClassImportanceWeightsDropdown(
       );
     });
     it("should be selectable for different classes", () => {
-      selectDropdown(Locators.TextWordsDropdown, "Class: spam").then(() => {
-        validateTextBarChart(getDefaultTopKWords(dataShape.localExplanations));
-      });
-      selectDropdown(Locators.TextWordsDropdown, "Class: not spam").then(() => {
-        validateTextBarChart(getDefaultTopKWords(dataShape.localExplanations));
+      dataShape.classNames.forEach((className) => {
+        selectDropdown(Locators.TextWordsDropdown, `Class: ${className}`).then(
+          () => {
+            validateTextBarChart(
+              getDefaultTopKWords(dataShape.localExplanations)
+            );
+          }
+        );
       });
     });
   });

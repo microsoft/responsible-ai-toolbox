@@ -85,7 +85,7 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest --durations=10 --doctest-modules --junitxml=junit/test-results.xml --cov=rai_core_flask --cov-report=xml --cov-report=html
+          pytest -s -v --durations=10 --doctest-modules --junitxml=junit/test-results.xml --cov=rai_core_flask --cov-report=xml --cov-report=html
         working-directory: rai_core_flask
 
       - name: Upload code coverage results

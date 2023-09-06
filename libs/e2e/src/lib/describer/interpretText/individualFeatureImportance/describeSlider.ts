@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { MaxImportantWords } from "@responsible-ai/interpret-text";
+
 import { Locators } from "../Constants";
 import { getDefaultTopKWords } from "../getDefaultTopKWords";
 import { IInterpretTextData } from "../IInterpretTextData";
@@ -16,13 +18,17 @@ function validateTextBarChart(expectedNumValues: number): void {
 
 export function describeSlider(dataShape: IInterpretTextData): void {
   describe("Slider", () => {
+    const isAtMax =
+      getDefaultTopKWords(dataShape.localExplanations) === MaxImportantWords;
+    let expectedNumValues = getDefaultTopKWords(dataShape.localExplanations);
     it("should increase number of most important tokens", () => {
       getSlider()
         .focus()
         .type("{rightarrow}")
         .then(() => {
-          const expectedNumValues =
-            getDefaultTopKWords(dataShape.localExplanations) + 1;
+          if (!isAtMax) {
+            expectedNumValues += 1;
+          }
           validateTextBarChart(expectedNumValues);
         });
     });
@@ -31,8 +37,7 @@ export function describeSlider(dataShape: IInterpretTextData): void {
         .focus()
         .type("{leftarrow}{leftarrow}")
         .then(() => {
-          const expectedNumValues =
-            getDefaultTopKWords(dataShape.localExplanations) - 1;
+          expectedNumValues -= 2;
           validateTextBarChart(expectedNumValues);
         });
     });

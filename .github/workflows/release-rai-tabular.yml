@@ -169,12 +169,12 @@ jobs:
 
       - name: run raiwidgets tests
         shell: bash -l {0}
-        run: pytest ./tests/
+        run: pytest -s -v ./tests/
         working-directory: ${{ env.widgetDirectory }}
 
       - name: run responsibleai tests
         shell: bash -l {0}
-        run: pytest ./tests/
+        run: pytest -s -v ./tests/
         working-directory: ${{ env.raiDirectory }}
 
   test-e2e-notebooks:

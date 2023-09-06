@@ -67,7 +67,7 @@ jobs:
 
       - name: run responsibleai-text tests
         shell: bash -l {0}
-        run: pytest ./tests/
+        run: pytest -s -v ./tests/
         working-directory: responsibleai_text
 
       # publish to PyPI

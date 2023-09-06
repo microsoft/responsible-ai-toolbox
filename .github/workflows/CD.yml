@@ -108,7 +108,7 @@ jobs:
         working-directory: ${{ env.widgetDirectory }}
 
       - name: run tests
-        run: pytest --durations=10
+        run: pytest -s -v --durations=10
 
       - name: Upload a Build result
         uses: actions/upload-artifact@v3
