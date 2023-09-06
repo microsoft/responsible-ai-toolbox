@@ -8,10 +8,31 @@ import requests
 
 
 class ServedModelWrapper:
+    """Wrapper for locally served model.
+    
+    The purpose of ServedModelWrapper is to provide an abstraction
+    for locally served models. This allows us to use the same code in
+    RAIInsights for loaded models that can run in the same environment and
+    also for locally served models.
+
+    Locally served in this case means on localhost via HTTP.
+    This could be in a separate conda environment, or even in a Docker
+    container.
+
+    :param port: The port on which the model is served.
+    :type port: int
+    """
     def __init__(self, port):
         self.port = port
 
     def forecast(self, X):
+        """Get forecasts from the model.
+
+        :param X: The input data.
+        :type X: pandas.DataFrame
+        :return: The model's forecasts based on the input data.
+        :rtype: List[float]
+        """
         # request formatting according to mlflow docs
         # https://mlflow.org/docs/latest/cli.html#mlflow-models-serve
         # JSON safe serialization takes care of datetime columns
