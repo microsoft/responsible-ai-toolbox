@@ -103,7 +103,7 @@ class TestRAIVisionInsights(object):
 
     @pytest.mark.skipif(
         (sys.platform == 'linux' and sys.version_info[:2] == (3, 8)) or
-        ('win' in sys.platform and sys.version_info[:2] == (3, 7)),
+        (sys.version_info[:2] == (3, 7)),
         reason='Incompatible torch weights for fridge model')
     @pytest.mark.parametrize('num_masks', [None, 25, DEFAULT_NUM_MASKS])
     @pytest.mark.parametrize('mask_res', [None, DEFAULT_MASK_RES, 8])
