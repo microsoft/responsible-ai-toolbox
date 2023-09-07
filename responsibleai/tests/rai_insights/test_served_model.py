@@ -63,7 +63,7 @@ def test_served_model(mock_post, rai_forecasting_insights_for_served_model):
 def test_served_model_failed(
         mock_post,
         rai_forecasting_insights_for_served_model):
-    X_train, X_test, _, _ = create_tiny_forecasting_dataset()
+    _, X_test, _, _ = create_tiny_forecasting_dataset()
 
     response_content = "Could not connect to host since it actively " \
         "refuses the connection."
