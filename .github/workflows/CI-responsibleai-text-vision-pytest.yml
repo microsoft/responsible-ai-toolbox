@@ -8,7 +8,7 @@ on:
     paths:
       - "responsibleai_text/**"
       - "responsibleai_vision/**"
-      - ".github/workflows/CI-responsibleai-text-pytest.yml"
+      - ".github/workflows/CI-responsibleai-text-vision-pytest.yml"
 
 jobs:
   ci-responsibleai-text-vision-python:
