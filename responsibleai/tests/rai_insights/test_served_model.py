@@ -3,6 +3,7 @@
 
 import json
 import random
+import requests
 from unittest import mock
 
 import pytest
@@ -66,17 +67,16 @@ def test_served_model_failed(
         rai_forecasting_insights_for_served_model):
     _, X_test, _, _ = create_tiny_forecasting_dataset()
 
-    response_content = "Could not connect to host since it actively " \
-        "refuses the connection."
-    mock_post.return_value = mock.Mock(
-        status_code=400,
-        content=response_content
-    )
+    response = requests.Response()
+    response.status_code = 400
+    response._content = b"Could not connect to host since it actively " \
+        b"refuses the connection."
+    mock_post.return_value = response
 
     rai_insights = RAIInsights.load(RAI_INSIGHTS_DIR_NAME)
-    with pytest.raises(Exception) as exc:
+    with pytest.raises(
+            Exception,
+            match="Could not retrieve predictions. "
+                  "Model server returned status code 400 "
+                  f"and the following response: {response.content}"):
         rai_insights.model.forecast(X_test)
-        assert ("Could not retrieve predictions. "
-                "Model server returned status code 400 "
-                f"and the following response: {response_content}"
-                in exc.value.args[0])

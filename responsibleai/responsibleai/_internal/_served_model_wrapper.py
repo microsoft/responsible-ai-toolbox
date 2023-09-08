@@ -43,12 +43,17 @@ class ServedModelWrapper:
             data=json.dumps(
                 {"dataframe_split": X.to_dict(orient='split')},
                 default=serialize_json_safe))
-        if response.status_code < 300:
-            # json.loads decodes byte string response.
-            # Response is a dictionary with a single entry 'predictions'
-            return json.loads(response.content)['predictions']
-        else:
+        try:
+            response.raise_for_status()
+            print(response.ok())
+            print(response.status_code)
+            print(400 <= response.status_code < 500)
+        except Exception:
             raise Exception(
                 "Could not retrieve predictions. "
                 f"Model server returned status code {response.status_code} "
                 f"and the following response: {response.content}")
+
+        # json.loads decodes byte string response.
+        # Response is a dictionary with a single entry 'predictions'
+        return json.loads(response.content)['predictions']
