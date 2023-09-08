@@ -56,7 +56,7 @@ export interface IPrecomputedExplanations {
 
 export interface ITextFeatureImportance {
   text: string[];
-  localExplanations: number[][];
+  localExplanations: number[][] | number[][][];
   baseValues?: number[][];
 }
 
