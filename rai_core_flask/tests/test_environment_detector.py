@@ -21,13 +21,13 @@ class TestEnvironmentDetector(object):
 
     def test_credentialed_vm(self):
         service = FlaskHelper(with_credentials=True)
-        assert type(service.env) == CredentialedVMEnvironment
+        assert isinstance(service.env, CredentialedVMEnvironment)
 
     def test_public_vm(self, mocker):
         mocker.patch('rai_core_flask.FlaskHelper._is_local_port_available',
                      return_value=True)
         service = FlaskHelper(ip="not localhost", with_credentials=False)
-        assert type(service.env) == PublicVMEnvironment
+        assert isinstance(service.env, PublicVMEnvironment)
 
     def test_public_vm_fail_on_port(self, mocker):
         mocker.patch('rai_core_flask.FlaskHelper._is_local_port_available',
@@ -39,7 +39,7 @@ class TestEnvironmentDetector(object):
 
     def test_local(self):
         service = FlaskHelper()
-        assert type(service.env) == LocalIPythonEnvironment
+        assert isinstance(service.env, LocalIPythonEnvironment)
 
     def test_azure_nb(self, mocker):
         mocker.patch('os.path.exists', return_value=True)
@@ -51,13 +51,13 @@ class TestEnvironmentDetector(object):
                 'instance': "fakeaznbinstance",
                 'domainsuffix': "fakedomainsuffix"})
         service = FlaskHelper()
-        assert type(service.env) == AzureNBEnvironment
+        assert isinstance(service.env, AzureNBEnvironment)
         assert service.with_credentials
 
     def test_databricks(self):
         try:
             os.environ[DATABRICKS_ENV_VAR] = "mock"
             service = FlaskHelper()
-            assert type(service.env) == DatabricksEnvironment
+            assert isinstance(service.env, DatabricksEnvironment)
         finally:
             del os.environ[DATABRICKS_ENV_VAR]

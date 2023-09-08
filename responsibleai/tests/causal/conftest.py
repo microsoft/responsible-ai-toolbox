@@ -15,7 +15,7 @@ from rai_test_utils.datasets.tabular import create_housing_data
 
 @pytest.fixture(scope='session')
 def adult_data():
-    X_train_df, X_test_df, y_train, y_test,\
+    X_train_df, X_test_df, y_train, y_test, \
         _, _, target_name, _, _, _ = create_adult_income_dataset()
     train_df = copy.deepcopy(X_train_df)
     test_df = copy.deepcopy(X_test_df)
