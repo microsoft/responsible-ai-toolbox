@@ -25,10 +25,17 @@ export function describeModelAssessmentTextFeatureImportance(
       getMenu("Individual feature importance").click();
     });
     if (datasetShape.textExplanationData) {
+      const textExplanationData = datasetShape.textExplanationData;
       it("should be able to select a table row for testing", () => {
-        selectRow("Index", "13", Locators.IFIContainer);
+        selectRow(
+          "Index",
+          textExplanationData.explanationIndex.toString(),
+          Locators.IFIContainer
+        );
       });
-      describeTextIndividualFeatureImportance(datasetShape.textExplanationData);
+      describeTextIndividualFeatureImportance(textExplanationData);
+    } else {
+      throw new Error(`Missing feature importances on ${name}`);
     }
   });
 }
