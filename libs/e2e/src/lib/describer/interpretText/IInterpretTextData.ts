@@ -10,4 +10,5 @@ export interface IInterpretTextData {
     negativeFeaturesExpectedValues: number;
     positiveFeaturesExpectedValues: number;
   };
+  explanationIndex: number;
 }
