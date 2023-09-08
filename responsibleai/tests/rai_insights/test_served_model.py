@@ -3,10 +3,10 @@
 
 import json
 import random
-import requests
 from unittest import mock
 
 import pytest
+import requests
 from tests.common_utils import (RandomForecastingModel,
                                 create_tiny_forecasting_dataset)
 

@@ -45,9 +45,6 @@ class ServedModelWrapper:
                 default=serialize_json_safe))
         try:
             response.raise_for_status()
-            print(response.ok())
-            print(response.status_code)
-            print(400 <= response.status_code < 500)
         except Exception:
             raise Exception(
                 "Could not retrieve predictions. "
