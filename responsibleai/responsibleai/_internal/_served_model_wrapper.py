@@ -46,7 +46,7 @@ class ServedModelWrapper:
         try:
             response.raise_for_status()
         except Exception:
-            raise Exception(
+            raise RuntimeError(
                 "Could not retrieve predictions. "
                 f"Model server returned status code {response.status_code} "
                 f"and the following response: {response.content}")
