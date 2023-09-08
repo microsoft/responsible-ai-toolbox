@@ -2,13 +2,15 @@
 # Licensed under the MIT License.
 
 from common_text_utils import (ANSWERS, BLBOOKS_LABEL, COVID19_EVENTS_LABELS,
-                               EMOTION, create_blbooks_pipeline,
+                               DBPEDIA_LABEL, EMOTION, create_blbooks_pipeline,
+                               create_dbpedia_pipeline,
                                create_multilabel_pipeline,
                                create_question_answering_pipeline,
                                create_text_classification_pipeline,
                                load_blbooks_genre_dataset,
                                load_covid19_emergency_event_dataset,
-                               load_emotion_dataset, load_squad_dataset)
+                               load_dbpedia_dataset, load_emotion_dataset,
+                               load_squad_dataset)
 from rai_text_insights_validator import validate_rai_text_insights
 
 from responsibleai.feature_metadata import FeatureMetadata
@@ -65,6 +67,12 @@ class TestRAITextInsights(object):
                                                  'annotated']
         run_rai_insights(pred, data, data[:5], BLBOOKS_LABEL, task_type,
                          feature_metadata, text_column='text')
+
+    def test_rai_insights_dbpedia(self):
+        data = load_dbpedia_dataset()
+        pred = create_dbpedia_pipeline()
+        task_type = ModelTask.TEXT_CLASSIFICATION
+        run_rai_insights(pred, data, data[:5], DBPEDIA_LABEL, task_type)
 
 
 def run_rai_insights(model, train_data, test_data,
