@@ -31,6 +31,7 @@ export interface ITabsViewProps {
   updateSelectedIndices: (indices: number[]) => void;
   selectedCohort: ErrorCohort;
   setSelectedCohort: (cohort: ErrorCohort) => void;
+  taskType: string;
 }
 
 export interface ITabViewState {
@@ -104,44 +105,57 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
               tokens={stackTokens}
               className={classNames.mainImageContainer}
             >
-              <Stack className={classNames.halfContainer} tokens={stackTokens}>
-                <Stack.Item id="errorInstances">
-                  <TitleBar
-                    count={this.props.errorInstances.length}
-                    type={TitleBarOptions.Error}
-                  />
-                </Stack.Item>
-                <Stack.Item
-                  className={classNames.imageListContainer}
-                  id="errorImageContainer"
-                >
+              {this.props.taskType === "object_detection" ? (
+                <Stack id="objectDetectionImageContainer" className={classNames.fullContainer} tokens={stackTokens}>
                   <ImageList
-                    items={this.props.errorInstances}
+                    items={this.state.items}
                     imageDim={this.props.imageDim}
                     searchValue={this.props.searchValue}
                     selectItem={this.props.onItemSelect}
                   />
-                </Stack.Item>
-              </Stack>
-              <Stack className={classNames.halfContainer} tokens={stackTokens}>
-                <Stack.Item id="successInstances">
-                  <TitleBar
-                    count={this.props.successInstances.length}
-                    type={TitleBarOptions.Success}
-                  />
-                </Stack.Item>
-                <Stack.Item
-                  className={classNames.imageListContainer}
-                  id="successImageContainer"
-                >
-                  <ImageList
-                    items={this.props.successInstances}
-                    imageDim={this.props.imageDim}
-                    searchValue={this.props.searchValue}
-                    selectItem={this.props.onItemSelect}
-                  />
-                </Stack.Item>
-              </Stack>
+                </Stack>
+              ) : (
+                <Stack horizontal className={classNames.mainContainer} tokens={stackTokens}>
+                  <Stack className={classNames.halfContainer} tokens={stackTokens}>
+                    <Stack.Item id="errorInstances">
+                      <TitleBar
+                        count={this.props.errorInstances.length}
+                        type={TitleBarOptions.Error}
+                      />
+                    </Stack.Item>
+                    <Stack.Item
+                      className={classNames.imageListContainer}
+                      id="errorImageContainer"
+                    >
+                      <ImageList
+                        items={this.props.errorInstances}
+                        imageDim={this.props.imageDim}
+                        searchValue={this.props.searchValue}
+                        selectItem={this.props.onItemSelect}
+                      />
+                    </Stack.Item>
+                  </Stack>
+                  <Stack className={classNames.halfContainer} tokens={stackTokens}>
+                    <Stack.Item id="successInstances">
+                      <TitleBar
+                        count={this.props.successInstances.length}
+                        type={TitleBarOptions.Success}
+                      />
+                    </Stack.Item>
+                    <Stack.Item
+                      className={classNames.imageListContainer}
+                      id="successImageContainer"
+                    >
+                      <ImageList
+                        items={this.props.successInstances}
+                        imageDim={this.props.imageDim}
+                        searchValue={this.props.searchValue}
+                        selectItem={this.props.onItemSelect}
+                      />
+                    </Stack.Item>
+                  </Stack>
+                </Stack>
+              )}
             </Stack>
           </Stack>
         );
