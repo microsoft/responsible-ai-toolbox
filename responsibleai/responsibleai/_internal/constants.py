@@ -136,3 +136,8 @@ class FileFormats:
     JSON = '.json'
     PKL = '.pkl'
     TXT = '.txt'
+
+
+class ModelServingConstants:
+    """Constants relevant for model serving."""
+    RAI_MODEL_SERVING_PORT_ENV_VAR = "RAI_MODEL_SERVING_PORT"

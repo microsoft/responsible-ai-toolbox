@@ -89,6 +89,12 @@ class TestSerializationUtilities:
         result = serialize_json_safe(datetime_object)
         assert datetime_str in result
 
+    def test_serialize_pandas_timestamp(self):
+        datetime_str = "2020-10-10"
+        datetime_object = pd.Timestamp(datetime_str)
+        result = serialize_json_safe(datetime_object)
+        assert datetime_str in result
+
     def test_serialize_via_json_timestamp(self):
         timestamp_obj = pd.Timestamp(2020, 1, 1)
         assert isinstance(timestamp_obj, pd.Timestamp)
