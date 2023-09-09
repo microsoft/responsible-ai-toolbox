@@ -40,7 +40,7 @@ export function describeVisionDataExplorer(
       });
 
       it("should show Image explorer view components when selected", () => {
-        ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelectionArePresent();
+        ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelectionArePresent(datasetShape);
         ensureAllVisionDataExplorerTableViewElementsBeforeSelectionAreNotPresent();
         ensureAllVisionDataExplorerClassViewElementsBeforeSelectionAreNotPresent();
         cy.get(Locators.VisionDataExplorerPageSizeSelector).should("not.exist");

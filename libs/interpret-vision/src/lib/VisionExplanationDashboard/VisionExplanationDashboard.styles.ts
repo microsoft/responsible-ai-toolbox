@@ -20,7 +20,7 @@ export interface IVisionExplanationDashboardStyles {
   mainContainer: IStyle;
   mainImageContainer: IStyle;
   halfContainer: IStyle;
-  fullContainer: IStyle;
+  objectDetectionContainer: IStyle;
   imageListContainer: IStyle;
   slider: IStyle;
   tableListContainer: IStyle;
@@ -52,9 +52,11 @@ export const visionExplanationDashboardStyles: () => IProcessedStyleSet<IVisionE
         height: "100%",
         width: "50%"
       },
-      fullContainer: {
+      objectDetectionContainer: {
+        border: `1px solid ${theme.semanticColors.disabledBorder}`,
+        height: "100%",
         width: "100%",
-        height: "100%"
+        overflow: "auto"
       },
       imageListContainer: {
         border: `1px solid ${theme.semanticColors.disabledBorder}`,

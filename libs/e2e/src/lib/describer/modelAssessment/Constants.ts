@@ -213,6 +213,7 @@ export enum Locators {
   VisionDataExplorerImageExplorerViewSuccessInstanceCount = "#VisionDataExplorer #successInstances #instanceCount",
   VisionDataExplorerImageExplorerViewErrorImageContainer = "#VisionDataExplorer #errorImageContainer",
   VisionDataExplorerImageExplorerViewSuccessImageContainer = "#VisionDataExplorer #successImageContainer",
+  VisionDataExplorerImageExplorerViewObjectDetectionContainer = "#VisionDataExplorer #objectDetectionImageContainer",
   VisionDataExplorerTabsViewTableList = "#VisionDataExplorer #tabsViewTableList",
   VisionDataExplorerTabsViewItemsSelectedStatement = "#VisionDataExplorer #itemsSelectedStatement",
   VisionDataExplorerTabsViewSaveCohortButton = "#VisionDataExplorer #saveCohortButton",
