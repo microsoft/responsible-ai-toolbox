@@ -41,7 +41,7 @@ class TestCausalVersioning:
         self._check_recursive_df_equality(loaded.policies, result.policies)
 
     def _check_recursive_df_equality(self, o_1, o_2):
-        assert type(o_1) == type(o_2)
+        assert type(o_1) is type(o_2)
 
         if isinstance(o_1, list):
             assert len(o_1) == len(o_2)

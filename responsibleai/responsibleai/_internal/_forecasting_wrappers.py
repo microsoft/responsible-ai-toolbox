@@ -198,9 +198,9 @@ class _WrappedQuantileForecastingModel(_WrappedForecastingModel):
         """
         if quantiles is None:
             quantiles = [0.025, 0.975]
-        if (type(quantiles) != list or
+        if (type(quantiles) is not list or
                 len(quantiles) == 0 or
-                any([type(q) != float or
+                any([type(q) is not float or
                      q <= 0 or
                      q >= 1 for q in quantiles])):
             raise ValueError(
