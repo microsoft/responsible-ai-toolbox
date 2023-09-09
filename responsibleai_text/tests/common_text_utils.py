@@ -29,8 +29,12 @@ COVID19_EVENTS_LABELS = ["event1", "event2", "event3", "event4",
                          "event5", "event6", "event7", "event8"]
 COVID19_EVENTS_MODEL_NAME = "covid19_events_model"
 BLBOOKSGENRE_MODEL_NAME = "blbooksgenre_model"
+DBPEDIA_MODEL_NAME = "dbpedia_model"
 NUM_BLBOOKSGENRE_LABELS = 2
+NUM_DBPEDIA_LABELS = 9
 BLBOOKS_LABEL = 'label'
+DBPEDIA_LABEL = 'label'
+L1 = 'l1'
 
 
 class TextClassificationPipelineSerializer(object):
@@ -123,7 +127,14 @@ def load_blbooks_genre_dataset():
     dataset = g.first().sort_index().reset_index().drop_duplicates()
     dataset = dataset[dataset.label != 1].reset_index(drop=True)
     dataset = dataset.drop(columns=grouping_col)
-    print(dataset)
+    return dataset
+
+
+def load_dbpedia_dataset():
+    dataset = datasets.load_dataset(
+        "DeveloperOats/DBPedia_Classes", split="test")
+    dataset = pd.DataFrame({"text": dataset["text"], L1: dataset[L1]})
+    dataset.rename(columns={L1: DBPEDIA_LABEL}, inplace=True)
     return dataset
 
 
@@ -158,6 +169,19 @@ class FetchModel(object):
             unzip.extractall(self.model_name)
 
 
+def create_pipeline_from_model(model):
+    tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
+    device = -1
+    pred = pipeline(
+        "text-classification",
+        model=model,
+        tokenizer=tokenizer,
+        device=device,
+        return_all_scores=True
+    )
+    return pred
+
+
 def create_multilabel_pipeline():
     fetcher = FetchModel(COVID19_EVENTS_MODEL_NAME)
     action_name = "Model download"
@@ -176,17 +200,7 @@ def create_multilabel_pipeline():
         problem_type="multi_label_classification",
         id2label=id2label,
         label2id=label2id)
-    tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
-    device = -1
-    # build a pipeline object to do predictions
-    pred = pipeline(
-        "text-classification",
-        model=model,
-        tokenizer=tokenizer,
-        device=device,
-        return_all_scores=True
-    )
-    return pred
+    return create_pipeline_from_model(model)
 
 
 def create_blbooks_pipeline():
@@ -200,13 +214,18 @@ def create_blbooks_pipeline():
                    retry_delay=retry_delay)
     model = AutoModelForSequenceClassification.from_pretrained(
         BLBOOKSGENRE_MODEL_NAME, num_labels=NUM_BLBOOKSGENRE_LABELS)
-    tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
-    device = -1
-    pred = pipeline(
-        "text-classification",
-        model=model,
-        tokenizer=tokenizer,
-        device=device,
-        return_all_scores=True
-    )
-    return pred
+    return create_pipeline_from_model(model)
+
+
+def create_dbpedia_pipeline():
+    fetcher = FetchModel(DBPEDIA_MODEL_NAME)
+    action_name = "Model download"
+    err_msg = "Failed to download model"
+    max_retries = 4
+    retry_delay = 60
+    retry_function(fetcher.fetch, action_name, err_msg,
+                   max_retries=max_retries,
+                   retry_delay=retry_delay)
+    model = AutoModelForSequenceClassification.from_pretrained(
+        DBPEDIA_MODEL_NAME, num_labels=NUM_DBPEDIA_LABELS)
+    return create_pipeline_from_model(model)

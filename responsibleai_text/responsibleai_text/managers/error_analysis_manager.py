@@ -4,6 +4,7 @@
 """Defines the Error Analysis Manager class."""
 
 import json
+import numbers
 from typing import Any, List, Optional, Union
 
 import jsonschema
@@ -110,7 +111,9 @@ class WrappedIndexPredictorModel:
         predictions = self.predictions[index]
         if self.task_type == ModelTask.MULTILABEL_TEXT_CLASSIFICATION:
             return predictions
-        if self.classes is not None and isinstance(predictions[0], int):
+        # use number.Integral to check for any numpy or python number type
+        if self.classes is not None and isinstance(predictions[0],
+                                                   numbers.Integral):
             predictions = [self.classes[y] for y in predictions]
         return predictions
 
