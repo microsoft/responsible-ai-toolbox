@@ -350,7 +350,7 @@ class Cohort:
     :type name: str
     """
     def __init__(self, name: str):
-        """Defines the cohort which will be injected from SDK into the Dashboard.
+        """Defines the cohort to be injected from SDK into the Dashboard.
         :param name: Name of the cohort.
         :type name: str
         """
