@@ -1141,7 +1141,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "해석 가능성 대시보드",
-      "importantWords": "가장 중요한 단어 표시",
+      "importantWords": "Show most important words",
       "topFeatureList": "상위 기능 목록 분석",
       "allButton": "모든 기능",
       "negButton": "부정적인 기능",
@@ -1155,7 +1155,8 @@
       "predictedAnswer": "예측된 답변: ",
       "trueAnswer": "실제 답변: ",
       "inputs": "입력",
-      "outputs": "출력"
+      "outputs": "출력",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "텍스트 기능 범례",

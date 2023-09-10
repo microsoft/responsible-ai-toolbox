@@ -1141,7 +1141,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Instrumentpanel för tolkning",
-      "importantWords": "Visa de viktigaste orden",
+      "importantWords": "Show most important words",
       "topFeatureList": "Analys av toppfunktionslistan",
       "allButton": "ALLA FUNKTIONER",
       "negButton": "NEGATIVA FUNKTIONER",
@@ -1155,7 +1155,8 @@
       "predictedAnswer": "Förutsagt svar: ",
       "trueAnswer": "Sant svar: ",
       "inputs": "Indata",
-      "outputs": "Utdata"
+      "outputs": "Utdata",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "FÖRKLARING AV TEXTFUNKTION",

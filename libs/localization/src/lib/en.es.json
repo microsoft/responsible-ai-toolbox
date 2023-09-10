@@ -1141,7 +1141,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Panel de interpretabilidad",
-      "importantWords": "Show most Important Words",
+      "importantWords": "Show most important words",
       "topFeatureList": "Análisis de la lista de características principales",
       "allButton": "TODAS LAS CARACTERÍSTICAS",
       "negButton": "CARACTERÍSTICAS NEGATIVAS",
@@ -1155,7 +1155,8 @@
       "predictedAnswer": "Predicted answer: ",
       "trueAnswer": "True answer: ",
       "inputs": "Inputs",
-      "outputs": "Outputs"
+      "outputs": "Outputs",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "LEYENDA DE CARACTERÍSTICA DE TEXTO",

@@ -1141,7 +1141,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "可解譯性儀表板",
-      "importantWords": "顯示最重要的字詞",
+      "importantWords": "Show most important words",
       "topFeatureList": "熱門特徵清單分析",
       "allButton": "所有特徵",
       "negButton": "負特徵",
@@ -1155,7 +1155,8 @@
       "predictedAnswer": "預測的答案:",
       "trueAnswer": "正確答案:",
       "inputs": "輸入",
-      "outputs": "輸出"
+      "outputs": "輸出",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "文字特徵圖例",
