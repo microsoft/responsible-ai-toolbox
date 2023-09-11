@@ -116,7 +116,7 @@ class FairnessDashboard(Dashboard):
             try:
                 data = request.get_json(force=True)
 
-                if type(data["binVector"][0]) == np.int32:
+                if type(data["binVector"][0]) is np.int32:
                     data['binVector'] = [
                         str(bin_) for bin_ in data['binVector']]
 

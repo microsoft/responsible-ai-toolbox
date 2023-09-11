@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import json
+import random
 
 import numpy as np
 import pandas as pd
@@ -62,6 +63,19 @@ def create_tiny_forecasting_dataset():
     y_train = [0, 1, 2, 3]
     y_test = [4, 5, 6, 7]
     return X_train, X_test, y_train, y_test
+
+
+class RandomForecastingModel():
+    def forecast(self, X):
+        return np.array([random.random() for _ in range(len(X))])
+
+
+class RandomForecastingModelWithQuantiles(RandomForecastingModel):
+    def forecast_quantiles(self, X, quantiles):
+        return [
+            [random.random() for _ in range(len(X))],
+            [random.random() for _ in range(len(X))]
+        ]
 
 
 class FetchDiceAdultCensusIncomeDataset(object):
