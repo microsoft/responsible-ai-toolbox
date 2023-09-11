@@ -5,7 +5,7 @@ import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
 export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelectionArePresent(
-  datasetShape: IModelAssessmentData,
+  datasetShape: IModelAssessmentData
 ): void {
   cy.get(Locators.VisionDataExplorerImageExplorerViewButton).click();
 
@@ -14,9 +14,9 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
   cy.get(Locators.VisionDataExplorerLegendSuccess).should("exist");
 
   if (datasetShape.isObjectDetection) {
-    cy.get(Locators.VisionDataExplorerImageExplorerViewObjectDetectionContainer).should(
-      "exist"
-    );
+    cy.get(
+      Locators.VisionDataExplorerImageExplorerViewObjectDetectionContainer
+    ).should("exist");
   } else {
     cy.get(Locators.VisionDataExplorerImageExplorerViewErrorInstances).should(
       "include.text",
@@ -26,9 +26,9 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
       "include.text",
       "Success instances"
     );
-    cy.get(Locators.VisionDataExplorerImageExplorerViewErrorInstanceCount).should(
-      "exist"
-    );
+    cy.get(
+      Locators.VisionDataExplorerImageExplorerViewErrorInstanceCount
+    ).should("exist");
     cy.get(
       Locators.VisionDataExplorerImageExplorerViewSuccessInstanceCount
     ).should("exist");

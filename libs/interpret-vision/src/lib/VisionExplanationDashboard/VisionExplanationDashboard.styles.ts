@@ -52,12 +52,6 @@ export const visionExplanationDashboardStyles: () => IProcessedStyleSet<IVisionE
         height: "100%",
         width: "50%"
       },
-      objectDetectionContainer: {
-        border: `1px solid ${theme.semanticColors.disabledBorder}`,
-        height: "100%",
-        width: "100%",
-        overflow: "auto"
-      },
       imageListContainer: {
         border: `1px solid ${theme.semanticColors.disabledBorder}`,
         height: "100%",
@@ -80,6 +74,12 @@ export const visionExplanationDashboardStyles: () => IProcessedStyleSet<IVisionE
       },
       mainImageContainer: {
         height: "650px"
+      },
+      objectDetectionContainer: {
+        border: `1px solid ${theme.semanticColors.disabledBorder}`,
+        height: "100%",
+        overflow: "auto",
+        width: "100%"
       },
       searchBox: {
         width: "300px"

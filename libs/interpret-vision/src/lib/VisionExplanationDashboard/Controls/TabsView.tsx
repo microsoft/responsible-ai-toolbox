@@ -2,7 +2,11 @@
 // Licensed under the MIT License.
 
 import { Stack } from "@fluentui/react";
-import { IVisionListItem, ErrorCohort, DatasetTaskType } from "@responsible-ai/core-ui";
+import {
+  IVisionListItem,
+  ErrorCohort,
+  DatasetTaskType
+} from "@responsible-ai/core-ui";
 import React from "react";
 
 import { visionExplanationDashboardStyles } from "../VisionExplanationDashboard.styles";
@@ -106,8 +110,15 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
               className={classNames.mainImageContainer}
             >
               {this.props.taskType === DatasetTaskType.ObjectDetection ? (
-                <Stack id="objectDetectionImageContainer" className={classNames.mainContainer} tokens={stackTokens}>
-                  <Stack className={classNames.objectDetectionContainer} tokens={stackTokens}>
+                <Stack
+                  id="objectDetectionImageContainer"
+                  className={classNames.mainContainer}
+                  tokens={stackTokens}
+                >
+                  <Stack
+                    className={classNames.objectDetectionContainer}
+                    tokens={stackTokens}
+                  >
                     <ImageList
                       items={this.state.items}
                       imageDim={this.props.imageDim}
@@ -117,8 +128,15 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
                   </Stack>
                 </Stack>
               ) : (
-                <Stack horizontal className={classNames.mainContainer} tokens={stackTokens}>
-                  <Stack className={classNames.halfContainer} tokens={stackTokens}>
+                <Stack
+                  horizontal
+                  className={classNames.mainContainer}
+                  tokens={stackTokens}
+                >
+                  <Stack
+                    className={classNames.halfContainer}
+                    tokens={stackTokens}
+                  >
                     <Stack.Item id="errorInstances">
                       <TitleBar
                         count={this.props.errorInstances.length}
@@ -137,7 +155,10 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
                       />
                     </Stack.Item>
                   </Stack>
-                  <Stack className={classNames.halfContainer} tokens={stackTokens}>
+                  <Stack
+                    className={classNames.halfContainer}
+                    tokens={stackTokens}
+                  >
                     <Stack.Item id="successInstances">
                       <TitleBar
                         count={this.props.successInstances.length}

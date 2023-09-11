@@ -33,9 +33,9 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsBeforeSelect
   cy.get(
     Locators.VisionDataExplorerImageExplorerViewSuccessImageContainer
   ).should("not.exist");
-  cy.get(Locators.VisionDataExplorerImageExplorerViewObjectDetectionContainer).should(
-    "not.exist"
-  );
+  cy.get(
+    Locators.VisionDataExplorerImageExplorerViewObjectDetectionContainer
+  ).should("not.exist");
 
   cy.get(Locators.VisionDataExplorerImageExplorerViewImagePredictedY).should(
     "not.exist"
