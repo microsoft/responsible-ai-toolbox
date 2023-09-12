@@ -89,6 +89,7 @@ export function preprocessData(
     const odPredictedY = typeof y === "undefined" ? defVal : y;
     const x = dataset.object_detection_true_y?.[index];
     const odTrueY = typeof x === "undefined" ? defVal : x;
+    const odLabels = dataset.object_detection_labels?.[index];
 
     const item: IVisionListItem = {
       image,
@@ -96,7 +97,8 @@ export function preprocessData(
       odPredictedY,
       odTrueY,
       predictedY: predictedY[index],
-      trueY: trueY[index]
+      trueY: trueY[index],
+      odLabels
     };
     fieldNames.forEach((fieldName) => {
       item[fieldName] = features[index];
