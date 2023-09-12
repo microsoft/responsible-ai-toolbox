@@ -11,4 +11,5 @@ export interface IInterpretTextData {
     positiveFeaturesExpectedValues: number;
   };
   explanationIndex: number;
+  expandCorrect?: boolean;
 }
