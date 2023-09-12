@@ -61,53 +61,11 @@ export class VisionExplanationDashboard extends React.Component<
   public render(): React.ReactNode {
     const classNames = visionExplanationDashboardStyles();
     const imageStyles = imageListStyles();
-    return this.context.dataset.task_type === "object_detection" ? (
+    return (
       <Stack
         horizontal={false}
         grow
-        tokens={{ childrenGap: "l1", padding: "m 40px" }}
-      >
-        <Stack.Item>
-          <VisionExplanationDashboardCommon
-            thisdashboard={this}
-            imageStyles={imageStyles}
-            classNames={classNames}
-          />
-        </Stack.Item>
-        <Stack.Item>
-          <TabsView
-            addCohort={this.addCohortWrapper}
-            errorInstances={this.state.errorInstances}
-            successInstances={this.state.successInstances}
-            imageDim={this.state.imageDim}
-            numRows={this.state.numRows}
-            otherMetadataFieldNames={this.state.otherMetadataFieldNames}
-            pageSize={this.state.pageSize}
-            searchValue={this.state.searchValue}
-            selectedItem={this.state.selectedItem}
-            selectedKey={this.state.selectedKey}
-            onItemSelect={this.onItemSelect}
-            updateSelectedIndices={this.updateSelectedIndices}
-            selectedCohort={this.props.selectedCohort}
-            setSelectedCohort={this.props.setSelectedCohort}
-          />
-        </Stack.Item>
-        <Stack.Item>
-          <FlyoutObjectDetection
-            explanations={this.state.computedExplanations}
-            isOpen={this.state.panelOpen}
-            item={this.state.selectedItem}
-            loadingExplanation={this.state.loadingExplanation}
-            otherMetadataFieldNames={this.state.otherMetadataFieldNames}
-            callback={this.onPanelClose}
-            onChange={this.onItemSelectObjectDetection}
-          />
-        </Stack.Item>
-      </Stack>
-    ) : (
-      <Stack
-        horizontal={false}
-        grow
+        id="VisionDataExplorer"
         tokens={{ childrenGap: "l1", padding: "m 40px" }}
       >
         <VisionExplanationDashboardCommon
@@ -133,7 +91,19 @@ export class VisionExplanationDashboard extends React.Component<
             setSelectedCohort={this.props.setSelectedCohort}
           />
         </Stack.Item>
-        <Stack.Item>
+        {this.state.panelOpen &&
+        this.context.dataset.task_type === "object_detection" ? (
+          <FlyoutObjectDetection
+            dataset={this.context.dataset}
+            explanations={this.state.computedExplanations}
+            isOpen={this.state.panelOpen}
+            item={this.state.selectedItem}
+            loadingExplanation={this.state.loadingExplanation}
+            otherMetadataFieldNames={this.state.otherMetadataFieldNames}
+            callback={this.onPanelClose}
+            onChange={this.onItemSelectObjectDetection}
+          />
+        ) : (
           <Flyout
             explanations={this.state.computedExplanations}
             isOpen={this.state.panelOpen}
@@ -142,7 +112,7 @@ export class VisionExplanationDashboard extends React.Component<
             otherMetadataFieldNames={this.state.otherMetadataFieldNames}
             callback={this.onPanelClose}
           />
-        </Stack.Item>
+        )}
       </Stack>
     );
   }
@@ -152,6 +122,7 @@ export class VisionExplanationDashboard extends React.Component<
   public addCohortWrapper = (name: string, switchCohort: boolean): void => {
     this.context.addCohort(
       getCohort(name, this.state.selectedIndices, this.context.jointDataset),
+      undefined,
       switchCohort
     );
   };

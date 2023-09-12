@@ -1,0 +1,8 @@
+# Copyright (c) Microsoft Corporation
+# Licensed under the MIT License.
+
+name = 'responsibleai_vision'
+_major = '0'
+_minor = '3'
+_patch = '1'
+version = '{}.{}.{}'.format(_major, _minor, _patch)

@@ -15,7 +15,12 @@ import { localization } from "@responsible-ai/localization";
 import { IColumnRange, RangeTypes } from "@responsible-ai/mlchartlib";
 import React from "react";
 
+import {
+  ModelAssessmentContext,
+  defaultModelAssessmentContext
+} from "../../Context/ModelAssessmentContext";
 import { IFilter } from "../../Interfaces/IFilter";
+import { ifEnableLargeData } from "../../util/buildInitialContext";
 import { FluentUIStyles } from "../../util/FluentUIStyles";
 
 import { maxLength } from "./CohortEditorPanelContentUtils";
@@ -51,6 +56,8 @@ export interface ICohortEditorFilterProps {
 }
 
 export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps> {
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
   private readonly dataArray: IComboBoxOption[] = this.props.featureNames.map(
     (featureName, index) => {
       return {
@@ -98,14 +105,16 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
             calloutProps={FluentUIStyles.calloutProps}
           />
         )}
-        {columnRange && columnRange.rangeType === RangeTypes.Integer && (
-          <Checkbox
-            key={this.props.openedFilter.column}
-            label={localization.Interpret.CohortEditor.TreatAsCategorical}
-            checked={isCategorical}
-            onChange={this.props.setAsCategorical}
-          />
-        )}
+        {columnRange &&
+          columnRange.rangeType === RangeTypes.Integer &&
+          !ifEnableLargeData(this.context.dataset) && (
+            <Checkbox
+              key={this.props.openedFilter.column}
+              label={localization.Interpret.CohortEditor.TreatAsCategorical}
+              checked={isCategorical}
+              onChange={this.props.setAsCategorical}
+            />
+          )}
         {isCategorical ? (
           <>
             <Text variant={"small"}>

@@ -2,16 +2,26 @@
 // Licensed under the MIT License.
 
 import { ITheme } from "@fluentui/react";
-import {
-  IHighchartsConfig,
-  getPrimaryChartColor,
-  getPrimaryBackgroundChartColor
-} from "@responsible-ai/core-ui";
+import { IHighchartsConfig } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { SeriesOptionsType } from "highcharts";
+import _ from "lodash";
 
 import { Utils } from "../../CommonUtils";
 import { IChartProps } from "../../Interfaces/IChartProps";
+
+function findNearestIndex(
+  array: number[],
+  target?: number
+): number | undefined {
+  if (!target) {
+    return array.length;
+  }
+  const nearestElement = _.minBy(array, (element) =>
+    Math.abs(element - target)
+  );
+  return _.indexOf(array, nearestElement);
+}
 
 export function getTokenImportancesChartOptions(
   props: IChartProps,
@@ -20,6 +30,11 @@ export function getTokenImportancesChartOptions(
   const importances = props.localExplanations;
   const k = props.topK;
   const sortedList = Utils.sortedTopK(importances, k, props.radio);
+
+  const outputFeatureImportanceLabel = `f ${
+    props.text[props.selectedTokenIndex || 0]
+  } (inputs)`;
+  const baseValueLabel = "base value";
   const [x, y, ylabel, tooltip]: [number[], number[], string[], string[]] = [
     [],
     [],
@@ -46,6 +61,36 @@ export function getTokenImportancesChartOptions(
     ylabel.push(props.text[idx]);
     tooltip.push(str);
   });
+
+  // add output feature importance
+  if (props.outputFeatureValue && props.baseValue) {
+    const outputFeatureValueIndex = findNearestIndex(
+      x,
+      props.outputFeatureValue
+    );
+    const baseValueFeatureValueIndex = findNearestIndex(x, props.baseValue);
+    if (outputFeatureValueIndex && baseValueFeatureValueIndex) {
+      if (Utils.addItem(props.outputFeatureValue, props.radio)) {
+        addItem(
+          x,
+          props.outputFeatureValue,
+          ylabel,
+          outputFeatureImportanceLabel,
+          outputFeatureValueIndex
+        );
+      }
+      if (Utils.addItem(props.baseValue, props.radio)) {
+        addItem(
+          x,
+          props.baseValue,
+          ylabel,
+          baseValueLabel,
+          baseValueFeatureValueIndex
+        );
+      }
+    }
+  }
+
   // Put most significant word at the top by reversing order
   tooltip.reverse();
   ylabel.reverse();
@@ -54,11 +99,10 @@ export function getTokenImportancesChartOptions(
   const data: any[] = [];
   x.forEach((p, index) => {
     const temp = {
-      borderColor: getPrimaryChartColor(theme),
       color:
         (p || 0) >= 0
-          ? getPrimaryChartColor(theme)
-          : getPrimaryBackgroundChartColor(theme),
+          ? theme.semanticColors.errorText
+          : theme.semanticColors.link,
       x: index,
       y: p
     };
@@ -68,6 +112,15 @@ export function getTokenImportancesChartOptions(
   const series: SeriesOptionsType[] = [
     {
       data,
+      dataLabels: {
+        align: "center",
+        color: theme.semanticColors.bodyBackground,
+        enabled: true,
+        formatter(): string | number | undefined {
+          return this.x; // Display the Y-axis value inside the bar
+        },
+        inside: true
+      },
       name: "",
       showInLegend: false,
       type: "bar"
@@ -80,11 +133,12 @@ export function getTokenImportancesChartOptions(
     },
     plotOptions: {
       bar: {
+        minPointLength: 10,
         tooltip: {
           pointFormatter(): string {
             return `${tooltip[this.x || 0]}: ${this.y || 0}`;
           }
-        }
+        } // Set the minimum pixel width for bars
       }
     },
     series,
@@ -97,4 +151,15 @@ export function getTokenImportancesChartOptions(
       }
     }
   };
+}
+
+function addItem(
+  x: any[],
+  xValue: any,
+  yLabel: any[],
+  yLabelValue: any,
+  index: number
+): void {
+  x.splice(index, 0, xValue);
+  yLabel.splice(index, 0, yLabelValue);
 }

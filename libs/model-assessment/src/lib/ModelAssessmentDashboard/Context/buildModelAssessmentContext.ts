@@ -90,7 +90,8 @@ export function buildInitialModelAssessmentContext(
     0,
     CohortSource.None,
     false,
-    metricStats
+    metricStats,
+    true
   );
   let errorCohortList: ErrorCohort[] = [defaultErrorCohort];
   const [preBuiltErrorCohortList] = processPreBuiltCohort(props, jointDataset);
@@ -106,11 +107,13 @@ export function buildInitialModelAssessmentContext(
     localization.ErrorAnalysis.Cohort.defaultLabel,
     props.dataset,
     [],
+    [],
     modelType,
     columnRanges,
     CohortSource.None,
     false,
-    metricStats
+    metricStats,
+    true
   );
   const datasetCohorts = [defaultDatasetCohort].concat(
     preBuiltDatasetCohortList
@@ -130,6 +133,7 @@ export function buildInitialModelAssessmentContext(
   return {
     activeGlobalTabs,
     baseCohort: cohorts[0],
+    baseDatasetCohort: datasetCohorts[0],
     cohorts,
     columnRanges,
     customPoints: [],
@@ -148,6 +152,7 @@ export function buildInitialModelAssessmentContext(
     onAddMessage: "",
     saveCohortVisible: false,
     selectedCohort: cohorts[0],
+    selectedDatasetCohort: datasetCohorts[0],
     selectedWhatIfIndex: undefined,
     sortVector: undefined
   };

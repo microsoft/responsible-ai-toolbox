@@ -20,7 +20,6 @@ import {
   IModelAssessmentContext,
   IsClassifier,
   DatasetTaskType,
-  isAllDataErrorCohort,
   featureColumnsExist,
   dataBalanceExperienceFlight,
   isFlightActive
@@ -136,7 +135,7 @@ export class TabsView extends React.PureComponent<
     const disabledView =
       this.props.requestDebugML === undefined &&
       this.props.requestMatrix === undefined &&
-      !isAllDataErrorCohort(this.props.baseCohort, true);
+      !this.props.baseCohort.isAllDataCohort;
     const classNames = tabsViewStyles();
     return (
       <Stack className={classNames.stackStyle}>

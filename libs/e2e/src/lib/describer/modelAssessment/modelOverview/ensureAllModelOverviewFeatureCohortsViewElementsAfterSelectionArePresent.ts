@@ -12,27 +12,35 @@ import {
 
 export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
   datasetShape: IModelAssessmentData,
-  selectedFeatures: number
+  selectedFeatures: number,
+  isTabular: boolean,
+  isVision: boolean
 ): void {
   cy.get(Locators.ModelOverviewFeatureSelection).should("exist");
   cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should(
     "exist"
   );
-  cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
   cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("not.exist");
-  cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
 
-  const defaultVisibleChart = getDefaultVisibleChart(
-    datasetShape.isRegression,
-    datasetShape.isBinary
-  );
-  assertChartVisibility(datasetShape, defaultVisibleChart);
+  // no vision condition as there's no second feature to select
+  if (isTabular || isVision) {
+    cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
+    cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
 
-  assertNumberOfChartRowsEqual(
-    datasetShape,
-    selectedFeatures,
-    defaultVisibleChart
-  );
+    // ensureHeatmapToggleBehavior(Locators.ModelOverviewDisaggregatedAnalysisTable);
+
+    const defaultVisibleChart = getDefaultVisibleChart(
+      datasetShape.isRegression,
+      datasetShape.isBinary
+    );
+    assertChartVisibility(datasetShape, defaultVisibleChart);
+
+    assertNumberOfChartRowsEqual(
+      datasetShape,
+      selectedFeatures,
+      defaultVisibleChart
+    );
+  }
 }
 
 function assertNumberOfChartRowsEqual(

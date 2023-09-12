@@ -44,11 +44,10 @@ export class App extends React.Component<IAppSetting, IAppState> {
   public render(): React.ReactNode {
     const theme: ITheme = themes[this.state.theme];
     return (
-      <>
+      <div style={{ backgroundColor: theme.semanticColors.bodyBackground }}>
         <AppHeader onSettingChanged={this.onSettingChanged} {...this.state} />
         <div
           style={{
-            backgroundColor: theme.semanticColors.bodyBackground,
             height: "calc(100% - 70px)",
             minHeight: "500px",
             width: "calc(100%-20px)"
@@ -192,7 +191,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
           )}
         </div>
         <Redirect to={generatePath(App.route, this.state)} push />
-      </>
+      </div>
     );
   }
   private onSettingChanged = <T extends keyof IAppSetting>(

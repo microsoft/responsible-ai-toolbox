@@ -55,13 +55,14 @@ export interface IObjectDetectionWidgetsProps {
   setIoUThreshold: (value: number) => void;
   updateDatasetCohortStats: () => void;
   updateFeatureCohortStats: () => Promise<void>;
+  abortController: AbortController | undefined;
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetectionWidgetsProps> {
   public render(): React.ReactNode {
     return (
-      <Stack horizontal>
+      <Stack horizontal tokens={{ childrenGap: "10px" }}>
         <ComboBox
           id="modelOverviewAggregateMethod"
           label={localization.ModelAssessment.ModelOverview.metricsTypeDropdown}
@@ -86,7 +87,7 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
           styles={FluentUIStyles.smallDropdownStyle}
         />
         <Slider
-          id="iouThreshold"
+          id="modelOverviewIoUThreshold"
           label={
             localization.ModelAssessment.ModelOverview.iouThresholdDropdown.name
           }
@@ -115,11 +116,18 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
     );
   }
 
+  private abortAnyPreexistingExecution(): void {
+    if (this.props.abortController !== undefined) {
+      this.props.abortController.abort();
+    }
+  }
+
   private onAggregateMethodChange = (
     _: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
     if (item) {
+      this.abortAnyPreexistingExecution();
       this.props.setAggregateMethod(item.text.toString());
     }
   };
@@ -129,12 +137,14 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
     item?: IComboBoxOption
   ): void => {
     if (item) {
+      this.abortAnyPreexistingExecution();
       this.props.setClassName(item.text.toString());
     }
   };
 
   private onIoUThresholdChange = (_: React.MouseEvent, value: number): void => {
     if (value) {
+      this.abortAnyPreexistingExecution();
       this.props.setIoUThreshold(value);
     }
   };

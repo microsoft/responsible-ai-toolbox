@@ -5,10 +5,16 @@ import { IColumnRange, RangeTypes } from "@responsible-ai/mlchartlib";
 
 import { ErrorCohortStats, MetricCohortStats } from "./Cohort/CohortStats";
 import { CohortSource, Metrics } from "./Cohort/Constants";
+import { translateToNewFilter } from "./Cohort/ManualCohortManagement/CohortEditorUtils";
 import { DatasetCohortColumns } from "./DatasetCohortColumns";
 import { IDataset } from "./Interfaces/IDataset";
 import { ModelTypes } from "./Interfaces/IExplanationContext";
-import { FilterMethods, IFilter } from "./Interfaces/IFilter";
+import {
+  FilterMethods,
+  ICompositeFilter,
+  IFilter,
+  Operations
+} from "./Interfaces/IFilter";
 import { getPropertyValues } from "./util/datasetUtils/getPropertyValues";
 import { IsBinary, IsMulticlass } from "./util/ExplanationUtils";
 import { MulticlassClassificationEnum } from "./util/JointDatasetUtils";
@@ -20,13 +26,15 @@ export class DatasetCohort {
     public name: string,
     public dataset: IDataset,
     public filters: IFilter[] = [],
-    public modelTypes?: ModelTypes,
+    public compositeFilters: ICompositeFilter[] = [],
+    public modelType?: ModelTypes,
     private columnRanges?: {
       [key: string]: IColumnRange;
     },
     public source: CohortSource = CohortSource.None,
     public isTemporary: boolean = false,
-    cohortStats: MetricCohortStats | undefined = undefined
+    cohortStats: MetricCohortStats | undefined = undefined,
+    public isAllDataCohort: boolean = false
   ) {
     this.name = name;
     this.selectedIndexes = this.applyFilters();
@@ -37,12 +45,53 @@ export class DatasetCohort {
     }
   }
 
+  private filterRecursively(
+    row: { [key: string]: unknown },
+    compositeFilter: ICompositeFilter
+  ): boolean {
+    if (compositeFilter.method) {
+      const filter = translateToNewFilter(
+        compositeFilter,
+        this.dataset.feature_names
+      );
+      return !!filter && this.filterRow(row, [filter]);
+    }
+    return this.filterComposite(
+      row,
+      compositeFilter.compositeFilters,
+      compositeFilter.operation
+    );
+  }
+
+  private filterComposite(
+    row: { [key: string]: unknown },
+    compositeFilters: ICompositeFilter[],
+    operation: Operations
+  ): boolean {
+    if (operation === Operations.And) {
+      return compositeFilters.every((compositeFilter) =>
+        this.filterRecursively(row, compositeFilter)
+      );
+    }
+    return compositeFilters.some((compositeFilter) =>
+      this.filterRecursively(row, compositeFilter)
+    );
+  }
+
   private applyFilters(): number[] {
     const indexes = [];
-    const dataDict = this.getDataDict(this.modelTypes);
+    const dataDict = this.getDataDict(this.modelType);
     for (const [index, row] of dataDict.entries()) {
       if (this.filterRow(row, this.filters)) {
-        indexes.push(index);
+        if (this.compositeFilters.length > 0) {
+          if (
+            this.filterComposite(row, this.compositeFilters, Operations.And)
+          ) {
+            indexes.push(index);
+          }
+        } else {
+          indexes.push(index);
+        }
       }
     }
     return indexes;

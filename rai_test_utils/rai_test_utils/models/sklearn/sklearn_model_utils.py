@@ -181,3 +181,39 @@ def create_complex_classification_pipeline(
     pipeline = Pipeline(steps=[('preprocessor', transformations),
                                ('classifier', RandomForestClassifier())])
     return pipeline.fit(X_train, y_train)
+
+
+def create_complex_regression_pipeline(
+        X_train, y_train, continuous_features, categorical_features):
+    """Create a complex sklearn pipeline for regression.
+
+    param X_train: The training data.
+    type X_train: numpy.ndarray or pandas.DataFrame
+    param y_train: The training labels.
+    type y_train: numpy.ndarray or pandas.DataFrame
+    param continuous_features: The continuous features.
+    type continuous_features: list
+    param categorical_features: The categorical features.
+    type categorical_features: list
+    return: A complex sklearn pipeline for regression.
+    rtype: sklearn.pipeline.Pipeline
+    """
+    # We create the preprocessing pipelines for both
+    # numeric and categorical data.
+    numeric_transformer = Pipeline(steps=[
+        ("imputer", SimpleImputer(strategy='median')),
+        ('scaler', StandardScaler())])
+
+    categorical_transformer = Pipeline(steps=[
+        ('onehot', OneHotEncoder(handle_unknown='ignore'))])
+
+    transformations = ColumnTransformer(
+        transformers=[
+            ('num', numeric_transformer, continuous_features),
+            ('cat', categorical_transformer, categorical_features)])
+
+    # Append classifier to preprocessing pipeline.
+    # Now we have a full prediction pipeline.
+    pipeline = Pipeline(steps=[('preprocessor', transformations),
+                               ('classifier', RandomForestRegressor())])
+    return pipeline.fit(X_train, y_train)

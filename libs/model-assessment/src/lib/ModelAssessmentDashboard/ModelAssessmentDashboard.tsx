@@ -12,7 +12,8 @@ import {
   defaultTheme,
   TelemetryLevels,
   TelemetryEventName,
-  Announce
+  Announce,
+  DatasetCohort
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -58,11 +59,13 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       <ModelAssessmentContext.Provider
         value={{
           addCohort: this.addCohort,
+          baseDatasetCohort: this.state.baseDatasetCohort,
           baseErrorCohort: this.state.baseCohort,
           causalAnalysisData: this.props.causalAnalysisData?.[0],
           columnRanges: this.state.columnRanges,
           counterfactualData: this.props.counterfactualData?.[0],
           dataset: this.props.dataset,
+          datasetCohorts: this.state.datasetCohorts,
           deleteCohort: this.deleteCohort,
           editCohort: this.editCohort,
           errorAnalysisData: this.props.errorAnalysisData?.[0],
@@ -103,6 +106,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           requestSplinePlotDistribution:
             this.props.requestSplinePlotDistribution,
           requestTestDataRow: this.props.requestTestDataRow,
+          selectedDatasetCohort: this.state.selectedDatasetCohort,
           selectedErrorCohort: this.state.selectedCohort,
           setAsCategorical: this.setAsCategorical,
           shiftErrorCohort: this.shiftErrorCohort,
@@ -265,6 +269,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
 
   private addCohort = (
     manuallyCreatedCohort: Cohort,
+    datasetCohort?: DatasetCohort,
     switchNew?: boolean
   ): void => {
     if (
@@ -287,13 +292,34 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       cohorts: newCohorts,
       selectedCohort: switchNew ? newErrorCohort : prevState.selectedCohort
     }));
+    if (datasetCohort) {
+      let newDatasetCohorts = this.state.datasetCohorts
+        ? [...this.state.datasetCohorts, datasetCohort]
+        : [datasetCohort];
+      newDatasetCohorts = newDatasetCohorts.filter(
+        (cohort) => !cohort?.isTemporary
+      );
+      this.setState((prevState) => ({
+        baseDatasetCohort: switchNew
+          ? datasetCohort
+          : prevState.baseDatasetCohort,
+        datasetCohorts: newDatasetCohorts,
+        selectedDatasetCohort: switchNew
+          ? datasetCohort
+          : prevState.selectedDatasetCohort
+      }));
+    }
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
       type: TelemetryEventName.NewCohortAdded
     });
   };
 
-  private editCohort = (editCohort: Cohort, switchNew?: boolean): void => {
+  private editCohort = (
+    editCohort: Cohort,
+    datasetCohort?: DatasetCohort,
+    switchNew?: boolean
+  ): void => {
     const editIndex = this.state.cohorts.findIndex(
       (c) => c.cohort.name === editCohort.name
     );
@@ -318,6 +344,22 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       });
     } else {
       this.setState({ cohorts: newCohorts });
+    }
+    if (datasetCohort) {
+      let newDatasetCohorts = this.state.datasetCohorts || [];
+      newDatasetCohorts[editIndex] = datasetCohort;
+      newDatasetCohorts = newDatasetCohorts.filter(
+        (cohort) => !cohort.isTemporary
+      );
+      if (switchNew) {
+        this.setState({
+          baseDatasetCohort: newDatasetCohorts[editIndex],
+          datasetCohorts: newDatasetCohorts,
+          selectedDatasetCohort: newDatasetCohorts[editIndex]
+        });
+      } else {
+        this.setState({ datasetCohorts: newDatasetCohorts });
+      }
     }
   };
 

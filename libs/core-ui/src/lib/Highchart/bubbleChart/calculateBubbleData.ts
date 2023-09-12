@@ -6,7 +6,9 @@ import { IDataset } from "../../Interfaces/IDataset";
 import { IHighchartBubbleSDKClusterData } from "../../Interfaces/IHighchartBubbleData";
 import { ifEnableLargeData } from "../../util/buildInitialContext";
 import { IGenericChartProps } from "../../util/IGenericChartProps";
+import { ITelemetryEvent, TelemetryLevels } from "../../util/ITelemetryEvent";
 import { JointDataset } from "../../util/JointDataset";
+import { TelemetryEventName } from "../../util/TelemetryEventName";
 import { IHighchartsConfig } from "../IHighchartsConfig";
 
 import { IClusterData } from "./ChartUtils";
@@ -24,6 +26,7 @@ export async function calculateBubblePlotDataFromErrorCohort(
   isScatterPlotDataLoading?: boolean,
   showColorAxis?: boolean,
   useDifferentColorForScatterPoints?: boolean,
+  eventName?: TelemetryEventName,
   requestBubblePlotData?: (
     filter: unknown[],
     compositeFilter: unknown[],
@@ -36,7 +39,8 @@ export async function calculateBubblePlotDataFromErrorCohort(
     scatterPlotData: IHighchartsConfig,
     clusterData: IClusterData
   ) => void,
-  onIndexSeriesUpdated?: (indexSeries: number[]) => void
+  onIndexSeriesUpdated?: (indexSeries: number[]) => void,
+  telemetryHook?: (message: ITelemetryEvent) => void
 ): Promise<IHighchartsConfig | IHighchartBubbleSDKClusterData | undefined> {
   if (ifEnableLargeData(dataset) && requestBubblePlotData) {
     try {
@@ -48,6 +52,11 @@ export async function calculateBubblePlotDataFromErrorCohort(
         jointDataset.metaDict[chartProps?.xAxis.property].label,
         jointDataset.metaDict[chartProps?.yAxis.property].label
       );
+      telemetryHook?.({
+        level: TelemetryLevels.Trace,
+        message: eventName,
+        type: TelemetryEventName.BubblePlotDataFetchSuccess
+      });
       return getBubbleChartOptions(
         bubbleChartData.clusters,
         jointDataset.metaDict[chartProps?.xAxis.property].label,
@@ -65,6 +74,12 @@ export async function calculateBubblePlotDataFromErrorCohort(
       );
     } catch (error) {
       if (error) {
+        telemetryHook?.({
+          context: error,
+          level: TelemetryLevels.Error,
+          message: eventName,
+          type: TelemetryEventName.BubblePlotDataFetchError
+        });
         return error;
       }
     }

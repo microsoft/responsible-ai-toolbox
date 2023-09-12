@@ -151,3 +151,66 @@ class TestFeatureMetadata:
 
         assert feature_metadata_1 == feature_metadata_2
         assert feature_metadata_1 != feature_metadata_3
+
+    def test_feature_metadata_input_types(self):
+        with pytest.raises(
+                UserConfigValidationException,
+                match='datetime feature must be a list.'):
+            FeatureMetadata(
+                identity_feature_name='id',
+                datetime_features={'d1'},
+                categorical_features=['c1', 'c2'],
+                dropped_features=['d3', 'd4']
+            )
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match='categorical feature must be a list.'):
+            FeatureMetadata(
+                identity_feature_name='id',
+                datetime_features=['d1'],
+                categorical_features='c1',
+                dropped_features=['d3', 'd4']
+            )
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match='dropped feature must be a list.'):
+            FeatureMetadata(
+                identity_feature_name='id',
+                datetime_features=['d1'],
+                categorical_features=['c1', 'c2'],
+                dropped_features='d3'
+            )
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match='time series ID feature must be a list.'):
+            FeatureMetadata(
+                identity_feature_name='id',
+                datetime_features=['d1'],
+                categorical_features=['c1', 'c2'],
+                dropped_features=['d3', 'd4'],
+                time_series_id_features='g1'
+            )
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match='Entries in time series ID feature must be strings.'):
+            FeatureMetadata(
+                identity_feature_name='id',
+                datetime_features=['d1'],
+                categorical_features=['c1', 'c2'],
+                dropped_features=['d3', 'd4'],
+                time_series_id_features=[[1]]
+            )
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match='identity_feature_name must be a string.'):
+            FeatureMetadata(
+                identity_feature_name=1,
+                datetime_features=['d1'],
+                categorical_features=['c1', 'c2'],
+                dropped_features=['d3', 'd4']
+            )

@@ -139,8 +139,10 @@ cypress window will open locally - select test file to run the tests
 2. `cd responsible-ai-toolbox` (It is recommended to create a new virtual environment and install the dependencies)
 3. `yarn install`
 4. `yarn buildall` or `yarn build widget`
-5. `pip install -e raiwidgets` to install raiwidgets locally.
-6. `pip install -e responsibleai` to install responsibleai locally.
+5. `pip install -e responsibleai_vision` if using the RAI Vision Dashboard locally.
+6. `pip install -e responsibleai_text` if using the RAI Text Dashboard locally.
+7. `pip install -e raiwidgets` to install raiwidgets locally.
+8. `pip install -e responsibleai` to install responsibleai locally.
 
    If there are changes to other python packages, you will want to install them locally as well:
 
@@ -154,9 +156,9 @@ cypress window will open locally - select test file to run the tests
 
    If there are no changes to them, then raiwidgets install will pick up the latest versions released on pypi.
 
-7. `pip install jupyter`
-8. `cd notebooks\responsibleaidashboard`
-9. To execute tests run `yarn e2e-widget`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible by running the notebook manually and using `yarn e2e-widget -w --host {host} -n {notebook}` where host is where RAI widget runs on (printed in notebook output) and notebook is the name of the notebook you are running. Eg: `yarn e2e-widget -w --host 5000 -n responsibleaidashboard-census-classification-model-debugging`
+9. `pip install jupyter`
+10. `cd notebooks\responsibleaidashboard`
+11. To execute tests run `yarn e2e-widget`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible by running the notebook manually and using `yarn e2e-widget -w --host {host} -n {notebook}` where host is where RAI widget runs on (printed in notebook output) and notebook is the name of the notebook you are running. Eg: `yarn e2e-widget -w --host 5000 -n responsibleaidashboard-census-classification-model-debugging`
 
 Cypress window will open locally - select test file to run the tests.
 
@@ -190,15 +192,17 @@ For any new change, which involves changing any of the python SDK components and
 3. You should commit all your current set of changes for SDK and UX using `git commit`.
 4. Clean all untracked files using `git clean -fdx`
 5. Run `yarn install` and `yarn buildall` to build the UX changes.
-6. Run `pip install -e raiwidgets` to install raiwidgets locally.
-7. Run `pip install -e responsibleai` to install responsibleai locally.
-8. Run `pip install -e erroranalysis` to install erroranalysis locally.
-9. Run `pip install -e rai_core_flask` to install rai_core_flask locally.
-10. Run `pip install -e raiutils` to install raiutils locally.
-11. Run `pip install -e nlp_feature_extractors` to install nlp_feature_extractors locally if using the RAI Text Dashboard.
-12. Run `pip install -e rai_test_utils` to install rai_test_utils locally.
-13. Install `jupyter` using `pip install jupyter`
-14. Open any notebook using python SDK and any widget from `responsible-ai-toolbox` and test your changes.
+6. Run `pip install -e responsibleai_vision` if using the RAI Vision Dashboard locally.
+7. Run `pip install -e responsibleai_text` if using the RAI Text Dashboard locally.
+8. Run `pip install -e raiwidgets` to install raiwidgets locally.
+9. Run `pip install -e responsibleai` to install responsibleai locally.
+10. Run `pip install -e erroranalysis` to install erroranalysis locally.
+11. Run `pip install -e rai_core_flask` to install rai_core_flask locally.
+12. Run `pip install -e raiutils` to install raiutils locally.
+13. Run `pip install -e nlp_feature_extractors` to install nlp_feature_extractors locally if using the RAI Text Dashboard.
+14. Run `pip install -e rai_test_utils` to install rai_test_utils locally.
+15. Install `jupyter` using `pip install jupyter`
+16. Open any notebook using python SDK and any widget from `responsible-ai-toolbox` and test your changes.
 
 The steps from 3 to 14 need to be repeated if you incrementally change UI or SDK.
 

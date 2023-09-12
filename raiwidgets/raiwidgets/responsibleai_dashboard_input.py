@@ -7,11 +7,11 @@ from typing import List, Optional
 import numpy as np
 import pandas as pd
 
-from erroranalysis._internal.constants import ModelTask, display_name_to_metric
-from raiutils.cohort import Cohort
+from erroranalysis._internal.constants import display_name_to_metric
+from raiutils.cohort import Cohort, CohortFilter, CohortFilterMethods
 from raiutils.data_processing import convert_to_list, serialize_json_safe
 from raiutils.exceptions import UserConfigValidationException
-from raiutils.models import is_classifier
+from raiutils.models import ModelTask, is_classifier
 from raiwidgets.constants import ErrorMessages
 from raiwidgets.error_handling import _format_exception
 from raiwidgets.interfaces import WidgetRequestResponseConstants
@@ -41,19 +41,49 @@ class ResponsibleAIDashboardInput:
         self.dashboard_input = analysis.get_data()
 
         self._validate_cohort_list(cohort_list)
-        if cohort_list is not None:
-            # Add cohort_list to dashboard_input
-            self.dashboard_input.cohortData = cohort_list
-        else:
-            self.dashboard_input.cohortData = []
 
         self._feature_length = len(self.dashboard_input.dataset.feature_names)
         if hasattr(analysis, ManagerNames.ERROR_ANALYSIS):
             self._error_analyzer = analysis.error_analysis._analyzer
 
+    def _generate_time_series_cohorts(self):
+        """Generate time series cohorts based on time series ID columns."""
+        cohort_list = []
+        ts_id_cols = self._analysis._feature_metadata.time_series_id_features
+        all_time_series = self._analysis.test[ts_id_cols].value_counts().index
+        for time_series_id_values in all_time_series:
+            column_value_combinations = zip(
+                ts_id_cols,
+                time_series_id_values)
+            id_columns_name_value_mapping = []
+            filters = []
+            for (col, val) in column_value_combinations:
+                id_columns_name_value_mapping.append(f"{col} = {val}")
+                filters.append(CohortFilter(
+                    method=CohortFilterMethods.METHOD_INCLUDES,
+                    arg=[val],
+                    column=col))
+            time_series = Cohort(", ".join(id_columns_name_value_mapping))
+            for filter in filters:
+                time_series.add_cohort_filter(filter)
+            cohort_list.append(time_series)
+        return cohort_list
+
     def _validate_cohort_list(self, cohort_list=None):
-        if cohort_list is None:
+        task_type = self.dashboard_input.dataset.task_type
+        if (task_type != ModelTask.FORECASTING and
+                cohort_list is None):
+            self.dashboard_input.cohortData = []
             return
+
+        if task_type == ModelTask.FORECASTING:
+            # Ensure user did not pass cohort_list and
+            # use the generated time series.
+            if cohort_list is not None:
+                raise UserConfigValidationException(
+                    "cohort_list is not supported for forecasting analysis.")
+            # use generated time series
+            cohort_list = self._generate_time_series_cohorts()
 
         if not isinstance(cohort_list, list):
             raise UserConfigValidationException(
@@ -74,8 +104,7 @@ class ResponsibleAIDashboardInput:
         test_data = pd.DataFrame(
             data=self.dashboard_input.dataset.features,
             columns=self.dashboard_input.dataset.feature_names)
-        if self.dashboard_input.dataset.task_type == \
-                ModelTask.CLASSIFICATION:
+        if task_type == ModelTask.CLASSIFICATION:
             class_names_list = self.dashboard_input.dataset.class_names
             true_y_array = self.dashboard_input.dataset.true_y
             true_class_array = np.array(
@@ -94,6 +123,8 @@ class ResponsibleAIDashboardInput:
                 target_column=self.dashboard_input.dataset.target_column,
                 categorical_features=categorical_features,
                 is_classification=self._is_classifier)
+
+        self.dashboard_input.cohortData = cohort_list
 
     def on_predict(self, data):
         try:
@@ -323,7 +354,7 @@ class ResponsibleAIDashboardInput:
         for the Object Detection scenario.
 
         :param post_data: List of inputs in the order
-        [true_y, predicted_y, aggregate_method, class_name, iou_thresh].
+        [true_y, predicted_y, aggregate_method, class_name, iou_threshold].
         :type post_data: List
 
         :return: JSON/dict data response
@@ -333,12 +364,14 @@ class ResponsibleAIDashboardInput:
             selection_indexes = post_data[0]
             aggregate_method = post_data[1]
             class_name = post_data[2]
-            iou_thresh = post_data[3]
+            iou_threshold = post_data[3]
+            object_detection_cache = post_data[4]
             exp = self._analysis.compute_object_detection_metrics(
                 selection_indexes,
                 aggregate_method,
                 class_name,
-                iou_thresh
+                iou_threshold,
+                object_detection_cache
             )
             return {
                 WidgetRequestResponseConstants.data: exp
@@ -354,12 +387,78 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: []
             }
 
+    def forecast(self, post_data):
+        # This is a separate function from predict since we apply
+        # transformations to an entire time series. That enables us
+        # to only send the transformation information from UI to backend
+        # rather than having to send the entire time series across.
+        try:
+            filters = post_data[0]
+            composite_filters = post_data[1]
+            transformation = post_data[2]
+            filtered_data_df = self._analysis.get_filtered_test_data(
+                filters=filters,
+                composite_filters=composite_filters,
+                include_original_columns_only=True)
+
+            transformation_func = None
+            # transforming with pandas
+            if len(transformation) > 0:
+                op, feature, value = transformation
+                if op == "add":
+                    def add(x):
+                        return x + float(value)
+                    transformation_func = add
+                elif op == "subtract":
+                    def subtract(x):
+                        return x - float(value)
+                    transformation_func = subtract
+                elif op == "multiply":
+                    def multiply(x):
+                        return x * float(value)
+                    transformation_func = multiply
+                elif op == "divide":
+                    def divide(x):
+                        return x / float(value)
+                    transformation_func = divide
+                elif op == "change":
+                    def change(x):
+                        return float(value)
+                    transformation_func = change
+                else:
+                    raise ValueError(
+                        f"An invalid transformation operation {op} "
+                        "was provided.")
+
+                filtered_data_df[feature] = \
+                    filtered_data_df[feature].map(transformation_func)
+
+            predictions = convert_to_list(
+                self._analysis.model.forecast(filtered_data_df),
+                EXP_VIZ_ERR_MSG)
+            # forecast should return a flat list of predictions
+            if all([len(p) == 1 for p in predictions]):
+                predictions = [p[0] for p in predictions]
+            return {
+                WidgetRequestResponseConstants.data: predictions
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to generate forecast for time series, "
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }
+
     def get_question_answering_metrics(self, post_data):
         """Flask endpoint function to get Model Overview metrics
         for the Question Answering scenario.
 
         :param post_data: List of inputs in the order
-        [true_y, predicted_y, aggregate_method, class_name, iou_thresh].
+        [true_y, predicted_y, aggregate_method, class_name, iou_threshold].
         :type post_data: List
 
         :return: JSON/dict data response
@@ -367,8 +466,10 @@ class ResponsibleAIDashboardInput:
         """
         try:
             selection_indexes = post_data[0]
+            question_answering_cache = post_data[1]
             exp = self._analysis.compute_question_answering_metrics(
-                selection_indexes
+                selection_indexes,
+                question_answering_cache
             )
             return {
                 WidgetRequestResponseConstants.data: exp

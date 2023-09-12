@@ -4,6 +4,7 @@
 """Defines the RAIBaseInsights class."""
 
 import json
+import os
 import pickle
 import warnings
 from abc import ABC, abstractmethod
@@ -14,7 +15,9 @@ import pandas as pd
 
 import responsibleai
 from raiutils.exceptions import UserConfigValidationException
+from responsibleai._internal._served_model_wrapper import ServedModelWrapper
 from responsibleai._internal.constants import (FileFormats, Metadata,
+                                               ModelServingConstants,
                                                SerializationAttributes)
 
 _DTYPES = 'dtypes'
@@ -263,6 +266,17 @@ class RAIBaseInsights(ABC):
         :param path: The directory path to model location.
         :type path: str
         """
+        # Communicate with locally served model
+        # if the environment variable RAI_MODEL_SERVING_PORT is set.
+        model_serving_port = os.getenv(
+            ModelServingConstants.RAI_MODEL_SERVING_PORT_ENV_VAR)
+        if model_serving_port is not None:
+            inst.__dict__['_' + _SERIALIZER] = None
+            inst.__dict__[Metadata.MODEL] = \
+                ServedModelWrapper(port=model_serving_port)
+            return
+
+        # Otherwise use the conventional paths with local artifacts
         top_dir = Path(path)
         serializer_path = top_dir / _SERIALIZER
         model_load_err = ('ERROR-LOADING-USER-MODEL: '

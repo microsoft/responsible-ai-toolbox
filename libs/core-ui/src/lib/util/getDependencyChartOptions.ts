@@ -49,6 +49,9 @@ export function getDependencyChartOptions(
           headerFormat: "",
           pointFormat: "{point.customData.template}"
         }
+      },
+      series: {
+        turboThreshold: 0
       }
     },
     series: [

@@ -68,6 +68,7 @@ export class VisionExplanationDashboardCommon extends React.Component<
               <Slider
                 max={80}
                 min={20}
+                id="dataExplorerThumbnailSize"
                 className={this.props.classNames.slider}
                 label={localization.InterpretVision.Dashboard.thumbnailSize}
                 defaultValue={50}
@@ -94,12 +95,13 @@ export class VisionExplanationDashboardCommon extends React.Component<
                 tokens={{ childrenGap: "l1" }}
                 verticalAlign="center"
               >
-                <Stack.Item>
+                <Stack.Item id="predictedLabel">
                   <Text>
                     {localization.InterpretVision.Dashboard.predictedLabel}
                   </Text>
                 </Stack.Item>
                 <Stack.Item
+                  id="legendFailure"
                   className={mergeStyles(
                     this.props.imageStyles.errorIndicator,
                     this.props.classNames.legendIndicator
@@ -110,6 +112,7 @@ export class VisionExplanationDashboardCommon extends React.Component<
                   </Text>
                 </Stack.Item>
                 <Stack.Item
+                  id="legendSuccess"
                   className={mergeStyles(
                     this.props.imageStyles.successIndicator,
                     this.props.classNames.legendIndicator

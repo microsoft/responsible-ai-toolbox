@@ -1,7 +1,6 @@
 pytest==7.0.1
 pytest-cov
 pytest-mock==3.6.1
-requests==2.25.1
 
 requirements-parser==0.2.0
 

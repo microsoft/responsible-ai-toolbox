@@ -75,7 +75,6 @@ export class FeatureImportancesTab extends React.PureComponent<
       return React.Fragment;
     }
     const classNames = featureImportanceTabStyles();
-
     return (
       <Stack className={classNames.container}>
         <Pivot

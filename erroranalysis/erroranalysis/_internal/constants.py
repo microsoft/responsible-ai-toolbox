@@ -39,10 +39,23 @@ class CohortFilterOps:
     OR = 'or'
 
 
+class ImageColumns(str, Enum):
+    """Provide constants related to the input image dataframe columns.
+
+    Can be 'image' or 'label'.
+    """
+
+    IMAGE = 'image'
+    LABEL = 'label'
+
+
 class ModelTask(str, Enum):
     """Provide model task constants.
 
-    Can be 'classification', 'regression' or 'unknown'.
+    Can be 'classification', 'regression', 'object_detection' or 'unknown'.
+
+    Provides a separate constant for object detection due to the
+    custom logic involved in evaluating predictions.
 
     Note: Keeping sentence case constants (Classification, Regression)
     for backwards compatibility, please use ALL_UPPER_CASE instead.
@@ -50,6 +63,9 @@ class ModelTask(str, Enum):
 
     CLASSIFICATION = 'classification'
     REGRESSION = 'regression'
+    IMAGE_CLASSIFICATION = 'image_classification'
+    MULTILABEL_IMAGE_CLASSIFICATION = 'multilabel_image_classification'
+    OBJECT_DETECTION = 'object_detection'
     UNKNOWN = 'unknown'
     Classification = 'classification'
     Regression = 'regression'
@@ -96,9 +112,6 @@ class Metrics(str, Enum):
     FALSE_POSITIVE_RATE = 'false_positive_rate'
     FALSE_NEGATIVE_RATE = 'false_negative_rate'
     SELECTION_RATE = 'selection_rate'
-    MEAN_AVERAGE_PRECISION = 'mean_average_precision'
-    AVERAGE_PRECISION = 'average_precision'
-    AVERAGE_RECALL = 'average_recall'
 
 
 class MetricKeys(str, Enum):
@@ -207,3 +220,8 @@ multiclass_classification_metrics = [
     Metrics.MICRO_F1_SCORE,
     Metrics.ACCURACY_SCORE,
     Metrics.ERROR_RATE]
+
+
+object_detection_metrics = [
+    Metrics.ERROR_RATE
+]

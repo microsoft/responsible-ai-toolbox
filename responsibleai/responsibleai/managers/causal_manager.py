@@ -22,6 +22,8 @@ from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.managers.base_manager import BaseManager
+from responsibleai.utils import (_find_features_having_missing_values,
+                                 _measure_time)
 
 
 class CausalManager(BaseManager):
@@ -157,6 +159,14 @@ class CausalManager(BaseManager):
         :param random_state: Controls the randomness of the estimator.
         :type random_state: int or RandomState or None
         """
+        if any(_find_features_having_missing_values(self._train)):
+            raise UserConfigValidationException(
+                'Missing values are not allowed in '
+                'the train dataset while computing causal effects.')
+        if any(_find_features_having_missing_values(self._test)):
+            raise UserConfigValidationException(
+                'Missing values are not allowed in '
+                'the test dataset while computing causal effects.')
         if not isinstance(treatment_features, list):
             raise UserConfigValidationException(
                 "Expecting a list for treatment_features but got {0}".format(
@@ -252,7 +262,8 @@ class CausalManager(BaseManager):
                 "upper_bound_on_cat_expansion={})."
             ).format(max_cat_expansion, max_cat_expansion)
             if expected in message:
-                raise ValueError(message + clarification)
+                raise UserConfigValidationException(
+                    message + clarification)
             raise e
 
     def _create_policy(
@@ -353,9 +364,12 @@ class CausalManager(BaseManager):
         result = filtered[0]
         return result._global_cohort_policy(X_test)
 
+    @_measure_time
     def compute(self):
         """Computes the causal effects by running the causal
            configuration."""
+        print("Causal Effects")
+        print('Current Status: Generating Causal Effects.')
         is_classification = self._task_type == ModelTask.CLASSIFICATION
         for result in self._results:
             causal_config = result.config
@@ -431,6 +445,7 @@ class CausalManager(BaseManager):
                     result.policies.append(policy)
 
                 result._validate_schema()
+        print('Current Status: Finished generating causal effects.')
 
     def get(self):
         """Get the computed causal insights."""

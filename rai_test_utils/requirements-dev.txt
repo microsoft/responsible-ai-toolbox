@@ -1,8 +1,11 @@
 pytest==7.0.1
 pytest-cov
 pytest-mock==3.6.1
-requests==2.25.1
 
 requirements-parser==0.2.0
 
 pandas>=0.25.1,<2.0.0
+ml-wrappers
+requests
+Pillow>=10.0.0; python_version>"3.7" # due to breaking changes in v10.0.0 (https://pillow.readthedocs.io/en/latest/releasenotes/10.0.0.html)
+Pillow<10.0.0; python_version<="3.7" # Pillow v10.0.0 is only available starting with Python 3.8

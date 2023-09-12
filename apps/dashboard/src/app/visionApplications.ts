@@ -72,6 +72,7 @@ export const visionApplications: IApplications = <const>{
           class_names: fridgeObjectDetection.class_names,
           feature_names: fridgeObjectDetection.feature_names,
           features: fridgeObjectDetection.features,
+          imageDimensions: fridgeObjectDetection.imageDimensions,
           images: fridgeObjectDetection.images,
           object_detection_predicted_y:
             fridgeObjectDetection.object_detection_predicted_y,

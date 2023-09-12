@@ -2,24 +2,29 @@
 # Licensed under the MIT License.
 
 import logging
+import random
 from unittest.mock import MagicMock
 
 import numpy as np
 import pandas as pd
 import pytest
 from lightgbm import LGBMClassifier
-from tests.common_utils import create_iris_data
+from tests.common_utils import (RandomForecastingModel,
+                                RandomForecastingModelWithQuantiles,
+                                create_iris_data,
+                                create_tiny_forecasting_dataset)
 
 from rai_test_utils.datasets.tabular import (
     create_binary_classification_dataset, create_cancer_data,
     create_housing_data)
 from rai_test_utils.models.lightgbm import create_lightgbm_classifier
-from rai_test_utils.models.sklearn import (
-    create_complex_classification_pipeline,
-    create_sklearn_random_forest_regressor)
+from rai_test_utils.models.sklearn import \
+    create_sklearn_random_forest_regressor
 from raiutils.exceptions import UserConfigValidationException
 from responsibleai import RAIInsights
 from responsibleai.feature_metadata import FeatureMetadata
+from responsibleai.rai_insights.rai_insights import \
+    _MODEL_METHOD_EXCEPTION_MESSAGE
 
 TARGET = 'target'
 
@@ -47,36 +52,6 @@ class TestRAIInsightsValidations:
                 target_column=TARGET,
                 task_type='regre',
                 forecasting_enabled=forecasting_enabled)
-
-    def test_missing_data_warnings(self):
-        train_data = {
-            'Column1': [10, 20, 90, 40, 50],
-            'Column2': [10, 20, 90, 40, 50],
-            'Target': [10, 20, 90, 40, 50]
-        }
-        train = pd.DataFrame(train_data)
-
-        test_data = {
-            'Column1': [10, 20, np.nan, 40, 50],
-            'Column2': [10, 20, 90, 40, 50],
-            'Target': [10, 20, 90, 40, 50]
-        }
-        test = pd.DataFrame(test_data)
-
-        X_train = train.drop(columns=['Target'])
-        y_train = train['Target'].values
-        model = create_complex_classification_pipeline(
-            X_train, y_train, ['Column1', 'Column2'], [])
-
-        with pytest.warns(
-            UserWarning,
-                match="['Column1']"):
-            RAIInsights(
-                model=model,
-                train=train,
-                test=test,
-                target_column='Target',
-                task_type='classification')
 
     def test_validate_test_data_size(self):
         X_train, X_test, y_train, y_test, _, _ = \
@@ -189,6 +164,31 @@ class TestRAIInsightsValidations:
                 target_column=TARGET,
                 task_type='classification',
                 categorical_features=['not_a_feature'])
+
+    def test_validate_multi_classification_continuous_target_column(self):
+        raw_data = {
+            'Column1': [10, 20, 90, 40, 50],
+            'Column2': [10, 20, 90, 40, 50],
+            'Target': [.1, .2, .9, .4, .5]
+        }
+        data = pd.DataFrame(raw_data)
+        X_data = data.drop(columns=['Target'])
+        X_data[TARGET] = data['Target'].values
+
+        # use valid target data to create the model
+        y_train = np.array([1, 1, 2, 0, 1])
+        model = create_lightgbm_classifier(X_data, y_train)
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="Target column type must not be continuous "
+                "for classification scenario."):
+            RAIInsights(
+                model=model,
+                train=X_data,
+                test=X_data,
+                target_column=TARGET,
+                task_type='classification')
 
     def test_validate_serializer(self):
         X_train, X_test, y_train, y_test, _, _ = \
@@ -337,45 +337,6 @@ class TestRAIInsightsValidations:
                 task_type='classification')
         assert 'The features in train and test data do not match' in \
             str(ucve.value)
-
-    def test_dirty_train_test_data(self):
-        X_train = pd.DataFrame(data=[['1', np.nan], ['2', '3']],
-                               columns=['c1', 'c2'])
-        y_train = np.array([1, 0])
-        X_test = pd.DataFrame(data=[['1', '2'], ['2', '3']],
-                              columns=['c1', 'c2'])
-        y_test = np.array([1, 0])
-
-        model = LGBMClassifier(boosting_type='gbdt', learning_rate=0.1,
-                               max_depth=5, n_estimators=200, n_jobs=1,
-                               random_state=777)
-
-        X_train[TARGET] = y_train
-        X_test[TARGET] = y_test
-
-        with pytest.raises(UserConfigValidationException) as ucve:
-            RAIInsights(
-                model=model,
-                train=X_train,
-                test=X_test,
-                target_column=TARGET,
-                categorical_features=['c2'],
-                task_type='classification')
-
-        assert 'Error finding unique values in column c2. ' + \
-            'Please check your train data.' in str(ucve.value)
-
-        with pytest.raises(UserConfigValidationException) as ucve:
-            RAIInsights(
-                model=model,
-                train=X_test,
-                test=X_train,
-                target_column=TARGET,
-                categorical_features=['c2'],
-                task_type='classification')
-
-        assert 'Error finding unique values in column c2. ' + \
-            'Please check your test data.' in str(ucve.value)
 
     def test_unsupported_train_test_types(self):
         X_train, X_test, y_train, y_test, _, _ = \
@@ -1126,3 +1087,104 @@ class TestCounterfactualUserConfigValidations:
                 test=X_test,
                 target_column=TARGET,
                 task_type='classification')
+
+    def test_optional_method_not_present(self):
+        X_train, X_test, y_train, y_test = create_tiny_forecasting_dataset()
+
+        model = RandomForecastingModel()
+        X_train = X_train.copy()
+        X_test = X_test.copy()
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        RAIInsights(
+            model=model,
+            train=X_train,
+            test=X_test,
+            target_column=TARGET,
+            task_type='forecasting',
+            feature_metadata=FeatureMetadata(
+                datetime_features=['time'],
+                time_series_id_features=['id']
+            ),
+            forecasting_enabled=True)
+
+    def test_optional_method_present(self):
+        X_train, X_test, y_train, y_test = create_tiny_forecasting_dataset()
+
+        model = RandomForecastingModelWithQuantiles()
+        X_train = X_train.copy()
+        X_test = X_test.copy()
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        RAIInsights(
+            model=model,
+            train=X_train,
+            test=X_test,
+            target_column=TARGET,
+            task_type='forecasting',
+            feature_metadata=FeatureMetadata(
+                datetime_features=['time'],
+                time_series_id_features=['id']
+            ),
+            forecasting_enabled=True)
+
+    def test_optional_method_failing(self):
+        X_train, X_test, y_train, y_test = create_tiny_forecasting_dataset()
+
+        class ForecastModelWithFailingQuantiles():
+            def forecast(self, X):
+                return [random.random() for _ in range(len(X))]
+
+            def forecast_quantiles(self, X):
+                raise Exception("Failed to forecast quantiles!")
+
+        model = ForecastModelWithFailingQuantiles()
+        X_train = X_train.copy()
+        X_test = X_test.copy()
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        message = _MODEL_METHOD_EXCEPTION_MESSAGE.format("forecast_quantiles")
+        with pytest.raises(
+                UserConfigValidationException, match=message):
+            RAIInsights(
+                model=model,
+                train=X_train,
+                test=X_test,
+                target_column=TARGET,
+                task_type='forecasting',
+                feature_metadata=FeatureMetadata(
+                    datetime_features=['time'],
+                    time_series_id_features=['id']
+                ),
+                forecasting_enabled=True)
+
+    def test_required_method_failing(self):
+        X_train, X_test, y_train, y_test = create_tiny_forecasting_dataset()
+
+        class ForecastModelWithFailingForecast():
+            def forecast(self, X):
+                raise Exception("Failed to forecast!")
+
+        model = ForecastModelWithFailingForecast()
+        X_train = X_train.copy()
+        X_test = X_test.copy()
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        message = _MODEL_METHOD_EXCEPTION_MESSAGE.format("forecast")
+        with pytest.raises(
+                UserConfigValidationException, match=message):
+            RAIInsights(
+                model=model,
+                train=X_train,
+                test=X_test,
+                target_column=TARGET,
+                task_type='forecasting',
+                feature_metadata=FeatureMetadata(
+                    datetime_features=['time'],
+                    time_series_id_features=['id']
+                ),
+                forecasting_enabled=True)

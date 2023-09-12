@@ -10,11 +10,13 @@ import {
   defaultModelAssessmentContext,
   ModelAssessmentContext
 } from "../../Context/ModelAssessmentContext";
+import { DatasetCohort } from "../../DatasetCohort";
 import { IDataset } from "../../Interfaces/IDataset";
 import { IExplanationModelMetadata } from "../../Interfaces/IExplanationContext";
 import { ICompositeFilter, IFilter } from "../../Interfaces/IFilter";
 import { JointDataset } from "../../util/JointDataset";
 import { Cohort } from "../Cohort";
+import { CohortSource } from "../Constants";
 
 import { cohortEditorStyles } from "./CohortEditor.styles";
 import { CohortEditorPanelContent } from "./CohortEditorPanelContent";
@@ -34,7 +36,11 @@ export interface ICohortEditorProps {
   features?: unknown[][];
   disableEditName?: boolean;
   existingCohortNames?: string[];
-  onSave: (newCohort: Cohort, switchNew?: boolean) => void;
+  onSave: (
+    newCohort: Cohort,
+    datasetCohort?: DatasetCohort,
+    switchNew?: boolean
+  ) => void;
   closeCohortEditor: () => void;
   closeCohortEditorPanel: () => void;
   filterList?: IFilter[];
@@ -209,7 +215,17 @@ export class CohortEditor extends React.PureComponent<
         this.state.filters,
         featureNames
       );
-
+      const newDatasetCohort = this.props.isFromExplanation
+        ? undefined
+        : new DatasetCohort(
+            this.state.cohortName,
+            this.context.dataset,
+            this.state.filters,
+            this.state.compositeFilters,
+            this.context.modelType,
+            this.context.columnRanges,
+            CohortSource.ManuallyCreated
+          );
       const newCohort = new Cohort(
         this.state.cohortName,
         this.props.jointDataset,
@@ -219,7 +235,7 @@ export class CohortEditor extends React.PureComponent<
       if (newCohort.filteredData.length === 0) {
         this.setState({ showEmptyCohortError: true });
       } else {
-        this.props.onSave(newCohort, switchNew);
+        this.props.onSave(newCohort, newDatasetCohort, switchNew);
       }
     }
   };

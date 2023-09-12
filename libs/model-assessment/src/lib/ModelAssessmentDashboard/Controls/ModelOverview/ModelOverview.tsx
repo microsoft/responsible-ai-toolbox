@@ -33,7 +33,6 @@ import {
   TelemetryLevels,
   TelemetryEventName,
   DatasetTaskType,
-  ImageClassificationMetrics,
   QuestionAnsweringMetrics,
   TotalCohortSamples
 } from "@responsible-ai/core-ui";
@@ -58,10 +57,15 @@ interface IModelOverviewProps {
     selectionIndexes: number[][],
     aggregateMethod: string,
     className: string,
-    iouThresh: number
+    iouThreshold: number,
+    objectDetectionCache: Map<string, [number, number, number]>
   ) => Promise<any[]>;
   requestQuestionAnsweringMetrics?: (
-    selectionIndexes: number[][]
+    selectionIndexes: number[][],
+    questionAnsweringCache: Map<
+      string,
+      [number, number, number, number, number, number]
+    >
   ) => Promise<any[]>;
 }
 
@@ -83,7 +87,9 @@ interface IModelOverviewState {
   className: string;
   featureBasedCohortLabeledStatistics: ILabeledStatistic[][];
   featureBasedCohorts: ErrorCohort[];
-  iouThresh: number;
+  iouThreshold: number;
+  objectDetectionAbortController: AbortController | undefined;
+  questionAnsweringAbortController: AbortController | undefined;
 }
 
 const datasetCohortViewPivotKey = "datasetCohortView";
@@ -94,6 +100,12 @@ export class ModelOverview extends React.Component<
   IModelOverviewState
 > {
   public static contextType = ModelAssessmentContext;
+  public questionAnsweringCache: Map<
+    string,
+    [number, number, number, number, number, number]
+  > = new Map();
+  public objectDetectionCache: Map<string, [number, number, number]> =
+    new Map();
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
   private featureComboBoxRef = React.createRef<IComboBox>();
@@ -113,8 +125,10 @@ export class ModelOverview extends React.Component<
       featureBasedCohortLabeledStatistics: [],
       featureBasedCohorts: [],
       featureConfigurationIsVisible: false,
-      iouThresh: 70,
+      iouThreshold: 70,
       metricConfigurationIsVisible: false,
+      objectDetectionAbortController: undefined,
+      questionAnsweringAbortController: undefined,
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
       selectedMetrics: [],
@@ -136,17 +150,13 @@ export class ModelOverview extends React.Component<
           BinaryClassificationMetrics.FalseNegativeRate,
           BinaryClassificationMetrics.SelectionRate
         ];
-      } else if (
-        this.context.dataset.task_type === DatasetTaskType.ImageClassification
-      ) {
-        defaultSelectedMetrics = [
-          ImageClassificationMetrics.Accuracy,
-          ImageClassificationMetrics.MacroF1,
-          ImageClassificationMetrics.MacroPrecision,
-          ImageClassificationMetrics.MacroRecall
-        ];
       } else {
-        defaultSelectedMetrics = [MulticlassClassificationMetrics.Accuracy];
+        defaultSelectedMetrics = [
+          MulticlassClassificationMetrics.Accuracy,
+          MulticlassClassificationMetrics.MacroF1,
+          MulticlassClassificationMetrics.MacroPrecision,
+          MulticlassClassificationMetrics.MacroRecall
+        ];
       }
     } else if (
       this.context.dataset.task_type ===
@@ -356,6 +366,7 @@ export class ModelOverview extends React.Component<
                 setIoUThreshold={this.setIoUThreshold}
                 updateDatasetCohortStats={this.updateDatasetCohortStats}
                 updateFeatureCohortStats={this.updateFeatureCohortStats}
+                abortController={this.state.objectDetectionAbortController}
               />
             )}
           </Stack>
@@ -414,6 +425,7 @@ export class ModelOverview extends React.Component<
               selectableMetrics={selectableMetrics}
               selectedMetrics={this.state.selectedMetrics}
               showHeatmapColors={this.state.showHeatmapColors}
+              modelType={this.context.modelMetadata.modelType}
             />
           ) : (
             <>
@@ -464,6 +476,7 @@ export class ModelOverview extends React.Component<
                 selectedFeatures={this.state.selectedFeatures}
                 featureBasedCohorts={this.state.featureBasedCohorts}
                 showHeatmapColors={this.state.showHeatmapColors}
+                modelType={this.context.modelMetadata.modelType}
               />
             </>
           )}
@@ -534,10 +547,8 @@ export class ModelOverview extends React.Component<
       this.state.featureBasedCohorts.length > 1;
 
     return (
-      (showHeatmapToggleInDatasetCohortView ||
-        showHeatmapToggleInFeatureCohortView) &&
-      // excluding object detection scenario
-      this.context.dataset.task_type !== DatasetTaskType.ObjectDetection
+      showHeatmapToggleInDatasetCohortView ||
+      showHeatmapToggleInFeatureCohortView
     );
   }
 
@@ -581,7 +592,7 @@ export class ModelOverview extends React.Component<
   };
 
   private setIoUThreshold = (value: number): void => {
-    this.setState({ iouThresh: value }, () => {
+    this.setState({ iouThreshold: value }, () => {
       if (this.state.datasetCohortChartIsVisible) {
         this.updateDatasetCohortStats();
       } else {
@@ -601,7 +612,14 @@ export class ModelOverview extends React.Component<
     const datasetCohortMetricStats = generateMetrics(
       this.context.jointDataset,
       selectionIndexes,
-      this.context.modelMetadata.modelType
+      this.context.modelMetadata.modelType,
+      this.objectDetectionCache,
+      [
+        this.state.aggregateMethod,
+        this.state.className,
+        this.state.iouThreshold
+      ],
+      this.questionAnsweringCache
     );
 
     this.setState({
@@ -627,25 +645,62 @@ export class ModelOverview extends React.Component<
       selectionIndexes.length > 0 &&
       this.state.aggregateMethod.length > 0 &&
       this.state.className.length > 0 &&
-      this.state.iouThresh
+      this.state.iouThreshold
     ) {
+      const newAbortController = new AbortController();
+      this.setState({ objectDetectionAbortController: newAbortController });
       this.context
         .requestObjectDetectionMetrics(
           selectionIndexes,
           this.state.aggregateMethod,
           this.state.className,
-          this.state.iouThresh,
-          new AbortController().signal
+          this.state.iouThreshold,
+          this.objectDetectionCache,
+          newAbortController.signal
         )
         .then((result) => {
-          // Assumption: the lengths of `result` and `selectionIndexes` are the same.
+          const [allCohortMetrics, cohortClasses] = result;
+
+          // Assumption: the lengths of `allCohortMetrics` and `selectionIndexes` are the same.
           const updatedMetricStats: ILabeledStatistic[][] = [];
 
           for (const [
             cohortIndex,
-            [meanAveragePrecision, averagePrecision, averageRecall]
-          ] of result.entries()) {
+            cohortMetrics
+          ] of allCohortMetrics.entries()) {
             const count = selectionIndexes[cohortIndex].length;
+
+            let meanAveragePrecision = -1;
+            let averagePrecision = -1;
+            let averageRecall = -1;
+
+            // checking 2D array of computed metrics to cache
+            if (
+              Array.isArray(cohortMetrics) &&
+              cohortMetrics.every((subArray) => Array.isArray(subArray))
+            ) {
+              for (const [i, cohortMetric] of cohortMetrics.entries()) {
+                const [mAP, aP, aR] = cohortMetric;
+
+                const key: [number[], string, string, number] = [
+                  selectionIndexes[cohortIndex],
+                  this.state.aggregateMethod,
+                  cohortClasses[i],
+                  this.state.iouThreshold
+                ];
+                if (!this.objectDetectionCache.has(key.toString())) {
+                  this.objectDetectionCache.set(key.toString(), [mAP, aP, aR]);
+                }
+
+                if (this.state.className === cohortClasses[i]) {
+                  [meanAveragePrecision, averagePrecision, averageRecall] =
+                    cohortMetric;
+                }
+              }
+            } else if (Array.isArray(cohortMetrics)) {
+              [meanAveragePrecision, averagePrecision, averageRecall] =
+                cohortMetrics;
+            }
 
             const updatedCohortMetricStats = [
               {
@@ -684,6 +739,11 @@ export class ModelOverview extends React.Component<
     selectionIndexes: number[][],
     isDatasetCohort: boolean
   ): void {
+    if (this.state.questionAnsweringAbortController !== undefined) {
+      this.state.questionAnsweringAbortController.abort();
+    }
+    const newAbortController = new AbortController();
+    this.setState({ questionAnsweringAbortController: newAbortController });
     if (
       this.context.requestQuestionAnsweringMetrics &&
       selectionIndexes.length > 0
@@ -691,7 +751,8 @@ export class ModelOverview extends React.Component<
       this.context
         .requestQuestionAnsweringMetrics(
           selectionIndexes,
-          new AbortController().signal
+          this.questionAnsweringCache,
+          newAbortController.signal
         )
         .then((result) => {
           // Assumption: the lengths of `result` and `selectionIndexes` are the same.
@@ -709,6 +770,24 @@ export class ModelOverview extends React.Component<
             ]
           ] of result.entries()) {
             const count = selectionIndexes[cohortIndex].length;
+
+            if (
+              !this.questionAnsweringCache.has(
+                selectionIndexes[cohortIndex].toString()
+              )
+            ) {
+              this.questionAnsweringCache.set(
+                selectionIndexes[cohortIndex].toString(),
+                [
+                  exactMatchRatio,
+                  f1Score,
+                  meteorScore,
+                  bleuScore,
+                  bertScore,
+                  rougeScore
+                ]
+              );
+            }
 
             const updatedCohortMetricStats = [
               {
@@ -783,7 +862,14 @@ export class ModelOverview extends React.Component<
     const featureCohortMetricStats = generateMetrics(
       this.context.jointDataset,
       selectionIndexes,
-      this.context.modelMetadata.modelType
+      this.context.modelMetadata.modelType,
+      this.objectDetectionCache,
+      [
+        this.state.aggregateMethod,
+        this.state.className,
+        this.state.iouThreshold
+      ],
+      this.questionAnsweringCache
     );
 
     this.setState({

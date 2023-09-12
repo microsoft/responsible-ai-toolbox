@@ -16,7 +16,8 @@ import pandas as pd
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
-from raiutils.exceptions import UserConfigValidationException
+from raiutils.exceptions import (SystemErrorException,
+                                 UserConfigValidationException)
 from raiutils.models import Forecasting, ModelTask, SKLearn
 from responsibleai._interfaces import (Dataset, RAIInsightsData,
                                        TabularDatasetMetadata)
@@ -49,6 +50,8 @@ _TIME_SERIES_ID_FEATURES = 'time_series_id_features'
 _CATEGORICAL_FEATURES = 'categorical_features'
 _DROPPED_FEATURES = 'dropped_features'
 _FORECASTING_RAI_INSIGHTS_ENABLED = "forecasting_enabled"
+
+_STRF_TIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 
 _MODEL_METHOD_EXCEPTION_MESSAGE = (
     'The passed model cannot be used for getting predictions via {0}')
@@ -259,6 +262,14 @@ class RAIInsights(RAIBaseInsights):
         self._initialize_managers()
         self._try_add_data_balance()
 
+    def get_categorical_features_after_drop(self):
+        dropped_features = self._feature_metadata.dropped_features
+        if dropped_features is None:
+            return self.categorical_features
+        else:
+            return list(set(self.categorical_features) -
+                        set(dropped_features))
+
     def get_train_data(self):
         """Returns the training dataset after dropping
         features if any were configured to be dropped.
@@ -371,13 +382,14 @@ class RAIInsights(RAIBaseInsights):
         dropped_features = self._feature_metadata.dropped_features
         self._causal_manager = CausalManager(
             self.get_train_data(), self.get_test_data(), self.target_column,
-            self.task_type, self.categorical_features, self._feature_metadata)
+            self.task_type, self.get_categorical_features_after_drop(),
+            self._feature_metadata)
 
         self._counterfactual_manager = CounterfactualManager(
             model=self.model, train=self.get_train_data(),
             test=self.get_test_data(),
             target_column=self.target_column, task_type=self.task_type,
-            categorical_features=self.categorical_features)
+            categorical_features=self.get_categorical_features_after_drop())
 
         self._data_balance_manager = DataBalanceManager(
             train=self.train, test=self.test, target_column=self.target_column,
@@ -393,7 +405,7 @@ class RAIInsights(RAIBaseInsights):
             self.model, self.get_train_data(), self.get_test_data(),
             self.target_column,
             self._classes,
-            categorical_features=self.categorical_features)
+            self.get_categorical_features_after_drop())
 
         self._managers = [self._causal_manager,
                           self._counterfactual_manager,
@@ -470,6 +482,8 @@ class RAIInsights(RAIBaseInsights):
         # We specifically do not advertise for this until we want people to
         # use it.
         if kwargs.get(_FORECASTING_RAI_INSIGHTS_ENABLED, False):
+            print("WARNING: Support for the forecasting task type is not yet "
+                  "stable. Please do not use it except for testing purposes.")
             valid_tasks.append(ModelTask.FORECASTING.value)
         if task_type not in valid_tasks:
             message = (f"Unsupported task type '{task_type}'. "
@@ -540,22 +554,17 @@ class RAIInsights(RAIBaseInsights):
                            f"{list(difference_set)}")
                 raise UserConfigValidationException(message)
 
-            for column in categorical_features:
-                try:
-                    np.unique(train[column])
-                except Exception:
-                    raise UserConfigValidationException(
-                        f"Error finding unique values in column {column}."
-                        " Please check your train data."
-                    )
-
-                try:
-                    np.unique(test[column])
-                except Exception:
-                    raise UserConfigValidationException(
-                        f"Error finding unique values in column {column}. "
-                        "Please check your test data.")
-
+        # Validate that the target column isn't continuous if the
+        # user is running classification scenario
+        # To address error thrown from sklearn here:  # noqa: E501
+        # https://github.com/scikit-learn/scikit-learn/blob/main/sklearn/utils/multiclass.py#L197
+        y_data = train[target_column]
+        if (task_type == ModelTask.CLASSIFICATION and
+                pd.api.types.is_float_dtype(y_data.dtype) and
+                np.any(y_data != y_data.astype(int))):
+            raise UserConfigValidationException(
+                "Target column type must not be continuous "
+                "for classification scenario.")
         # Check if any features exist that are not numeric, datetime, or
         # categorical.
         train_features = train.drop(columns=[target_column]).columns
@@ -576,22 +585,11 @@ class RAIInsights(RAIBaseInsights):
                 "identified as categorical features: "
                 f"{non_categorical_or_time_string_columns}")
 
-        list_of_feature_having_missing_values = []
-        for feature in test.columns.tolist():
-            if np.any(test[feature].isnull()):
-                list_of_feature_having_missing_values.append(feature)
-        if len(list_of_feature_having_missing_values) > 0:
-            warnings.warn(
-                f"Features {list_of_feature_having_missing_values} "
-                "have missing values in test data")
-
         self._validate_feature_metadata(
             feature_metadata, train, task_type, model, target_column)
 
         if model is not None:
             # Pick one row from train and test data
-            small_train_data = train[0:1]
-            small_test_data = test[0:1]
             has_dropped_features = False
             if feature_metadata is not None and \
                 (feature_metadata.dropped_features is not None and
@@ -602,12 +600,12 @@ class RAIInsights(RAIBaseInsights):
             else:
                 features_to_drop = [target_column]
 
-            small_train_data = small_train_data.drop(
+            actual_train_data = train.drop(
                 columns=features_to_drop, axis=1)
-            small_test_data = small_test_data.drop(
+            actual_test_data = test.drop(
                 columns=features_to_drop, axis=1)
-            if (len(small_train_data.columns) == 0 or
-                    len(small_test_data.columns) == 0):
+            if (len(actual_train_data.columns) == 0 or
+                    len(actual_test_data.columns) == 0):
                 if has_dropped_features:
                     raise UserConfigValidationException(
                         'All features have been dropped from the dataset.'
@@ -625,8 +623,8 @@ class RAIInsights(RAIBaseInsights):
             # Ensure that the model has the required methods and that they
             # do not change the input data.
             if task_type != ModelTask.FORECASTING:
-                self._ensure_model_outputs(input_data=small_train_data)
-            self._ensure_model_outputs(input_data=small_test_data)
+                self._ensure_model_outputs(input_data=actual_train_data)
+            self._ensure_model_outputs(input_data=actual_test_data)
 
             if task_type == ModelTask.REGRESSION:
                 if hasattr(model, SKLearn.PREDICT_PROBA):
@@ -880,10 +878,11 @@ class RAIInsights(RAIBaseInsights):
             true_y = self.test[self.target_column]
 
         X_test = test_data.drop(columns=[self.target_column])
+        X_test_after_drop = self.get_test_data(X_test)
         filter_data_with_cohort = FilterDataWithCohortFilters(
             model=self.model,
-            dataset=X_test,
-            features=X_test.columns,
+            dataset=X_test_after_drop,
+            features=X_test_after_drop.columns,
             categorical_features=self.categorical_features,
             categories=self._categories,
             true_y=true_y,
@@ -1014,7 +1013,7 @@ class RAIInsights(RAIBaseInsights):
                         self._feature_metadata.datetime_features[0]
                     dashboard_dataset.index = convert_to_list(
                         pd.to_datetime(self.test[time_column_name])
-                        .apply(lambda dt: dt.strftime("%Y-%m-%dT%H:%M:%SZ")))
+                        .apply(lambda dt: dt.strftime(_STRF_TIME_FORMAT)))
             except Exception as ex:
                 raise ValueError(
                     "The datetime feature should be parseable by "
@@ -1154,6 +1153,9 @@ class RAIInsights(RAIBaseInsights):
                    if m.purpose == purpose]
         if len(methods) == 0:
             return None
+        # If a method is optional don't fail
+        if methods[0].optional and not hasattr(self.model, methods[0].name):
+            return None
         return getattr(self.model, methods[0].name)
 
     def _get_model_output(self, *, input_data: Union[None, np.array],
@@ -1191,6 +1193,13 @@ class RAIInsights(RAIBaseInsights):
                     _MODEL_METHOD_EXCEPTION_MESSAGE.format(method.name))
             try:
                 model_method = getattr(self.model, method.name)
+            except Exception:
+                if not method.optional:
+                    raise UserConfigValidationException(
+                        _MODEL_METHOD_EXCEPTION_MESSAGE.format(method.name))
+                # skip if method is optional and unavailable
+                continue
+            try:
                 model_method(input_data)
             except Exception:
                 raise UserConfigValidationException(
@@ -1276,11 +1285,23 @@ class RAIInsights(RAIBaseInsights):
                 res_object[_UNIQUE_VALUES] = unique_value.tolist()
             elif datetime_features is not None and col in datetime_features:
                 res_object[_RANGE_TYPE] = "datetime"
-                res_object[_MIN_VALUE] = test[col].min()
-                res_object[_MAX_VALUE] = test[col].max()
+                res_object[_MIN_VALUE] = \
+                    test[col].min().strftime(_STRF_TIME_FORMAT)
+                res_object[_MAX_VALUE] = \
+                    test[col].max().strftime(_STRF_TIME_FORMAT)
             else:
-                min_value = float(test[col].min())
-                max_value = float(test[col].max())
+                col_min = test[col].min()
+                col_max = test[col].max()
+                try:
+                    min_value = float(col_min)
+                    max_value = float(col_max)
+                except Exception as e:
+                    raise SystemErrorException(
+                        "Unable to convert min or max value "
+                        f"of feature column {col} to float. "
+                        f"min value of {col} is of type {type(col_min)} and "
+                        f"max value of {col} is of type {type(col_max)} "
+                        f"Original Excepton: {e}")
                 res_object[_RANGE_TYPE] = "integer"
                 res_object[_MIN_VALUE] = min_value
                 res_object[_MAX_VALUE] = max_value

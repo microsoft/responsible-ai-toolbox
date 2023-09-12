@@ -250,6 +250,7 @@ export class DatasetExplorerTab extends React.Component<
                 selectedCohortIndex={this.state.selectedCohortIndex}
                 onChartPropChange={this.onChartPropsChange}
                 dataset={this.context.dataset}
+                telemetryHook={this.props.telemetryHook}
               />
             </Stack.Item>
           </Stack>

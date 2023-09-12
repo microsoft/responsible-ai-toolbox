@@ -5,6 +5,7 @@ from rai_test_utils.models.lightgbm import create_lightgbm_classifier
 from rai_test_utils.models.sklearn import (
     create_sklearn_logistic_regressor, create_sklearn_random_forest_classifier,
     create_sklearn_random_forest_regressor, create_sklearn_svm_classifier)
+from rai_test_utils.models.torch import get_object_detection_fridge_model
 from rai_test_utils.models.xgboost import create_xgboost_classifier
 
 
@@ -40,3 +41,14 @@ def create_models_regression(X_train, y_train):
     rf_model = create_sklearn_random_forest_regressor(X_train, y_train)
 
     return [rf_model]
+
+
+def create_models_object_detection():
+    """Create a list of models for object detection.
+
+    :return: A list of models.
+    :rtype: list
+    """
+    fridge_model = get_object_detection_fridge_model()
+
+    return [fridge_model]

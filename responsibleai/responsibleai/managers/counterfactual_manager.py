@@ -29,6 +29,8 @@ from responsibleai._tools.shared.state_directory_management import \
 from responsibleai.exceptions import (DuplicateManagerConfigException,
                                       SchemaErrorException)
 from responsibleai.managers.base_manager import BaseManager
+from responsibleai.utils import (_find_features_having_missing_values,
+                                 _measure_time)
 
 
 class CounterfactualConstants:
@@ -417,6 +419,15 @@ class CounterfactualManager(BaseManager):
         return dice_explainer
 
     def _add_counterfactual_config(self, new_counterfactual_config):
+        if any(_find_features_having_missing_values(self._train)):
+            raise UserConfigValidationException(
+                'Missing values are not allowed in the '
+                'train dataset while computing counterfactuals.')
+        if any(_find_features_having_missing_values(self._test)):
+            raise UserConfigValidationException(
+                'Missing values are not allowed in the '
+                'test dataset while computing counterfactuals.')
+
         if self._model is None:
             raise UserConfigValidationException(
                 'Model is required for counterfactual example generation and '
@@ -539,13 +550,19 @@ class CounterfactualManager(BaseManager):
 
         self._add_counterfactual_config(counterfactual_config)
 
+    @_measure_time
     def compute(self):
         """Computes the counterfactual examples by running the counterfactual
            configuration."""
+        print("Counterfactual")
         for cf_config in self._counterfactual_config_list:
             if not cf_config.is_computed:
                 cf_config.is_computed = True
                 try:
+                    print("Current Status: Generating {0} counterfactuals"
+                          " for {1} samples".format(
+                              cf_config.total_CFs, len(self._test)))
+
                     cf_config.explainer = self._create_diceml_explainer(
                         method=cf_config.method,
                         continuous_features=cf_config.continuous_features)
@@ -578,6 +595,9 @@ class CounterfactualManager(BaseManager):
 
                     cf_config.counterfactual_obj = counterfactual_obj
 
+                    print('Current Status: Generated {0} counterfactuals'
+                          ' for {1} samples.'.format(
+                              cf_config.total_CFs, len(self._test)))
                 except Exception as e:
                     cf_config.has_computation_failed = True
                     cf_config.failure_reason = str(e)

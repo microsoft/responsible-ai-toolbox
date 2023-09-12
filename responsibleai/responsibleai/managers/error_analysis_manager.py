@@ -4,6 +4,7 @@
 """Defines the Error Analysis Manager class."""
 
 import json
+import warnings
 from pathlib import Path
 from typing import Any, List, Optional
 
@@ -16,6 +17,7 @@ from erroranalysis._internal.error_report import as_error_report
 from erroranalysis._internal.error_report import \
     json_converter as report_json_converter
 from raiutils.exceptions import UserConfigValidationException
+from raiutils.models import ModelTask
 from responsibleai._config.base_config import BaseConfig
 from responsibleai._interfaces import ErrorAnalysisData
 from responsibleai._internal.constants import ErrorAnalysisManagerKeys as Keys
@@ -26,6 +28,8 @@ from responsibleai._tools.shared.state_directory_management import \
 from responsibleai.exceptions import (ConfigAndResultMismatchException,
                                       DuplicateManagerConfigException)
 from responsibleai.managers.base_manager import BaseManager
+from responsibleai.utils import (_find_features_having_missing_values,
+                                 _measure_time)
 
 REPORTS = 'reports'
 CONFIG = 'config'
@@ -226,7 +230,8 @@ class ErrorAnalysisManager(BaseManager):
     def __init__(self, model: Any, dataset: pd.DataFrame, target_column: str,
                  classes: Optional[List] = None,
                  categorical_features: Optional[List[str]] = None,
-                 dropped_features: Optional[List[str]] = None):
+                 dropped_features: Optional[List[str]] = None,
+                 model_task: Optional[str] = ModelTask.CLASSIFICATION):
         """Creates an ErrorAnalysisManager object.
 
         :param model: The model to analyze errors on.
@@ -251,6 +256,7 @@ class ErrorAnalysisManager(BaseManager):
         self._true_y = dataset[target_column]
         self._dataset = dataset.drop(columns=[target_column])
         self._feature_names = list(self._dataset.columns)
+        self._model_task = model_task
         self._classes = classes
         self._categorical_features = categorical_features
         self._ea_config_list = []
@@ -264,6 +270,7 @@ class ErrorAnalysisManager(BaseManager):
             self._true_y,
             self._feature_names,
             self._categorical_features,
+            model_task=self._model_task,
             classes=self._classes)
 
     def add(self, max_depth: int = 3, num_leaves: int = 31,
@@ -303,9 +310,18 @@ class ErrorAnalysisManager(BaseManager):
         else:
             self._ea_config_list.append(ea_config)
 
+    @_measure_time
     def compute(self):
         """Creates an ErrorReport by running the error analyzer on the model.
         """
+        print("Error Analysis")
+        print('Current Status: Generating error analysis reports.')
+        compute_importances = not any(_find_features_having_missing_values(
+            self._dataset))
+        if not compute_importances:
+            warnings.warn(
+                'Test dataset has missing values, '
+                'skipping feature importance computation in error analysis.')
         for config in self._ea_config_list:
             if config.is_computed:
                 continue
@@ -318,7 +334,7 @@ class ErrorAnalysisManager(BaseManager):
                 filter_features, max_depth=max_depth,
                 min_child_samples=min_child_samples,
                 num_leaves=num_leaves,
-                compute_importances=True,
+                compute_importances=compute_importances,
                 compute_root_stats=True)
 
             # Validate the serialized output against schema
@@ -327,6 +343,7 @@ class ErrorAnalysisManager(BaseManager):
                 json.loads(report.to_json()), schema)
 
             self._ea_report_list.append(report)
+        print('Current Status: Finished generating error analysis reports.')
 
     def get(self):
         """Get the computed error reports.

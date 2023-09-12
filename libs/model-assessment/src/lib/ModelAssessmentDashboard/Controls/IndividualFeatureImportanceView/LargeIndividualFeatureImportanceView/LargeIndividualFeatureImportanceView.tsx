@@ -122,22 +122,25 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
             this.state.isLocalExplanationsDataLoading
           }
           setIsRevertButtonClicked={this.setIsRevertButtonClicked}
+          telemetryHook={this.props.telemetryHook}
         />
-        <LocalImportanceChart
-          rowNumber={this.state.selectedPointsIndexes[0]}
-          data={this.state.localExplanationsData}
-          isLocalExplanationsDataLoading={
-            this.state.isLocalExplanationsDataLoading
-          }
-          localExplanationsErrorMessage={
-            this.state.localExplanationsErrorMessage
-          }
-          selectedWeightVector={this.props.selectedWeightVector}
-          onWeightChange={this.props.onWeightChange}
-          weightOptions={this.props.weightOptions}
-          weightLabels={this.props.weightLabels}
-          modelType={this.props.modelType}
-        />
+        {!this.state.isBubbleChartDataLoading && (
+          <LocalImportanceChart
+            rowNumber={this.state.selectedPointsIndexes[0]}
+            data={this.state.localExplanationsData}
+            isLocalExplanationsDataLoading={
+              this.state.isLocalExplanationsDataLoading
+            }
+            localExplanationsErrorMessage={
+              this.state.localExplanationsErrorMessage
+            }
+            selectedWeightVector={this.props.selectedWeightVector}
+            onWeightChange={this.props.onWeightChange}
+            weightOptions={this.props.weightOptions}
+            weightLabels={this.props.weightLabels}
+            modelType={this.props.modelType}
+          />
+        )}
       </Stack>
     );
   }
@@ -188,7 +191,8 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       this.state.isLocalExplanationsDataLoading,
       this.context.requestBubblePlotData,
       this.selectPointFromChartLargeData,
-      this.onBubbleClick
+      this.onBubbleClick,
+      this.props.telemetryHook
     );
     if (
       datasetBubblePlotConfigOverride &&
@@ -291,7 +295,8 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     });
     const localExplanationsData = await getLocalExplanationsFromSDK(
       absoluteIndex,
-      this.context.requestLocalExplanations
+      this.context.requestLocalExplanations,
+      this.props.telemetryHook
     );
     if (
       typeof localExplanationsData === "object" &&

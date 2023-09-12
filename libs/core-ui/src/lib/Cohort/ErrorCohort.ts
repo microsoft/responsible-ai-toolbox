@@ -20,7 +20,8 @@ export class ErrorCohort {
     public cells: number = 0,
     public source: CohortSource = CohortSource.None,
     public isTemporary: boolean = false,
-    cohortStats: MetricCohortStats | undefined = undefined
+    cohortStats: MetricCohortStats | undefined = undefined,
+    public isAllDataCohort: boolean = false
   ) {
     this.cohort = cohort;
     this.jointDataset = jointDataset;

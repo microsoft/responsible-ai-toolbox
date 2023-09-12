@@ -3,6 +3,7 @@
 
 """Defines the BaseAnalyzer, the ModelAnalyzer and PredictionsAnalyzer."""
 
+import logging
 from abc import ABC, abstractmethod
 
 import numpy as np
@@ -29,6 +30,19 @@ from erroranalysis._internal.version_checker import check_pandas_version
 from erroranalysis.error_correlation_methods import (
     compute_ebm_global_importance, compute_gbm_global_importance)
 from erroranalysis.report import ErrorReport
+
+module_logger = logging.getLogger(__name__)
+module_logger.setLevel(logging.INFO)
+
+try:
+    from vision_explanation_methods.error_labeling.error_labeling import \
+        ErrorLabeling
+    pytorch_installed = True
+except ImportError:
+    pytorch_installed = False
+    module_logger.debug("Can't import vision_explanation_methods"
+                        "or underlying torch dependencies, "
+                        "required for Object Detection scenario.")
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 IMPORTANCES_THRESHOLD = 50000
@@ -91,11 +105,16 @@ class BaseAnalyzer(ABC):
         self._categories = []
         self._categorical_indexes = []
         self._category_dictionary = {}
-        self._model_task = model_task
         self._classes = classes
+        if model_task == ModelTask.IMAGE_CLASSIFICATION or \
+           model_task == ModelTask.MULTILABEL_IMAGE_CLASSIFICATION:
+            model_task = ModelTask.CLASSIFICATION
+        self._model_task = model_task
         if model_task == ModelTask.CLASSIFICATION:
             if metric is None:
                 metric = Metrics.ERROR_RATE
+        elif model_task == ModelTask.OBJECT_DETECTION:
+            metric = Metrics.ERROR_RATE
         else:
             if metric is None:
                 metric = Metrics.MEAN_SQUARED_ERROR
@@ -490,7 +509,8 @@ class BaseAnalyzer(ABC):
             diff = np.concatenate((diff, diff))
         if error_correlation_method == ErrorCorrelationMethods.MUTUAL_INFO:
             n_neighbors = min(3, input_data.shape[0] - 1)
-            if self._model_task == ModelTask.CLASSIFICATION:
+            if self._model_task == ModelTask.CLASSIFICATION \
+               or self._model_task == ModelTask.OBJECT_DETECTION:
                 return mutual_info_classif(
                     input_data, diff, n_neighbors=n_neighbors).tolist()
             else:
@@ -684,6 +704,24 @@ class ModelAnalyzer(BaseAnalyzer):
         """
         if self._model_task == ModelTask.CLASSIFICATION:
             return self.model.predict(self.dataset) != self.true_y
+        elif self._model_task == ModelTask.OBJECT_DETECTION:
+            if not pytorch_installed:
+                raise ModuleNotFoundError(
+                    "User Error: torch & torchvision are not installed "
+                    "and are needed for the Object Detection scenario."
+                )
+            pred_y = self.model.predict(self.dataset)
+            diff = [
+                len(
+                    ErrorLabeling(
+                        ModelTask.OBJECT_DETECTION,
+                        pred_y[image_idx],
+                        self.true_y[image_idx]
+                    ).compute_error_list()
+                ) > 0
+                for image_idx in range(len(self.true_y))
+            ]
+            return diff
         else:
             return self.model.predict(self.dataset) - self.true_y
 

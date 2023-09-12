@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import logging
 import numbers
 from enum import Enum
 
@@ -25,6 +26,19 @@ from erroranalysis._internal.metrics import get_ordered_classes, metric_to_func
 from erroranalysis._internal.process_categoricals import process_categoricals
 from erroranalysis._internal.utils import is_spark
 from raiutils.exceptions import UserConfigValidationException
+
+module_logger = logging.getLogger(__name__)
+module_logger.setLevel(logging.INFO)
+
+try:
+    from vision_explanation_methods.error_labeling.error_labeling import \
+        ErrorLabeling
+    pytorch_installed = True
+except ImportError:
+    pytorch_installed = False
+    module_logger.debug("Can't import vision_explanation_methods"
+                        "or underlying torch dependencies, "
+                        "required for Object Detection scenario.")
 
 # imports required for pyspark support
 try:
@@ -307,6 +321,22 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
         pred_y = analyzer.model.predict(input_data)
     if analyzer.model_task == ModelTask.CLASSIFICATION:
         diff = pred_y != true_y
+    elif analyzer.model_task == ModelTask.OBJECT_DETECTION:
+        if not pytorch_installed:
+            raise ModuleNotFoundError(
+                "User Error: torch & torchvision are not installed "
+                "and are needed for the Object Detection scenario."
+            )
+        diff = [
+            len(
+                ErrorLabeling(
+                    ModelTask.OBJECT_DETECTION,
+                    pred_y[image_idx],
+                    true_y[image_idx]
+                ).compute_error_list()
+            ) > 0
+            for image_idx in range(len(true_y))
+        ]
     else:
         diff = pred_y - true_y
     if not isinstance(diff, np.ndarray):
@@ -471,17 +501,34 @@ def create_surrogate_model(analyzer,
         surrogate = LGBMClassifier(n_estimators=1,
                                    max_depth=max_depth,
                                    num_leaves=num_leaves,
-                                   min_child_samples=min_child_samples)
+                                   min_child_samples=min_child_samples,
+                                   verbosity=-1)
     else:
         surrogate = LGBMRegressor(n_estimators=1,
                                   max_depth=max_depth,
                                   num_leaves=num_leaves,
-                                  min_child_samples=min_child_samples)
-    if cat_ind_reindexed:
-        surrogate.fit(dataset_sub_features, diff,
-                      categorical_feature=cat_ind_reindexed)
-    else:
-        surrogate.fit(dataset_sub_features, diff)
+                                  min_child_samples=min_child_samples,
+                                  verbosity=-1)
+    try:
+        if cat_ind_reindexed:
+            surrogate.fit(dataset_sub_features, diff,
+                          categorical_feature=cat_ind_reindexed)
+        else:
+            surrogate.fit(dataset_sub_features, diff)
+    except ValueError as ve:
+        # throw user exception for bad model prediction output
+        if "y should be a 1d array, got an array of shape" in str(ve):
+            diff_shape = diff.shape
+            invalid_shape = len(diff_shape) > 2
+            invalid_2d_dims = len(diff_shape) == 2 and diff_shape[1] != 1
+            if invalid_shape or invalid_2d_dims:
+                raise UserConfigValidationException(
+                    "The surrogate model could not be trained. " +
+                    "The shape of the diff array is invalid: {}. ".format(
+                        diff_shape) +
+                    "Please check the prediction function of the model.")
+        # re-raise any unknown system error
+        raise ve
     return surrogate
 
 

@@ -169,7 +169,8 @@ export async function getBubblePlotData(
   onBubbleClick?: (
     scatterPlotData: IHighchartsConfig,
     clusterData: IClusterData
-  ) => void
+  ) => void,
+  telemetryHook?: (message: ITelemetryEvent) => void
 ): Promise<IHighchartBubbleSDKClusterData | IHighchartsConfig | undefined> {
   return await calculateBubblePlotDataFromErrorCohort(
     cohort,
@@ -180,10 +181,12 @@ export async function getBubblePlotData(
     isLocalExplanationsDataLoading,
     true,
     false,
+    TelemetryEventName.FeatureImportanceBubblePlotDataFetch,
     requestBubblePlotData,
     selectPointFromChartLargeData,
     onBubbleClick,
-    undefined
+    undefined,
+    telemetryHook
   );
 }
 

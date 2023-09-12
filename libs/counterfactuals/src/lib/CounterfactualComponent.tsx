@@ -239,7 +239,8 @@ export class CounterfactualComponent extends React.PureComponent<
       const localCounterfactualData = await getLocalCounterfactualsFromSDK(
         absoluteIndex,
         this.state.counterfactualsData.id,
-        this.context.requestLocalCounterfactuals
+        this.context.requestLocalCounterfactuals,
+        this.props.telemetryHook
       );
       if (
         typeof localCounterfactualData === "object" &&

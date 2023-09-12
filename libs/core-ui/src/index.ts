@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 export * from "./lib/cohortKey";
-export * from "./lib/Cohort/allDataCohortUtils";
 export * from "./lib/Cohort/Cohort";
 export * from "./lib/Cohort/CohortList/CohortList";
 export * from "./lib/Cohort/Constants";
@@ -39,7 +38,7 @@ export * from "./lib/util/getRandomId";
 export * from "./lib/util/getCohortFilterCount";
 export * from "./lib/util/getDependencyChartOptions";
 export * from "./lib/util/IGenericChartProps";
-export * from "./lib/util/ImageStatisticsUtils";
+export * from "./lib/util/MulticlassStatisticsUtils";
 export * from "./lib/util/initializeOfficeFabric";
 export * from "./lib/util/isNumber";
 export * from "./lib/util/ModelExplanationUtils";
@@ -61,6 +60,7 @@ export * from "./lib/util/MultilabelStatisticsUtils";
 export * from "./lib/util/ObjectDetectionStatisticsUtils";
 export * from "./lib/util/QuestionAnsweringStatisticsUtils";
 export * from "./lib/util/StatisticsUtils";
+export * from "./lib/util/StatisticsUtilsEnums";
 export * from "./lib/util/string";
 export * from "./lib/util/toScientific";
 export * from "./lib/util/ITelemetryEvent";

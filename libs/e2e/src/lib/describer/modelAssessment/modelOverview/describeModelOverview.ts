@@ -16,34 +16,56 @@ import { ensureNewCohortsShowUpInCharts } from "./ensureNewCohortsShowUpInCharts
 
 const testName = "Model Overview v2";
 
+function getDashboardName(isVision: boolean, isText: boolean): string {
+  if (isVision) {
+    return "modelAssessmentVision";
+  } else if (isText) {
+    return "modelAssessmentText";
+  }
+  return "modelAssessment";
+}
+
 export function describeModelOverview(
   datasetShape: IModelAssessmentData,
   name?: keyof typeof modelAssessmentDatasetsIncludingFlights,
   isNotebookTest = true
 ): void {
   describe(testName, () => {
+    const isVision =
+      datasetShape.isObjectDetection ||
+      datasetShape.isImageMultiLabel ||
+      datasetShape.isImageClassification
+        ? true
+        : false;
+    const isText =
+      datasetShape.isTextClassification || datasetShape.isTextMultiLabel
+        ? true
+        : false;
+    const isTabular = !isVision && !isText;
     if (isNotebookTest) {
       before(() => {
         visit(name);
       });
     } else {
       before(() => {
-        cy.visit(`#/modelAssessment/${name}/light/english/Version-2`);
+        const dashboardName = getDashboardName(isVision, isText);
+        cy.visit(`#/${dashboardName}/${name}/light/english/Version-2`);
       });
     }
 
     if (datasetShape.modelOverviewData?.hasModelOverviewComponent) {
       it("should have 'Model overview' component in the initial state", () => {
-        ensureAllModelOverviewBasicElementsArePresent();
+        ensureAllModelOverviewBasicElementsArePresent(datasetShape);
         ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
           datasetShape,
           false,
-          isNotebookTest
+          isNotebookTest,
+          isTabular
         );
       });
 
       it("should show 'Feature cohorts' view when selected", () => {
-        ensureAllModelOverviewBasicElementsArePresent();
+        ensureAllModelOverviewBasicElementsArePresent(datasetShape);
         cy.get(Locators.ModelOverviewCohortViewFeatureCohortViewButton).click();
         ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent(
           datasetShape,
@@ -57,7 +79,9 @@ export function describeModelOverview(
         );
         ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
           datasetShape,
-          1
+          1,
+          isTabular,
+          isVision
         );
       });
 
@@ -67,18 +91,27 @@ export function describeModelOverview(
           datasetShape.modelOverviewData?.featureCohortView
             ?.secondFeatureToSelect || ""
         );
-        ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
-          datasetShape,
-          2
-        );
+        if (
+          datasetShape.modelOverviewData?.featureCohortView
+            ?.secondFeatureToSelect
+        ) {
+          ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
+            datasetShape,
+            2,
+            isTabular,
+            isVision
+          );
+        }
       });
 
       it("should show new cohorts in charts", () => {
-        ensureNewCohortsShowUpInCharts(datasetShape, isNotebookTest);
+        ensureNewCohortsShowUpInCharts(datasetShape, isNotebookTest, isTabular);
       });
 
       it("should pivot between charts when clicking", () => {
-        ensureChartsPivot(datasetShape, isNotebookTest, true);
+        if (isTabular) {
+          ensureChartsPivot(datasetShape, isNotebookTest, true);
+        }
       });
     } else {
       it("should not have 'Model overview' component", () => {

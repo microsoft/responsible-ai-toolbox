@@ -1,7 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ICounterfactualData } from "@responsible-ai/core-ui";
+import {
+  ICounterfactualData,
+  ITelemetryEvent,
+  TelemetryEventName,
+  TelemetryLevels
+} from "@responsible-ai/core-ui";
 
 export async function getLocalCounterfactualsFromSDK(
   absoluteIndex: number,
@@ -10,7 +15,8 @@ export async function getLocalCounterfactualsFromSDK(
     counterfactualsId: string,
     absoluteIndex: number,
     abortSignal: AbortSignal
-  ) => Promise<Record<string, unknown> | ICounterfactualData>
+  ) => Promise<Record<string, unknown> | ICounterfactualData>,
+  telemetryHook?: ((message: ITelemetryEvent) => void) | undefined
 ): Promise<
   ICounterfactualData | Record<string, unknown> | undefined | unknown
 > {
@@ -21,9 +27,18 @@ export async function getLocalCounterfactualsFromSDK(
         absoluteIndex,
         new AbortController().signal
       );
+    telemetryHook?.({
+      level: TelemetryLevels.Trace,
+      type: TelemetryEventName.LocalCounterfactualsFetchSuccess
+    });
 
     return result;
   } catch (error) {
+    telemetryHook?.({
+      context: error,
+      level: TelemetryLevels.Error,
+      type: TelemetryEventName.LocalCounterfactualsFetchError
+    });
     return error;
   }
 }

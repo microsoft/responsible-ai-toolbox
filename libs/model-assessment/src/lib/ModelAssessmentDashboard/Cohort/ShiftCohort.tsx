@@ -16,7 +16,6 @@ import {
   DatasetTaskType,
   defaultModelAssessmentContext,
   ErrorCohort,
-  isAllDataErrorCohort,
   ModelAssessmentContext,
   translateToNewFilters
 } from "@responsible-ai/core-ui";
@@ -48,8 +47,7 @@ export class ShiftCohort extends React.Component<
     const savedCohorts = this.context.errorCohorts.filter(
       (errorCohort) =>
         !errorCohort.isTemporary &&
-        (this.props.showAllDataCohort ||
-          !isAllDataErrorCohort(errorCohort, true))
+        (this.props.showAllDataCohort || !errorCohort.isAllDataCohort)
     );
     const options: IDropdownOption[] = savedCohorts.map(
       (savedCohort: ErrorCohort, index: number) => {

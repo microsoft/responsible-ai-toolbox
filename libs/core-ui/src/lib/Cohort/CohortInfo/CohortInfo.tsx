@@ -6,7 +6,6 @@ import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { getCohortFilterCount } from "../../util/getCohortFilterCount";
-import { isAllDataErrorCohort } from "../allDataCohortUtils";
 import { ErrorCohortStats } from "../CohortStats";
 import { ErrorCohort } from "../ErrorCohort";
 import { PredictionPath } from "../PredictionPath/PredictionPath";
@@ -38,7 +37,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
             <Label>
               {localization.ErrorAnalysis.CohortInfo.basicInformation}
             </Label>
-            {!isAllDataErrorCohort(this.props.currentCohort, true) && (
+            {!this.props.currentCohort.isAllDataCohort && (
               <Text>{this.props.currentCohort.cohort.name}</Text>
             )}
             <Text>

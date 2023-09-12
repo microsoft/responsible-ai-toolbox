@@ -3,6 +3,6 @@
 
 name = 'rai_test_utils'
 _major = '0'
-_minor = '2'
-_patch = '0'
+_minor = '4'
+_patch = '1'
 version = '{}.{}.{}'.format(_major, _minor, _patch)

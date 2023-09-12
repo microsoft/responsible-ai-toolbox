@@ -2,7 +2,9 @@
 # Licensed under the MIT License.
 
 import pandas as pd
+import pytest
 
+from raiutils.exceptions import SystemErrorException
 from responsibleai.rai_insights import RAIInsights
 
 
@@ -18,3 +20,12 @@ class TestRAIInsightsGetFeatureRanges:
         assert len(feature_ranges) == 2
         assert 'Category' == feature_ranges[0]['column_name']
         assert 'Numerical' == feature_ranges[1]['column_name']
+
+    def test_invalid_float_cast_raises_value_error(self):
+        data = {'col1': ['A', 'B', 'C', '50']}
+
+        df = pd.DataFrame(data)
+
+        with pytest.raises(SystemErrorException,
+                           match='Unable to convert min or max value'):
+            RAIInsights._get_feature_ranges(df, [], ['col1'])

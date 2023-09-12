@@ -63,7 +63,10 @@ export const MulticlassDnnModelDebugging = {
     initialCohorts: [
       {
         metrics: {
-          accuracy: "0.674"
+          accuracy: "0.674",
+          macroF1Score: "0.673",
+          macroPrecisionScore: "0.669",
+          macroRecallScore: "0.677"
         },
         name: "All data",
         sampleSize: "89"
@@ -71,7 +74,10 @@ export const MulticlassDnnModelDebugging = {
     ],
     newCohort: {
       metrics: {
-        accuracy: "0.67"
+        accuracy: "0.67",
+        macroF1Score: "0.671",
+        macroPrecisionScore: "0.666",
+        macroRecallScore: "0.675"
       },
       name: "CohortCreateE2E-multiclass-dnn",
       sampleSize: "88"

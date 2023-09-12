@@ -1,21 +1,31 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IInterpretTextData } from "../interpretText/IInterpretTextData";
+
 export interface IModelAssessmentData {
   errorAnalysisData?: IErrorAnalysisData;
+  textExplanationData?: IInterpretTextData;
   modelStatisticsData?: IModelStatisticsData;
   modelOverviewData?: IModelOverviewData;
   datasetExplorerData?: IDatasetExplorerData;
+  visionDataExplorerData?: IVisionDataExplorerData;
   featureImportanceData?: IFeatureImportanceData;
   dataBalanceData?: IDataBalanceData;
   causalAnalysisData?: ICausalAnalysisData;
   whatIfCounterfactualsData?: IWhatIfCounterfactualsData;
+  whatIfForecastingData?: IWhatIfForecastingData;
   featureNames?: string[];
   cohortDefaultName?: string;
   checkDupCohort?: boolean;
   isMulticlass?: boolean;
   isRegression?: boolean;
   isBinary?: boolean;
+  isObjectDetection?: boolean;
+  isImageMultiLabel?: boolean;
+  isTextMultiLabel?: boolean;
+  isImageClassification?: boolean;
+  isTextClassification?: boolean;
 }
 
 export interface IErrorAnalysisData {
@@ -63,9 +73,9 @@ export interface IModelOverviewData {
   newCohort?: IExpectedCohortData;
   featureCohortView?: {
     singleFeatureCohorts: number;
-    multiFeatureCohorts: number;
+    multiFeatureCohorts?: number;
     firstFeatureToSelect: string;
-    secondFeatureToSelect: string;
+    secondFeatureToSelect?: string;
   };
 }
 
@@ -84,6 +94,12 @@ export interface IDatasetExplorerData {
   colorValueButton?: string;
   noY?: boolean;
   cohortDatasetNewValue?: string;
+}
+
+export interface IVisionDataExplorerData {
+  hasVisionDataExplorerComponent?: boolean;
+  errorInstances?: number;
+  successInstances?: number;
 }
 
 export interface IDEWhiskerPlotData {
@@ -164,6 +180,18 @@ export interface IWhatIfCounterfactualsData {
   newClassValue?: string;
 }
 
+export interface IWhatIfForecastingData {
+  hasWhatIfForecastingComponent?: boolean;
+  numberOfTimeSeriesOptions?: number;
+  timeSeriesToSelect?: string;
+  testTransformation?: {
+    featureToSelect?: string;
+    operationToSelect?: string;
+    operationToSelectIndex?: number;
+    valueToSelect?: number;
+  };
+}
+
 export enum RAINotebookNames {
   "CensusClassificationModelDebugging" = "responsibleaidashboard-census-classification-model-debugging.py",
   "CensusClassificationModelDebuggingDataBalanceExperience" = "responsibleaidashboard-census-classification-model-debugging.py",
@@ -176,5 +204,13 @@ export enum RAINotebookNames {
   "HousingDecisionMaking" = "responsibleaidashboard-housing-decision-making.py",
   "HousingDecisionMakingDataBalanceExperience" = "responsibleaidashboard-housing-decision-making.py",
   "MulticlassDnnModelDebugging" = "responsibleaidashboard-multiclass-dnn-model-debugging.py",
-  "MulticlassDnnModelDebuggingDataBalanceExperience" = "responsibleaidashboard-multiclass-dnn-model-debugging.py"
+  "MulticlassDnnModelDebuggingDataBalanceExperience" = "responsibleaidashboard-multiclass-dnn-model-debugging.py",
+  "OrangeJuiceForecasting" = "responsibleaidashboard-orange-juice-forecasting.py",
+  "OrangeJuiceForecastingDataBalanceExperience" = "responsibleaidashboard-orange-juice-forecasting.py",
+  "FridgeImageClassificationModelDebugging" = "responsibleaidashboard-fridge-image-classification-model-debugging.py",
+  "FridgeMultilabelModelDebugging" = "responsibleaidashboard-fridge-multilabel-image-classification-model-debugging.py",
+  "FridgeObjectDetectionModelDebugging" = "responsibleaidashboard-fridge-object-detection-model-debugging.py",
+  "DBPediaTextClassificationModelDebugging" = "responsibleaidashboard-DBPedia-text-classification-model-debugging.py",
+  "BlbooksgenreTextClassificationModelDebugging" = "responsibleaidashboard-blbooksgenre-binary-text-classification-model-debugging.py",
+  "CovidTextClassificationModelDebugging" = "responsibleaidashboard-covid-event-multilabel-text-classification-model-debugging.py"
 }
