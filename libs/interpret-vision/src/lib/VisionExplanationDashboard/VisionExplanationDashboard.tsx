@@ -3,6 +3,7 @@
 
 import { IDropdownOption, Stack, PivotItem } from "@fluentui/react";
 import {
+  DatasetTaskType,
   defaultModelAssessmentContext,
   IVisionListItem,
   ModelAssessmentContext
@@ -89,10 +90,11 @@ export class VisionExplanationDashboard extends React.Component<
             updateSelectedIndices={this.updateSelectedIndices}
             selectedCohort={this.props.selectedCohort}
             setSelectedCohort={this.props.setSelectedCohort}
+            taskType={this.context.dataset.task_type}
           />
         </Stack.Item>
         {this.state.panelOpen &&
-        this.context.dataset.task_type === "object_detection" ? (
+        this.context.dataset.task_type === DatasetTaskType.ObjectDetection ? (
           <FlyoutObjectDetection
             dataset={this.context.dataset}
             explanations={this.state.computedExplanations}
