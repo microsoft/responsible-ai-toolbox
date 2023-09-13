@@ -686,22 +686,20 @@ class RAIVisionInsights(RAIBaseInsights):
 
         return dashboard_dataset
 
-    def _generate_od_error_labels(self, true_y, predicted_y, class_names):
+    def _generate_od_error_labels(self, true_y, pred_y, class_names):
         """Utilized Error Labeling to generate labels with correct and incorrect objects.
 
         :param true_y: The true labels.
         :type true_y: list
-        :param predicted_y: The predicted labels.
-        :type predicted_y: list
+        :param pred_y: The predicted labels.
+        :type pred_y: list
         :return: The aggregated labels.
         :rtype: List[str]
         """
         INCORRECT, CORRECT = 'incorrect', 'correct'
         object_detection_labels = []
         for image_idx in range(len(true_y)):
-            image_labels = defaultdict(
-                lambda: {INCORRECT: defaultdict(int), CORRECT: defaultdict(int)}
-            )
+            image_labels = defaultdict(lambda: defaultdict(int))
             error_matrix = ErrorLabeling(
                 ModelTask.OBJECT_DETECTION,
                 pred_y[image_idx],
@@ -710,15 +708,15 @@ class RAIVisionInsights(RAIBaseInsights):
 
             for label_idx in range(len(error_matrix)):
                 object_label = class_names[int(true_y[image_idx][label_idx][0]-1)]
-                if ErrorLabelType.MATCH in error_arr[label_idx]:
+                if ErrorLabelType.MATCH in error_matrix[label_idx]:
                     image_labels[CORRECT][object_label] += 1
                 else:
                     image_labels[INCORRECT][object_label] += 1
 
                 image_labels[INCORRECT][object_label] += \
-                    error_arr[label_idx].count(ErrorLabelType.DUPLICATE_DETECTION)
+                    np.count_nonzero(error_matrix[label_idx] == ErrorLabelType.DUPLICATE_DETECTION)
 
-            agg_label = f"{sum(image_labels[CORRECT].values())} {CORRECT},
+            agg_label = f"{sum(image_labels[CORRECT].values())} {CORRECT}, \
                           {sum(image_labels[INCORRECT].values())} {INCORRECT}"
 
             object_detection_labels.append(agg_label)
