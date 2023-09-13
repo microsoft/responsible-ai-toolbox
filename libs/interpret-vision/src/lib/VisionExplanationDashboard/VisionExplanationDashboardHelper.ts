@@ -90,9 +90,7 @@ export function preprocessData(
     const x = dataset.object_detection_true_y?.[index];
     const odTrueY = typeof x === "undefined" ? defVal : x;
     const l = dataset.object_detection_labels?.[index]
-    console.log(l);
     const odAggLabel = typeof l === "undefined" ? defVal : l;
-    console.log(odAggLabel);
 
     const item: IVisionListItem = {
       image,
