@@ -1141,7 +1141,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Yorumlanabilirlik Panosu",
-      "importantWords": "Show most Important Words",
+      "importantWords": "Show most important words",
       "topFeatureList": "En çok kullanılan özellikler listesinin analizi",
       "allButton": "TÜM ÖZELLİKLER",
       "negButton": "NEGATİF ÖZELLİKLER",
@@ -1155,7 +1155,8 @@
       "predictedAnswer": "Predicted answer: ",
       "trueAnswer": "True answer: ",
       "inputs": "Inputs",
-      "outputs": "Outputs"
+      "outputs": "Outputs",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "METİN ÖZELLİĞİ GÖSTERGESİ",
