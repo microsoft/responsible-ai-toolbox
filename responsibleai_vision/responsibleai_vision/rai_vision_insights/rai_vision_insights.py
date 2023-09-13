@@ -694,7 +694,7 @@ class RAIVisionInsights(RAIBaseInsights):
         :param predicted_y: The predicted labels.
         :type predicted_y: list
         :return: The aggregated labels.
-        :rtype: list
+        :rtype: List[str]
         """
         INCORRECT, CORRECT = 'incorrect', 'correct'
         object_detection_labels = []
@@ -718,7 +718,10 @@ class RAIVisionInsights(RAIBaseInsights):
                 image_labels[INCORRECT][object_label] += \
                     error_arr[label_idx].count(ErrorLabelType.DUPLICATE_DETECTION)
 
-            object_detection_labels.append(image_labels)
+            agg_label = f"{sum(image_labels[CORRECT].values())} {CORRECT},
+                          {sum(image_labels[INCORRECT].values())} {INCORRECT}"
+
+            object_detection_labels.append(agg_label)
 
         return object_detection_labels
 

@@ -71,13 +71,12 @@ function generateItems(type: string, examples: IVisionListItem[]): IItemsData {
   const labelVisibilities: Map<string, boolean> = new Map();
   const selectedKeys: string[] = [];
   examples.forEach((example) => {
-    let label = "";
+    let baseLabel = example[type]?.toString();
+    let label = baseLabel ? baseLabel : "";
     if (type === labelTypes.predictedY) {
       label = getJoinedLabelString(example.predictedY);
     } else if (type === labelTypes.trueY) {
       label = getJoinedLabelString(example.trueY);
-    } else {
-      label = example[type].toString();
     }
 
     if (!items) {

@@ -113,5 +113,12 @@ export const fridgeObjectDetection: IDataset = {
     [0, 1, 0, 1],
     [1, 0, 1, 0],
     [0, 1, 0, 1]
+  ],
+  object_detection_labels: [
+    "2 correct, 0 incorrect",
+    "2 correct, 0 incorrect",
+    "2 correct, 0 incorrect",
+    "2 correct, 0 incorrect",
+    "2 correct, 0 incorrect",
   ]
 };

@@ -38,7 +38,7 @@ class Dataset:
     object_detection_true_y: Optional[List]
     object_detection_predicted_y: Optional[List]
     imageDimensions: Optional[List[List[int]]]
-    object_detection_labels: Optional[List[Dict[str, Dict[str, Any]]]]
+    object_detection_labels: Optional[List[str]]
 
 
 class BoundedCoordinates:
