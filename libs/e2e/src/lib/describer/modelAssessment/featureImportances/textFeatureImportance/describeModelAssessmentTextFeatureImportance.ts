@@ -27,6 +27,9 @@ export function describeModelAssessmentTextFeatureImportance(
     if (datasetShape.textExplanationData) {
       const textExplanationData = datasetShape.textExplanationData;
       it("should be able to select a table row for testing", () => {
+        if (textExplanationData.expandCorrect) {
+          cy.get(Locators.IFICollapseButton).first().click();
+        }
         selectRow(
           "Index",
           textExplanationData.explanationIndex.toString(),

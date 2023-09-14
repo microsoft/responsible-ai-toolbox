@@ -29,7 +29,16 @@ class TestRAITextInsights(object):
         data = load_squad_dataset()
         pred = create_question_answering_pipeline()
         task_type = ModelTask.QUESTION_ANSWERING
-        run_rai_insights(pred, data, data[:5], ANSWERS, task_type)
+        run_rai_insights(pred, data, data[:3], ANSWERS, task_type)
+
+    def test_rai_insights_question_answering_varied_outputs(self):
+        data = load_squad_dataset()
+        pred = create_question_answering_pipeline()
+        task_type = ModelTask.QUESTION_ANSWERING
+        # data[6:7] seems to create varied output sizes for some masking
+        # adding to test suite to ensure this passes
+        test_data = data[6:7].reset_index(drop=True)
+        run_rai_insights(pred, data, test_data, ANSWERS, task_type)
 
     def test_rai_insights_question_answering_metadata(self):
         data = load_squad_dataset(with_metadata=True)
@@ -37,7 +46,7 @@ class TestRAITextInsights(object):
         task_type = ModelTask.QUESTION_ANSWERING
         feature_metadata = FeatureMetadata()
         feature_metadata.categorical_features = ['title']
-        run_rai_insights(pred, data, data[:5], ANSWERS, task_type,
+        run_rai_insights(pred, data, data[:3], ANSWERS, task_type,
                          feature_metadata)
 
     def test_rai_insights_multilabel(self):
