@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getDefaultTopKWords } from "../../../util/getDefaultTopKWords";
-import { interpretTextDatasets } from "../interpretTextDatasets";
+import { getDefaultTopKWords } from "../getDefaultTopKWords";
+import { IInterpretTextData } from "../IInterpretTextData";
 
 import { describeBarChart } from "./describeBarChart";
 import { describeClassImportanceWeightsDropdown } from "./describeClassImportanceWeightsDropdown";
@@ -13,19 +13,15 @@ import { describeTextHighlighting } from "./describeTextHighlighting";
 
 const testName = "Individual feature importance";
 
-export function describeIndividualFeatureImportance(
-  name: keyof typeof interpretTextDatasets
+export function describeTextIndividualFeatureImportance(
+  datasetShape: IInterpretTextData
 ): void {
-  const datasetShape = interpretTextDatasets[name];
   describe(testName, () => {
-    before(() => {
-      cy.visit(`#/interpretText/${name}/light/english/Version-1`);
-    });
     describeLegend();
     describeTextHighlighting(datasetShape);
     describeBarChart(getDefaultTopKWords(datasetShape.localExplanations));
     describeClassImportanceWeightsDropdown(datasetShape);
     describeSlider(datasetShape);
-    describeRadioButtonFeatureWeightsSelector();
+    describeRadioButtonFeatureWeightsSelector(datasetShape);
   });
 }

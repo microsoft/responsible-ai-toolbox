@@ -3,6 +3,7 @@
 
 import { IDropdownOption, Stack, PivotItem } from "@fluentui/react";
 import {
+  DatasetTaskType,
   defaultModelAssessmentContext,
   IVisionListItem,
   ModelAssessmentContext
@@ -61,54 +62,7 @@ export class VisionExplanationDashboard extends React.Component<
   public render(): React.ReactNode {
     const classNames = visionExplanationDashboardStyles();
     const imageStyles = imageListStyles();
-    return this.context.dataset.task_type === "object_detection" ? (
-      <Stack
-        horizontal={false}
-        grow
-        id="VisionDataExplorer"
-        tokens={{ childrenGap: "l1", padding: "m 40px" }}
-      >
-        <Stack.Item>
-          <VisionExplanationDashboardCommon
-            thisdashboard={this}
-            imageStyles={imageStyles}
-            classNames={classNames}
-          />
-        </Stack.Item>
-        <Stack.Item>
-          <TabsView
-            addCohort={this.addCohortWrapper}
-            errorInstances={this.state.errorInstances}
-            successInstances={this.state.successInstances}
-            imageDim={this.state.imageDim}
-            numRows={this.state.numRows}
-            otherMetadataFieldNames={this.state.otherMetadataFieldNames}
-            pageSize={this.state.pageSize}
-            searchValue={this.state.searchValue}
-            selectedItem={this.state.selectedItem}
-            selectedKey={this.state.selectedKey}
-            onItemSelect={this.onItemSelect}
-            updateSelectedIndices={this.updateSelectedIndices}
-            selectedCohort={this.props.selectedCohort}
-            setSelectedCohort={this.props.setSelectedCohort}
-          />
-        </Stack.Item>
-        <Stack.Item>
-          {this.state.panelOpen && (
-            <FlyoutObjectDetection
-              dataset={this.context.dataset}
-              explanations={this.state.computedExplanations}
-              isOpen={this.state.panelOpen}
-              item={this.state.selectedItem}
-              loadingExplanation={this.state.loadingExplanation}
-              otherMetadataFieldNames={this.state.otherMetadataFieldNames}
-              callback={this.onPanelClose}
-              onChange={this.onItemSelectObjectDetection}
-            />
-          )}
-        </Stack.Item>
-      </Stack>
-    ) : (
+    return (
       <Stack
         horizontal={false}
         grow
@@ -136,9 +90,22 @@ export class VisionExplanationDashboard extends React.Component<
             updateSelectedIndices={this.updateSelectedIndices}
             selectedCohort={this.props.selectedCohort}
             setSelectedCohort={this.props.setSelectedCohort}
+            taskType={this.context.dataset.task_type}
           />
         </Stack.Item>
-        <Stack.Item>
+        {this.state.panelOpen &&
+        this.context.dataset.task_type === DatasetTaskType.ObjectDetection ? (
+          <FlyoutObjectDetection
+            dataset={this.context.dataset}
+            explanations={this.state.computedExplanations}
+            isOpen={this.state.panelOpen}
+            item={this.state.selectedItem}
+            loadingExplanation={this.state.loadingExplanation}
+            otherMetadataFieldNames={this.state.otherMetadataFieldNames}
+            callback={this.onPanelClose}
+            onChange={this.onItemSelectObjectDetection}
+          />
+        ) : (
           <Flyout
             explanations={this.state.computedExplanations}
             isOpen={this.state.panelOpen}
@@ -147,7 +114,7 @@ export class VisionExplanationDashboard extends React.Component<
             otherMetadataFieldNames={this.state.otherMetadataFieldNames}
             callback={this.onPanelClose}
           />
-        </Stack.Item>
+        )}
       </Stack>
     );
   }

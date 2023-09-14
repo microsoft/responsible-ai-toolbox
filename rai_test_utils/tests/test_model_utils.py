@@ -2,6 +2,8 @@
 # Licensed under the MIT License.
 
 import numpy as np
+import pandas as pd
+import pytest
 from ml_wrappers import wrap_model
 
 from rai_test_utils.datasets.tabular import (create_housing_data,
@@ -12,8 +14,15 @@ from rai_test_utils.datasets.vision import (
 from rai_test_utils.models import (create_models_classification,
                                    create_models_object_detection,
                                    create_models_regression)
-from rai_test_utils.models.sklearn import \
-    create_complex_classification_pipeline
+from rai_test_utils.models.sklearn import (
+    create_complex_classification_pipeline, create_complex_regression_pipeline)
+
+try:
+    import torch  # noqa: F401
+    import torchvision  # noqa: F401
+    pytorch_installed = True
+except ImportError:
+    pytorch_installed = False
 
 
 class TestModelUtils:
@@ -39,8 +48,20 @@ class TestModelUtils:
             X_train, y_train, num_feature_names, cat_feature_names)
         assert pipeline.predict(X_test) is not None
 
+    def test_create_complex_regression_pipeline(self):
+        X_train, X_test, y_train, y_test, num_feature_names, \
+            = create_housing_data()
+        X_train = pd.DataFrame(X_train, columns=num_feature_names)
+        X_test = pd.DataFrame(X_test, columns=num_feature_names)
+        pipeline = create_complex_regression_pipeline(
+            X_train, y_train, num_feature_names, [])
+        assert pipeline.predict(X_test) is not None
+
+    @pytest.mark.skipif(not pytorch_installed,
+                        reason="requires torch/torchvision")
     def test_object_detection_models(self):
-        dataset = load_fridge_object_detection_dataset().iloc[:2]
+        dataset = \
+            load_fridge_object_detection_dataset().iloc[:2]
 
         X_train = dataset[["image"]]
         classes = np.array(['can', 'carton', 'milk_bottle', 'water_bottle'])

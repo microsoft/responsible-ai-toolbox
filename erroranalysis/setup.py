@@ -15,6 +15,11 @@ with open("README.md", "r") as fh:
 with open('requirements.txt') as f:
     install_requires = [line.strip() for line in f]
 
+with open('requirements-object-detection.txt') as f:
+    extras_require = {
+        'object_detection': [line.strip() for line in f]
+    }
+
 setuptools.setup(
     name=name,  # noqa: F821
     version=version,  # noqa: F821
@@ -27,6 +32,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     python_requires='>=3.6',
     install_requires=install_requires,
+    extras_require=extras_require,
     classifiers=[
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",

@@ -101,19 +101,23 @@ class TestRAIVisionInsights(object):
         run_rai_insights(model, data[:3], FRIDGE_MULTILABEL_TARGETS,
                          task_type, test_error_analysis=True)
 
-    @pytest.mark.skip("This test seems to fail due to issues in the \
-                      MacOS/Linux versions of the build/PR gate.")
+    @pytest.mark.skipif(
+        sys.version_info[:2] == (3, 7) or sys.version_info[:2] == (3, 8),
+        reason='Incompatible torch state update for fridge model')
     @pytest.mark.parametrize('num_masks', [None, 25, DEFAULT_NUM_MASKS])
     @pytest.mark.parametrize('mask_res', [None, DEFAULT_MASK_RES, 8])
     def test_rai_insights_object_detection_fridge(self, num_masks, mask_res):
         data = load_fridge_object_detection_dataset()
-        model = retrieve_fridge_object_detection_model()
+        model = retrieve_fridge_object_detection_model(
+            load_fridge_weights=True
+        )
         task_type = ModelTask.OBJECT_DETECTION
         class_names = np.array(['can', 'carton',
                                 'milk_bottle', 'water_bottle'])
         run_rai_insights(model, data[:2], ImageColumns.LABEL,
                          task_type, class_names,
-                         num_masks=num_masks, mask_res=mask_res)
+                         num_masks=num_masks, mask_res=mask_res,
+                         test_error_analysis=True)
 
     @pytest.mark.parametrize('num_masks', [-100, -1, 0])
     def test_rai_insights_invalid_num_masks(self, num_masks):
@@ -223,7 +227,11 @@ class TestRAIVisionInsights(object):
         task_type = ModelTask.OBJECT_DETECTION
         class_names = np.array(['can', 'carton',
                                 'milk_bottle', 'water_bottle'])
-        dropped_features = [i for i in range(0, 10)]
+        dropped_cols_num = [i for i in range(0, 10)]
+        dropped_features = ["{}".format(i) for i in dropped_cols_num]
+        # rename column names to strings since RAI validation fails otherwise
+        data = data.rename(columns={i: j for i, j in zip(
+            dropped_cols_num, dropped_features)}).reset_index(drop=True)
         run_rai_insights(model, data[:3], ImageColumns.LABEL,
                          task_type, class_names,
                          dropped_features=dropped_features)

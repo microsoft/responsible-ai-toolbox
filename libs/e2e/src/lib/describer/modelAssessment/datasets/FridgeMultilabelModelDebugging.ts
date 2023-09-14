@@ -19,8 +19,12 @@ export const FridgeMultilabelModelDebugging = {
     hasFeatureImportanceComponent: false
   },
   featureNames: ["image"],
-  isMultiLabel: true,
+  isImageMultiLabel: true,
   modelOverviewData: {
+    featureCohortView: {
+      firstFeatureToSelect: "mean_pixel_value",
+      singleFeatureCohorts: 3
+    },
     hasModelOverviewComponent: true,
     initialCohorts: [
       {

@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { textExplanationData } from "./BlbooksgenreTextExplanationData";
+
 export const BlbooksgenreTextClassificationModelDebugging = {
   causalAnalysisData: {
     hasCausalAnalysisComponent: false
@@ -48,5 +50,6 @@ export const BlbooksgenreTextClassificationModelDebugging = {
       name: "CohortCreateE2E-text-classification",
       sampleSize: "19"
     }
-  }
+  },
+  textExplanationData
 };

@@ -1,7 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+export * from "./lib/describer/interpretText/IInterpretTextData";
+export * from "./lib/describer/interpretText/individualFeatureImportance/describeTextIndividualFeatureImportance";
 export * from "./lib/describer/modelAssessment/featureImportances/aggregateFeatureImportance/describeAggregateFeatureImportance";
+export * from "./lib/describer/modelAssessment/featureImportances/textFeatureImportance/describeModelAssessmentTextFeatureImportance";
 export * from "./lib/describer/modelAssessment/causalAnalysis/describeCausalAnalysis";
 export * from "./lib/describer/modelAssessment/dataBalance/describeDataBalance";
 export * from "./lib/describer/modelAssessment/dataExplorer/describeDatasetExplorer";
