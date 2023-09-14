@@ -9,7 +9,7 @@ import {
   Separator,
   Text
 } from "@fluentui/react";
-import { IVisionListItem } from "@responsible-ai/core-ui";
+import { DatasetTaskType, IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
@@ -26,6 +26,7 @@ export interface IVisionExplanationDashboardCommonProps {
   thisdashboard: VisionExplanationDashboard;
   imageStyles: IProcessedStyleSet<IDatasetExplorerTabStyles>;
   classNames: IProcessedStyleSet<IVisionExplanationDashboardStyles>;
+  taskType: string;
 }
 
 export interface IVisionExplanationDashboardCommonState {
@@ -89,7 +90,7 @@ export class VisionExplanationDashboardCommon extends React.Component<
                   onPageSizeSelect={this.props.thisdashboard.onPageSizeSelect}
                 />
               </Stack.Item>
-            ) : (
+            ) : this.props.taskType !== DatasetTaskType.ObjectDetection ? (
               <Stack
                 horizontal
                 tokens={{ childrenGap: "l1" }}
@@ -123,7 +124,7 @@ export class VisionExplanationDashboardCommon extends React.Component<
                   </Text>
                 </Stack.Item>
               </Stack>
-            )}
+            ) : (<Stack />)}
           </Stack>
         </Stack.Item>
         {this.props.thisdashboard.state.selectedKey ===
