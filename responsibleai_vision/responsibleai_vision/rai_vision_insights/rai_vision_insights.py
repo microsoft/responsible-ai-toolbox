@@ -678,16 +678,18 @@ class RAIVisionInsights(RAIBaseInsights):
                 class_names=dashboard_dataset.class_names
             )
 
-            dashboard_dataset.object_detection_labels = self._generate_od_error_labels(
-                dashboard_dataset.object_detection_true_y,
-                dashboard_dataset.object_detection_predicted_y,
-                class_names=dashboard_dataset.class_names
-            )
+            dashboard_dataset.object_detection_labels = \
+                self._generate_od_error_labels(
+                    dashboard_dataset.object_detection_true_y,
+                    dashboard_dataset.object_detection_predicted_y,
+                    class_names=dashboard_dataset.class_names
+                )
 
         return dashboard_dataset
 
     def _generate_od_error_labels(self, true_y, pred_y, class_names):
-        """Utilized Error Labeling to generate labels with correct and incorrect objects.
+        """Utilized Error Labeling to generate labels
+        with correct and incorrect objects.
 
         :param true_y: The true labels.
         :type true_y: list
@@ -707,14 +709,17 @@ class RAIVisionInsights(RAIBaseInsights):
             ).compute_error_labels()
 
             for label_idx in range(len(error_matrix)):
-                object_label = class_names[int(true_y[image_idx][label_idx][0]-1)]
+                object_label = class_names[
+                    int(true_y[image_idx][label_idx][0] - 1)]
                 if ErrorLabelType.MATCH in error_matrix[label_idx]:
                     image_labels[CORRECT][object_label] += 1
                 else:
                     image_labels[INCORRECT][object_label] += 1
 
                 image_labels[INCORRECT][object_label] += \
-                    np.count_nonzero(error_matrix[label_idx] == ErrorLabelType.DUPLICATE_DETECTION)
+                    np.count_nonzero(
+                        error_matrix[label_idx] ==
+                        ErrorLabelType.DUPLICATE_DETECTION)
 
             agg_label = f"{sum(image_labels[CORRECT].values())} {CORRECT}, \
                           {sum(image_labels[INCORRECT].values())} {INCORRECT}"

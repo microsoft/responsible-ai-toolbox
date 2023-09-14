@@ -90,7 +90,7 @@ export class VisionExplanationDashboardCommon extends React.Component<
                   onPageSizeSelect={this.props.thisdashboard.onPageSizeSelect}
                 />
               </Stack.Item>
-            ) : this.props.taskType !== DatasetTaskType.ObjectDetection ? (
+            ) : (this.props.taskType !== DatasetTaskType.ObjectDetection ? (
               <Stack
                 horizontal
                 tokens={{ childrenGap: "l1" }}
@@ -124,7 +124,7 @@ export class VisionExplanationDashboardCommon extends React.Component<
                   </Text>
                 </Stack.Item>
               </Stack>
-            ) : (<Stack />)}
+            ) : (<Stack />))}
           </Stack>
         </Stack.Item>
         {this.props.thisdashboard.state.selectedKey ===

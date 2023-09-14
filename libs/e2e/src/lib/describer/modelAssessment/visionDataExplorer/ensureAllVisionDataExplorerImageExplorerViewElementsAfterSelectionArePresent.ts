@@ -15,8 +15,8 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
     ).should("exist");
 
     cy.get(
-      Locators.
-      VisionDataExplorerImageExplorerViewImageODAggLabel
+      Locators
+      .VisionDataExplorerImageExplorerViewImageODAggLabel
     ).should("exist");
   } else {
     cy.get(Locators.VisionDataExplorerPredictedLabel).should("exist");
