@@ -66,7 +66,13 @@ export function constructRows(
           row
         );
       } else {
-        pushRowData(tableRow, JointDataset.TrueYLabel, jointDataset, row);
+        pushRowData(
+          tableRow,
+          JointDataset.TrueYLabel,
+          jointDataset,
+          row,
+          index
+        );
       }
     }
     if (jointDataset.hasPredictedY) {
@@ -78,7 +84,13 @@ export function constructRows(
           row
         );
       } else {
-        pushRowData(tableRow, JointDataset.PredictedYLabel, jointDataset, row);
+        pushRowData(
+          tableRow,
+          JointDataset.PredictedYLabel,
+          jointDataset,
+          row,
+          index
+        );
       }
     }
     tableRow.push(...data);
@@ -178,13 +190,19 @@ function pushRowData(
   tableRow: any[],
   property: string,
   jointDataset: JointDataset,
-  row: { [key: string]: number }
+  row: { [key: string]: number },
+  index: number
 ): void {
   const categories = jointDataset.metaDict[property]?.sortedCategoricalValues;
-  if (jointDataset.metaDict[property].isCategorical && categories) {
-    tableRow.push(categories[row[property]]);
-  } else {
-    tableRow.push(row[property]);
+  const rowValue = row[property];
+  if (rowValue !== undefined) {
+    if (jointDataset.metaDict[property].isCategorical && categories) {
+      tableRow.push(categories[row[property]]);
+    } else {
+      tableRow.push(row[property]);
+    }
+  } else if (jointDataset.strDataDict) {
+    tableRow.push(jointDataset.strDataDict[index][property]);
   }
 }
 
