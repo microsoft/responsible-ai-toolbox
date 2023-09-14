@@ -10,11 +10,11 @@ import os
 import pickle
 import shutil
 import warnings
+from collections import defaultdict
 from enum import Enum
 from pathlib import Path
 from typing import Any, Optional
 
-from collections import defaultdict
 import matplotlib.pyplot as pl
 import numpy as np
 import pandas as pd
@@ -22,6 +22,8 @@ import torch
 from ml_wrappers import wrap_model
 from ml_wrappers.common.constants import Device
 from torchmetrics.detection.mean_ap import MeanAveragePrecision
+from vision_explanation_methods.error_labeling.error_labeling import (
+    ErrorLabeling, ErrorLabelType)
 
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from raiutils.data_processing import convert_to_list
@@ -46,9 +48,6 @@ from responsibleai_vision.utils.image_reader import (
     get_base64_string_from_path, get_image_from_path, is_automl_image_model)
 from responsibleai_vision.utils.image_utils import (
     convert_images, get_images, transform_object_detection_labels)
-
-from vision_explanation_methods.error_labeling.error_labeling import \
-    ErrorLabeling, ErrorLabelType
 
 IMAGE = ImageColumns.IMAGE.value
 IMAGE_URL = ImageColumns.IMAGE_URL.value
