@@ -9,6 +9,7 @@ import {
   getChartItems,
   getDefaultVisibleChart
 } from "./charts";
+import { ensureHeatmapToggleBehavior } from "./ensureHeatmapToggleBehavior";
 
 export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
   datasetShape: IModelAssessmentData,
@@ -27,7 +28,7 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
     cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
     cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
 
-    // ensureHeatmapToggleBehavior(Locators.ModelOverviewDisaggregatedAnalysisTable);
+    ensureHeatmapToggleBehavior(Locators.ModelOverviewDisaggregatedAnalysisTable);
 
     const defaultVisibleChart = getDefaultVisibleChart(
       datasetShape.isRegression,
