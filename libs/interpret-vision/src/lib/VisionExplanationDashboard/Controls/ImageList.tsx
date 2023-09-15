@@ -105,7 +105,7 @@ export class ImageList extends React.Component<
     const itemTrueY = item?.trueY;
     const trueY = getJoinedLabelString(itemTrueY);
     const alt = predictedY;
-    const odAggLabel = getJoinedLabelString(item?.odAggLabel);
+    const odAggregate = getJoinedLabelString(item?.odAggregate);
 
     return (
       <Stack
@@ -142,12 +142,12 @@ export class ImageList extends React.Component<
             <Stack>
               <Stack.Item
                 className={classNames.labelContainer}
-                id={`odAggLabel_${item?.index}`}
+                id={`odAggregateLabel_${item?.index}`}
               >
                 <Text
                   className={classNames.label}
                 >
-                  {odAggLabel}
+                  {odAggregate}
                 </Text>
               </Stack.Item>
             </Stack>

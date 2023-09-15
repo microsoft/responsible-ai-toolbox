@@ -25,11 +25,11 @@ export const fridgeObjectDetection: IDataset = {
   ],
   images: fridgeObjectDetectionImages,
   objectDetectionLabels: [
-    "2 correct, 0 incorrect",
-    "2 correct, 0 incorrect",
-    "2 correct, 0 incorrect",
-    "2 correct, 0 incorrect",
-    "2 correct, 0 incorrect",
+    {"correct": "1 milk_bottle, 1 can", "incorrect": "None", "aggregate": "2 correct, 0 incorrect"},
+    {"correct": "1 milk_bottle, 1 can", "incorrect": "None", "aggregate": "2 correct, 0 incorrect"},
+    {"correct": "1 carton, 1 water_bottle", "incorrect": "None", "aggregate": "2 correct, 0 incorrect"},
+    {"correct": "1 can, 1 milk_bottle", "incorrect": "None", "aggregate": "2 correct, 0 incorrect"},
+    {"correct": "1 carton, 1 water_bottle", "incorrect": "None", "aggregate": "2 correct, 0 incorrect"},
   ],
   object_detection_predicted_y: [
     [
