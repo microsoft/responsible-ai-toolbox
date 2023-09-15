@@ -251,7 +251,6 @@ class TestCausalManagerTreatmentCosts:
                 cost_manager.add(['AveRooms', 'Population', 'AveOccup'],
                                  treatment_cost=0)
                 cost_manager.compute()
-
             except TypeError:
                 pass
             mock_create.assert_any_call(ANY, ANY, 'AveRooms', 0, ANY, ANY, ANY)
@@ -269,7 +268,6 @@ class TestCausalManagerTreatmentCosts:
         with pytest.raises(UserConfigValidationException, match=message):
             cost_manager.add(['AveRooms', 'Population', 'AveOccup'],
                              treatment_cost=5)
-            cost_manager.compute()
 
     def test_nonlist_cost(self, cost_manager):
         message = ("treatment_cost must be a list with the same number of "
@@ -281,7 +279,6 @@ class TestCausalManagerTreatmentCosts:
         with pytest.raises(UserConfigValidationException, match=message):
             cost_manager.add(['AveRooms', 'Population', 'AveOccup'],
                              treatment_cost=np.array([1, 2]))
-            cost_manager.compute()
 
     def test_invalid_cost_list_length(self, cost_manager):
         expected = ("treatment_cost must be a list with the same number of "
@@ -290,7 +287,6 @@ class TestCausalManagerTreatmentCosts:
         with pytest.raises(UserConfigValidationException, match=expected):
             cost_manager.add(['AveRooms', 'Population', 'AveOccup'],
                              treatment_cost=[1, 2])
-            cost_manager.compute()
 
     def test_constant_cost_per_treatment_feature(self, cost_manager):
         with patch.object(cost_manager, '_create_policy', return_value=None)\
