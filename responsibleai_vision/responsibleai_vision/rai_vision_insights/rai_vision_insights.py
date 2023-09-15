@@ -724,7 +724,8 @@ class RAIVisionInsights(RAIBaseInsights):
                         ErrorLabelType.DUPLICATE_DETECTION)
 
             agg_label = f"{sum(image_labels[_CORRECT].values())} {_CORRECT}, \
-                          {sum(image_labels[_INCORRECT].values())} {_INCORRECT}"
+                          {sum(image_labels[_INCORRECT].values())} \
+                          {_INCORRECT}"
 
             object_detection_labels.append(agg_label)
 
