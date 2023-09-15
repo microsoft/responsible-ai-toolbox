@@ -28,7 +28,9 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
     cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
     cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
 
-    ensureHeatmapToggleBehavior(Locators.ModelOverviewDisaggregatedAnalysisTable);
+    ensureHeatmapToggleBehavior(
+      Locators.ModelOverviewDisaggregatedAnalysisTable
+    );
 
     const defaultVisibleChart = getDefaultVisibleChart(
       datasetShape.isRegression,
