@@ -85,6 +85,8 @@ _DATETIME_FEATURES = 'datetime_features'
 _TIME_SERIES_ID_FEATURES = 'time_series_id_features'
 _CATEGORICAL_FEATURES = 'categorical_features'
 _DROPPED_FEATURES = 'dropped_features'
+_INCORRECT = 'incorrect'
+_CORRECT = 'correct'
 
 
 def reshape_image(image):
@@ -694,10 +696,11 @@ class RAIVisionInsights(RAIBaseInsights):
         :type true_y: list
         :param pred_y: The predicted labels.
         :type pred_y: list
+        :param class_names: The class labels in the dataset.
+        :type class_names: list
         :return: The aggregated labels.
         :rtype: List[str]
         """
-        INCORRECT, CORRECT = 'incorrect', 'correct'
         object_detection_labels = []
         for image_idx in range(len(true_y)):
             image_labels = defaultdict(lambda: defaultdict(int))
@@ -711,17 +714,17 @@ class RAIVisionInsights(RAIBaseInsights):
                 object_label = class_names[
                     int(true_y[image_idx][label_idx][0] - 1)]
                 if ErrorLabelType.MATCH in error_matrix[label_idx]:
-                    image_labels[CORRECT][object_label] += 1
+                    image_labels[_CORRECT][object_label] += 1
                 else:
-                    image_labels[INCORRECT][object_label] += 1
+                    image_labels[_INCORRECT][object_label] += 1
 
-                image_labels[INCORRECT][object_label] += \
+                image_labels[_INCORRECT][object_label] += \
                     np.count_nonzero(
                         error_matrix[label_idx] ==
                         ErrorLabelType.DUPLICATE_DETECTION)
 
-            agg_label = f"{sum(image_labels[CORRECT].values())} {CORRECT}, \
-                          {sum(image_labels[INCORRECT].values())} {INCORRECT}"
+            agg_label = f"{sum(image_labels[_CORRECT].values())} {_CORRECT}, \
+                          {sum(image_labels[_INCORRECT].values())} {_INCORRECT}"
 
             object_detection_labels.append(agg_label)
 
