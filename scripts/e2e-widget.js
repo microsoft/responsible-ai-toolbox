@@ -33,7 +33,8 @@ const textFileNames = [
   "responsibleaidashboard-covid-event-multilabel-text-classification-model-debugging"
 ];
 const ignoredFiles = [
-  "responsibleaidashboard-question-answering-model-debugging"
+  "responsibleaidashboard-question-answering-model-debugging",
+  "responsibleaidashboard-openai-model-debugging"
 ];
 const fileNames = tabularFileNames
   .concat(visionFileNames)
