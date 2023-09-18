@@ -24,13 +24,6 @@ export const fridgeObjectDetection: IDataset = {
     [499, 666]
   ],
   images: fridgeObjectDetectionImages,
-  objectDetectionLabels: [
-    "2 correct, 0 incorrect",
-    "2 correct, 0 incorrect",
-    "2 correct, 0 incorrect",
-    "2 correct, 0 incorrect",
-    "2 correct, 0 incorrect",
-  ],
   object_detection_predicted_y: [
     [
       [
@@ -104,6 +97,13 @@ export const fridgeObjectDetection: IDataset = {
       [4, 98, 176, 219, 496, 0],
       [2, 220, 130, 392, 505, 0]
     ]
+  ],
+  objectDetectionLabels: [
+    "2 correct, 0 incorrect",
+    "2 correct, 0 incorrect",
+    "2 correct, 0 incorrect",
+    "2 correct, 0 incorrect",
+    "2 correct, 0 incorrect",
   ],
   predicted_y: [
     [1, 0, 1, 0],

@@ -82,16 +82,18 @@ export class VisionExplanationDashboardCommon extends React.Component<
               />
             </Stack.Item>
             {this.props.thisdashboard.state.selectedKey !==
-            VisionDatasetExplorerTabOptions.ImageExplorerView ? (
+             VisionDatasetExplorerTabOptions.ImageExplorerView && (
               <Stack.Item>
                 <PageSizeSelectors
                   selectedKey={this.props.thisdashboard.state.selectedKey}
                   onNumRowsSelect={this.props.thisdashboard.onNumRowsSelect}
                   onPageSizeSelect={this.props.thisdashboard.onPageSizeSelect}
                 />
-              </Stack.Item>
-            ) : (this.props.taskType !== DatasetTaskType.ObjectDetection ? (
-              <Stack
+              </Stack.Item>)}
+            {this.props.thisdashboard.state.selectedKey ===
+             VisionDatasetExplorerTabOptions.ImageExplorerView &&
+             this.props.taskType !== DatasetTaskType.ObjectDetection &&
+             <Stack
                 horizontal
                 tokens={{ childrenGap: "l1" }}
                 verticalAlign="center"
@@ -123,8 +125,7 @@ export class VisionExplanationDashboardCommon extends React.Component<
                     {localization.InterpretVision.Dashboard.legendSuccess}
                   </Text>
                 </Stack.Item>
-              </Stack>
-            ) : (<Stack />))}
+             </Stack>}
           </Stack>
         </Stack.Item>
         {this.props.thisdashboard.state.selectedKey ===
