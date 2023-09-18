@@ -144,11 +144,7 @@ export class ImageList extends React.Component<
                 className={classNames.labelContainer}
                 id={`odAggLabel_${item?.index}`}
               >
-                <Text
-                  className={classNames.label}
-                >
-                  {odAggLabel}
-                </Text>
+                <Text className={classNames.label}>{odAggLabel}</Text>
               </Stack.Item>
             </Stack>
           ) : (

@@ -103,7 +103,7 @@ export const fridgeObjectDetection: IDataset = {
     "2 correct, 0 incorrect",
     "2 correct, 0 incorrect",
     "2 correct, 0 incorrect",
-    "2 correct, 0 incorrect",
+    "2 correct, 0 incorrect"
   ],
   predicted_y: [
     [1, 0, 1, 0],
