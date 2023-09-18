@@ -86,15 +86,15 @@ export function describeModelOverview(
       });
 
       it("should show 'Feature cohorts' view with multiple features when selected", () => {
-        multiSelectComboBox(
-          "#modelOverviewFeatureSelection",
-          datasetShape.modelOverviewData?.featureCohortView
-            ?.secondFeatureToSelect || ""
-        );
         if (
           datasetShape.modelOverviewData?.featureCohortView
             ?.secondFeatureToSelect
         ) {
+          multiSelectComboBox(
+            "#modelOverviewFeatureSelection",
+            datasetShape.modelOverviewData?.featureCohortView
+              ?.secondFeatureToSelect
+          );
           ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
             datasetShape,
             2,
