@@ -80,6 +80,7 @@ export const visionApplications: IApplications = <const>{
             fridgeObjectDetection.object_detection_predicted_y,
           object_detection_true_y:
             fridgeObjectDetection.object_detection_true_y,
+          objectDetectionLabels: fridgeObjectDetection.objectDetectionLabels,
           predicted_y: fridgeObjectDetection.predicted_y,
           target_column: fridgeObjectDetection.target_column,
           task_type: fridgeObjectDetection.task_type,
