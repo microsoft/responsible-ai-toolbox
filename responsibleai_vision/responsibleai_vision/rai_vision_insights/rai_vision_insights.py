@@ -10,6 +10,7 @@ import os
 import pickle
 import shutil
 import warnings
+from collections import defaultdict
 from enum import Enum
 from pathlib import Path
 from typing import Any, Optional
@@ -21,6 +22,8 @@ import torch
 from ml_wrappers import wrap_model
 from ml_wrappers.common.constants import Device
 from torchmetrics.detection.mean_ap import MeanAveragePrecision
+from vision_explanation_methods.error_labeling.error_labeling import (
+    ErrorLabeling, ErrorLabelType)
 
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from raiutils.data_processing import convert_to_list
@@ -82,6 +85,8 @@ _DATETIME_FEATURES = 'datetime_features'
 _TIME_SERIES_ID_FEATURES = 'time_series_id_features'
 _CATEGORICAL_FEATURES = 'categorical_features'
 _DROPPED_FEATURES = 'dropped_features'
+_INCORRECT = 'incorrect'
+_CORRECT = 'correct'
 
 
 def reshape_image(image):
@@ -598,8 +603,6 @@ class RAIVisionInsights(RAIBaseInsights):
                 predicted_y = self._convert_labels(
                     predicted_y, dashboard_dataset.class_names)
             dashboard_dataset.predicted_y = predicted_y
-            if tasktype == ModelTask.OBJECT_DETECTION:
-                dashboard_dataset.object_detection_predicted_y = predicted_y
         row_length = len(dataset)
 
         dashboard_dataset.features = self._ext_test
@@ -611,8 +614,6 @@ class RAIVisionInsights(RAIBaseInsights):
                 true_y = self._convert_labels(
                     true_y, dashboard_dataset.class_names)
             dashboard_dataset.true_y = true_y
-            if tasktype == ModelTask.OBJECT_DETECTION:
-                dashboard_dataset.object_detection_true_y = true_y
 
         dashboard_dataset.feature_names = self._ext_features
         dashboard_dataset.target_column = self.target_column
@@ -678,7 +679,57 @@ class RAIVisionInsights(RAIBaseInsights):
                 class_names=dashboard_dataset.class_names
             )
 
+            dashboard_dataset.object_detection_labels = \
+                self._generate_od_error_labels(
+                    dashboard_dataset.object_detection_true_y,
+                    dashboard_dataset.object_detection_predicted_y,
+                    class_names=dashboard_dataset.class_names
+                )
+
         return dashboard_dataset
+
+    def _generate_od_error_labels(self, true_y, pred_y, class_names):
+        """Utilized Error Labeling to generate labels
+        with correct and incorrect objects.
+
+        :param true_y: The true labels.
+        :type true_y: list
+        :param pred_y: The predicted labels.
+        :type pred_y: list
+        :param class_names: The class labels in the dataset.
+        :type class_names: list
+        :return: The aggregated labels.
+        :rtype: List[str]
+        """
+        object_detection_labels = []
+        for image_idx in range(len(true_y)):
+            image_labels = defaultdict(lambda: defaultdict(int))
+            error_matrix = ErrorLabeling(
+                ModelTask.OBJECT_DETECTION,
+                pred_y[image_idx],
+                true_y[image_idx]
+            ).compute_error_labels()
+
+            for label_idx in range(len(error_matrix)):
+                object_label = class_names[
+                    int(true_y[image_idx][label_idx][0] - 1)]
+                if ErrorLabelType.MATCH in error_matrix[label_idx]:
+                    image_labels[_CORRECT][object_label] += 1
+                else:
+                    image_labels[_INCORRECT][object_label] += 1
+
+                image_labels[_INCORRECT][object_label] += \
+                    np.count_nonzero(
+                        error_matrix[label_idx] ==
+                        ErrorLabelType.DUPLICATE_DETECTION)
+
+            agg_label = f"{sum(image_labels[_CORRECT].values())} {_CORRECT}, \
+                          {sum(image_labels[_INCORRECT].values())} \
+                          {_INCORRECT}"
+
+            object_detection_labels.append(agg_label)
+
+        return object_detection_labels
 
     def _format_od_labels(self, y, class_names):
         """Formats the Object Detection label representation to
