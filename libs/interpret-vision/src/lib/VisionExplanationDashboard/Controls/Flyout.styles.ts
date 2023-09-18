@@ -80,8 +80,8 @@ export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
     },
     odFlyoutContainer: {
       height: "100%",
-      width: "100%",
-      overflow: "auto"
+      overflow: "auto",
+      width: "100%"
     },
     sectionIndent: {
       overflow: "hidden",
