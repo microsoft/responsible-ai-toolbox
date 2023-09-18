@@ -6,9 +6,11 @@
 from typing import List, Optional
 
 import pandas as pd
+from PIL import Image
+from PIL.ExifTags import TAGS
 from tqdm import tqdm
 
-from responsibleai_vision.utils.image_reader import get_image_from_path
+from responsibleai_vision.utils.image_reader import get_all_exif_feature_names, get_image_from_path, get_image_pointer_from_path
 
 
 def extract_features(image_dataset: pd.DataFrame,
@@ -34,7 +36,10 @@ def extract_features(image_dataset: pd.DataFrame,
     :rtype: list, list
     '''
     results = []
-    feature_names = ["mean_pixel_value"]
+    exif_feature_names = get_all_exif_feature_names(image_dataset)
+    feature_names = ["mean_pixel_value"] + exif_feature_names
+
+    # append all feature names other than target column and label
     column_names = image_dataset.columns
     has_dropped_features = dropped_features is not None
     start_meta_index = 2
@@ -44,12 +49,32 @@ def extract_features(image_dataset: pd.DataFrame,
         if has_dropped_features and column_names[j] in dropped_features:
             continue
         feature_names.append(column_names[j])
+
+    # append all features
     for i in tqdm(range(image_dataset.shape[0])):
         image = image_dataset.iloc[i, 0]
         if isinstance(image, str):
-            image = get_image_from_path(image, image_mode)
-        mean_pixel_value = image.mean()
-        row_feature_values = [mean_pixel_value]
+            image_arr = get_image_from_path(image, image_mode)
+            mean_pixel_value = image_arr.mean()
+        else:
+            mean_pixel_value = image.mean()
+        row_feature_values = [mean_pixel_value] + [None] * len(exif_feature_names)
+
+        # append all exif features
+        if isinstance(image, str):
+            image_pointer_path = get_image_pointer_from_path(image)
+            with Image.open(image_pointer_path) as im:
+                exifdata = im.getexif()
+                for tag_id in exifdata:
+                    # get the tag name, instead of human unreadable tag id
+                    tag = TAGS.get(tag_id, tag_id)
+                    data = exifdata.get(tag_id)
+                    # decode bytes
+                    if isinstance(data, bytes):
+                        data = data.decode()
+                    row_feature_values[feature_names.index(tag)] = data
+
+        print(row_feature_values)
         # append all features other than target column and label
         for j in range(start_meta_index, image_dataset.shape[1]):
             if has_dropped_features and column_names[j] in dropped_features:
