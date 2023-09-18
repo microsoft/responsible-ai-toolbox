@@ -73,6 +73,7 @@ export class VisionExplanationDashboard extends React.Component<
           thisdashboard={this}
           imageStyles={imageStyles}
           classNames={classNames}
+          taskType={this.context.dataset.task_type}
         />
         <Stack.Item>
           <TabsView
