@@ -88,16 +88,15 @@ export class FlyoutObjectDetection extends React.Component<
           onDismiss={this.callbackWrapper}
           isLightDismiss
           type={FluentUI.PanelType.large}
-          className={classNames.mainContainer}
+          className={classNames.odFlyoutContainer}
         >
-          <FluentUI.Stack tokens={FlyoutODUtils.stackTokens.medium} horizontal>
+          <FluentUI.Stack tokens={FlyoutODUtils.stackTokens.medium}>
             <FluentUI.Stack>
               <FluentUI.Stack.Item>
                 <FluentUI.Separator className={classNames.separator} />
               </FluentUI.Stack.Item>
               <FluentUI.Stack.Item>
                 <FluentUI.Stack
-                  horizontal
                   tokens={FlyoutODUtils.stackTokens.medium}
                   horizontalAlign="space-around"
                   verticalAlign="center"
@@ -135,13 +134,6 @@ export class FlyoutObjectDetection extends React.Component<
                       </FluentUI.Stack.Item>
                     </FluentUI.Stack>
                   </FluentUI.Stack.Item>
-                  <FluentUI.Stack.Item className={classNames.imageContainer}>
-                    <FluentUI.Stack.Item id="canvasToolsDiv">
-                      <FluentUI.Stack.Item id="selectionDiv">
-                        <div ref={this.callbackRef} id="editorDiv" />
-                      </FluentUI.Stack.Item>
-                    </FluentUI.Stack.Item>
-                  </FluentUI.Stack.Item>
                 </FluentUI.Stack>
               </FluentUI.Stack.Item>
               <FluentUI.Stack.Item>
@@ -163,6 +155,15 @@ export class FlyoutObjectDetection extends React.Component<
                     items={this.state.metadata}
                     onRenderCell={FlyoutStyles.onRenderCell}
                   />
+                </FluentUI.Stack.Item>
+              </FluentUI.Stack>
+              <FluentUI.Stack>
+                <FluentUI.Stack.Item className={classNames.imageContainer}>
+                  <FluentUI.Stack.Item id="canvasToolsDiv">
+                    <FluentUI.Stack.Item id="selectionDiv">
+                      <div ref={this.callbackRef} id="editorDiv" />
+                    </FluentUI.Stack.Item>
+                  </FluentUI.Stack.Item>
                 </FluentUI.Stack.Item>
               </FluentUI.Stack>
             </FluentUI.Stack>
@@ -193,7 +194,7 @@ export class FlyoutObjectDetection extends React.Component<
                       FlyoutODUtils.ExcessLabelLen
                     )
                   ] ? (
-                    <FluentUI.Stack.Item>
+                    <FluentUI.Stack.Item className={classNames.imageContainer}>
                       <FluentUI.Image
                         src={`data:image/jpg;base64,${this.props.explanations
                           .get(item.index)
