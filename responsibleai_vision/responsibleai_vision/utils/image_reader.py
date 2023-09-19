@@ -4,6 +4,7 @@
 """Utilities for reading images."""
 
 import base64
+from copy import deepcopy
 from io import BytesIO
 from typing import Any, Tuple, Union
 from urllib.parse import urlparse
@@ -91,7 +92,7 @@ def get_all_exif_feature_names(image_dataset):
                     # get the tag name, instead of human unreadable tag id
                     tag = TAGS.get(tag_id, tag_id)
                     if tag not in image_dataset.columns:
-                        exif_feature_names.add(tag)
+                        exif_feature_names.add(deepcopy(tag))
     return list(exif_feature_names)
 
 
