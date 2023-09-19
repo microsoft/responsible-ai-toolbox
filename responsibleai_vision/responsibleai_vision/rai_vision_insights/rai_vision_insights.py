@@ -725,13 +725,20 @@ class RAIVisionInsights(RAIBaseInsights):
                         error_matrix[label_idx] ==
                         ErrorLabelType.DUPLICATE_DETECTION)
 
-            rendered_labels[_CORRECT] = ', '.join(f'{value} {key}' for key, value in image_labels[_CORRECT].items())
-            rendered_labels[_CORRECT] = rendered_labels[_CORRECT] if len(rendered_labels[_CORRECT]) > 0 else 'None'
-            rendered_labels[_INCORRECT] = ', '.join(f'{value} {key}' for key, value in image_labels[_INCORRECT].items())
-            rendered_labels[_INCORRECT] = rendered_labels[_INCORRECT] if len(rendered_labels[_INCORRECT]) > 0 else 'None'
-            rendered_labels[_AGGREGATE_LABEL] = f"{sum(image_labels[_CORRECT].values())} {_CORRECT}, \
-                                                    {sum(image_labels[_INCORRECT].values())} \
-                                                    {_INCORRECT}"
+            rendered_labels[_CORRECT] = ', '.join(
+                f'{value} {key}' for key, value in
+                image_labels[_CORRECT].items())
+            if len(rendered_labels[_CORRECT]) == 0:
+                rendered_labels[_CORRECT] = 'None'
+            rendered_labels[_INCORRECT] = ', '.join(
+                f'{value} {key}' for key, value in
+                image_labels[_INCORRECT].items())
+            if len(rendered_labels[_INCORRECT]) == 0:
+                rendered_labels[_INCORRECT] = 'None'
+            rendered_labels[_AGGREGATE_LABEL] = \
+                f"{sum(image_labels[_CORRECT].values())} {_CORRECT}, \
+                  {sum(image_labels[_INCORRECT].values())} \
+                  {_INCORRECT}"
 
             object_detection_labels.append(rendered_labels)
 
