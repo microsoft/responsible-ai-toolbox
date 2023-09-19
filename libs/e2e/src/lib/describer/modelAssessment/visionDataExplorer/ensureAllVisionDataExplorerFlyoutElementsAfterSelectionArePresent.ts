@@ -15,11 +15,10 @@ export function ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresen
   cy.get(Locators.VisionDataExplorerImageExplorerViewButton).click();
 
   cy.waitUntil(() => {
-    cy.reload()
     return Cypress.$(Locators.VisionDataExplorerImageExplorerViewSuccessImage).length > 0
     && (Cypress.$(Locators.VisionDataExplorerImageExplorerViewSuccessImage)[0] as HTMLImageElement).naturalWidth > 0
     && (Cypress.$(Locators.VisionDataExplorerImageExplorerViewSuccessImage)[0] as HTMLImageElement).naturalHeight > 0;
-  });
+  }).get(Locators.VisionDataExplorerImageExplorerViewSuccessImage).click();
 
   // cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage, { timeout: 30000 })
   // .should("be.visible")
@@ -32,7 +31,7 @@ export function ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresen
   //   );
   // });
 
-  cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage).click();
+  // cy.get(Locators.VisionDataExplorerImageExplorerViewSuccessImage).click();
 
   cy.get(Locators.VisionDataExplorerFlyoutPredictionTitle).should("exist");
 
