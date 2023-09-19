@@ -9,7 +9,7 @@ import {
   Separator,
   Text
 } from "@fluentui/react";
-import { IVisionListItem } from "@responsible-ai/core-ui";
+import { DatasetTaskType, IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
@@ -26,6 +26,7 @@ export interface IVisionExplanationDashboardCommonProps {
   thisdashboard: VisionExplanationDashboard;
   imageStyles: IProcessedStyleSet<IDatasetExplorerTabStyles>;
   classNames: IProcessedStyleSet<IVisionExplanationDashboardStyles>;
+  taskType: string;
 }
 
 export interface IVisionExplanationDashboardCommonState {
@@ -81,7 +82,7 @@ export class VisionExplanationDashboardCommon extends React.Component<
               />
             </Stack.Item>
             {this.props.thisdashboard.state.selectedKey !==
-            VisionDatasetExplorerTabOptions.ImageExplorerView ? (
+              VisionDatasetExplorerTabOptions.ImageExplorerView && (
               <Stack.Item>
                 <PageSizeSelectors
                   selectedKey={this.props.thisdashboard.state.selectedKey}
@@ -89,41 +90,44 @@ export class VisionExplanationDashboardCommon extends React.Component<
                   onPageSizeSelect={this.props.thisdashboard.onPageSizeSelect}
                 />
               </Stack.Item>
-            ) : (
-              <Stack
-                horizontal
-                tokens={{ childrenGap: "l1" }}
-                verticalAlign="center"
-              >
-                <Stack.Item id="predictedLabel">
-                  <Text>
-                    {localization.InterpretVision.Dashboard.predictedLabel}
-                  </Text>
-                </Stack.Item>
-                <Stack.Item
-                  id="legendFailure"
-                  className={mergeStyles(
-                    this.props.imageStyles.errorIndicator,
-                    this.props.classNames.legendIndicator
-                  )}
-                >
-                  <Text className={this.props.imageStyles.labelPredicted}>
-                    {localization.InterpretVision.Dashboard.legendFailure}
-                  </Text>
-                </Stack.Item>
-                <Stack.Item
-                  id="legendSuccess"
-                  className={mergeStyles(
-                    this.props.imageStyles.successIndicator,
-                    this.props.classNames.legendIndicator
-                  )}
-                >
-                  <Text className={this.props.imageStyles.labelPredicted}>
-                    {localization.InterpretVision.Dashboard.legendSuccess}
-                  </Text>
-                </Stack.Item>
-              </Stack>
             )}
+            {this.props.thisdashboard.state.selectedKey ===
+              VisionDatasetExplorerTabOptions.ImageExplorerView &&
+              this.props.taskType !== DatasetTaskType.ObjectDetection && (
+                <Stack
+                  horizontal
+                  tokens={{ childrenGap: "l1" }}
+                  verticalAlign="center"
+                >
+                  <Stack.Item id="predictedLabel">
+                    <Text>
+                      {localization.InterpretVision.Dashboard.predictedLabel}
+                    </Text>
+                  </Stack.Item>
+                  <Stack.Item
+                    id="legendFailure"
+                    className={mergeStyles(
+                      this.props.imageStyles.errorIndicator,
+                      this.props.classNames.legendIndicator
+                    )}
+                  >
+                    <Text className={this.props.imageStyles.labelPredicted}>
+                      {localization.InterpretVision.Dashboard.legendFailure}
+                    </Text>
+                  </Stack.Item>
+                  <Stack.Item
+                    id="legendSuccess"
+                    className={mergeStyles(
+                      this.props.imageStyles.successIndicator,
+                      this.props.classNames.legendIndicator
+                    )}
+                  >
+                    <Text className={this.props.imageStyles.labelPredicted}>
+                      {localization.InterpretVision.Dashboard.legendSuccess}
+                    </Text>
+                  </Stack.Item>
+                </Stack>
+              )}
           </Stack>
         </Stack.Item>
         {this.props.thisdashboard.state.selectedKey ===

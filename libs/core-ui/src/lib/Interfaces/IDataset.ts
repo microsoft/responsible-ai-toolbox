@@ -43,6 +43,7 @@ export interface IDataset {
   object_detection_true_y?: number[][][];
   object_detection_predicted_y?: number[][][];
   imageDimensions?: Array<[number, number]>;
+  objectDetectionLabels?: string[];
 }
 
 // TODO Remove DatasetSummary when possible

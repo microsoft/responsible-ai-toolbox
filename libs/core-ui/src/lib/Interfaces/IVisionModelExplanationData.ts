@@ -7,4 +7,5 @@ export interface IVisionListItem {
   predictedY: string | string[];
   trueY: string | string[];
   index: number;
+  odAggLabel: string;
 }

@@ -11,7 +11,7 @@ import {
   IRectangle,
   Stack
 } from "@fluentui/react";
-import { IVisionListItem } from "@responsible-ai/core-ui";
+import { DatasetTaskType, IVisionListItem } from "@responsible-ai/core-ui";
 import React from "react";
 
 import { ISearchable } from "../Interfaces/ISearchable";
@@ -24,6 +24,7 @@ export interface IImageListProps extends ISearchable {
   items: IVisionListItem[];
   imageDim: number;
   selectItem: (item: IVisionListItem) => void;
+  taskType: string;
 }
 
 export interface IImageListState {
@@ -104,6 +105,7 @@ export class ImageList extends React.Component<
     const itemTrueY = item?.trueY;
     const trueY = getJoinedLabelString(itemTrueY);
     const alt = predictedY;
+    const odAggLabel = getJoinedLabelString(item?.odAggLabel);
 
     return (
       <Stack
@@ -136,37 +138,50 @@ export class ImageList extends React.Component<
               className={classNames.image}
             />
           </Stack.Item>
-          <Stack.Item
-            className={
-              predictedY === trueY
-                ? classNames.successIndicator
-                : classNames.errorIndicator
-            }
-            style={{
-              left: ImagePadding
-            }}
-            id={`predictedY_${item?.index}`}
-          >
-            <Text className={classNames.labelPredicted}>{predictedY}</Text>
-          </Stack.Item>
-          <Stack.Item
-            className={classNames.labelContainer}
-            style={{
-              left: ImagePadding - 14,
-              width:
-                this.props.imageDim > 200
-                  ? this.props.imageDim
-                  : this.props.imageDim - 1.35 * ImagePadding
-            }}
-            id={`trueY_${item?.index}`}
-          >
-            <Text
-              className={classNames.label}
-              style={{ width: this.props.imageDim - 20 }}
-            >
-              {trueY}
-            </Text>
-          </Stack.Item>
+          {this.props.taskType === DatasetTaskType.ObjectDetection ? (
+            <Stack>
+              <Stack.Item
+                className={classNames.labelContainer}
+                id={`odAggLabel_${item?.index}`}
+              >
+                <Text className={classNames.label}>{odAggLabel}</Text>
+              </Stack.Item>
+            </Stack>
+          ) : (
+            <Stack>
+              <Stack.Item
+                className={
+                  predictedY === trueY
+                    ? classNames.successIndicator
+                    : classNames.errorIndicator
+                }
+                style={{
+                  left: ImagePadding
+                }}
+                id={`predictedY_${item?.index}`}
+              >
+                <Text className={classNames.labelPredicted}>{predictedY}</Text>
+              </Stack.Item>
+              <Stack.Item
+                className={classNames.labelContainer}
+                style={{
+                  left: ImagePadding - 14,
+                  width:
+                    this.props.imageDim > 200
+                      ? this.props.imageDim
+                      : this.props.imageDim - 1.35 * ImagePadding
+                }}
+                id={`trueY_${item?.index}`}
+              >
+                <Text
+                  className={classNames.label}
+                  style={{ width: this.props.imageDim - 20 }}
+                >
+                  {trueY}
+                </Text>
+              </Stack.Item>
+            </Stack>
+          )}
         </Stack.Item>
       </Stack>
     );
