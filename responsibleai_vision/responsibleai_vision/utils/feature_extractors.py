@@ -3,7 +3,6 @@
 
 """Defines the feature extractors."""
 
-from copy import deepcopy
 from typing import List, Optional
 
 import pandas as pd
@@ -73,7 +72,8 @@ def extract_features(image_dataset: pd.DataFrame,
                     # decode bytes
                     if isinstance(data, bytes):
                         data = data.decode()
-                    row_feature_values[feature_names.index(tag)] = deepcopy(data)
+                    if isinstance(data, str):  # TODO: add support for other data types
+                        row_feature_values[feature_names.index(tag)] = data
 
         # append all features other than target column and label
         for j in range(start_meta_index, image_dataset.shape[1]):

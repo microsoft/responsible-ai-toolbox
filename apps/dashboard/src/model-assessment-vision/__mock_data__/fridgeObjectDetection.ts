@@ -8,13 +8,16 @@ import { fridgeObjectDetectionImages } from "./fridgeObjectDetectionImages";
 export const fridgeObjectDetection: IDataset = {
   categorical_features: [],
   class_names: ["can", "carton", "milk_bottle", "water_bottle"],
-  feature_names: ["mean_pixel_value"],
+  feature_metadata: {
+    categorical_features: ["Make"]
+  },
+  feature_names: ["mean_pixel_value", "Make"],
   features: [
-    [96.30899737412763],
-    [95.32630225415797],
-    [100.3762680516188],
-    [92.000130390912],
-    [95.33849179841164]
+    [96.30899737412763, "Google"],
+    [95.32630225415797, "Google"],
+    [100.3762680516188, "Google"],
+    [92.000130390912, "Google"],
+    [95.33849179841164, "Google"]
   ],
   imageDimensions: [
     [499, 666],

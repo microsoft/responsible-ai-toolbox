@@ -1211,12 +1211,12 @@ class RAIVisionInsights(RAIBaseInsights):
                 object_detection_values = metric_OD.compute()
                 mAP = round(object_detection_values
                             ['map'].item(), 2)
-                APs = [round(value, 2) for value in
-                       object_detection_values['map_per_class']
-                       .detach().tolist()]
-                ARs = [round(value, 2) for value in
-                       object_detection_values['mar_100_per_class']
-                       .detach().tolist()]
+                AP_tensor = object_detection_values['map_per_class'].detach()
+                AP_tensor = [AP_tensor.item()] if AP_tensor.numel() == 1 else AP_tensor.tolist()
+                AR_tensor = object_detection_values['mar_100_per_class'].detach()
+                AR_tensor = [AR_tensor.item()] if AR_tensor.numel() == 1 else AR_tensor.tolist()
+                APs = [round(value, 2) for value in AP_tensor]
+                ARs = [round(value, 2) for value in AR_tensor]
 
                 assert len(APs) == len(ARs) == len(cohort_classes)
 
