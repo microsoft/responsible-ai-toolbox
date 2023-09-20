@@ -1141,7 +1141,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Painel de interpretação",
-      "importantWords": "Mostrar Palavras Mais Importantes",
+      "importantWords": "Show most important words",
       "topFeatureList": "Análise da lista de características de topo",
       "allButton": "TODAS AS FUNCIONALIDADES",
       "negButton": "FUNCIONALIDADES NEGATIVAS",
@@ -1155,7 +1155,8 @@
       "predictedAnswer": "Resposta prevista: ",
       "trueAnswer": "Resposta verdadeira: ",
       "inputs": "Entradas",
-      "outputs": "Saídas"
+      "outputs": "Saídas",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "LEGENDA DA FUNCIONALIDADE DE TEXTO",
