@@ -127,7 +127,7 @@ export class FlyoutObjectDetection extends React.Component<
                             }
                           />
                         </FluentUI.Stack.Item>
-                        <FluentUI.Stack.Item>
+                        <FluentUI.Stack.Item id="flyoutPredictionTitle">
                           {predictedY !== trueY ? (
                             <FluentUI.Text
                               variant="large"
@@ -157,13 +157,13 @@ export class FlyoutObjectDetection extends React.Component<
                           {item?.index}
                         </FluentUI.Text>
                       </FluentUI.Stack.Item>
-                      <FluentUI.Stack.Item>
+                      <FluentUI.Stack.Item id="flyoutPredLabel">
                         <FluentUI.Text variant="large">
                           {localization.InterpretVision.Dashboard.predictedY}
                           {predictedY}
                         </FluentUI.Text>
                       </FluentUI.Stack.Item>
-                      <FluentUI.Stack.Item>
+                      <FluentUI.Stack.Item id="flyoutGtLabel">
                         <FluentUI.Text variant="large">
                           {localization.InterpretVision.Dashboard.trueY}
                           {trueY}
@@ -186,6 +186,7 @@ export class FlyoutObjectDetection extends React.Component<
                   </FluentUI.Text>
                 </FluentUI.Stack.Item>
                 <FluentUI.Stack.Item
+                  id="flyoutMetadata"
                   className={classNames.featureListContainer}
                 >
                   <FluentUI.List

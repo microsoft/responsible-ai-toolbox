@@ -8,6 +8,7 @@ import { IModelAssessmentData } from "../IModelAssessmentData";
 
 import { ensureAllVisionDataExplorerBasicElementsArePresent } from "./ensureAllVisionDataExplorerBasicElementsArePresent";
 import { ensureAllVisionDataExplorerClassViewElementsAfterSelectionArePresent } from "./ensureAllVisionDataExplorerClassViewElementsAfterSelectionArePresent";
+import { ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresent } from "./ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresent";
 import { ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelectionArePresent } from "./ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelectionArePresent";
 import { ensureAllVisionDataExplorerTableViewElementsAfterSelectionArePresent } from "./ensureAllVisionDataExplorerTableViewElementsAfterSelectionArePresent";
 import {
@@ -35,6 +36,11 @@ export function describeVisionDataExplorer(
     }
 
     if (datasetShape.visionDataExplorerData?.hasVisionDataExplorerComponent) {
+      it("should Flyout view components when selected", () => {
+        ensureAllVisionDataExplorerFlyoutElementsAfterSelectionArePresent(
+          datasetShape
+        );
+      });
       it("should have basic components in the initial state", () => {
         ensureAllVisionDataExplorerBasicElementsArePresent();
       });

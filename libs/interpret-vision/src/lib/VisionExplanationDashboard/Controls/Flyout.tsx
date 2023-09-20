@@ -149,7 +149,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                           }
                         />
                       </Stack.Item>
-                      <Stack.Item id="predictionTitle">
+                      <Stack.Item id="flyoutPredictionTitle">
                         {predictedY !== trueY ? (
                           <Text
                             variant="large"
@@ -179,13 +179,13 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                         {item?.index}
                       </Text>
                     </Stack.Item>
-                    <Stack.Item id="predLabel">
+                    <Stack.Item id="flyoutPredLabel">
                       <Text variant="large">
                         {localization.InterpretVision.Dashboard.predictedY}
                         {predictedY}
                       </Text>
                     </Stack.Item>
-                    <Stack.Item id="gtLabel">
+                    <Stack.Item id="flyoutGtLabel">
                       <Text variant="large">
                         {localization.InterpretVision.Dashboard.trueY}
                         {trueY}
@@ -218,6 +218,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
               {!this.props.loadingExplanation[0][index] ? (
                 <Stack.Item>
                   <Image
+                    id={`flyoutExplanationImage_${item?.index}`}
                     src={`data:image/jpg;base64,${this.props.explanations
                       .get(0)
                       ?.get(index)}`}
@@ -245,7 +246,10 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                   {localization.InterpretVision.Dashboard.panelInformation}
                 </Text>
               </Stack.Item>
-              <Stack.Item className={classNames.featureListContainer}>
+              <Stack.Item
+                id="flyoutMetadata"
+                className={classNames.featureListContainer}
+              >
                 <List
                   items={this.state.metadata}
                   onRenderCell={this.onRenderCell}
