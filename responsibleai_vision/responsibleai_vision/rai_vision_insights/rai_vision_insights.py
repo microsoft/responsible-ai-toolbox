@@ -103,6 +103,23 @@ def reshape_image(image):
     return np.expand_dims(image, axis=0)
 
 
+def _feature_metadata_from_dict(feature_meta_dict):
+    """Create a FeatureMetadata from a dictionary.
+
+    :param feature_meta_dict: The dictionary to create the FeatureMetadata
+        from.
+    :type feature_meta_dict: dict
+    :return: The FeatureMetadata created from the dictionary.
+    :rtype: FeatureMetadata
+    """
+    return FeatureMetadata(
+        identity_feature_name=feature_meta_dict[_IDENTITY_FEATURE_NAME],
+        datetime_features=feature_meta_dict[_DATETIME_FEATURES],
+        time_series_id_features=feature_meta_dict[_TIME_SERIES_ID_FEATURES],
+        categorical_features=feature_meta_dict[_CATEGORICAL_FEATURES],
+        dropped_features=feature_meta_dict[_DROPPED_FEATURES])
+
+
 class RAIVisionInsights(RAIBaseInsights):
     """Defines the top-level RAIVisionInsights API.
 
@@ -1015,17 +1032,10 @@ class RAIVisionInsights(RAIBaseInsights):
                 meta[Metadata.FEATURE_METADATA] is None):
             inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata()
         else:
-            inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata(
-                identity_feature_name=meta[Metadata.FEATURE_METADATA][
-                    _IDENTITY_FEATURE_NAME],
-                datetime_features=meta[Metadata.FEATURE_METADATA][
-                    _DATETIME_FEATURES],
-                time_series_id_features=meta[Metadata.FEATURE_METADATA][
-                    _TIME_SERIES_ID_FEATURES],
-                categorical_features=meta[Metadata.FEATURE_METADATA][
-                    _CATEGORICAL_FEATURES],
-                dropped_features=meta[Metadata.FEATURE_METADATA][
-                    _DROPPED_FEATURES])
+            feature_metadata_dict = meta[Metadata.FEATURE_METADATA]
+            feature_metadata = _feature_metadata_from_dict(
+                feature_metadata_dict)
+            inst.__dict__['_' + Metadata.FEATURE_METADATA] = feature_metadata
 
         # load the image downloader as part of metadata
         RAIVisionInsights._load_image_downloader(inst, path)
