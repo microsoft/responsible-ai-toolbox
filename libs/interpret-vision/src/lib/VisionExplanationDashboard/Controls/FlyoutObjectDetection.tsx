@@ -112,7 +112,7 @@ export class FlyoutObjectDetection extends React.Component<
                         tokens={{ childrenGap: "s1" }}
                         horizontalAlign="center"
                         verticalAlign="center"
-                       />
+                      />
                       <FluentUI.Stack.Item>
                         <FluentUI.Text variant="large">
                           {localization.InterpretVision.Dashboard.indexLabel}
@@ -121,13 +121,19 @@ export class FlyoutObjectDetection extends React.Component<
                       </FluentUI.Stack.Item>
                       <FluentUI.Stack.Item>
                         <FluentUI.Text variant="large">
-                          {localization.InterpretVision.Dashboard.correctDetections}
+                          {
+                            localization.InterpretVision.Dashboard
+                              .correctDetections
+                          }
                           {correctDetections}
                         </FluentUI.Text>
                       </FluentUI.Stack.Item>
                       <FluentUI.Stack.Item>
                         <FluentUI.Text variant="large">
-                          {localization.InterpretVision.Dashboard.incorrectDetections}
+                          {
+                            localization.InterpretVision.Dashboard
+                              .incorrectDetections
+                          }
                           {incorrectDetections}
                         </FluentUI.Text>
                       </FluentUI.Stack.Item>
