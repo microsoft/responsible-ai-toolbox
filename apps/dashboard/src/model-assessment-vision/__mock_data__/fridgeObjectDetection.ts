@@ -6,18 +6,18 @@ import { DatasetTaskType, IDataset } from "@responsible-ai/core-ui";
 import { fridgeObjectDetectionImages } from "./fridgeObjectDetectionImages";
 
 export const fridgeObjectDetection: IDataset = {
-  categorical_features: [],
+  categorical_features: ["Make", "Software", "Model"],
   class_names: ["can", "carton", "milk_bottle", "water_bottle"],
   feature_metadata: {
-    categorical_features: ["Make"]
+    categorical_features: ["Make", "Software", "Model"]
   },
-  feature_names: ["mean_pixel_value", "Make"],
+  feature_names: ["mean_pixel_value", "Make", "Software", "Model"],
   features: [
-    [96.30899737412763, "Google"],
-    [95.32630225415797, "Google"],
-    [100.3762680516188, "Google"],
-    [92.000130390912, "Google"],
-    [95.33849179841164, "Google"]
+    [96.30899737412763, "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"],
+    [95.32630225415797, "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"],
+    [100.3762680516188, "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"],
+    [92.000130390912, "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"],
+    [95.33849179841164, "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"]
   ],
   imageDimensions: [
     [499, 666],
