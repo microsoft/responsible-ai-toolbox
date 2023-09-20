@@ -23,7 +23,7 @@ export interface ITabularDatasetMetadata {
   feature_ranges: Array<{ [key: string]: any }>;
 }
 
-interface ObjectDetectionLabelType {
+interface IObjectDetectionLabelType {
   correct: string;
   incorrect: string;
   aggregate: string;
@@ -49,7 +49,7 @@ export interface IDataset {
   object_detection_true_y?: number[][][];
   object_detection_predicted_y?: number[][][];
   imageDimensions?: Array<[number, number]>;
-  objectDetectionLabels?: Array<ObjectDetectionLabelType>;
+  objectDetectionLabels?: IObjectDetectionLabelType[];
 }
 
 // TODO Remove DatasetSummary when possible

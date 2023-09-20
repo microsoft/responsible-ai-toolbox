@@ -99,11 +99,11 @@ export function preprocessData(
     const item: IVisionListItem = {
       image,
       index,
+      odAggregate,
+      odCorrect,
+      odIncorrect,
       odPredictedY,
       odTrueY,
-      odIncorrect,
-      odCorrect,
-      odAggregate,
       predictedY: predictedY[index],
       trueY: trueY[index]
     };

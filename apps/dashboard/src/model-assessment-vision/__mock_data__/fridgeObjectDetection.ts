@@ -24,13 +24,6 @@ export const fridgeObjectDetection: IDataset = {
     [499, 666]
   ],
   images: fridgeObjectDetectionImages,
-  objectDetectionLabels: [
-    {"correct": "1 milk_bottle, 1 can", "incorrect": "None", "aggregate": "2 correct, 0 incorrect"},
-    {"correct": "1 milk_bottle, 1 can", "incorrect": "None", "aggregate": "2 correct, 0 incorrect"},
-    {"correct": "1 carton, 1 water_bottle", "incorrect": "None", "aggregate": "2 correct, 0 incorrect"},
-    {"correct": "1 can, 1 milk_bottle", "incorrect": "None", "aggregate": "2 correct, 0 incorrect"},
-    {"correct": "1 carton, 1 water_bottle", "incorrect": "None", "aggregate": "2 correct, 0 incorrect"},
-  ],
   object_detection_predicted_y: [
     [
       [
@@ -104,6 +97,13 @@ export const fridgeObjectDetection: IDataset = {
       [4, 98, 176, 219, 496, 0],
       [2, 220, 130, 392, 505, 0]
     ]
+  ],
+  objectDetectionLabels: [
+    {"aggregate": "2 correct, 0 incorrect", "correct": "1 milk_bottle, 1 can", "incorrect": "None"},
+    {"aggregate": "2 correct, 0 incorrect", "correct": "1 milk_bottle, 1 can", "incorrect": "None"},
+    {"aggregate": "2 correct, 0 incorrect", "correct": "1 carton, 1 water_bottle", "incorrect": "None"},
+    {"aggregate": "2 correct, 0 incorrect", "correct": "1 can, 1 milk_bottle", "incorrect": "None"},
+    {"aggregate": "2 correct, 0 incorrect", "correct": "1 carton, 1 water_bottle", "incorrect": "None"},
   ],
   predicted_y: [
     [1, 0, 1, 0],
