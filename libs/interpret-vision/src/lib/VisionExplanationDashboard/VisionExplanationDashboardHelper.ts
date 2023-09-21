@@ -89,13 +89,19 @@ export function preprocessData(
     const odPredictedY = typeof y === "undefined" ? defVal : y;
     const x = dataset.object_detection_true_y?.[index];
     const odTrueY = typeof x === "undefined" ? defVal : x;
-    const l = dataset.objectDetectionLabels?.[index];
-    const odAggLabel = typeof l === "undefined" ? defVal : l;
+    const i = dataset.objectDetectionLabels?.[index].incorrect;
+    const c = dataset.objectDetectionLabels?.[index].correct;
+    const a = dataset.objectDetectionLabels?.[index].aggregate;
+    const odIncorrect = typeof i === "undefined" ? defVal : i;
+    const odCorrect = typeof c === "undefined" ? defVal : c;
+    const odAggregate = typeof a === "undefined" ? defVal : a;
 
     const item: IVisionListItem = {
       image,
       index,
-      odAggLabel,
+      odAggregate,
+      odCorrect,
+      odIncorrect,
       odPredictedY,
       odTrueY,
       predictedY: predictedY[index],
