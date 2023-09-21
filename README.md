@@ -101,21 +101,21 @@ Please note that model overview (including fairness analysis) and data explorer 
 
 ### Useful Links
 
-- [Take a tour of Responsible AI Dashboard](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/tour.ipynb)
-- [Get started](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/getting-started.ipynb)
+- [Take a tour of Responsible AI Dashboard](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/tabular/tour.ipynb)
+- [Get started](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/tabular/getting-started.ipynb)
 
 Model Debugging Examples:
-- [Try the tool: model debugging of a census income prediction model (classification)](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-census-classification-model-debugging.ipynb)
-- [Try the tool: model debugging of a housing price prediction model (classification)](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-housing-classification-model-debugging.ipynb)
-- [Try the tool: model debugging of a diabetes progression prediction model (regression)](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-diabetes-regression-model-debugging.ipynb)
-- [Try the tool: model debugging of a fridge object detection model](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-fridge-object-detection-model-debugging.ipynb)
+- [Try the tool: model debugging of a census income prediction model (classification)](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/tabular/responsibleaidashboard-census-classification-model-debugging.ipynb)
+- [Try the tool: model debugging of a housing price prediction model (classification)](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/tabular/responsibleaidashboard-housing-classification-model-debugging.ipynb)
+- [Try the tool: model debugging of a diabetes progression prediction model (regression)](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/tabular/responsibleaidashboard-diabetes-regression-model-debugging.ipynb)
+- [Try the tool: model debugging of a fridge object detection model](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/vision/responsibleaidashboard-fridge-object-detection-model-debugging.ipynb)
 
  Responsible Decision Making Examples:
-- [Try the tool: make decisions for house improvements](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-housing-decision-making.ipynb)
-- [Try the tool: provide recommendations to patients using diabetes data](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-diabetes-decision-making.ipynb)
-- [Try the tool: model debugging of a fridge image classification model](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-fridge-image-classification-model-debugging.ipynb)
-- [Try the tool: model debugging of a fridge multilabel image classification model](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-fridge-multilabel-image-classification-model-debugging.ipynb)
-- [Try the tool: model debugging of a fridge object detection model](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/responsibleaidashboard-fridge-object-detection-model-debugging.ipynb)
+- [Try the tool: make decisions for house improvements](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/tabular/responsibleaidashboard-housing-decision-making.ipynb)
+- [Try the tool: provide recommendations to patients using diabetes data](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/tabular/responsibleaidashboard-diabetes-decision-making.ipynb)
+- [Try the tool: model debugging of a fridge image classification model](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/vision/responsibleaidashboard-fridge-image-classification-model-debugging.ipynb)
+- [Try the tool: model debugging of a fridge multilabel image classification model](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/vision/responsibleaidashboard-fridge-multilabel-image-classification-model-debugging.ipynb)
+- [Try the tool: model debugging of a fridge object detection model](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/vision/responsibleaidashboard-fridge-object-detection-model-debugging.ipynb)
 
 
 
