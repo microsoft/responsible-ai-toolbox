@@ -14,7 +14,7 @@ import {
   Selection,
   MarqueeSelection
 } from "@fluentui/react";
-import { IVisionListItem } from "@responsible-ai/core-ui";
+import { DatasetTaskType, IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
@@ -31,6 +31,7 @@ export interface ITableListProps extends ISearchable {
   pageSize: number;
   selectItem: (item: IVisionListItem) => void;
   updateSelectedIndices: (indices: number[]) => void;
+  taskType: string;
 }
 
 export interface ITableListState {
@@ -110,7 +111,9 @@ export class TableList extends React.Component<
         maxWidth: 400,
         minWidth: 200,
         name: localization.InterpretVision.Dashboard.columnTwo
-      },
+      }
+    ];
+    const labelColumns: IColumn[] = [
       {
         fieldName: "trueY",
         isResizable: true,
@@ -127,7 +130,30 @@ export class TableList extends React.Component<
         minWidth: 200,
         name: localization.InterpretVision.Dashboard.columnFour
       }
-    ];
+    ]
+    const objectDetectionLabelColumns : IColumn[] = [
+      {
+        fieldName: "correctDetections",
+        isResizable: true,
+        key: "correctDetections",
+        maxWidth: 400,
+        minWidth: 200,
+        name: localization.InterpretVision.Dashboard.columnThreeOD
+      },
+      {
+        fieldName: "incorrectDetections",
+        isResizable: true,
+        key: "incorrectDetections",
+        maxWidth: 400,
+        minWidth: 200,
+        name: localization.InterpretVision.Dashboard.columnFourOD
+      }
+    ]
+    if (this.props.taskType === DatasetTaskType.ObjectDetection) {
+      columns.push(...objectDetectionLabelColumns);
+    } else {
+      columns.push(...labelColumns);
+    }
     const fieldNames = this.props.otherMetadataFieldNames;
     fieldNames.forEach((fieldName) => {
       columns.push({
@@ -252,6 +278,12 @@ export class TableList extends React.Component<
     // Handle multilabel case for trueY and predictedY
     if (value && Array.isArray(value)) {
       value = value.join(", ");
+    } else if (this.props.taskType === DatasetTaskType.ObjectDetection) {
+      if (item && column && column.fieldName === "correctDetections") {
+        value = item["odCorrect" as keyof IVisionListItem];
+      } else if (item && column && column.fieldName === "incorrectDetections") {
+        value = item["odIncorrect" as keyof IVisionListItem];
+      }
     }
 
     const image =
