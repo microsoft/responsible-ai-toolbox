@@ -1141,7 +1141,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Řídicí panel interpretovatelnosti",
-      "importantWords": "Zobrazit nejdůležitější slova",
+      "importantWords": "Show most important words",
       "topFeatureList": "Analýza seznamu hlavních funkcí",
       "allButton": "VŠECHNY FUNKCE",
       "negButton": "NEGATIVNÍ FUNKCE",
@@ -1155,7 +1155,8 @@
       "predictedAnswer": "Předpokládaná odpověď: ",
       "trueAnswer": "Skutečná odpověď: ",
       "inputs": "Vstupy",
-      "outputs": "Výstupy"
+      "outputs": "Výstupy",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "LEGENDA TEXTOVÉ FUNKCE",
