@@ -76,8 +76,8 @@ export class FlyoutObjectDetection extends React.Component<
       return <div />;
     }
     const classNames = flyoutStyles();
-    const predictedY = getJoinedLabelString(item?.predictedY);
-    const trueY = getJoinedLabelString(item?.trueY);
+    const correctDetections = getJoinedLabelString(item?.odCorrect);
+    const incorrectDetections = getJoinedLabelString(item?.odIncorrect);
 
     return (
       <FluentUI.FocusZone>
@@ -112,45 +112,7 @@ export class FlyoutObjectDetection extends React.Component<
                         tokens={{ childrenGap: "s1" }}
                         horizontalAlign="center"
                         verticalAlign="center"
-                      >
-                        <FluentUI.Stack.Item
-                          className={classNames.iconContainer}
-                        >
-                          <FluentUI.Icon
-                            iconName={
-                              predictedY !== trueY ? "Cancel" : "Checkmark"
-                            }
-                            className={
-                              predictedY !== trueY
-                                ? classNames.errorIcon
-                                : classNames.successIcon
-                            }
-                          />
-                        </FluentUI.Stack.Item>
-                        <FluentUI.Stack.Item>
-                          {predictedY !== trueY ? (
-                            <FluentUI.Text
-                              variant="large"
-                              className={classNames.errorTitle}
-                            >
-                              {
-                                localization.InterpretVision.Dashboard
-                                  .titleBarError
-                              }
-                            </FluentUI.Text>
-                          ) : (
-                            <FluentUI.Text
-                              variant="large"
-                              className={classNames.successTitle}
-                            >
-                              {
-                                localization.InterpretVision.Dashboard
-                                  .titleBarSuccess
-                              }
-                            </FluentUI.Text>
-                          )}
-                        </FluentUI.Stack.Item>
-                      </FluentUI.Stack>
+                      />
                       <FluentUI.Stack.Item>
                         <FluentUI.Text variant="large">
                           {localization.InterpretVision.Dashboard.indexLabel}
@@ -159,14 +121,20 @@ export class FlyoutObjectDetection extends React.Component<
                       </FluentUI.Stack.Item>
                       <FluentUI.Stack.Item>
                         <FluentUI.Text variant="large">
-                          {localization.InterpretVision.Dashboard.predictedY}
-                          {predictedY}
+                          {
+                            localization.InterpretVision.Dashboard
+                              .correctDetections
+                          }
+                          {correctDetections}
                         </FluentUI.Text>
                       </FluentUI.Stack.Item>
                       <FluentUI.Stack.Item>
                         <FluentUI.Text variant="large">
-                          {localization.InterpretVision.Dashboard.trueY}
-                          {trueY}
+                          {
+                            localization.InterpretVision.Dashboard
+                              .incorrectDetections
+                          }
+                          {incorrectDetections}
                         </FluentUI.Text>
                       </FluentUI.Stack.Item>
                     </FluentUI.Stack>

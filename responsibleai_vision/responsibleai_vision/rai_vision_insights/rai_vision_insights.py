@@ -87,6 +87,7 @@ _CATEGORICAL_FEATURES = 'categorical_features'
 _DROPPED_FEATURES = 'dropped_features'
 _INCORRECT = 'incorrect'
 _CORRECT = 'correct'
+_AGGREGATE_LABEL = 'aggregate'
 
 
 def reshape_image(image):
@@ -704,6 +705,7 @@ class RAIVisionInsights(RAIBaseInsights):
         object_detection_labels = []
         for image_idx in range(len(true_y)):
             image_labels = defaultdict(lambda: defaultdict(int))
+            rendered_labels = {}
             error_matrix = ErrorLabeling(
                 ModelTask.OBJECT_DETECTION,
                 pred_y[image_idx],
@@ -723,11 +725,22 @@ class RAIVisionInsights(RAIBaseInsights):
                         error_matrix[label_idx] ==
                         ErrorLabelType.DUPLICATE_DETECTION)
 
-            agg_label = f"{sum(image_labels[_CORRECT].values())} {_CORRECT}, \
-                          {sum(image_labels[_INCORRECT].values())} \
-                          {_INCORRECT}"
+            rendered_labels[_CORRECT] = ', '.join(
+                f'{value} {key}' for key, value in
+                image_labels[_CORRECT].items())
+            if len(rendered_labels[_CORRECT]) == 0:
+                rendered_labels[_CORRECT] = 'None'
+            rendered_labels[_INCORRECT] = ', '.join(
+                f'{value} {key}' for key, value in
+                image_labels[_INCORRECT].items())
+            if len(rendered_labels[_INCORRECT]) == 0:
+                rendered_labels[_INCORRECT] = 'None'
+            rendered_labels[_AGGREGATE_LABEL] = \
+                f"{sum(image_labels[_CORRECT].values())} {_CORRECT}, \
+                  {sum(image_labels[_INCORRECT].values())} \
+                  {_INCORRECT}"
 
-            object_detection_labels.append(agg_label)
+            object_detection_labels.append(rendered_labels)
 
         return object_detection_labels
 
