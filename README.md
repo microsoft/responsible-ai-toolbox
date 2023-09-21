@@ -66,7 +66,7 @@ Responsible AI dashboard is designed to achieve the following goals:
 - To help model developers create end to end and fluid debugging experiences and navigate seamlessly through error identification and diagnosis by using interactive visualizations that identify errors, inspect the data, generate global and local explanations models, and potentially inspect problematic examples.
 - To help business stakeholders explore causal relationships in the data and take informed decisions in the real world.
 
-This repository contains the Jupyter notebooks with examples to showcase how to use this widget. Get started [here](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/getting-started.ipynb).
+This repository contains the Jupyter notebooks with examples to showcase how to use this widget. Get started [here](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/tabular/getting-started.ipynb).
 
 
 ### Installation
