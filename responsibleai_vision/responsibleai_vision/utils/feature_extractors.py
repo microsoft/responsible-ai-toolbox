@@ -3,14 +3,17 @@
 
 """Defines the feature extractors."""
 
-from typing import List, Optional
+from typing import Optional
 
 import pandas as pd
 from PIL import Image
 from PIL.ExifTags import TAGS
 from responsibleai.feature_metadata import FeatureMetadata
 from tqdm import tqdm
-from responsibleai_vision.utils.image_reader import get_all_exif_feature_names, get_image_from_path, get_image_pointer_from_path
+from responsibleai_vision.utils.image_reader import (
+    get_all_exif_feature_names,
+    get_image_from_path,
+    get_image_pointer_from_path)
 
 
 def extract_features(image_dataset: pd.DataFrame,
@@ -37,7 +40,8 @@ def extract_features(image_dataset: pd.DataFrame,
     :rtype: list, list
     '''
     results = []
-    dropped_features = feature_metadata.dropped_features if feature_metadata else None
+    dropped_features = feature_metadata.dropped_features \
+        if feature_metadata else None
     if feature_metadata and feature_metadata.categorical_features is None:
         feature_metadata.categorical_features = []
     exif_feature_names = get_all_exif_feature_names(image_dataset)
@@ -62,7 +66,8 @@ def extract_features(image_dataset: pd.DataFrame,
             mean_pixel_value = image_arr.mean()
         else:
             mean_pixel_value = image.mean()
-        row_feature_values = [mean_pixel_value] + [None] * len(exif_feature_names)
+        row_feature_values = [mean_pixel_value] + \
+            [None] * len(exif_feature_names)
 
         # append all exif features
         if isinstance(image, str):
@@ -76,7 +81,8 @@ def extract_features(image_dataset: pd.DataFrame,
                     # decode bytes
                     if isinstance(data, bytes):
                         data = data.decode()
-                    if isinstance(data, str):  # TODO: add support for other data types
+                    # TODO: add support for other data types
+                    if isinstance(data, str):
                         feature_metadata.categorical_features.append(str(tag))
                         row_feature_values[feature_names.index(tag)] = data
 
