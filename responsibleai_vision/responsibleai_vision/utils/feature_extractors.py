@@ -8,11 +8,11 @@ from typing import Optional
 import pandas as pd
 from PIL import Image
 from PIL.ExifTags import TAGS
-from responsibleai.feature_metadata import FeatureMetadata
 from tqdm import tqdm
+
+from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai_vision.utils.image_reader import (
-    get_all_exif_feature_names,
-    get_image_from_path,
+    get_all_exif_feature_names, get_image_from_path,
     get_image_pointer_from_path)
 
 
