@@ -8,15 +8,15 @@ from typing import List, Optional
 import pandas as pd
 from PIL import Image
 from PIL.ExifTags import TAGS
+from responsibleai.feature_metadata import FeatureMetadata
 from tqdm import tqdm
-
 from responsibleai_vision.utils.image_reader import get_all_exif_feature_names, get_image_from_path, get_image_pointer_from_path
 
 
 def extract_features(image_dataset: pd.DataFrame,
                      target_column: str, task_type: str,
                      image_mode: str = None,
-                     dropped_features: Optional[List[str]] = None):
+                     feature_metadata: Optional[FeatureMetadata] = None):
     '''Extract tabular data features from the image dataset.
 
     :param image_dataset: A pandas dataframe containing the image data.
@@ -30,12 +30,16 @@ def extract_features(image_dataset: pd.DataFrame,
         See pillow documentation for all modes:
         https://pillow.readthedocs.io/en/stable/handbook/concepts.html
     :type image_mode: str
-    :param dropped_features: The list of features to drop from the dataset.
-    :type dropped_features: list[str]
+    :param feature_metadata: Feature metadata for the dataset
+        to identify different kinds of features.
+    :type feature_metadata: Optional[FeatureMetadata]
     :return: The list of extracted features and the feature names.
     :rtype: list, list
     '''
     results = []
+    dropped_features = feature_metadata.dropped_features if feature_metadata else None
+    if feature_metadata and feature_metadata.categorical_features is None:
+        feature_metadata.categorical_features = []
     exif_feature_names = get_all_exif_feature_names(image_dataset)
     feature_names = ["mean_pixel_value"] + exif_feature_names
 
@@ -73,6 +77,7 @@ def extract_features(image_dataset: pd.DataFrame,
                     if isinstance(data, bytes):
                         data = data.decode()
                     if isinstance(data, str):  # TODO: add support for other data types
+                        feature_metadata.categorical_features.append(str(tag))
                         row_feature_values[feature_names.index(tag)] = data
 
         # append all features other than target column and label

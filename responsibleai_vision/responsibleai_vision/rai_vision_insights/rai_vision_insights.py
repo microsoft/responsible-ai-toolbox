@@ -267,7 +267,7 @@ class RAIVisionInsights(RAIBaseInsights):
         ext_test, ext_features = extract_features(
             self.test, self.target_column, self.task_type,
             self.image_mode,
-            self._feature_metadata.dropped_features)
+            self._feature_metadata)
         self._ext_test = ext_test
         self._ext_features = ext_features
 
