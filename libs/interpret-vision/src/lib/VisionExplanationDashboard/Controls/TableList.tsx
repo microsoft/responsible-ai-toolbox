@@ -18,28 +18,14 @@ import { DatasetTaskType, IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-import { ISearchable } from "../Interfaces/ISearchable";
 import { getFilteredDataFromSearch } from "../utils/getFilteredData";
 import { visionExplanationDashboardStyles } from "../VisionExplanationDashboard.styles";
 
-export interface ITableListProps extends ISearchable {
-  addCohort: (name: string, switchCohort: boolean) => void;
-  errorInstances: IVisionListItem[];
-  successInstances: IVisionListItem[];
-  imageDim: number;
-  otherMetadataFieldNames: string[];
-  pageSize: number;
-  selectItem: (item: IVisionListItem) => void;
-  updateSelectedIndices: (indices: number[]) => void;
-  taskType: string;
-}
-
-export interface ITableListState {
-  filteredGroups: IGroup[];
-  filteredItems: IVisionListItem[];
-  groups: IGroup[];
-  columns: IColumn[];
-}
+import {
+  defaultState,
+  ITableListProps,
+  ITableListState
+} from "./TableListHelper";
 
 export class TableList extends React.Component<
   ITableListProps,
@@ -51,12 +37,7 @@ export class TableList extends React.Component<
     this._selection = new Selection({
       onSelectionChanged: (): void => this.updateSelection()
     });
-    this.state = {
-      columns: [],
-      filteredGroups: [],
-      filteredItems: [],
-      groups: []
-    };
+    this.state = defaultState;
   }
 
   public componentDidUpdate(prevProps: ITableListProps): void {
@@ -130,8 +111,8 @@ export class TableList extends React.Component<
         minWidth: 200,
         name: localization.InterpretVision.Dashboard.columnFour
       }
-    ]
-    const objectDetectionLabelColumns : IColumn[] = [
+    ];
+    const objectDetectionLabelColumns: IColumn[] = [
       {
         fieldName: "correctDetections",
         isResizable: true,
@@ -148,7 +129,7 @@ export class TableList extends React.Component<
         minWidth: 200,
         name: localization.InterpretVision.Dashboard.columnFourOD
       }
-    ]
+    ];
     if (this.props.taskType === DatasetTaskType.ObjectDetection) {
       columns.push(...objectDetectionLabelColumns);
     } else {

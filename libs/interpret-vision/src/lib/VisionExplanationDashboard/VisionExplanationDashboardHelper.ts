@@ -114,13 +114,13 @@ export function preprocessData(
     const predictedYValue = getJoinedLabelString(item.predictedY);
     const trueYValue = getJoinedLabelString(item.trueY);
     if (dataset.task_type === DatasetTaskType.ObjectDetection) {
-      item["odIncorrect"] === "None"
-      ? successInstances.push(item)
-      : errorInstances.push(item);
+      item.odIncorrect === "None"
+        ? successInstances.push(item)
+        : errorInstances.push(item);
     } else {
       predictedYValue === trueYValue
-      ? successInstances.push(item)
-      : errorInstances.push(item);
+        ? successInstances.push(item)
+        : errorInstances.push(item);
     }
 
     loadingExplanation.push(
