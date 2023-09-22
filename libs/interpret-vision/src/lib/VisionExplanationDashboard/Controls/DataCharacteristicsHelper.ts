@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { IDropdownOption } from "@fluentui/react";
-import { IVisionListItem } from "@responsible-ai/core-ui";
+import { DatasetTaskType, IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 
 import { ISearchable } from "../Interfaces/ISearchable";
@@ -13,6 +13,7 @@ export interface IDataCharacteristicsProps extends ISearchable {
   imageDim: number;
   numRows: number;
   selectItem(item: IVisionListItem): void;
+  taskType: string;
 }
 
 export interface IDataCharacteristicsState {
@@ -41,22 +42,18 @@ export interface IItemsData {
 export const stackTokens = { childrenGap: "l1" };
 export const labelTypes = {
   predictedY: "predictedY",
-  trueY: "trueY"
+  trueY: "trueY",
+  odCorrect: "Correct",
+  odIncorrect: "Incorrect",
 };
 
 export const SelectAllKey = "selectAll";
-const labelTypeDropdownOptions: IDropdownOption[] = [
-  { key: labelTypes.predictedY, text: labelTypes.predictedY },
-  { key: labelTypes.trueY, text: labelTypes.trueY }
-];
 export const defaultState = {
   columnCount: [],
   dropdownOptionsPredicted: [],
   dropdownOptionsTrue: [],
   itemsPredicted: new Map(),
   itemsTrue: new Map(),
-  labelType: labelTypes.predictedY,
-  labelTypeDropdownOptions,
   labelVisibilitiesPredicted: new Map(),
   labelVisibilitiesTrue: new Map(),
   renderStartIndex: [],
@@ -77,6 +74,10 @@ function generateItems(type: string, examples: IVisionListItem[]): IItemsData {
       label = getJoinedLabelString(example.predictedY);
     } else if (type === labelTypes.trueY) {
       label = getJoinedLabelString(example.trueY);
+    } else if (type === labelTypes.odIncorrect) {
+      label = example.odIncorrect;
+    } else if (type === labelTypes.odCorrect) {
+      label = example.odCorrect;
     }
 
     if (!items) {
@@ -122,10 +123,22 @@ function generateItems(type: string, examples: IVisionListItem[]): IItemsData {
   };
 }
 
+export function getPredOrIncorrectLabelType(taskType: string) : string {
+  return (taskType === DatasetTaskType.ObjectDetection)
+    ? labelTypes.odIncorrect : labelTypes.predictedY;
+}
+
+export function getTrueOrCorrectLabelType(taskType: string) : string {
+  return (taskType === DatasetTaskType.ObjectDetection)
+    ? labelTypes.odCorrect : labelTypes.trueY;
+}
+
 export function processItems(
   items: IVisionListItem[],
   resetLabels: boolean,
-  state: IDataCharacteristicsState
+  state: IDataCharacteristicsState,
+  predOrIncorrectLabelType: string,
+  trueOrCorrectLabelType: string,
 ): Pick<
   IDataCharacteristicsState,
   | "columnCount"
@@ -145,11 +158,11 @@ export function processItems(
   const renderStartIndex: number[] = [];
   const showBackArrow: boolean[] = [];
 
-  const predicted: IItemsData = generateItems(labelTypes.predictedY, examples);
+  const predicted: IItemsData = generateItems(predOrIncorrectLabelType, examples);
   const dropdownOptionsPredicted: IDropdownOption[] = predicted.dropdownOptions;
   const itemsPredicted: Map<string, IVisionListItem[]> = predicted.items;
 
-  const trues: IItemsData = generateItems(labelTypes.trueY, examples);
+  const trues: IItemsData = generateItems(trueOrCorrectLabelType, examples);
   const dropdownOptionsTrue: IDropdownOption[] = trues.dropdownOptions;
   const itemsTrue: Map<string, IVisionListItem[]> = trues.items;
 
@@ -187,7 +200,8 @@ export function processItems(
 
 export function getLabelVisibility(
   item: IDropdownOption<any>,
-  state: IDataCharacteristicsState
+  state: IDataCharacteristicsState,
+  predOrIncorrectLabelType: string
 ): Pick<
   IDataCharacteristicsState,
   | "labelVisibilitiesPredicted"
@@ -195,7 +209,7 @@ export function getLabelVisibility(
   | "labelVisibilitiesTrue"
   | "selectedKeysTrue"
 > {
-  const predicted = state.labelType === labelTypes.predictedY;
+  const predicted = state.labelType === predOrIncorrectLabelType;
 
   if (item.key === SelectAllKey) {
     const dropdownOptions = predicted

@@ -22,9 +22,10 @@ import { dataCharacteristicsStyles } from "./DataCharacteristics.styles";
 import {
   defaultState,
   getLabelVisibility,
+  getPredOrIncorrectLabelType,
+  getTrueOrCorrectLabelType,
   IDataCharacteristicsProps,
   IDataCharacteristicsState,
-  labelTypes,
   processItems,
   stackTokens
 } from "./DataCharacteristicsHelper";
@@ -36,10 +37,22 @@ export class DataCharacteristics extends React.Component<
   IDataCharacteristicsState
 > {
   private rowHeight: number;
+  private predOrIncorrectLabelType: string;
+  private trueOrCorrectLabelType: string;
   public constructor(props: IDataCharacteristicsProps) {
     super(props);
     this.rowHeight = 0;
-    this.state = defaultState;
+    this.predOrIncorrectLabelType = getPredOrIncorrectLabelType(this.props.taskType);
+    this.trueOrCorrectLabelType = getTrueOrCorrectLabelType(this.props.taskType);
+    const labelTypeDropdownOptions: IDropdownOption[] = [
+      { key: this.predOrIncorrectLabelType, text: this.predOrIncorrectLabelType },
+      { key: this.trueOrCorrectLabelType, text: this.trueOrCorrectLabelType }
+    ];
+    this.state = {
+      ...defaultState,
+      labelTypeDropdownOptions,
+      labelType: this.predOrIncorrectLabelType,
+    };
   }
 
   public componentDidMount(): void {
@@ -56,7 +69,7 @@ export class DataCharacteristics extends React.Component<
 
   public render(): React.ReactNode {
     const classNames = dataCharacteristicsStyles();
-    const predicted = this.state.labelType === labelTypes.predictedY;
+    const predicted = this.state.labelType === this.predOrIncorrectLabelType;
     const items = predicted ? this.state.itemsPredicted : this.state.itemsTrue;
     let keys = [];
     for (const key of items.keys()) {
@@ -95,12 +108,12 @@ export class DataCharacteristics extends React.Component<
                           .labelVisibilityDropdown
                       }
                       options={
-                        this.state.labelType === labelTypes.predictedY
+                        this.state.labelType === this.predOrIncorrectLabelType
                           ? this.state.dropdownOptionsPredicted
                           : this.state.dropdownOptionsTrue
                       }
                       selectedKeys={
-                        this.state.labelType === labelTypes.predictedY
+                        this.state.labelType === this.predOrIncorrectLabelType
                           ? this.state.selectedKeysPredicted
                           : this.state.selectedKeysTrue
                       }
@@ -170,7 +183,8 @@ export class DataCharacteristics extends React.Component<
       this.props.searchValue,
       this.props.items
     );
-    this.setState(processItems(filteredItems, resetLabels, this.state));
+    this.setState(processItems(filteredItems, resetLabels, this.state,
+      this.predOrIncorrectLabelType, this.trueOrCorrectLabelType));
   };
 
   private onRenderCell = (
@@ -222,22 +236,22 @@ export class DataCharacteristics extends React.Component<
     if (!item) {
       return;
     }
-    this.setState(getLabelVisibility(item, this.state));
+    this.setState(getLabelVisibility(item, this.state, this.predOrIncorrectLabelType));
   };
 
   private sortKeys(keys: string[]): string[] {
     const items =
-      this.state.labelType === labelTypes.predictedY
+      this.state.labelType === this.predOrIncorrectLabelType
         ? this.state.itemsPredicted
         : this.state.itemsTrue;
-    keys.sort(function (a, b) {
+    keys.sort((a, b) => {
       const aItems = items.get(a);
       const bItems = items.get(b);
       const aCount = aItems?.filter(
-        (item) => !isItemPredTrueEqual(item)
+        (item) => !isItemPredTrueEqual(item, this.props.taskType)
       ).length;
       const bCount = bItems?.filter(
-        (item) => !isItemPredTrueEqual(item)
+        (item) => !isItemPredTrueEqual(item, this.props.taskType)
       ).length;
       if (aCount === bCount) {
         return a > b ? 1 : -1;
