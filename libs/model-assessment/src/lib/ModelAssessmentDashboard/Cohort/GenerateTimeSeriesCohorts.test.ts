@@ -77,7 +77,12 @@ const defaultCohort = new ErrorCohort(
 
 describe("Generate time series cohorts from time series ID features", () => {
   it("should create cohorts for dataset", () => {
-    const cohorts = generateTimeSeriesCohorts(defaultCohort, [], dataset, jointDataset);
+    const cohorts = generateTimeSeriesCohorts(
+      defaultCohort,
+      [],
+      dataset,
+      jointDataset
+    );
     expect(cohorts.length).toBe(3);
     cohorts.forEach((cohort) => {
       expect(cohort.cohort.filters.length).toBe(2);
