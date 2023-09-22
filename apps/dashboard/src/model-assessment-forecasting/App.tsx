@@ -23,6 +23,7 @@ interface IAppProps extends IModelAssessmentData {
   version: 1 | 2;
   classDimension?: 1 | 2 | 3;
   featureFlights?: string[];
+  prebuildCohorts?: boolean;
 }
 
 export class App extends React.Component<IAppProps> {
@@ -30,22 +31,24 @@ export class App extends React.Component<IAppProps> {
     this.props.modelExplanationData?.forEach(
       (modelExplanationData) => (modelExplanationData.modelClass = "blackbox")
     );
-    let cohortData: IPreBuiltCohort[];
-    switch (this.props.dataset.features.length) {
-      case 10:
-        cohortData = [bobsSandwichesSandwich];
-        break;
-      case 30:
-        cohortData = [
-          giorgiosPizzeriaBoston,
-          nonnasCannoliBoston,
-          bobsSandwichesSandwich
-        ];
-        break;
-      default:
-        throw new Error(
-          "Invalid dataset. Test env is not aware of this dataset."
-        );
+    let cohortData: IPreBuiltCohort[] | undefined;
+    if (this.props.prebuildCohorts) {
+      switch (this.props.dataset.features.length) {
+        case 10:
+          cohortData = [bobsSandwichesSandwich];
+          break;
+        case 30:
+          cohortData = [
+            giorgiosPizzeriaBoston,
+            nonnasCannoliBoston,
+            bobsSandwichesSandwich
+          ];
+          break;
+        default:
+          throw new Error(
+            "Invalid dataset. Test env is not aware of this dataset."
+          );
+      }
     }
     const modelAssessmentDashboardProps: IModelAssessmentDashboardProps = {
       ...this.props,
