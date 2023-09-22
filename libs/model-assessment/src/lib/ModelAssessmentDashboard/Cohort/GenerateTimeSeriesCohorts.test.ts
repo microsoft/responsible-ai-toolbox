@@ -12,6 +12,7 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
+
 import { generateTimeSeriesCohorts } from "./GenerateTimeSeriesCohorts";
 
 const features = [
@@ -52,18 +53,18 @@ const jointDataset = new JointDataset({
 });
 
 const dataset = {
-  task_type: "forecasting",
-  feature_names: featureNames,
-  features,
-  true_y: trueY,
   categorical_features: ["A", "B"],
   feature_metadata: {
     categorical_features: ["A", "B"],
     time_series_id_features: ["A", "B"]
-  }
+  },
+  feature_names: featureNames,
+  features,
+  task_type: "forecasting",
+  true_y: trueY
 } as IDataset;
 
-const metricStats = new MetricCohortStats(12, 12, 0.5, "test_metric", 1.0);
+const metricStats = new MetricCohortStats(12, 12, 0.5, "test_metric", 1);
 
 const defaultCohort = new ErrorCohort(
   new Cohort(localization.ErrorAnalysis.Cohort.defaultLabel, jointDataset, []),
