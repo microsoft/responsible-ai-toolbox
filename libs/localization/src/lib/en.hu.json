@@ -1141,7 +1141,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Értelmezhetőségi irányítópult",
-      "importantWords": "A legfontosabb szavak megjelenítése",
+      "importantWords": "Show most important words",
       "topFeatureList": "Kiemelt jellemzők listájának elemzése",
       "allButton": "MINDEN JELLEMZŐ",
       "negButton": "NEGATÍV JELLEMZŐK",
@@ -1155,7 +1155,8 @@
       "predictedAnswer": "Előre jelzett válasz: ",
       "trueAnswer": "Igaz válasz: ",
       "inputs": "Bemenetek",
-      "outputs": "Kimenetek"
+      "outputs": "Kimenetek",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "SZÖVEGJELLEMZŐ JELMAGYARÁZATA",
@@ -1207,6 +1208,8 @@
       "panelInformation": "Információ",
       "predictedLabel": "Előrejelzett címke",
       "predictedY": "Előre jelzett: ",
+      "correctDetections": "Correct detections: ",
+      "incorrectDetections": "Incorrect detections: ",
       "prefix": "Objektum: ",
       "rows": "Sorok: ",
       "search": "Keresés",

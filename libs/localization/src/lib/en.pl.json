@@ -1141,7 +1141,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Pulpit nawigacyjny możliwości interpretacji",
-      "importantWords": "Show most Important Words",
+      "importantWords": "Show most important words",
       "topFeatureList": "Analiza listy najważniejszych funkcji",
       "allButton": "WSZYSTKIE FUNKCJE",
       "negButton": "CECHY NEGATYWNE",
@@ -1155,7 +1155,8 @@
       "predictedAnswer": "Predicted answer: ",
       "trueAnswer": "True answer: ",
       "inputs": "Inputs",
-      "outputs": "Outputs"
+      "outputs": "Outputs",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "LEGENDA FUNKCJI TEKSTU",
@@ -1207,6 +1208,8 @@
       "panelInformation": "Information",
       "predictedLabel": "Predicted label",
       "predictedY": "Predicted: ",
+      "correctDetections": "Correct detections: ",
+      "incorrectDetections": "Incorrect detections: ",
       "prefix": "Object: ",
       "rows": "Rows: ",
       "search": "Wyszukaj",

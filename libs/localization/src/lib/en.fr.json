@@ -1141,7 +1141,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Tableau de bord d’interprétation",
-      "importantWords": "Afficher les mots les plus importants",
+      "importantWords": "Show most important words",
       "topFeatureList": "Analyse de la liste des principales fonctionnalités",
       "allButton": "TOUTES LES FONCTIONNALITÉS",
       "negButton": "FONCTIONNALITÉS NÉGATIVES",
@@ -1155,7 +1155,8 @@
       "predictedAnswer": "Réponse prédite : ",
       "trueAnswer": "Réponse vraie : ",
       "inputs": "Entrées",
-      "outputs": "Sorties"
+      "outputs": "Sorties",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "LÉGENDE DE FONCTIONNALITÉ DE TEXTE",
@@ -1207,6 +1208,8 @@
       "panelInformation": "Informations",
       "predictedLabel": "Libellé prédit",
       "predictedY": "Prédit : ",
+      "correctDetections": "Correct detections: ",
+      "incorrectDetections": "Incorrect detections: ",
       "prefix": "Objet : ",
       "rows": "Lignes : ",
       "search": "Rechercher",
