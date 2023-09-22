@@ -25,6 +25,7 @@ import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 
 import { getAvailableTabs } from "../AvailableTabs";
+import { generateTimeSeriesCohorts } from "../Cohort/GenerateTimeSeriesCohorts";
 import { processPreBuiltCohort } from "../Cohort/ProcessPreBuiltCohort";
 import { processPreBuiltDatasetCohort } from "../Cohort/ProcessPreBuiltDatasetCohort";
 import { IModelAssessmentDashboardProps } from "../ModelAssessmentDashboardProps";
@@ -34,7 +35,6 @@ import {
 } from "../ModelAssessmentDashboardState";
 import { GlobalTabKeys } from "../ModelAssessmentEnums";
 import { getModelTypeFromProps } from "../utils/getModelTypeFromProps";
-import { generateTimeSeriesCohorts } from "../Cohort/GenerateTimeSeriesCohorts";
 
 export function buildInitialModelAssessmentContext(
   props: IModelAssessmentDashboardProps

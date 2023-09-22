@@ -18,7 +18,7 @@ export function generateTimeSeriesCohorts(
   preBuiltErrorCohortList: ErrorCohort[],
   dataset: IDataset,
   jointDataset: JointDataset
-) {
+): ErrorCohort[] {
   if (
     dataset.feature_metadata?.time_series_id_features &&
     dataset.feature_metadata?.time_series_id_features?.length > 0
