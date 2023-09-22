@@ -27,10 +27,9 @@ export const FridgeObjectDetectionModelDebugging = {
   modelOverviewData: {
     featureCohortView: {
       firstFeatureToSelect: "mean_pixel_value",
-      singleFeatureCohorts: FeatureCohorts,
+      multiFeatureCohorts: FeatureCohorts,
       secondFeatureToSelect: "Make",
-      multiFeatureCohorts: FeatureCohorts
-
+      singleFeatureCohorts: FeatureCohorts
     },
     hasModelOverviewComponent: true,
     initialCohorts: [

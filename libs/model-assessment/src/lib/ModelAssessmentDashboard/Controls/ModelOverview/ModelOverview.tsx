@@ -991,11 +991,11 @@ export class ModelOverview extends React.Component<
     });
   };
 
-  private abortAnyPreexistingExecution(task_type: string): void {
+  private abortAnyPreexistingExecution(taskType: string): void {
     let abortController: AbortController | undefined;
-    if (task_type === DatasetTaskType.ObjectDetection) {
+    if (taskType === DatasetTaskType.ObjectDetection) {
       abortController = this.state.objectDetectionAbortController;
-    } else if (task_type === DatasetTaskType.QuestionAnswering) {
+    } else if (taskType === DatasetTaskType.QuestionAnswering) {
       abortController = this.state.questionAnsweringAbortController;
     }
     if (abortController !== undefined) {
