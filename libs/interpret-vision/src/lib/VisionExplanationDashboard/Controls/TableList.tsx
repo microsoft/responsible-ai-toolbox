@@ -75,7 +75,6 @@ export class TableList extends React.Component<
       filteredItems,
       groups
     );
-
     const columns: IColumn[] = [
       {
         fieldName: "image",
@@ -266,12 +265,10 @@ export class TableList extends React.Component<
         value = item["odIncorrect" as keyof IVisionListItem];
       }
     }
-
     const image =
       item && column && column.fieldName === "image"
         ? item["image" as keyof IVisionListItem]
         : "";
-
     return (
       <Stack horizontal tokens={{ childrenGap: "s1" }}>
         {image ? (
