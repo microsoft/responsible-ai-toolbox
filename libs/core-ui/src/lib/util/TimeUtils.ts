@@ -16,22 +16,14 @@ export function orderByTime(
     );
 }
 
-export function isTimeOrTimeSeriesIDColumn(
+export function isTimeSeriesIDColumn(
   featureName: string,
   featureMetaData?: IFeatureMetaData
 ): boolean {
-  // The if-condition below should always be true since these are all required
-  // for forecasting and validated upon building the model assessment context.
-  // The if statement exists merely to satisfy the compiler.
-  if (
-    featureMetaData?.datetime_features &&
-    featureMetaData.datetime_features.length > 0
-  ) {
-    const isDatetimeFeature =
-      featureMetaData.datetime_features[0] === featureName;
+  if (featureMetaData?.time_series_id_features) {
     const isTimeSeriesIdColumn =
       featureMetaData.time_series_id_features?.includes(featureName) ?? false;
-    return isDatetimeFeature || isTimeSeriesIdColumn;
+    return isTimeSeriesIdColumn;
   }
   // If we don't have feature metadata then we can assume that there are no
   // time or time series identifying columns.
@@ -51,7 +43,7 @@ export function featureColumnsExist(
   }
   return (
     featureNames.filter(
-      (featureName) => !isTimeOrTimeSeriesIDColumn(featureName, featureMetaData)
+      (featureName) => !isTimeSeriesIDColumn(featureName, featureMetaData)
     ).length > 0
   );
 }

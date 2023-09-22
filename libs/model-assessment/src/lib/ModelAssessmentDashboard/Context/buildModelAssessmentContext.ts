@@ -18,19 +18,14 @@ import {
   ModelTypes,
   IDataset,
   getColumnRanges,
-  DatasetCohort,
-  FilterMethods,
-  IFilter,
+  DatasetCohort
 } from "@responsible-ai/core-ui";
 import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 
 import { getAvailableTabs } from "../AvailableTabs";
-import {
-  processPreBuiltCohort,
-  translatePreBuiltCohortFilterForDataset
-} from "../Cohort/ProcessPreBuiltCohort";
+import { processPreBuiltCohort } from "../Cohort/ProcessPreBuiltCohort";
 import { processPreBuiltDatasetCohort } from "../Cohort/ProcessPreBuiltDatasetCohort";
 import { IModelAssessmentDashboardProps } from "../ModelAssessmentDashboardProps";
 import {
@@ -39,6 +34,7 @@ import {
 } from "../ModelAssessmentDashboardState";
 import { GlobalTabKeys } from "../ModelAssessmentEnums";
 import { getModelTypeFromProps } from "../utils/getModelTypeFromProps";
+import { generateTimeSeriesCohorts } from "../Cohort/GenerateTimeSeriesCohorts";
 
 export function buildInitialModelAssessmentContext(
   props: IModelAssessmentDashboardProps
@@ -101,59 +97,17 @@ export function buildInitialModelAssessmentContext(
   let errorCohortList: ErrorCohort[] = [defaultErrorCohort];
   let [preBuiltErrorCohortList] = processPreBuiltCohort(props, jointDataset);
   if (
-    preBuiltErrorCohortList.length == 0 &&
-    props.dataset.feature_metadata?.time_series_id_features &&
-    props.dataset.feature_metadata?.time_series_id_features?.length > 0 &&
+    preBuiltErrorCohortList.length === 0 &&
     props.dataset.task_type === DatasetTaskType.Forecasting
   ) {
-    // Need to generate time series as cohorts for forecasting.
-    const timeSeriesIdFeatureIndices =
-      props.dataset.feature_metadata?.time_series_id_features.map(
-        (featureName) => props.dataset.feature_names.indexOf(featureName)
-      );
-    let distinctTimeSeriesIds = new Set<string>();
-    props.dataset.features.forEach((row) => {
-      const timeSeriesId = timeSeriesIdFeatureIndices.map(
-        (index) => row[index]
-      );
-      distinctTimeSeriesIds.add(JSON.stringify(timeSeriesId));
-    });
-
-    preBuiltErrorCohortList = [];
-    distinctTimeSeriesIds.forEach((timeSeriesId) => {
-      const timeSeriesIdArray = JSON.parse(timeSeriesId);
-      const filterList: IFilter[] = [];
-      let cohortNameParts: string[] = [];
-      props.dataset.feature_metadata?.time_series_id_features?.forEach(
-        (feature: string, index: number) => {
-          const value = timeSeriesIdArray[index];
-          const [filter] = translatePreBuiltCohortFilterForDataset(
-            {
-              column: feature,
-              method: FilterMethods.Includes,
-              arg: [value]
-            },
-            jointDataset
-          );
-          if (filter) {
-            filterList.push(filter);
-            cohortNameParts.push(`${feature} = ${value}`);
-          }
-        }
-      );
-      const cohort = new Cohort(
-        cohortNameParts.join(", "),
-        jointDataset,
-        filterList
-      );
-      const errorCohortEntry = new ErrorCohort(
-        cohort,
-        jointDataset,
-        undefined,
-        CohortSource.Prebuilt
-      );
-      preBuiltErrorCohortList.push(errorCohortEntry);
-    });
+    // Need to generate time series as cohorts for forecasting
+    // if they haven't been passed in as prebuilt cohorts
+    preBuiltErrorCohortList = generateTimeSeriesCohorts(
+      defaultErrorCohort,
+      preBuiltErrorCohortList,
+      props.dataset,
+      jointDataset
+    );
   }
   errorCohortList = errorCohortList.concat(preBuiltErrorCohortList);
   const cohorts = errorCohortList;

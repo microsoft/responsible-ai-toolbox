@@ -10,7 +10,7 @@ import {
 } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
-  isTimeOrTimeSeriesIDColumn,
+  isTimeSeriesIDColumn,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -57,7 +57,7 @@ export class TransformationCreation extends React.Component<
           return { featureName, idx };
         })
         .filter(({ featureName }) => {
-          return !isTimeOrTimeSeriesIDColumn(
+          return !isTimeSeriesIDColumn(
             featureName,
             this.context.dataset.feature_metadata
           );

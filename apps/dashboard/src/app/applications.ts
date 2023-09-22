@@ -249,20 +249,25 @@ export const applications: IApplications = <const>{
         dataset: mockForecastingData,
         prebuildCohorts: true
       } as IModelAssessmentDataSet,
-      restaurantsNoPrebuiltCohorts: {
-        classDimension: 1,
-        dataset: mockForecastingData,
-        prebuildCohorts: false
-      } as IModelAssessmentDataSet,
       restaurantsNoFeatures: {
         classDimension: 1,
         dataset: mockForecastingDataNoFeatures,
         prebuildCohorts: true
       } as IModelAssessmentDataSet,
+      restaurantsNoPrebuiltCohorts: {
+        classDimension: 1,
+        dataset: mockForecastingData,
+        prebuildCohorts: false
+      } as IModelAssessmentDataSet,
       restaurantsSingleTimeSeries: {
         classDimension: 1,
         dataset: mockForecastingDataSingleTimeSeries,
         prebuildCohorts: true
+      } as IModelAssessmentDataSet,
+      restaurantsSingleTimeSeriesNoPrebuiltCohorts: {
+        classDimension: 1,
+        dataset: mockForecastingDataSingleTimeSeries,
+        prebuildCohorts: false
       } as IModelAssessmentDataSet
     },
     versions: { "1": 1, "2:Static-View": 2 }
