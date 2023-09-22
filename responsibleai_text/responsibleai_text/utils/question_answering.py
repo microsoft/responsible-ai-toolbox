@@ -40,6 +40,7 @@ class QAPredictor:
         :rtype: list[list[float]]
         """
         outs = []
+        out_shape = None
         for q in questions:
             question, context = q.split(SEP)
             d = self._qa_model.tokenizer(question, context)
@@ -48,7 +49,20 @@ class QAPredictor:
                 **{k: torch.tensor(
                     d[k], device=device).reshape(1, -1) for k in d})
             logits = out.start_logits if start else out.end_logits
-            outs.append(logits.reshape(-1).detach().cpu().numpy())
+            out = logits.reshape(-1).detach().cpu().numpy()
+            # shapes must match for mini batch, otherwise shap will error out
+            # masking can produce different shapes in certain cases for some
+            # models and tokenizers
+            if out_shape is None:
+                out_shape = out.shape[0]
+            else:
+                if out_shape != out.shape[0]:
+                    if out.shape[0] < out_shape:
+                        out_shape = out.shape[0]
+                        for i in range(len(outs)):
+                            outs[i] = outs[i][:out_shape]
+                    out = out[:out_shape]
+            outs.append(out)
         return outs
 
     def predict_qa_start(self, questions):

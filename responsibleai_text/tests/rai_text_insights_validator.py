@@ -28,6 +28,9 @@ def validate_rai_text_insights(
     assert explanation is None or isinstance(explanation, list)
     explanation_data = rai_text_insights.explainer.get_data()
     assert explanation_data is None or isinstance(explanation_data, list)
+    error_analysis_data = rai_text_insights.error_analysis.get_data()
+    assert error_analysis_data is None or isinstance(
+        error_analysis_data, list)
     if task_type == ModelTask.TEXT_CLASSIFICATION:
         np.testing.assert_array_equal(rai_text_insights._classes,
                                       classes)
@@ -40,6 +43,10 @@ def validate_rai_text_insights(
             local_importances = local_data[0].localExplanations
             text = local_data[0].text
             assert len(local_importances) == len(text)
+        if error_analysis_data:
+            root_node = error_analysis_data[0].tree[0]
+            # assert there were some successful predictions as sanity check
+            assert root_node['error'] < root_node['size']
     if task_type == ModelTask.QUESTION_ANSWERING:
         if explanation_data:
             exp_data = explanation_data[0].precomputedExplanations

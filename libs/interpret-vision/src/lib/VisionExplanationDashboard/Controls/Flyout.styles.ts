@@ -21,6 +21,7 @@ export interface IFlyoutStyles {
   successTitle: IStyle;
   label: IStyle;
   mainContainer: IStyle;
+  odFlyoutContainer: IStyle;
   successIcon: IStyle;
   sectionIndent: IStyle;
   separator: IStyle;
@@ -65,8 +66,8 @@ export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
       width: "250px"
     },
     imageContainer: {
-      maxHeight: "250px",
-      maxWidth: "250px"
+      maxHeight: "1500px",
+      maxWidth: "1000px"
     },
     label: {
       bottom: 20,
@@ -76,6 +77,11 @@ export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
     mainContainer: {
       height: "100%",
       overflow: "hidden"
+    },
+    odFlyoutContainer: {
+      height: "100%",
+      overflow: "auto",
+      width: "100%"
     },
     sectionIndent: {
       overflow: "hidden",

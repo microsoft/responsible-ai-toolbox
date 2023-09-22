@@ -7,6 +7,7 @@ import warnings
 from typing import Any
 
 import numpy as np
+import pandas as pd
 
 
 def serialize_json_safe(o: Any):
@@ -31,7 +32,7 @@ def serialize_json_safe(o: Any):
         if isinstance(o, str):
             return json.dumps(o)[1:-1]
         return o
-    elif isinstance(o, datetime.datetime):
+    elif isinstance(o, datetime.datetime) or isinstance(o, pd.Timestamp):
         return o.__str__()
     elif isinstance(o, dict):
         return {k: serialize_json_safe(v, ) for k, v in o.items()}

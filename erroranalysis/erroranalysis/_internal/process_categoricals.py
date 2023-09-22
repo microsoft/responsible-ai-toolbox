@@ -49,5 +49,5 @@ def process_categoricals(all_feature_names: List[str],
             categories.append(category_values)
             category_dictionary[category_index] = category_values
 
-    return categories, categorical_indexes, category_dictionary,\
+    return categories, categorical_indexes, category_dictionary, \
         string_ind_data

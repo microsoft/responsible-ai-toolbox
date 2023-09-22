@@ -2,7 +2,11 @@
 // Licensed under the MIT License.
 
 import { Stack } from "@fluentui/react";
-import { IVisionListItem, ErrorCohort } from "@responsible-ai/core-ui";
+import {
+  IVisionListItem,
+  ErrorCohort,
+  DatasetTaskType
+} from "@responsible-ai/core-ui";
 import React from "react";
 
 import { visionExplanationDashboardStyles } from "../VisionExplanationDashboard.styles";
@@ -31,6 +35,7 @@ export interface ITabsViewProps {
   updateSelectedIndices: (indices: number[]) => void;
   selectedCohort: ErrorCohort;
   setSelectedCohort: (cohort: ErrorCohort) => void;
+  taskType: string;
 }
 
 export interface ITabViewState {
@@ -104,44 +109,79 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
               tokens={stackTokens}
               className={classNames.mainImageContainer}
             >
-              <Stack className={classNames.halfContainer} tokens={stackTokens}>
-                <Stack.Item id="errorInstances">
-                  <TitleBar
-                    count={this.props.errorInstances.length}
-                    type={TitleBarOptions.Error}
-                  />
-                </Stack.Item>
-                <Stack.Item
-                  className={classNames.imageListContainer}
-                  id="errorImageContainer"
+              {this.props.taskType === DatasetTaskType.ObjectDetection ? (
+                <Stack
+                  id="objectDetectionImageContainer"
+                  className={classNames.mainContainer}
+                  tokens={stackTokens}
                 >
-                  <ImageList
-                    items={this.props.errorInstances}
-                    imageDim={this.props.imageDim}
-                    searchValue={this.props.searchValue}
-                    selectItem={this.props.onItemSelect}
-                  />
-                </Stack.Item>
-              </Stack>
-              <Stack className={classNames.halfContainer} tokens={stackTokens}>
-                <Stack.Item id="successInstances">
-                  <TitleBar
-                    count={this.props.successInstances.length}
-                    type={TitleBarOptions.Success}
-                  />
-                </Stack.Item>
-                <Stack.Item
-                  className={classNames.imageListContainer}
-                  id="successImageContainer"
+                  <Stack
+                    className={classNames.objectDetectionContainer}
+                    tokens={stackTokens}
+                  >
+                    <ImageList
+                      items={this.state.items}
+                      imageDim={this.props.imageDim}
+                      searchValue={this.props.searchValue}
+                      selectItem={this.props.onItemSelect}
+                      taskType={this.props.taskType}
+                    />
+                  </Stack>
+                </Stack>
+              ) : (
+                <Stack
+                  horizontal
+                  className={classNames.mainContainer}
+                  tokens={stackTokens}
                 >
-                  <ImageList
-                    items={this.props.successInstances}
-                    imageDim={this.props.imageDim}
-                    searchValue={this.props.searchValue}
-                    selectItem={this.props.onItemSelect}
-                  />
-                </Stack.Item>
-              </Stack>
+                  <Stack
+                    className={classNames.halfContainer}
+                    tokens={stackTokens}
+                  >
+                    <Stack.Item id="errorInstances">
+                      <TitleBar
+                        count={this.props.errorInstances.length}
+                        type={TitleBarOptions.Error}
+                      />
+                    </Stack.Item>
+                    <Stack.Item
+                      className={classNames.imageListContainer}
+                      id="errorImageContainer"
+                    >
+                      <ImageList
+                        items={this.props.errorInstances}
+                        imageDim={this.props.imageDim}
+                        searchValue={this.props.searchValue}
+                        selectItem={this.props.onItemSelect}
+                        taskType={this.props.taskType}
+                      />
+                    </Stack.Item>
+                  </Stack>
+                  <Stack
+                    className={classNames.halfContainer}
+                    tokens={stackTokens}
+                  >
+                    <Stack.Item id="successInstances">
+                      <TitleBar
+                        count={this.props.successInstances.length}
+                        type={TitleBarOptions.Success}
+                      />
+                    </Stack.Item>
+                    <Stack.Item
+                      className={classNames.imageListContainer}
+                      id="successImageContainer"
+                    >
+                      <ImageList
+                        items={this.props.successInstances}
+                        imageDim={this.props.imageDim}
+                        searchValue={this.props.searchValue}
+                        selectItem={this.props.onItemSelect}
+                        taskType={this.props.taskType}
+                      />
+                    </Stack.Item>
+                  </Stack>
+                </Stack>
+              )}
             </Stack>
           </Stack>
         );

@@ -35,7 +35,7 @@ class TestFlaskHelper(object):
 
         flask_service = FlaskHelper(ip=self.test_ip_local)
 
-        assert(flask_service.port >= 5000 and flask_service.port <= 5099)
+        assert (flask_service.port >= 5000 and flask_service.port <= 5099)
 
         @flask_service.app.route("/hello", methods=["GET"])
         def hello():
@@ -44,8 +44,8 @@ class TestFlaskHelper(object):
         response = call_get_with_retries(
             http, f"{flask_service.env.base_url}/hello")
 
-        assert(response.status_code == 200)
-        assert(response.text == "Hello")
+        assert (response.status_code == 200)
+        assert (response.text == "Hello")
 
     def test_with_explicit_port(self):
         """Test the flask helper when setting an explicit port."""
@@ -54,7 +54,7 @@ class TestFlaskHelper(object):
         flask_service = FlaskHelper(ip=self.test_ip_local,
                                     port=self.test_port_local)
 
-        assert(flask_service.port == self.test_port_local)
+        assert (flask_service.port == self.test_port_local)
 
         @flask_service.app.route("/hello_two", methods=["GET"])
         def hello_two():
@@ -63,8 +63,8 @@ class TestFlaskHelper(object):
         response = call_get_with_retries(
             http, f"{flask_service.env.base_url}/hello_two")
 
-        assert(response.status_code == 200)
-        assert(response.text == "Hello")
+        assert (response.status_code == 200)
+        assert (response.text == "Hello")
 
 
 def call_get_with_retries(http_client,

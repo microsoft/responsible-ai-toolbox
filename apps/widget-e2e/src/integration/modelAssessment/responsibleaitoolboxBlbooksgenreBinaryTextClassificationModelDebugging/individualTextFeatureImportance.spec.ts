@@ -7,8 +7,8 @@ import {
 } from "@responsible-ai/e2e";
 
 const datasetShape =
-  modelAssessmentDatasets.DBPediaTextClassificationModelDebugging;
+  modelAssessmentDatasets.BlbooksgenreTextClassificationModelDebugging;
 describeModelAssessmentTextFeatureImportance(
   datasetShape,
-  "DBPediaTextClassificationModelDebugging"
+  "BlbooksgenreTextClassificationModelDebugging"
 );

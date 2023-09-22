@@ -213,6 +213,7 @@ export enum Locators {
   VisionDataExplorerImageExplorerViewSuccessInstanceCount = "#VisionDataExplorer #successInstances #instanceCount",
   VisionDataExplorerImageExplorerViewErrorImageContainer = "#VisionDataExplorer #errorImageContainer",
   VisionDataExplorerImageExplorerViewSuccessImageContainer = "#VisionDataExplorer #successImageContainer",
+  VisionDataExplorerImageExplorerViewObjectDetectionContainer = "#VisionDataExplorer #objectDetectionImageContainer",
   VisionDataExplorerTabsViewTableList = "#VisionDataExplorer #tabsViewTableList",
   VisionDataExplorerTabsViewItemsSelectedStatement = "#VisionDataExplorer #itemsSelectedStatement",
   VisionDataExplorerTabsViewSaveCohortButton = "#VisionDataExplorer #saveCohortButton",
@@ -223,5 +224,6 @@ export enum Locators {
   VisionDataExplorerClassViewContainer = "#VisionDataExplorer #classViewContainer",
   VisionDataExplorerImageExplorerViewImage = "#VisionDataExplorer #visionImage_0",
   VisionDataExplorerImageExplorerViewImagePredictedY = "#VisionDataExplorer #predictedY_0",
-  VisionDataExplorerImageExplorerViewImageTrueY = "#VisionDataExplorer #trueY_0"
+  VisionDataExplorerImageExplorerViewImageTrueY = "#VisionDataExplorer #trueY_0",
+  VisionDataExplorerImageExplorerViewImageODAggLabel = "#VisionDataExplorer #odAggregateLabel_0"
 }
