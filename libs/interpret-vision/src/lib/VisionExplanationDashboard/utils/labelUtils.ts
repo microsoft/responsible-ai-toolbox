@@ -21,6 +21,6 @@ export function isItemPredTrueEqual(item: IVisionListItem, taskType: string): bo
     ?(
     getJoinedLabelString(item.predictedY) === getJoinedLabelString(item.trueY)
     ) : (
-      item.odIncorrect === "None"
+      item.odIncorrect === NoLabel
     )
 }
