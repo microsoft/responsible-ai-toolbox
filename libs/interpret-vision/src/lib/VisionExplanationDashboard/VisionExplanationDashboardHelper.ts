@@ -16,7 +16,7 @@ import { localization } from "@responsible-ai/localization";
 
 import { IVisionExplanationDashboardProps } from "./Interfaces/IVisionExplanationDashboardProps";
 import { IVisionExplanationDashboardState } from "./Interfaces/IVisionExplanationDashboardState";
-import { getJoinedLabelString } from "./utils/labelUtils";
+import { getJoinedLabelString, NoLabel } from "./utils/labelUtils";
 
 export enum VisionDatasetExplorerTabOptions {
   ImageExplorerView = "Image explorer view",
@@ -115,7 +115,7 @@ export function preprocessData(
     const predictedYValue = getJoinedLabelString(item.predictedY);
     const trueYValue = getJoinedLabelString(item.trueY);
     if (dataset.task_type === DatasetTaskType.ObjectDetection) {
-      item.odIncorrect === "None"
+      item.odIncorrect === NoLabel
         ? successInstances.push(item)
         : errorInstances.push(item);
     } else {
