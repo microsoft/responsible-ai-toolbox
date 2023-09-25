@@ -99,6 +99,7 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
               selectItem={this.props.onItemSelect}
               pageSize={this.props.pageSize}
               updateSelectedIndices={this.props.updateSelectedIndices}
+              taskType={this.props.taskType}
             />
           </Stack>
         );

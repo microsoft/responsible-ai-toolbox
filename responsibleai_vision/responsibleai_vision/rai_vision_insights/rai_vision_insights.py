@@ -104,6 +104,23 @@ def reshape_image(image):
     return np.expand_dims(image, axis=0)
 
 
+def _feature_metadata_from_dict(feature_meta_dict):
+    """Create a FeatureMetadata from a dictionary.
+
+    :param feature_meta_dict: The dictionary to create the FeatureMetadata
+        from.
+    :type feature_meta_dict: dict
+    :return: The FeatureMetadata created from the dictionary.
+    :rtype: FeatureMetadata
+    """
+    return FeatureMetadata(
+        identity_feature_name=feature_meta_dict[_IDENTITY_FEATURE_NAME],
+        datetime_features=feature_meta_dict[_DATETIME_FEATURES],
+        time_series_id_features=feature_meta_dict[_TIME_SERIES_ID_FEATURES],
+        categorical_features=feature_meta_dict[_CATEGORICAL_FEATURES],
+        dropped_features=feature_meta_dict[_DROPPED_FEATURES])
+
+
 class RAIVisionInsights(RAIBaseInsights):
     """Defines the top-level RAIVisionInsights API.
 
@@ -251,7 +268,7 @@ class RAIVisionInsights(RAIBaseInsights):
         ext_test, ext_features = extract_features(
             self.test, self.target_column, self.task_type,
             self.image_mode,
-            self._feature_metadata.dropped_features)
+            self._feature_metadata)
         self._ext_test = ext_test
         self._ext_features = ext_features
 
@@ -1028,17 +1045,10 @@ class RAIVisionInsights(RAIBaseInsights):
                 meta[Metadata.FEATURE_METADATA] is None):
             inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata()
         else:
-            inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata(
-                identity_feature_name=meta[Metadata.FEATURE_METADATA][
-                    _IDENTITY_FEATURE_NAME],
-                datetime_features=meta[Metadata.FEATURE_METADATA][
-                    _DATETIME_FEATURES],
-                time_series_id_features=meta[Metadata.FEATURE_METADATA][
-                    _TIME_SERIES_ID_FEATURES],
-                categorical_features=meta[Metadata.FEATURE_METADATA][
-                    _CATEGORICAL_FEATURES],
-                dropped_features=meta[Metadata.FEATURE_METADATA][
-                    _DROPPED_FEATURES])
+            feature_metadata_dict = meta[Metadata.FEATURE_METADATA]
+            feature_metadata = _feature_metadata_from_dict(
+                feature_metadata_dict)
+            inst.__dict__['_' + Metadata.FEATURE_METADATA] = feature_metadata
 
         # load the image downloader as part of metadata
         RAIVisionInsights._load_image_downloader(inst, path)
@@ -1224,12 +1234,15 @@ class RAIVisionInsights(RAIBaseInsights):
                 object_detection_values = metric_OD.compute()
                 mAP = round(object_detection_values
                             ['map'].item(), 2)
-                APs = [round(value, 2) for value in
-                       object_detection_values['map_per_class']
-                       .detach().tolist()]
-                ARs = [round(value, 2) for value in
-                       object_detection_values['mar_100_per_class']
-                       .detach().tolist()]
+                AP_tensor = object_detection_values['map_per_class'].detach()
+                AP_tensor = [AP_tensor.item()] if AP_tensor.numel() == 1 \
+                    else AP_tensor.tolist()
+                AR_tensor = object_detection_values[
+                    'mar_100_per_class'].detach()
+                AR_tensor = [AR_tensor.item()] if AR_tensor.numel() == 1 \
+                    else AR_tensor.tolist()
+                APs = [round(value, 2) for value in AP_tensor]
+                ARs = [round(value, 2) for value in AR_tensor]
 
                 assert len(APs) == len(ARs) == len(cohort_classes)
 
