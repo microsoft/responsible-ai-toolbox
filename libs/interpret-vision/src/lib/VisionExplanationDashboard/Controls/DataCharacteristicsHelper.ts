@@ -12,8 +12,8 @@ export interface IDataCharacteristicsProps extends ISearchable {
   items: IVisionListItem[];
   imageDim: number;
   numRows: number;
-  selectItem(item: IVisionListItem): void;
   taskType: string;
+  selectItem(item: IVisionListItem): void;
 }
 
 export interface IDataCharacteristicsState {
@@ -41,10 +41,10 @@ export interface IItemsData {
 
 export const stackTokens = { childrenGap: "l1" };
 export const labelTypes = {
-  predictedY: "predictedY",
-  trueY: "trueY",
   odCorrect: "Correct",
   odIncorrect: "Incorrect",
+  predictedY: "predictedY",
+  trueY: "trueY",
 };
 
 export const SelectAllKey = "selectAll";

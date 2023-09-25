@@ -50,8 +50,8 @@ export class DataCharacteristics extends React.Component<
     ];
     this.state = {
       ...defaultState,
-      labelTypeDropdownOptions,
       labelType: this.predOrIncorrectLabelType,
+      labelTypeDropdownOptions,
     };
   }
 
