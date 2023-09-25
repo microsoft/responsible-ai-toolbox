@@ -6,18 +6,18 @@ import { DatasetTaskType, IDataset } from "@responsible-ai/core-ui";
 import { fridgeObjectDetectionImages } from "./fridgeObjectDetectionImages";
 
 export const fridgeObjectDetection: IDataset = {
-  categorical_features: ["Make", "Software", "Model"],
+  categorical_features: ["Software", "Make", "Model"],
   class_names: ["can", "carton", "milk_bottle", "water_bottle"],
   feature_metadata: {
-    categorical_features: ["Make", "Software", "Model"]
+    categorical_features: ["Software", "Make", "Model"]
   },
-  feature_names: ["mean_pixel_value", "Make", "Software", "Model"],
+  feature_names: ["mean_pixel_value", "Software", "Make", "ResolutionUnit", "GPSInfo", "ImageLength", "ExifOffset", "Model", "YCbCrPositioning", "Orientation", "ImageWidth"],
   features: [
-    [96.30899737412763, "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"],
-    [95.32630225415797, "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"],
-    [100.3762680516188, "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"],
-    [92.000130390912, "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"],
-    [95.33849179841164, "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"]
+    [96.30899737412763, "HDR+ 1.0.220943774z", "Google", 2, 31313, 4032, 244, "Pixel 2 XL", 1, 1, 3024],
+    [95.32630225415797, "HDR+ 1.0.220943774z", "Google", 2, null, 4032, 232, "Pixel 2 XL", 1, 1, 3024],
+    [100.3762680516188, "HDR+ 1.0.220943774z", "Google", 2, 33275, 4032, 244, "Pixel 2 XL", 1, 1, 3024],
+    [92.000130390912, "HDR+ 1.0.220943774z", "Google", 2, 31559, 4032, 244, "Pixel 2 XL", 1, 1, 3024],
+    [95.33849179841164, "HDR+ 1.0.220943774z", "Google", 2, null, 4032, 232, "Pixel 2 XL", 1, 1, 3024]
   ],
   imageDimensions: [
     [499, 666],
