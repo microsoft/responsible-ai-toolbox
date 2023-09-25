@@ -7,15 +7,18 @@ import { fridge } from "./fridge";
 import { fridgeImages } from "./fridgeImages";
 
 export const fridgeBinary: IDataset = {
-  categorical_features: [],
+  categorical_features: ["Make", "Software", "Model"],
   class_names: ["can", "carton"],
-  feature_names: ["mean_pixel_value"],
+  feature_metadata: {
+    categorical_features: ["Make", "Software", "Model"]
+  },
+  feature_names: ["mean_pixel_value", "Make", "Software", "Model"],
   features: [
-    fridge.features[0],
-    fridge.features[1],
-    fridge.features[2],
-    fridge.features[3],
-    fridge.features[34]
+    [fridge.features[0][0], "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"],
+    [fridge.features[1][0], "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"],
+    [fridge.features[2][0], "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"],
+    [fridge.features[3][0], "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"],
+    [fridge.features[34][0], "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"]
   ],
   images: [
     fridgeImages[0],

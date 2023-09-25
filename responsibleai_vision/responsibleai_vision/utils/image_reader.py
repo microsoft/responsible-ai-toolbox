@@ -11,6 +11,7 @@ from urllib.parse import urlparse
 import requests
 from numpy import asarray
 from PIL import Image
+from PIL.ExifTags import TAGS
 from requests.adapters import HTTPAdapter, Retry
 
 from responsibleai_vision.common.constants import (AutoMLImagesModelIdentifier,
@@ -36,6 +37,21 @@ def _get_retry_session(url):
     return session
 
 
+def get_image_pointer_from_path(image_path):
+    """Get image pointer from path.
+
+    :param image_path: The path to the image.
+    :type image_path: str
+    :return: The image open pointer.
+    :rtype: str or bytes
+    """
+    image_open_pointer = image_path
+    if image_path.startswith("http://") or image_path.startswith("https://"):
+        response = _get_retry_session(image_path).get(image_path)
+        image_open_pointer = BytesIO(response.content)
+    return image_open_pointer
+
+
 def get_image_from_path(image_path, image_mode):
     """Get image from path.
 
@@ -48,15 +64,37 @@ def get_image_from_path(image_path, image_mode):
     :return: The image as a numpy array.
     :rtype: numpy.ndarray
     """
-    image_open_pointer = image_path
-    if image_path.startswith("http://") or image_path.startswith("https://"):
-        response = _get_retry_session(image_path).get(image_path)
-        image_open_pointer = BytesIO(response.content)
+    image_open_pointer = get_image_pointer_from_path(image_path)
     with Image.open(image_open_pointer) as im:
         if image_mode is not None:
             im = im.convert(image_mode)
         image_array = asarray(im)
     return image_array
+
+
+def get_all_exif_feature_names(image_dataset):
+    """Get all exif feature names.
+
+    :param image_dataset: The image dataset.
+    :type image_dataset: pandas.DataFrame
+    :return: The list of exif feature names.
+    :rtype: List[Union[str, int]]]
+    """
+    exif_feature_names = set()
+    for i in range(image_dataset.shape[0]):
+        image = image_dataset.iloc[i, 0]
+        if isinstance(image, str):
+            image_pointer_path = get_image_pointer_from_path(image)
+            with Image.open(image_pointer_path) as im:
+                exifdata = im.getexif()
+                for tag_id in exifdata:
+                    # get the tag name, instead of human unreadable tag id
+                    tag = TAGS.get(tag_id, tag_id)
+                    # TODO: add support for other data types
+                    if tag not in image_dataset.columns \
+                       and isinstance(exifdata.get(tag_id), str):
+                        exif_feature_names.add(tag)
+    return list(exif_feature_names)
 
 
 def get_base64_string_from_path(
