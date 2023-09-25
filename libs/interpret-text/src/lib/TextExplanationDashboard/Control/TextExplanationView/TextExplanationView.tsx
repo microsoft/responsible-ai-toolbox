@@ -35,25 +35,29 @@ export class TextExplanationView extends React.Component<
     super(props);
 
     const weightVector = this.props.selectedWeightVector;
-    const importances = this.props.isQA
-      ? computeImportancesForAllTokens(
-          this.props.dataSummary.localExplanations,
-          true
-        )
-      : computeImportancesForWeightVector(
-          this.props.dataSummary.localExplanations,
-          weightVector
-        );
-
+    let importances: number[] = [];
+    let outputFeatureImportances: number[][] = [];
+    if (this.props.isQA) {
+      importances = computeImportancesForAllTokens(
+        this.props.dataSummary.localExplanations as number[][][],
+        true
+      );
+      outputFeatureImportances = getOutputFeatureImportances(
+        this.props.dataSummary.localExplanations as number[][][],
+        this.props.dataSummary.baseValues
+      );
+    } else {
+      importances = computeImportancesForWeightVector(
+        this.props.dataSummary.localExplanations as number[][],
+        weightVector
+      );
+    }
     const maxK = calculateMaxKImportances(importances);
     const topK = calculateTopKImportances(importances);
     this.state = {
       importances,
       maxK,
-      outputFeatureImportances: getOutputFeatureImportances(
-        this.props.dataSummary.localExplanations,
-        this.props.dataSummary.baseValues
-      ),
+      outputFeatureImportances,
       qaRadio: QAExplanationType.Start,
       radio: RadioKeys.All,
       selectedToken: 0,
@@ -87,6 +91,9 @@ export class TextExplanationView extends React.Component<
       ? this.state.singleTokenImportances
       : this.state.importances;
     const baseValue = this.props.isQA ? this.getBaseValue() : undefined;
+    const outputFeatureValue = this.props.isQA
+      ? outputLocalExplanations[this.state.selectedToken]
+      : undefined;
 
     return (
       <Stack>
@@ -137,7 +144,7 @@ export class TextExplanationView extends React.Component<
           setTopK={this.setTopK}
           onWeightVectorChange={this.onWeightVectorChange}
           onSelectedTokenChange={this.onSelectedTokenChange}
-          outputFeatureValue={outputLocalExplanations[this.state.selectedToken]}
+          outputFeatureValue={outputFeatureValue}
           baseValue={baseValue}
           selectedTokenIndex={this.state.selectedToken}
         />
@@ -146,17 +153,22 @@ export class TextExplanationView extends React.Component<
   }
 
   private updateState(): void {
-    const importances = this.props.isQA
-      ? this.getTokenImportances()
-      : this.getImportances(this.props.selectedWeightVector);
+    let importances: number[] = [];
+    let outputFeatureImportances: number[][] = [];
+    if (this.props.isQA) {
+      importances = this.getTokenImportances();
+      outputFeatureImportances = getOutputFeatureImportances(
+        this.props.dataSummary.localExplanations as number[][][],
+        this.props.dataSummary.baseValues
+      );
+    } else {
+      importances = this.getImportances(this.props.selectedWeightVector);
+    }
     const [topK, maxK] = this.getTopKMaxK(importances);
     this.setState({
       importances,
       maxK,
-      outputFeatureImportances: getOutputFeatureImportances(
-        this.props.dataSummary.localExplanations,
-        this.props.dataSummary.baseValues
-      ),
+      outputFeatureImportances,
       selectedToken: 0,
       singleTokenImportances: this.getImportanceForSingleToken(
         this.state.selectedToken
@@ -194,7 +206,7 @@ export class TextExplanationView extends React.Component<
 
   private getImportances(weightOption: WeightVectorOption): number[] {
     return computeImportancesForWeightVector(
-      this.props.dataSummary.localExplanations,
+      this.props.dataSummary.localExplanations as number[][],
       weightOption
     );
   }
@@ -202,7 +214,7 @@ export class TextExplanationView extends React.Component<
   // for QA
   private getTokenImportances(): number[] {
     return computeImportancesForAllTokens(
-      this.props.dataSummary.localExplanations
+      this.props.dataSummary.localExplanations as number[][][]
     );
   }
 
