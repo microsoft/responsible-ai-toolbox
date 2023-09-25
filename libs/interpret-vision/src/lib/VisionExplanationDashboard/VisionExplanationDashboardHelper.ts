@@ -3,6 +3,7 @@
 
 import {
   Cohort,
+  DatasetTaskType,
   FilterMethods,
   ICompositeFilter,
   IDataset,
@@ -113,9 +114,15 @@ export function preprocessData(
     });
     const predictedYValue = getJoinedLabelString(item.predictedY);
     const trueYValue = getJoinedLabelString(item.trueY);
-    predictedYValue === trueYValue
-      ? successInstances.push(item)
-      : errorInstances.push(item);
+    if (dataset.task_type === DatasetTaskType.ObjectDetection) {
+      item.odIncorrect === "None"
+        ? successInstances.push(item)
+        : errorInstances.push(item);
+    } else {
+      predictedYValue === trueYValue
+        ? successInstances.push(item)
+        : errorInstances.push(item);
+    }
 
     loadingExplanation.push(
       new Array<boolean>(
