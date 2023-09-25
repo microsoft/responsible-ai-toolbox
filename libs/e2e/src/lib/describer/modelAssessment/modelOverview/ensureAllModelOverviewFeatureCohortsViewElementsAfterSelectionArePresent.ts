@@ -23,7 +23,6 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
   );
   cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("not.exist");
 
-  // no vision condition as there's no second feature to select
   if (isTabular || isVision) {
     cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
     cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
