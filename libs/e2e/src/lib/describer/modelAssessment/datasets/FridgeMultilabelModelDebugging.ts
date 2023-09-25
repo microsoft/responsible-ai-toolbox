@@ -5,7 +5,7 @@ export const FridgeMultilabelModelDebugging = {
   causalAnalysisData: {
     hasCausalAnalysisComponent: false
   },
-  checkDupCohort: false,
+  checkDupCohort: true,
   cohortDefaultName: "All data",
   dataBalanceData: {
     aggregateBalanceMeasuresComputed: false,
