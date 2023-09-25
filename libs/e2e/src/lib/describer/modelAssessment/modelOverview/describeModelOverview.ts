@@ -91,17 +91,12 @@ export function describeModelOverview(
           datasetShape.modelOverviewData?.featureCohortView
             ?.secondFeatureToSelect || ""
         );
-        if (
-          datasetShape.modelOverviewData?.featureCohortView
-            ?.secondFeatureToSelect
-        ) {
-          ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
-            datasetShape,
-            2,
-            isTabular,
-            isVision
-          );
-        }
+        ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
+          datasetShape,
+          2,
+          isTabular,
+          isVision
+        );
       });
 
       it("should show new cohorts in charts", () => {

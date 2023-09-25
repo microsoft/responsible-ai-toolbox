@@ -1430,6 +1430,8 @@
       "columnTwo": "Index",
       "columnThree": "True Y",
       "columnFour": "Predicted Y",
+      "columnThreeOD": "Correct",
+      "columnFourOD": "Incorrect",
       "columnFive": "Other metadata",
       "chooseObject": "Choose a detected object",
       "examples": "examples",

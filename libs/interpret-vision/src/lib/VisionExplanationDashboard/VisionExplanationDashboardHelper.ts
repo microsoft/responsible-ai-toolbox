@@ -3,6 +3,7 @@
 
 import {
   Cohort,
+  DatasetTaskType,
   FilterMethods,
   ICompositeFilter,
   IDataset,
@@ -73,9 +74,7 @@ export function preprocessData(
 
   const trueY = mapClassNames(dataSummary.true_y, classNames);
 
-  const features = dataSummary.features?.map((featuresArr) => {
-    return Number((featuresArr[0] as number).toFixed(2));
-  });
+  const features = dataSummary.features;
 
   const fieldNames = dataSummary.feature_names;
   if (!features || !fieldNames) {
@@ -107,14 +106,23 @@ export function preprocessData(
       predictedY: predictedY[index],
       trueY: trueY[index]
     };
-    fieldNames.forEach((fieldName) => {
-      item[fieldName] = features[index];
+    fieldNames.forEach((fieldName, fieldIndex) => {
+      item[fieldName] = features[index][fieldIndex] as string | number;
+      if (typeof item[fieldName] === "number") {
+        item[fieldName] = Number((item[fieldName] as number).toFixed(2));
+      }
     });
     const predictedYValue = getJoinedLabelString(item.predictedY);
     const trueYValue = getJoinedLabelString(item.trueY);
-    predictedYValue === trueYValue
-      ? successInstances.push(item)
-      : errorInstances.push(item);
+    if (dataset.task_type === DatasetTaskType.ObjectDetection) {
+      item.odIncorrect === "None"
+        ? successInstances.push(item)
+        : errorInstances.push(item);
+    } else {
+      predictedYValue === trueYValue
+        ? successInstances.push(item)
+        : errorInstances.push(item);
+    }
 
     loadingExplanation.push(
       new Array<boolean>(

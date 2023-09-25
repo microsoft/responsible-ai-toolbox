@@ -14,31 +14,18 @@ import {
   Selection,
   MarqueeSelection
 } from "@fluentui/react";
-import { IVisionListItem } from "@responsible-ai/core-ui";
+import { DatasetTaskType, IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-import { ISearchable } from "../Interfaces/ISearchable";
 import { getFilteredDataFromSearch } from "../utils/getFilteredData";
 import { visionExplanationDashboardStyles } from "../VisionExplanationDashboard.styles";
 
-export interface ITableListProps extends ISearchable {
-  addCohort: (name: string, switchCohort: boolean) => void;
-  errorInstances: IVisionListItem[];
-  successInstances: IVisionListItem[];
-  imageDim: number;
-  otherMetadataFieldNames: string[];
-  pageSize: number;
-  selectItem: (item: IVisionListItem) => void;
-  updateSelectedIndices: (indices: number[]) => void;
-}
-
-export interface ITableListState {
-  filteredGroups: IGroup[];
-  filteredItems: IVisionListItem[];
-  groups: IGroup[];
-  columns: IColumn[];
-}
+import {
+  defaultState,
+  ITableListProps,
+  ITableListState
+} from "./TableListHelper";
 
 export class TableList extends React.Component<
   ITableListProps,
@@ -50,12 +37,7 @@ export class TableList extends React.Component<
     this._selection = new Selection({
       onSelectionChanged: (): void => this.updateSelection()
     });
-    this.state = {
-      columns: [],
-      filteredGroups: [],
-      filteredItems: [],
-      groups: []
-    };
+    this.state = defaultState;
   }
 
   public componentDidUpdate(prevProps: ITableListProps): void {
@@ -93,7 +75,6 @@ export class TableList extends React.Component<
       filteredItems,
       groups
     );
-
     const columns: IColumn[] = [
       {
         fieldName: "image",
@@ -110,7 +91,9 @@ export class TableList extends React.Component<
         maxWidth: 400,
         minWidth: 200,
         name: localization.InterpretVision.Dashboard.columnTwo
-      },
+      }
+    ];
+    const labelColumns: IColumn[] = [
       {
         fieldName: "trueY",
         isResizable: true,
@@ -128,6 +111,29 @@ export class TableList extends React.Component<
         name: localization.InterpretVision.Dashboard.columnFour
       }
     ];
+    const objectDetectionLabelColumns: IColumn[] = [
+      {
+        fieldName: "correctDetections",
+        isResizable: true,
+        key: "correctDetections",
+        maxWidth: 400,
+        minWidth: 200,
+        name: localization.InterpretVision.Dashboard.columnThreeOD
+      },
+      {
+        fieldName: "incorrectDetections",
+        isResizable: true,
+        key: "incorrectDetections",
+        maxWidth: 400,
+        minWidth: 200,
+        name: localization.InterpretVision.Dashboard.columnFourOD
+      }
+    ];
+    if (this.props.taskType === DatasetTaskType.ObjectDetection) {
+      columns.push(...objectDetectionLabelColumns);
+    } else {
+      columns.push(...labelColumns);
+    }
     const fieldNames = this.props.otherMetadataFieldNames;
     fieldNames.forEach((fieldName) => {
       columns.push({
@@ -252,13 +258,17 @@ export class TableList extends React.Component<
     // Handle multilabel case for trueY and predictedY
     if (value && Array.isArray(value)) {
       value = value.join(", ");
+    } else if (this.props.taskType === DatasetTaskType.ObjectDetection) {
+      if (item && column && column.fieldName === "correctDetections") {
+        value = item["odCorrect" as keyof IVisionListItem];
+      } else if (item && column && column.fieldName === "incorrectDetections") {
+        value = item["odIncorrect" as keyof IVisionListItem];
+      }
     }
-
     const image =
       item && column && column.fieldName === "image"
         ? item["image" as keyof IVisionListItem]
         : "";
-
     return (
       <Stack horizontal tokens={{ childrenGap: "s1" }}>
         {image ? (
