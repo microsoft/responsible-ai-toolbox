@@ -1,6 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getOS } from "../../../../util/getOS";
+
+const FeatureCohorts = getOS() === "Linux" ? 3 : 2;
+
 export const FridgeObjectDetectionModelDebugging = {
   causalAnalysisData: {
     hasCausalAnalysisComponent: false
@@ -23,9 +27,9 @@ export const FridgeObjectDetectionModelDebugging = {
   modelOverviewData: {
     featureCohortView: {
       firstFeatureToSelect: "mean_pixel_value",
-      multiFeatureCohorts: 3,
+      multiFeatureCohorts: FeatureCohorts,
       secondFeatureToSelect: "Make",
-      singleFeatureCohorts: 3
+      singleFeatureCohorts: FeatureCohorts
     },
     hasModelOverviewComponent: true,
     initialCohorts: [
