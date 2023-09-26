@@ -1173,6 +1173,7 @@ class RAIVisionInsights(RAIBaseInsights):
                 continue
 
             metric_OD = MeanAveragePrecision(
+                aggregate=aggregate_method,
                 class_metrics=True,
                 iou_thresholds=normalized_iou_threshold).to(device)
             true_y_cohort = [true_y[cohort_index] for cohort_index
