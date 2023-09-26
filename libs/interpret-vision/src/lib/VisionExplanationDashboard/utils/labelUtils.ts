@@ -3,7 +3,7 @@
 
 import { IVisionListItem } from "@responsible-ai/core-ui";
 
-const NoLabel = "(none)";
+export const NoLabel = "(none)";
 
 export function getJoinedLabelString(
   labels: string | string[] | undefined
