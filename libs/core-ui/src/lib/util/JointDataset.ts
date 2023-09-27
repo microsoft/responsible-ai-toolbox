@@ -227,8 +227,7 @@ export class JointDataset {
       this.hasODCorrect = true;
     }
     // include error columns if applicable
-    if ((this.hasPredictedY && this.hasTrueY) ||
-        (this.hasODIncorrect && this.hasODCorrect)) {
+    if ((this.hasPredictedY && this.hasTrueY)) {
       this.dataDict?.forEach((row) => {
         JointDataset.setErrorMetrics(
           row,
@@ -271,8 +270,7 @@ export class JointDataset {
       }
       if (
         IsMulticlass(args.metadata.modelType) ||
-        IsMultilabel(args.metadata.modelType) ||
-        IsObjectDetection(args.metadata.modelType)
+        IsMultilabel(args.metadata.modelType)
       ) {
         this.metaDict[JointDataset.ClassificationError] = {
           abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
@@ -286,6 +284,30 @@ export class JointDataset {
           treatAsCategorical: true
         };
       }
+    } else if (this.hasODIncorrect && this.hasODCorrect) {
+      this.strDataDict?.forEach((row) => {
+        JointDataset.setErrorMetrics(
+          row,
+          this._modelMeta.modelType,
+          this.numLabels
+        );
+      })
+      if (IsObjectDetection(args.metadata.modelType)) {
+        this.metaDict[JointDataset.ClassificationError] = {
+          abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
+          category: ColumnCategories.Outcome,
+          isCategorical: true,
+          label: localization.Interpret.Columns.classificationOutcome,
+          sortedCategoricalValues: [
+            localization.Interpret.Columns.correctlyClassified,
+            localization.Interpret.Columns.misclassified
+          ],
+          treatAsCategorical: true
+        };
+      }
+      this.dataDict?.forEach((row, rowIndex) => {
+        row[JointDataset.ClassificationError] = this.strDataDict?.[rowIndex][JointDataset.ObjectDetectionIncorrect] !== "(none)" ? MulticlassClassificationEnum.Misclassified : MulticlassClassificationEnum.Correct;
+      })
     }
     if (args.localExplanations) {
       this.rawLocalImportance = JointDataset.buildLocalFeatureMatrix(
@@ -412,10 +434,9 @@ export class JointDataset {
       return;
     }
     if (IsObjectDetection(modelType)) {
-      row[JointDataset.ClassificationError] =
-        row[JointDataset.ObjectDetectionIncorrect] === "(none)"
-          ? MulticlassClassificationEnum.Misclassified
-          : MulticlassClassificationEnum.Correct;
+      row[JointDataset.ClassificationError] = row[JointDataset.ObjectDetectionIncorrect] !== "(none)"
+        ? MulticlassClassificationEnum.Misclassified
+        : MulticlassClassificationEnum.Correct;
       return;
     }
   }
