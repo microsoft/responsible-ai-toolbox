@@ -750,7 +750,7 @@ class RAIVisionInsights(RAIBaseInsights):
                 rendered_labels[_CORRECT] = _NOLABEL
             rendered_labels[_INCORRECT] = ', '.join(
                 f'{value} {key}' for key, value in
-                image_labels[_INCORRECT].items()  if value > 0)
+                image_labels[_INCORRECT].items() if value > 0)
             if len(rendered_labels[_INCORRECT]) == 0:
                 rendered_labels[_INCORRECT] = _NOLABEL
             rendered_labels[_AGGREGATE_LABEL] = \
