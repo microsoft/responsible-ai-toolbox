@@ -698,7 +698,7 @@ class RAIVisionInsights(RAIBaseInsights):
                 class_names=dashboard_dataset.class_names
             )
 
-            dashboard_dataset.objectDetectionLabels = \
+            dashboard_dataset.object_detection_labels = \
                 self._generate_od_error_labels(
                     dashboard_dataset.object_detection_true_y,
                     dashboard_dataset.object_detection_predicted_y,
@@ -745,12 +745,12 @@ class RAIVisionInsights(RAIBaseInsights):
 
             rendered_labels[_CORRECT] = ', '.join(
                 f'{value} {key}' for key, value in
-                image_labels[_CORRECT].items() if value > 0)
+                image_labels[_CORRECT].items())
             if len(rendered_labels[_CORRECT]) == 0:
                 rendered_labels[_CORRECT] = _NOLABEL
             rendered_labels[_INCORRECT] = ', '.join(
                 f'{value} {key}' for key, value in
-                image_labels[_INCORRECT].items()  if value > 0)
+                image_labels[_INCORRECT].items())
             if len(rendered_labels[_INCORRECT]) == 0:
                 rendered_labels[_INCORRECT] = _NOLABEL
             rendered_labels[_AGGREGATE_LABEL] = \
