@@ -12,13 +12,85 @@ export const fridgeBinary: IDataset = {
   feature_metadata: {
     categorical_features: ["Software", "Make", "Model"]
   },
-  feature_names: ["mean_pixel_value", "Software", "ResolutionUnit", "Make", "GPSInfo", "ImageLength", "ExifOffset", "Model", "YCbCrPositioning", "Orientation", "ImageWidth"],
+  feature_names: [
+    "mean_pixel_value",
+    "Software",
+    "ResolutionUnit",
+    "Make",
+    "GPSInfo",
+    "ImageLength",
+    "ExifOffset",
+    "Model",
+    "YCbCrPositioning",
+    "Orientation",
+    "ImageWidth"
+  ],
   features: [
-    [fridge.features[0][0], "HDR+ 1.0.220943774z", "Google", 2, 31313, 4032, 244, "Pixel 2 XL", 1, 1, 3024],
-    [fridge.features[1][0], "HDR+ 1.0.220943774z", "Google", 2, null, 4032, 232, "Pixel 2 XL", 1, 1, 3024],
-    [fridge.features[2][0], "HDR+ 1.0.220943774z", "Google", 2, 33275, 4032, 244, "Pixel 2 XL", 1, 1, 3024],
-    [fridge.features[3][0], "HDR+ 1.0.220943774z", "Google", 2, 31559, 4032, 244, "Pixel 2 XL", 1, 1, 3024],
-    [fridge.features[34][0], "HDR+ 1.0.220943774z", "Google", 2, null, 4032, 232, "Pixel 2 XL", 1, 1, 3024]
+    [
+      fridge.features[0][0],
+      "HDR+ 1.0.220943774z",
+      "Google",
+      2,
+      31313,
+      4032,
+      244,
+      "Pixel 2 XL",
+      1,
+      1,
+      3024
+    ],
+    [
+      fridge.features[1][0],
+      "HDR+ 1.0.220943774z",
+      "Google",
+      2,
+      undefined,
+      4032,
+      232,
+      "Pixel 2 XL",
+      1,
+      1,
+      3024
+    ],
+    [
+      fridge.features[2][0],
+      "HDR+ 1.0.220943774z",
+      "Google",
+      2,
+      33275,
+      4032,
+      244,
+      "Pixel 2 XL",
+      1,
+      1,
+      3024
+    ],
+    [
+      fridge.features[3][0],
+      "HDR+ 1.0.220943774z",
+      "Google",
+      2,
+      31559,
+      4032,
+      244,
+      "Pixel 2 XL",
+      1,
+      1,
+      3024
+    ],
+    [
+      fridge.features[34][0],
+      "HDR+ 1.0.220943774z",
+      "Google",
+      2,
+      undefined,
+      4032,
+      232,
+      "Pixel 2 XL",
+      1,
+      1,
+      3024
+    ]
   ],
   images: [
     fridgeImages[0],
