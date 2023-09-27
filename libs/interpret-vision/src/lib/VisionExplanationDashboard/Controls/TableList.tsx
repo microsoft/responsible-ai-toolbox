@@ -26,6 +26,7 @@ import {
   ITableListProps,
   ITableListState
 } from "./TableListHelper";
+import { isItemPredTrueEqual } from "../utils/labelUtils";
 
 export class TableList extends React.Component<
   ITableListProps,
@@ -221,7 +222,8 @@ export class TableList extends React.Component<
       return groups;
     }
     const filteredSuccessInstances = filteredItems.filter(
-      (item) => item.predictedY === item.trueY
+      // TODO: Add OD task type for OD's box filter bug fix.
+      (item) => isItemPredTrueEqual(item)
     );
     groups[0].count = filteredSuccessInstances.length;
     groups[1].startIndex = filteredSuccessInstances.length;
