@@ -93,6 +93,8 @@ export class JointDataset {
       this.datasetMetaData = { featureMetaData: args.featureMetaData };
     }
 
+    const modelTypeIsObjectDetection = IsObjectDetection(this._modelMeta.modelType);
+
     if (args.dataset && args.dataset.length > 0) {
       this.initializeDataDictIfNeeded(args.dataset);
       this.datasetRowCount = args.dataset.length;
@@ -144,7 +146,7 @@ export class JointDataset {
       });
       this.hasDataset = true;
     }
-    if (args.predictedY && !IsObjectDetection(args.metadata.modelType)) {
+    if (args.predictedY && !modelTypeIsObjectDetection) {
       this.updateMetaDataDict(
         args.predictedY,
         args.metadata,
@@ -154,7 +156,7 @@ export class JointDataset {
         args.targetColumn
       );
       this.hasPredictedY = true;
-    } else if (args.objectDetectionLabels && IsObjectDetection(args.metadata.modelType)) {
+    } else if (args.objectDetectionLabels && modelTypeIsObjectDetection) {
       this.updateMetaDataDict(
         args.objectDetectionLabels.map(label => label.incorrect),
         args.metadata,
@@ -205,7 +207,7 @@ export class JointDataset {
         this.predictionClassCount = args.metadata.classNames.length;
       }
     }
-    if (args.trueY && !IsObjectDetection(args.metadata.modelType)) {
+    if (args.trueY && !modelTypeIsObjectDetection) {
       this.updateMetaDataDict(
         args.trueY,
         args.metadata,
@@ -215,7 +217,7 @@ export class JointDataset {
         args.targetColumn
       );
       this.hasTrueY = true;
-    } else if (args.objectDetectionLabels && IsObjectDetection(args.metadata.modelType)) {
+    } else if (args.objectDetectionLabels && modelTypeIsObjectDetection) {
       this.updateMetaDataDict(
         args.objectDetectionLabels.map(label => label.correct),
         args.metadata,
@@ -292,7 +294,7 @@ export class JointDataset {
           this.numLabels
         );
       })
-      if (IsObjectDetection(args.metadata.modelType)) {
+      if (modelTypeIsObjectDetection) {
         this.metaDict[JointDataset.ClassificationError] = {
           abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
           category: ColumnCategories.Outcome,
