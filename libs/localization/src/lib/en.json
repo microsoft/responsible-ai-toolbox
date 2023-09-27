@@ -186,6 +186,12 @@
     "showTop": "Datapoints with the largest estimated causal responses to treatment feature: {0}",
     "whatifDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or specify the desired prediction (e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data table or scatter plot."
   },
+  "DataAnalysis": {
+    "TableView": {
+      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
+      "infoTitle": "Additional information on table view"
+    }
+  },
   "ErrorAnalysis": {
     "Cohort": {
       "_cohort.comment": "a subset of the data is called a cohort",
@@ -1692,7 +1698,6 @@
       "CorrectPredictions": "Correct predictions",
       "GlobalExplanation": "Aggregate feature importance",
       "IncorrectPredictions": "Incorrect predictions",
-      "InfoTitle": "Additional information on data analysis table view",
       "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
       "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).",
       "LocalExplanation": "Individual feature importance",
