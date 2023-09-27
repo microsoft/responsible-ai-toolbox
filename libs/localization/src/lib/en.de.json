@@ -1141,7 +1141,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Interpretierbarkeitsdashboard",
-      "importantWords": "Wichtigste Wörter anzeigen",
+      "importantWords": "Show most important words",
       "topFeatureList": "Wichtigste Featurelistenanalysen",
       "allButton": "ALLE FEATURES",
       "negButton": "NEGATIVE FEATURES",
@@ -1155,7 +1155,8 @@
       "predictedAnswer": "Vorhergesagte Antwort: ",
       "trueAnswer": "Richtige Antwort: ",
       "inputs": "Eingaben",
-      "outputs": "Ausgaben"
+      "outputs": "Ausgaben",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "TEXTFUNKTIONSLEGENDE",
@@ -1188,6 +1189,8 @@
       "columnTwo": "Index",
       "columnThree": "WAHR Y",
       "columnFour": "Vorhergesagtes Y",
+      "columnThreeOD": "Correct",
+      "columnFourOD": "Incorrect",
       "columnFive": "Andere Metadaten",
       "chooseObject": "Erkanntes Objekt auswählen",
       "examples": "Beispiele",
@@ -1207,6 +1210,8 @@
       "panelInformation": "Informationen",
       "predictedLabel": "Vorhergesagte Bezeichnung",
       "predictedY": "Vorhergesagt: ",
+      "correctDetections": "Correct detections: ",
+      "incorrectDetections": "Incorrect detections: ",
       "prefix": "Objekt: ",
       "rows": "Zeilen: ",
       "search": "Suchen",

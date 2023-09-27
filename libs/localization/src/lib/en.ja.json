@@ -1141,7 +1141,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "解釈可能性ダッシュボード",
-      "importantWords": "Show most Important Words",
+      "importantWords": "Show most important words",
       "topFeatureList": "上位特徴リストの分析",
       "allButton": "すべての特徴量",
       "negButton": "負の特徴",
@@ -1155,7 +1155,8 @@
       "predictedAnswer": "Predicted answer: ",
       "trueAnswer": "True answer: ",
       "inputs": "Inputs",
-      "outputs": "Outputs"
+      "outputs": "Outputs",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "テキスト特徴の凡例",
@@ -1188,6 +1189,8 @@
       "columnTwo": "インデックス",
       "columnThree": "True Y",
       "columnFour": "予測された Y",
+      "columnThreeOD": "Correct",
+      "columnFourOD": "Incorrect",
       "columnFive": "その他のメタデータ",
       "chooseObject": "Choose a detected object",
       "examples": "examples",
@@ -1207,6 +1210,8 @@
       "panelInformation": "Information",
       "predictedLabel": "Predicted label",
       "predictedY": "Predicted: ",
+      "correctDetections": "Correct detections: ",
+      "incorrectDetections": "Incorrect detections: ",
       "prefix": "Object: ",
       "rows": "Rows: ",
       "search": "検索",

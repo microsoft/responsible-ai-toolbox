@@ -1141,7 +1141,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Dashboard interpreteerbaarheid",
-      "importantWords": "Show most Important Words",
+      "importantWords": "Show most important words",
       "topFeatureList": "Analyse van lijst met belangrijkste functies",
       "allButton": "ALLE FUNCTIES",
       "negButton": "NEGATIEVE FUNCTIES",
@@ -1155,7 +1155,8 @@
       "predictedAnswer": "Predicted answer: ",
       "trueAnswer": "True answer: ",
       "inputs": "Inputs",
-      "outputs": "Outputs"
+      "outputs": "Outputs",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "LEGENDA VAN TEKSTFUNCTIE",
@@ -1188,6 +1189,8 @@
       "columnTwo": "Index",
       "columnThree": "Waar Y",
       "columnFour": "Voorspelde Y",
+      "columnThreeOD": "Correct",
+      "columnFourOD": "Incorrect",
       "columnFive": "Andere metagegevens",
       "chooseObject": "Choose a detected object",
       "examples": "examples",
@@ -1207,6 +1210,8 @@
       "panelInformation": "Information",
       "predictedLabel": "Predicted label",
       "predictedY": "Predicted: ",
+      "correctDetections": "Correct detections: ",
+      "incorrectDetections": "Incorrect detections: ",
       "prefix": "Object: ",
       "rows": "Rows: ",
       "search": "Zoeken",

@@ -1141,7 +1141,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Instrumentpanel för tolkning",
-      "importantWords": "Visa de viktigaste orden",
+      "importantWords": "Show most important words",
       "topFeatureList": "Analys av toppfunktionslistan",
       "allButton": "ALLA FUNKTIONER",
       "negButton": "NEGATIVA FUNKTIONER",
@@ -1155,7 +1155,8 @@
       "predictedAnswer": "Förutsagt svar: ",
       "trueAnswer": "Sant svar: ",
       "inputs": "Indata",
-      "outputs": "Utdata"
+      "outputs": "Utdata",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "FÖRKLARING AV TEXTFUNKTION",
@@ -1188,6 +1189,8 @@
       "columnTwo": "Index",
       "columnThree": "Sant Y",
       "columnFour": "Förutsade Y",
+      "columnThreeOD": "Correct",
+      "columnFourOD": "Incorrect",
       "columnFive": "Andra metadata",
       "chooseObject": "Välj ett identifierat objekt",
       "examples": "exempel",
@@ -1207,6 +1210,8 @@
       "panelInformation": "Information",
       "predictedLabel": "Förväntad etikett",
       "predictedY": "Förutsagt: ",
+      "correctDetections": "Correct detections: ",
+      "incorrectDetections": "Incorrect detections: ",
       "prefix": "Objekt: ",
       "rows": "Rader: ",
       "search": "Sök",

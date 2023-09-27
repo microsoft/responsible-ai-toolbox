@@ -1141,7 +1141,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Painel de Interpretabilidade",
-      "importantWords": "Show most Important Words",
+      "importantWords": "Show most important words",
       "topFeatureList": "Análise da lista de recursos principais",
       "allButton": "TODOS OS RECURSOS",
       "negButton": "RECURSOS NEGATIVOS",
@@ -1155,7 +1155,8 @@
       "predictedAnswer": "Predicted answer: ",
       "trueAnswer": "True answer: ",
       "inputs": "Inputs",
-      "outputs": "Outputs"
+      "outputs": "Outputs",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "LEGENDA DO RECURSO DE TEXTO",
@@ -1188,6 +1189,8 @@
       "columnTwo": "Índice",
       "columnThree": "Y Verdadeiro",
       "columnFour": "Y Previsto",
+      "columnThreeOD": "Correct",
+      "columnFourOD": "Incorrect",
       "columnFive": "Outros metadados",
       "chooseObject": "Choose a detected object",
       "examples": "examples",
@@ -1207,6 +1210,8 @@
       "panelInformation": "Information",
       "predictedLabel": "Predicted label",
       "predictedY": "Predicted: ",
+      "correctDetections": "Correct detections: ",
+      "incorrectDetections": "Incorrect detections: ",
       "prefix": "Object: ",
       "rows": "Rows: ",
       "search": "Pesquisar",
