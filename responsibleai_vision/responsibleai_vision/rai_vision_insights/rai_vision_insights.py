@@ -679,7 +679,7 @@ class RAIVisionInsights(RAIBaseInsights):
             encoded_images.append(b64)
 
         # passing to frontend to draw bounding boxes with the correct scale
-        dashboard_dataset.imageDimensions = image_dimensions
+        dashboard_dataset.image_dimensions = image_dimensions
 
         if len(encoded_images) > 0:
             dashboard_dataset.images = encoded_images
@@ -698,7 +698,7 @@ class RAIVisionInsights(RAIBaseInsights):
                 class_names=dashboard_dataset.class_names
             )
 
-            dashboard_dataset.objectDetectionLabels = \
+            dashboard_dataset.object_detection_labels = \
                 self._generate_od_error_labels(
                     dashboard_dataset.object_detection_true_y,
                     dashboard_dataset.object_detection_predicted_y,

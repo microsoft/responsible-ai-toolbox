@@ -31,7 +31,7 @@ When using the DPV2 run of the object detection ResponsibleAIVisionInsights dash
 
 3. Wrapped ML model returned for use
 
-4. The extracted data table is passed to the front end. The following three attributes are unique to the object detection scenario: `object_detection_true_y, 'object_detection_predicted_y`, and `imageDimensions`. See this ![mock data](https://github.com/microsoft/responsible-ai-toolbox/blob/main/apps/dashboard/src/model-assessment-vision/__mock_data__/fridgeObjectDetection.ts) for an example.
+4. The extracted data table is passed to the front end. The following three attributes are unique to the object detection scenario: `object_detection_true_y, 'object_detection_predicted_y`, and `image_dimensions`. See this ![mock data](https://github.com/microsoft/responsible-ai-toolbox/blob/main/apps/dashboard/src/model-assessment-vision/__mock_data__/fridgeObjectDetection.ts) for an example.
 
 5. The dashboard is generated
 

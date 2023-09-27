@@ -48,8 +48,8 @@ export interface IDataset {
   index?: string[];
   object_detection_true_y?: number[][][];
   object_detection_predicted_y?: number[][][];
-  imageDimensions?: Array<[number, number]>;
-  objectDetectionLabels?: IObjectDetectionLabelType[];
+  image_dimensions?: Array<[number, number]>;
+  object_detection_labels?: IObjectDetectionLabelType[];
 }
 
 // TODO Remove DatasetSummary when possible

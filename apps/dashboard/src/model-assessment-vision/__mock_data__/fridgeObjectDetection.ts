@@ -19,7 +19,7 @@ export const fridgeObjectDetection: IDataset = {
     [92.000130390912, "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"],
     [95.33849179841164, "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"]
   ],
-  imageDimensions: [
+  image_dimensions: [
     [499, 666],
     [499, 666],
     [499, 666],
@@ -101,7 +101,7 @@ export const fridgeObjectDetection: IDataset = {
       [2, 220, 130, 392, 505, 0]
     ]
   ],
-  objectDetectionLabels: [
+  object_detection_labels: [
     {
       aggregate: "2 correct, 0 incorrect",
       correct: "1 milk_bottle, 1 can",
