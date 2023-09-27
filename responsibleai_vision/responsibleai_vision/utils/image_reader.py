@@ -91,9 +91,11 @@ def get_all_exif_feature_names(image_dataset):
                     # get the tag name, instead of human unreadable tag id
                     tag = TAGS.get(tag_id, tag_id)
                     if tag not in image_dataset.columns:
-                       data = exifdata.get(tag_id)
-                       if isinstance(data, str) or isinstance(data, int) or isinstance(data, float):
-                        exif_feature_names.add(tag)
+                        data = exifdata.get(tag_id)
+                        if isinstance(data, str) or \
+                           isinstance(data, int) or \
+                           isinstance(data, float):
+                            exif_feature_names.add(tag)
     return list(exif_feature_names)
 
 
