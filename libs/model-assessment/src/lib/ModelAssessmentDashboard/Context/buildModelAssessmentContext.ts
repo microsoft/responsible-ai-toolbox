@@ -60,11 +60,11 @@ export function buildInitialModelAssessmentContext(
     featureMetaData: props.dataset.feature_metadata,
     localExplanations,
     metadata: modelMetadata,
+    objectDetectionLabels: props.dataset.objectDetectionLabels,
     predictedProbabilities: props.dataset.probability_y,
     predictedY: props.dataset.predicted_y,
     targetColumn: props.dataset.target_column,
-    trueY: props.dataset.true_y,
-    objectDetectionLabels: props.dataset.objectDetectionLabels
+    trueY: props.dataset.true_y
   });
   const globalProps = buildGlobalProperties(
     props.modelExplanationData?.[0]?.precomputedExplanations

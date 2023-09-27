@@ -7,9 +7,9 @@ import {
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance
 } from "../Interfaces/ExplanationInterfaces";
+import { IObjectDetectionLabelType } from "../Interfaces/IDataset";
 import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
 import { IFeatureMetaData } from "../Interfaces/IMetaData";
-import { IObjectDetectionLabelType } from "../Interfaces/IDataset";
 
 import { AxisTypes } from "./IGenericChartProps";
 

@@ -4,6 +4,7 @@
 import { ColumnActionsMode, IColumn } from "@fluentui/react";
 
 import { JointDataset } from "../util/JointDataset";
+import { MulticlassClassificationEnum } from "./JointDatasetUtils";
 
 export interface ITableState {
   rows: any[];
@@ -15,7 +16,7 @@ export function areRowPredTrueLabelsEqual(
   jointDataset: JointDataset
 ): boolean {
   if (jointDataset.hasODIncorrect && jointDataset.hasODCorrect) {
-    return row[JointDataset.ClassificationError] === 0;
+    return row[JointDataset.ClassificationError] === MulticlassClassificationEnum.Correct;
   }
   if (jointDataset.numLabels === 1) {
     return row[JointDataset.PredictedYLabel] === row[JointDataset.TrueYLabel];
