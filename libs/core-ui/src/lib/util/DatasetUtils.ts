@@ -4,6 +4,7 @@
 import { ColumnActionsMode, IColumn } from "@fluentui/react";
 
 import { JointDataset } from "../util/JointDataset";
+
 import { MulticlassClassificationEnum } from "./JointDatasetUtils";
 
 export interface ITableState {
