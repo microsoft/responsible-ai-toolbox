@@ -9,6 +9,7 @@ import {
 } from "../Interfaces/ExplanationInterfaces";
 import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
 import { IFeatureMetaData } from "../Interfaces/IMetaData";
+import { IObjectDetectionLabelType } from "../Interfaces/IDataset";
 
 import { AxisTypes } from "./IGenericChartProps";
 
@@ -23,8 +24,7 @@ export interface IJointDatasetArgs {
   metadata: IExplanationModelMetadata;
   featureMetaData?: IFeatureMetaData;
   targetColumn?: string | string[];
-  objectDetectionTrueY?: number[][][];
-  objectDetectionPredictedY?: number[][][];
+  objectDetectionLabels?: IObjectDetectionLabelType[];
 }
 
 export enum ColumnCategories {

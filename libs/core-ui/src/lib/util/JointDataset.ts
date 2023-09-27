@@ -18,7 +18,7 @@ import {
   WeightVectors,
   WeightVectorOption
 } from "../Interfaces/IWeightedDropdownContext";
-import { IsBinary, IsMulticlass, IsMultilabel } from "../util/ExplanationUtils";
+import { IsBinary, IsMulticlass, IsMultilabel, IsObjectDetection } from "../util/ExplanationUtils";
 
 import { AxisTypes } from "./IGenericChartProps";
 import {
@@ -42,9 +42,9 @@ export class JointDataset {
   public static readonly PredictedYLabel = "PredictedY";
   public static readonly ProbabilityYRoot = "ProbabilityClass";
   public static readonly TrueYLabel = "TrueY";
-  public static readonly ObjectDetectionPredictedYLabel =
-    "ObjectDetectionPredictedY";
-  public static readonly ObjectDetectionTrueYLabel = "ObjectDetectionTrueY";
+  public static readonly ObjectDetectionCorrect = "Correct";
+  public static readonly ObjectDetectionIncorrect = "Incorrect";
+  public static readonly ObjectDetectionLabels = "ObjectDetectionLabels";
   public static readonly DitherLabel = "Dither";
   public static readonly DitherLabel2 = "Dither2";
   public static readonly ClassificationError = "ClassificationError";
@@ -64,6 +64,8 @@ export class JointDataset {
   public hasPredictedY = false;
   public hasPredictedProbabilities = false;
   public hasTrueY = false;
+  public hasODIncorrect = false;
+  public hasODCorrect = false;
   public datasetFeatureCount = 0;
   public predictionClassCount = 0;
   public datasetRowCount = 0;
@@ -142,7 +144,7 @@ export class JointDataset {
       });
       this.hasDataset = true;
     }
-    if (args.predictedY) {
+    if (args.predictedY && !IsObjectDetection(args.metadata.modelType)) {
       this.updateMetaDataDict(
         args.predictedY,
         args.metadata,
@@ -152,6 +154,16 @@ export class JointDataset {
         args.targetColumn
       );
       this.hasPredictedY = true;
+    } else if (args.objectDetectionLabels && IsObjectDetection(args.metadata.modelType)) {
+      this.updateMetaDataDict(
+        args.objectDetectionLabels.map(label => label.incorrect),
+        args.metadata,
+        JointDataset.ObjectDetectionIncorrect,
+        localization.Interpret.ExplanationScatter.odIncorrect,
+        localization.Interpret.ExplanationScatter.odIncorrect,
+        args.targetColumn
+      );
+      this.hasODIncorrect = true;
     }
     if (args.predictedProbabilities) {
       const predictedProbabilities = args.predictedProbabilities;
@@ -193,7 +205,7 @@ export class JointDataset {
         this.predictionClassCount = args.metadata.classNames.length;
       }
     }
-    if (args.trueY) {
+    if (args.trueY && !IsObjectDetection(args.metadata.modelType)) {
       this.updateMetaDataDict(
         args.trueY,
         args.metadata,
@@ -203,9 +215,20 @@ export class JointDataset {
         args.targetColumn
       );
       this.hasTrueY = true;
+    } else if (args.objectDetectionLabels && IsObjectDetection(args.metadata.modelType)) {
+      this.updateMetaDataDict(
+        args.objectDetectionLabels.map(label => label.correct),
+        args.metadata,
+        JointDataset.ObjectDetectionCorrect,
+        localization.Interpret.ExplanationScatter.odCorrect,
+        localization.Interpret.ExplanationScatter.odCorrect,
+        args.targetColumn
+      );
+      this.hasODCorrect = true;
     }
     // include error columns if applicable
-    if (this.hasPredictedY && this.hasTrueY) {
+    if ((this.hasPredictedY && this.hasTrueY) ||
+        (this.hasODIncorrect && this.hasODCorrect)) {
       this.dataDict?.forEach((row) => {
         JointDataset.setErrorMetrics(
           row,
@@ -248,7 +271,8 @@ export class JointDataset {
       }
       if (
         IsMulticlass(args.metadata.modelType) ||
-        IsMultilabel(args.metadata.modelType)
+        IsMultilabel(args.metadata.modelType) ||
+        IsObjectDetection(args.metadata.modelType)
       ) {
         this.metaDict[JointDataset.ClassificationError] = {
           abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
@@ -385,6 +409,13 @@ export class JointDataset {
       row[JointDataset.ClassificationError] = misclassified
         ? MulticlassClassificationEnum.Misclassified
         : MulticlassClassificationEnum.Correct;
+      return;
+    }
+    if (IsObjectDetection(modelType)) {
+      row[JointDataset.ClassificationError] =
+        row[JointDataset.ObjectDetectionIncorrect] === "(none)"
+          ? MulticlassClassificationEnum.Misclassified
+          : MulticlassClassificationEnum.Correct;
       return;
     }
   }

@@ -63,7 +63,8 @@ export function buildInitialModelAssessmentContext(
     predictedProbabilities: props.dataset.probability_y,
     predictedY: props.dataset.predicted_y,
     targetColumn: props.dataset.target_column,
-    trueY: props.dataset.true_y
+    trueY: props.dataset.true_y,
+    objectDetectionLabels: props.dataset.objectDetectionLabels
   });
   const globalProps = buildGlobalProperties(
     props.modelExplanationData?.[0]?.precomputedExplanations
