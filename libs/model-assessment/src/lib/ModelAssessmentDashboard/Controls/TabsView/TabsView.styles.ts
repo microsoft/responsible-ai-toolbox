@@ -7,7 +7,6 @@ import {
   IProcessedStyleSet,
   getTheme
 } from "@fluentui/react";
-import { hideXxlUp } from "@responsible-ai/core-ui";
 
 export interface ITabsViewStyles {
   section: IStyle;
@@ -41,8 +40,7 @@ export const tabsViewStyles: () => IProcessedStyleSet<ITabsViewStyles> = () => {
       textOverflow: "ellipsis"
     },
     sectionTooltip: {
-      display: "inline",
-      ...hideXxlUp
+      display: "inline"
     },
     stackStyle: {
       padding: "20px",

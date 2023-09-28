@@ -88,6 +88,7 @@ _DROPPED_FEATURES = 'dropped_features'
 _INCORRECT = 'incorrect'
 _CORRECT = 'correct'
 _AGGREGATE_LABEL = 'aggregate'
+_NOLABEL = '(none)'
 
 
 def reshape_image(image):
@@ -746,12 +747,12 @@ class RAIVisionInsights(RAIBaseInsights):
                 f'{value} {key}' for key, value in
                 image_labels[_CORRECT].items())
             if len(rendered_labels[_CORRECT]) == 0:
-                rendered_labels[_CORRECT] = 'None'
+                rendered_labels[_CORRECT] = _NOLABEL
             rendered_labels[_INCORRECT] = ', '.join(
                 f'{value} {key}' for key, value in
                 image_labels[_INCORRECT].items())
             if len(rendered_labels[_INCORRECT]) == 0:
-                rendered_labels[_INCORRECT] = 'None'
+                rendered_labels[_INCORRECT] = _NOLABEL
             rendered_labels[_AGGREGATE_LABEL] = \
                 f"{sum(image_labels[_CORRECT].values())} {_CORRECT}, \
                   {sum(image_labels[_INCORRECT].values())} \
