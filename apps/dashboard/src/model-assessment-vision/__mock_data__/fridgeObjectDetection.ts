@@ -177,27 +177,27 @@ export const fridgeObjectDetection: IDataset = {
     {
       aggregate: "2 correct, 0 incorrect",
       correct: "1 milk_bottle, 1 can",
-      incorrect: "None"
+      incorrect: "(none)"
     },
     {
       aggregate: "2 correct, 0 incorrect",
       correct: "1 milk_bottle, 1 can",
-      incorrect: "None"
+      incorrect: "(none)"
     },
     {
       aggregate: "2 correct, 0 incorrect",
       correct: "1 carton, 1 water_bottle",
-      incorrect: "None"
+      incorrect: "(none)"
     },
     {
       aggregate: "2 correct, 0 incorrect",
       correct: "1 can, 1 milk_bottle",
-      incorrect: "None"
+      incorrect: "(none)"
     },
     {
       aggregate: "2 correct, 0 incorrect",
       correct: "1 carton, 1 water_bottle",
-      incorrect: "None"
+      incorrect: "(none)"
     }
   ],
   predicted_y: [

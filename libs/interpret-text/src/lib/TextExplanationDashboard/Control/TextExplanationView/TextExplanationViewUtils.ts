@@ -8,7 +8,7 @@ import { QAExplanationType, Utils } from "../../CommonUtils";
 import { MaxImportantWords } from "./ITextExplanationViewSpec";
 
 export function getOutputFeatureImportances(
-  localExplanations: number[][],
+  localExplanations: number[][][],
   baseValues?: number[][]
 ): number[][] {
   const startSumOfFeatureImportances = getSumOfFeatureImportances(
@@ -31,7 +31,7 @@ export function getOutputFeatureImportances(
   ];
 }
 
-export function getSumOfFeatureImportances(importances: number[]): number[] {
+export function getSumOfFeatureImportances(importances: number[][]): number[] {
   return importances.map((_, index) =>
     importances.reduce((sum, row) => sum + row[index], 0)
   );
@@ -80,15 +80,17 @@ export function computeImportancesForWeightVector(
 }
 
 export function computeImportancesForAllTokens(
-  importances: number[][],
+  importances: number[][][],
   isInitialState?: boolean,
   qaRadio?: string
 ): number[] {
-  const startSumImportances = importances[0].map((_, index) =>
-    importances.reduce((sum, row) => sum + row[index], 0)
+  const startImportances = importances[0];
+  const startSumImportances = startImportances.map((_, index) =>
+    startImportances.reduce((sum, row) => sum + row[index], 0)
   );
-  const endSumImportances = importances[1].map((_, index) =>
-    importances.reduce((sum, row) => sum + row[index], 0)
+  const endImportances = importances[1];
+  const endSumImportances = endImportances.map((_, index) =>
+    endImportances.reduce((sum, row) => sum + row[index], 0)
   );
   if (isInitialState) {
     return startSumImportances;

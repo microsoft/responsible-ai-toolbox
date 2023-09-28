@@ -28,7 +28,7 @@ export interface ITextLocalImportancePlotsProps {
 
 export interface ITextFeatureImportances {
   text: string[];
-  importances: number[][];
+  importances: number[][] | number[][][];
   baseValues?: number[][];
   prediction: number[];
   predictedY?: number[] | number[][] | string[] | string | number;
@@ -83,7 +83,8 @@ export class TextLocalImportancePlots extends React.Component<ITextLocalImportan
           const key = JointDataset.ProbabilityYRoot + index.toString();
           return rowDict[key];
         });
-      const importances: number[][] = textFeatureImportance?.localExplanations;
+      const importances: number[][] | number[][][] =
+        textFeatureImportance?.localExplanations;
       const baseValues = textFeatureImportance?.baseValues;
       const trueY = this.context.dataset.true_y[row[0]];
       const predictedY = this.context.dataset.predicted_y?.[row[0]];

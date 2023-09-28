@@ -18,7 +18,7 @@ export interface IDatasetSummary {
    */
   text: string[];
   classNames?: string[];
-  localExplanations: number[][];
+  localExplanations: number[][] | number[][][];
   baseValues?: number[][];
   prediction?: number[];
   predictedY?: number[] | number[][] | string[] | string | number;
