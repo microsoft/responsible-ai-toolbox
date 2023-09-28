@@ -6,15 +6,18 @@ import { DatasetTaskType, IDataset } from "@responsible-ai/core-ui";
 import { fridgeObjectDetectionImages } from "./fridgeObjectDetectionImages";
 
 export const fridgeObjectDetection: IDataset = {
-  categorical_features: [],
+  categorical_features: ["Make", "Software", "Model"],
   class_names: ["can", "carton", "milk_bottle", "water_bottle"],
-  feature_names: ["mean_pixel_value"],
+  feature_metadata: {
+    categorical_features: ["Make", "Software", "Model"]
+  },
+  feature_names: ["mean_pixel_value", "Make", "Software", "Model"],
   features: [
-    [96.30899737412763],
-    [95.32630225415797],
-    [100.3762680516188],
-    [92.000130390912],
-    [95.33849179841164]
+    [96.30899737412763, "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"],
+    [95.32630225415797, "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"],
+    [100.3762680516188, "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"],
+    [92.000130390912, "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"],
+    [95.33849179841164, "Google", "HDR+ 1.0.220943774z", "Pixel 2 XL"]
   ],
   imageDimensions: [
     [499, 666],
@@ -97,6 +100,33 @@ export const fridgeObjectDetection: IDataset = {
       [4, 98, 176, 219, 496, 0],
       [2, 220, 130, 392, 505, 0]
     ]
+  ],
+  objectDetectionLabels: [
+    {
+      aggregate: "2 correct, 0 incorrect",
+      correct: "1 milk_bottle, 1 can",
+      incorrect: "(none)"
+    },
+    {
+      aggregate: "2 correct, 0 incorrect",
+      correct: "1 milk_bottle, 1 can",
+      incorrect: "(none)"
+    },
+    {
+      aggregate: "2 correct, 0 incorrect",
+      correct: "1 carton, 1 water_bottle",
+      incorrect: "(none)"
+    },
+    {
+      aggregate: "2 correct, 0 incorrect",
+      correct: "1 can, 1 milk_bottle",
+      incorrect: "(none)"
+    },
+    {
+      aggregate: "2 correct, 0 incorrect",
+      correct: "1 carton, 1 water_bottle",
+      incorrect: "(none)"
+    }
   ],
   predicted_y: [
     [1, 0, 1, 0],

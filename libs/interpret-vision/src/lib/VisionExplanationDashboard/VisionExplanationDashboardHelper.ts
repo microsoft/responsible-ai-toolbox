@@ -3,6 +3,7 @@
 
 import {
   Cohort,
+  DatasetTaskType,
   FilterMethods,
   ICompositeFilter,
   IDataset,
@@ -15,7 +16,7 @@ import { localization } from "@responsible-ai/localization";
 
 import { IVisionExplanationDashboardProps } from "./Interfaces/IVisionExplanationDashboardProps";
 import { IVisionExplanationDashboardState } from "./Interfaces/IVisionExplanationDashboardState";
-import { getJoinedLabelString } from "./utils/labelUtils";
+import { getJoinedLabelString, NoLabel } from "./utils/labelUtils";
 
 export enum VisionDatasetExplorerTabOptions {
   ImageExplorerView = "Image explorer view",
@@ -73,9 +74,7 @@ export function preprocessData(
 
   const trueY = mapClassNames(dataSummary.true_y, classNames);
 
-  const features = dataSummary.features?.map((featuresArr) => {
-    return Number((featuresArr[0] as number).toFixed(2));
-  });
+  const features = dataSummary.features;
 
   const fieldNames = dataSummary.feature_names;
   if (!features || !fieldNames) {
@@ -89,23 +88,41 @@ export function preprocessData(
     const odPredictedY = typeof y === "undefined" ? defVal : y;
     const x = dataset.object_detection_true_y?.[index];
     const odTrueY = typeof x === "undefined" ? defVal : x;
+    const i = dataset.objectDetectionLabels?.[index].incorrect;
+    const c = dataset.objectDetectionLabels?.[index].correct;
+    const a = dataset.objectDetectionLabels?.[index].aggregate;
+    const odIncorrect = typeof i === "undefined" ? defVal : i;
+    const odCorrect = typeof c === "undefined" ? defVal : c;
+    const odAggregate = typeof a === "undefined" ? defVal : a;
 
     const item: IVisionListItem = {
       image,
       index,
+      odAggregate,
+      odCorrect,
+      odIncorrect,
       odPredictedY,
       odTrueY,
       predictedY: predictedY[index],
       trueY: trueY[index]
     };
-    fieldNames.forEach((fieldName) => {
-      item[fieldName] = features[index];
+    fieldNames.forEach((fieldName, fieldIndex) => {
+      item[fieldName] = features[index][fieldIndex] as string | number;
+      if (typeof item[fieldName] === "number") {
+        item[fieldName] = Number((item[fieldName] as number).toFixed(2));
+      }
     });
     const predictedYValue = getJoinedLabelString(item.predictedY);
     const trueYValue = getJoinedLabelString(item.trueY);
-    predictedYValue === trueYValue
-      ? successInstances.push(item)
-      : errorInstances.push(item);
+    if (dataset.task_type === DatasetTaskType.ObjectDetection) {
+      item.odIncorrect === NoLabel
+        ? successInstances.push(item)
+        : errorInstances.push(item);
+    } else {
+      predictedYValue === trueYValue
+        ? successInstances.push(item)
+        : errorInstances.push(item);
+    }
 
     loadingExplanation.push(
       new Array<boolean>(

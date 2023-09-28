@@ -41,17 +41,8 @@ export function getInfo(
       body = localization.Interpret.DatasetExplorer.helperText;
       title = localization.Interpret.DatasetExplorer.infoTitle;
     } else if (dataAnalysisOption === DataAnalysisTabOptions.TableView) {
-      title = localization.ModelAssessment.FeatureImportances.InfoTitle;
-      let hasTextImportances = false;
-      if (props?.modelExplanationData) {
-        hasTextImportances =
-          !!props.modelExplanationData[0]?.precomputedExplanations
-            ?.textFeatureImportance;
-      }
-      body = hasTextImportances
-        ? localization.ModelAssessment.FeatureImportances.IndividualFeatureText
-        : localization.ModelAssessment.FeatureImportances
-            .IndividualFeatureTabular;
+      title = localization.DataAnalysis.TableView.infoTitle;
+      body = localization.DataAnalysis.TableView.description;
     }
   } else if (tabKey === GlobalTabKeys.CausalAnalysisTab) {
     if (causalAnalysisOption === CausalAnalysisOptions.Aggregate) {

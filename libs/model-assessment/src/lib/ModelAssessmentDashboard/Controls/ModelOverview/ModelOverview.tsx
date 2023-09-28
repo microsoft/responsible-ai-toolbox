@@ -991,10 +991,24 @@ export class ModelOverview extends React.Component<
     });
   };
 
+  private abortAnyPreexistingExecution(taskType: string): void {
+    let abortController: AbortController | undefined;
+    if (taskType === DatasetTaskType.ObjectDetection) {
+      abortController = this.state.objectDetectionAbortController;
+    } else if (taskType === DatasetTaskType.QuestionAnswering) {
+      abortController = this.state.questionAnsweringAbortController;
+    }
+    if (abortController !== undefined) {
+      abortController.abort();
+    }
+  }
+
   private onFeatureSelectionChange = (
     _: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
+    this.abortAnyPreexistingExecution(this.context.dataset.task_type);
+
     if (item && item.selected !== undefined && typeof item.key === "number") {
       let newlySelectedFeatures = this.state.selectedFeatures;
       // technically we know it's only numbers but item.key has type string | number

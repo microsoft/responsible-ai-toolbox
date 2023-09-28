@@ -98,6 +98,7 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
               selectItem={this.props.onItemSelect}
               pageSize={this.props.pageSize}
               updateSelectedIndices={this.props.updateSelectedIndices}
+              taskType={this.props.taskType}
             />
           </Stack>
         );
@@ -124,6 +125,7 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
                       imageDim={this.props.imageDim}
                       searchValue={this.props.searchValue}
                       selectItem={this.props.onItemSelect}
+                      taskType={this.props.taskType}
                     />
                   </Stack>
                 </Stack>
@@ -152,6 +154,7 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
                         imageDim={this.props.imageDim}
                         searchValue={this.props.searchValue}
                         selectItem={this.props.onItemSelect}
+                        taskType={this.props.taskType}
                       />
                     </Stack.Item>
                   </Stack>
@@ -174,6 +177,7 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
                         imageDim={this.props.imageDim}
                         searchValue={this.props.searchValue}
                         selectItem={this.props.onItemSelect}
+                        taskType={this.props.taskType}
                       />
                     </Stack.Item>
                   </Stack>
