@@ -81,9 +81,10 @@ def extract_features(image_dataset: pd.DataFrame,
                     # decode bytes
                     if isinstance(data, bytes):
                         data = data.decode()
-                    # TODO: add support for other data types
                     if isinstance(data, str):
                         feature_metadata.categorical_features.append(str(tag))
+                        row_feature_values[feature_names.index(tag)] = data
+                    elif isinstance(data, int) or isinstance(data, float):
                         row_feature_values[feature_names.index(tag)] = data
 
         # append all features other than target column and label
