@@ -16,7 +16,7 @@ import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { getFilteredDataFromSearch } from "../utils/getFilteredData";
-import { getJoinedLabelString, isItemPredTrueEqual } from "../utils/labelUtils";
+import { getJoinedLabelString } from "../utils/labelUtils";
 
 import { dataCharacteristicsStyles } from "./DataCharacteristics.styles";
 import {
@@ -31,31 +31,37 @@ import {
 } from "./DataCharacteristicsHelper";
 import { DataCharacteristicsLegend } from "./DataCharacteristicsLegend";
 import { DataCharacteristicsRow } from "./DataCharacteristicsRow";
+import { sortKeys } from "./DataCharacteristicsSortHelper";
 
 export class DataCharacteristics extends React.Component<
   IDataCharacteristicsProps,
   IDataCharacteristicsState
 > {
-  private rowHeight: number;
-  private predOrIncorrectLabelType: string;
-  private trueOrCorrectLabelType: string;
+  private rowHeight = 0;
+  private predOrIncorrectLabelType: string = getPredOrIncorrectLabelType(
+    this.props.taskType
+  );
+  private trueOrCorrectLabelType: string = getTrueOrCorrectLabelType(
+    this.props.taskType
+  );
+  private classNames = dataCharacteristicsStyles();
   public constructor(props: IDataCharacteristicsProps) {
     super(props);
-    this.rowHeight = 0;
-    this.predOrIncorrectLabelType = getPredOrIncorrectLabelType(this.props.taskType);
-    this.trueOrCorrectLabelType = getTrueOrCorrectLabelType(this.props.taskType);
     const labelTypeDropdownOptions: IDropdownOption[] = [
-      { key: this.predOrIncorrectLabelType, text: this.predOrIncorrectLabelType },
+      {
+        key: this.predOrIncorrectLabelType,
+        text: this.predOrIncorrectLabelType
+      },
       { key: this.trueOrCorrectLabelType, text: this.trueOrCorrectLabelType }
     ];
     this.state = {
       ...defaultState,
       labelType: this.predOrIncorrectLabelType,
-      labelTypeDropdownOptions,
+      labelTypeDropdownOptions
     };
   }
 
-  public componentDidMount = () : void => this.processData(true);
+  public componentDidMount = (): void => this.processData(true);
 
   public componentDidUpdate(prevProps: IDataCharacteristicsProps): void {
     if (this.props.items !== prevProps.items) {
@@ -66,11 +72,9 @@ export class DataCharacteristics extends React.Component<
   }
 
   public render(): React.ReactNode {
-    const classNames = dataCharacteristicsStyles();
     const predicted = this.state.labelType === this.predOrIncorrectLabelType;
     const items = predicted ? this.state.itemsPredicted : this.state.itemsTrue;
-    let keys = [...items.keys()];
-    keys = this.sortKeys(keys);
+    const keys = sortKeys([...items.keys()], items, this.props.taskType);
     return (
       <FocusZone>
         <Stack tokens={stackTokens}>
@@ -81,7 +85,7 @@ export class DataCharacteristics extends React.Component<
               horizontalAlign="space-between"
               verticalAlign="center"
             >
-              <Stack.Item className={classNames.labelsContainer}>
+              <Stack.Item className={this.classNames.labelsContainer}>
                 <Stack horizontal tokens={{ childrenGap: "s1" }}>
                   <Stack.Item>
                     <Dropdown
@@ -97,7 +101,7 @@ export class DataCharacteristics extends React.Component<
                   <Stack.Item>
                     <Dropdown
                       id="labelVisibilitySelectorsDropdown"
-                      className={classNames.dropdown}
+                      className={this.classNames.dropdown}
                       label={
                         localization.InterpretVision.Dashboard
                           .labelVisibilityDropdown
@@ -124,7 +128,7 @@ export class DataCharacteristics extends React.Component<
             </Stack>
           </Stack.Item>
           <Stack.Item
-            className={classNames.mainContainer}
+            className={this.classNames.mainContainer}
             id="classViewContainer"
             style={{ height: this.props.numRows * this.props.imageDim * 1.8 }}
           >
@@ -140,7 +144,7 @@ export class DataCharacteristics extends React.Component<
                 <Stack
                   key={label}
                   tokens={stackTokens}
-                  className={classNames.instanceContainer}
+                  className={this.classNames.instanceContainer}
                 >
                   {labelVisibilities.get(label.toString()) && (
                     <Stack.Item>
@@ -178,34 +182,40 @@ export class DataCharacteristics extends React.Component<
       this.props.searchValue,
       this.props.items
     );
-    this.setState(processItems(filteredItems, resetLabels, this.state,
-      this.predOrIncorrectLabelType, this.trueOrCorrectLabelType));
+    this.setState(
+      processItems(
+        filteredItems,
+        resetLabels,
+        this.state,
+        this.predOrIncorrectLabelType,
+        this.trueOrCorrectLabelType
+      )
+    );
   };
 
   private onRenderCell = (
     item?: IVisionListItem | undefined
   ): React.ReactElement => {
     const imageDim = this.props.imageDim;
-    const classNames = dataCharacteristicsStyles();
     const predictedY = getJoinedLabelString(item?.predictedY);
     const trueY = getJoinedLabelString(item?.trueY);
     const indicatorStyle = mergeStyles(
-      classNames.indicator,
+      this.classNames.indicator,
       { width: imageDim },
       predictedY === trueY
-        ? classNames.successIndicator
-        : classNames.errorIndicator
+        ? this.classNames.successIndicator
+        : this.classNames.errorIndicator
     );
     return !item ? (
       <div />
     ) : (
-      <Stack className={classNames.tile}>
+      <Stack className={this.classNames.tile}>
         <Stack.Item style={{ height: imageDim, width: imageDim }}>
           <Image
             alt={predictedY}
             src={`data:image/jpg;base64,${item?.image}`}
             onClick={this.callbackWrapper(item)}
-            className={classNames.image}
+            className={this.classNames.image}
             style={{ display: "inline", height: imageDim }}
             imageFit={ImageFit.none}
           />
@@ -231,30 +241,10 @@ export class DataCharacteristics extends React.Component<
     if (!item) {
       return;
     }
-    this.setState(getLabelVisibility(item, this.state, this.predOrIncorrectLabelType));
+    this.setState(
+      getLabelVisibility(item, this.state, this.predOrIncorrectLabelType)
+    );
   };
-
-  private sortKeys(keys: string[]): string[] {
-    const items =
-      this.state.labelType === this.predOrIncorrectLabelType
-        ? this.state.itemsPredicted
-        : this.state.itemsTrue;
-    keys.sort((a, b) => {
-      const aItems = items.get(a);
-      const bItems = items.get(b);
-      const aCount = aItems?.filter(
-        (item) => !isItemPredTrueEqual(item, this.props.taskType)
-      ).length;
-      const bCount = bItems?.filter(
-        (item) => !isItemPredTrueEqual(item, this.props.taskType)
-      ).length;
-      if (aCount === bCount) {
-        return a > b ? 1 : -1;
-      }
-      return !aCount || !bCount ? 0 : bCount - aCount;
-    });
-    return keys;
-  }
 
   private loadNextItems = (index: number) => (): void => {
     const { renderStartIndex, showBackArrow } = this.state;
