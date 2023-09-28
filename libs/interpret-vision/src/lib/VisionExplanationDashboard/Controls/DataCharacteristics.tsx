@@ -55,9 +55,7 @@ export class DataCharacteristics extends React.Component<
     };
   }
 
-  public componentDidMount(): void {
-    this.processData(true);
-  }
+  public componentDidMount = () : void => this.processData(true);
 
   public componentDidUpdate(prevProps: IDataCharacteristicsProps): void {
     if (this.props.items !== prevProps.items) {
@@ -71,10 +69,7 @@ export class DataCharacteristics extends React.Component<
     const classNames = dataCharacteristicsStyles();
     const predicted = this.state.labelType === this.predOrIncorrectLabelType;
     const items = predicted ? this.state.itemsPredicted : this.state.itemsTrue;
-    let keys = [];
-    for (const key of items.keys()) {
-      keys.push(key);
-    }
+    let keys = [...items.keys()];
     keys = this.sortKeys(keys);
     return (
       <FocusZone>
