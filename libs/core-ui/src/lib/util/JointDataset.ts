@@ -18,7 +18,12 @@ import {
   WeightVectors,
   WeightVectorOption
 } from "../Interfaces/IWeightedDropdownContext";
-import { IsBinary, IsMulticlass, IsMultilabel, IsObjectDetection } from "../util/ExplanationUtils";
+import {
+  IsBinary,
+  IsMulticlass,
+  IsMultilabel,
+  IsObjectDetection
+} from "../util/ExplanationUtils";
 
 import { AxisTypes } from "./IGenericChartProps";
 import {
@@ -89,228 +94,13 @@ export class JointDataset {
   public constructor(args: IJointDatasetArgs) {
     this._modelMeta = args.metadata;
 
-    if (args.featureMetaData !== undefined) {
-      this.datasetMetaData = { featureMetaData: args.featureMetaData };
-    }
+    const modelTypeIsObjectDetection = IsObjectDetection(
+      this._modelMeta.modelType
+    );
 
-    const modelTypeIsObjectDetection = IsObjectDetection(this._modelMeta.modelType);
-
-    if (args.dataset && args.dataset.length > 0) {
-      this.initializeDataDictIfNeeded(args.dataset);
-      this.datasetRowCount = args.dataset.length;
-      this.datasetFeatureCount = args.dataset[0].length;
-      // first set metadata
-      args.dataset[0].forEach((_, colIndex) => {
-        const key = JointDataset.DataLabelRoot + colIndex.toString();
-        if (args.metadata.featureIsCategorical?.[colIndex]) {
-          const sortedUnique = (
-            args.metadata.featureRanges[colIndex] as ICategoricalRange
-          ).uniqueValues
-            .concat()
-            .sort();
-          this.metaDict[key] = {
-            abbridgedLabel: args.metadata.featureNamesAbridged[colIndex],
-            category: ColumnCategories.Dataset,
-            index: colIndex,
-            isCategorical: true,
-            label: args.metadata.featureNames[colIndex],
-            sortedCategoricalValues: sortedUnique,
-            treatAsCategorical: true
-          };
-        } else {
-          this.metaDict[key] = {
-            abbridgedLabel: args.metadata.featureNamesAbridged[colIndex],
-            category: ColumnCategories.Dataset,
-            featureRange: args.metadata.featureRanges[
-              colIndex
-            ] as INumericRange,
-            index: colIndex,
-            isCategorical: false,
-            label: args.metadata.featureNames[colIndex]
-          };
-        }
-      });
-      args.dataset.forEach((row, index) => {
-        row.forEach((val, colIndex) => {
-          const key = JointDataset.DataLabelRoot + colIndex.toString();
-          if (this.dataDict) {
-            // store the index for categorical values rather than the actual value. Makes dataset uniform numeric and enables dithering
-            if (args.metadata.featureIsCategorical?.[colIndex]) {
-              this.dataDict[index][key] =
-                this.metaDict[key].sortedCategoricalValues?.indexOf(val) || 0;
-            } else {
-              this.dataDict[index][key] = val;
-            }
-          }
-        });
-      });
-      this.hasDataset = true;
-    }
-    if (args.predictedY && !modelTypeIsObjectDetection) {
-      this.updateMetaDataDict(
-        args.predictedY,
-        args.metadata,
-        JointDataset.PredictedYLabel,
-        localization.Interpret.ExplanationScatter.predictedY,
-        localization.Interpret.ExplanationScatter.predictedY,
-        args.targetColumn
-      );
-      this.hasPredictedY = true;
-    } else if (args.objectDetectionLabels && modelTypeIsObjectDetection) {
-      this.updateMetaDataDict(
-        args.objectDetectionLabels.map(label => label.incorrect),
-        args.metadata,
-        JointDataset.ObjectDetectionIncorrect,
-        localization.Interpret.ExplanationScatter.odIncorrect,
-        localization.Interpret.ExplanationScatter.odIncorrect,
-        args.targetColumn
-      );
-      this.hasODIncorrect = true;
-    }
-    if (args.predictedProbabilities) {
-      const predictedProbabilities = args.predictedProbabilities;
-      if (args.metadata.modelType !== ModelTypes.Regression) {
-        args.predictedProbabilities.forEach((predictionArray, index) => {
-          predictionArray.forEach((val, classIndex) => {
-            if (this.dataDict) {
-              this.dataDict[index][
-                JointDataset.ProbabilityYRoot + classIndex.toString()
-              ] = val;
-            }
-          });
-        });
-        // create metadata for each class
-        args.metadata.classNames.forEach((className, classIndex) => {
-          const label = localization.formatString(
-            localization.Interpret.ExplanationScatter.probabilityLabel,
-            className
-          );
-          const projection = predictedProbabilities.map(
-            (row) => row[classIndex]
-          );
-          this.metaDict[JointDataset.ProbabilityYRoot + classIndex.toString()] =
-            {
-              abbridgedLabel: label,
-              category: ColumnCategories.Outcome,
-              featureRange: {
-                max: _.max(projection) || 0,
-                min: _.min(projection) || 0,
-                rangeType: RangeTypes.Numeric
-              },
-              isCategorical: false,
-              label,
-              sortedCategoricalValues: undefined,
-              treatAsCategorical: false
-            };
-        });
-        this.hasPredictedProbabilities = true;
-        this.predictionClassCount = args.metadata.classNames.length;
-      }
-    }
-    if (args.trueY && !modelTypeIsObjectDetection) {
-      this.updateMetaDataDict(
-        args.trueY,
-        args.metadata,
-        JointDataset.TrueYLabel,
-        localization.Interpret.ExplanationScatter.trueY,
-        localization.Interpret.ExplanationScatter.trueY,
-        args.targetColumn
-      );
-      this.hasTrueY = true;
-    } else if (args.objectDetectionLabels && modelTypeIsObjectDetection) {
-      this.updateMetaDataDict(
-        args.objectDetectionLabels.map(label => label.correct),
-        args.metadata,
-        JointDataset.ObjectDetectionCorrect,
-        localization.Interpret.ExplanationScatter.odCorrect,
-        localization.Interpret.ExplanationScatter.odCorrect,
-        args.targetColumn
-      );
-      this.hasODCorrect = true;
-    }
-    // include error columns if applicable
-    if ((this.hasPredictedY && this.hasTrueY)) {
-      this.dataDict?.forEach((row) => {
-        JointDataset.setErrorMetrics(
-          row,
-          this._modelMeta.modelType,
-          this.numLabels
-        );
-      });
-      // Set appropriate metadata
-      if (args.metadata.modelType === ModelTypes.Regression && this.dataDict) {
-        const regressionErrorArray = this.dataDict.map(
-          (row) => row[JointDataset.RegressionError]
-        );
-        this.metaDict[JointDataset.RegressionError] = {
-          abbridgedLabel: localization.Interpret.Columns.error,
-          category: ColumnCategories.Outcome,
-          featureRange: {
-            max: _.max(regressionErrorArray) || 0,
-            min: _.min(regressionErrorArray) || 0,
-            rangeType: RangeTypes.Numeric
-          },
-          isCategorical: false,
-          label: localization.Interpret.Columns.regressionError,
-          sortedCategoricalValues: undefined
-        };
-      }
-      if (IsBinary(args.metadata.modelType)) {
-        this.metaDict[JointDataset.ClassificationError] = {
-          abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
-          category: ColumnCategories.Outcome,
-          isCategorical: true,
-          label: localization.Interpret.Columns.classificationOutcome,
-          sortedCategoricalValues: [
-            localization.Interpret.Columns.trueNegative,
-            localization.Interpret.Columns.falsePositive,
-            localization.Interpret.Columns.falseNegative,
-            localization.Interpret.Columns.truePositive
-          ],
-          treatAsCategorical: true
-        };
-      }
-      if (
-        IsMulticlass(args.metadata.modelType) ||
-        IsMultilabel(args.metadata.modelType)
-      ) {
-        this.metaDict[JointDataset.ClassificationError] = {
-          abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
-          category: ColumnCategories.Outcome,
-          isCategorical: true,
-          label: localization.Interpret.Columns.classificationOutcome,
-          sortedCategoricalValues: [
-            localization.Interpret.Columns.correctlyClassified,
-            localization.Interpret.Columns.misclassified
-          ],
-          treatAsCategorical: true
-        };
-      }
-    } else if (this.hasODIncorrect && this.hasODCorrect) {
-      this.strDataDict?.forEach((row) => {
-        JointDataset.setErrorMetrics(
-          row,
-          this._modelMeta.modelType,
-          this.numLabels
-        );
-      })
-      if (modelTypeIsObjectDetection) {
-        this.metaDict[JointDataset.ClassificationError] = {
-          abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
-          category: ColumnCategories.Outcome,
-          isCategorical: true,
-          label: localization.Interpret.Columns.classificationOutcome,
-          sortedCategoricalValues: [
-            localization.Interpret.Columns.correctlyClassified,
-            localization.Interpret.Columns.misclassified
-          ],
-          treatAsCategorical: true
-        };
-      }
-      this.dataDict?.forEach((row, rowIndex) => {
-        row[JointDataset.ClassificationError] = this.strDataDict?.[rowIndex][JointDataset.ObjectDetectionIncorrect] !== "(none)" ? MulticlassClassificationEnum.Misclassified : MulticlassClassificationEnum.Correct;
-      })
-    }
+    this.initializeDatasetVariables(args);
+    this.initializeLabelVariables(args, modelTypeIsObjectDetection);
+    this.initializeErrorVariables(args, modelTypeIsObjectDetection);
     if (args.localExplanations) {
       this.rawLocalImportance = JointDataset.buildLocalFeatureMatrix(
         args.localExplanations.scores,
@@ -324,6 +114,7 @@ export class JointDataset {
       this.buildLocalFlattenMatrix(WeightVectors.AbsAvg);
       this.hasLocalExplanations = true;
     }
+
     if (this.dataDict === undefined) {
       this.initializeDataDictIfNeeded([]);
     }
@@ -436,9 +227,10 @@ export class JointDataset {
       return;
     }
     if (IsObjectDetection(modelType)) {
-      row[JointDataset.ClassificationError] = row[JointDataset.ObjectDetectionIncorrect] !== "(none)"
-        ? MulticlassClassificationEnum.Misclassified
-        : MulticlassClassificationEnum.Correct;
+      row[JointDataset.ClassificationError] =
+        row[JointDataset.ObjectDetectionIncorrect] !== "(none)"
+          ? MulticlassClassificationEnum.Misclassified
+          : MulticlassClassificationEnum.Correct;
       return;
     }
   }
@@ -743,6 +535,246 @@ export class JointDataset {
       return jointDatasetFeatureName;
     }
     return undefined;
+  }
+
+  private initializeDatasetVariables(args: IJointDatasetArgs): void {
+    if (args.featureMetaData !== undefined) {
+      this.datasetMetaData = { featureMetaData: args.featureMetaData };
+    }
+
+    if (args.dataset && args.dataset.length > 0) {
+      this.initializeDataDictIfNeeded(args.dataset);
+      this.datasetRowCount = args.dataset.length;
+      this.datasetFeatureCount = args.dataset[0].length;
+      // first set metadata
+      args.dataset[0].forEach((_, colIndex) => {
+        const key = JointDataset.DataLabelRoot + colIndex.toString();
+        if (args.metadata.featureIsCategorical?.[colIndex]) {
+          const sortedUnique = (
+            args.metadata.featureRanges[colIndex] as ICategoricalRange
+          ).uniqueValues
+            .concat()
+            .sort();
+          this.metaDict[key] = {
+            abbridgedLabel: args.metadata.featureNamesAbridged[colIndex],
+            category: ColumnCategories.Dataset,
+            index: colIndex,
+            isCategorical: true,
+            label: args.metadata.featureNames[colIndex],
+            sortedCategoricalValues: sortedUnique,
+            treatAsCategorical: true
+          };
+        } else {
+          this.metaDict[key] = {
+            abbridgedLabel: args.metadata.featureNamesAbridged[colIndex],
+            category: ColumnCategories.Dataset,
+            featureRange: args.metadata.featureRanges[
+              colIndex
+            ] as INumericRange,
+            index: colIndex,
+            isCategorical: false,
+            label: args.metadata.featureNames[colIndex]
+          };
+        }
+      });
+      args.dataset.forEach((row, index) => {
+        row.forEach((val, colIndex) => {
+          const key = JointDataset.DataLabelRoot + colIndex.toString();
+          if (this.dataDict) {
+            // store the index for categorical values rather than the actual value. Makes dataset uniform numeric and enables dithering
+            if (args.metadata.featureIsCategorical?.[colIndex]) {
+              this.dataDict[index][key] =
+                this.metaDict[key].sortedCategoricalValues?.indexOf(val) || 0;
+            } else {
+              this.dataDict[index][key] = val;
+            }
+          }
+        });
+      });
+      this.hasDataset = true;
+    }
+  }
+
+  private initializeLabelVariables(
+    args: IJointDatasetArgs,
+    modelTypeIsObjectDetection: boolean
+  ): void {
+    if (args.predictedY && !modelTypeIsObjectDetection) {
+      this.updateMetaDataDict(
+        args.predictedY,
+        args.metadata,
+        JointDataset.PredictedYLabel,
+        localization.Interpret.ExplanationScatter.predictedY,
+        localization.Interpret.ExplanationScatter.predictedY,
+        args.targetColumn
+      );
+      this.hasPredictedY = true;
+    } else if (args.objectDetectionLabels && modelTypeIsObjectDetection) {
+      this.updateMetaDataDict(
+        args.objectDetectionLabels.map((label) => label.incorrect),
+        args.metadata,
+        JointDataset.ObjectDetectionIncorrect,
+        localization.Interpret.ExplanationScatter.odIncorrect,
+        localization.Interpret.ExplanationScatter.odIncorrect,
+        args.targetColumn
+      );
+      this.hasODIncorrect = true;
+    }
+    if (args.predictedProbabilities) {
+      const predictedProbabilities = args.predictedProbabilities;
+      if (args.metadata.modelType !== ModelTypes.Regression) {
+        args.predictedProbabilities.forEach((predictionArray, index) => {
+          predictionArray.forEach((val, classIndex) => {
+            if (this.dataDict) {
+              this.dataDict[index][
+                JointDataset.ProbabilityYRoot + classIndex.toString()
+              ] = val;
+            }
+          });
+        });
+        // create metadata for each class
+        args.metadata.classNames.forEach((className, classIndex) => {
+          const label = localization.formatString(
+            localization.Interpret.ExplanationScatter.probabilityLabel,
+            className
+          );
+          const projection = predictedProbabilities.map(
+            (row) => row[classIndex]
+          );
+          this.metaDict[JointDataset.ProbabilityYRoot + classIndex.toString()] =
+            {
+              abbridgedLabel: label,
+              category: ColumnCategories.Outcome,
+              featureRange: {
+                max: _.max(projection) || 0,
+                min: _.min(projection) || 0,
+                rangeType: RangeTypes.Numeric
+              },
+              isCategorical: false,
+              label,
+              sortedCategoricalValues: undefined,
+              treatAsCategorical: false
+            };
+        });
+        this.hasPredictedProbabilities = true;
+        this.predictionClassCount = args.metadata.classNames.length;
+      }
+    }
+    if (args.trueY && !modelTypeIsObjectDetection) {
+      this.updateMetaDataDict(
+        args.trueY,
+        args.metadata,
+        JointDataset.TrueYLabel,
+        localization.Interpret.ExplanationScatter.trueY,
+        localization.Interpret.ExplanationScatter.trueY,
+        args.targetColumn
+      );
+      this.hasTrueY = true;
+    } else if (args.objectDetectionLabels && modelTypeIsObjectDetection) {
+      this.updateMetaDataDict(
+        args.objectDetectionLabels.map((label) => label.correct),
+        args.metadata,
+        JointDataset.ObjectDetectionCorrect,
+        localization.Interpret.ExplanationScatter.odCorrect,
+        localization.Interpret.ExplanationScatter.odCorrect,
+        args.targetColumn
+      );
+      this.hasODCorrect = true;
+    }
+  }
+
+  private initializeErrorVariables(
+    args: IJointDatasetArgs,
+    modelTypeIsObjectDetection: boolean
+  ): void {
+    // include error columns if applicable
+    if (this.hasPredictedY && this.hasTrueY) {
+      this.dataDict?.forEach((row) => {
+        JointDataset.setErrorMetrics(
+          row,
+          this._modelMeta.modelType,
+          this.numLabels
+        );
+      });
+      // Set appropriate metadata
+      if (args.metadata.modelType === ModelTypes.Regression && this.dataDict) {
+        const regressionErrorArray = this.dataDict.map(
+          (row) => row[JointDataset.RegressionError]
+        );
+        this.metaDict[JointDataset.RegressionError] = {
+          abbridgedLabel: localization.Interpret.Columns.error,
+          category: ColumnCategories.Outcome,
+          featureRange: {
+            max: _.max(regressionErrorArray) || 0,
+            min: _.min(regressionErrorArray) || 0,
+            rangeType: RangeTypes.Numeric
+          },
+          isCategorical: false,
+          label: localization.Interpret.Columns.regressionError,
+          sortedCategoricalValues: undefined
+        };
+      }
+      if (IsBinary(args.metadata.modelType)) {
+        this.metaDict[JointDataset.ClassificationError] = {
+          abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
+          category: ColumnCategories.Outcome,
+          isCategorical: true,
+          label: localization.Interpret.Columns.classificationOutcome,
+          sortedCategoricalValues: [
+            localization.Interpret.Columns.trueNegative,
+            localization.Interpret.Columns.falsePositive,
+            localization.Interpret.Columns.falseNegative,
+            localization.Interpret.Columns.truePositive
+          ],
+          treatAsCategorical: true
+        };
+      }
+      if (
+        IsMulticlass(args.metadata.modelType) ||
+        IsMultilabel(args.metadata.modelType)
+      ) {
+        this.metaDict[JointDataset.ClassificationError] = {
+          abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
+          category: ColumnCategories.Outcome,
+          isCategorical: true,
+          label: localization.Interpret.Columns.classificationOutcome,
+          sortedCategoricalValues: [
+            localization.Interpret.Columns.correctlyClassified,
+            localization.Interpret.Columns.misclassified
+          ],
+          treatAsCategorical: true
+        };
+      }
+    } else if (this.hasODIncorrect && this.hasODCorrect) {
+      this.strDataDict?.forEach((row) => {
+        JointDataset.setErrorMetrics(
+          row,
+          this._modelMeta.modelType,
+          this.numLabels
+        );
+      });
+      if (modelTypeIsObjectDetection) {
+        this.metaDict[JointDataset.ClassificationError] = {
+          abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
+          category: ColumnCategories.Outcome,
+          isCategorical: true,
+          label: localization.Interpret.Columns.classificationOutcome,
+          sortedCategoricalValues: [
+            localization.Interpret.Columns.correctlyClassified,
+            localization.Interpret.Columns.misclassified
+          ],
+          treatAsCategorical: true
+        };
+      }
+      this.dataDict?.forEach((row, rowIndex) => {
+        row[JointDataset.ClassificationError] =
+          this.strDataDict?.[rowIndex][
+            JointDataset.ObjectDetectionIncorrect
+          ] !== "(none)"
+            ? MulticlassClassificationEnum.Misclassified
+            : MulticlassClassificationEnum.Correct;
+      });
+    }
   }
 
   private updateMetaDataDict(

@@ -17,7 +17,10 @@ export function areRowPredTrueLabelsEqual(
   jointDataset: JointDataset
 ): boolean {
   if (jointDataset.hasODIncorrect && jointDataset.hasODCorrect) {
-    return row[JointDataset.ClassificationError] === MulticlassClassificationEnum.Correct;
+    return (
+      row[JointDataset.ClassificationError] ===
+      MulticlassClassificationEnum.Correct
+    );
   }
   if (jointDataset.numLabels === 1) {
     return row[JointDataset.PredictedYLabel] === row[JointDataset.TrueYLabel];

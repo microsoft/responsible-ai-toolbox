@@ -16,7 +16,11 @@ import {
   Operations
 } from "./Interfaces/IFilter";
 import { getPropertyValues } from "./util/datasetUtils/getPropertyValues";
-import { IsBinary, IsMulticlass, IsObjectDetection } from "./util/ExplanationUtils";
+import {
+  IsBinary,
+  IsMulticlass,
+  IsObjectDetection
+} from "./util/ExplanationUtils";
 import { MulticlassClassificationEnum } from "./util/JointDatasetUtils";
 
 export class DatasetCohort {
@@ -135,8 +139,10 @@ export class DatasetCohort {
       }
     });
     this.dataset.objectDetectionLabels?.forEach((val, index) => {
-      dataDict[index][DatasetCohortColumns.ObjectDetectionIncorrect] = val.incorrect;
-      dataDict[index][DatasetCohortColumns.ObjectDetectionCorrect] = val.correct;
+      dataDict[index][DatasetCohortColumns.ObjectDetectionIncorrect] =
+        val.incorrect;
+      dataDict[index][DatasetCohortColumns.ObjectDetectionCorrect] =
+        val.correct;
     });
     // set up errors
     if (modelType === ModelTypes.Regression) {
