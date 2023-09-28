@@ -44,7 +44,7 @@ export const labelTypes = {
   odCorrect: "Correct",
   odIncorrect: "Incorrect",
   predictedY: "predictedY",
-  trueY: "trueY",
+  trueY: "trueY"
 };
 
 export const SelectAllKey = "selectAll";
@@ -123,14 +123,16 @@ function generateItems(type: string, examples: IVisionListItem[]): IItemsData {
   };
 }
 
-export function getPredOrIncorrectLabelType(taskType: string) : string {
-  return (taskType === DatasetTaskType.ObjectDetection)
-    ? labelTypes.odIncorrect : labelTypes.predictedY;
+export function getPredOrIncorrectLabelType(taskType: string): string {
+  return taskType === DatasetTaskType.ObjectDetection
+    ? labelTypes.odIncorrect
+    : labelTypes.predictedY;
 }
 
-export function getTrueOrCorrectLabelType(taskType: string) : string {
-  return (taskType === DatasetTaskType.ObjectDetection)
-    ? labelTypes.odCorrect : labelTypes.trueY;
+export function getTrueOrCorrectLabelType(taskType: string): string {
+  return taskType === DatasetTaskType.ObjectDetection
+    ? labelTypes.odCorrect
+    : labelTypes.trueY;
 }
 
 export function processItems(
@@ -138,7 +140,7 @@ export function processItems(
   resetLabels: boolean,
   state: IDataCharacteristicsState,
   predOrIncorrectLabelType: string,
-  trueOrCorrectLabelType: string,
+  trueOrCorrectLabelType: string
 ): Pick<
   IDataCharacteristicsState,
   | "columnCount"
@@ -158,7 +160,10 @@ export function processItems(
   const renderStartIndex: number[] = [];
   const showBackArrow: boolean[] = [];
 
-  const predicted: IItemsData = generateItems(predOrIncorrectLabelType, examples);
+  const predicted: IItemsData = generateItems(
+    predOrIncorrectLabelType,
+    examples
+  );
   const dropdownOptionsPredicted: IDropdownOption[] = predicted.dropdownOptions;
   const itemsPredicted: Map<string, IVisionListItem[]> = predicted.items;
 

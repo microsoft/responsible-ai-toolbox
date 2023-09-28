@@ -16,11 +16,11 @@ export function getJoinedLabelString(
   return labels;
 }
 
-export function isItemPredTrueEqual(item: IVisionListItem, taskType: string): boolean {
-  return (taskType === DatasetTaskType.ObjectDetection)
-    ?(
-    getJoinedLabelString(item.predictedY) === getJoinedLabelString(item.trueY)
-    ) : (
-      item.odIncorrect === NoLabel
-    )
+export function isItemPredTrueEqual(
+  item: IVisionListItem,
+  taskType: string
+): boolean {
+  return taskType === DatasetTaskType.ObjectDetection
+    ? getJoinedLabelString(item.predictedY) === getJoinedLabelString(item.trueY)
+    : item.odIncorrect === NoLabel;
 }
