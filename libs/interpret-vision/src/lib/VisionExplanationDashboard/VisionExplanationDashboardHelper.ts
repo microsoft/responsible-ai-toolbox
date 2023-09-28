@@ -201,7 +201,6 @@ export const defaultState: IVisionExplanationDashboardState = {
   loadingExplanation: [[]],
   numRows: 3,
   otherMetadataFieldNames: ["mean_pixel_value"],
-  pageSize: 10,
   panelOpen: false,
   searchValue: "",
   selectedIndices: [],

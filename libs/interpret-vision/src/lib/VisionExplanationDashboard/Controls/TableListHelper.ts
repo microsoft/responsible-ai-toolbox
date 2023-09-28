@@ -12,7 +12,6 @@ export interface ITableListProps extends ISearchable {
   successInstances: IVisionListItem[];
   imageDim: number;
   otherMetadataFieldNames: string[];
-  pageSize: number;
   selectItem: (item: IVisionListItem) => void;
   updateSelectedIndices: (indices: number[]) => void;
   taskType: string;
