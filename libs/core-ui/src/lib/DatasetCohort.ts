@@ -23,6 +23,8 @@ import {
 } from "./util/ExplanationUtils";
 import { MulticlassClassificationEnum } from "./util/JointDatasetUtils";
 
+const NoLabel = "(none)";
+
 export class DatasetCohort {
   public selectedIndexes: number[] = [];
   public cohortStats: MetricCohortStats;
@@ -173,7 +175,7 @@ export class DatasetCohort {
     } else if (modelType && IsObjectDetection(modelType)) {
       for (const [index, row] of dataDict.entries()) {
         dataDict[index][DatasetCohortColumns.ClassificationError] =
-          row[DatasetCohortColumns.ObjectDetectionIncorrect] !== "(none)"
+          row[DatasetCohortColumns.ObjectDetectionIncorrect] !== NoLabel
             ? MulticlassClassificationEnum.Misclassified
             : MulticlassClassificationEnum.Correct;
       }
