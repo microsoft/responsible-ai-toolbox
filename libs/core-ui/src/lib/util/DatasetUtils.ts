@@ -5,6 +5,8 @@ import { ColumnActionsMode, IColumn } from "@fluentui/react";
 
 import { JointDataset } from "../util/JointDataset";
 
+import { MulticlassClassificationEnum } from "./JointDatasetUtils";
+
 export interface ITableState {
   rows: any[];
   columns: IColumn[];
@@ -14,6 +16,12 @@ export function areRowPredTrueLabelsEqual(
   row: { [key: string]: number },
   jointDataset: JointDataset
 ): boolean {
+  if (jointDataset.hasODIncorrect && jointDataset.hasODCorrect) {
+    return (
+      row[JointDataset.ClassificationError] ===
+      MulticlassClassificationEnum.Correct
+    );
+  }
   if (jointDataset.numLabels === 1) {
     return row[JointDataset.PredictedYLabel] === row[JointDataset.TrueYLabel];
   }
@@ -57,7 +65,15 @@ export function constructRows(
     if (colors) {
       tableRow.push(colors[i]);
     }
-    if (jointDataset.hasTrueY) {
+    if (jointDataset.hasODCorrect) {
+      pushRowData(
+        tableRow,
+        JointDataset.ObjectDetectionCorrect,
+        jointDataset,
+        row,
+        index
+      );
+    } else if (jointDataset.hasTrueY) {
       if (jointDataset.numLabels > 1) {
         pushMultilabelRowData(
           tableRow,
@@ -75,7 +91,15 @@ export function constructRows(
         );
       }
     }
-    if (jointDataset.hasPredictedY) {
+    if (jointDataset.hasODIncorrect) {
+      pushRowData(
+        tableRow,
+        JointDataset.ObjectDetectionIncorrect,
+        jointDataset,
+        row,
+        index
+      );
+    } else if (jointDataset.hasPredictedY) {
       if (jointDataset.numLabels > 1) {
         pushMultilabelRowData(
           tableRow,
@@ -147,7 +171,18 @@ export function constructCols(
     });
     index++;
   }
-  if (!isCustomPointsView && jointDataset.hasTrueY) {
+  if (jointDataset.hasODCorrect) {
+    columns.push({
+      columnActionsMode: ColumnActionsMode.disabled,
+      fieldName: `${index}`,
+      isResizable: true,
+      key: `column${index}`,
+      maxWidth: 100,
+      minWidth: 50,
+      name: "Correct"
+    });
+    index++;
+  } else if (!isCustomPointsView && jointDataset.hasTrueY) {
     columns.push({
       columnActionsMode: ColumnActionsMode.disabled,
       fieldName: `${index}`,
@@ -159,7 +194,18 @@ export function constructCols(
     });
     index++;
   }
-  if (!isCustomPointsView && jointDataset.hasPredictedY) {
+  if (jointDataset.hasODIncorrect) {
+    columns.push({
+      columnActionsMode: ColumnActionsMode.disabled,
+      fieldName: `${index}`,
+      isResizable: true,
+      key: `column${index}`,
+      maxWidth: 100,
+      minWidth: 50,
+      name: "Incorrect"
+    });
+    index++;
+  } else if (!isCustomPointsView && jointDataset.hasPredictedY) {
     columns.push({
       columnActionsMode: ColumnActionsMode.disabled,
       fieldName: `${index}`,

@@ -23,7 +23,7 @@ export interface ITabularDatasetMetadata {
   feature_ranges: Array<{ [key: string]: any }>;
 }
 
-interface IObjectDetectionLabelType {
+export interface IObjectDetectionLabelType {
   correct: string;
   incorrect: string;
   aggregate: string;
