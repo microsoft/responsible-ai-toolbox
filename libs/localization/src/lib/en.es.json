@@ -186,6 +186,12 @@
     "showTop": "Puntos de datos con las mayores respuestas causales estimadas a la característica de tratamiento: {0}",
     "whatifDescription": "La hipótesis le permite perturbar las características de cualquier entrada y observar cómo cambia la predicción del modelo. Puede perturbar las características manualmente o especificar la predicción deseada (por ejemplo, la etiqueta de clase de un clasificador) para ver una lista de los puntos de datos más cercanos a la entrada original que daría lugar a la predicción deseada. También conocidas como contrafactuales de predicción, puede usarlas para explorar las relaciones aprendidas por el modelo; comprender las características importantes y necesarias para las predicciones del modelo; o depurar casos perimetrales para el modelo. Para empezar, elija los puntos de entrada de la tabla de datos o el gráfico de dispersión."
   },
+  "DataAnalysis": {
+    "TableView": {
+      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
+      "infoTitle": "Additional information on table view"
+    }
+  },
   "ErrorAnalysis": {
     "Cohort": {
       "cohort": "Cohorte",
@@ -1141,7 +1147,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Panel de interpretabilidad",
-      "importantWords": "Show most Important Words",
+      "importantWords": "Show most important words",
       "topFeatureList": "Análisis de la lista de características principales",
       "allButton": "TODAS LAS CARACTERÍSTICAS",
       "negButton": "CARACTERÍSTICAS NEGATIVAS",
@@ -1155,7 +1161,8 @@
       "predictedAnswer": "Predicted answer: ",
       "trueAnswer": "True answer: ",
       "inputs": "Inputs",
-      "outputs": "Outputs"
+      "outputs": "Outputs",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "LEYENDA DE CARACTERÍSTICA DE TEXTO",
@@ -1188,6 +1195,8 @@
       "columnTwo": "Índice",
       "columnThree": "Y verdadero",
       "columnFour": "Eje Y previsto",
+      "columnThreeOD": "Correct",
+      "columnFourOD": "Incorrect",
       "columnFive": "Otros metadatos",
       "chooseObject": "Choose a detected object",
       "examples": "examples",
@@ -1207,6 +1216,8 @@
       "panelInformation": "Information",
       "predictedLabel": "Predicted label",
       "predictedY": "Predicted: ",
+      "correctDetections": "Correct detections: ",
+      "incorrectDetections": "Incorrect detections: ",
       "prefix": "Object: ",
       "rows": "Rows: ",
       "search": "Buscar",
@@ -1446,9 +1457,9 @@
       "CorrectPredictions": "Predicciones correctas",
       "GlobalExplanation": "Importancia de la característica Agregar",
       "IncorrectPredictions": "Predicciones incorrectas",
-      "InfoTitle": "Additional information on data analysis table view",
+      "InfoTitle": "Additional information on feature importance values",
       "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
       "LocalExplanation": "Importancia de la característica Individual",
       "SelectionCounter": "{0}/{1} puntos de datos seleccionados",
       "SelectionLimit": "En este momento se pueden seleccionar hasta 5 puntos de datos.",
