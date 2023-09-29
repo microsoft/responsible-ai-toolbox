@@ -16,8 +16,15 @@ import {
   Operations
 } from "./Interfaces/IFilter";
 import { getPropertyValues } from "./util/datasetUtils/getPropertyValues";
-import { IsBinary, IsMulticlass } from "./util/ExplanationUtils";
-import { MulticlassClassificationEnum } from "./util/JointDatasetUtils";
+import {
+  IsBinary,
+  IsMulticlass,
+  IsObjectDetection
+} from "./util/ExplanationUtils";
+import {
+  MulticlassClassificationEnum,
+  NoLabel
+} from "./util/JointDatasetUtils";
 
 export class DatasetCohort {
   public selectedIndexes: number[] = [];
@@ -134,6 +141,12 @@ export class DatasetCohort {
         dataDict[index][DatasetCohortColumns.PredictedY] = val;
       }
     });
+    this.dataset.objectDetectionLabels?.forEach((val, index) => {
+      dataDict[index][DatasetCohortColumns.ObjectDetectionIncorrect] =
+        val.incorrect;
+      dataDict[index][DatasetCohortColumns.ObjectDetectionCorrect] =
+        val.correct;
+    });
     // set up errors
     if (modelType === ModelTypes.Regression) {
       for (const [index, row] of dataDict.entries()) {
@@ -157,6 +170,13 @@ export class DatasetCohort {
         dataDict[index][DatasetCohortColumns.ClassificationError] =
           row[DatasetCohortColumns.TrueY] !==
           row[DatasetCohortColumns.PredictedY]
+            ? MulticlassClassificationEnum.Misclassified
+            : MulticlassClassificationEnum.Correct;
+      }
+    } else if (modelType && IsObjectDetection(modelType)) {
+      for (const [index, row] of dataDict.entries()) {
+        dataDict[index][DatasetCohortColumns.ClassificationError] =
+          row[DatasetCohortColumns.ObjectDetectionIncorrect] !== NoLabel
             ? MulticlassClassificationEnum.Misclassified
             : MulticlassClassificationEnum.Correct;
       }

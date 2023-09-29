@@ -1023,6 +1023,8 @@
       "index": "Index",
       "output": "Output",
       "predictedY": "Predicted Y",
+      "odIncorrect": "Incorrect",
+      "odCorrect": "Correct",
       "probabilityLabel": "Probability : {0}",
       "trueY": "True Y",
       "xValue": "X value:",
