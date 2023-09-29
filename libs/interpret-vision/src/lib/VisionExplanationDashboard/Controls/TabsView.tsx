@@ -80,6 +80,7 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
                 numRows={this.props.numRows}
                 searchValue={this.props.searchValue}
                 selectItem={this.props.onItemSelect}
+                taskType={this.props.taskType}
               />
             </Stack.Item>
           </Stack>
