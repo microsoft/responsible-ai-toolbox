@@ -19,6 +19,7 @@ import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { getFilteredDataFromSearch } from "../utils/getFilteredData";
+import { isItemPredTrueEqual } from "../utils/labelUtils";
 import { visionExplanationDashboardStyles } from "../VisionExplanationDashboard.styles";
 
 import {
@@ -26,7 +27,6 @@ import {
   ITableListProps,
   ITableListState
 } from "./TableListHelper";
-import { isItemPredTrueEqual } from "../utils/labelUtils";
 
 export class TableList extends React.Component<
   ITableListProps,
@@ -189,7 +189,11 @@ export class TableList extends React.Component<
     if (searchValue.length === 0) {
       return items;
     }
-    const filteredItems = getFilteredDataFromSearch(searchValue, items, this.props.taskType);
+    const filteredItems = getFilteredDataFromSearch(
+      searchValue,
+      items,
+      this.props.taskType
+    );
     return filteredItems;
   }
 
@@ -221,8 +225,8 @@ export class TableList extends React.Component<
     if (searchValue.length === 0) {
       return groups;
     }
-    const filteredSuccessInstances = filteredItems.filter(
-      (item) => isItemPredTrueEqual(item, this.props.taskType)
+    const filteredSuccessInstances = filteredItems.filter((item) =>
+      isItemPredTrueEqual(item, this.props.taskType)
     );
     groups[0].count = filteredSuccessInstances.length;
     groups[1].startIndex = filteredSuccessInstances.length;

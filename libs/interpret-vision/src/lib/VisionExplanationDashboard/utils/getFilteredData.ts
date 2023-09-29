@@ -9,15 +9,22 @@ export function getFilteredDataFromSearch(
   taskType: string
 ): IVisionListItem[] {
   return items.filter((item) => {
-    const predOrIncorrectY = taskType === DatasetTaskType.ObjectDetection
-      ? item.odIncorrect : item.predictedY;
-    const trueOrCorrectY = taskType === DatasetTaskType.ObjectDetection
-      ? item.odCorrect : item.trueY;
+    const predOrIncorrectY =
+      taskType === DatasetTaskType.ObjectDetection
+        ? item.odIncorrect
+        : item.predictedY;
+    const trueOrCorrectY =
+      taskType === DatasetTaskType.ObjectDetection
+        ? item.odCorrect
+        : item.trueY;
     const predOrIncorrectYIncludesSearchVal = includesSearchVal(
       predOrIncorrectY,
       searchVal
     );
-    const trueOrCorrectYIncludesSearchVal = includesSearchVal(trueOrCorrectY, searchVal);
+    const trueOrCorrectYIncludesSearchVal = includesSearchVal(
+      trueOrCorrectY,
+      searchVal
+    );
     return predOrIncorrectYIncludesSearchVal || trueOrCorrectYIncludesSearchVal;
   });
 }
