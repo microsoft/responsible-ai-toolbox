@@ -679,7 +679,7 @@ class RAIVisionInsights(RAIBaseInsights):
             encoded_images.append(b64)
 
         # passing to frontend to draw bounding boxes with the correct scale
-        dashboard_dataset.imageDimensions = image_dimensions
+        dashboard_dataset.image_dimensions = image_dimensions
 
         if len(encoded_images) > 0:
             dashboard_dataset.images = encoded_images

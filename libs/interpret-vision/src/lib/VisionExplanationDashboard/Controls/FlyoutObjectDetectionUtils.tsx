@@ -66,7 +66,7 @@ export function drawBox(
   colorCode: string,
   boxId: string
 ): void {
-  if (!dataset.imageDimensions) {
+  if (!dataset.image_dimensions) {
     return;
   }
 
@@ -125,7 +125,7 @@ export function drawBoundingBoxes(
 
   // Drawing bounding boxes for each ground truth object
   for (const [oidx, gtObject] of trueY.entries()) {
-    if (!dataset.imageDimensions) {
+    if (!dataset.image_dimensions) {
       break;
     }
     const objectLabelIndex = gtObject[0] - 1;
@@ -137,7 +137,7 @@ export function drawBoundingBoxes(
       editor,
       dataset,
       scaleCoordinate,
-      dataset.imageDimensions[oidx],
+      dataset.image_dimensions[oidx],
       gtObject,
       annotation,
       theme.palette.green,
@@ -147,7 +147,7 @@ export function drawBoundingBoxes(
 
   // Draws bounding boxes for each predicted object
   for (const [oidx, predObject] of predictedY.entries()) {
-    if (!dataset.imageDimensions) {
+    if (!dataset.image_dimensions) {
       break;
     }
     const objectLabelIndex = predObject[0] - 1;
@@ -161,7 +161,7 @@ export function drawBoundingBoxes(
       editor,
       dataset,
       scaleCoordinate,
-      dataset.imageDimensions[oidx],
+      dataset.image_dimensions[oidx],
       predObject,
       annotation,
       theme.palette.magenta,
