@@ -186,6 +186,12 @@
     "showTop": "Gegevenspunten met de meeste geschatte oorzakelijke reacties op behandelingskenmerk: {0}",
     "whatifDescription": "Met Wat-als-scenario's kunt u kenmerken voor elke invoer verstoren en observeren hoe de voorspelling van het model verandert. U kunt functies handmatig verstoren of eenvoudig de gewenste voorspelling specificeren (bijvoorbeeld klasselabel voor een classificatie) om een lijst te zien met gegevenspunten die het dichtst bij de oorzakelijke invoer liggen en die tot de gewenste voorspelling zouden leiden. Ook bekend als nulscenario's voor voorspellingen, kunt u ze gebruiken voor het verkennen van de relaties die door het model zijn geleerd; het begrijpen van belangrijke, noodzakelijke kenmerken voor de voorspellingen van het model; of fouten opsporen in edge-cases voor het model. Kies om te beginnen invoerpunten uit de gegevenstabel of het spreidingsdiagram."
   },
+  "DataAnalysis": {
+    "TableView": {
+      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
+      "infoTitle": "Additional information on table view"
+    }
+  },
   "ErrorAnalysis": {
     "Cohort": {
       "cohort": "Cohort",
@@ -1141,7 +1147,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Dashboard interpreteerbaarheid",
-      "importantWords": "Show most Important Words",
+      "importantWords": "Show most important words",
       "topFeatureList": "Analyse van lijst met belangrijkste functies",
       "allButton": "ALLE FUNCTIES",
       "negButton": "NEGATIEVE FUNCTIES",
@@ -1155,7 +1161,8 @@
       "predictedAnswer": "Predicted answer: ",
       "trueAnswer": "True answer: ",
       "inputs": "Inputs",
-      "outputs": "Outputs"
+      "outputs": "Outputs",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "LEGENDA VAN TEKSTFUNCTIE",
@@ -1188,6 +1195,8 @@
       "columnTwo": "Index",
       "columnThree": "Waar Y",
       "columnFour": "Voorspelde Y",
+      "columnThreeOD": "Correct",
+      "columnFourOD": "Incorrect",
       "columnFive": "Andere metagegevens",
       "chooseObject": "Choose a detected object",
       "examples": "examples",
@@ -1207,6 +1216,8 @@
       "panelInformation": "Information",
       "predictedLabel": "Predicted label",
       "predictedY": "Predicted: ",
+      "correctDetections": "Correct detections: ",
+      "incorrectDetections": "Incorrect detections: ",
       "prefix": "Object: ",
       "rows": "Rows: ",
       "search": "Zoeken",
@@ -1446,9 +1457,9 @@
       "CorrectPredictions": "Juiste voorspellingen",
       "GlobalExplanation": "Functie-urgentie samenvoegen",
       "IncorrectPredictions": "Onjuiste voorspellingen",
-      "InfoTitle": "Additional information on data analysis table view",
+      "InfoTitle": "Additional information on feature importance values",
       "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
       "LocalExplanation": "Belang van afzonderlijke functies",
       "SelectionCounter": "{0}/{1} gegevenspunten geselecteerd",
       "SelectionLimit": "Er kunnen momenteel maximaal 5 gegevenspunten worden geselecteerd.",
