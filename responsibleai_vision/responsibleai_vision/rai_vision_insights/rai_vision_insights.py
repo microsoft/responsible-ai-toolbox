@@ -738,19 +738,23 @@ class RAIVisionInsights(RAIBaseInsights):
                 else:
                     image_labels[_INCORRECT][object_label] += 1
 
-                image_labels[_INCORRECT][object_label] += \
-                    np.count_nonzero(
-                        error_matrix[label_idx] ==
-                        ErrorLabelType.DUPLICATE_DETECTION)
+                duplicate_detections = np.count_nonzero(
+                    error_matrix[label_idx] ==
+                    ErrorLabelType.DUPLICATE_DETECTION)
+                if duplicate_detections > 0:
+                    image_labels[_INCORRECT][object_label] += duplicate_detections
+
+            correct_labels = sorted(image_labels[_CORRECT].items(), key=lambda x: class_names.index(x[0]))
+            incorrect_labels = sorted(image_labels[_INCORRECT].items(), key=lambda x: class_names.index(x[0]))
 
             rendered_labels[_CORRECT] = ', '.join(
                 f'{value} {key}' for key, value in
-                image_labels[_CORRECT].items())
+                correct_labels)
             if len(rendered_labels[_CORRECT]) == 0:
                 rendered_labels[_CORRECT] = _NOLABEL
             rendered_labels[_INCORRECT] = ', '.join(
                 f'{value} {key}' for key, value in
-                image_labels[_INCORRECT].items())
+                incorrect_labels)
             if len(rendered_labels[_INCORRECT]) == 0:
                 rendered_labels[_INCORRECT] = _NOLABEL
             rendered_labels[_AGGREGATE_LABEL] = \
