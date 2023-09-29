@@ -54,8 +54,15 @@ function assertNumberOfChartRowsEqual(
   }
   console.log(selectedFeatures);
   console.log(expectedNumberOfCohorts);
-  cy.get(getChartItems(chartIdentifier)).should(
-    "have.length",
-    expectedNumberOfCohorts
-  );
+  if (Array.isArray(expectedNumberOfCohorts)) {
+    cy.get(getChartItems(chartIdentifier))
+      .its("length")
+      .should("be.gte", expectedNumberOfCohorts[0])
+      .and("be.lte", expectedNumberOfCohorts[1]);
+  } else {
+    cy.get(getChartItems(chartIdentifier)).should(
+      "have.length",
+      expectedNumberOfCohorts
+    );
+  }
 }

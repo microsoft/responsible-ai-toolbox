@@ -83,7 +83,6 @@ export class VisionExplanationDashboard extends React.Component<
             imageDim={this.state.imageDim}
             numRows={this.state.numRows}
             otherMetadataFieldNames={this.state.otherMetadataFieldNames}
-            pageSize={this.state.pageSize}
             searchValue={this.state.searchValue}
             selectedItem={this.state.selectedItem}
             selectedKey={this.state.selectedKey}
@@ -220,12 +219,6 @@ export class VisionExplanationDashboard extends React.Component<
     item: IDropdownOption | undefined
   ): void => {
     this.setState({ numRows: Number(item?.text) });
-  };
-  public onPageSizeSelect = (
-    _event: React.FormEvent<HTMLDivElement>,
-    item: IDropdownOption | undefined
-  ): void => {
-    this.setState({ pageSize: Number(item?.text) });
   };
   public handleLinkClick = (item?: PivotItem): void => {
     if (item && item.props.itemKey !== undefined) {
