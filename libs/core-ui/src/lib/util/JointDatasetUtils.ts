@@ -13,6 +13,8 @@ import { IFeatureMetaData } from "../Interfaces/IMetaData";
 
 import { AxisTypes } from "./IGenericChartProps";
 
+export const NoLabel = "(none)";
+
 export interface IJointDatasetArgs {
   dataset?: any[][];
   predictedY?: number[] | number[][] | string[];

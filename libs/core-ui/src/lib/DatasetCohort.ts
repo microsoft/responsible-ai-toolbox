@@ -21,9 +21,7 @@ import {
   IsMulticlass,
   IsObjectDetection
 } from "./util/ExplanationUtils";
-import { MulticlassClassificationEnum } from "./util/JointDatasetUtils";
-
-const NoLabel = "(none)";
+import { MulticlassClassificationEnum, NoLabel } from "./util/JointDatasetUtils";
 
 export class DatasetCohort {
   public selectedIndexes: number[] = [];

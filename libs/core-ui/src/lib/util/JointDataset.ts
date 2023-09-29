@@ -31,7 +31,8 @@ import {
   IJointDatasetArgs,
   IJointMeta,
   MulticlassClassificationEnum,
-  IDatasetMeta
+  IDatasetMeta,
+  NoLabel
 } from "./JointDatasetUtils";
 
 // this is the single source for data, it should hold all raw data and be how data for presentation is
@@ -228,7 +229,7 @@ export class JointDataset {
     }
     if (IsObjectDetection(modelType)) {
       row[JointDataset.ClassificationError] =
-        row[JointDataset.ObjectDetectionIncorrect] !== "(none)"
+        row[JointDataset.ObjectDetectionIncorrect] !== NoLabel
           ? MulticlassClassificationEnum.Misclassified
           : MulticlassClassificationEnum.Correct;
       return;
@@ -770,7 +771,7 @@ export class JointDataset {
         row[JointDataset.ClassificationError] =
           this.strDataDict?.[rowIndex][
             JointDataset.ObjectDetectionIncorrect
-          ] !== "(none)"
+          ] !== NoLabel
             ? MulticlassClassificationEnum.Misclassified
             : MulticlassClassificationEnum.Correct;
       });
