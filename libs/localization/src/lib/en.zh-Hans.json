@@ -186,6 +186,12 @@
     "showTop": "对治疗特征具有最大估计因果响应的数据点: {0}",
     "whatifDescription": "通过 What-if，可以干扰任何输入的特征，并观察模型的预测如何变化。可以手动干扰特征，或指定所需的预测(例如分类器的类标签)，以查看将导致所需预测的最接近原始输入的数据点列表。这些也称为预测反事实，可以用于探索模型所学习到的关系，了解模型预测的重要和必要特征，或调试模型的边缘案例。若要开始，请从数据表或散点图中选择输入点。"
   },
+  "DataAnalysis": {
+    "TableView": {
+      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
+      "infoTitle": "Additional information on table view"
+    }
+  },
   "ErrorAnalysis": {
     "Cohort": {
       "cohort": "队列",
@@ -1141,7 +1147,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "可解释性仪表板",
-      "importantWords": "Show most Important Words",
+      "importantWords": "Show most important words",
       "topFeatureList": "主要特征列表分析",
       "allButton": "所有特征",
       "negButton": "负特征",
@@ -1155,7 +1161,8 @@
       "predictedAnswer": "Predicted answer: ",
       "trueAnswer": "True answer: ",
       "inputs": "Inputs",
-      "outputs": "Outputs"
+      "outputs": "Outputs",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "文本特征图例",
@@ -1188,6 +1195,8 @@
       "columnTwo": "指标",
       "columnThree": "真实 Y",
       "columnFour": "预测的 Y",
+      "columnThreeOD": "Correct",
+      "columnFourOD": "Incorrect",
       "columnFive": "其他元数据",
       "chooseObject": "Choose a detected object",
       "examples": "examples",
@@ -1207,6 +1216,8 @@
       "panelInformation": "Information",
       "predictedLabel": "Predicted label",
       "predictedY": "Predicted: ",
+      "correctDetections": "Correct detections: ",
+      "incorrectDetections": "Incorrect detections: ",
       "prefix": "Object: ",
       "rows": "Rows: ",
       "search": "搜索",
@@ -1446,9 +1457,9 @@
       "CorrectPredictions": "正确的预测",
       "GlobalExplanation": "聚合特征重要性",
       "IncorrectPredictions": "不正确的预测",
-      "InfoTitle": "Additional information on data analysis table view",
+      "InfoTitle": "Additional information on feature importance values",
       "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
       "LocalExplanation": "单个特征重要性",
       "SelectionCounter": "已选择 {0} 个数据点(共 {1} 个)",
       "SelectionLimit": "此时最多可选择 5 个数据点。",

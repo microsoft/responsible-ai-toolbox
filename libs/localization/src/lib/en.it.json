@@ -186,6 +186,12 @@
     "showTop": "DataPoint con le risposte causali stimate maggiori alla funzionalità di trattamento: {0}",
     "whatifDescription": "What-if consente di perturbare le caratteristiche per qualsiasi input e osservare il modo in cui cambia la previsione del modello. È possibile personalizzare le caratteristiche manualmente o specificare la previsione desiderata (ad esempio, l'etichetta di classe per un classificatore) per visualizzare un elenco dei punti dati più vicini all'input originale che condurrebbe alla previsione desiderata. Conosciuta anche come previsione controfattuali, è possibile usarla per esplorare le relazioni apprese dal modello; comprendere le importanti e necessarie caratteristiche per le previsioni del modello; o eseguire il debug di edge case per il modello. Per iniziare, scegliere i punti di input dalla tabella dati o dal grafico a dispersione."
   },
+  "DataAnalysis": {
+    "TableView": {
+      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
+      "infoTitle": "Additional information on table view"
+    }
+  },
   "ErrorAnalysis": {
     "Cohort": {
       "cohort": "Coorte",
@@ -1141,7 +1147,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Dashboard interpretabilità",
-      "importantWords": "Show most Important Words",
+      "importantWords": "Show most important words",
       "topFeatureList": "Analisi dell'elenco delle funzionalità principali",
       "allButton": "TUTTE LE FUNZIONALITÀ",
       "negButton": "CARATTERISTICHE NEGATIVE",
@@ -1155,7 +1161,8 @@
       "predictedAnswer": "Predicted answer: ",
       "trueAnswer": "True answer: ",
       "inputs": "Inputs",
-      "outputs": "Outputs"
+      "outputs": "Outputs",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "LEGENDA FUNZIONALITÀ TESTO",
@@ -1188,6 +1195,8 @@
       "columnTwo": "Indice",
       "columnThree": "Y vero",
       "columnFour": "Y stimato",
+      "columnThreeOD": "Correct",
+      "columnFourOD": "Incorrect",
       "columnFive": "Altri metadati",
       "chooseObject": "Choose a detected object",
       "examples": "examples",
@@ -1207,6 +1216,8 @@
       "panelInformation": "Information",
       "predictedLabel": "Predicted label",
       "predictedY": "Predicted: ",
+      "correctDetections": "Correct detections: ",
+      "incorrectDetections": "Incorrect detections: ",
       "prefix": "Object: ",
       "rows": "Rows: ",
       "search": "Cerca",
@@ -1446,9 +1457,9 @@
       "CorrectPredictions": "Correggere le stime",
       "GlobalExplanation": "Importanza delle caratteristiche aggregate",
       "IncorrectPredictions": "Stime non corrette",
-      "InfoTitle": "Additional information on data analysis table view",
+      "InfoTitle": "Additional information on feature importance values",
       "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
       "LocalExplanation": "Importanza della singola caratteristica",
       "SelectionCounter": "{0}/{1} punti dati selezionati",
       "SelectionLimit": "Al momento è possibile selezionare fino a 5 punti dati.",
