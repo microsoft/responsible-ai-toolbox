@@ -52,6 +52,7 @@ export function describeVisionDataExplorer(
         ensureAllVisionDataExplorerTableViewElementsAfterSelectionArePresent();
         ensureAllVisionDataExplorerImageExplorerViewElementsBeforeSelectionAreNotPresent();
         ensureAllVisionDataExplorerClassViewElementsBeforeSelectionAreNotPresent();
+        cy.get(Locators.VisionDataExplorerPageSizeSelector).should("not.exist");
       });
 
       it("should show Class view components when selected", () => {

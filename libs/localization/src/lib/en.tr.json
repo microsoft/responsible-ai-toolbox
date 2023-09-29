@@ -186,6 +186,12 @@
     "showTop": "Tedavi özelliğine yönelik en büyük tahmini nedensel yanıtları olan veri noktaları: {0}",
     "whatifDescription": "Durum çözümlemesi, herhangi bir giriş için özellikleri bozmanıza ve modelin tahmininin nasıl değiştiğini gözlemlemenize olanak tanır. Özellikleri kendiniz bozabilir veya istenen tahmine yol açacak orijinal girişe en yakın veri noktalarının bir listesini görmek için istediğiniz tahmini (ör. bir sınıflandırıcı için sınıf etiketi) belirtebilirsiniz. Bunları (tahmin karşıolgusalları olarak da bilinir) model tarafından öğrenilen ilişkileri keşfetmek; modelin tahminleri için önemli, gerekli özellikleri anlamak veya model için uç durumlarda hata ayıklamak üzere kullanabilirsiniz. Başlamak için, veri tablosundan veya dağılım çiziminden giriş noktalarını seçin."
   },
+  "DataAnalysis": {
+    "TableView": {
+      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
+      "infoTitle": "Additional information on table view"
+    }
+  },
   "ErrorAnalysis": {
     "Cohort": {
       "cohort": "Kohort",
@@ -1141,7 +1147,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Yorumlanabilirlik Panosu",
-      "importantWords": "Show most Important Words",
+      "importantWords": "Show most important words",
       "topFeatureList": "En çok kullanılan özellikler listesinin analizi",
       "allButton": "TÜM ÖZELLİKLER",
       "negButton": "NEGATİF ÖZELLİKLER",
@@ -1155,7 +1161,8 @@
       "predictedAnswer": "Predicted answer: ",
       "trueAnswer": "True answer: ",
       "inputs": "Inputs",
-      "outputs": "Outputs"
+      "outputs": "Outputs",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "METİN ÖZELLİĞİ GÖSTERGESİ",
@@ -1188,6 +1195,8 @@
       "columnTwo": "Endeks",
       "columnThree": "Doğru Y",
       "columnFour": "Tahmini Y",
+      "columnThreeOD": "Correct",
+      "columnFourOD": "Incorrect",
       "columnFive": "Diğer meta veriler",
       "chooseObject": "Choose a detected object",
       "examples": "examples",
@@ -1207,6 +1216,8 @@
       "panelInformation": "Information",
       "predictedLabel": "Predicted label",
       "predictedY": "Predicted: ",
+      "correctDetections": "Correct detections: ",
+      "incorrectDetections": "Incorrect detections: ",
       "prefix": "Object: ",
       "rows": "Rows: ",
       "search": "Ara",
@@ -1446,9 +1457,9 @@
       "CorrectPredictions": "Doğru tahminler",
       "GlobalExplanation": "Kümelenmiş özellik önem derecesi",
       "IncorrectPredictions": "Yanlış tahminler",
-      "InfoTitle": "Additional information on data analysis table view",
+      "InfoTitle": "Additional information on feature importance values",
       "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
       "LocalExplanation": "Bireysel özellik önem derecesi",
       "SelectionCounter": "{0}/{1} veri noktası seçildi",
       "SelectionLimit": "Şu anda en fazla 5 veri noktası seçilebilir.",

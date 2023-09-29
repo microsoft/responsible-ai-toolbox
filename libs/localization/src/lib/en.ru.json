@@ -186,6 +186,12 @@
     "showTop": "Точки данных с наиболее сильными ожидаемыми откликами на признак обработки: {0}",
     "whatifDescription": "Анализ \"Что если\" позволяет вам воздействовать на признаки для любых входных данных и следить за изменением прогнозирования модели. Вы можете воздействовать на признаки вручную или указать требуемый прогноз (например, метку класса для классификатора), чтобы увидеть список ближайших к исходным входным данным точек данных, использование которых позволит получить желаемый прогноз. Эти точки данных также называются предположениями прогноза, противоречащими фактам, и их можно использовать для просмотра отношений, изученных моделью, для понимания важных и необходимых для прогнозирования признаков с помощью модели и для отладки граничных вариантов модели. Чтобы начать, выберите точки входных данных в таблице данных или на точечной диаграмме."
   },
+  "DataAnalysis": {
+    "TableView": {
+      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
+      "infoTitle": "Additional information on table view"
+    }
+  },
   "ErrorAnalysis": {
     "Cohort": {
       "cohort": "Когорта",
@@ -1141,7 +1147,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Панель интерпретируемости",
-      "importantWords": "Show most Important Words",
+      "importantWords": "Show most important words",
       "topFeatureList": "Анализ списка лучших функций",
       "allButton": "ВСЕ ФУНКЦИИ",
       "negButton": "ОТРИЦАТЕЛЬНЫЕ ФУНКЦИИ",
@@ -1155,7 +1161,8 @@
       "predictedAnswer": "Predicted answer: ",
       "trueAnswer": "True answer: ",
       "inputs": "Inputs",
-      "outputs": "Outputs"
+      "outputs": "Outputs",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "ЛЕГЕНДЫ ТЕКСТОВЫХ ФУНКЦИЙ",
@@ -1188,6 +1195,8 @@
       "columnTwo": "Индекс",
       "columnThree": "Истинное значение Y",
       "columnFour": "Спрогнозированный Y",
+      "columnThreeOD": "Correct",
+      "columnFourOD": "Incorrect",
       "columnFive": "Другие метаданные",
       "chooseObject": "Choose a detected object",
       "examples": "examples",
@@ -1207,6 +1216,8 @@
       "panelInformation": "Information",
       "predictedLabel": "Predicted label",
       "predictedY": "Predicted: ",
+      "correctDetections": "Correct detections: ",
+      "incorrectDetections": "Incorrect detections: ",
       "prefix": "Object: ",
       "rows": "Rows: ",
       "search": "Поиск",
@@ -1446,9 +1457,9 @@
       "CorrectPredictions": "Правильные прогнозы",
       "GlobalExplanation": "Совокупная важность признаков",
       "IncorrectPredictions": "Неправильные прогнозы",
-      "InfoTitle": "Additional information on data analysis table view",
+      "InfoTitle": "Additional information on feature importance values",
       "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
       "LocalExplanation": "Важность отдельных признаков",
       "SelectionCounter": "Выбрано {0}/{1} точек данных",
       "SelectionLimit": "Сейчас можно выбрать до 5 точек данных.",

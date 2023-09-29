@@ -186,6 +186,12 @@
     "showTop": "処理の特徴量に対する因果応答が最大値で推定されるデータポイント: {0}",
     "whatifDescription": "What-If を使用すると、任意の入力を無秩序にし、モデルの予測がどのように変化するかを確認できます。特徴を手動で無秩序にするか、または必要な予測 (分類子のクラス ラベルなど) を指定して、目的の予測に導く元の入力に最も近いデータ ポイントの一覧を表示できます。予測反事実条件とも呼ばれているものを使用して、モデルによって学習されたリレーションシップを探索し、モデルの予測に必要な重要な特徴、またはモデルのデバッグ エッジ-ケースを理解します。開始するには、データ tablr または散布図から入力ポイントを選択します。"
   },
+  "DataAnalysis": {
+    "TableView": {
+      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
+      "infoTitle": "Additional information on table view"
+    }
+  },
   "ErrorAnalysis": {
     "Cohort": {
       "cohort": "コーホート",
@@ -1141,7 +1147,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "解釈可能性ダッシュボード",
-      "importantWords": "Show most Important Words",
+      "importantWords": "Show most important words",
       "topFeatureList": "上位特徴リストの分析",
       "allButton": "すべての特徴量",
       "negButton": "負の特徴",
@@ -1155,7 +1161,8 @@
       "predictedAnswer": "Predicted answer: ",
       "trueAnswer": "True answer: ",
       "inputs": "Inputs",
-      "outputs": "Outputs"
+      "outputs": "Outputs",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "テキスト特徴の凡例",
@@ -1188,6 +1195,8 @@
       "columnTwo": "インデックス",
       "columnThree": "True Y",
       "columnFour": "予測された Y",
+      "columnThreeOD": "Correct",
+      "columnFourOD": "Incorrect",
       "columnFive": "その他のメタデータ",
       "chooseObject": "Choose a detected object",
       "examples": "examples",
@@ -1207,6 +1216,8 @@
       "panelInformation": "Information",
       "predictedLabel": "Predicted label",
       "predictedY": "Predicted: ",
+      "correctDetections": "Correct detections: ",
+      "incorrectDetections": "Incorrect detections: ",
       "prefix": "Object: ",
       "rows": "Rows: ",
       "search": "検索",
@@ -1446,9 +1457,9 @@
       "CorrectPredictions": "正しい予測",
       "GlobalExplanation": "特徴量の重要度集約",
       "IncorrectPredictions": "正しくない予測",
-      "InfoTitle": "Additional information on data analysis table view",
+      "InfoTitle": "Additional information on feature importance values",
       "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
       "LocalExplanation": "個々の特徴量の重要度",
       "SelectionCounter": "{0}/{1} データポイントが選択されました",
       "SelectionLimit": "現時点では最大 5 つのデータポイントを選択できます。",
