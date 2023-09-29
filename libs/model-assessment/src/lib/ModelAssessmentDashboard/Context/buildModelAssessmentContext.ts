@@ -60,7 +60,7 @@ export function buildInitialModelAssessmentContext(
     featureMetaData: props.dataset.feature_metadata,
     localExplanations,
     metadata: modelMetadata,
-    objectDetectionLabels: props.dataset.objectDetectionLabels,
+    objectDetectionLabels: props.dataset.object_detection_labels,
     predictedProbabilities: props.dataset.probability_y,
     predictedY: props.dataset.predicted_y,
     targetColumn: props.dataset.target_column,
