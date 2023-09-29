@@ -2,12 +2,8 @@
 // Licensed under the MIT License.
 
 import { getOS } from "../../../../util/getOS";
-import { getPythonVersion } from "../../../../util/getPythonVersion";
 
-const isLinux = getOS() === "Linux";
-const isPython37 = getPythonVersion() === "3.7";
-
-const FeatureCohorts = isLinux && isPython37 ? 3 : 2;
+const FeatureCohorts = getOS() === "Linux" ? [2, 3] : 3;
 
 export const FridgeObjectDetectionModelDebugging = {
   causalAnalysisData: {

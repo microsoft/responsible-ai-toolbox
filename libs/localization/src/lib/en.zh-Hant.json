@@ -186,6 +186,12 @@
     "showTop": "對於處理方式特徵具有最大估計原因回應的資料點: {0}",
     "whatifDescription": "假設狀況可讓您針對任何輸入來轉換特徵，並觀察模型的預測如何變更。您可以手動對特徵進行轉換，或指定所需的預測 (例如分類器類別標籤)，以查看最接近原始輸入的資料點清單，以得到所需的預測。這也稱為預測反事實，您可以使用它們來探索模型所學到的關聯性；了解模型預測的重要必要功能；或針對模型進行邊緣案例的偵錯。若要開始，請從資料表或散佈圖選擇輸入點。"
   },
+  "DataAnalysis": {
+    "TableView": {
+      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
+      "infoTitle": "Additional information on table view"
+    }
+  },
   "ErrorAnalysis": {
     "Cohort": {
       "cohort": "世代",
@@ -1141,7 +1147,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "可解譯性儀表板",
-      "importantWords": "顯示最重要的字詞",
+      "importantWords": "Show most important words",
       "topFeatureList": "熱門特徵清單分析",
       "allButton": "所有特徵",
       "negButton": "負特徵",
@@ -1155,7 +1161,8 @@
       "predictedAnswer": "預測的答案:",
       "trueAnswer": "正確答案:",
       "inputs": "輸入",
-      "outputs": "輸出"
+      "outputs": "輸出",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "文字特徵圖例",
@@ -1188,6 +1195,8 @@
       "columnTwo": "索引",
       "columnThree": "實際的 Y",
       "columnFour": "預測的 Y",
+      "columnThreeOD": "Correct",
+      "columnFourOD": "Incorrect",
       "columnFive": "其他中繼資料",
       "chooseObject": "選擇偵測到的物件",
       "examples": "範例",
@@ -1207,6 +1216,8 @@
       "panelInformation": "資訊",
       "predictedLabel": "預測標記",
       "predictedY": "預測: ",
+      "correctDetections": "Correct detections: ",
+      "incorrectDetections": "Incorrect detections: ",
       "prefix": "物件: ",
       "rows": "資料列: ",
       "search": "搜尋",
@@ -1446,9 +1457,9 @@
       "CorrectPredictions": "正確的預測",
       "GlobalExplanation": "彙總特徵重要度",
       "IncorrectPredictions": "不正確的預測",
-      "InfoTitle": "資料分析資料表檢視的其他資訊",
+      "InfoTitle": "Additional information on feature importance values",
       "IndividualFeatureTabular": "按一下資料表中的資料點 (最多 5 個資料點) 選取資料點，以在檢視其局部特徵重要度值 (區域解釋)，以個別條件預測 (ICE) 繪圖。",
-      "IndividualFeatureText": "按一下資料表中的資料點以選取資料點，以檢視本機特徵重要度值 (本機說明)。",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
       "LocalExplanation": "個別特徵重要度",
       "SelectionCounter": "已選取 {0}/{1} 個資料點",
       "SelectionLimit": "目前最多可選取 5 個資料點。",

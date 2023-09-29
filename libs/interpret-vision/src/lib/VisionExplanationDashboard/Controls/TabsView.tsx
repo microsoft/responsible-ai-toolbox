@@ -27,7 +27,6 @@ export interface ITabsViewProps {
   imageDim: number;
   numRows: number;
   otherMetadataFieldNames: string[];
-  pageSize: number;
   searchValue: string;
   selectedItem: IVisionListItem | undefined;
   selectedKey: string;
@@ -96,7 +95,6 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
               otherMetadataFieldNames={this.props.otherMetadataFieldNames}
               searchValue={this.props.searchValue}
               selectItem={this.props.onItemSelect}
-              pageSize={this.props.pageSize}
               updateSelectedIndices={this.props.updateSelectedIndices}
               taskType={this.props.taskType}
             />

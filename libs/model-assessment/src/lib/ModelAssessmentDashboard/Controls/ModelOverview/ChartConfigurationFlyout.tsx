@@ -14,36 +14,24 @@ import {
 } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
-  ErrorCohort,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { IChartConfigurationFlyoutProps } from "./ChartConfigurationFlyoutProps";
+import { IChartConfigurationFlyoutState } from "./ChartConfigurationFlyoutState";
+import {
+  getInitialNewlySelectedDatasetCohorts,
+  getInitialNewlySelectedFeatureCohorts,
+  makeChartCohortOptionSelectionChange,
+  selectAllOptionKey,
+  getIndexAndNames,
+  getIdAndNames,
+  getMaxCohortId,
+  noCohortIsSelected
+} from "./ChartConfigurationFlyoutUtils";
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
-
-interface IChartConfigurationFlyoutProps {
-  isOpen: boolean;
-  onDismissFlyout: () => void;
-  datasetCohorts: ErrorCohort[];
-  featureBasedCohorts: ErrorCohort[];
-  selectedDatasetCohorts?: number[];
-  selectedFeatureBasedCohorts?: number[];
-  updateCohortSelection: (
-    selectedDatasetCohorts: number[],
-    selectedFeatureBasedCohorts: number[],
-    datasetCohortChartIsSelected: boolean
-  ) => void;
-  datasetCohortViewIsSelected: boolean;
-}
-
-interface IChartConfigurationFlyoutState {
-  newlySelectedDatasetCohorts: number[];
-  newlySelectedFeatureBasedCohorts: number[];
-  datasetCohortViewIsNewlySelected: boolean;
-}
-
-const selectAllOptionKey = "selectAll";
 
 export class ChartConfigurationFlyout extends React.Component<
   IChartConfigurationFlyoutProps,
@@ -59,21 +47,21 @@ export class ChartConfigurationFlyout extends React.Component<
     super(props);
     this.state = {
       datasetCohortViewIsNewlySelected: this.props.datasetCohortViewIsSelected,
-      newlySelectedDatasetCohorts:
-        this.props.selectedDatasetCohorts ??
-        this.props.datasetCohorts.map((errorCohort) =>
-          errorCohort.cohort.getCohortID()
-        ),
-      newlySelectedFeatureBasedCohorts:
-        this.props.selectedFeatureBasedCohorts ??
-        this.props.featureBasedCohorts.map((_, index) => index)
+      newlySelectedDatasetCohorts: getInitialNewlySelectedDatasetCohorts(
+        this.props.selectedDatasetCohorts,
+        this.props.datasetCohorts
+      ),
+      newlySelectedFeatureBasedCohorts: getInitialNewlySelectedFeatureCohorts(
+        this.props.selectedFeatureBasedCohorts,
+        this.props.featureBasedCohorts
+      )
     };
   }
 
   public componentDidUpdate(prevProps: IChartConfigurationFlyoutProps): void {
     // update dataset cohorts if any new ones were created
-    const prevMaxCohortID = this.getMaxCohortId(prevProps.datasetCohorts);
-    const currMaxCohortID = this.getMaxCohortId(this.props.datasetCohorts);
+    const prevMaxCohortID = getMaxCohortId(prevProps.datasetCohorts);
+    const currMaxCohortID = getMaxCohortId(this.props.datasetCohorts);
     let newCohorts: number[] = [];
     if (currMaxCohortID > prevMaxCohortID) {
       // A cohort has a higher ID than the previously recorded
@@ -143,8 +131,8 @@ export class ChartConfigurationFlyout extends React.Component<
       key: selectAllOptionKey,
       text: localization.ModelAssessment.ModelOverview.selectAllCohortsOption
     };
-    const datasetCohortOptions = this.getIdAndNames(this.props.datasetCohorts);
-    const featureBasedCohortOptions = this.getIndexAndNames(
+    const datasetCohortOptions = getIdAndNames(this.props.datasetCohorts);
+    const featureBasedCohortOptions = getIndexAndNames(
       this.props.featureBasedCohorts
     );
 
@@ -182,13 +170,17 @@ export class ChartConfigurationFlyout extends React.Component<
       }
     ];
 
-    const noCohortSelected = this.noCohortIsSelected();
+    const noCohortSelected = noCohortIsSelected(
+      this.state.datasetCohortViewIsNewlySelected,
+      this.state.newlySelectedDatasetCohorts,
+      this.state.newlySelectedFeatureBasedCohorts
+    );
 
     return (
       <Panel
         isOpen={this.props.isOpen}
         closeButtonAriaLabel="Close"
-        onDismiss={this.props.onDismissFlyout}
+        onDismiss={this.onDismiss}
         onRenderFooterContent={this.onRenderFooterContent}
         isFooterAtBottom
       >
@@ -265,28 +257,37 @@ export class ChartConfigurationFlyout extends React.Component<
     );
   }
 
+  private onDismiss = (): void => {
+    this.setState({
+      newlySelectedDatasetCohorts: getInitialNewlySelectedDatasetCohorts(
+        this.props.selectedDatasetCohorts,
+        this.props.datasetCohorts
+      ),
+      newlySelectedFeatureBasedCohorts: getInitialNewlySelectedFeatureCohorts(
+        this.props.selectedFeatureBasedCohorts,
+        this.props.featureBasedCohorts
+      )
+    });
+    this.props.onDismissFlyout();
+  };
+
   private onRenderFooterContent = (): React.ReactElement => {
     return (
       <Stack horizontal tokens={{ childrenGap: "10px" }}>
         <PrimaryButton
           onClick={this.onConfirm}
           text={localization.ModelAssessment.ModelOverview.chartConfigApply}
-          disabled={this.noCohortIsSelected()}
+          disabled={noCohortIsSelected(
+            this.state.datasetCohortViewIsNewlySelected,
+            this.state.newlySelectedDatasetCohorts,
+            this.state.newlySelectedFeatureBasedCohorts
+          )}
         />
         <DefaultButton
-          onClick={this.props.onDismissFlyout}
+          onClick={this.onDismiss}
           text={localization.ModelAssessment.ModelOverview.chartConfigCancel}
         />
       </Stack>
-    );
-  };
-
-  private noCohortIsSelected = (): boolean => {
-    return (
-      (this.state.datasetCohortViewIsNewlySelected &&
-        this.state.newlySelectedDatasetCohorts.length === 0) ||
-      (!this.state.datasetCohortViewIsNewlySelected &&
-        this.state.newlySelectedFeatureBasedCohorts.length === 0)
     );
   };
 
@@ -318,7 +319,7 @@ export class ChartConfigurationFlyout extends React.Component<
   ): void => {
     if (item) {
       this.setState({
-        newlySelectedDatasetCohorts: this.makeChartCohortOptionSelectionChange(
+        newlySelectedDatasetCohorts: makeChartCohortOptionSelectionChange(
           this.state.newlySelectedDatasetCohorts,
           this.props.datasetCohorts.map((errorCohort) =>
             errorCohort.cohort.getCohortID()
@@ -335,60 +336,12 @@ export class ChartConfigurationFlyout extends React.Component<
   ): void => {
     if (item) {
       this.setState({
-        newlySelectedFeatureBasedCohorts:
-          this.makeChartCohortOptionSelectionChange(
-            this.state.newlySelectedFeatureBasedCohorts,
-            this.props.featureBasedCohorts.map((_cohort, index) => index),
-            item
-          )
+        newlySelectedFeatureBasedCohorts: makeChartCohortOptionSelectionChange(
+          this.state.newlySelectedFeatureBasedCohorts,
+          this.props.featureBasedCohorts.map((_cohort, index) => index),
+          item
+        )
       });
     }
   };
-
-  private makeChartCohortOptionSelectionChange = (
-    currentlySelected: number[],
-    allItems: number[],
-    item: IDropdownOption
-  ): number[] => {
-    if (item.key === selectAllOptionKey) {
-      // if all items were selected before then unselect all now
-      // if at least some items were not selected before then select all now
-      if (currentlySelected.length !== allItems.length) {
-        return allItems;
-      }
-      return [];
-    }
-    const key = Number(item.key);
-
-    if (item.selected && !currentlySelected.includes(key)) {
-      // update with newly selected item
-      return currentlySelected.concat([key]);
-    } else if (!item.selected && currentlySelected.includes(key)) {
-      // update by removing the unselected item
-      return currentlySelected.filter((idx) => idx !== key);
-    }
-
-    return currentlySelected;
-  };
-
-  private getIndexAndNames(errorCohorts: ErrorCohort[]): IDropdownOption[] {
-    return errorCohorts.map((cohort, index) => {
-      return { key: index.toString(), text: cohort.cohort.name };
-    });
-  }
-
-  private getIdAndNames(errorCohorts: ErrorCohort[]): IDropdownOption[] {
-    return errorCohorts.map((errorCohort) => {
-      return {
-        key: errorCohort.cohort.getCohortID().toString(),
-        text: errorCohort.cohort.name
-      };
-    });
-  }
-
-  private getMaxCohortId(cohorts: ErrorCohort[]): number {
-    return Math.max(
-      ...cohorts.map((errorCohort) => errorCohort.cohort.getCohortID())
-    );
-  }
 }

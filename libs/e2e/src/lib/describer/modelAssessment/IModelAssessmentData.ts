@@ -72,8 +72,8 @@ export interface IModelOverviewData {
   initialCohorts?: IExpectedCohortData[];
   newCohort?: IExpectedCohortData;
   featureCohortView?: {
-    singleFeatureCohorts: number;
-    multiFeatureCohorts?: number;
+    singleFeatureCohorts: number | number[];
+    multiFeatureCohorts?: number | number[];
     firstFeatureToSelect: string;
     secondFeatureToSelect?: string;
   };

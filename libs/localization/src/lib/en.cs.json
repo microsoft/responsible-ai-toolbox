@@ -186,6 +186,12 @@
     "showTop": "Datové body s největšími odhadovanými příčinami reakce na zpracování funkce: {0}",
     "whatifDescription": "Citlivostní analýza vám umožní provést perturbaci funkcí u jakéhokoli vstupu a pozorovat, jak se predikce modelu budou měnit. Funkce můžete perturbovat ručně, nebo můžete zadat požadované predikce (např. třídu popisku u klasifikátoru) a zobrazit si tak seznam nejbližších datových bodů k původnímu vstupu, které povedou k požadované predikci. V případě takzvaných protifaktorů predikce je můžete použít k prozkoumání vztahů, které se model naučil, nebo k porozumění důležitých, nezbytných funkcí pro předpovědi modelu, nebo k ladění krajních případů modelu. Když budete chtít začít, zvolte vstupní body z datové tabulky nebo bodového diagramu."
   },
+  "DataAnalysis": {
+    "TableView": {
+      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
+      "infoTitle": "Additional information on table view"
+    }
+  },
   "ErrorAnalysis": {
     "Cohort": {
       "cohort": "Kohorta",
@@ -1141,7 +1147,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Řídicí panel interpretovatelnosti",
-      "importantWords": "Zobrazit nejdůležitější slova",
+      "importantWords": "Show most important words",
       "topFeatureList": "Analýza seznamu hlavních funkcí",
       "allButton": "VŠECHNY FUNKCE",
       "negButton": "NEGATIVNÍ FUNKCE",
@@ -1155,7 +1161,8 @@
       "predictedAnswer": "Předpokládaná odpověď: ",
       "trueAnswer": "Skutečná odpověď: ",
       "inputs": "Vstupy",
-      "outputs": "Výstupy"
+      "outputs": "Výstupy",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "LEGENDA TEXTOVÉ FUNKCE",
@@ -1188,6 +1195,8 @@
       "columnTwo": "Index",
       "columnThree": "Skutečné Y",
       "columnFour": "Predikované Y",
+      "columnThreeOD": "Correct",
+      "columnFourOD": "Incorrect",
       "columnFive": "Další metadata",
       "chooseObject": "Zvolte zjištěný objekt",
       "examples": "Příklady",
@@ -1207,6 +1216,8 @@
       "panelInformation": "Informace",
       "predictedLabel": "Predikovaný popisek",
       "predictedY": "Předpověď: ",
+      "correctDetections": "Correct detections: ",
+      "incorrectDetections": "Incorrect detections: ",
       "prefix": "Objekt: ",
       "rows": "Řádky: ",
       "search": "Hledat",
@@ -1446,9 +1457,9 @@
       "CorrectPredictions": "Správné predikce",
       "GlobalExplanation": "Význam agregovaného atributu",
       "IncorrectPredictions": "Nesprávné predikce",
-      "InfoTitle": "Další informace o zobrazení tabulky analýzy dat",
+      "InfoTitle": "Additional information on feature importance values",
       "IndividualFeatureTabular": "Výběrem datového bodu kliknutím na datový bod (až 5 datových bodů) v tabulce zobrazíte jejich místní hodnoty důležitosti funkcí (místní vysvětlení) a grafy jednotlivých podmíněných očekávání (ICE).",
-      "IndividualFeatureText": "Výběrem datového bodu kliknutím na datový bod v tabulce zobrazíte hodnoty důležitosti místních funkcí (místní vysvětlení).",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
       "LocalExplanation": "Významnost jednotlivých atributů",
       "SelectionCounter": "{0}/{1} vybraných datových bodů",
       "SelectionLimit": "V tuto chvíli je možné vybrat až 5 datových bodů.",
