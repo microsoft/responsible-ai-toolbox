@@ -1,19 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IVisionListItem } from "@responsible-ai/core-ui";
+import { DatasetTaskType, IVisionListItem } from "@responsible-ai/core-ui";
 
 export function getFilteredDataFromSearch(
   searchVal: string,
-  items: IVisionListItem[]
+  items: IVisionListItem[],
+  taskType: string
 ): IVisionListItem[] {
   return items.filter((item) => {
-    const predYIncludesSearchVal = includesSearchVal(
-      item.predictedY,
+    const predOrIncorrectY = taskType === DatasetTaskType.ObjectDetection
+      ? item.odIncorrect : item.predictedY;
+    const trueOrCorrectY = taskType === DatasetTaskType.ObjectDetection
+      ? item.odCorrect : item.trueY;
+    const predOrIncorrectYIncludesSearchVal = includesSearchVal(
+      predOrIncorrectY,
       searchVal
     );
-    const trueYIncludesSearchVal = includesSearchVal(item.trueY, searchVal);
-    return predYIncludesSearchVal || trueYIncludesSearchVal;
+    const trueOrCorrectYIncludesSearchVal = includesSearchVal(trueOrCorrectY, searchVal);
+    return predOrIncorrectYIncludesSearchVal || trueOrCorrectYIncludesSearchVal;
   });
 }
 

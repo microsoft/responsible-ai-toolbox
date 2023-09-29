@@ -189,7 +189,7 @@ export class TableList extends React.Component<
     if (searchValue.length === 0) {
       return items;
     }
-    const filteredItems = getFilteredDataFromSearch(searchValue, items);
+    const filteredItems = getFilteredDataFromSearch(searchValue, items, this.props.taskType);
     return filteredItems;
   }
 
@@ -222,8 +222,7 @@ export class TableList extends React.Component<
       return groups;
     }
     const filteredSuccessInstances = filteredItems.filter(
-      // TODO: Add OD task type for OD's box filter bug fix.
-      (item) => isItemPredTrueEqual(item)
+      (item) => isItemPredTrueEqual(item, this.props.taskType)
     );
     groups[0].count = filteredSuccessInstances.length;
     groups[1].startIndex = filteredSuccessInstances.length;
