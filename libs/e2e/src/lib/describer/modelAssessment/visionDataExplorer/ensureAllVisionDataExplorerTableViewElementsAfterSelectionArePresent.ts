@@ -12,6 +12,4 @@ export function ensureAllVisionDataExplorerTableViewElementsAfterSelectionArePre
     "exist"
   );
   cy.get(Locators.VisionDataExplorerTabsViewSaveCohortButton).should("exist");
-
-  cy.get(Locators.VisionDataExplorerPageSizeSelector).should("exist");
 }

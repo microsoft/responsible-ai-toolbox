@@ -207,11 +207,8 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
             )
         elif manager_type == ManagerNames.ERROR_ANALYSIS:
             rai_insights.error_analysis.add()
-        elif manager_type == ManagerNames.EXPLAINER:
-            rai_insights.explainer.add()
         else:
-            raise ValueError(
-                "Bad manager_type: {0}".format(manager_type))
+            rai_insights.explainer.add()
 
         rai_insights.compute()
 

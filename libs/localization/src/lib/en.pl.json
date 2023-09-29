@@ -186,6 +186,12 @@
     "showTop": "Punkty danych z największymi szacowanymi odpowiedziami przyczynowymi na funkcje działań: {0}",
     "whatifDescription": "Analiza co-jeżeli pozwala na zakłócenie funkcji w przypadku dowolnych danych wejściowych i obserwowanie, jak zmienia się przewidywanie modelu. Możesz zakłócać funkcje ręcznie lub określić żądane przewidywanie (np. etykietę klasy dla klasyfikatora), aby wyświetlić listę punktów danych najbliższych pierwotnym danym wejściowym, które mogłyby doprowadzić do żądanego przewidywania. Nazywane również przewidywaniami hipotez przeciwnych, których można używać do badania relacji wyuczonych przez model; stopnia zrozumienia ważnych, niezbędnych funkcji dla przewidywań modelu; lub możesz debugować skrajne przypadki dla modelu. Aby rozpocząć, wybierz punkty danych wejściowych z tabeli danych lub wykresu punktowego."
   },
+  "DataAnalysis": {
+    "TableView": {
+      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
+      "infoTitle": "Additional information on table view"
+    }
+  },
   "ErrorAnalysis": {
     "Cohort": {
       "cohort": "Kohorta",
@@ -1141,7 +1147,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Pulpit nawigacyjny możliwości interpretacji",
-      "importantWords": "Show most Important Words",
+      "importantWords": "Show most important words",
       "topFeatureList": "Analiza listy najważniejszych funkcji",
       "allButton": "WSZYSTKIE FUNKCJE",
       "negButton": "CECHY NEGATYWNE",
@@ -1155,7 +1161,8 @@
       "predictedAnswer": "Predicted answer: ",
       "trueAnswer": "True answer: ",
       "inputs": "Inputs",
-      "outputs": "Outputs"
+      "outputs": "Outputs",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "LEGENDA FUNKCJI TEKSTU",
@@ -1188,6 +1195,8 @@
       "columnTwo": "Indeks",
       "columnThree": "Prawda Y",
       "columnFour": "Przewidywana wartość Y",
+      "columnThreeOD": "Correct",
+      "columnFourOD": "Incorrect",
       "columnFive": "Inne metadane",
       "chooseObject": "Choose a detected object",
       "examples": "examples",
@@ -1207,6 +1216,8 @@
       "panelInformation": "Information",
       "predictedLabel": "Predicted label",
       "predictedY": "Predicted: ",
+      "correctDetections": "Correct detections: ",
+      "incorrectDetections": "Incorrect detections: ",
       "prefix": "Object: ",
       "rows": "Rows: ",
       "search": "Wyszukaj",
@@ -1446,9 +1457,9 @@
       "CorrectPredictions": "Prawidłowe przewidywania",
       "GlobalExplanation": "Zagregowana istotność funkcji",
       "IncorrectPredictions": "Niepoprawne przewidywania",
-      "InfoTitle": "Additional information on data analysis table view",
+      "InfoTitle": "Additional information on feature importance values",
       "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
       "LocalExplanation": "Indywidualna istotność funkcji",
       "SelectionCounter": "wybrane punkty danych {0}/{1}",
       "SelectionLimit": "W tej chwili można wybrać maksymalnie 5 punktów danych.",

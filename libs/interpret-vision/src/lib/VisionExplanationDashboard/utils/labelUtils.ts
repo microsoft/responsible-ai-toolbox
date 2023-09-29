@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IVisionListItem } from "@responsible-ai/core-ui";
+import { DatasetTaskType, IVisionListItem } from "@responsible-ai/core-ui";
 
 export const NoLabel = "(none)";
 
@@ -16,8 +16,11 @@ export function getJoinedLabelString(
   return labels;
 }
 
-export function isItemPredTrueEqual(item: IVisionListItem): boolean {
-  return (
-    getJoinedLabelString(item.predictedY) === getJoinedLabelString(item.trueY)
-  );
+export function isItemPredTrueEqual(
+  item: IVisionListItem,
+  taskType: string
+): boolean {
+  return taskType === DatasetTaskType.ObjectDetection
+    ? getJoinedLabelString(item.predictedY) === getJoinedLabelString(item.trueY)
+    : item.odIncorrect === NoLabel;
 }

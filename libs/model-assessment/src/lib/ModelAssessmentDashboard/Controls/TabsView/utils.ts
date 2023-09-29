@@ -7,6 +7,7 @@ import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
 
 import { GlobalTabKeys } from "../../ModelAssessmentEnums";
+import { FeatureImportancesTabOptions } from "../FeatureImportances";
 
 import { ITabsViewProps } from "./TabsViewProps";
 
@@ -15,12 +16,21 @@ interface IInfo {
   title: string;
 }
 
+function hasTextImportances(props?: ITabsViewProps): boolean {
+  if (props?.modelExplanationData) {
+    return !!props.modelExplanationData[0]?.precomputedExplanations
+      ?.textFeatureImportance;
+  }
+  return false;
+}
+
 export function getInfo(
   tabKey: GlobalTabKeys,
   props?: ITabsViewProps,
   errorAnalysisOption?: ErrorAnalysisOptions,
   dataAnalysisOption?: DataAnalysisTabOptions,
-  causalAnalysisOption?: CausalAnalysisOptions
+  causalAnalysisOption?: CausalAnalysisOptions,
+  featureImportanceOption?: FeatureImportancesTabOptions
 ): IInfo {
   let body = "";
   let title = "";
@@ -41,17 +51,8 @@ export function getInfo(
       body = localization.Interpret.DatasetExplorer.helperText;
       title = localization.Interpret.DatasetExplorer.infoTitle;
     } else if (dataAnalysisOption === DataAnalysisTabOptions.TableView) {
-      title = localization.ModelAssessment.FeatureImportances.InfoTitle;
-      let hasTextImportances = false;
-      if (props?.modelExplanationData) {
-        hasTextImportances =
-          !!props.modelExplanationData[0]?.precomputedExplanations
-            ?.textFeatureImportance;
-      }
-      body = hasTextImportances
-        ? localization.ModelAssessment.FeatureImportances.IndividualFeatureText
-        : localization.ModelAssessment.FeatureImportances
-            .IndividualFeatureTabular;
+      title = localization.DataAnalysis.TableView.infoTitle;
+      body = localization.DataAnalysis.TableView.description;
     }
   } else if (tabKey === GlobalTabKeys.CausalAnalysisTab) {
     if (causalAnalysisOption === CausalAnalysisOptions.Aggregate) {
@@ -63,6 +64,21 @@ export function getInfo(
     } else {
       body = localization.CausalAnalysis.TreatmentPolicy.header;
       title = localization.CausalAnalysis.TreatmentPolicy.infoTitle;
+    }
+  } else if (tabKey === GlobalTabKeys.FeatureImportancesTab) {
+    if (
+      featureImportanceOption === FeatureImportancesTabOptions.GlobalExplanation
+    ) {
+      body = localization.Interpret.GlobalTab.helperText;
+      title = localization.Interpret.GlobalTab.infoTitle;
+    } else if (
+      featureImportanceOption === FeatureImportancesTabOptions.LocalExplanation
+    ) {
+      body = hasTextImportances(props)
+        ? localization.ModelAssessment.FeatureImportances.IndividualFeatureText
+        : localization.ModelAssessment.FeatureImportances
+            .IndividualFeatureTabular;
+      title = localization.ModelAssessment.FeatureImportances.InfoTitle;
     }
   }
   return { body, title };

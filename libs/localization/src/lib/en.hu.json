@@ -186,6 +186,12 @@
     "showTop": "A kezelési jellemzőre adott legnagyobb becsült okozati válaszokkal rendelkező adatpontok: {0}",
     "whatifDescription": "A lehetőségelemzés lehetővé teszi, hogy bármilyen bemenethez perturbálja a jellemzőket, és megfigyelje, hogyan változik a modell előrejelzése. A jellemzőket manuálisan perturbálhatja, vagy megadhatja a kívánt előrejelzést (pl. osztálycímkét egy osztályozóhoz), hogy láthassa az eredeti bemenethez legközelebbi adatpontok listáját, amelyek a kívánt előrejelzéshez vezetnének. Az előrejelzési ellenpéldáknak is nevezett elemeket használhatja a modell által megtanult összefüggések feltárására; a modell előrejelzéseihez fontos, szükséges jellemzők megértésére; vagy a modell éles eseteinek hibakeresésére. A kezdéshez válasszon bemeneti pontokat az adattábláról vagy a pontdiagramról."
   },
+  "DataAnalysis": {
+    "TableView": {
+      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
+      "infoTitle": "Additional information on table view"
+    }
+  },
   "ErrorAnalysis": {
     "Cohort": {
       "cohort": "Kohorsz",
@@ -1141,7 +1147,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Értelmezhetőségi irányítópult",
-      "importantWords": "A legfontosabb szavak megjelenítése",
+      "importantWords": "Show most important words",
       "topFeatureList": "Kiemelt jellemzők listájának elemzése",
       "allButton": "MINDEN JELLEMZŐ",
       "negButton": "NEGATÍV JELLEMZŐK",
@@ -1155,7 +1161,8 @@
       "predictedAnswer": "Előre jelzett válasz: ",
       "trueAnswer": "Igaz válasz: ",
       "inputs": "Bemenetek",
-      "outputs": "Kimenetek"
+      "outputs": "Kimenetek",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "SZÖVEGJELLEMZŐ JELMAGYARÁZATA",
@@ -1188,6 +1195,8 @@
       "columnTwo": "Index",
       "columnThree": "Valós Y",
       "columnFour": "Előrejelzett Y",
+      "columnThreeOD": "Correct",
+      "columnFourOD": "Incorrect",
       "columnFive": "Egyéb metaadatok",
       "chooseObject": "Észlelt objektum kiválasztása",
       "examples": "példák",
@@ -1207,6 +1216,8 @@
       "panelInformation": "Információ",
       "predictedLabel": "Előrejelzett címke",
       "predictedY": "Előre jelzett: ",
+      "correctDetections": "Correct detections: ",
+      "incorrectDetections": "Incorrect detections: ",
       "prefix": "Objektum: ",
       "rows": "Sorok: ",
       "search": "Keresés",
@@ -1446,9 +1457,9 @@
       "CorrectPredictions": "Helyes előrejelzések",
       "GlobalExplanation": "Aggregált jellemzőfontosság",
       "IncorrectPredictions": "Helytelen előrejelzések",
-      "InfoTitle": "További információ az adatelemzés táblanézetéről",
+      "InfoTitle": "Additional information on feature importance values",
       "IndividualFeatureTabular": "Jelöljön ki egy adatpontot. Ehhez kattintson egy adatpontra (legfeljebb 5 adatpontra) a táblában a helyi jellemzőfontossági értékek (helyi magyarázat) és az egyéni feltételes elvárások (ICE) diagram megtekintéséhez.",
-      "IndividualFeatureText": "Jelöljön ki egy adatpontot. Ehhez kattintson egy adatpontra a táblában a helyi jellemzőfontossági értékek (helyi magyarázat) megtekintéséhez.",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
       "LocalExplanation": "Egyéni jellemzőfontosság",
       "SelectionCounter": "{0}/{1} adatpont kiválasztva",
       "SelectionLimit": "Jelenleg legfeljebb 5 adatpont választható ki.",
