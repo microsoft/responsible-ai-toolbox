@@ -88,9 +88,9 @@ export function preprocessData(
     const odPredictedY = typeof y === "undefined" ? defVal : y;
     const x = dataset.object_detection_true_y?.[index];
     const odTrueY = typeof x === "undefined" ? defVal : x;
-    const i = dataset.objectDetectionLabels?.[index].incorrect;
-    const c = dataset.objectDetectionLabels?.[index].correct;
-    const a = dataset.objectDetectionLabels?.[index].aggregate;
+    const i = dataset.object_detection_labels?.[index].incorrect;
+    const c = dataset.object_detection_labels?.[index].correct;
+    const a = dataset.object_detection_labels?.[index].aggregate;
     const odIncorrect = typeof i === "undefined" ? defVal : i;
     const odCorrect = typeof c === "undefined" ? defVal : c;
     const odAggregate = typeof a === "undefined" ? defVal : a;

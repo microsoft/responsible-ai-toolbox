@@ -679,7 +679,7 @@ class RAIVisionInsights(RAIBaseInsights):
             encoded_images.append(b64)
 
         # passing to frontend to draw bounding boxes with the correct scale
-        dashboard_dataset.imageDimensions = image_dimensions
+        dashboard_dataset.image_dimensions = image_dimensions
 
         if len(encoded_images) > 0:
             dashboard_dataset.images = encoded_images
@@ -745,12 +745,12 @@ class RAIVisionInsights(RAIBaseInsights):
 
             rendered_labels[_CORRECT] = ', '.join(
                 f'{value} {key}' for key, value in
-                image_labels[_CORRECT].items())
+                image_labels[_CORRECT].items() if value > 0)
             if len(rendered_labels[_CORRECT]) == 0:
                 rendered_labels[_CORRECT] = _NOLABEL
             rendered_labels[_INCORRECT] = ', '.join(
                 f'{value} {key}' for key, value in
-                image_labels[_INCORRECT].items())
+                image_labels[_INCORRECT].items() if value > 0)
             if len(rendered_labels[_INCORRECT]) == 0:
                 rendered_labels[_INCORRECT] = _NOLABEL
             rendered_labels[_AGGREGATE_LABEL] = \
