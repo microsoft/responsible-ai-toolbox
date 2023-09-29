@@ -49,23 +49,13 @@ export class TableList extends React.Component<
     ) {
       const filteredItems: IVisionListItem[] = this.getFilteredItems();
       const searchVal = this.props.searchValue.toLowerCase();
-      if (searchVal.length === 0) {
-        const groups: IGroup[] = this.getGroups();
-
-        this.setState({
-          filteredGroups: groups,
-          filteredItems
-        });
-      } else {
-        const filteredGroups: IGroup[] = this.getFilteredGroups(
-          filteredItems,
-          this.state.groups
-        );
-        this.setState({
-          filteredGroups,
-          filteredItems
-        });
-      }
+      const groups: IGroup[] = searchVal.length === 0
+        ? this.getGroups()
+        : this.getFilteredGroups(filteredItems, this.state.groups);
+      this.setState({
+        filteredGroups: groups,
+        filteredItems
+      });
     }
   }
 
