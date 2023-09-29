@@ -742,10 +742,13 @@ class RAIVisionInsights(RAIBaseInsights):
                     error_matrix[label_idx] ==
                     ErrorLabelType.DUPLICATE_DETECTION)
                 if duplicate_detections > 0:
-                    image_labels[_INCORRECT][object_label] += duplicate_detections
+                    image_labels[_INCORRECT][object_label] += \
+                        duplicate_detections
 
-            correct_labels = sorted(image_labels[_CORRECT].items(), key=lambda x: class_names.index(x[0]))
-            incorrect_labels = sorted(image_labels[_INCORRECT].items(), key=lambda x: class_names.index(x[0]))
+            correct_labels = sorted(image_labels[_CORRECT].items(),
+                                    key=lambda x: class_names.index(x[0]))
+            incorrect_labels = sorted(image_labels[_INCORRECT].items(),
+                                      key=lambda x: class_names.index(x[0]))
 
             rendered_labels[_CORRECT] = ', '.join(
                 f'{value} {key}' for key, value in
