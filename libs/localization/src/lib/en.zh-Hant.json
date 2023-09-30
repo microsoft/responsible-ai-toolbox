@@ -906,6 +906,8 @@
       "index": "索引",
       "output": "輸出",
       "predictedY": "預測的 Y",
+      "odIncorrect": "Incorrect",
+      "odCorrect": "Correct",
       "probabilityLabel": "機率 : {0}",
       "trueY": "實際的 Y",
       "xValue": "X 值:",
@@ -1147,7 +1149,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "可解譯性儀表板",
-      "importantWords": "Show most important words",
+      "importantWords": "顯示最重要的字詞",
       "topFeatureList": "熱門特徵清單分析",
       "allButton": "所有特徵",
       "negButton": "負特徵",
@@ -1162,7 +1164,7 @@
       "trueAnswer": "正確答案:",
       "inputs": "輸入",
       "outputs": "輸出",
-      "sliderAriaLabel": "Slider for most important words"
+      "sliderAriaLabel": "重要字詞的滑桿"
     },
     "Legend": {
       "featureLegend": "文字特徵圖例",
@@ -1195,8 +1197,8 @@
       "columnTwo": "索引",
       "columnThree": "實際的 Y",
       "columnFour": "預測的 Y",
-      "columnThreeOD": "Correct",
-      "columnFourOD": "Incorrect",
+      "columnThreeOD": "正確",
+      "columnFourOD": "不正確",
       "columnFive": "其他中繼資料",
       "chooseObject": "選擇偵測到的物件",
       "examples": "範例",
@@ -1216,8 +1218,8 @@
       "panelInformation": "資訊",
       "predictedLabel": "預測標記",
       "predictedY": "預測: ",
-      "correctDetections": "Correct detections: ",
-      "incorrectDetections": "Incorrect detections: ",
+      "correctDetections": "正確的偵測: ",
+      "incorrectDetections": "不正確的偵測: ",
       "prefix": "物件: ",
       "rows": "資料列: ",
       "search": "搜尋",

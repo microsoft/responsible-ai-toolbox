@@ -906,6 +906,8 @@
       "index": "Índice",
       "output": "Resultado",
       "predictedY": "Y Previsto",
+      "odIncorrect": "Incorrect",
+      "odCorrect": "Correct",
       "probabilityLabel": "Probabilidade: {0}",
       "trueY": "Y Verdadeiro",
       "xValue": "Valor de X:",
@@ -1147,7 +1149,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Painel de interpretação",
-      "importantWords": "Show most important words",
+      "importantWords": "Mostrar Palavras Mais Importantes",
       "topFeatureList": "Análise da lista de características de topo",
       "allButton": "TODAS AS FUNCIONALIDADES",
       "negButton": "FUNCIONALIDADES NEGATIVAS",
@@ -1162,7 +1164,7 @@
       "trueAnswer": "Resposta verdadeira: ",
       "inputs": "Entradas",
       "outputs": "Saídas",
-      "sliderAriaLabel": "Slider for most important words"
+      "sliderAriaLabel": "Controlo de deslize para palavras mais importantes"
     },
     "Legend": {
       "featureLegend": "LEGENDA DA FUNCIONALIDADE DE TEXTO",
@@ -1195,8 +1197,8 @@
       "columnTwo": "Índice",
       "columnThree": "Y Verdadeiro",
       "columnFour": "Y Previsto",
-      "columnThreeOD": "Correct",
-      "columnFourOD": "Incorrect",
+      "columnThreeOD": "Correto",
+      "columnFourOD": "Incorreto",
       "columnFive": "Outros metadados",
       "chooseObject": "Escolha um objeto detetado",
       "examples": "exemplos",
@@ -1216,8 +1218,8 @@
       "panelInformation": "Informações",
       "predictedLabel": "Etiqueta prevista",
       "predictedY": "Previsto: ",
-      "correctDetections": "Correct detections: ",
-      "incorrectDetections": "Incorrect detections: ",
+      "correctDetections": "Deteções corretas: ",
+      "incorrectDetections": "Deteções incorretas: ",
       "prefix": "Objeto: ",
       "rows": "Linhas: ",
       "search": "Procurar",
