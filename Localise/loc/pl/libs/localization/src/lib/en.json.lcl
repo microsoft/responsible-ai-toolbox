@@ -9404,7 +9404,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Incorrect]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nieprawidłowe]]></Val>
+            <Val><![CDATA[Niepoprawne]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
