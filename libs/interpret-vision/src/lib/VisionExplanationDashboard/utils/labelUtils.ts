@@ -21,6 +21,7 @@ export function isItemPredTrueEqual(
   taskType: string
 ): boolean {
   return taskType === DatasetTaskType.ObjectDetection
-    ? getJoinedLabelString(item.predictedY) === getJoinedLabelString(item.trueY)
-    : item.odIncorrect === NoLabel;
+    ? item.odIncorrect === NoLabel
+    : getJoinedLabelString(item.predictedY) ===
+        getJoinedLabelString(item.trueY);
 }

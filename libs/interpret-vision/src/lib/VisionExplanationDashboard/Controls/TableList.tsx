@@ -19,6 +19,7 @@ import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { getFilteredDataFromSearch } from "../utils/getFilteredData";
+import { isItemPredTrueEqual } from "../utils/labelUtils";
 import { visionExplanationDashboardStyles } from "../VisionExplanationDashboard.styles";
 
 import {
@@ -48,23 +49,14 @@ export class TableList extends React.Component<
     ) {
       const filteredItems: IVisionListItem[] = this.getFilteredItems();
       const searchVal = this.props.searchValue.toLowerCase();
-      if (searchVal.length === 0) {
-        const groups: IGroup[] = this.getGroups();
-
-        this.setState({
-          filteredGroups: groups,
-          filteredItems
-        });
-      } else {
-        const filteredGroups: IGroup[] = this.getFilteredGroups(
-          filteredItems,
-          this.state.groups
-        );
-        this.setState({
-          filteredGroups,
-          filteredItems
-        });
-      }
+      const groups: IGroup[] =
+        searchVal.length === 0
+          ? this.getGroups()
+          : this.getFilteredGroups(filteredItems, this.state.groups);
+      this.setState({
+        filteredGroups: groups,
+        filteredItems
+      });
     }
   }
 
@@ -188,7 +180,11 @@ export class TableList extends React.Component<
     if (searchValue.length === 0) {
       return items;
     }
-    const filteredItems = getFilteredDataFromSearch(searchValue, items);
+    const filteredItems = getFilteredDataFromSearch(
+      searchValue,
+      items,
+      this.props.taskType
+    );
     return filteredItems;
   }
 
@@ -220,8 +216,8 @@ export class TableList extends React.Component<
     if (searchValue.length === 0) {
       return groups;
     }
-    const filteredSuccessInstances = filteredItems.filter(
-      (item) => item.predictedY === item.trueY
+    const filteredSuccessInstances = filteredItems.filter((item) =>
+      isItemPredTrueEqual(item, this.props.taskType)
     );
     groups[0].count = filteredSuccessInstances.length;
     groups[1].startIndex = filteredSuccessInstances.length;
