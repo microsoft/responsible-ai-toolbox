@@ -180,7 +180,8 @@ export class DataCharacteristics extends React.Component<
   private processData = (resetLabels: boolean): void => {
     const filteredItems = getFilteredDataFromSearch(
       this.props.searchValue,
-      this.props.items
+      this.props.items,
+      this.props.taskType
     );
     this.setState(
       processItems(
