@@ -239,7 +239,7 @@ export const textExplanationData = {
   expectedFeaturesValues: {
     allFeaturesExpectedValues: 13,
     negativeFeaturesExpectedValues: 13,
-    positiveFeaturesExpectedValues: 10
+    positiveFeaturesExpectedValues: 6
   },
   explanationIndex: 13,
   localExplanations: localExplanationData,

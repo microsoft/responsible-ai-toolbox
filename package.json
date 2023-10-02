@@ -70,6 +70,7 @@
     "react-plotly.js": "^2.5.0",
     "react-router-dom": "^5.0.1",
     "regenerator-runtime": "0.13.7",
+    "socket.io-client": "^4.7.2",
     "tslib": "^2.5.0",
     "uuid": "^8.3.0",
     "vott-ct": "^2.4.2-rc.0"

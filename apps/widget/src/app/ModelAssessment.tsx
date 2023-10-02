@@ -14,7 +14,7 @@ import {
 import { ModelAssessmentDashboard } from "@responsible-ai/model-assessment";
 import React from "react";
 
-import { callFlaskService } from "./callFlaskService";
+import { callFlaskService, connectToFlaskService } from "./callFlaskService";
 import { CallbackType, IModelAssessmentProps } from "./ModelAssessmentUtils";
 
 export class ModelAssessment extends React.Component<IModelAssessmentProps> {
@@ -33,7 +33,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
         objectDetectionCache: Map<string, [number, number, number]>,
         abortSignal: AbortSignal
       ): Promise<any[]> => {
-        return callFlaskService(
+        return connectToFlaskService(
           this.props.config,
           [
             selectionIndexes,
@@ -42,7 +42,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
             iouThreshold,
             objectDetectionCache
           ],
-          "/get_object_detection_metrics",
+          "handle_object_detection_json",
           abortSignal
         );
       };
@@ -57,10 +57,10 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
         >,
         abortSignal: AbortSignal
       ): Promise<any[]> => {
-        return callFlaskService(
+        return connectToFlaskService(
           this.props.config,
           [selectionIndexes, questionAnsweringCache],
-          "/get_question_answering_metrics",
+          "handle_question_answering_json",
           abortSignal
         );
       };
