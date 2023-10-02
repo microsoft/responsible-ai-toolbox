@@ -141,7 +141,7 @@ export class DatasetCohort {
         dataDict[index][DatasetCohortColumns.PredictedY] = val;
       }
     });
-    this.dataset.objectDetectionLabels?.forEach((val, index) => {
+    this.dataset.object_detection_labels?.forEach((val, index) => {
       dataDict[index][DatasetCohortColumns.ObjectDetectionIncorrect] =
         val.incorrect;
       dataDict[index][DatasetCohortColumns.ObjectDetectionCorrect] =
