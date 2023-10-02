@@ -21,11 +21,11 @@ export function generateTimeSeriesCohorts(
 ): ErrorCohort[] {
   if (
     dataset.feature_metadata?.time_series_id_features &&
-    dataset.feature_metadata?.time_series_id_features?.length > 0
+    dataset.feature_metadata?.time_series_id_features.length > 0
   ) {
     // Need to generate time series as cohorts for forecasting.
     const timeSeriesIdFeatureIndices =
-      dataset.feature_metadata?.time_series_id_features.map((featureName) =>
+      dataset.feature_metadata.time_series_id_features.map((featureName) =>
         dataset.feature_names.indexOf(featureName)
       );
     const distinctTimeSeriesIds = new Set<string>();
