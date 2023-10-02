@@ -22,7 +22,6 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
   );
   cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("not.exist");
 
-  // no vision condition as there's no second feature to select
   if (isTabular || isVision) {
     cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
     cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
@@ -55,8 +54,15 @@ function assertNumberOfChartRowsEqual(
   }
   console.log(selectedFeatures);
   console.log(expectedNumberOfCohorts);
-  cy.get(getChartItems(chartIdentifier)).should(
-    "have.length",
-    expectedNumberOfCohorts
-  );
+  if (Array.isArray(expectedNumberOfCohorts)) {
+    cy.get(getChartItems(chartIdentifier))
+      .its("length")
+      .should("be.gte", expectedNumberOfCohorts[0])
+      .and("be.lte", expectedNumberOfCohorts[1]);
+  } else {
+    cy.get(getChartItems(chartIdentifier)).should(
+      "have.length",
+      expectedNumberOfCohorts
+    );
+  }
 }

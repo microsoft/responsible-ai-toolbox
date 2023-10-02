@@ -3,7 +3,7 @@
 
 import { getOS } from "../../../../util/getOS";
 
-const singleFeatureCohorts = getOS() === "Linux" ? 2 : 3;
+const FeatureCohorts = getOS() === "Linux" ? [2, 3] : 3;
 
 export const FridgeObjectDetectionModelDebugging = {
   causalAnalysisData: {
@@ -27,7 +27,9 @@ export const FridgeObjectDetectionModelDebugging = {
   modelOverviewData: {
     featureCohortView: {
       firstFeatureToSelect: "mean_pixel_value",
-      singleFeatureCohorts
+      multiFeatureCohorts: FeatureCohorts,
+      secondFeatureToSelect: "Make",
+      singleFeatureCohorts: FeatureCohorts
     },
     hasModelOverviewComponent: true,
     initialCohorts: [

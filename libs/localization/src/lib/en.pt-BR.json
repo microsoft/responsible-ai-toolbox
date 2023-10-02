@@ -186,6 +186,12 @@
     "showTop": "Pontos de dados com as maiores respostas causais estimadas ao recurso de tratamento: {0}",
     "whatifDescription": "What-if permite que você perturbe recursos para qualquer entrada e observe como a previsão do modelo muda. Você pode perturbar recursos manualmente ou especificar a previsão desejada (por exemplo, rótulo de classe para um classificador) para ver uma lista de pontos de dados mais próximos da entrada original que levaria à previsão desejada. Também conhecidos como contrafatuais de previsão, você pode usá-los para explorar as relações aprendidas pelo modelo; compreender recursos importantes e necessários para as previsões do modelo; ou depurar casos extremos para o modelo. Para começar, escolha os pontos de entrada da tabela de dados ou gráfico de dispersão."
   },
+  "DataAnalysis": {
+    "TableView": {
+      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
+      "infoTitle": "Additional information on table view"
+    }
+  },
   "ErrorAnalysis": {
     "Cohort": {
       "cohort": "Coorte",
@@ -1141,7 +1147,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Painel de Interpretabilidade",
-      "importantWords": "Show most Important Words",
+      "importantWords": "Show most important words",
       "topFeatureList": "Análise da lista de recursos principais",
       "allButton": "TODOS OS RECURSOS",
       "negButton": "RECURSOS NEGATIVOS",
@@ -1155,7 +1161,8 @@
       "predictedAnswer": "Predicted answer: ",
       "trueAnswer": "True answer: ",
       "inputs": "Inputs",
-      "outputs": "Outputs"
+      "outputs": "Outputs",
+      "sliderAriaLabel": "Slider for most important words"
     },
     "Legend": {
       "featureLegend": "LEGENDA DO RECURSO DE TEXTO",
@@ -1188,6 +1195,8 @@
       "columnTwo": "Índice",
       "columnThree": "Y Verdadeiro",
       "columnFour": "Y Previsto",
+      "columnThreeOD": "Correct",
+      "columnFourOD": "Incorrect",
       "columnFive": "Outros metadados",
       "chooseObject": "Choose a detected object",
       "examples": "examples",
@@ -1207,6 +1216,8 @@
       "panelInformation": "Information",
       "predictedLabel": "Predicted label",
       "predictedY": "Predicted: ",
+      "correctDetections": "Correct detections: ",
+      "incorrectDetections": "Incorrect detections: ",
       "prefix": "Object: ",
       "rows": "Rows: ",
       "search": "Pesquisar",
@@ -1446,9 +1457,9 @@
       "CorrectPredictions": "Previsões corretas",
       "GlobalExplanation": "Importância agregada do recurso",
       "IncorrectPredictions": "Previsões incorretas",
-      "InfoTitle": "Additional information on data analysis table view",
+      "InfoTitle": "Additional information on feature importance values",
       "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
       "LocalExplanation": "Importância de recursos individuais",
       "SelectionCounter": "{0}/{1} pontos de dados selecionados",
       "SelectionLimit": "Até 5 pontos de dados podem ser selecionados no momento.",

@@ -11,7 +11,6 @@ export interface IVisionExplanationDashboardState {
   loadingExplanation: boolean[][];
   otherMetadataFieldNames: string[];
   numRows: number;
-  pageSize: number;
   panelOpen: boolean;
   searchValue: string;
   selectedIndices: number[];

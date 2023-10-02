@@ -7,10 +7,13 @@ import {
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance
 } from "../Interfaces/ExplanationInterfaces";
+import { IObjectDetectionLabelType } from "../Interfaces/IDataset";
 import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
 import { IFeatureMetaData } from "../Interfaces/IMetaData";
 
 import { AxisTypes } from "./IGenericChartProps";
+
+export const NoLabel = "(none)";
 
 export interface IJointDatasetArgs {
   dataset?: any[][];
@@ -23,8 +26,7 @@ export interface IJointDatasetArgs {
   metadata: IExplanationModelMetadata;
   featureMetaData?: IFeatureMetaData;
   targetColumn?: string | string[];
-  objectDetectionTrueY?: number[][][];
-  objectDetectionPredictedY?: number[][][];
+  objectDetectionLabels?: IObjectDetectionLabelType[];
 }
 
 export enum ColumnCategories {

@@ -91,7 +91,7 @@ export class FlyoutObjectDetection extends React.Component<
           className={classNames.odFlyoutContainer}
         >
           <FluentUI.Stack tokens={FlyoutODUtils.stackTokens.medium}>
-            <FluentUI.Stack>
+            <FluentUI.Stack tokens={FlyoutODUtils.stackTokens.medium}>
               <FluentUI.Stack.Item>
                 <FluentUI.Separator className={classNames.separator} />
               </FluentUI.Stack.Item>
@@ -109,7 +109,7 @@ export class FlyoutObjectDetection extends React.Component<
                     >
                       <FluentUI.Stack
                         horizontal
-                        tokens={{ childrenGap: "s1" }}
+                        tokens={FlyoutODUtils.stackTokens.medium}
                         horizontalAlign="center"
                         verticalAlign="center"
                       />
@@ -145,7 +145,7 @@ export class FlyoutObjectDetection extends React.Component<
                 <FluentUI.Separator className={classNames.separator} />
               </FluentUI.Stack.Item>
               <FluentUI.Stack
-                tokens={{ childrenGap: "l2" }}
+                tokens={FlyoutODUtils.stackTokens.large}
                 className={classNames.sectionIndent}
               >
                 <FluentUI.Stack.Item>

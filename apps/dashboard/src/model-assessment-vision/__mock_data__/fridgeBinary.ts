@@ -7,15 +7,90 @@ import { fridge } from "./fridge";
 import { fridgeImages } from "./fridgeImages";
 
 export const fridgeBinary: IDataset = {
-  categorical_features: [],
-  class_names: ["can", "carton"],
-  feature_names: ["mean_pixel_value"],
+  categorical_features: ["Software", "Make", "Model"],
+  class_names: ["can", "carton", "milk_bottle", "water_bottle"],
+  feature_metadata: {
+    categorical_features: ["Software", "Make", "Model"]
+  },
+  feature_names: [
+    "mean_pixel_value",
+    "Software",
+    "ResolutionUnit",
+    "Make",
+    "GPSInfo",
+    "ImageLength",
+    "ExifOffset",
+    "Model",
+    "YCbCrPositioning",
+    "Orientation",
+    "ImageWidth"
+  ],
   features: [
-    fridge.features[0],
-    fridge.features[1],
-    fridge.features[2],
-    fridge.features[3],
-    fridge.features[34]
+    [
+      fridge.features[0][0],
+      "HDR+ 1.0.220943774z",
+      "Google",
+      2,
+      31313,
+      4032,
+      244,
+      "Pixel 2 XL",
+      1,
+      1,
+      3024
+    ],
+    [
+      fridge.features[1][0],
+      "HDR+ 1.0.220943774z",
+      "Google",
+      2,
+      undefined,
+      4032,
+      232,
+      "Pixel 2 XL",
+      1,
+      1,
+      3024
+    ],
+    [
+      fridge.features[2][0],
+      "HDR+ 1.0.220943774z",
+      "Google",
+      2,
+      33275,
+      4032,
+      244,
+      "Pixel 2 XL",
+      1,
+      1,
+      3024
+    ],
+    [
+      fridge.features[3][0],
+      "HDR+ 1.0.220943774z",
+      "Google",
+      2,
+      31559,
+      4032,
+      244,
+      "Pixel 2 XL",
+      1,
+      1,
+      3024
+    ],
+    [
+      fridge.features[34][0],
+      "HDR+ 1.0.220943774z",
+      "Google",
+      2,
+      undefined,
+      4032,
+      232,
+      "Pixel 2 XL",
+      1,
+      1,
+      3024
+    ]
   ],
   images: [
     fridgeImages[0],
