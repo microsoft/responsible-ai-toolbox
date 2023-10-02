@@ -284,11 +284,11 @@ def load_fridge_object_detection_dataset(automl_format=False):
     if automl_format:
         image_details = load_image_details()
         columns = [ImageColumns.IMAGE.value,
-                 ImageColumns.IMAGE_DETAILS.value,
-                 ImageColumns.LABEL.value]
+                   ImageColumns.IMAGE_DETAILS.value,
+                   ImageColumns.LABEL.value]
     else:
         columns = [ImageColumns.IMAGE.value,
-                 ImageColumns.LABEL.value]
+                   ImageColumns.LABEL.value]
     feats = []
     for i, file in enumerate(os.listdir("./data/odFridgeObjects/" + "images")):
         image_path = "./data/odFridgeObjects/" + "images" + "/" + file

@@ -12,9 +12,10 @@ from common_vision_utils import load_fridge_object_detection_dataset
 
 from responsibleai_vision.common.constants import ImageColumns
 from responsibleai_vision.utils.image_reader import \
-    _get_retry_session as image_reader_get_retry_session, get_all_exif_feature_names
+    _get_retry_session as image_reader_get_retry_session
 from responsibleai_vision.utils.image_reader import \
     _requests_sessions as image_reader_requests_sessions
+from responsibleai_vision.utils.image_reader import get_all_exif_feature_names
 from responsibleai_vision.utils.image_utils import (
     BOTTOM_X, BOTTOM_Y, HEIGHT, IS_CROWD, TOP_X, TOP_Y, WIDTH, classes_to_dict,
     transform_object_detection_labels)
@@ -91,4 +92,7 @@ class TestImageUtils(object):
         image_dataset = load_fridge_object_detection_dataset().head(2)
         exif_feature_names = get_all_exif_feature_names(image_dataset)
         assert len(exif_feature_names) == 11
-        assert set(exif_feature_names) == set(['Orientation', 'ExifOffset', 'ImageWidth', 'GPSInfo', 'Model', 'DateTime', 'YCbCrPositioning', 'ImageLength', 'ResolutionUnit', 'Software', 'Make'])
+        assert set(exif_feature_names) == \
+            set(['Orientation', 'ExifOffset', 'ImageWidth', 'GPSInfo',
+                 'Model', 'DateTime', 'YCbCrPositioning', 'ImageLength',
+                 'ResolutionUnit', 'Software', 'Make'])
