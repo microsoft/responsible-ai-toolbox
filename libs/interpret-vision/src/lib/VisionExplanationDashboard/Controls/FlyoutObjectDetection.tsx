@@ -212,13 +212,13 @@ export class FlyoutObjectDetection extends React.Component<
                         style={explanationImage}
                       />
                     </FluentUI.Stack.Item>
-                  ) : (
+                  ) : this.state.odSelectedKey !== "" ? (
                     <FluentUI.Stack.Item>
                       <FluentUI.Spinner
                         label={`${localization.InterpretVision.Dashboard.loading} ${item?.index}`}
                       />
                     </FluentUI.Stack.Item>
-                  )}
+                  ) : null}
                 </FluentUI.Stack>
               </FluentUI.Stack>
             </FluentUI.Stack>
