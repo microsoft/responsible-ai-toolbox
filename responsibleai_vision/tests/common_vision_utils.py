@@ -289,7 +289,7 @@ def load_fridge_object_detection_dataset(automl_format=False):
     else:
         columns = [ImageColumns.IMAGE.value,
                    ImageColumns.LABEL.value]
-    feats = []
+    features = []
     for i, file in enumerate(os.listdir("./data/odFridgeObjects/" + "images")):
         image_path = "./data/odFridgeObjects/" + "images" + "/" + file
         if automl_format:
@@ -303,9 +303,9 @@ def load_fridge_object_detection_dataset(automl_format=False):
                 ImageColumns.IMAGE.value: image_path,
                 ImageColumns.LABEL.value: labels[i]
             }
-        feats.append(row)
+        features.append(row)
 
-    data = pd.DataFrame(feats, columns=columns)
+    data = pd.DataFrame(features, columns=columns)
     return data
 
 
