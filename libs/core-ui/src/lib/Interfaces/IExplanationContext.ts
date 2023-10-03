@@ -16,7 +16,8 @@ export enum ModelTypes {
   TextMulticlass = "textmulticlass",
   TextMultilabel = "textmultilabel",
   ObjectDetection = "objectdetection",
-  QuestionAnswering = "questionanswering"
+  QuestionAnswering = "questionanswering",
+  Forecasting = "forecasting"
 }
 
 export interface IExplanationContext {
