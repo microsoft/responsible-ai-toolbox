@@ -221,9 +221,7 @@ export class FlyoutObjectDetection extends React.Component<
                     ] && (
                       <FluentUI.Stack.Item>
                         <FluentUI.Spinner
-                          label={`${localization.InterpretVision.Dashboard.loading} ${
-                            item?.index
-                          }`}
+                          label={`${localization.InterpretVision.Dashboard.loading} ${item?.index}`}
                         />
                       </FluentUI.Stack.Item>
                     )}
