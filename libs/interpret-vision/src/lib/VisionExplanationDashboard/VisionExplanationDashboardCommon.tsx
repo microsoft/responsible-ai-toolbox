@@ -81,13 +81,12 @@ export class VisionExplanationDashboardCommon extends React.Component<
                 }
               />
             </Stack.Item>
-            {this.props.thisdashboard.state.selectedKey !==
-              VisionDatasetExplorerTabOptions.ImageExplorerView && (
+            {this.props.thisdashboard.state.selectedKey ===
+              VisionDatasetExplorerTabOptions.ClassView && (
               <Stack.Item>
                 <PageSizeSelectors
                   selectedKey={this.props.thisdashboard.state.selectedKey}
                   onNumRowsSelect={this.props.thisdashboard.onNumRowsSelect}
-                  onPageSizeSelect={this.props.thisdashboard.onPageSizeSelect}
                 />
               </Stack.Item>
             )}

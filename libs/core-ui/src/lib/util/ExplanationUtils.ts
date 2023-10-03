@@ -26,6 +26,10 @@ export function IsMultilabel(modelType: ModelTypes): boolean {
   );
 }
 
+export function IsObjectDetection(modelType: ModelTypes): boolean {
+  return modelType === ModelTypes.ObjectDetection;
+}
+
 export function IsClassifier(modelType: ModelTypes): boolean {
   return (
     modelType === ModelTypes.Binary ||
