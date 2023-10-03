@@ -906,6 +906,8 @@
       "index": "Index",
       "output": "Ausgabe",
       "predictedY": "Vorhersage für Y",
+      "odIncorrect": "Incorrect",
+      "odCorrect": "Correct",
       "probabilityLabel": "Wahrscheinlichkeit : {0}",
       "trueY": "TRUE Y",
       "xValue": "X-Wert:",
@@ -1147,7 +1149,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Interpretierbarkeitsdashboard",
-      "importantWords": "Show most important words",
+      "importantWords": "Wichtigste Wörter anzeigen",
       "topFeatureList": "Wichtigste Featurelistenanalysen",
       "allButton": "ALLE FEATURES",
       "negButton": "NEGATIVE FEATURES",
@@ -1162,7 +1164,7 @@
       "trueAnswer": "Richtige Antwort: ",
       "inputs": "Eingaben",
       "outputs": "Ausgaben",
-      "sliderAriaLabel": "Slider for most important words"
+      "sliderAriaLabel": "Schieberegler für die wichtigsten Wörter"
     },
     "Legend": {
       "featureLegend": "TEXTFUNKTIONSLEGENDE",
@@ -1195,8 +1197,8 @@
       "columnTwo": "Index",
       "columnThree": "WAHR Y",
       "columnFour": "Vorhergesagtes Y",
-      "columnThreeOD": "Correct",
-      "columnFourOD": "Incorrect",
+      "columnThreeOD": "Richtig",
+      "columnFourOD": "Fehlerhaft",
       "columnFive": "Andere Metadaten",
       "chooseObject": "Erkanntes Objekt auswählen",
       "examples": "Beispiele",
@@ -1216,8 +1218,8 @@
       "panelInformation": "Informationen",
       "predictedLabel": "Vorhergesagte Bezeichnung",
       "predictedY": "Vorhergesagt: ",
-      "correctDetections": "Correct detections: ",
-      "incorrectDetections": "Incorrect detections: ",
+      "correctDetections": "Richtige Erkennungen: ",
+      "incorrectDetections": "Falsche Erkennungen: ",
       "prefix": "Objekt: ",
       "rows": "Zeilen: ",
       "search": "Suchen",

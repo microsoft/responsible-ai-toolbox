@@ -906,6 +906,8 @@
       "index": "인덱스",
       "output": "출력",
       "predictedY": "예측된 Y",
+      "odIncorrect": "Incorrect",
+      "odCorrect": "Correct",
       "probabilityLabel": "확률: {0}",
       "trueY": "True Y",
       "xValue": "X 값:",
@@ -1147,7 +1149,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "해석 가능성 대시보드",
-      "importantWords": "Show most important words",
+      "importantWords": "가장 중요한 단어 표시",
       "topFeatureList": "상위 기능 목록 분석",
       "allButton": "모든 기능",
       "negButton": "부정적인 기능",
@@ -1162,7 +1164,7 @@
       "trueAnswer": "실제 답변: ",
       "inputs": "입력",
       "outputs": "출력",
-      "sliderAriaLabel": "Slider for most important words"
+      "sliderAriaLabel": "가장 중요한 단어의 슬라이더"
     },
     "Legend": {
       "featureLegend": "텍스트 기능 범례",
@@ -1195,8 +1197,8 @@
       "columnTwo": "지수",
       "columnThree": "True Y",
       "columnFour": "예측 Y",
-      "columnThreeOD": "Correct",
-      "columnFourOD": "Incorrect",
+      "columnThreeOD": "맞음",
+      "columnFourOD": "잘못됨",
       "columnFive": "기타 메타데이터",
       "chooseObject": "검색된 개체 선택",
       "examples": "예제",
@@ -1216,8 +1218,8 @@
       "panelInformation": "정보",
       "predictedLabel": "예측 레이블",
       "predictedY": "예측: ",
-      "correctDetections": "Correct detections: ",
-      "incorrectDetections": "Incorrect detections: ",
+      "correctDetections": "올바른 탐지: ",
+      "incorrectDetections": "잘못된 탐지: ",
       "prefix": "개체: ",
       "rows": "행: ",
       "search": "검색",
