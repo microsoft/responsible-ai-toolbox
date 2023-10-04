@@ -25,6 +25,7 @@ import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 
 import { getAvailableTabs } from "../AvailableTabs";
+import { generateTimeSeriesCohorts } from "../Cohort/GenerateTimeSeriesCohorts";
 import { processPreBuiltCohort } from "../Cohort/ProcessPreBuiltCohort";
 import { processPreBuiltDatasetCohort } from "../Cohort/ProcessPreBuiltDatasetCohort";
 import { IModelAssessmentDashboardProps } from "../ModelAssessmentDashboardProps";
@@ -95,7 +96,20 @@ export function buildInitialModelAssessmentContext(
     true
   );
   let errorCohortList: ErrorCohort[] = [defaultErrorCohort];
-  const [preBuiltErrorCohortList] = processPreBuiltCohort(props, jointDataset);
+  let [preBuiltErrorCohortList] = processPreBuiltCohort(props, jointDataset);
+  if (
+    preBuiltErrorCohortList.length === 0 &&
+    props.dataset.task_type === DatasetTaskType.Forecasting
+  ) {
+    // Need to generate time series as cohorts for forecasting
+    // if they haven't been passed in as prebuilt cohorts
+    preBuiltErrorCohortList = generateTimeSeriesCohorts(
+      defaultErrorCohort,
+      preBuiltErrorCohortList,
+      props.dataset,
+      jointDataset
+    );
+  }
   errorCohortList = errorCohortList.concat(preBuiltErrorCohortList);
   const cohorts = errorCohortList;
 
