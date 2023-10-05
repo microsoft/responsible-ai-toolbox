@@ -54,7 +54,7 @@ jobs:
           pip install --upgrade setuptools
           pip install --upgrade "pip-tools<=6.13.0"
 
-      - if: ${{ matrix.pythonVersion == '3.8' || matrix.pythonVersion == '3.9' || matrix.pythonVersion == '3.10' }}
+      - if: ${{ matrix.pythonVersion == '3.8' || matrix.pythonVersion == '3.9' || matrix.pythonVersion == '3.10' || matrix.pythonVersion == '3.11' }}
         name: Setup tools for python gte 3.8
         run: |
           python -m pip install --upgrade pip
