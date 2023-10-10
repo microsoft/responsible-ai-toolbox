@@ -906,6 +906,8 @@
       "index": "Index",
       "output": "Utdata",
       "predictedY": "Förutsade Y",
+      "odIncorrect": "Incorrect",
+      "odCorrect": "Correct",
       "probabilityLabel": "Sannolikhet: {0}",
       "trueY": "Sant Y",
       "xValue": "X-värde:",
@@ -1147,7 +1149,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Instrumentpanel för tolkning",
-      "importantWords": "Show most important words",
+      "importantWords": "Visa de viktigaste orden",
       "topFeatureList": "Analys av toppfunktionslistan",
       "allButton": "ALLA FUNKTIONER",
       "negButton": "NEGATIVA FUNKTIONER",
@@ -1162,7 +1164,7 @@
       "trueAnswer": "Sant svar: ",
       "inputs": "Indata",
       "outputs": "Utdata",
-      "sliderAriaLabel": "Slider for most important words"
+      "sliderAriaLabel": "Skjutreglage för de viktigaste orden"
     },
     "Legend": {
       "featureLegend": "FÖRKLARING AV TEXTFUNKTION",
@@ -1195,8 +1197,8 @@
       "columnTwo": "Index",
       "columnThree": "Sant Y",
       "columnFour": "Förutsade Y",
-      "columnThreeOD": "Correct",
-      "columnFourOD": "Incorrect",
+      "columnThreeOD": "Korrekt",
+      "columnFourOD": "Fel",
       "columnFive": "Andra metadata",
       "chooseObject": "Välj ett identifierat objekt",
       "examples": "exempel",
@@ -1216,8 +1218,8 @@
       "panelInformation": "Information",
       "predictedLabel": "Förväntad etikett",
       "predictedY": "Förutsagt: ",
-      "correctDetections": "Correct detections: ",
-      "incorrectDetections": "Incorrect detections: ",
+      "correctDetections": "Korrekta identifieringar: ",
+      "incorrectDetections": "Felaktiga identifieringar: ",
       "prefix": "Objekt: ",
       "rows": "Rader: ",
       "search": "Sök",
