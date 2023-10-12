@@ -906,6 +906,8 @@
       "index": "Index",
       "output": "Kimenet",
       "predictedY": "Előrejelzett Y",
+      "odIncorrect": "Incorrect",
+      "odCorrect": "Correct",
       "probabilityLabel": "Valószínűség: {0}",
       "trueY": "Valós Y",
       "xValue": "X-érték:",
@@ -1147,7 +1149,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Értelmezhetőségi irányítópult",
-      "importantWords": "Show most important words",
+      "importantWords": "A legfontosabb szavak megjelenítése",
       "topFeatureList": "Kiemelt jellemzők listájának elemzése",
       "allButton": "MINDEN JELLEMZŐ",
       "negButton": "NEGATÍV JELLEMZŐK",
@@ -1162,7 +1164,7 @@
       "trueAnswer": "Igaz válasz: ",
       "inputs": "Bemenetek",
       "outputs": "Kimenetek",
-      "sliderAriaLabel": "Slider for most important words"
+      "sliderAriaLabel": "Csúszka a legfontosabb szavakhoz"
     },
     "Legend": {
       "featureLegend": "SZÖVEGJELLEMZŐ JELMAGYARÁZATA",
@@ -1195,8 +1197,8 @@
       "columnTwo": "Index",
       "columnThree": "Valós Y",
       "columnFour": "Előrejelzett Y",
-      "columnThreeOD": "Correct",
-      "columnFourOD": "Incorrect",
+      "columnThreeOD": "Helyes",
+      "columnFourOD": "Helytelen",
       "columnFive": "Egyéb metaadatok",
       "chooseObject": "Észlelt objektum kiválasztása",
       "examples": "példák",
@@ -1216,8 +1218,8 @@
       "panelInformation": "Információ",
       "predictedLabel": "Előrejelzett címke",
       "predictedY": "Előre jelzett: ",
-      "correctDetections": "Correct detections: ",
-      "incorrectDetections": "Incorrect detections: ",
+      "correctDetections": "Helyes észlelések: ",
+      "incorrectDetections": "Helytelen észlelések: ",
       "prefix": "Objektum: ",
       "rows": "Sorok: ",
       "search": "Keresés",
