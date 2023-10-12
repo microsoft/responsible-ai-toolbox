@@ -87,10 +87,17 @@ jobs:
           auto-update-conda: true
           python-version: ${{ matrix.pythonVersion }}
 
-      - name: Install pytorch
+      - if: ${{ matrix.pythonVersion == '3.7' }}
+        name: Install pytorch with python 3.7
         shell: bash -l {0}
         run: |
-          conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
+          conda install --yes --quiet "pytorch==1.13.1" "torchvision<0.15" captum cpuonly -c pytorch
+
+      - if: ${{ matrix.pythonVersion != '3.7' }}
+        name: Install pytorch with python 3.8 or newer
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet "pytorch<2.1,>1.13.1" "torchvision<0.16" captum cpuonly -c pytorch
 
       - name: Setup tools
         shell: bash -l {0}
