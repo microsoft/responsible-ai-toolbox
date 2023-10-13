@@ -15,6 +15,9 @@ papermill
 scrapbook
 jupyter
 nbval
+nbconvert<=7.8.0
+jupyterlab<=4.0.6
+jupyter_core<=5.2.0
 
 docutils<0.18
 sphinx==3.1.1
@@ -22,6 +25,8 @@ sphinx-gallery==0.8.1
 pydata-sphinx-theme==0.3.0
 
 transformers
+tokenizers<=0.14.0
+huggingface-hub<=0.16.4
 datasets
 tensorflow<2.11.0
 opencv-python
