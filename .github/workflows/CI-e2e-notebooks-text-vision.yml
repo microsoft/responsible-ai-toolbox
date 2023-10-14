@@ -129,6 +129,11 @@ jobs:
           pip install .
         working-directory: responsibleai_text
 
+      - name: Downgrade gevent
+        shell: bash -l {0}
+        run: |
+          pip install gevent==22.10.2
+
       - if: ${{ matrix.notebookGroup == 'text_nb_group_1'}}
         name: Setup spacy
         shell: bash -l {0}
