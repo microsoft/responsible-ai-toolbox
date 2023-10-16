@@ -104,6 +104,8 @@ this file to understand what changed.
   - LEGO: Pull request from JUNO/hb_a12a4630-4852-4e7d-9cbc-c0e1117da1ab_20230928114108584 to main by @csigs in https://github.com/microsoft/responsible-ai-toolbox/pull/2372
   - Add python 3.11 for erroranalysis, raiutils and rai-test-utils by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2385
   - Add 3.11 support to rai-core-flask by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2386
+  - fix failing builds due to pytorch dependencies by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2389
+  - pin responsibleai text and vision packages to 0.30.0 by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/2387
 
 ## v0.30.0
 
