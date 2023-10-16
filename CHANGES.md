@@ -26,7 +26,6 @@ this file to understand what changed.
 
 ## v0.30.0
 
-- educational materials
 - new features
   - ## Responsible AI Dashboard
     - Heatmap Support for Object Detection by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2303
@@ -45,7 +44,6 @@ this file to understand what changed.
     - Add pandas timestamp support to json serialization utility function in raiutils by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/2320
   - ## RAI tabular
     - Forecasting: consume locally served model by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/2319
-- breaking changes
 - bug fixes and tests
   - ## Responsible AI Dashboard
     - accessibility: add aria label to RAI text dashboard slider by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2293
