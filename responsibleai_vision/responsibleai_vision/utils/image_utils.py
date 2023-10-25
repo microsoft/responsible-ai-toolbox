@@ -129,6 +129,9 @@ def transform_object_detection_labels(test, target_column, classes):
                     xmax = label[BOTTOM_X] * width
                     ymax = label[BOTTOM_Y] * height
 
+                    if IS_CROWD not in label:
+                      label[IS_CROWD] = 0
+
                     image_labels.append([class_id, int(xmin), int(ymin),
                                          int(xmax), int(ymax),
                                          int(label[IS_CROWD])])
