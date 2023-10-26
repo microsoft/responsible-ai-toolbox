@@ -198,7 +198,7 @@ export class FlyoutObjectDetection extends React.Component<
                     +this.state.odSelectedKey.slice(
                       FlyoutODUtils.ExcessLabelLen
                     )
-                  ] ? (
+                  ] && (
                     <FluentUI.Stack.Item className={classNames.imageContainer}>
                       <FluentUI.Image
                         src={`data:image/jpg;base64,${this.props.explanations
@@ -212,13 +212,19 @@ export class FlyoutObjectDetection extends React.Component<
                         style={explanationImage}
                       />
                     </FluentUI.Stack.Item>
-                  ) : (
-                    <FluentUI.Stack.Item>
-                      <FluentUI.Spinner
-                        label={`${localization.InterpretVision.Dashboard.loading} ${item?.index}`}
-                      />
-                    </FluentUI.Stack.Item>
                   )}
+                  {this.state.odSelectedKey !== "" &&
+                    this.props.loadingExplanation[item.index][
+                      +this.state.odSelectedKey.slice(
+                        FlyoutODUtils.ExcessLabelLen
+                      )
+                    ] && (
+                      <FluentUI.Stack.Item>
+                        <FluentUI.Spinner
+                          label={`${localization.InterpretVision.Dashboard.loading} ${item?.index}`}
+                        />
+                      </FluentUI.Stack.Item>
+                    )}
                 </FluentUI.Stack>
               </FluentUI.Stack>
             </FluentUI.Stack>
