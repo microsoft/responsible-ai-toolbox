@@ -906,6 +906,8 @@
       "index": "Index",
       "output": "Résultat",
       "predictedY": "Valeur Y prédite",
+      "odIncorrect": "Incorrect",
+      "odCorrect": "Correct",
       "probabilityLabel": "Probabilité : {0}",
       "trueY": "Y réel",
       "xValue": "Valeur X :",
@@ -1147,7 +1149,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Tableau de bord d’interprétation",
-      "importantWords": "Show most important words",
+      "importantWords": "Afficher les mots les plus importants",
       "topFeatureList": "Analyse de la liste des principales fonctionnalités",
       "allButton": "TOUTES LES FONCTIONNALITÉS",
       "negButton": "FONCTIONNALITÉS NÉGATIVES",
@@ -1162,7 +1164,7 @@
       "trueAnswer": "Réponse vraie : ",
       "inputs": "Entrées",
       "outputs": "Sorties",
-      "sliderAriaLabel": "Slider for most important words"
+      "sliderAriaLabel": "Curseur pour les mots les plus importants"
     },
     "Legend": {
       "featureLegend": "LÉGENDE DE FONCTIONNALITÉ DE TEXTE",
@@ -1216,8 +1218,8 @@
       "panelInformation": "Informations",
       "predictedLabel": "Libellé prédit",
       "predictedY": "Prédit : ",
-      "correctDetections": "Correct detections: ",
-      "incorrectDetections": "Incorrect detections: ",
+      "correctDetections": "Détections correctes : ",
+      "incorrectDetections": "Détections incorrectes : ",
       "prefix": "Objet : ",
       "rows": "Lignes : ",
       "search": "Rechercher",
