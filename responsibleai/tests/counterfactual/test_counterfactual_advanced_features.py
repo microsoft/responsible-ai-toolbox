@@ -4,7 +4,6 @@
 
 import os
 
-import numpy as np
 import pytest
 
 from rai_test_utils.models.lightgbm import create_lightgbm_classifier
@@ -57,24 +56,21 @@ class TestCounterfactualAdvancedFeatures(object):
         cf_obj = rai_insights.counterfactual.get()[0]
         assert cf_obj is not None
         for index in range(0, len(cf_obj.cf_examples_list)):
-            if encode_target_as_strings:
-                assert isinstance(
-                    cf_obj.cf_examples_list[
-                        index].test_instance_df['target'].values[0], str)
-            else:
-                assert isinstance(
-                    cf_obj.cf_examples_list[
-                        index].test_instance_df['target'].values[0], np.int32)
+            assert isinstance(
+                cf_obj.cf_examples_list[
+                    index].test_instance_df[
+                        'target'].values[0], str) == encode_target_as_strings
+
             assert cf_obj.cf_examples_list[
-                index].test_instance_df['target'].values[0] in set(y_train)
+                index].test_instance_df['target'].values[0] in set(
+                    y_train)
 
             cf_target_array = cf_obj.cf_examples_list[0].final_cfs_df[
                 'target'].values
             for inner_index in range(0, 10):
-                if encode_target_as_strings:
-                    assert isinstance(cf_target_array[inner_index], str)
-                else:
-                    assert isinstance(cf_target_array[inner_index], np.int32)
+                assert isinstance(
+                    cf_target_array[
+                        inner_index], str) == encode_target_as_strings
                 assert cf_target_array[inner_index] in set(y_train)
 
     @pytest.mark.parametrize('feature_importance', [True, False])
