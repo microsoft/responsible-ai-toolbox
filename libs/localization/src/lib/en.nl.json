@@ -1208,7 +1208,7 @@
       "labelVisibilityDropdown": "Labels selecteren om weer te geven",
       "legendFailure": "mislukte poging",
       "legendSuccess": "geslaagd",
-      "loading": "Uitleg voor index berekenen",
+      "loading": "Computing explanation for image of index",
       "multiselect": "Multiselect",
       "notdefined": "objectscenario niet gedefinieerd",
       "objectSelect": "Objectselectie",

@@ -1208,7 +1208,7 @@
       "labelVisibilityDropdown": "選取要顯示的標記",
       "legendFailure": "失敗",
       "legendSuccess": "成功",
-      "loading": "索引的計算說明",
+      "loading": "Computing explanation for image of index",
       "multiselect": "多重選取",
       "notdefined": "物件案例未定義",
       "objectSelect": "物件選取項目",

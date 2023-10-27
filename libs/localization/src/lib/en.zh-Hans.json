@@ -1208,7 +1208,7 @@
       "labelVisibilityDropdown": "选择要显示的标签",
       "legendFailure": "故障",
       "legendSuccess": "成功",
-      "loading": "索引的计算说明",
+      "loading": "Computing explanation for image of index",
       "multiselect": "多选",
       "notdefined": "未定义对象方案",
       "objectSelect": "对象选择",
