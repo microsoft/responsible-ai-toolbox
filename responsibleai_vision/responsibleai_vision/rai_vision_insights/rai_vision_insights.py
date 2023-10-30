@@ -88,6 +88,7 @@ _DROPPED_FEATURES = 'dropped_features'
 _INCORRECT = 'incorrect'
 _CORRECT = 'correct'
 _AGGREGATE_LABEL = 'aggregate'
+_NOLABEL = '(none)'
 
 
 def reshape_image(image):
@@ -102,6 +103,23 @@ def reshape_image(image):
     if image_shape_len != 2 and image_shape_len != 3:
         raise ValueError('Image must have 2 or 3 dimensions')
     return np.expand_dims(image, axis=0)
+
+
+def _feature_metadata_from_dict(feature_meta_dict):
+    """Create a FeatureMetadata from a dictionary.
+
+    :param feature_meta_dict: The dictionary to create the FeatureMetadata
+        from.
+    :type feature_meta_dict: dict
+    :return: The FeatureMetadata created from the dictionary.
+    :rtype: FeatureMetadata
+    """
+    return FeatureMetadata(
+        identity_feature_name=feature_meta_dict[_IDENTITY_FEATURE_NAME],
+        datetime_features=feature_meta_dict[_DATETIME_FEATURES],
+        time_series_id_features=feature_meta_dict[_TIME_SERIES_ID_FEATURES],
+        categorical_features=feature_meta_dict[_CATEGORICAL_FEATURES],
+        dropped_features=feature_meta_dict[_DROPPED_FEATURES])
 
 
 class RAIVisionInsights(RAIBaseInsights):
@@ -251,7 +269,7 @@ class RAIVisionInsights(RAIBaseInsights):
         ext_test, ext_features = extract_features(
             self.test, self.target_column, self.task_type,
             self.image_mode,
-            self._feature_metadata.dropped_features)
+            self._feature_metadata)
         self._ext_test = ext_test
         self._ext_features = ext_features
 
@@ -661,7 +679,7 @@ class RAIVisionInsights(RAIBaseInsights):
             encoded_images.append(b64)
 
         # passing to frontend to draw bounding boxes with the correct scale
-        dashboard_dataset.imageDimensions = image_dimensions
+        dashboard_dataset.image_dimensions = image_dimensions
 
         if len(encoded_images) > 0:
             dashboard_dataset.images = encoded_images
@@ -720,21 +738,28 @@ class RAIVisionInsights(RAIBaseInsights):
                 else:
                     image_labels[_INCORRECT][object_label] += 1
 
-                image_labels[_INCORRECT][object_label] += \
-                    np.count_nonzero(
-                        error_matrix[label_idx] ==
-                        ErrorLabelType.DUPLICATE_DETECTION)
+                duplicate_detections = np.count_nonzero(
+                    error_matrix[label_idx] ==
+                    ErrorLabelType.DUPLICATE_DETECTION)
+                if duplicate_detections > 0:
+                    image_labels[_INCORRECT][object_label] += \
+                        duplicate_detections
+
+            correct_labels = sorted(image_labels[_CORRECT].items(),
+                                    key=lambda x: class_names.index(x[0]))
+            incorrect_labels = sorted(image_labels[_INCORRECT].items(),
+                                      key=lambda x: class_names.index(x[0]))
 
             rendered_labels[_CORRECT] = ', '.join(
                 f'{value} {key}' for key, value in
-                image_labels[_CORRECT].items())
+                correct_labels)
             if len(rendered_labels[_CORRECT]) == 0:
-                rendered_labels[_CORRECT] = 'None'
+                rendered_labels[_CORRECT] = _NOLABEL
             rendered_labels[_INCORRECT] = ', '.join(
                 f'{value} {key}' for key, value in
-                image_labels[_INCORRECT].items())
+                incorrect_labels)
             if len(rendered_labels[_INCORRECT]) == 0:
-                rendered_labels[_INCORRECT] = 'None'
+                rendered_labels[_INCORRECT] = _NOLABEL
             rendered_labels[_AGGREGATE_LABEL] = \
                 f"{sum(image_labels[_CORRECT].values())} {_CORRECT}, \
                   {sum(image_labels[_INCORRECT].values())} \
@@ -1028,17 +1053,10 @@ class RAIVisionInsights(RAIBaseInsights):
                 meta[Metadata.FEATURE_METADATA] is None):
             inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata()
         else:
-            inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata(
-                identity_feature_name=meta[Metadata.FEATURE_METADATA][
-                    _IDENTITY_FEATURE_NAME],
-                datetime_features=meta[Metadata.FEATURE_METADATA][
-                    _DATETIME_FEATURES],
-                time_series_id_features=meta[Metadata.FEATURE_METADATA][
-                    _TIME_SERIES_ID_FEATURES],
-                categorical_features=meta[Metadata.FEATURE_METADATA][
-                    _CATEGORICAL_FEATURES],
-                dropped_features=meta[Metadata.FEATURE_METADATA][
-                    _DROPPED_FEATURES])
+            feature_metadata_dict = meta[Metadata.FEATURE_METADATA]
+            feature_metadata = _feature_metadata_from_dict(
+                feature_metadata_dict)
+            inst.__dict__['_' + Metadata.FEATURE_METADATA] = feature_metadata
 
         # load the image downloader as part of metadata
         RAIVisionInsights._load_image_downloader(inst, path)
@@ -1225,12 +1243,15 @@ class RAIVisionInsights(RAIBaseInsights):
                 object_detection_values = metric_OD.compute()
                 mAP = round(object_detection_values
                             ['map'].item(), 2)
-                APs = [round(value, 2) for value in
-                       object_detection_values['map_per_class']
-                       .detach().tolist()]
-                ARs = [round(value, 2) for value in
-                       object_detection_values['mar_100_per_class']
-                       .detach().tolist()]
+                AP_tensor = object_detection_values['map_per_class'].detach()
+                AP_tensor = [AP_tensor.item()] if AP_tensor.numel() == 1 \
+                    else AP_tensor.tolist()
+                AR_tensor = object_detection_values[
+                    'mar_100_per_class'].detach()
+                AR_tensor = [AR_tensor.item()] if AR_tensor.numel() == 1 \
+                    else AR_tensor.tolist()
+                APs = [round(value, 2) for value in AP_tensor]
+                ARs = [round(value, 2) for value in AR_tensor]
 
                 assert len(APs) == len(ARs) == len(cohort_classes)
 

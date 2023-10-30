@@ -186,6 +186,12 @@
     "showTop": "처리 기능에 대한 추정 인과 관계 응답이 가장 큰 데이터 포인트: {0}",
     "whatifDescription": "가상(What-if) 기능을 사용하면 입력에 대한 기능을 변경하고 모델의 예측이 어떻게 변경되는지 관찰할 수 있습니다. 기능을 수동으로 변경하거나 원하는 예측(예: 분류자의 클래스 레이블)을 지정하여 원하는 예측으로 이어지는 원래 입력에 가장 가까운 데이터 요소 목록을 볼 수 있습니다. 이는 반사실적 예측이라고도 하는데 모델의 예측에 필요하며 중요한 기능을 이해하거나 모델에 대한 에지 케이스를 디버그하는 등 모델에서 학습한 관계를 탐색하는 데 사용할 수 있습니다. 시작하려면 데이터 테이블 또는 산점도에서 입력 포인트를 선택하세요."
   },
+  "DataAnalysis": {
+    "TableView": {
+      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
+      "infoTitle": "Additional information on table view"
+    }
+  },
   "ErrorAnalysis": {
     "Cohort": {
       "cohort": "코호트",
@@ -900,6 +906,8 @@
       "index": "인덱스",
       "output": "출력",
       "predictedY": "예측된 Y",
+      "odIncorrect": "Incorrect",
+      "odCorrect": "Correct",
       "probabilityLabel": "확률: {0}",
       "trueY": "True Y",
       "xValue": "X 값:",
@@ -1155,7 +1163,8 @@
       "predictedAnswer": "예측된 답변: ",
       "trueAnswer": "실제 답변: ",
       "inputs": "입력",
-      "outputs": "출력"
+      "outputs": "출력",
+      "sliderAriaLabel": "가장 중요한 단어의 슬라이더"
     },
     "Legend": {
       "featureLegend": "텍스트 기능 범례",
@@ -1188,6 +1197,8 @@
       "columnTwo": "지수",
       "columnThree": "True Y",
       "columnFour": "예측 Y",
+      "columnThreeOD": "맞음",
+      "columnFourOD": "잘못됨",
       "columnFive": "기타 메타데이터",
       "chooseObject": "검색된 개체 선택",
       "examples": "예제",
@@ -1207,6 +1218,8 @@
       "panelInformation": "정보",
       "predictedLabel": "예측 레이블",
       "predictedY": "예측: ",
+      "correctDetections": "올바른 탐지: ",
+      "incorrectDetections": "잘못된 탐지: ",
       "prefix": "개체: ",
       "rows": "행: ",
       "search": "검색",
@@ -1446,9 +1459,9 @@
       "CorrectPredictions": "올바른 예측",
       "GlobalExplanation": "집계 기능 중요도",
       "IncorrectPredictions": "잘못된 예측",
-      "InfoTitle": "데이터 분석 테이블 뷰에 대한 추가 정보",
+      "InfoTitle": "Additional information on feature importance values",
       "IndividualFeatureTabular": "테이블에서 데이터 요소(최대 5개의 데이터 요소)를 클릭하여 데이터포인트를 선택하여 로컬 기능 중요도 값(로컬 설명) 및 ICE(개별 조건부 기대) 플롯을 확인합니다.",
-      "IndividualFeatureText": "로컬 특성 중요도 값(로컬 설명)을 보려면 테이블에서 데이터 포인트를 클릭하여 데이터 포인트를 선택하세요.",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
       "LocalExplanation": "개별 기능 중요도",
       "SelectionCounter": "선택한 데이터 요소 {0}/{1}",
       "SelectionLimit": "현재 최대 5개의 데이터 포인트를 선택할 수 있습니다.",

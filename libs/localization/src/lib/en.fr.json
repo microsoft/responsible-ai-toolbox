@@ -186,6 +186,12 @@
     "showTop": "DataPoints avec la fonction de traitement des réponses de causalité la plus élevée estimée : {0}",
     "whatifDescription": "What-if vous permet de perturber des fonctionnalités pour n’importe quelle entrée et d’observer comment la prédiction du modèle change. Vous pouvez perturber des fonctionnalités manuellement ou spécifier la prédiction souhaitée (par exemple, l’étiquette de classe d’un classifieur) pour afficher la liste des points de données les plus proches de l’entrée d’origine qui mèneraient à la prédiction souhaitée. Également appelés contrefacteurs de prédiction, vous pouvez les utiliser pour explorer les relations établies par le modèle ; comprendre les fonctionnalités importantes et nécessaires pour les prédictions du modèle ; ou déboguer des cas de périphérie pour le modèle. Pour commencer, choisissez des points d’entrée dans le tableau de données ou le nuage de points."
   },
+  "DataAnalysis": {
+    "TableView": {
+      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
+      "infoTitle": "Additional information on table view"
+    }
+  },
   "ErrorAnalysis": {
     "Cohort": {
       "cohort": "Cohorte",
@@ -900,6 +906,8 @@
       "index": "Index",
       "output": "Résultat",
       "predictedY": "Valeur Y prédite",
+      "odIncorrect": "Incorrect",
+      "odCorrect": "Correct",
       "probabilityLabel": "Probabilité : {0}",
       "trueY": "Y réel",
       "xValue": "Valeur X :",
@@ -1155,7 +1163,8 @@
       "predictedAnswer": "Réponse prédite : ",
       "trueAnswer": "Réponse vraie : ",
       "inputs": "Entrées",
-      "outputs": "Sorties"
+      "outputs": "Sorties",
+      "sliderAriaLabel": "Curseur pour les mots les plus importants"
     },
     "Legend": {
       "featureLegend": "LÉGENDE DE FONCTIONNALITÉ DE TEXTE",
@@ -1188,6 +1197,8 @@
       "columnTwo": "Index",
       "columnThree": "Y réel",
       "columnFour": "Valeur Y prédite",
+      "columnThreeOD": "Correct",
+      "columnFourOD": "Incorrect",
       "columnFive": "Autres métadonnées",
       "chooseObject": "Choisissez un objet détecté",
       "examples": "Exemples",
@@ -1207,6 +1218,8 @@
       "panelInformation": "Informations",
       "predictedLabel": "Libellé prédit",
       "predictedY": "Prédit : ",
+      "correctDetections": "Détections correctes : ",
+      "incorrectDetections": "Détections incorrectes : ",
       "prefix": "Objet : ",
       "rows": "Lignes : ",
       "search": "Rechercher",
@@ -1446,9 +1459,9 @@
       "CorrectPredictions": "Prédictions correctes",
       "GlobalExplanation": "Importance des fonctionnalités agrégées",
       "IncorrectPredictions": "Prédictions incorrectes",
-      "InfoTitle": "Informations supplémentaires sur la vue du tableau d'analyse des données",
+      "InfoTitle": "Additional information on feature importance values",
       "IndividualFeatureTabular": "Sélectionnez un point de données en cliquant sur un point de données (jusqu'à 5 points de données) dans le tableau pour afficher leurs valeurs d'importance des caractéristiques locales (explication locale) et les parcelles d'attente conditionnelle individuelle (ICE).",
-      "IndividualFeatureText": "Sélectionnez un point de données en cliquant sur un point de données dans le tableau pour afficher les valeurs d'importance des caractéristiques locales (explication locale).",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
       "LocalExplanation": "Importance des fonctionnalités individuelles",
       "SelectionCounter": "points de données{0}/{1} sélectionnés",
       "SelectionLimit": "Vous pouvez sélectionner jusqu’à 5 points de données pour le moment.",

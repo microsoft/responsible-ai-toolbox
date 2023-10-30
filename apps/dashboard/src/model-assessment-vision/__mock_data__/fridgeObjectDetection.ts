@@ -6,17 +6,92 @@ import { DatasetTaskType, IDataset } from "@responsible-ai/core-ui";
 import { fridgeObjectDetectionImages } from "./fridgeObjectDetectionImages";
 
 export const fridgeObjectDetection: IDataset = {
-  categorical_features: [],
+  categorical_features: ["Software", "Make", "Model"],
   class_names: ["can", "carton", "milk_bottle", "water_bottle"],
-  feature_names: ["mean_pixel_value"],
-  features: [
-    [96.30899737412763],
-    [95.32630225415797],
-    [100.3762680516188],
-    [92.000130390912],
-    [95.33849179841164]
+  feature_metadata: {
+    categorical_features: ["Software", "Make", "Model"]
+  },
+  feature_names: [
+    "mean_pixel_value",
+    "Software",
+    "Make",
+    "ResolutionUnit",
+    "GPSInfo",
+    "ImageLength",
+    "ExifOffset",
+    "Model",
+    "YCbCrPositioning",
+    "Orientation",
+    "ImageWidth"
   ],
-  imageDimensions: [
+  features: [
+    [
+      96.30899737412763,
+      "HDR+ 1.0.220943774z",
+      "Google",
+      2,
+      31313,
+      4032,
+      244,
+      "Pixel 2 XL",
+      1,
+      1,
+      3024
+    ],
+    [
+      95.32630225415797,
+      "HDR+ 1.0.220943774z",
+      "Google",
+      2,
+      undefined,
+      4032,
+      232,
+      "Pixel 2 XL",
+      1,
+      1,
+      3024
+    ],
+    [
+      100.3762680516188,
+      "HDR+ 1.0.220943774z",
+      "Google",
+      2,
+      33275,
+      4032,
+      244,
+      "Pixel 2 XL",
+      1,
+      1,
+      3024
+    ],
+    [
+      92.000130390912,
+      "HDR+ 1.0.220943774z",
+      "Google",
+      2,
+      31559,
+      4032,
+      244,
+      "Pixel 2 XL",
+      1,
+      1,
+      3024
+    ],
+    [
+      95.33849179841164,
+      "HDR+ 1.0.220943774z",
+      "Google",
+      2,
+      undefined,
+      4032,
+      232,
+      "Pixel 2 XL",
+      1,
+      1,
+      3024
+    ]
+  ],
+  image_dimensions: [
     [499, 666],
     [499, 666],
     [499, 666],
@@ -24,6 +99,33 @@ export const fridgeObjectDetection: IDataset = {
     [499, 666]
   ],
   images: fridgeObjectDetectionImages,
+  object_detection_labels: [
+    {
+      aggregate: "2 correct, 0 incorrect",
+      correct: "1 can, 1 milk_bottle",
+      incorrect: "(none)"
+    },
+    {
+      aggregate: "2 correct, 0 incorrect",
+      correct: "1 can, 1 milk_bottle",
+      incorrect: "(none)"
+    },
+    {
+      aggregate: "2 correct, 0 incorrect",
+      correct: "1 carton, 1 water_bottle",
+      incorrect: "(none)"
+    },
+    {
+      aggregate: "2 correct, 0 incorrect",
+      correct: "1 can, 1 milk_bottle",
+      incorrect: "(none)"
+    },
+    {
+      aggregate: "2 correct, 0 incorrect",
+      correct: "1 carton, 1 water_bottle",
+      incorrect: "(none)"
+    }
+  ],
   object_detection_predicted_y: [
     [
       [
@@ -97,33 +199,6 @@ export const fridgeObjectDetection: IDataset = {
       [4, 98, 176, 219, 496, 0],
       [2, 220, 130, 392, 505, 0]
     ]
-  ],
-  objectDetectionLabels: [
-    {
-      aggregate: "2 correct, 0 incorrect",
-      correct: "1 milk_bottle, 1 can",
-      incorrect: "None"
-    },
-    {
-      aggregate: "2 correct, 0 incorrect",
-      correct: "1 milk_bottle, 1 can",
-      incorrect: "None"
-    },
-    {
-      aggregate: "2 correct, 0 incorrect",
-      correct: "1 carton, 1 water_bottle",
-      incorrect: "None"
-    },
-    {
-      aggregate: "2 correct, 0 incorrect",
-      correct: "1 can, 1 milk_bottle",
-      incorrect: "None"
-    },
-    {
-      aggregate: "2 correct, 0 incorrect",
-      correct: "1 carton, 1 water_bottle",
-      incorrect: "None"
-    }
   ],
   predicted_y: [
     [1, 0, 1, 0],

@@ -3,26 +3,26 @@
     "close": "Закрыть",
     "tooltipButton": "Кнопка подсказки",
     "identityFeature": "Функция удостоверения",
-    "infoTitle": "Additional information",
-    "spinButton": "Spin",
-    "editButton": "Edit",
-    "decreaseValue": "Decrease value",
-    "increaseValue": "Increase value",
-    "decreaseValueByOne": "Decrease value by 1",
-    "increaseValueByOne": "Increase value by 1",
-    "loading": "Loading..."
+    "infoTitle": "Дополнительные сведения",
+    "spinButton": "Вращать",
+    "editButton": "Изменить",
+    "decreaseValue": "Уменьшить значение",
+    "increaseValue": "Увеличить значение",
+    "decreaseValueByOne": "Уменьшить значение на 1",
+    "increaseValueByOne": "Увеличить значение на 1",
+    "loading": "Идет загрузка…"
   },
   "ChartContextMenu": {
-    "hideData": "Hide data table",
-    "viewData": "View data table",
-    "viewInFullScreen": "View in full screen",
-    "printChart": "Print chart",
-    "downloadCSV": "Download CSV",
-    "downloadPNG": "Download PNG image",
-    "downloadJPEG": "Download JPEG image",
-    "downloadPDF": "Download PDF document",
-    "downloadSVG": "Download SVG vector image",
-    "downloadXLS": "Download XLS"
+    "hideData": "Скрыть таблицу данных",
+    "viewData": "Просмотреть таблицу данных",
+    "viewInFullScreen": "Просмотреть в полноэкранном режиме",
+    "printChart": "Распечатать диаграмму",
+    "downloadCSV": "Скачать CSV-файл",
+    "downloadPNG": "Скачать изображение в формате PNG",
+    "downloadJPEG": "Скачать изображение в формате JPEG",
+    "downloadPDF": "Скачать PDF-документ",
+    "downloadSVG": "Скачать векторное изображение SVG",
+    "downloadXLS": "Скачать XLS-файл"
   },
   "CausalAnalysis": {
     "AggregateView": {
@@ -39,7 +39,7 @@
       "description": "Анализ причинно-следственных связей дает ответы на вопросы \"что если\" о том, как бы изменились реальные результаты при выборе другого варианта политики, например при применении другой стратегии ценообразования для продукта или в случае использования альтернативного лечения пациента. В отличии от прогнозов модели, определяющих важные шаблоны корреляции, эти средства помогают определить наиболее важные признаки, которые непосредственно влияют на интересующие результаты. Эти модели определяют причинно-следственный эффект одного признака (обычно называемый \"обработкой\") при постоянстве других несмешанных признаков. Чтобы достичь наилучших результатов, убедитесь, что полный набор данных содержит все доступные признаки, которые могут коррелировать с результатом как искажающие результат факторы.",
       "directAggregate": "Прямой агрегированный причинно-следственный эффект каждой обработки с доверительным интервалом 95%",
       "here": "здесь",
-      "infoTitle": "Additional information on aggregated causal effects",
+      "infoTitle": "Подробнее об агрегированных эффектах причины и следствия",
       "lasso": "Инструмент \"лассо\" (или логистическая регрессия, если y двоичное) предназначен для прогнозирования y на основе X[-i], а также (логистическая регрессия, если X[i] категориальное) для прогнозирования X[i] на основе X[-i]. Причинно-следственное влияние можно представить в виде корреляции остаточных или необъясненных вариантов двух задач прогнозирования. Дополнительные сведения о двойном машинном обучении",
       "unconfounding": "Что такое искажающие признаки?"
     },
@@ -51,7 +51,7 @@
       "description": "Отдельные причинно-следственные эффекты могут давать информацию для персонализированной обработки, такой как целевое продвижение среди клиентов или индивидуальный план лечения. Как именно лицо с определенным набором признаков будет реагировать на изменение причинного признака или лечения? Причинно-следственный инструмент \"что-если\" вычисляет незначительные изменения в реальных результатах для конкретного лица, если уровень обработки для него будет изменен. Этот анализ позволяет понять, как изменились бы реальные результаты при выборе разных вариантов политики, например, другой стратегии ценообразования продукта или альтернативного лечения пациента. Укажите интересующую обработку и посмотрите, как изменится реальный результат.",
       "directIndividual": "Прямой индивидуальный причинно-следственный эффект каждой обработки с доверительным интервалом 95%",
       "index": "Индекс точки данных",
-      "infoTitle": "Additional information on individual causal what-if",
+      "infoTitle": "Подробнее о конкретной причинно-следственной ошибке \"что если\"",
       "missingParameters": "На этой вкладке требуется указать набор данных для оценки.",
       "newOutcome": "Новый результат",
       "selectTreatment": "Выбор обработки",
@@ -85,7 +85,7 @@
       "averageGainBinary": "Средний выигрыш от приведения обработки {0} к базовому значению {1}.",
       "averageGainContinuous": "Среднее преимущество альтернативных политик по сравнению с обработкой без {0}.",
       "header": "Эти инструменты помогают вырабатывать политики для будущей обработки. Вы можете определить, какие части выборки испытывают наиболее сильные отклики на изменения в причинных признаках или обработках, и составить правила, определяющие, на какие совокупности в будущем следует нацеливать конкретную обработку.",
-      "infoTitle": "Additional information on treatment policy",
+      "infoTitle": "Подробнее о политике обработки",
       "nSample": "n = {0}",
       "noData": "Нет данных"
     }
@@ -116,8 +116,8 @@
       "cancel": "Отмена",
       "title": "Переключить когорту",
       "subText": "Выберите когорту из списка когорт. Примените когорту к панели мониторинга.",
-      "selectCohort": "Select a cohort",
-      "cohortList": "Cohort list"
+      "selectCohort": "Выберите когорту",
+      "cohortList": "Список когорт"
     },
     "PreBuiltCohort": {
       "featureNameNotFound": "Имя функции не найдено в наборе данных",
@@ -148,13 +148,13 @@
       "predictedClass": "Спрогнозированный класс",
       "predictedValue": "Спрогнозированное значение"
     },
-    "Size": "Size",
-    "loading": "Loading...",
+    "Size": "Размер",
+    "loading": "Идет загрузка…",
     "counterfactualEx": "Пример, противоречащий фактам {0}",
     "counterfactualName": "Название противоречащего фактам предположения для анализа \"что если\"",
     "createWhatIfCounterfactual": "Создать противоречащее фактам предположение для анализа \"что если\"",
     "createCounterfactual": "Противоречащее фактам предположение",
-    "revertToBubbleChart": "View bubble chart",
+    "revertToBubbleChart": "Просмотреть пузырьковую диаграмму",
     "createOwn": "Создайте собственное предположение, противоречащее фактам:",
     "currentClass": "Текущий класс",
     "currentRange": "Текущий диапазон",
@@ -167,9 +167,9 @@
     "listDescription": "Этот список показывает, какие точки данных в выбранном образце данных показывают наибольший отклик на выбранную обработку, на основе всех признаков, включенных в оцениваемую причинно-следственную модель. Пять столбцов слева показывают, рекомендована ли обработка для наблюдения, текущую обработку, предполагаемый эффект обработки (эффект от применения обработки по сравнению с отсутствием обработки для двоичных обработок или увеличением/уменьшением признака обработки на 10% типового размера обработки в выборке [в динамике: отображается численное изменение в используемой обработки]), а также нижний и верхний доверительные интервалы (CI) для этого эффекта. В остальных столбцах показаны текущее состояние обработки и другие признаки каждого наблюдения.",
     "localImportanceDescription": "Признаки высшего ранга в строке {0}, которые надо изменить для достижения желаемого прогноза модели. На основе анализа \"что если\" для прогноза: {1}",
     "localImportanceSelectData": "Выберите точку данных, чтобы просмотреть локальную диаграмму важности",
-    "largeLocalImportanceSelectData": "Select a bubble, followed by a data point to view local importance chart",
-    "localImportanceFetchError": "There was an error while fetching the local importance data. Error details: {0} Please check the data used.",
-    "BubbleChartFetchError": "There was an error while fetching the data. Error details: {0} Please check the data used.",
+    "largeLocalImportanceSelectData": "Выберите пузырек, а затем точку данных, чтобы увидеть диаграмму локальной важности",
+    "localImportanceFetchError": "Произошла ошибка при получении данных локальной важности. Сведения об ошибке: {0}. Проверьте использованные данные.",
+    "BubbleChartFetchError": "Произошла ошибка при получении данных. Сведения об ошибке: {0}. Проверьте использованные данные.",
     "noData": "Нет данных",
     "noFeatures": "Нет доступных признаков",
     "panelDescription": "Просматривайте предположения, противоречащие фактам, и создавайте собственные. Выполняйте поиск по признакам, чтобы просматривать предлагаемые значения из широкого набора примеров предположений, противоречащих фактам. Устанавливайте предлагаемые значения признаков для противоречащих фактам предположений, нажимая на ссылку «Установить значения» под названием каждого предположения. Указывайте названия для предположений, противоречащих фактам, и сохраняйте их.",
@@ -185,6 +185,12 @@
     "showOnly": "Показать только",
     "showTop": "Точки данных с наиболее сильными ожидаемыми откликами на признак обработки: {0}",
     "whatifDescription": "Анализ \"Что если\" позволяет вам воздействовать на признаки для любых входных данных и следить за изменением прогнозирования модели. Вы можете воздействовать на признаки вручную или указать требуемый прогноз (например, метку класса для классификатора), чтобы увидеть список ближайших к исходным входным данным точек данных, использование которых позволит получить желаемый прогноз. Эти точки данных также называются предположениями прогноза, противоречащими фактам, и их можно использовать для просмотра отношений, изученных моделью, для понимания важных и необходимых для прогнозирования признаков с помощью модели и для отладки граничных вариантов модели. Чтобы начать, выберите точки входных данных в таблице данных или на точечной диаграмме."
+  },
+  "DataAnalysis": {
+    "TableView": {
+      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
+      "infoTitle": "Additional information on table view"
+    }
   },
   "ErrorAnalysis": {
     "Cohort": {
@@ -217,13 +223,13 @@
       "subText": "Ознакомьтесь с выбранной когортой. Измените имя когорты. Удалите эту когорту."
     },
     "FeatureList": {
-      "featureList": "Feature List",
+      "featureList": "Список признаков",
       "apply": "Применить",
       "features": "Признаки",
       "importances": "Важность",
       "treeMapDescription": "Чтобы повторно обучить карту дерева, выберите и сохраните признаки ниже. Важность признаков была рассчитана с использованием взаимной информации с ошибкой в истинных метках. Используйте это в качестве руководства по обучению карты дерева.",
       "staticTreeMapDescription": "Просмотрите функции, которые использовались для обучения карты дерева. Важность признаков рассчитывалась с использованием взаимной информации с ошибкой на истинных метках.",
-      "searchResultMessage": "Results displayed out of {resultLength} for {searchValue}"
+      "searchResultMessage": "Показано результатов поиска {searchValue} из общего количества {resultLength}"
     },
     "TreeViewParameters": {
       "maximumDepth": "Максимальная глубина",
@@ -289,7 +295,7 @@
       "disabledWarning": "Тепловая карта ошибок отключена, если глобальная когорта не переключена на представление всех данных, так как она создается для полного набора данных. Вернитесь к полному набору данных, чтобы просмотреть тепловую карту ошибок."
     },
     "MatrixSummary": {
-      "heatMapInfoTitle": "Additional information on heat map",
+      "heatMapInfoTitle": "Подробнее о тепловой карте",
       "heatMapDescription": "С помощью тепловой карты можно сфокусироваться на определенных фильтрах пересечения признаков и вычислить разъединенные коэффициенты ошибок. Начните с двух признаков набора данных для сравнения.",
       "heatMapStaticDescription": "Тепловая карта позволяет сосредоточиться на фильтрах определенных пересекающихся признаков и вычислить частоту дезагрегированных ошибок. Чтобы создать тепловую карту с помощью пакета SDK, необходимо выбрать один или два признака перед просмотром панели мониторинга."
     },
@@ -305,108 +311,108 @@
     },
     "Metrics": {
       "AccuracyScore": {
-        "Name": "Accuracy score",
-        "Info": "The accuracy score represents the ratio of correct to total instances in the data.",
-        "Short": "Accuracy",
-        "Title": "Additional information on accuracy score"
+        "Name": "Оценка точности",
+        "Info": "Оценка точности представляет отношение правильных к общему количеству экземпляров в данных.",
+        "Short": "Правильность",
+        "Title": "Дополнительные сведения об оценке точности"
       },
       "ErrorRate": {
-        "Name": "Error rate",
-        "Info": "The error rate represents the percentage of instances in the node for which the system has failed.",
-        "Short": "Error rate",
-        "Title": "Additional information on error rate"
+        "Name": "Частота ошибок",
+        "Info": "Частота ошибок представляет процент экземпляров в узле, для которого произошла ошибка системы.",
+        "Short": "Частота ошибок",
+        "Title": "Дополнительные сведения о частоте ошибок"
       },
       "F1Score": {
-        "Name": "F1 score",
-        "Info": "The F1 score is the harmonic mean of the precision and recall metrics.",
-        "Short": "F1 score",
-        "Title": "Additional information on F1 score"
+        "Name": "Показатель F1",
+        "Info": "Показатель F1 — это среднее гармоническое метрик точности и полноты.",
+        "Short": "Показатель F1",
+        "Title": "Дополнительные сведения о показателе F1"
       },
       "MeanAbsoluteError": {
-        "Name": "Mean absolute error",
-        "Info": "The mean absolute error is the average of the sum of the errors.",
-        "Short": "Mean abs. error",
-        "Title": "Additional information on mean absolute error"
+        "Name": "Средняя абсолютная погрешность",
+        "Info": "Средняя абсолютная погрешность — это среднее значение суммы ошибок.",
+        "Short": "Средняя абсолютная погрешность",
+        "Title": "Дополнительные сведения о средней абсолютной погрешности"
       },
       "MeanSquaredError": {
-        "Name": "Mean squared error",
-        "Info": "The mean squared error is the average of the squares of the errors.",
-        "Short": "Mean sq. error",
-        "Title": "Additional information on mean squared error"
+        "Name": "Среднеквадратическая погрешность",
+        "Info": "Среднеквадратическая погрешность — это среднее значение квадратов ошибок.",
+        "Short": "Среднеквадратическая погрешность",
+        "Title": "Дополнительные сведения о среднеквадратической погрешности"
       },
       "Precision": {
-        "Name": "Precision score",
-        "Info": "The precision is the ratio of true positives over all predicted positives.",
-        "Short": "Precision",
-        "Title": "Additional information on precision"
+        "Name": "Оценка точности",
+        "Info": "Точность — это отношение истинноположительных результатов ко всем прогнозируемым положительным результатам.",
+        "Short": "Точность",
+        "Title": "Дополнительные сведения о точности"
       },
       "Recall": {
-        "Name": "Recall score",
-        "Info": "The recall is the ratio of true positives over all actual positives.",
-        "Short": "Recall",
-        "Title": "Additional information on recall"
+        "Name": "Оценка полноты",
+        "Info": "Полнота — это отношение истинноположительных результатов ко всем фактическим положительным результатам.",
+        "Short": "Полнота",
+        "Title": "Дополнительные сведения о полноте"
       },
       "MacroPrecision": {
-        "Name": "Macro averaged precision score",
-        "Info": "The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.",
-        "Short": "Macro precision",
-        "Title": "Additional information on macro averaged precision"
+        "Name": "Оценка макро-усредненной точности",
+        "Info": "Макро-усредненная точность — это отношение истинноположительных результатов ко всем прогнозируемым положительным результатам, вычисляемое независимо для каждого класса и усредненное.",
+        "Short": "Макро-точность",
+        "Title": "Дополнительные сведения о макро-усредненной точности"
       },
       "MicroPrecision": {
-        "Name": "Micro averaged precision score",
-        "Info": "The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.",
-        "Short": "Micro precision",
-        "Title": "Additional information on micro averaged precision"
+        "Name": "Оценка микро-усредненной точности",
+        "Info": "Микро-усредненная полнота — это отношение истинноположительных результатов ко всем прогнозируемым положительным результатам, агрегированное для всех классов.",
+        "Short": "Микро-точность",
+        "Title": "Дополнительные сведения о микро-усредненной точности"
       },
       "MacroRecall": {
-        "Name": "Macro averaged recall score",
-        "Info": "The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.",
-        "Short": "Macro recall",
-        "Title": "Additional information on macro averaged recall"
+        "Name": "Оценка макро-усредненной полноты",
+        "Info": "Макро-усредненная полнота — это отношение истинноположительных результатов ко всем фактическим положительным результатам, вычисляемое независимо для каждого класса и усредненное.",
+        "Short": "Макро-полнота",
+        "Title": "Дополнительные сведения о макро-усредненной полноте"
       },
       "MicroRecall": {
-        "Name": "Micro averaged recall score",
-        "Info": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
-        "Short": "Micro recall",
-        "Title": "Additional information on micro averaged recall"
+        "Name": "Оценка микро-усредненной полноты",
+        "Info": "Микро-усредненная полнота — это отношение истинноположительных результатов ко всем фактическим положительным результатам, агрегированное для всех классов.",
+        "Short": "Микро-полнота",
+        "Title": "Дополнительные сведения о микро-усредненной полноте"
       },
       "MacroF1Score": {
-        "Name": "Macro averaged F1 score",
-        "Info": "The macro averaged F1 score is the harmonic mean of the macro averaged precision and recall metrics.",
-        "Short": "Macro F1 score",
-        "Title": "Additional information on macro averaged F1 score"
+        "Name": "Макроусредненный показатель F1",
+        "Info": "Макроусредненный показатель F1 представляет собой гармоническое среднее макроусредненных метрик точности и полноты.",
+        "Short": "Макро показатель F1",
+        "Title": "Дополнительные сведения о макро-усредненном показателе F1"
       },
       "MicroF1Score": {
-        "Name": "Micro averaged F1 score",
-        "Info": "The micro averaged F1 score is the harmonic mean of the micro averaged precision and recall metrics.",
-        "Short": "Micro F1 score",
-        "Title": "Additional information on micro averaged F1 score"
+        "Name": "Микроусредненный показатель F1",
+        "Info": "Микроусредненный показатель F1 представляет собой гармоническое среднее микроусредненных метрик точности и полноты.",
+        "Short": "Микро показатель F1",
+        "Title": "Дополнительные сведения о микро-усредненном показателе F1"
       },
       "MeanAveragePrecision": {
-        "Name": "Mean average precision score",
-        "Info": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall.",
-        "Short": "Mean avg precision",
-        "Title": "Additional information on mean average precision score"
+        "Name": "Оценка именованной средней точности",
+        "Info": "Средняя точность для моделей обнаружения объектов — это среднее значение AP (средней точности) для всех классов. Этот показатель оценивает надежность модели обнаружения объектов и инкапсулирует переключение между точностью и отзывом.",
+        "Short": "Именованная средняя точность",
+        "Title": "Дополнительные сведения об оценке именованной средней точности"
       },
       "AveragePrecision": {
-        "Name": "Average precision score",
-        "Info": "Average precision for object detection models is calculated for a selected class.",
-        "Short": "Avg precision",
-        "Title": "Additional information on average precision score"
+        "Name": "Средний показатель точности",
+        "Info": "Средняя точность для моделей обнаружения объектов вычисляется для выбранного класса.",
+        "Short": "Средняя точность",
+        "Title": "Дополнительные сведения о среднем показателе точности"
       },
       "AverageRecall": {
-        "Name": "Average recall score",
-        "Info": "Average recall for object detection models is calculated for a selected class.",
-        "Short": "Avg recall",
-        "Title": "Additional information on average recall score"
+        "Name": "Средняя оценка полноты",
+        "Info": "Средняя полнота для моделей обнаружения объектов вычисляется для выбранного класса.",
+        "Short": "Средняя полнота",
+        "Title": "Дополнительные сведения о средней оценке полноты"
       },
       "metricName": "Имя метрики",
       "metricValue": "Значение метрики"
     },
     "MetricSelector": {
       "selectorLabel": "Выбрать метрику",
-      "feature1SelectorLabel": "Rows: Feature 1",
-      "feature2SelectorLabel": "Columns: Feature 2"
+      "feature1SelectorLabel": "Строки: признак 1",
+      "feature2SelectorLabel": "Столбцы: признак 2"
     },
     "Navigation": {
       "cohortSaved": "Новая когорта сохранена. См. список когорт в параметрах когорты.",
@@ -427,9 +433,9 @@
       "defaultLabelCopy": "Копировать все данные"
     },
     "TreeView": {
-      "ariaLabel": "Interactive chart",
-      "disabledArialLabel": "Disabled interactive chart",
-      "treeMapInfoTitle": "Additional information on tree map",
+      "ariaLabel": "Интерактивная диаграмма",
+      "disabledArialLabel": "Деактивированная интерактивная диаграмма",
+      "treeMapInfoTitle": "Подробнее о древовидной карте",
       "treeDescription": "Визуализация дерева использует взаимную информацию между каждым признаком и ошибкой, чтобы оптимальным образом иерархически отделять экземпляры ошибок от успешных экземпляров в данных. Это упрощает процесс обнаружения и выделения закономерностей распространенных сбоев. Чтобы отредактировать список используемых функций в дереве, нажмите «Список функций». Используйте раскрывающееся меню «Выбор метрики», чтобы узнать больше о производительности узлов ошибок и успехов. Обратите внимание, что этот выбор метрики не повлияет на способ создания вашего дерева ошибок.",
       "treeStaticDescription": "Визуализация дерева использует взаимную информацию между каждым признаком и ошибкой, чтобы оптимальным образом иерархически отделять экземпляры ошибок от успешных экземпляров в данных. Это упрощает процесс обнаружения и выделения закономерностей распространенных сбоев. Чтобы найти важные шаблоны отказов, ищите узлы с более ярким красным цветом (т. е. с высокой частотой ошибок) и более высокой линией заполнения (т. е. с высоким покрытием ошибок). Чтобы просмотреть список функций, использованных при создании этого дерева ошибок, нажмите «Список функций». Используйте раскрывающееся меню «Выбор метрики», чтобы узнать больше о производительности узлов ошибок и успехов. Обратите внимание, что этот выбор метрики не повлияет на способ создания вашего дерева ошибок.",
       "disabledWarning": "Карта дерева ошибок отключена, если глобальная когорта не переключена на представление всех данных, так как она создается для полного набора данных. Вернитесь к полному набору данных, чтобы просмотреть карту дерева ошибок."
@@ -764,7 +770,7 @@
       "countHelperText": "Гистограмма количества точек",
       "ditherLabel": "Размывание значений",
       "groupByCohort": "Группировать по когорте",
-      "logarithmicScaling": "Enable logarithmic scaling",
+      "logarithmicScaling": "Включить логарифмическую шкалу",
       "numOfBins": "Число интервалов",
       "selectClass": "Выберите класс",
       "selectFeature": "Выберите признак",
@@ -788,7 +794,7 @@
       "importancePrefix": "Важность",
       "numberOfDatapoints": "Количество точек данных",
       "rowIndex": "Индекс строки",
-      "absoluteIndex": "Absolute index",
+      "absoluteIndex": "Абсолютный индекс",
       "xValue": "Значение X",
       "yValue": "Значение Y"
     },
@@ -816,12 +822,12 @@
     },
     "CohortEditor": {
       "columns": {
-        "index": "Index",
-        "dataset": "Dataset",
-        "predictedY": "Predicted Y",
-        "trueY": "True Y",
-        "classificationOutcome": "Classification outcome",
-        "regressionError": "Error"
+        "index": "Индекс",
+        "dataset": "Набор данных",
+        "predictedY": "Спрогнозированное значение Y",
+        "trueY": "Истинное значение Y",
+        "classificationOutcome": "Результат классификации",
+        "regressionError": "Ошибка"
       },
       "TreatAsCategorical": "Рассматривать как категориальные",
       "addFilter": "Добавить фильтр",
@@ -846,8 +852,8 @@
       "save": "Сохранить",
       "saveAndSwitch": "Сохранить и переключить",
       "selectFilter": "Выберите фильтр",
-      "noFiltersApplied": "No filters applied",
-      "filterAdded": "Filter added"
+      "noFiltersApplied": "Ни один фильтр не применен.",
+      "filterAdded": "Фильтр добавлен."
     },
     "Columns": {
       "classificationOutcome": "Результат классификации",
@@ -857,8 +863,8 @@
       "falsePositive": "Ложноположительный результат",
       "none": "Количество",
       "predictedProbabilities": "Прогнозируемые вероятности",
-      "predictedLabels": "Predicted labels",
-      "trueLabels": "True labels",
+      "predictedLabels": "Прогнозируемые метки",
+      "trueLabels": "Истинные метки",
       "regressionError": "Ошибка регрессии",
       "trueNegative": "Истинный отрицательный результат",
       "truePositive": "Истинноположительный результат",
@@ -879,7 +885,7 @@
       "aggregatePlots": "Агрегированные графики",
       "chartType": "Тип диаграммы",
       "colorValue": "Цвет значения",
-      "infoTitle": "Additional information on data analysis chart view",
+      "infoTitle": "Подробнее о графическом представлении анализа данных",
       "helperText": "Создание когорт набора данных для анализа статистики набора данных по таким фильтрам, как предсказанный результат, функции набора данных и группы ошибок. Чрезмерная или недостаточная представленность в наборе данных.",
       "individualDatapoints": "Отдельные точки данных",
       "missingParameters": "На этой вкладке требуется указать набор данных для оценки.",
@@ -900,6 +906,8 @@
       "index": "Индекс",
       "output": "Выходные данные",
       "predictedY": "Спрогнозированный Y",
+      "odIncorrect": "Incorrect",
+      "odCorrect": "Correct",
       "probabilityLabel": "Вероятность: {0}",
       "trueY": "Истинное значение Y",
       "xValue": "Значение X:",
@@ -968,10 +976,10 @@
       "dependencePlotHelperText": "Этот график зависимости показывает связь значений признаков с соответствующими значениями важности признаков.",
       "dependencePlotTitle": "Графики зависимостей",
       "helperText": "Изучите первые k важных функций, влияющих на общие прогнозы по вашей модели (это также называется \"глобальным объяснением\"). Используйте ползунок для отображения важности признаков в порядке убывания. Значения важности признаков всех когорт отображаются рядом друг с другом, и их можно отключить, выбрав когорту в условных обозначениях. Щелкните любой признак на графике, и ниже будет показано распределение плотности влияния выбранного признака на прогноз.",
-      "infoTitle": "Additional information on aggregate feature importance",
+      "infoTitle": "Подробнее о совокупной важности признаков",
       "legendHelpText": "Щелкайте элементы условных обозначений для включения или отключения когорт на графике.",
       "missingParameters": "На этой вкладке требуется указать параметр локальной важности признака.",
-      "sortByCohort": "Sort by cohort",
+      "sortByCohort": "Сортировать по когорте",
       "sortBy": "Сортировать по точке данных",
       "topAtoB": "{0} наиболее важных признаков",
       "viewDependencePlotFor": "Показать график зависимостей для:",
@@ -1014,15 +1022,15 @@
     },
     "Statistics": {
       "accuracy": "Правильность: {0}",
-      "bleuScore": "Bleu score: {0}",
-      "bertScore": "Bert score: {0}",
-      "exactMatchRatio": "Exact match ratio: {0}",
-      "rougeScore": "Rouge Score: {0}",
+      "bleuScore": "Оценка BLEU: {0}",
+      "bertScore": "Оценка BERT: {0}",
+      "exactMatchRatio": "Доля точных совпадений: {0}",
+      "rougeScore": "Оценка ROUGE: {0}",
       "fnr": "Частота ложноотрицательных результатов: {0}",
       "fpr": "Частота ложноположительных результатов: {0}",
-      "hammingScore": "Hamming score: {0}",
+      "hammingScore": "Оценка Хэмминга: {0}",
       "meanPrediction": "Средний прогноз {0}",
-      "meteorScore": "Meteor Score: {0}",
+      "meteorScore": "Оценка METEOR: {0}",
       "mse": "Среднеквадратическая погрешность: {0}",
       "precision": "Точность: {0}",
       "rSquared": "R²: {0}",
@@ -1030,10 +1038,10 @@
       "selectionRate": "Скорость выбора: {0}",
       "mae": "Средняя абсолютная погрешность: {0}",
       "f1Score": "Показатель F1: {0}",
-      "samples": "Sample size: {0}",
-      "meanAveragePrecision": "Mean average precision: {0}",
-      "averagePrecision": "Average precision: {0}",
-      "averageRecall": "Average recall: {0}"
+      "samples": "Размер выборки: {0}",
+      "meanAveragePrecision": "Средняя точность среднего арифметического: {0}",
+      "averagePrecision": "Средняя точность: {0}",
+      "averageRecall": "Средняя полнота: {0}"
     },
     "ValidationErrors": {
       "addFilters": "Добавьте фильтры",
@@ -1141,29 +1149,30 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Панель интерпретируемости",
-      "importantWords": "Show most Important Words",
+      "importantWords": "Показать самые важные слова",
       "topFeatureList": "Анализ списка лучших функций",
       "allButton": "ВСЕ ФУНКЦИИ",
       "negButton": "ОТРИЦАТЕЛЬНЫЕ ФУНКЦИИ",
       "posButton": "ПОЛОЖИТЕЛЬНЫЕ ФУНКЦИИ",
-      "legendText": "Positive scalar feature importances represent the extent that the words were important towards the classification of your selected label, and negative scalar feature importances represent words that encouraged your model away from your selected label.",
-      "legendTextForQA": "The left text box and the bar chart display the predictions of the model. The right text box shows the feature importance associated with a selected token. Positive feature importances represent the extent that the words were important towards marking the selected token as the starting/ending position of the answer.",
+      "legendText": "Положительные скалярные значения важности признаков представляют степень важности слова для классификации выбранной метки, а отрицательные скалярные значения важности признаков относятся к словам, побуждающим модель отказаться от выбранной вами метки.",
+      "legendTextForQA": "В левом текстовом поле и на линейчатой диаграмме отображаются прогнозы модели. В правом текстовом поле показана важность признака, связанная с выбранным токеном. Положительные значения важности признаков указывают на то, насколько важными были слова для обозначения выбранной лексемы в качестве начальной или конечной позиции ответа.",
       "label": "Метка",
       "colon": ": ",
-      "startingPosition": "STARTING POSITION",
-      "endingPosition": "ENDING POSITION",
-      "predictedAnswer": "Predicted answer: ",
-      "trueAnswer": "True answer: ",
-      "inputs": "Inputs",
-      "outputs": "Outputs"
+      "startingPosition": "НАЧАЛЬНАЯ ПОЗИЦИЯ",
+      "endingPosition": "КОНЕЧНАЯ ПОЗИЦИЯ",
+      "predictedAnswer": "Прогнозируемый ответ: ",
+      "trueAnswer": "Правильный ответ: ",
+      "inputs": "Входные данные",
+      "outputs": "Выходные данные",
+      "sliderAriaLabel": "Ползунок для самых важных слов"
     },
     "Legend": {
       "featureLegend": "ЛЕГЕНДЫ ТЕКСТОВЫХ ФУНКЦИЙ",
       "posFeatureImportance": "ПОЛОЖИТЕЛЬНАЯ ВАЖНОСТЬ ФУНКЦИЙ",
       "negFeatureImportance": "ОТРИЦАТЕЛЬНАЯ ВАЖНОСТЬ ФУНКЦИИ",
-      "cls": "CLS: start of the sentence",
-      "sep": "SEP: end of the sentence",
-      "selectedWord": "Selected word: "
+      "cls": "CLS: начало предложения",
+      "sep": "SEP: конец предложения",
+      "selectedWord": "Выбранное слово: "
     },
     "BarChart": {
       "featureImportance": "ВАЖНОСТЬ ФУНКЦИИ"
@@ -1171,55 +1180,59 @@
   },
   "InterpretVision": {
     "Cohort": {
-      "close": "Close",
-      "errorCohortName": "Please choose a unique cohort name.",
-      "errorNumSelected": "Please select at least one (1) item.",
-      "itemsSelectedSingular": "item selected",
-      "itemsSelectedPlural": "items selected",
-      "save": "Save cohort",
-      "saveAndClose": "Save and close",
-      "saveAndSwitch": "Save and switch",
-      "textField": "New cohort name",
-      "title": "Save new cohort"
+      "close": "Закрыть",
+      "errorCohortName": "Выберите уникальное имя когорты.",
+      "errorNumSelected": "Выберите по крайней мере один элемент.",
+      "itemsSelectedSingular": "элемент выбран",
+      "itemsSelectedPlural": "выбрано элементов",
+      "save": "Сохранить когорту",
+      "saveAndClose": "Сохранить и закрыть",
+      "saveAndSwitch": "Сохранить и переключить",
+      "textField": "Новое имя когорты",
+      "title": "Сохранить новую когорту"
     },
     "Dashboard": {
       "allData": "Все данные",
-      "columnOne": "Image",
+      "columnOne": "Изображение",
       "columnTwo": "Индекс",
       "columnThree": "Истинное значение Y",
       "columnFour": "Спрогнозированный Y",
+      "columnThreeOD": "Верно",
+      "columnFourOD": "Неверно",
       "columnFive": "Другие метаданные",
-      "chooseObject": "Choose a detected object",
-      "examples": "examples",
+      "chooseObject": "Выберите обнаруженный объект",
+      "examples": "примеры",
       "filter": "Фильтр",
-      "indexLabel": "Image ",
-      "labelTypeDropdown": "Select label type",
-      "labelVisibilityDropdown": "Select labels to display",
-      "legendFailure": "failure",
-      "legendSuccess": "success",
-      "loading": "Computing explanation for index",
-      "multiselect": "Multiselect",
-      "notdefined": "object scenario not defined",
-      "objectSelect": "Object Selection",
+      "indexLabel": "Изображение ",
+      "labelTypeDropdown": "Выбрать тип метки",
+      "labelVisibilityDropdown": "Выберите метки для показа",
+      "legendFailure": "сбой",
+      "legendSuccess": "успешно",
+      "loading": "Производится вычисление объяснения для индекса",
+      "multiselect": "Множественный выбор",
+      "notdefined": "сценарий объекта не определен",
+      "objectSelect": "Выбор объектов",
       "pageSize": "Размер страницы: ",
-      "panelTitle": "Selected instance",
-      "panelExplanation": "Explanation",
-      "panelInformation": "Information",
-      "predictedLabel": "Predicted label",
-      "predictedY": "Predicted: ",
-      "prefix": "Object: ",
-      "rows": "Rows: ",
+      "panelTitle": "Выбранный экземпляр",
+      "panelExplanation": "Объяснение",
+      "panelInformation": "Сведения",
+      "predictedLabel": "Спрогнозированная метка",
+      "predictedY": "Спрогнозировано: ",
+      "correctDetections": "Правильные обнаружения: ",
+      "incorrectDetections": "Неправильные обнаружения: ",
+      "prefix": "Объект: ",
+      "rows": "Строк: ",
       "search": "Поиск",
-      "selectAll": "Select all",
+      "selectAll": "Выделить все",
       "settings": "Параметры",
-      "showAll": "Show all",
+      "showAll": "Показать все",
       "tabOptionFirst": "Представление обозревателя изображений",
       "tabOptionSecond": "Представление таблицы",
-      "tabOptionThird": "Class view",
+      "tabOptionThird": "Представление классов",
       "thumbnailSize": "Размер эскиза",
       "titleBarError": "Экземпляры ошибок",
       "titleBarSuccess": "Успешные экземпляры",
-      "trueY": "Ground truth: "
+      "trueY": "Подлинная правда: "
     }
   },
   "ModelAssessment": {
@@ -1228,15 +1241,15 @@
       "CalloutContent": "Добавление некоторых компонентов (представления ошибок в виде дерева, тепловой карты ошибок) позволит отфильтровать данные из глобальной когорты, которые отображаются в списке компонентов ниже.",
       "CalloutTitle": "Добавление компонента",
       "TabAddedMessage": {
-        "DataAnalysis": "Data analysis component added",
-        "FeatureImportances": "Feature importances component added",
-        "ErrorAnalysis": "Error analysis component added",
-        "Fairness": "Fairness component added",
-        "ModelOverview": "Model overview component added",
-        "CausalAnalysis": "Causal analysis component added",
-        "Counterfactuals": "Counterfactuals component added",
-        "Vision": "Vision data explorer component added",
-        "Forecasting": "Forecasting what-if component added"
+        "DataAnalysis": "Добавлен компонент анализа данных",
+        "FeatureImportances": "Добавлен компонент важности признаков",
+        "ErrorAnalysis": "Добавлен компонент анализа ошибок",
+        "Fairness": "Добавлен компонент справедливости",
+        "ModelOverview": "Компонент обзора модели добавлен",
+        "CausalAnalysis": "Добавлен компонент причинно-следственного анализа данных",
+        "Counterfactuals": "Добавлен счетчик фактов, противоречащих предположениям",
+        "Vision": "Компонент визуального распознавания обозревателя данных добавлен",
+        "Forecasting": "Добавлен компонент прогнозирования \"что если\""
       }
     },
     "CausalAnalysis": {
@@ -1264,7 +1277,7 @@
     },
     "CohortInformation": {
       "ShiftCohort": "Переключить когорту",
-      "SwitchTimeSeries": "Switch time series",
+      "SwitchTimeSeries": "Переключить временные ряды",
       "NewCohort": "Новая когорта",
       "DataPoints": "Количество точек данных",
       "DefaultCohort": " (по умолчанию)",
@@ -1276,7 +1289,7 @@
       "CohortSettingsTitle": "Параметры когорты"
     },
     "ComponentNames": {
-      "ChartView": "Chart view",
+      "ChartView": "Представление диаграммы",
       "CausalAnalysis": "Анализ причинно-следственных связей",
       "Counterfactuals": "Контрфактические предположения",
       "DataAnalysis": "Анализ данных",
@@ -1285,10 +1298,10 @@
       "ErrorAnalysis": "Анализ ошибок",
       "Fairness": "Справедливость",
       "FeatureImportances": "Важность признаков",
-      "Forecasting": "Forecasting",
+      "Forecasting": "Прогнозирование",
       "ModelOverview": "Обзор модели",
-      "TableView": "Table view",
-      "VisionTab": "Vision data explorer"
+      "TableView": "Табличное представление",
+      "VisionTab": "Открыть обозреватель данных"
     },
     "DashboardSettings": {
       "Content": "В этом списке показан макет панели мониторинга. Данные можно фильтровать с помощью компонента анализа ошибок для отображения в списке компонентов ниже.",
@@ -1446,17 +1459,17 @@
       "CorrectPredictions": "Правильные прогнозы",
       "GlobalExplanation": "Совокупная важность признаков",
       "IncorrectPredictions": "Неправильные прогнозы",
-      "InfoTitle": "Additional information on data analysis table view",
-      "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).",
+      "InfoTitle": "Additional information on feature importance values",
+      "IndividualFeatureTabular": "Выберите точку данных, щелкнув ее (до 5 точек данных) в таблице, чтобы просмотреть локальные значения важности признаков (локальное объяснение) и графики отдельного условного ожидания (ICE).",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
       "LocalExplanation": "Важность отдельных признаков",
       "SelectionCounter": "Выбрано {0}/{1} точек данных",
       "SelectionLimit": "Сейчас можно выбрать до 5 точек данных.",
-      "RowCheckboxAriaLabel": "Row checkbox",
-      "SelectionColumnAriaLabel": "Toggle selection"
+      "RowCheckboxAriaLabel": "Флажок строки",
+      "SelectionColumnAriaLabel": "Переключить выбор"
     },
     "IndividualFeatureImportanceView": {
-      "SmallInstanceSelection": "Instance selection"
+      "SmallInstanceSelection": "Выбор экземпляра"
     },
     "MainMenu": {
       "DashboardSettings": "Конфигурация панели мониторинга",
@@ -1472,44 +1485,44 @@
     "ModelOverview": {
       "metrics": {
         "accuracy": {
-          "name": "Accuracy score",
+          "name": "Оценка точности",
           "description": "Доля точек данных с корректной классификацией."
         },
         "exactMatchRatio": {
-          "name": "Exact match ratio",
-          "description": "The ratio of instances classified correctly for every label."
+          "name": "Доля точных совпадений",
+          "description": "Доля правильно классифицированных экземпляров для каждой метки."
         },
         "meteorScore": {
-          "name": "Meteor Score",
-          "description": "METEOR Score is calculated based on the harmonic mean of precision and recall, with recall weighted more than precision in question answering task."
+          "name": "Оценка METEOR",
+          "description": "Оценка METEOR вычисляется на основе гармонического среднего значения точности и полноты при ответе на вопрос, с использованием более высокого весового коэффициента для полноты, чем для точности."
         },
         "bleuScore": {
-          "name": "Bleu Score",
-          "description": "Bleu Score measures the ratio of words (and/or n-grams) in the machine generated text that appeared in the reference text in question answering task."
+          "name": "Оценка BLEU",
+          "description": "Оценка BLEU измеряет долю слов и(или) n-грамм из сгенерированного компьютером текста, включенных в справочный текст при ответе на вопрос."
         },
         "bertScore": {
-          "name": "Bert Score",
-          "description": "BERTScore focuses on computing semantic similarity between tokens of reference and machine generated text in question answering task."
+          "name": "Оценка BERT",
+          "description": "Оценка BERT направлена на вычисление семантического подобия между ссылочными токенами и текстом, который был сгенерирован компьютером в качестве ответа на вопрос."
         },
         "rougeScore": {
-          "name": "Rouge Score",
-          "description": "Rouge Score measures the ratio of words (and/or n-grams) in the reference text that appeared in the machine generated text in question answering task."
+          "name": "Оценка ROUGE",
+          "description": "Оценка ROUGE измеряет долю слов и(или) n-грамм из справочного текста, включенных в сгенерированный компьютером текст при ответе на вопрос."
         },
         "hammingScore": {
-          "name": "Hamming score",
-          "description": "The average ratio of labels classified correctly among those classified as 1 in multilabel task."
+          "name": "Оценка Хэмминга",
+          "description": "Средняя доля меток, классифицированных правильно, среди меток, классифицированных как 1 в задаче с несколькими метками."
         },
         "f1Score": {
           "name": "Показатель F1",
           "description": "Показатель F1 — это среднее гармоническое точности и полноты."
         },
         "f1ScoreMacro": {
-          "name": "Macro F1 score",
-          "description": "Macro F1 score is the harmonic mean of precision and recall for each class, with each class weighted equally."
+          "name": "Макро-оценка F1",
+          "description": "Макро-оценка F1 — это гармоническое среднее точности и полноты для каждого класса, полученное с использованием одинакового весового коэффициента для всех классов."
         },
         "f1ScoreMicro": {
-          "name": "Micro F1 score",
-          "description": "Micro F1 score is the harmonic mean of precision and recall for each class, with each class weighted according to how many instances it contains."
+          "name": "Микро-оценка F1",
+          "description": "Микро-оценка F1 — это среднее гармоническое значение точности и полноты для каждого класса. Для классов используется весовой коэффициент в соответствии с количеством экземпляров в классе."
         },
         "meanAbsoluteError": {
           "name": "Средняя абсолютная погрешность",
@@ -1524,24 +1537,24 @@
           "description": "Доля точек данных с корректной классификацией среди тех, что классифицированы как 1."
         },
         "precisionMacro": {
-          "name": "Macro Precision score",
-          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted equally."
+          "name": "Макро-оценка точности",
+          "description": "Доля правильно классифицированных точек данных среди классифицированных как 1, для каждого класса. Для всех классов используются равные весовые коэффициенты."
         },
         "precisionMicro": {
-          "name": "Micro Precision score",
-          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted according to how many instances it contains."
+          "name": "Микро-оценка точности",
+          "description": "Доля правильно классифицированных точек данных среди меток, классифицированных как 1, для каждого класса. Для классов используется весовой коэффициент в соответствии с количеством экземпляров в классе."
         },
         "recall": {
           "name": "Оценка полноты",
           "description": "Доля точек данных с корректной классификацией среди тех, чья истинная метка — 1. Другие названия: доля истинноположительных результатов, чувствительность."
         },
         "recallMacro": {
-          "name": "Macro Recall score",
-          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted equally."
+          "name": "Макро-оценка полноты",
+          "description": "Доля правильно классифицированных точек данных среди тех, у которых истинная метка равна 1, для каждого класса. Для всех классов используются равные весовые коэффициенты."
         },
         "recallMicro": {
-          "name": "Micro Recall score",
-          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted according to how many instances it contains."
+          "name": "Макро-оценка полноты",
+          "description": "Доля правильно классифицированных точек данных среди тех, у которых истинная метка равна 1, для каждого класса. Для классов используется весовой коэффициент в соответствии с количеством экземпляров в классе."
         },
         "falsePositiveRate": {
           "name": "Частота ложноположительных результатов",
@@ -1560,32 +1573,32 @@
           "description": "Среднее значение всех прогнозов."
         },
         "meanAveragePrecision": {
-          "name": "Mean Average Precision score",
-          "description": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall."
+          "name": "Среднее значение среднего арифметического",
+          "description": "Средняя точность для моделей обнаружения объектов — это среднее значение AP (средней точности) для всех классов. Этот показатель оценивает надежность модели обнаружения объектов и инкапсулирует переключение между точностью и отзывом."
         },
         "averagePrecision": {
-          "name": "Average Precision score",
-          "description": "Average precision for object detection models is calculated for a selected class."
+          "name": "Средний показатель точности",
+          "description": "Средняя точность для моделей обнаружения объектов вычисляется для выбранного класса."
         },
         "averageRecall": {
-          "name": "Average Recall score",
-          "description": "Average recall for object detection models is calculated for a selected class."
+          "name": "Средняя оценка полноты",
+          "description": "Средняя полнота для моделей обнаружения объектов вычисляется для выбранного класса."
         },
         "fairnessMetricDifference": "Разница",
         "fairnessMetricRatio": "Соотношение"
       },
       "metricsDropdown": "Метрики",
-      "metricsTypeDropdown": "Aggregate method",
+      "metricsTypeDropdown": "Метод агрегирования",
       "metricTypes": {
-        "macro": "Macro",
-        "micro": "Micro"
+        "macro": "Макро",
+        "micro": "Микро"
       },
-      "classSelectionDropdown": "Select class(es)",
+      "classSelectionDropdown": "Выберите класс(ы)",
       "iouThresholdDropdown": {
-        "name": "IoU Threshold",
-        "description": "Intersection over Union quantifies the degree of overlap between the prediction and ground truth bounding box of a detected object in an image. For example, setting an IoU threshold of 70% means that a prediction with greater than 70% overlap with ground truth is True, thus influencing the definition of prediction correctness and calculation of other performance metrics.",
+        "name": "Пороговое значение пересечения с объединением (IOU)",
+        "description": "Пересечение с объединением позволяет количественно измерить степень перекрытия между прогнозом и ограничивающим прямоугольником подлинной истинности обнаруженного объекта в изображении. Например, установка порога IoU в 70% означает, что истинным объявляется прогноз, перекрывающийся с подлинной истинностью на 70%. Это влияет на определение правильности прогноза и вычисление других метрик работы модели.",
         "iconId": "iouThresholdIconId",
-        "title": "Learn about the IoU threshold"
+        "title": "Подробнее о пороговом значении IOU"
       },
       "notAvailable": "Н/Д",
       "countColumnHeader": "Размер выборки",
@@ -1597,14 +1610,14 @@
       "featuresDropdown": "Функции",
       "metricChartDropdownSelectionHeader": "Метрика",
       "probabilityForClassSelectionHeader": "Вероятность для класса",
-      "targetSelectionHeader": "Target",
+      "targetSelectionHeader": "Цель",
       "metricSelectionDropdownPlaceholder": "Выберите метрики для сравнения когорт.",
-      "classSelectionDropdownPlaceholder": "Select class name for class-based analysis.",
+      "classSelectionDropdownPlaceholder": "Выберите имя класса для анализа на основе класса.",
       "featureSelectionDropdownPlaceholder": "Выберите функции для анализа на основе функций.",
       "probabilityDistributionPivotItem": "Распределение вероятности",
-      "regressionDistributionPivotItem": "Target distribution",
+      "regressionDistributionPivotItem": "Целевое распределение",
       "metricsVisualizationsPivotItem": "Визуализации метрик",
-      "confusionMatrixPivotItem": "Confusion matrix",
+      "confusionMatrixPivotItem": "Матрица ошибок",
       "disaggregatedAnalysisFeatureSelectionPlaceholder": "Выберите компоненты для создания анализа на основе функций.",
       "tableCountTooltip": "Когорта {0} содержит {1} экземпляров.",
       "tableMetricTooltip": "{0} модели в когорте {1} — {2}",
@@ -1615,36 +1628,36 @@
       "metricSelectionButton": "Выберите метрику",
       "cohortSelectionButton": "Выберите когорты",
       "probabilityLabelSelectionButton": "Выбрать метку",
-      "regressionTargetSelectionButton": "Choose target",
+      "regressionTargetSelectionButton": "Выберите целевой объект",
       "selectAllCohortsOption": "Выделить все",
       "other": "Другое",
       "BoxPlot": {
         "outlierProbability": "вероятность",
         "outlierLabel": "Выбросы",
         "boxPlotSeriesLabel": "Блочная диаграмма",
-        "lowerWhisker": "Lower whisker",
-        "upperWhisker": "Upper whisker",
-        "median": "Median",
-        "lowerQuartile": "Lower quartile",
-        "upperQuartile": "Upper quartile"
+        "lowerWhisker": "Нижний ус",
+        "upperWhisker": "Верхний ус",
+        "median": "Медиана",
+        "lowerQuartile": "Нижний квартиль",
+        "upperQuartile": "Верхний квартиль"
       },
       "chartConfigApply": "Применить",
       "chartConfigCancel": "Отмена",
       "chartConfigDatasetCohortSelectionPlaceholder": "Выберите когорты набора данных",
       "chartConfigFeatureBasedCohortSelectionPlaceholder": "Выберите когорты на основе функций",
       "confusionMatrix": {
-        "confusionMatrixCohortSelectionLabel": "Select dataset cohort",
-        "confusionMatrixClassSelectionLabel": "Select classes",
-        "confusionMatrixClassMinSelectionError": "Select at least {0} classes to visualize the confusion matrix.",
-        "confusionMatrixClassMaxSelectionError": "Select at most {0} classes to visualize the confusion matrix.",
-        "confusionMatrixClassSelectionDefaultPlaceholder": "Choose classes",
-        "confusionMatrixHeatmapTooltip": "{0} datapoints should be {1}, predicted to be {2}",
-        "confusionMatrixYAxisLabel": "True Class",
-        "confusionMatrixXAxisLabel": "Predicted Class",
-        "class": "Class"
+        "confusionMatrixCohortSelectionLabel": "Выберите когорту набора данных",
+        "confusionMatrixClassSelectionLabel": "Выбрать классы",
+        "confusionMatrixClassMinSelectionError": "Выберите не менее {0} классов, чтобы визуализировать матрицу ошибок.",
+        "confusionMatrixClassMaxSelectionError": "Для визуализации матрицы ошибок выберите не более {0} классов.",
+        "confusionMatrixClassSelectionDefaultPlaceholder": "Выберите классы",
+        "confusionMatrixHeatmapTooltip": "{0} точек данных должно быть {1}, согласно прогнозу - {2}",
+        "confusionMatrixYAxisLabel": "Истинный класс",
+        "confusionMatrixXAxisLabel": "Спрогнозированный класс",
+        "class": "Класс"
       },
       "nA": "Н/Д",
-      "disaggregatedAnalysisBaseCohortDisclaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
+      "disaggregatedAnalysisBaseCohortDisclaimer": "Когорты в следующем функциональном анализе основаны на глобальной когорте {0}.",
       "disaggregatedAnalysisBaseCohortWarning": "В отличие от когорты {0}, {1} включает фильтры. Как следствие, он записывает только подмножество всего набора данных, и выводы могут не распространяться на весь набор данных.",
       "probabilitySplineChartToggleLabel": "Использовать сплайн-диаграмму",
       "countAxisLabel": "Количество",
@@ -1674,76 +1687,76 @@
         "flyoutDescription": "Вы можете просмотреть когорты наборов данных или когорты объектов. Если группы функций недоступны, вам необходимо сначала выбрать одну или несколько функций в представлении групп функций. Впоследствии создаются когорты функций, и вы можете выбрать их здесь."
       },
       "regressionTargetOptions": {
-        "predictedY": "Predicted Y",
-        "trueY": "True Y",
-        "error": "Error"
+        "predictedY": "Спрогнозированное значение Y",
+        "trueY": "Истинное значение Y",
+        "error": "Ошибка"
       },
       "topLevelDescription": "Оцените производительность модели, изучив распределение значений прогнозирования и значений метрик производительности модели. Используйте вкладку «Когорты наборов данных», чтобы изучить свою модель, просмотрев сравнительный анализ ее производительности для различных предварительно созданных или вновь созданных когорт наборов данных. Используйте «Когорты функций», чтобы исследовать свою модель, просматривая сравнительный анализ ее эффективности в подгруппах конфиденциальных и неконфиденциальных функций (например, производительность для разных полов и уровней дохода).",
-      "infoTitle": "Additional information on model overview",
+      "infoTitle": "Подробнее об обзоре моделей",
       "visualDisplayToggleLabel": "Показать тепловую карту",
       "featureBasedViewDescription": "Выберите до двух признаков, чтобы просмотреть разбивку производительности модели по когортам на основе признаков (если выбран один признак) или перекрестным когортам (если выбраны два признака)."
     },
     "TableViewTab": {
-      "Heading": "View the dataset in a table format for all features and rows."
+      "Heading": "Просмотрите набор данных в виде таблицы для всех признаков и строк."
     }
   },
   "Forecasting": {
-    "target": "Target",
-    "whatIfForecastingHeader": "What-if analysis",
-    "forecastHeader": "Forecast analysis",
-    "whatIfForecastingDescription": "What-if allows you to perturb features for your entire time series and observe how the model's forecast changes.",
-    "whatIfForecastingChooseTimeSeries": "To start, choose a time series from the options below.",
-    "forecastDescription": "Forecast analysis compares your model's forecast to the actual values of your time series. To enable what-if analysis, provide a dataset with features.",
-    "timeSeries": "Time series",
-    "selectTimeSeries": "Select a time series.",
-    "singleTimeSeries": "The dataset contains only a single time series '{0}' which has been selected by default.",
-    "trueY": "True Y",
-    "baselinePrediction": "Baseline prediction",
-    "forecastComparisonHeader": "Compare What-if Forecasts",
-    "forecastComparisonChartTitle": "Forecasts",
-    "forecastComparisonChartTimeAxisLabel": "Time",
+    "target": "Цель",
+    "whatIfForecastingHeader": "Анализ \"что если\"",
+    "forecastHeader": "Анализ прогноза",
+    "whatIfForecastingDescription": "Функция \"Что если\" позволяет менять значения признаков для всего временного ряда и наблюдать за изменением прогноза модели.",
+    "whatIfForecastingChooseTimeSeries": "Чтобы начать, выберите временной ряд из приведенного ниже списка.",
+    "forecastDescription": "Анализ прогнозов сравнивает прогноз модели с фактическими значениями временного ряда. Чтобы включить анализ \"что если\", предоставьте набор данных с признаками.",
+    "timeSeries": "Временной ряд",
+    "selectTimeSeries": "Выберите временной ряд.",
+    "singleTimeSeries": "Набор данных содержит только один временной ряд \"{0}\", и он выбран по умолчанию.",
+    "trueY": "Истинное значение Y",
+    "baselinePrediction": "Прогнозирование базовых показателей",
+    "forecastComparisonHeader": "Сравнить прогнозы \"что если\"",
+    "forecastComparisonChartTitle": "Прогнозы",
+    "forecastComparisonChartTimeAxisLabel": "Время",
     "Transformations": {
-      "multiply": "multiply",
-      "divide": "divide",
-      "add": "add",
-      "subtract": "subtract",
-      "change": "change to"
+      "multiply": "умножить",
+      "divide": "разделить",
+      "add": "добавить",
+      "subtract": "отнять",
+      "change": "изменить на"
     },
     "TransformationCreation": {
-      "title": "Create what-if scenario",
-      "nameLabel": "What-if scenario name",
-      "featureInstructions": "Choose a feature to perturb.",
-      "operationInstructions": "Choose an operation to apply to the feature.",
-      "operationDropdownHeader": "Operation",
-      "featureDropdownHeader": "Feature",
-      "valueSpinButtonHeader": "Value",
-      "scenarioNamingInstructionsPlaceholder": "Enter a unique name",
-      "scenarioNamingInstructions": "Enter a name for your what-if scenario.",
-      "scenarioNamingCollisionMessage": "This name exists already. Please enter a unique name.",
-      "scenarioNamingLengthMessage": "The name must be between 1 and 50 characters. The actual length is {0}.",
-      "scenarioNamingInvalidCharactersMessage": "The name can only contain alphanumeric characters, whitespaces, dashes, or underscores, and needs to start with an alphanumeric character.",
-      "valueErrorMessage": "For operation {0} please select a value other than {1}.",
-      "invalidCombinationErrorMessage": "This is identical to an existing what-if scenario. Please change the feature, operation, or value.",
-      "addTransformationButton": "Add Transformation",
-      "divisionAndMultiplicationBy": "by"
+      "title": "Создать сценарий \"что если\"",
+      "nameLabel": "Имя сценария \"что если\"",
+      "featureInstructions": "Выберите признак, который будет меняться.",
+      "operationInstructions": "Выберите операцию для применения к признаку.",
+      "operationDropdownHeader": "Операция",
+      "featureDropdownHeader": "Признак",
+      "valueSpinButtonHeader": "Значение",
+      "scenarioNamingInstructionsPlaceholder": "Введите уникальное имя",
+      "scenarioNamingInstructions": "Введите имя сценария \"что если\".",
+      "scenarioNamingCollisionMessage": "Это имя уже существует. Введите уникальное имя.",
+      "scenarioNamingLengthMessage": "Имя должно содержать от 1 до 50 символов. Фактическая длина равна {0}.",
+      "scenarioNamingInvalidCharactersMessage": "Имя может содержать только буквы, цифры, пробелы, дефисы и символы подчеркивания и должно начинаться с буквы или цифры.",
+      "valueErrorMessage": "Для операции {0} выберите значение, отличное от {1}.",
+      "invalidCombinationErrorMessage": "Этот сценарий \"что если\" идентичен уже существующему. Измените признак, операцию или значение.",
+      "addTransformationButton": "Добавить преобразование",
+      "divisionAndMultiplicationBy": "на"
     },
     "TransformationTable": {
-      "nameColumnHeader": "Name",
-      "methodColumnHeader": "Method",
-      "divisionAndMultiplicationBy": "by ",
-      "header": "What-if Forecasts ({0})"
+      "nameColumnHeader": "Имя",
+      "methodColumnHeader": "Метод",
+      "divisionAndMultiplicationBy": "на ",
+      "header": "Прогнозы \"что если\" ({0})"
     },
     "TimeSeries": {
-      "apply": "Apply",
-      "cancel": "Cancel",
-      "cohortList": "Time series list",
-      "selectCohort": "Select a time series",
-      "shiftCohort": "Switch time series",
-      "shiftCohortDescription": "Select a time series from the time series list. Apply the time series to the dashboard."
+      "apply": "Применить",
+      "cancel": "Отмена",
+      "cohortList": "Список временных рядов",
+      "selectCohort": "Выберите временной ряд",
+      "shiftCohort": "Переключить временные ряды",
+      "shiftCohortDescription": "Выберите временной ряд из списка. Примените его к панели мониторинга."
     },
     "TimeSeriesSettings": {
-      "CohortSettingsDescription": "Time series are pre-defined based on time series identifying columns.",
-      "CohortSettingsTitle": "Time series settings"
+      "CohortSettingsDescription": "Временные ряды определены задающими их столбцами.",
+      "CohortSettingsTitle": "Параметры временных рядов"
     }
   }
 }

@@ -116,8 +116,9 @@ export function getTokenImportancesChartOptions(
         align: "center",
         color: theme.semanticColors.bodyBackground,
         enabled: true,
+        // Don't show the data label inside the bars since it is redundant with the tooltips and y-axis labels
         formatter(): string | number | undefined {
-          return this.x; // Display the Y-axis value inside the bar
+          return "";
         },
         inside: true
       },

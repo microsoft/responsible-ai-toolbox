@@ -86,22 +86,18 @@ export function describeModelOverview(
       });
 
       it("should show 'Feature cohorts' view with multiple features when selected", () => {
+        cy.get(Locators.ModelOverviewFeatureSelection).click();
         multiSelectComboBox(
           "#modelOverviewFeatureSelection",
           datasetShape.modelOverviewData?.featureCohortView
             ?.secondFeatureToSelect || ""
         );
-        if (
-          datasetShape.modelOverviewData?.featureCohortView
-            ?.secondFeatureToSelect
-        ) {
-          ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
-            datasetShape,
-            2,
-            isTabular,
-            isVision
-          );
-        }
+        ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
+          datasetShape,
+          2,
+          isTabular,
+          isVision
+        );
       });
 
       it("should show new cohorts in charts", () => {

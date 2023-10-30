@@ -186,6 +186,12 @@
     "showTop": "Datenpunkte mit den größten geschätzten kausalen Antworten auf das Behandlungsfeature: {0}",
     "whatifDescription": "Was-wäre-wenn ermöglicht es Ihnen, Features für beliebige Eingaben zu stören und zu beobachten, wie sich die Vorhersage des Modells ändert. Sie können Features manuell stören oder die gewünschte Vorhersage (z.B. die Klassenbezeichnung für einen Klassifizierer) angeben, um eine Liste der Datenpunkte anzuzeigen, die der ursprünglichen Eingabe am nächsten liegen und zur gewünschten Vorhersage führen würden. Dies wird auch kontrafaktische Vorhersage genannt, und Sie können diese zum Erkunden der vom Modell erlernten Beziehungen verwenden, zum Verständnis wichtiger, erforderlicher Features für die Vorhersagen des Modells oder zum Debuggen von Randfällen für das Modell. Wählen Sie zum Starten die Eingabepunkte aus der Datentabelle oder dem Streudiagramm aus."
   },
+  "DataAnalysis": {
+    "TableView": {
+      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
+      "infoTitle": "Additional information on table view"
+    }
+  },
   "ErrorAnalysis": {
     "Cohort": {
       "cohort": "Kohorte",
@@ -900,6 +906,8 @@
       "index": "Index",
       "output": "Ausgabe",
       "predictedY": "Vorhersage für Y",
+      "odIncorrect": "Incorrect",
+      "odCorrect": "Correct",
       "probabilityLabel": "Wahrscheinlichkeit : {0}",
       "trueY": "TRUE Y",
       "xValue": "X-Wert:",
@@ -1155,7 +1163,8 @@
       "predictedAnswer": "Vorhergesagte Antwort: ",
       "trueAnswer": "Richtige Antwort: ",
       "inputs": "Eingaben",
-      "outputs": "Ausgaben"
+      "outputs": "Ausgaben",
+      "sliderAriaLabel": "Schieberegler für die wichtigsten Wörter"
     },
     "Legend": {
       "featureLegend": "TEXTFUNKTIONSLEGENDE",
@@ -1188,6 +1197,8 @@
       "columnTwo": "Index",
       "columnThree": "WAHR Y",
       "columnFour": "Vorhergesagtes Y",
+      "columnThreeOD": "Richtig",
+      "columnFourOD": "Fehlerhaft",
       "columnFive": "Andere Metadaten",
       "chooseObject": "Erkanntes Objekt auswählen",
       "examples": "Beispiele",
@@ -1207,6 +1218,8 @@
       "panelInformation": "Informationen",
       "predictedLabel": "Vorhergesagte Bezeichnung",
       "predictedY": "Vorhergesagt: ",
+      "correctDetections": "Richtige Erkennungen: ",
+      "incorrectDetections": "Falsche Erkennungen: ",
       "prefix": "Objekt: ",
       "rows": "Zeilen: ",
       "search": "Suchen",
@@ -1446,9 +1459,9 @@
       "CorrectPredictions": "Richtige Vorhersagen",
       "GlobalExplanation": "Aggregierte Attributrelevanz",
       "IncorrectPredictions": "Falsche Vorhersagen",
-      "InfoTitle": "Zusätzliche Informationen zur Tabellenansicht für die Datenanalyse",
+      "InfoTitle": "Additional information on feature importance values",
       "IndividualFeatureTabular": "Wählen Sie einen Datenpunkt aus, indem Sie in der Tabelle auf einen Datenpunkt (bis zu 5 Datenpunkte) klicken, um deren lokale Featurerelevanzwerte (lokale Erklärung) und die Plots für die individuelle bedingte Erwartung (Individual Conditional Expectation, ICE) anzuzeigen.",
-      "IndividualFeatureText": "Wählen Sie einen Datenpunkt aus, indem Sie auf einen Datenpunkt in der Tabelle klicken, um die Wichtigkeitswerte für lokale Features anzuzeigen (lokale Erklärung).",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
       "LocalExplanation": "Individuelle Attributrelevanz",
       "SelectionCounter": "{0}/{1} Datenpunkte ausgewählt",
       "SelectionLimit": "Zu diesem Zeitpunkt können bis zu 5 Datenpunkte ausgewählt werden.",

@@ -186,6 +186,12 @@
     "showTop": "Pontos de dados com as maiores respostas causais estimadas à funcionalidade de tratamento: {0}",
     "whatifDescription": "O teste de hipóteses permite-lhe inserir funcionalidades para qualquer entrada e observar como a predição do modelo muda. Pode influenciar manualmente as funcionalidades ou especificar a predição desejada (por exemplo, a etiqueta de classe de um classificador) para ver uma lista dos pontos de dados mais próximos da entrada original que iria levar à previsão pretendida. Também conhecidos como contrafactuais de previsão, pode utilizá-los para explorar as relações aprendidas pelo modelo, compreender as funcionalidades importantes e necessárias para as predições do modelo; ou depurar casos-limite para o modelo. Para começar, escolha pontos de entrada a partir da tabela de dados ou gráfico de dispersão."
   },
+  "DataAnalysis": {
+    "TableView": {
+      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
+      "infoTitle": "Additional information on table view"
+    }
+  },
   "ErrorAnalysis": {
     "Cohort": {
       "cohort": "Grupo",
@@ -900,6 +906,8 @@
       "index": "Índice",
       "output": "Resultado",
       "predictedY": "Y Previsto",
+      "odIncorrect": "Incorrect",
+      "odCorrect": "Correct",
       "probabilityLabel": "Probabilidade: {0}",
       "trueY": "Y Verdadeiro",
       "xValue": "Valor de X:",
@@ -1155,7 +1163,8 @@
       "predictedAnswer": "Resposta prevista: ",
       "trueAnswer": "Resposta verdadeira: ",
       "inputs": "Entradas",
-      "outputs": "Saídas"
+      "outputs": "Saídas",
+      "sliderAriaLabel": "Controlo de deslize para palavras mais importantes"
     },
     "Legend": {
       "featureLegend": "LEGENDA DA FUNCIONALIDADE DE TEXTO",
@@ -1188,6 +1197,8 @@
       "columnTwo": "Índice",
       "columnThree": "Y Verdadeiro",
       "columnFour": "Y Previsto",
+      "columnThreeOD": "Correto",
+      "columnFourOD": "Incorreto",
       "columnFive": "Outros metadados",
       "chooseObject": "Escolha um objeto detetado",
       "examples": "exemplos",
@@ -1207,6 +1218,8 @@
       "panelInformation": "Informações",
       "predictedLabel": "Etiqueta prevista",
       "predictedY": "Previsto: ",
+      "correctDetections": "Deteções corretas: ",
+      "incorrectDetections": "Deteções incorretas: ",
       "prefix": "Objeto: ",
       "rows": "Linhas: ",
       "search": "Procurar",
@@ -1446,9 +1459,9 @@
       "CorrectPredictions": "Previsões corretas",
       "GlobalExplanation": "Importância da funcionalidade agregada",
       "IncorrectPredictions": "Previsões incorretas",
-      "InfoTitle": "Informações adicionais sobre a vista de tabela de análise de dados",
+      "InfoTitle": "Additional information on feature importance values",
       "IndividualFeatureTabular": "Selecione um ponto de dados ao clicar num ponto de dados (até cinco pontos de dados) na tabela para ver os valores de importância da funcionalidade local (explicação local) e os gráficos de expetativas condicionais individuais (ICE).",
-      "IndividualFeatureText": "Selecione um ponto de dados ao clicar num ponto de dados na tabela para ver os valores de importância da funcionalidade local (explicação local).",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
       "LocalExplanation": "Importância individual da funcionalidade",
       "SelectionCounter": "{0}/{1} pontos de dados selecionados",
       "SelectionLimit": "Podem ser selecionados até 5 pontos de dados neste momento.",
