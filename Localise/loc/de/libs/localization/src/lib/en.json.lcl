@@ -9567,10 +9567,13 @@
       </Item>
       <Item ItemId=";InterpretVision.Dashboard.loading" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Computing explanation for index]]></Val>
+          <Val><![CDATA[Computing explanation for image of index]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Berechnen der Erklärung für den Index]]></Val>
+            <Val><![CDATA[Berechnungserläuterung für das Bild des Indexes]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Computing explanation for index]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
