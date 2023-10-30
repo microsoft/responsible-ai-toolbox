@@ -158,7 +158,7 @@ export const textExplanationData = {
   ],
   expectedFeaturesValues: {
     allFeaturesExpectedValues: 13,
-    negativeFeaturesExpectedValues: 4,
+    negativeFeaturesExpectedValues: 5,
     positiveFeaturesExpectedValues: 13
   },
   explanationIndex: 0,
