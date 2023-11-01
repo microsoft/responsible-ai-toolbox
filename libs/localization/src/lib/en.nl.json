@@ -188,8 +188,8 @@
   },
   "DataAnalysis": {
     "TableView": {
-      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
-      "infoTitle": "Additional information on table view"
+      "description": "Bekijk de gegevensset in een tabelweergave met de basis-waarheid en voorspelde labels. De tabel is onderverdeeld in subtabellen met juiste en onjuiste voorspellingen.",
+      "infoTitle": "Aanvullende informatie over de tabelweergave"
     }
   },
   "ErrorAnalysis": {
@@ -906,8 +906,8 @@
       "index": "Index",
       "output": "Uitvoer",
       "predictedY": "Voorspelde Y",
-      "odIncorrect": "Incorrect",
-      "odCorrect": "Correct",
+      "odIncorrect": "Onjuist",
+      "odCorrect": "Juist",
       "probabilityLabel": "Waarschijnlijkheid: {0}",
       "trueY": "Terecht-Y",
       "xValue": "X-waarde:",
@@ -1208,7 +1208,7 @@
       "labelVisibilityDropdown": "Labels selecteren om weer te geven",
       "legendFailure": "mislukte poging",
       "legendSuccess": "geslaagd",
-      "loading": "Uitleg voor index berekenen",
+      "loading": "Uitleg voor installatiekopie van index berekenen",
       "multiselect": "Multiselect",
       "notdefined": "objectscenario niet gedefinieerd",
       "objectSelect": "Objectselectie",
@@ -1459,9 +1459,9 @@
       "CorrectPredictions": "Juiste voorspellingen",
       "GlobalExplanation": "Functie-urgentie samenvoegen",
       "IncorrectPredictions": "Onjuiste voorspellingen",
-      "InfoTitle": "Additional information on feature importance values",
+      "InfoTitle": "Aanvullende informatie over waarden voor functie-urgentie",
       "IndividualFeatureTabular": "Selecteer een gegevenspunt door op een gegevenspunt (maximaal 5 gegevenspunten) in de tabel te klikken om de waarden voor de lokale functie-urgentie (lokale uitleg) en de afzonderlijke ICE-plot (voorwaardelijke verwachting) weer te geven.",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
+      "IndividualFeatureText": "Selecteer een gegevenspunt door op een gegevenspunt in de tabel te klikken om de waarden van de lokale functie-urgentie weer te geven (lokale uitleg) vanuit de tekstuitlegger van SHAP.",
       "LocalExplanation": "Belang van afzonderlijke functies",
       "SelectionCounter": "{0}/{1} gegevenspunten geselecteerd",
       "SelectionLimit": "Er kunnen momenteel maximaal 5 gegevenspunten worden geselecteerd.",

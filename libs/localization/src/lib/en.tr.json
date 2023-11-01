@@ -1208,7 +1208,7 @@
       "labelVisibilityDropdown": "Görüntülenecek etiketleri seçin",
       "legendFailure": "hata",
       "legendSuccess": "başarılı",
-      "loading": "Dizin için hesaplama açıklaması",
+      "loading": "Computing explanation for image of index",
       "multiselect": "Çoklu Seçim",
       "notdefined": "nesne senaryosu tanımlanmadı",
       "objectSelect": "Nesne Seçimi",

@@ -1208,7 +1208,7 @@
       "labelVisibilityDropdown": "Wybierz etykiety do wyświetlenia",
       "legendFailure": "niepowodzenie",
       "legendSuccess": "sukces",
-      "loading": "Obliczanie objaśnienia dla indeksu",
+      "loading": "Computing explanation for image of index",
       "multiselect": "Wybór wielokrotny",
       "notdefined": "nie zdefiniowano scenariusza obiektu",
       "objectSelect": "Wybór obiektu",
