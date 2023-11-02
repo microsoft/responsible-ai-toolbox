@@ -12,7 +12,7 @@ Provide environment detection for enabling Flask server without configuring at i
 `flask_service = FlaskHelper(ip=<ip-to-listen-on>, port=<port-to-listen-on>)`
 
 If `ip` is not specified then it listens on `localhost` by default.
-If `port` is not specified then it finds an open port in the range 5000 to 5099
+If `port` is not specified then it finds an open port in the range 8704 to 8993
 and listens on it.
 
 To register a function to listen on an route:
