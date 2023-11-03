@@ -1208,7 +1208,7 @@
       "labelVisibilityDropdown": "Выберите метки для показа",
       "legendFailure": "сбой",
       "legendSuccess": "успешно",
-      "loading": "Производится вычисление объяснения для индекса",
+      "loading": "Computing explanation for image of index",
       "multiselect": "Множественный выбор",
       "notdefined": "сценарий объекта не определен",
       "objectSelect": "Выбор объектов",
