@@ -188,8 +188,8 @@
   },
   "DataAnalysis": {
     "TableView": {
-      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
-      "infoTitle": "Additional information on table view"
+      "description": "以表的表示形式查看数据集，其中包含真实值和预测的标签。表分隔为包含正确预测和错误预测的子表。",
+      "infoTitle": "有关表视图的其他信息"
     }
   },
   "ErrorAnalysis": {
@@ -906,8 +906,8 @@
       "index": "索引",
       "output": "输出",
       "predictedY": "预测的 Y",
-      "odIncorrect": "Incorrect",
-      "odCorrect": "Correct",
+      "odIncorrect": "不正确",
+      "odCorrect": "正确",
       "probabilityLabel": "概率: {0}",
       "trueY": "真实 Y",
       "xValue": "X 值:",
@@ -1208,7 +1208,7 @@
       "labelVisibilityDropdown": "选择要显示的标签",
       "legendFailure": "故障",
       "legendSuccess": "成功",
-      "loading": "索引的计算说明",
+      "loading": "索引图像的计算说明",
       "multiselect": "多选",
       "notdefined": "未定义对象方案",
       "objectSelect": "对象选择",
@@ -1459,9 +1459,9 @@
       "CorrectPredictions": "正确的预测",
       "GlobalExplanation": "聚合特征重要性",
       "IncorrectPredictions": "不正确的预测",
-      "InfoTitle": "Additional information on feature importance values",
+      "InfoTitle": "有关特征重要性值的其他信息",
       "IndividualFeatureTabular": "通过单击表中的一个数据点(最多 5 个数据点)来选择数据点，以查看其本地特征重要性值(本地解释)和单个条件预期(ICE)绘图。",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
+      "IndividualFeatureText": "通过单击表中的数据点来选择数据点，以查看来自 SHAP 文本解释器的局部特征重要性值(局部说明)。",
       "LocalExplanation": "单个特征重要性",
       "SelectionCounter": "已选择 {0} 个数据点(共 {1} 个)",
       "SelectionLimit": "此时最多可选择 5 个数据点。",

@@ -188,8 +188,8 @@
   },
   "DataAnalysis": {
     "TableView": {
-      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
-      "infoTitle": "Additional information on table view"
+      "description": "Zeigen Sie das Dataset in einer Tabellendarstellung mit der Grundwahrheit und den vorhergesagten Bezeichnungen an. Die Tabelle ist in Untertabellen mit richtigen und falschen Vorhersagen unterteilt.",
+      "infoTitle": "Zusätzliche Informationen zur Tabellenansicht"
     }
   },
   "ErrorAnalysis": {
@@ -906,8 +906,8 @@
       "index": "Index",
       "output": "Ausgabe",
       "predictedY": "Vorhersage für Y",
-      "odIncorrect": "Incorrect",
-      "odCorrect": "Correct",
+      "odIncorrect": "Fehlerhaft",
+      "odCorrect": "Richtig",
       "probabilityLabel": "Wahrscheinlichkeit : {0}",
       "trueY": "TRUE Y",
       "xValue": "X-Wert:",
@@ -1208,7 +1208,7 @@
       "labelVisibilityDropdown": "Anzuzeigende Bezeichnungen auswählen",
       "legendFailure": "Fehler",
       "legendSuccess": "erfolgreich",
-      "loading": "Berechnen der Erklärung für den Index",
+      "loading": "Berechnungserläuterung für das Bild des Indexes",
       "multiselect": "Mehrfachauswahl",
       "notdefined": "Objektszenario nicht definiert",
       "objectSelect": "Objektauswahl",
@@ -1459,9 +1459,9 @@
       "CorrectPredictions": "Richtige Vorhersagen",
       "GlobalExplanation": "Aggregierte Attributrelevanz",
       "IncorrectPredictions": "Falsche Vorhersagen",
-      "InfoTitle": "Additional information on feature importance values",
+      "InfoTitle": "Zusätzliche Informationen zu Featurerelevanzwerten",
       "IndividualFeatureTabular": "Wählen Sie einen Datenpunkt aus, indem Sie in der Tabelle auf einen Datenpunkt (bis zu 5 Datenpunkte) klicken, um deren lokale Featurerelevanzwerte (lokale Erklärung) und die Plots für die individuelle bedingte Erwartung (Individual Conditional Expectation, ICE) anzuzeigen.",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
+      "IndividualFeatureText": "Wählen Sie einen Datenpunkt aus, indem Sie auf einen Datenpunkt in der Tabelle klicken, um die lokalen Featurerelevanzwerte (lokale Erklärung) aus dem Texterklärer von SHAP anzuzeigen.",
       "LocalExplanation": "Individuelle Attributrelevanz",
       "SelectionCounter": "{0}/{1} Datenpunkte ausgewählt",
       "SelectionLimit": "Zu diesem Zeitpunkt können bis zu 5 Datenpunkte ausgewählt werden.",
