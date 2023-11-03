@@ -19,9 +19,14 @@ def validate_rai_vision_insights(
     rai_vision_insights,
     test_data,
     target_column,
-    task_type
+    task_type,
+    ignore_index=False
 ):
-    pd.testing.assert_frame_equal(rai_vision_insights.test, test_data)
+    rai_vision_test = rai_vision_insights.test
+    if ignore_index:
+        rai_vision_test = rai_vision_test.reset_index(drop=True)
+        test_data = test_data.reset_index(drop=True)
+    pd.testing.assert_frame_equal(rai_vision_test, test_data)
     assert rai_vision_insights.target_column == target_column
     assert rai_vision_insights.task_type == task_type
 

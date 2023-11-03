@@ -18,6 +18,7 @@ from common_vision_utils import (FRIDGE_MULTILABEL_TARGETS, ImageTransformEnum,
                                  load_multilabel_fridge_dataset,
                                  retrieve_fridge_object_detection_model,
                                  retrieve_or_train_fridge_model)
+from ml_wrappers import wrap_model
 from ml_wrappers.common.constants import Device
 from rai_vision_insights_validator import validate_rai_vision_insights
 
@@ -118,6 +119,38 @@ class TestRAIVisionInsights(object):
                          task_type, class_names,
                          num_masks=num_masks, mask_res=mask_res,
                          test_error_analysis=True)
+
+    def test_rai_insights_object_detection_jagged_list(self):
+        data = load_fridge_object_detection_dataset()
+        model = retrieve_fridge_object_detection_model(
+            load_fridge_weights=True
+        )
+        task_type = ModelTask.OBJECT_DETECTION
+        wrapped_model = wrap_model(model, data, ModelTask.OBJECT_DETECTION)
+
+        class DummyPredictWrapper(object):
+            def __init__(self, model):
+                self.model = model
+                self._model = model._model
+
+            def to(self, dummy):
+                pass
+
+            def predict(self, X):
+                return self.model.predict(X).tolist()
+
+            def predict_proba(self, X):
+                return self.model.predict_proba(X)
+
+        wrapped_model = DummyPredictWrapper(wrapped_model)
+        class_names = np.array(['can', 'carton',
+                                'milk_bottle', 'water_bottle'])
+        # test case where there are different numbers of objects in labels
+        data = data.iloc[[1, 50, 120]]
+        run_rai_insights(wrapped_model, data, ImageColumns.LABEL,
+                         task_type, class_names,
+                         test_error_analysis=True,
+                         ignore_index=True)
 
     @pytest.mark.parametrize('num_masks', [-100, -1, 0])
     def test_rai_insights_invalid_num_masks(self, num_masks):
@@ -264,7 +297,8 @@ def run_rai_insights(model, test_data, target_column,
                      upscale=False, max_evals=DEFAULT_MAX_EVALS,
                      num_masks=DEFAULT_NUM_MASKS,
                      mask_res=DEFAULT_MASK_RES,
-                     device=Device.AUTO.value):
+                     device=Device.AUTO.value,
+                     ignore_index=False):
     feature_metadata = None
     if dropped_features:
         feature_metadata = FeatureMetadata(dropped_features=dropped_features)
@@ -294,7 +328,8 @@ def run_rai_insights(model, test_data, target_column,
     # Validate
     validate_rai_vision_insights(
         rai_insights, test_data,
-        target_column, task_type)
+        target_column, task_type,
+        ignore_index)
     if task_type == ModelTask.OBJECT_DETECTION:
         selection_indexes = [[0]]
         aggregate_method = 'Macro'
