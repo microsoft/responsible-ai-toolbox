@@ -1449,7 +1449,7 @@
       "labelVisibilityDropdown": "Select labels to display",
       "legendFailure": "failure",
       "legendSuccess": "success",
-      "loading": "Computing explanation for index",
+      "loading": "Computing explanation for image of index",
       "multiselect": "Multiselect",
       "notdefined": "object scenario not defined",
       "objectSelect": "Object Selection",

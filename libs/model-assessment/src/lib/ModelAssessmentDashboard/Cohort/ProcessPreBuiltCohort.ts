@@ -166,7 +166,7 @@ function translatePreBuiltCohortFilterForClassificationOutcome(
   return filter;
 }
 
-function translatePreBuiltCohortFilterForDataset(
+export function translatePreBuiltCohortFilterForDataset(
   preBuiltCohortFilter: IPreBuiltFilter,
   jointDataset: JointDataset
 ): [IFilter | undefined, string | undefined] {

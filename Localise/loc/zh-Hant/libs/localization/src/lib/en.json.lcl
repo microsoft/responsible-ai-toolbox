@@ -1477,6 +1477,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";DataAnalysis.TableView.description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[以具有地面事實和預測標籤的資料表標記法檢視資料集。資料表會以正確和不正確的預測分隔成子資料工作表。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";DataAnalysis.TableView.infoTitle" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Additional information on table view]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[資料表檢視的其他資訊]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";ErrorAnalysis.Cohort.cohort" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cohort]]></Val>
@@ -7123,6 +7141,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Interpret.ExplanationScatter.odCorrect" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Correct]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[正確]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Interpret.ExplanationScatter.odIncorrect" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Incorrect]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[不正確]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Interpret.ExplanationScatter.output" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Output]]></Val>
@@ -9531,10 +9567,13 @@
       </Item>
       <Item ItemId=";InterpretVision.Dashboard.loading" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Computing explanation for index]]></Val>
+          <Val><![CDATA[Computing explanation for image of index]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[索引的計算說明]]></Val>
+            <Val><![CDATA[正在計算索引映像的說明]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Computing explanation for index]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10968,19 +11007,25 @@
       </Item>
       <Item ItemId=";ModelAssessment.FeatureImportances.IndividualFeatureText" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).]]></Val>
+          <Val><![CDATA[Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[按一下資料表中的資料點以選取資料點，以檢視本機特徵重要度值 (本機說明)。]]></Val>
+            <Val><![CDATA[按一下資料表中的資料點以選取資料點，以從 SHAP 的文字解釋者檢視本機特徵重要度值 (本機說明)。]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ModelAssessment.FeatureImportances.InfoTitle" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Additional information on data analysis table view]]></Val>
+          <Val><![CDATA[Additional information on feature importance values]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[資料分析資料表檢視的其他資訊]]></Val>
+            <Val><![CDATA[功能重要性值的其他資訊]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Additional information on data analysis table view]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>

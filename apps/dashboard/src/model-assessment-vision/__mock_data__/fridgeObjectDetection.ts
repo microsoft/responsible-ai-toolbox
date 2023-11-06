@@ -102,12 +102,12 @@ export const fridgeObjectDetection: IDataset = {
   object_detection_labels: [
     {
       aggregate: "2 correct, 0 incorrect",
-      correct: "1 milk_bottle, 1 can",
+      correct: "1 can, 1 milk_bottle",
       incorrect: "(none)"
     },
     {
       aggregate: "2 correct, 0 incorrect",
-      correct: "1 milk_bottle, 1 can",
+      correct: "1 can, 1 milk_bottle",
       incorrect: "(none)"
     },
     {

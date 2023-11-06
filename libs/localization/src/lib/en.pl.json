@@ -3,26 +3,26 @@
     "close": "Zamknij",
     "tooltipButton": "Przycisk etykietki narzędzia",
     "identityFeature": "Funkcja tożsamości",
-    "infoTitle": "Additional information",
-    "spinButton": "Spin",
-    "editButton": "Edit",
-    "decreaseValue": "Decrease value",
-    "increaseValue": "Increase value",
-    "decreaseValueByOne": "Decrease value by 1",
-    "increaseValueByOne": "Increase value by 1",
-    "loading": "Loading..."
+    "infoTitle": "Dodatkowe informacje",
+    "spinButton": "Pokrętło",
+    "editButton": "Edytuj",
+    "decreaseValue": "Zmniejsz wartość",
+    "increaseValue": "Zwiększ wartość",
+    "decreaseValueByOne": "Zmniejsz wartość o 1",
+    "increaseValueByOne": "Zwiększ wartość o 1",
+    "loading": "Trwa ładowanie..."
   },
   "ChartContextMenu": {
-    "hideData": "Hide data table",
-    "viewData": "View data table",
-    "viewInFullScreen": "View in full screen",
-    "printChart": "Print chart",
-    "downloadCSV": "Download CSV",
-    "downloadPNG": "Download PNG image",
-    "downloadJPEG": "Download JPEG image",
-    "downloadPDF": "Download PDF document",
-    "downloadSVG": "Download SVG vector image",
-    "downloadXLS": "Download XLS"
+    "hideData": "Ukryj tabelę danych",
+    "viewData": "Wyświetl tabelę danych",
+    "viewInFullScreen": "Wyświetl na pełnym ekranie",
+    "printChart": "Drukuj wykres",
+    "downloadCSV": "Pobierz plik CSV",
+    "downloadPNG": "Pobierz obraz PNG",
+    "downloadJPEG": "Pobierz obraz JPEG",
+    "downloadPDF": "Pobierz dokument PDF",
+    "downloadSVG": "Pobierz obraz wektora SVG",
+    "downloadXLS": "Pobierz plik XLS"
   },
   "CausalAnalysis": {
     "AggregateView": {
@@ -39,7 +39,7 @@
       "description": "Analiza przyczyn odpowiada na pytania „co-jeśli” na temat tego, jak zmieniłyby się rzeczywiste wyniki w przypadku dokonania wyboru innych zasad, np. innej strategii cenowej w przypadku danego produktu lub alternatywnego sposobu działania w przypadku pacjenta. W przeciwieństwie do przewidywań modelu, które identyfikują ważne wzorce korelacji, narzędzia te pomagają zidentyfikować najważniejsze funkcje przyczynowe, które bezpośrednio wpływają na wynik będący przedmiotem zainteresowania. Modele te identyfikują skutek przyczynowy jednej funkcji (zazwyczaj określanej mianem „działanie”), jednocześnie utrzymując inne funkcje wprowadzające w błąd na stałym poziomie. Aby uzyskać najlepsze wyniki, należy zapewnić, że pełny zestaw danych zawiera wszystkie dostępne funkcje, które mogą korelować z wynikiem jako czynnikiem wprowadzającym w błąd.",
       "directAggregate": "Bezpośredni zagregowany efekt przyczyn każdego leczenia z 95% przedziałem ufności",
       "here": "tutaj",
-      "infoTitle": "Additional information on aggregated causal effects",
+      "infoTitle": "Dodatkowe informacje na temat zagregowanych efektów przyczynowych",
       "lasso": "Element Lasso (lub regresja logistyczna, jeśli wartość y jest binarna) był dopasowany do przewidywania y z X[-i], a Lasso (lub regresja logistyczna, jeśli X[i] jest kategoryczne) jest dopasowane do przewidywania X[i] z Χ[-i]. Skutek przyczynowy można wyświetlić jako średnią korelację pozostałości/niespodziewanych wahań dwóch zadań przewidywania. Dowiedz się więcej o podwójnym uczeniu maszynowym",
       "unconfounding": "Czy są funkcje wprowadzające w błąd?"
     },
@@ -51,7 +51,7 @@
       "description": "Poszczególne skutki przyczynowe mogą informować o spersonalizowanych interwencjach, takich jak promocja ukierunkowana na docelową grupę klientów lub zindywidualizowany plan działania. W jaki sposób osoba z określonym zestawem funkcji będzie reagować na zmianę funkcji przyczynowej lub sposobu działania? Przyczynowe narzędzie warunkowe oblicza marginalne zmiany w rzeczywistych wartościach w przypadku konkretnej osoby, jeśli zmieni się poziom działania. Ta analiza umożliwia zrozumienie, w jaki sposób wyniki rzeczywiste zmieniłyby się w przypadku dokonania wyboru innych zasad, np. innej strategii cenowej w przypadku danego produktu lub alternatywnego sposobu działania w przypadku pacjenta. Określ sposób działania, będący przedmiotem zainteresowania, i obserwuj, jak rzeczywisty wynik mógłby się zmienić.",
       "directIndividual": "Bezpośredni indywidualny efekt przyczyn każdego leczenia z 95% przedziałem ufności",
       "index": "Indeks punktów danych",
-      "infoTitle": "Additional information on individual causal what-if",
+      "infoTitle": "Dodatkowe informacje o poszczególnych przyczynowych warunkach analizy warunkowej",
       "missingParameters": "Ta karta wymaga dostarczenia zestawu danych oceny.",
       "newOutcome": "Nowy wynik",
       "selectTreatment": "Wybierz rodzaj leczenia",
@@ -85,7 +85,7 @@
       "averageGainBinary": "Średnie zyski ustawienia działania {0} na jego wartość punktu odniesienia {1}.",
       "averageGainContinuous": "Średnie zyski z alternatywnych zasad w porównaniu z brakiem leczenia „{0}”.",
       "header": "Te narzędzia ułatwiają opracowywanie zasad dla przyszłych interwencji. Możesz określić, które części Twojej próbki najbardziej są podatne na zmiany funkcji przyczynowych lub działań, a także utworzyć reguły w celu określenia, które przyszłe zestawy danych powinny być docelowe na potrzeby konkretnych interwencji.",
-      "infoTitle": "Additional information on treatment policy",
+      "infoTitle": "Dodatkowe informacje na temat zasad leczenia",
       "nSample": "n = {0}",
       "noData": "Brak danych"
     }
@@ -116,8 +116,8 @@
       "cancel": "Anuluj",
       "title": "Przełącz kohortę",
       "subText": "Wybierz kohortę z listy kohort. Zastosuj kohortę do pulpitu nawigacyjnego.",
-      "selectCohort": "Select a cohort",
-      "cohortList": "Cohort list"
+      "selectCohort": "Wybieranie kohortę",
+      "cohortList": "Lista kohort"
     },
     "PreBuiltCohort": {
       "featureNameNotFound": "Nie znaleziono nazwy funkcji w zestawie danych",
@@ -148,13 +148,13 @@
       "predictedClass": "Przewidywana klasa",
       "predictedValue": "Wartość przewidywana"
     },
-    "Size": "Size",
-    "loading": "Loading...",
+    "Size": "Rozmiar",
+    "loading": "Trwa ładowanie...",
     "counterfactualEx": "Przykład hipotezy przeciwnej {0}",
     "counterfactualName": "Nazwa dla analizy co-jeżeli hipotez przeciwnych",
     "createWhatIfCounterfactual": "Utwórz hipotezę przeciwną analizy co-jeżeli",
     "createCounterfactual": "Hipoteza przeciwna",
-    "revertToBubbleChart": "View bubble chart",
+    "revertToBubbleChart": "Wyświetl wykres bąbelkowy",
     "createOwn": "Utwórz własne hipotezy przeciwne:",
     "currentClass": "Bieżąca klasa",
     "currentRange": "Bieżący zakres",
@@ -167,9 +167,9 @@
     "listDescription": "Na tej liście pokazano, które punkty danych w bieżącej próbce mają największą odpowiedź przyczynową na wybrane działanie na podstawie wszystkich funkcji uwzględnionych w szacowanym modelu przyczynowym. Lewe pięć kolumn informuje, czy dany sposób działania jest zalecany dla obserwacji, bieżącego działania, oszacowanego skutku działania (skutku zastosowania działania z punktu odniesienia braku działania w przypadku działań binarnych lub zwiększenia/zmniejszenia funkcji działania o 10% wielkości typowego działania w próbce: [dynamiczne: informuje o zmianie liczbowej w użytym przez nas działaniu]) oraz dolne i górne Interwały pewności (CI) dla tego skutku. Pozostałe kolumny przedstawiają bieżący stan działania i inne funkcje każdej obserwacji.",
     "localImportanceDescription": "Najważniejsze funkcje w wierszu {0}, aby osiągnąć wymagane przewidywanie modelu. Na podstawie analizy warunkowej w przypadku przewidywania: {1}",
     "localImportanceSelectData": "Wybierz punkt danych do wyświetlenia lokalnego wykresu ważności",
-    "largeLocalImportanceSelectData": "Select a bubble, followed by a data point to view local importance chart",
-    "localImportanceFetchError": "There was an error while fetching the local importance data. Error details: {0} Please check the data used.",
-    "BubbleChartFetchError": "There was an error while fetching the data. Error details: {0} Please check the data used.",
+    "largeLocalImportanceSelectData": "Wybierz bąbelek, a następnie punkt danych, aby wyświetlić lokalny wykres ważności",
+    "localImportanceFetchError": "Wystąpił błąd podczas pobierania danych ważności lokalnej. Szczegóły błędu: {0}. Sprawdź używane dane.",
+    "BubbleChartFetchError": "Wystąpił błąd podczas pobierania danych. Szczegóły błędu: {0}. Sprawdź używane dane.",
     "noData": "Brak danych",
     "noFeatures": "Brak dostępnych funkcji",
     "panelDescription": "Przeglądaj hipotezy przeciwne i twórz własne. Przeszukuj funkcje, aby zobaczyć sugerowane wartości z różnych zestawów przykładów hipotez przeciwnych. Ustaw sugerowane wartości hipotezy przeciwnej, klikając pole tekstowe „Ustaw wartość” pod każdą nazwą hipotezy przeciwnej. Nazwij Twoją hipotezę przeciwną i zapisz ją.",
@@ -223,13 +223,13 @@
       "subText": "Dowiedz się więcej o wybranej kohorcie. Edytuj nazwę kohorty. Usuń tę kohortę."
     },
     "FeatureList": {
-      "featureList": "Feature List",
+      "featureList": "Lista funkcji",
       "apply": "Zastosuj",
       "features": "Cechy",
       "importances": "Ważności",
       "treeMapDescription": "Aby ponownie przeszkolić mapę drzewa, wybierz i zapisz poniższe cechy. Ważności cech zostały obliczone na podstawie wspólnych informacji z błędem na etykiecie prawdziwości. Używaj ich jako wskazówki dotyczącej szkolenia mapy drzewa.",
       "staticTreeMapDescription": "Wyświetl funkcje, które zostały użyte do wytrenowania mapy drzewa. Istotności funkcji zostały obliczone przy użyciu wspólnych informacji z błędem w etykietach true.",
-      "searchResultMessage": "Results displayed out of {resultLength} for {searchValue}"
+      "searchResultMessage": "Wyniki wyświetlone z {resultLength} dla {searchValue}"
     },
     "TreeViewParameters": {
       "maximumDepth": "Maksymalna głębokość",
@@ -295,7 +295,7 @@
       "disabledWarning": "Mapa cieplna błędów jest wyłączona, chyba że dla kohorty globalnej przełączono się w tryb reprezentowania wartości „Wszystkie dane”, ponieważ mapa cieplna jest generowana dla pełnego zestawu danych. Przełącz się z powrotem w tryb pełnego zestawu danych, aby wyświetlić mapę cieplną błędów."
     },
     "MatrixSummary": {
-      "heatMapInfoTitle": "Additional information on heat map",
+      "heatMapInfoTitle": "Dodatkowe informacje na temat mapy cieplnej",
       "heatMapDescription": "Dzięki mapie cieplnej możesz skoncentrować uwagę na określonych filtrach funkcji międzysekcyjnej i obliczyć wskaźniki rozdzielonych błędów. Zacznij od dwóch funkcji zestawów danych w celu porównania.",
       "heatMapStaticDescription": "Dzięki mapie cieplnej możesz skoncentrować uwagę na określonych filtrach funkcji międzysekcyjnych i obliczyć wskaźniki rozdzielonych błędów. Przed wyświetleniem pulpitu nawigacyjnego należy wybrać maksymalnie dwie funkcje, aby utworzyć mapę cieplną za pośrednictwem zestawu SDK."
     },
@@ -311,108 +311,108 @@
     },
     "Metrics": {
       "AccuracyScore": {
-        "Name": "Accuracy score",
-        "Info": "The accuracy score represents the ratio of correct to total instances in the data.",
-        "Short": "Accuracy",
-        "Title": "Additional information on accuracy score"
+        "Name": "Ocena dokładności",
+        "Info": "Ocena dokładności reprezentuje stosunek poprawnych do łącznej liczby wystąpień w danych.",
+        "Short": "Dokładność",
+        "Title": "Dodatkowe informacje o ocenie dokładności"
       },
       "ErrorRate": {
-        "Name": "Error rate",
-        "Info": "The error rate represents the percentage of instances in the node for which the system has failed.",
-        "Short": "Error rate",
-        "Title": "Additional information on error rate"
+        "Name": "Częstotliwość błędów",
+        "Info": "Częstotliwość błędów oznacza procent wystąpień w węźle, w przypadku których w systemie wystąpił błąd.",
+        "Short": "Częstotliwość błędów",
+        "Title": "Dodatkowe informacje na temat częstotliwości błędów"
       },
       "F1Score": {
-        "Name": "F1 score",
-        "Info": "The F1 score is the harmonic mean of the precision and recall metrics.",
-        "Short": "F1 score",
-        "Title": "Additional information on F1 score"
+        "Name": "Miara F1",
+        "Info": "Miara F1 to średnia harmoniczna precyzji i kompletności metryki.",
+        "Short": "Miara F1",
+        "Title": "Dodatkowe informacje na temat miary F1"
       },
       "MeanAbsoluteError": {
-        "Name": "Mean absolute error",
-        "Info": "The mean absolute error is the average of the sum of the errors.",
-        "Short": "Mean abs. error",
-        "Title": "Additional information on mean absolute error"
+        "Name": "Średni błąd bezwzględny",
+        "Info": "Średni błąd bezwzględny jest średnią sumy błędów.",
+        "Short": "Średni błąd bezwzględny",
+        "Title": "Dodatkowe informacje o średnim błędzie bezwzględnym"
       },
       "MeanSquaredError": {
-        "Name": "Mean squared error",
-        "Info": "The mean squared error is the average of the squares of the errors.",
-        "Short": "Mean sq. error",
-        "Title": "Additional information on mean squared error"
+        "Name": "Średni błąd kwadratowy",
+        "Info": "Średni błąd kwadratowy to średnia kwadratów błędów.",
+        "Short": "Średni błąd kwadratowy",
+        "Title": "Dodatkowe informacje o średnim błędzie kwadratowym"
       },
       "Precision": {
-        "Name": "Precision score",
-        "Info": "The precision is the ratio of true positives over all predicted positives.",
-        "Short": "Precision",
-        "Title": "Additional information on precision"
+        "Name": "Wynik precyzji",
+        "Info": "Precyzja to stosunek wyników prawdziwie dodatnich do wszystkich przewidywanych wyników dodatnich.",
+        "Short": "Precyzja",
+        "Title": "Dodatkowe informacje na temat precyzji"
       },
       "Recall": {
-        "Name": "Recall score",
-        "Info": "The recall is the ratio of true positives over all actual positives.",
-        "Short": "Recall",
-        "Title": "Additional information on recall"
+        "Name": "Wynik kompletności",
+        "Info": "Kompletność to stosunek wyników prawdziwie dodatnich do wszystkich rzeczywistych wyników dodatnich.",
+        "Short": "Kompletność",
+        "Title": "Dodatkowe informacje na temat kompletności"
       },
       "MacroPrecision": {
-        "Name": "Macro averaged precision score",
-        "Info": "The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.",
-        "Short": "Macro precision",
-        "Title": "Additional information on macro averaged precision"
+        "Name": "Wynik makrouśrednionej precyzji",
+        "Info": "Makrouśredniona precyzja to stosunek wyników prawdziwie dodatnich do wszystkich przewidywanych wyników dodatnich obliczany niezależnie na klasę i uśredniony.",
+        "Short": "Makroprecyzja",
+        "Title": "Dodatkowe informacje o makrouśrednionej precyzji"
       },
       "MicroPrecision": {
-        "Name": "Micro averaged precision score",
-        "Info": "The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.",
-        "Short": "Micro precision",
-        "Title": "Additional information on micro averaged precision"
+        "Name": "Wynik mikrouśrednionej precyzji",
+        "Info": "Mikrouśredniona precyzja to stosunek wyników prawdziwie dodatnich do wszystkich przewidywanych wyników dodatnich zagregowanych dla wszystkich klas.",
+        "Short": "Mikroprecyzja",
+        "Title": "Dodatkowe informacje o mikrouśrednionej precyzji"
       },
       "MacroRecall": {
-        "Name": "Macro averaged recall score",
-        "Info": "The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.",
-        "Short": "Macro recall",
-        "Title": "Additional information on macro averaged recall"
+        "Name": "Wynik makrouśrednionej kompletności",
+        "Info": "Makrouśredniona kompletność to stosunek wyników prawdziwie dodatnich do wszystkich rzeczywistych wyników dodatnich obliczany niezależnie na klasę i uśredniony.",
+        "Short": "Makrokompletność",
+        "Title": "Dodatkowe informacje o makrouśrednionej kompletności"
       },
       "MicroRecall": {
-        "Name": "Micro averaged recall score",
-        "Info": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
-        "Short": "Micro recall",
-        "Title": "Additional information on micro averaged recall"
+        "Name": "Wynik mikrouśrednionej kompletności",
+        "Info": "Mikrouśredniona kompletność to stosunek wyników prawdziwie dodatnich do wszystkich rzeczywistych wyników dodatnich zagregowanych dla wszystkich klas.",
+        "Short": "Mikrokompletność",
+        "Title": "Dodatkowe informacje o mikrouśrednionej kompletności"
       },
       "MacroF1Score": {
-        "Name": "Macro averaged F1 score",
-        "Info": "The macro averaged F1 score is the harmonic mean of the macro averaged precision and recall metrics.",
-        "Short": "Macro F1 score",
-        "Title": "Additional information on macro averaged F1 score"
+        "Name": "Średnia miara F1 (makro)",
+        "Info": "Średnia miara F1 (makro) jest średnią harmoniczną średniej makro precyzji i kompletności metryki.",
+        "Short": "Miara F1 (makro)",
+        "Title": "Dodatkowe informacje o średniej mierze F1 (makro)"
       },
       "MicroF1Score": {
-        "Name": "Micro averaged F1 score",
-        "Info": "The micro averaged F1 score is the harmonic mean of the micro averaged precision and recall metrics.",
-        "Short": "Micro F1 score",
-        "Title": "Additional information on micro averaged F1 score"
+        "Name": "Średnia miara F1 (mikro)",
+        "Info": "Średnia miara F1 (mikro) jest średnią harmoniczną średniej mikro precyzji i kompletności metryki.",
+        "Short": "Miara F1 (mikro)",
+        "Title": "Dodatkowe informacje o średniej mierze F1 (mikro)"
       },
       "MeanAveragePrecision": {
-        "Name": "Mean average precision score",
-        "Info": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall.",
-        "Short": "Mean avg precision",
-        "Title": "Additional information on mean average precision score"
+        "Name": "Wynik średniej precyzji",
+        "Info": "Średnia precyzja dla modeli wykrywania obiektów jest średnią wskaźnika średniej precyzja we wszystkich klasach. Daje to ocenę niezawodności modelu wykrywania obiektów i jednoczy kompromis między precyzją a kompletnością.",
+        "Short": "Średnia precyzja",
+        "Title": "Dodatkowe informacje o wyniku średniej precyzji"
       },
       "AveragePrecision": {
-        "Name": "Average precision score",
-        "Info": "Average precision for object detection models is calculated for a selected class.",
-        "Short": "Avg precision",
-        "Title": "Additional information on average precision score"
+        "Name": "Wynik średniej precyzji",
+        "Info": "Średnia precyzja dla modeli wykrywania obiektów jest obliczana dla wybranej klasy.",
+        "Short": "Średnia precyzja",
+        "Title": "Dodatkowe informacje o wyniku średniej precyzji"
       },
       "AverageRecall": {
-        "Name": "Average recall score",
-        "Info": "Average recall for object detection models is calculated for a selected class.",
-        "Short": "Avg recall",
-        "Title": "Additional information on average recall score"
+        "Name": "Wynik średniej kompletności",
+        "Info": "Średnia kompletność modeli wykrywania obiektów jest obliczana dla wybranej klasy.",
+        "Short": "Średnia kompletność",
+        "Title": "Dodatkowe informacje o wyniku średniej kompletności"
       },
       "metricName": "Nazwa metryki",
       "metricValue": "Wartość metryki"
     },
     "MetricSelector": {
       "selectorLabel": "Wybierz metrykę",
-      "feature1SelectorLabel": "Rows: Feature 1",
-      "feature2SelectorLabel": "Columns: Feature 2"
+      "feature1SelectorLabel": "Wiersze: funkcja 1",
+      "feature2SelectorLabel": "Kolumny: Funkcja 2"
     },
     "Navigation": {
       "cohortSaved": "Zapisano nową kohortę! Zobacz listę kohort w ustawieniach kohorty.",
@@ -433,9 +433,9 @@
       "defaultLabelCopy": "Kopia wszystkich danych"
     },
     "TreeView": {
-      "ariaLabel": "Interactive chart",
-      "disabledArialLabel": "Disabled interactive chart",
-      "treeMapInfoTitle": "Additional information on tree map",
+      "ariaLabel": "Wykres interakcyjny",
+      "disabledArialLabel": "Wyłączony wykres interakcyjny",
+      "treeMapInfoTitle": "Dodatkowe informacje na temat mapy drzewa",
       "treeDescription": "Wizualizacja drzewa wykorzystuje wzajemne informacje między każdą funkcją i błędem, aby najlepiej oddzielić w ramach danych błędne wystąpienia od wystąpień zakończonych powodzeniem w sposób hierarchiczny. Upraszcza to proces wykrywania i wyróżniania typowych wzorców niepowodzeń. Aby znaleźć ważne wzorce błędów, wyszukaj węzły oznaczone mocniejszym czerwonym kolorem (tzn. z wysokim wskaźnikiem błędów) i wyższą linią wypełnienia (tzn. z wysokim pokryciem błędów). Aby edytować listę funkcji używanych w drzewie, kliknij pozycję „Lista funkcji”. Użyj menu rozwijanego „wybierz metrykę”, aby dowiedzieć się więcej o błędach i wydajności węzłów zakończonych powodzeniem. Pamiętaj, że ten wybór metryki nie wpłynie na sposób generowania drzewa błędów.",
       "treeStaticDescription": "Wizualizacja drzewa wykorzystuje wzajemne informacje między każdą funkcją i błędem, aby najlepiej oddzielić w ramach danych błędne wystąpienia od wystąpień zakończonych powodzeniem w sposób hierarchiczny. Upraszcza to proces wykrywania i wyróżniania typowych wzorców niepowodzeń. Aby znaleźć ważne wzorce błędów, wyszukaj węzły oznaczone mocniejszym czerwonym kolorem (tzn. z wysokim wskaźnikiem błędów) i wyższą linią wypełnienia (tzn. z wysokim pokryciem błędów). Aby wyświetlić listę funkcji używanych podczas tworzenia drzewa błędów, kliknij pozycję „Lista funkcji”. Użyj menu rozwijanego „wybierz metrykę”, aby dowiedzieć się więcej o błędach i wydajności węzłów zakończonych powodzeniem. Pamiętaj, że ten wybór metryki nie wpłynie na sposób generowania drzewa błędów.",
       "disabledWarning": "Mapa drzewa błędów jest wyłączona, chyba że dla kohorty globalnej przełączono się w tryb reprezentowania wartości „Wszystkie dane”, ponieważ mapa drzewa jest generowana dla pełnego zestawu danych. Przełącz się z powrotem w tryb pełnego zestawu danych, aby wyświetlić mapę drzewa błędów."
@@ -770,7 +770,7 @@
       "countHelperText": "Histogram liczby punktów",
       "ditherLabel": "Powinny się wahać",
       "groupByCohort": "Grupuj według kohorty",
-      "logarithmicScaling": "Enable logarithmic scaling",
+      "logarithmicScaling": "Włączanie skalowania logarytmicznego",
       "numOfBins": "Liczba pojemników",
       "selectClass": "Wybierz klasę",
       "selectFeature": "Wybierz cechę",
@@ -794,7 +794,7 @@
       "importancePrefix": "Ważność",
       "numberOfDatapoints": "Liczba punktów danych",
       "rowIndex": "Indeks wiersza",
-      "absoluteIndex": "Absolute index",
+      "absoluteIndex": "Indeks bezwzględny",
       "xValue": "Wartość X",
       "yValue": "Wartość Y"
     },
@@ -822,12 +822,12 @@
     },
     "CohortEditor": {
       "columns": {
-        "index": "Index",
-        "dataset": "Dataset",
-        "predictedY": "Predicted Y",
-        "trueY": "True Y",
-        "classificationOutcome": "Classification outcome",
-        "regressionError": "Error"
+        "index": "Indeks",
+        "dataset": "Zestaw danych",
+        "predictedY": "Przewidywana wartość Y",
+        "trueY": "Prawda Y",
+        "classificationOutcome": "Wynik klasyfikacji",
+        "regressionError": "Błąd"
       },
       "TreatAsCategorical": "Traktuj jako kategorialne",
       "addFilter": "Dodawanie filtru",
@@ -852,8 +852,8 @@
       "save": "Zapisz",
       "saveAndSwitch": "Zapisz i przełącz",
       "selectFilter": "Wybierz filtr",
-      "noFiltersApplied": "No filters applied",
-      "filterAdded": "Filter added"
+      "noFiltersApplied": "Nie zastosowano żadnych filtrów",
+      "filterAdded": "Dodano filtr"
     },
     "Columns": {
       "classificationOutcome": "Wynik klasyfikacji",
@@ -863,8 +863,8 @@
       "falsePositive": "Wynik fałszywie dodatni",
       "none": "Liczba",
       "predictedProbabilities": "Prawdopodobieństwa przewidywania",
-      "predictedLabels": "Predicted labels",
-      "trueLabels": "True labels",
+      "predictedLabels": "Przewidywane etykiety",
+      "trueLabels": "Etykiety prawda",
       "regressionError": "Błąd regresji",
       "trueNegative": "Wynik prawdziwie ujemny",
       "truePositive": "Wynik prawdziwie dodatni",
@@ -885,7 +885,7 @@
       "aggregatePlots": "Zagreguj wykresy",
       "chartType": "Typ wykresu",
       "colorValue": "Wartość koloru",
-      "infoTitle": "Additional information on data analysis chart view",
+      "infoTitle": "Dodatkowe informacje na temat widoku wykresu analizy danych",
       "helperText": "Utwórz zestaw danych kohorty, aby analizować statystykę zestawu danych na filtrach, takich jak prognozowany wynik, funkcje zestawu danych i grupy błędów. Dowiedz się więcej o nadmiernej/niedostatecznej prezentacji w zestawie danych.",
       "individualDatapoints": "Poszczególne punkty danych",
       "missingParameters": "Ta karta wymaga dostarczenia zestawu danych oceny.",
@@ -906,6 +906,8 @@
       "index": "Indeks",
       "output": "Dane wyjściowe",
       "predictedY": "Przewidywana wartość Y",
+      "odIncorrect": "Incorrect",
+      "odCorrect": "Correct",
       "probabilityLabel": "Prawdopodobieństwo: {0}",
       "trueY": "Prawda Y",
       "xValue": "Wartość X:",
@@ -974,10 +976,10 @@
       "dependencePlotHelperText": "Ten wykres zależności pokazuje relacje wartości funkcji z odpowiadającymi jej wartościami istotności funkcji.",
       "dependencePlotTitle": "Wykresy zależności",
       "helperText": "Poznaj ważne funkcje typu top-k, które wpływają na ogólne przewidywania modelu (zwanego też objaśnieniem ogólnym). Użyj suwaka, aby wyświetlić istotności funkcji w kolejności malejącej. Wszystkie istotności funkcji kohort są wyświetlane obok siebie i można je wyłączyć, wybierając daną kohortę z legendy. Kliknij dowolną funkcję na wykresie, aby zobaczyć, w jaki sposób wartości wybranej funkcji wpływają na przewidywanie poniżej powierzchni gęstości.",
-      "infoTitle": "Additional information on aggregate feature importance",
+      "infoTitle": "Dodatkowe informacje na temat zagregowanej ważności funkcji",
       "legendHelpText": "Włącz lub wyłącz kohorty na wykresie, klikając elementy legendy.",
       "missingParameters": "Na tej karcie musi być podany parametr ważności cechy lokalnej.",
-      "sortByCohort": "Sort by cohort",
+      "sortByCohort": "Sortuj według kohorty",
       "sortBy": "Sortuj według punktu danych",
       "topAtoB": "Najlepsze {0} funkcji według ich istotności",
       "viewDependencePlotFor": "Wyświetl wykres zależności dla:",
@@ -1020,15 +1022,15 @@
     },
     "Statistics": {
       "accuracy": "Dokładność: {0}",
-      "bleuScore": "Bleu score: {0}",
-      "bertScore": "Bert score: {0}",
-      "exactMatchRatio": "Exact match ratio: {0}",
-      "rougeScore": "Rouge Score: {0}",
+      "bleuScore": "Wynik Bleu: {0}",
+      "bertScore": "Wynik Berta: {0}",
+      "exactMatchRatio": "Dokładny współczynnik dopasowania: {0}",
+      "rougeScore": "Wynik Rouge: {0}",
       "fnr": "Wskaźnik wyników fałszywie ujemnych: {0}",
       "fpr": "Wskaźnik wyników fałszywie dodatnich: {0}",
-      "hammingScore": "Hamming score: {0}",
+      "hammingScore": "Wynik Hamminga: {0}",
       "meanPrediction": "Średnie przewidywanie {0}",
-      "meteorScore": "Meteor Score: {0}",
+      "meteorScore": "Wynik Meteor: {0}",
       "mse": "Średni błąd kwadratowy: {0}",
       "precision": "Precyzja: {0}",
       "rSquared": "R²: {0}",
@@ -1036,10 +1038,10 @@
       "selectionRate": "Współczynnik wyboru: {0}",
       "mae": "Średni błąd bezwzględny: {0}",
       "f1Score": "Miara F1: {0}",
-      "samples": "Sample size: {0}",
-      "meanAveragePrecision": "Mean average precision: {0}",
-      "averagePrecision": "Average precision: {0}",
-      "averageRecall": "Average recall: {0}"
+      "samples": "Rozmiar próbek: {0}",
+      "meanAveragePrecision": "Średnia precyzja: {0}",
+      "averagePrecision": "Średnia precyzja: {0}",
+      "averageRecall": "Średnia kompletność: {0}"
     },
     "ValidationErrors": {
       "addFilters": "Dodaj filtry",
@@ -1147,30 +1149,30 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Pulpit nawigacyjny możliwości interpretacji",
-      "importantWords": "Show most important words",
+      "importantWords": "Pokaż najważniejsze wyrazy",
       "topFeatureList": "Analiza listy najważniejszych funkcji",
       "allButton": "WSZYSTKIE FUNKCJE",
       "negButton": "CECHY NEGATYWNE",
       "posButton": "CECHY POZYTYWNE",
-      "legendText": "Positive scalar feature importances represent the extent that the words were important towards the classification of your selected label, and negative scalar feature importances represent words that encouraged your model away from your selected label.",
-      "legendTextForQA": "The left text box and the bar chart display the predictions of the model. The right text box shows the feature importance associated with a selected token. Positive feature importances represent the extent that the words were important towards marking the selected token as the starting/ending position of the answer.",
+      "legendText": "Dodatnia wartość skalarna istotności funkcji reprezentuje poziom, w jakim słowa były ważne dla klasyfikacji wybranej etykiety, a ujemna wartość skalarna istotności funkcji reprezentuje słowa, które odwiodły Twój model od wybranej etykiety.",
+      "legendTextForQA": "Lewe pole tekstowe i wykres słupkowy wyświetlają przewidywania modelu. W odpowiednim polu tekstowym jest wyświetlana ważność funkcji skojarzona z wybranym tokenem. Znaczenie cech pozytywnych reprezentuje zakres, w jakim wyrazy były ważne dla oznaczania wybranego tokenu jako pozycji początkowej/końcowej odpowiedzi.",
       "label": "Etykieta",
       "colon": ": ",
-      "startingPosition": "STARTING POSITION",
-      "endingPosition": "ENDING POSITION",
-      "predictedAnswer": "Predicted answer: ",
-      "trueAnswer": "True answer: ",
-      "inputs": "Inputs",
-      "outputs": "Outputs",
-      "sliderAriaLabel": "Slider for most important words"
+      "startingPosition": "POZYCJA POCZĄTKOWA",
+      "endingPosition": "POZYCJA KOŃCOWA",
+      "predictedAnswer": "Przewidywana odpowiedź: ",
+      "trueAnswer": "Prawdziwa odpowiedź: ",
+      "inputs": "Dane wejściowe",
+      "outputs": "Dane wyjściowe",
+      "sliderAriaLabel": "Suwak najważniejszych wyrazów"
     },
     "Legend": {
       "featureLegend": "LEGENDA FUNKCJI TEKSTU",
       "posFeatureImportance": "WAŻNOŚĆ FUNKCJI POZYTYWNYCH",
       "negFeatureImportance": "NEGATYWNA WAŻNOŚĆ FUNKCJI",
-      "cls": "CLS: start of the sentence",
-      "sep": "SEP: end of the sentence",
-      "selectedWord": "Selected word: "
+      "cls": "CLS: początek zdania",
+      "sep": "SEP: koniec zdania",
+      "selectedWord": "Zaznaczony wyraz: "
     },
     "BarChart": {
       "featureImportance": "WAŻNOŚĆ CECHY"
@@ -1178,59 +1180,59 @@
   },
   "InterpretVision": {
     "Cohort": {
-      "close": "Close",
-      "errorCohortName": "Please choose a unique cohort name.",
-      "errorNumSelected": "Please select at least one (1) item.",
-      "itemsSelectedSingular": "item selected",
-      "itemsSelectedPlural": "items selected",
-      "save": "Save cohort",
-      "saveAndClose": "Save and close",
-      "saveAndSwitch": "Save and switch",
-      "textField": "New cohort name",
-      "title": "Save new cohort"
+      "close": "Zamknij",
+      "errorCohortName": "Wybierz unikatową nazwę kohorty.",
+      "errorNumSelected": "Wybierz co najmniej jeden (1) element.",
+      "itemsSelectedSingular": "wybrano element",
+      "itemsSelectedPlural": "wybrane elementy",
+      "save": "Zapisz kohortę",
+      "saveAndClose": "Zapisz i zamknij",
+      "saveAndSwitch": "Zapisz i przełącz",
+      "textField": "Nazwa nowej kohorty",
+      "title": "Zapisz nową kohortę"
     },
     "Dashboard": {
       "allData": "Wszystkie dane",
-      "columnOne": "Image",
+      "columnOne": "Obraz",
       "columnTwo": "Indeks",
       "columnThree": "Prawda Y",
       "columnFour": "Przewidywana wartość Y",
-      "columnThreeOD": "Correct",
-      "columnFourOD": "Incorrect",
+      "columnThreeOD": "Poprawne",
+      "columnFourOD": "Nieprawidłowe",
       "columnFive": "Inne metadane",
-      "chooseObject": "Choose a detected object",
-      "examples": "examples",
+      "chooseObject": "Wybierz wykryty obiekt",
+      "examples": "przykłady",
       "filter": "Filtr",
-      "indexLabel": "Image ",
-      "labelTypeDropdown": "Select label type",
-      "labelVisibilityDropdown": "Select labels to display",
-      "legendFailure": "failure",
-      "legendSuccess": "success",
-      "loading": "Computing explanation for index",
-      "multiselect": "Multiselect",
-      "notdefined": "object scenario not defined",
-      "objectSelect": "Object Selection",
+      "indexLabel": "Obraz ",
+      "labelTypeDropdown": "Wybierz typ etykiety",
+      "labelVisibilityDropdown": "Wybierz etykiety do wyświetlenia",
+      "legendFailure": "niepowodzenie",
+      "legendSuccess": "sukces",
+      "loading": "Computing explanation for image of index",
+      "multiselect": "Wybór wielokrotny",
+      "notdefined": "nie zdefiniowano scenariusza obiektu",
+      "objectSelect": "Wybór obiektu",
       "pageSize": "Rozmiar strony: ",
-      "panelTitle": "Selected instance",
-      "panelExplanation": "Explanation",
-      "panelInformation": "Information",
-      "predictedLabel": "Predicted label",
-      "predictedY": "Predicted: ",
-      "correctDetections": "Correct detections: ",
-      "incorrectDetections": "Incorrect detections: ",
-      "prefix": "Object: ",
-      "rows": "Rows: ",
+      "panelTitle": "Wybrane wystąpienie",
+      "panelExplanation": "Wyjaśnienie",
+      "panelInformation": "Informacje",
+      "predictedLabel": "Przewidywana etykieta",
+      "predictedY": "Prognozowana: ",
+      "correctDetections": "Poprawne wykrycia: ",
+      "incorrectDetections": "Nieprawidłowe wykrycia: ",
+      "prefix": "Obiekt: ",
+      "rows": "Wiersze: ",
       "search": "Wyszukaj",
-      "selectAll": "Select all",
+      "selectAll": "Wybierz wszystkie",
       "settings": "Ustawienia",
-      "showAll": "Show all",
+      "showAll": "Pokaż wszystko",
       "tabOptionFirst": "Widok eksploratora obrazów",
       "tabOptionSecond": "Widok tabeli",
-      "tabOptionThird": "Class view",
+      "tabOptionThird": "Widok klas",
       "thumbnailSize": "Rozmiar miniatury",
       "titleBarError": "Wystąpienia błędów",
       "titleBarSuccess": "Wystąpienia sukcesu",
-      "trueY": "Ground truth: "
+      "trueY": "Walidacja oparta na bezpośredniej obserwacji (dane empiryczne): "
     }
   },
   "ModelAssessment": {
@@ -1239,15 +1241,15 @@
       "CalloutContent": "Dodanie niektórych składników (widok drzewa błędów, mapa cieplna błędów) umożliwi Ci filtrowanie danych z kohorty globalnej, które są widoczne w składnikach poniżej.",
       "CalloutTitle": "Dodaj składnik",
       "TabAddedMessage": {
-        "DataAnalysis": "Data analysis component added",
-        "FeatureImportances": "Feature importances component added",
-        "ErrorAnalysis": "Error analysis component added",
-        "Fairness": "Fairness component added",
-        "ModelOverview": "Model overview component added",
-        "CausalAnalysis": "Causal analysis component added",
-        "Counterfactuals": "Counterfactuals component added",
-        "Vision": "Vision data explorer component added",
-        "Forecasting": "Forecasting what-if component added"
+        "DataAnalysis": "Dodano składnik analizy danych",
+        "FeatureImportances": "Dodano składnik ważności funkcji",
+        "ErrorAnalysis": "Dodano składnik analizy błędów",
+        "Fairness": "Dodano składnik uczciwości",
+        "ModelOverview": "Dodano składnik przeglądu modelu",
+        "CausalAnalysis": "Dodano składnik analizy przyczynowej",
+        "Counterfactuals": "Dodano składnik hipotezy przeciwnej",
+        "Vision": "Dodano składnik eksploratora danych usługi Azure Cognitive Service dla wizji",
+        "Forecasting": "Dodano składnik analizy warunkowej prognozowania"
       }
     },
     "CausalAnalysis": {
@@ -1275,7 +1277,7 @@
     },
     "CohortInformation": {
       "ShiftCohort": "Przełącz kohortę",
-      "SwitchTimeSeries": "Switch time series",
+      "SwitchTimeSeries": "Przełączanie szeregów czasowych",
       "NewCohort": "Nowa kohorta",
       "DataPoints": "Liczba punktów danych",
       "DefaultCohort": " (wartość domyślna)",
@@ -1287,7 +1289,7 @@
       "CohortSettingsTitle": "Ustawienia kohorty"
     },
     "ComponentNames": {
-      "ChartView": "Chart view",
+      "ChartView": "Widok wykresu",
       "CausalAnalysis": "Analiza przyczyn",
       "Counterfactuals": "Hipotezy przeciwne",
       "DataAnalysis": "Analiza danych",
@@ -1296,10 +1298,10 @@
       "ErrorAnalysis": "Analiza błędów",
       "Fairness": "Uczciwość",
       "FeatureImportances": "Istotność funkcji",
-      "Forecasting": "Forecasting",
+      "Forecasting": "Prognozowanie",
       "ModelOverview": "Przegląd modelu",
-      "TableView": "Table view",
-      "VisionTab": "Vision data explorer"
+      "TableView": "Widok tabeli",
+      "VisionTab": "Eksplorator danych usługi Azure Cognitive Service dla wizji"
     },
     "DashboardSettings": {
       "Content": "Lista pokazuje układ pulpitu nawigacyjnego. Możesz przefiltrować dane za pomocą składnika analizy błędów, który ma być wyświetlany w poniższych składnikach.",
@@ -1458,16 +1460,16 @@
       "GlobalExplanation": "Zagregowana istotność funkcji",
       "IncorrectPredictions": "Niepoprawne przewidywania",
       "InfoTitle": "Additional information on feature importance values",
-      "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
+      "IndividualFeatureTabular": "Wybierz punkt danych, klikając punkt danych (maksymalnie 5 punktów danych) w tabeli, aby wyświetlić poniżej wykresy przedstawiające ich lokalne wartości istotności funkcji (lokalne objaśnienie) oraz indywidualne oczekiwanie warunkowe (ICE).",
       "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
       "LocalExplanation": "Indywidualna istotność funkcji",
       "SelectionCounter": "wybrane punkty danych {0}/{1}",
       "SelectionLimit": "W tej chwili można wybrać maksymalnie 5 punktów danych.",
-      "RowCheckboxAriaLabel": "Row checkbox",
-      "SelectionColumnAriaLabel": "Toggle selection"
+      "RowCheckboxAriaLabel": "Pole wyboru wiersza",
+      "SelectionColumnAriaLabel": "Przełącz wybór"
     },
     "IndividualFeatureImportanceView": {
-      "SmallInstanceSelection": "Instance selection"
+      "SmallInstanceSelection": "Wybór wystąpienia"
     },
     "MainMenu": {
       "DashboardSettings": "Konfiguracja pulpitu nawigacyjnego",
@@ -1483,44 +1485,44 @@
     "ModelOverview": {
       "metrics": {
         "accuracy": {
-          "name": "Accuracy score",
+          "name": "Ocena dokładności",
           "description": "Ułamek punktów danych sklasyfikowanych poprawnie."
         },
         "exactMatchRatio": {
-          "name": "Exact match ratio",
-          "description": "The ratio of instances classified correctly for every label."
+          "name": "Dokładny współczynnik dopasowania",
+          "description": "Współczynnik wystąpień sklasyfikowanych poprawnie dla każdej etykiety."
         },
         "meteorScore": {
-          "name": "Meteor Score",
-          "description": "METEOR Score is calculated based on the harmonic mean of precision and recall, with recall weighted more than precision in question answering task."
+          "name": "Wynik Meteor",
+          "description": "Wynik METEOR jest obliczany na podstawie harmonicznej średniej precyzji i kompletności, gdzie waga kompletności jest większa niż precyzji w zadaniu odpowiadania na pytania."
         },
         "bleuScore": {
-          "name": "Bleu Score",
-          "description": "Bleu Score measures the ratio of words (and/or n-grams) in the machine generated text that appeared in the reference text in question answering task."
+          "name": "Wynik Bleu",
+          "description": "Wskaźnik Bleu mierzy stosunek wyrazów (i/lub n-gramów) w tekście wygenerowanym maszynowo, który pojawił się w tekście referencyjnym w zadaniu odpowiadania na pytanie."
         },
         "bertScore": {
-          "name": "Bert Score",
-          "description": "BERTScore focuses on computing semantic similarity between tokens of reference and machine generated text in question answering task."
+          "name": "Wynik Berta",
+          "description": "Wskaźnik BERTScore koncentruje się na przetwarzaniu semantycznego podobieństwa między tokenami odwołania i tekstem wygenerowanym maszynowo w zadaniu odpowiadania na pytanie."
         },
         "rougeScore": {
-          "name": "Rouge Score",
-          "description": "Rouge Score measures the ratio of words (and/or n-grams) in the reference text that appeared in the machine generated text in question answering task."
+          "name": "Wynik Rouge",
+          "description": "Wynik Rouge mierzy stosunek wyrazów (i/lub n-gramów) w tekście referencyjnym, który pojawił się w tekście wygenerowanym maszynowo w zadaniu odpowiadania na pytania."
         },
         "hammingScore": {
-          "name": "Hamming score",
-          "description": "The average ratio of labels classified correctly among those classified as 1 in multilabel task."
+          "name": "Wynik Hamminga",
+          "description": "Średni stosunek etykiet sklasyfikowanych poprawnie wśród tych sklasyfikowanych jako 1 w zadaniu wielu etykiet."
         },
         "f1Score": {
           "name": "Miara F1",
           "description": "Miara F1 to średnia harmoniczna precyzji i czułości."
         },
         "f1ScoreMacro": {
-          "name": "Macro F1 score",
-          "description": "Macro F1 score is the harmonic mean of precision and recall for each class, with each class weighted equally."
+          "name": "Miara F1 (makro)",
+          "description": "Wynik makra F1 jest harmoniczną średnią precyzji i kompletności dla każdej klasy, przy założeniu, że każda klasa ma jednakową wagę."
         },
         "f1ScoreMicro": {
-          "name": "Micro F1 score",
-          "description": "Micro F1 score is the harmonic mean of precision and recall for each class, with each class weighted according to how many instances it contains."
+          "name": "Miara F1 (mikro)",
+          "description": "Wskaźnik Micro F1 jest harmoniczną średnią precyzji i kompletności dla każdej klasy, a każda klasa jest ważona zgodnie z liczbą wystąpień, które zawiera."
         },
         "meanAbsoluteError": {
           "name": "Średni błąd bezwzględny",
@@ -1535,24 +1537,24 @@
           "description": "Ułamek punktów danych sklasyfikowanych poprawnie wśród tych, które sklasyfikowano jako 1."
         },
         "precisionMacro": {
-          "name": "Macro Precision score",
-          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted equally."
+          "name": "Wynik makroprecyzji",
+          "description": "Ułamek punktów danych sklasyfikowanych poprawnie wśród tych sklasyfikowanych jako 1 dla każdej klasy, przy założeniu, że każda klasa ma jednakową wagę."
         },
         "precisionMicro": {
-          "name": "Micro Precision score",
-          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted according to how many instances it contains."
+          "name": "Wskaźnik mikroprecyzji",
+          "description": "Ułamek punktów danych sklasyfikowanych poprawnie wśród tych sklasyfikowanych jako 1 dla każdej klasy, gdzie klasa jest ważona zgodnie z liczbą wystąpień, które zawiera."
         },
         "recall": {
           "name": "Wynik kompletności",
           "description": "Ułamek punktów danych sklasyfikowanych poprawnie wśród tych, których rzeczywista etykieta to 1. Alternatywne nazwy: rzeczywisty współczynnik poprawności, wrażliwość."
         },
         "recallMacro": {
-          "name": "Macro Recall score",
-          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted equally."
+          "name": "Wynik kompletności makr",
+          "description": "Ułamek punktów danych sklasyfikowanych poprawnie wśród tych, których prawdziwa etykieta wynosi 1 dla każdej klasy, przy założeniu, że każda klasa ma jednakową wagę."
         },
         "recallMicro": {
-          "name": "Micro Recall score",
-          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted according to how many instances it contains."
+          "name": "Wskaźnik mikrokompletności",
+          "description": "Ułamek punktów danych sklasyfikowanych poprawnie wśród tych, których prawdziwa etykieta wynosi 1 dla każdej klasy, a każda klasa jest ważona zgodnie z liczbą wystąpień, które zawiera."
         },
         "falsePositiveRate": {
           "name": "Wskaźnik wyników fałszywie dodatnich",
@@ -1571,32 +1573,32 @@
           "description": "Średnia wszystkich przewidywań."
         },
         "meanAveragePrecision": {
-          "name": "Mean Average Precision score",
-          "description": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall."
+          "name": "Wynik średniej precyzji",
+          "description": "Średnia precyzja dla modeli wykrywania obiektów jest średnią wskaźnika średniej precyzja we wszystkich klasach. Daje to ocenę niezawodności modelu wykrywania obiektów i jednoczy kompromis między precyzją a kompletnością."
         },
         "averagePrecision": {
-          "name": "Average Precision score",
-          "description": "Average precision for object detection models is calculated for a selected class."
+          "name": "Średni wynik dokładności",
+          "description": "Średnia precyzja dla modeli wykrywania obiektów jest obliczana dla wybranej klasy."
         },
         "averageRecall": {
-          "name": "Average Recall score",
-          "description": "Average recall for object detection models is calculated for a selected class."
+          "name": "Średni wynik kompletności",
+          "description": "Średnia kompletność modeli wykrywania obiektów jest obliczana dla wybranej klasy."
         },
         "fairnessMetricDifference": "Różnica",
         "fairnessMetricRatio": "Współczynnik"
       },
       "metricsDropdown": "Metryki",
-      "metricsTypeDropdown": "Aggregate method",
+      "metricsTypeDropdown": "Metoda agregująca",
       "metricTypes": {
-        "macro": "Macro",
-        "micro": "Micro"
+        "macro": "Makro",
+        "micro": "Mikro"
       },
-      "classSelectionDropdown": "Select class(es)",
+      "classSelectionDropdown": "Wybierz klasy",
       "iouThresholdDropdown": {
-        "name": "IoU Threshold",
-        "description": "Intersection over Union quantifies the degree of overlap between the prediction and ground truth bounding box of a detected object in an image. For example, setting an IoU threshold of 70% means that a prediction with greater than 70% overlap with ground truth is True, thus influencing the definition of prediction correctness and calculation of other performance metrics.",
+        "name": "Próg IOU",
+        "description": "Część wspólna sumy zbiorów określa stopień nakładania się prognozy i pola ograniczenia danych empirycznych dla wykrytego obiektu na obrazie. Na przykład ustawienie progu IoU równego 70% oznacza, że prognoza z wartością nałożenia się na wartość danych empirycznych większą niż 70% oznacza Prawdę. To natomiast wpływa na definicję poprawności przewidywania i obliczanie innych metryk wydajności.",
         "iconId": "iouThresholdIconId",
-        "title": "Learn about the IoU threshold"
+        "title": "Dowiedz się więcej o progu IoU"
       },
       "notAvailable": "Nie dotyczy",
       "countColumnHeader": "Rozmiar próbki",
@@ -1608,14 +1610,14 @@
       "featuresDropdown": "Funkcja(e)",
       "metricChartDropdownSelectionHeader": "Metryka",
       "probabilityForClassSelectionHeader": "Prawdopodobieństwo dla klasy",
-      "targetSelectionHeader": "Target",
+      "targetSelectionHeader": "Element docelowy",
       "metricSelectionDropdownPlaceholder": "Wybierz metryki, aby porównać kohorty.",
-      "classSelectionDropdownPlaceholder": "Select class name for class-based analysis.",
+      "classSelectionDropdownPlaceholder": "Wybierz nazwę klasy na potrzeby analizy opartej na klasie.",
       "featureSelectionDropdownPlaceholder": "Wybierz funkcje do użycia na potrzeby analizy opartej na funkcjach.",
       "probabilityDistributionPivotItem": "Rozkład prawdopodobieństwa",
-      "regressionDistributionPivotItem": "Target distribution",
+      "regressionDistributionPivotItem": "Dystrybucja docelowa",
       "metricsVisualizationsPivotItem": "Wizualizacje metryk",
-      "confusionMatrixPivotItem": "Confusion matrix",
+      "confusionMatrixPivotItem": "Macierz błędów",
       "disaggregatedAnalysisFeatureSelectionPlaceholder": "Wybierz funkcje, aby wygenerować analizę opartą na funkcjach.",
       "tableCountTooltip": "Kohorta {0} zawiera wystąpienia {1}.",
       "tableMetricTooltip": "{0} modelu w kohorcie {1} jest {2}",
@@ -1626,36 +1628,36 @@
       "metricSelectionButton": "Wybierz metrykę",
       "cohortSelectionButton": "Wybierz kohorty",
       "probabilityLabelSelectionButton": "Wybierz etykietę",
-      "regressionTargetSelectionButton": "Choose target",
+      "regressionTargetSelectionButton": "Wybierz cel",
       "selectAllCohortsOption": "Wybierz wszystkie",
       "other": "Inne",
       "BoxPlot": {
         "outlierProbability": "prawdopodobieństwo",
         "outlierLabel": "Elementy odstające",
         "boxPlotSeriesLabel": "Wykres skrzynkowy",
-        "lowerWhisker": "Lower whisker",
-        "upperWhisker": "Upper whisker",
-        "median": "Median",
-        "lowerQuartile": "Lower quartile",
-        "upperQuartile": "Upper quartile"
+        "lowerWhisker": "Dolny wąs",
+        "upperWhisker": "Górny wąs",
+        "median": "Mediana",
+        "lowerQuartile": "Kwartyl dolny",
+        "upperQuartile": "Kwartyl górny"
       },
       "chartConfigApply": "Zastosuj",
       "chartConfigCancel": "Anuluj",
       "chartConfigDatasetCohortSelectionPlaceholder": "Wybierz kohorty zestawów danych",
       "chartConfigFeatureBasedCohortSelectionPlaceholder": "Wybierz kohorty oparte na funkcjach",
       "confusionMatrix": {
-        "confusionMatrixCohortSelectionLabel": "Select dataset cohort",
-        "confusionMatrixClassSelectionLabel": "Select classes",
-        "confusionMatrixClassMinSelectionError": "Select at least {0} classes to visualize the confusion matrix.",
-        "confusionMatrixClassMaxSelectionError": "Select at most {0} classes to visualize the confusion matrix.",
-        "confusionMatrixClassSelectionDefaultPlaceholder": "Choose classes",
-        "confusionMatrixHeatmapTooltip": "{0} datapoints should be {1}, predicted to be {2}",
-        "confusionMatrixYAxisLabel": "True Class",
-        "confusionMatrixXAxisLabel": "Predicted Class",
-        "class": "Class"
+        "confusionMatrixCohortSelectionLabel": "Wybierz kohorty zestawów danych",
+        "confusionMatrixClassSelectionLabel": "Wybierz klasy",
+        "confusionMatrixClassMinSelectionError": "Wybierz co najmniej {0} klas(y), aby zwizualizować macierz błędów.",
+        "confusionMatrixClassMaxSelectionError": "Wybierz co najwyżej {0} klas(y), aby zwizualizować macierz błędów.",
+        "confusionMatrixClassSelectionDefaultPlaceholder": "Wybierz klasy",
+        "confusionMatrixHeatmapTooltip": "{0} punkty danych powinny mieć wartość {1}, przewidywana wartość to {2}",
+        "confusionMatrixYAxisLabel": "Prawdziwa klasa",
+        "confusionMatrixXAxisLabel": "Przewidywana klasa",
+        "class": "Klasa"
       },
       "nA": "Nie dotyczy",
-      "disaggregatedAnalysisBaseCohortDisclaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
+      "disaggregatedAnalysisBaseCohortDisclaimer": "Kohorty w następującej analizie opartej na funkcjach są oparte na kohorcie globalnej, {0}.",
       "disaggregatedAnalysisBaseCohortWarning": "W odróżnieniu od kohorty {0}, {1} zawiera filtry. W rezultacie przechwytuje tylko podzbiór całego zestawu danych, a szczegółowe informacje mogą nie być uogólniane do pełnego zestawu danych.",
       "probabilitySplineChartToggleLabel": "Użyj wykresu krzywej dowolnego kształtu",
       "countAxisLabel": "Liczba",
@@ -1685,76 +1687,76 @@
         "flyoutDescription": "Możesz wyświetlić kohorty zestawów danych lub kohorty funkcji. Jeśli kohorty funkcji są niedostępne, musisz najpierw wybrać co najmniej jedną funkcję w widoku kohort funkcji. Następnie są generowane kohorty funkcji i możesz je wybrać tutaj."
       },
       "regressionTargetOptions": {
-        "predictedY": "Predicted Y",
-        "trueY": "True Y",
-        "error": "Error"
+        "predictedY": "Przewidywana wartość Y",
+        "trueY": "Prawda Y",
+        "error": "Błąd"
       },
       "topLevelDescription": "Oceń wydajność modelu, badając rozkład wartości przewidywania i wartości metryk wydajności modelu. Użyj karty „Kohorty zestawów danych”, aby zbadać model, patrząc na analizę porównawczą jego wydajności w różnych wstępnie utworzonych lub nowo utworzonych kohortach zestawów danych. Użyj „Kohorty funkcji”, aby zbadać model, patrząc na analizę porównawczą jego wydajności w podkohortach funkcji wrażliwych/niewrażliwych. (np. wydajność dla różnych płci, poziomy dochodów).",
-      "infoTitle": "Additional information on model overview",
+      "infoTitle": "Dodatkowe informacje na temat przeglądu modelu",
       "visualDisplayToggleLabel": "Pokaż mapę cieplną",
       "featureBasedViewDescription": "Wybierz maksymalnie dwie funkcje, aby wyświetlić podział wydajności modelu dla kohort opartych na funkcjach (jeśli wybrano jedną funkcję) lub kohorty wspólnej (jeśli zostaną wybrane dwie funkcje)."
     },
     "TableViewTab": {
-      "Heading": "View the dataset in a table format for all features and rows."
+      "Heading": "Wyświetl zestaw danych w formacie tabeli dla wszystkich funkcji i wierszy."
     }
   },
   "Forecasting": {
-    "target": "Target",
-    "whatIfForecastingHeader": "What-if analysis",
-    "forecastHeader": "Forecast analysis",
-    "whatIfForecastingDescription": "What-if allows you to perturb features for your entire time series and observe how the model's forecast changes.",
-    "whatIfForecastingChooseTimeSeries": "To start, choose a time series from the options below.",
-    "forecastDescription": "Forecast analysis compares your model's forecast to the actual values of your time series. To enable what-if analysis, provide a dataset with features.",
-    "timeSeries": "Time series",
-    "selectTimeSeries": "Select a time series.",
-    "singleTimeSeries": "The dataset contains only a single time series '{0}' which has been selected by default.",
-    "trueY": "True Y",
-    "baselinePrediction": "Baseline prediction",
-    "forecastComparisonHeader": "Compare What-if Forecasts",
-    "forecastComparisonChartTitle": "Forecasts",
-    "forecastComparisonChartTimeAxisLabel": "Time",
+    "target": "Element docelowy",
+    "whatIfForecastingHeader": "Analiza warunkowa",
+    "forecastHeader": "Analiza prognozy",
+    "whatIfForecastingDescription": "Funkcja analizy warunkowej umożliwia zakłócanie funkcji dla całego szeregu czasowego i obserwowanie zmian prognozy modelu.",
+    "whatIfForecastingChooseTimeSeries": "Aby rozpocząć, wybierz szereg czasowy z poniższych opcji.",
+    "forecastDescription": "Analiza prognozy porównuje prognozę modelu z rzeczywistymi wartościami szeregów czasowych. Aby włączyć analizę warunkową, udostępnij zestaw danych z funkcjami.",
+    "timeSeries": "Szereg czasowy",
+    "selectTimeSeries": "Wybierz szereg czasowy.",
+    "singleTimeSeries": "Zestaw danych zawiera tylko jedną serię czasową „{0}”, która została wybrana domyślnie.",
+    "trueY": "Prawda Y",
+    "baselinePrediction": "Przewidywanie punktu odniesienia",
+    "forecastComparisonHeader": "Porównanie prognoz analizy warunkowej",
+    "forecastComparisonChartTitle": "Prognozy",
+    "forecastComparisonChartTimeAxisLabel": "Czas",
     "Transformations": {
-      "multiply": "multiply",
-      "divide": "divide",
-      "add": "add",
-      "subtract": "subtract",
-      "change": "change to"
+      "multiply": "mnożenie",
+      "divide": "podzielić",
+      "add": "dodaj",
+      "subtract": "odejmowanie",
+      "change": "zmień na"
     },
     "TransformationCreation": {
-      "title": "Create what-if scenario",
-      "nameLabel": "What-if scenario name",
-      "featureInstructions": "Choose a feature to perturb.",
-      "operationInstructions": "Choose an operation to apply to the feature.",
-      "operationDropdownHeader": "Operation",
-      "featureDropdownHeader": "Feature",
-      "valueSpinButtonHeader": "Value",
-      "scenarioNamingInstructionsPlaceholder": "Enter a unique name",
-      "scenarioNamingInstructions": "Enter a name for your what-if scenario.",
-      "scenarioNamingCollisionMessage": "This name exists already. Please enter a unique name.",
-      "scenarioNamingLengthMessage": "The name must be between 1 and 50 characters. The actual length is {0}.",
-      "scenarioNamingInvalidCharactersMessage": "The name can only contain alphanumeric characters, whitespaces, dashes, or underscores, and needs to start with an alphanumeric character.",
-      "valueErrorMessage": "For operation {0} please select a value other than {1}.",
-      "invalidCombinationErrorMessage": "This is identical to an existing what-if scenario. Please change the feature, operation, or value.",
-      "addTransformationButton": "Add Transformation",
-      "divisionAndMultiplicationBy": "by"
+      "title": "Tworzenie scenariusza analizy warunkowej",
+      "nameLabel": "Nazwa scenariusza analizy warunkowej",
+      "featureInstructions": "Wybierz funkcję, którą chcesz zakłócić.",
+      "operationInstructions": "Wybierz operację, która ma być zastosowana do funkcji.",
+      "operationDropdownHeader": "Operacja",
+      "featureDropdownHeader": "Funkcja",
+      "valueSpinButtonHeader": "Wartość",
+      "scenarioNamingInstructionsPlaceholder": "Podaj unikatową nazwę",
+      "scenarioNamingInstructions": "Wprowadź nazwę scenariusza analizy warunkowej.",
+      "scenarioNamingCollisionMessage": "Ta nazwa już istnieje. Wprowadź unikatową nazwę.",
+      "scenarioNamingLengthMessage": "Nazwa musi zawierać od 1 do 50 znaków. Rzeczywista długość to {0}.",
+      "scenarioNamingInvalidCharactersMessage": "Nazwa może zawierać tylko znaki alfanumeryczne, białe znaki, łączniki lub podkreślenia i musi zaczynać się od znaku alfanumerycznego.",
+      "valueErrorMessage": "Aby wykonać operację {0}, wybierz wartość inną niż {1}.",
+      "invalidCombinationErrorMessage": "Jest to identyczne w stosunku do istniejącego scenariusza analizy warunkowej. Zmień funkcję, operację lub wartość.",
+      "addTransformationButton": "Dodaj przekształcenie",
+      "divisionAndMultiplicationBy": "przez"
     },
     "TransformationTable": {
-      "nameColumnHeader": "Name",
-      "methodColumnHeader": "Method",
-      "divisionAndMultiplicationBy": "by ",
-      "header": "What-if Forecasts ({0})"
+      "nameColumnHeader": "Nazwa",
+      "methodColumnHeader": "Metoda",
+      "divisionAndMultiplicationBy": "przez ",
+      "header": "Prognozy warunkowe ({0})"
     },
     "TimeSeries": {
-      "apply": "Apply",
-      "cancel": "Cancel",
-      "cohortList": "Time series list",
-      "selectCohort": "Select a time series",
-      "shiftCohort": "Switch time series",
-      "shiftCohortDescription": "Select a time series from the time series list. Apply the time series to the dashboard."
+      "apply": "Zastosuj",
+      "cancel": "Anuluj",
+      "cohortList": "Lista szeregów czasowych",
+      "selectCohort": "Wybierz szereg czasowy",
+      "shiftCohort": "Przełączanie szeregów czasowych",
+      "shiftCohortDescription": "Wybierz szereg czasowy z listy szeregów czasowych. Zastosuj szeregi czasowe do pulpitu nawigacyjnego."
     },
     "TimeSeriesSettings": {
-      "CohortSettingsDescription": "Time series are pre-defined based on time series identifying columns.",
-      "CohortSettingsTitle": "Time series settings"
+      "CohortSettingsDescription": "Szeregi czasowe są wstępnie zdefiniowane na podstawie szeregów czasowych identyfikujących kolumny.",
+      "CohortSettingsTitle": "Ustawienia szeregów czasowych"
     }
   }
 }

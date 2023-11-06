@@ -14,10 +14,10 @@ class TestFlaskHelper(object):
 
     def setup_class(cls):
         """Set up once for all tests."""
-        cls.port_range_start = 5000
-        cls.port_range_end = 5099
+        cls.port_range_start = 8704
+        cls.port_range_end = 8993
         cls.test_ip_local = "localhost"
-        cls.test_port_local = 5100
+        cls.test_port_local = 8994
 
     def get_http_client(self):
         """Get HTTP client with automatic retries."""
@@ -35,7 +35,7 @@ class TestFlaskHelper(object):
 
         flask_service = FlaskHelper(ip=self.test_ip_local)
 
-        assert (flask_service.port >= 5000 and flask_service.port <= 5099)
+        assert (flask_service.port >= 8704 and flask_service.port <= 8993)
 
         @flask_service.app.route("/hello", methods=["GET"])
         def hello():

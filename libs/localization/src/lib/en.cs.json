@@ -906,6 +906,8 @@
       "index": "Index",
       "output": "Výstup",
       "predictedY": "Predikované Y",
+      "odIncorrect": "Incorrect",
+      "odCorrect": "Correct",
       "probabilityLabel": "Pravděpodobnost : {0}",
       "trueY": "Skutečné Y",
       "xValue": "Hodnota X:",
@@ -1147,7 +1149,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Řídicí panel interpretovatelnosti",
-      "importantWords": "Show most important words",
+      "importantWords": "Zobrazit nejdůležitější slova",
       "topFeatureList": "Analýza seznamu hlavních funkcí",
       "allButton": "VŠECHNY FUNKCE",
       "negButton": "NEGATIVNÍ FUNKCE",
@@ -1162,7 +1164,7 @@
       "trueAnswer": "Skutečná odpověď: ",
       "inputs": "Vstupy",
       "outputs": "Výstupy",
-      "sliderAriaLabel": "Slider for most important words"
+      "sliderAriaLabel": "Posuvník pro nejdůležitější slova"
     },
     "Legend": {
       "featureLegend": "LEGENDA TEXTOVÉ FUNKCE",
@@ -1195,8 +1197,8 @@
       "columnTwo": "Index",
       "columnThree": "Skutečné Y",
       "columnFour": "Predikované Y",
-      "columnThreeOD": "Correct",
-      "columnFourOD": "Incorrect",
+      "columnThreeOD": "Správně",
+      "columnFourOD": "Nesprávně",
       "columnFive": "Další metadata",
       "chooseObject": "Zvolte zjištěný objekt",
       "examples": "Příklady",
@@ -1206,7 +1208,7 @@
       "labelVisibilityDropdown": "Vyberte popisky, které se mají zobrazit.",
       "legendFailure": "selhání",
       "legendSuccess": "úspěch",
-      "loading": "Vysvětlení výpočtu indexu",
+      "loading": "Computing explanation for image of index",
       "multiselect": "Vícenásobný výběr",
       "notdefined": "scénář objektu není definovaný.",
       "objectSelect": "Výběr objektu",
@@ -1216,8 +1218,8 @@
       "panelInformation": "Informace",
       "predictedLabel": "Predikovaný popisek",
       "predictedY": "Předpověď: ",
-      "correctDetections": "Correct detections: ",
-      "incorrectDetections": "Incorrect detections: ",
+      "correctDetections": "Správná zjištění: ",
+      "incorrectDetections": "Nesprávná zjištění: ",
       "prefix": "Objekt: ",
       "rows": "Řádky: ",
       "search": "Hledat",

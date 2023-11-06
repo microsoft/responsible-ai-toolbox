@@ -3,6 +3,8 @@
 
 """Defines the Model Analysis Dashboard class."""
 
+import json
+
 from flask import jsonify, request
 
 from raiutils.models import ModelTask
@@ -114,3 +116,14 @@ class ResponsibleAIDashboard(Dashboard):
             '/get_question_answering_metrics',
             methods=["POST"]
         )
+
+        if hasattr(self._service, 'socketio'):
+            @self._service.socketio.on('handle_object_detection_json')
+            def handle_object_detection_json(od_json):
+                od_data = json.loads(od_json['data'])
+                return self.input.get_object_detection_metrics(od_data)
+
+            @self._service.socketio.on('handle_question_answering_json')
+            def handle_question_answering_json(qa_json):
+                qa_data = json.loads(qa_json['data'])
+                return self.input.get_question_answering_metrics(qa_data)
