@@ -186,6 +186,12 @@
     "showTop": "對於處理方式特徵具有最大估計原因回應的資料點: {0}",
     "whatifDescription": "假設狀況可讓您針對任何輸入來轉換特徵，並觀察模型的預測如何變更。您可以手動對特徵進行轉換，或指定所需的預測 (例如分類器類別標籤)，以查看最接近原始輸入的資料點清單，以得到所需的預測。這也稱為預測反事實，您可以使用它們來探索模型所學到的關聯性；了解模型預測的重要必要功能；或針對模型進行邊緣案例的偵錯。若要開始，請從資料表或散佈圖選擇輸入點。"
   },
+  "DataAnalysis": {
+    "TableView": {
+      "description": "以具有地面事實和預測標籤的資料表標記法檢視資料集。資料表會以正確和不正確的預測分隔成子資料工作表。",
+      "infoTitle": "資料表檢視的其他資訊"
+    }
+  },
   "ErrorAnalysis": {
     "Cohort": {
       "cohort": "世代",
@@ -900,6 +906,8 @@
       "index": "索引",
       "output": "輸出",
       "predictedY": "預測的 Y",
+      "odIncorrect": "不正確",
+      "odCorrect": "正確",
       "probabilityLabel": "機率 : {0}",
       "trueY": "實際的 Y",
       "xValue": "X 值:",
@@ -1155,7 +1163,8 @@
       "predictedAnswer": "預測的答案:",
       "trueAnswer": "正確答案:",
       "inputs": "輸入",
-      "outputs": "輸出"
+      "outputs": "輸出",
+      "sliderAriaLabel": "重要字詞的滑桿"
     },
     "Legend": {
       "featureLegend": "文字特徵圖例",
@@ -1188,6 +1197,8 @@
       "columnTwo": "索引",
       "columnThree": "實際的 Y",
       "columnFour": "預測的 Y",
+      "columnThreeOD": "正確",
+      "columnFourOD": "不正確",
       "columnFive": "其他中繼資料",
       "chooseObject": "選擇偵測到的物件",
       "examples": "範例",
@@ -1197,7 +1208,7 @@
       "labelVisibilityDropdown": "選取要顯示的標記",
       "legendFailure": "失敗",
       "legendSuccess": "成功",
-      "loading": "索引的計算說明",
+      "loading": "正在計算索引映像的說明",
       "multiselect": "多重選取",
       "notdefined": "物件案例未定義",
       "objectSelect": "物件選取項目",
@@ -1207,6 +1218,8 @@
       "panelInformation": "資訊",
       "predictedLabel": "預測標記",
       "predictedY": "預測: ",
+      "correctDetections": "正確的偵測: ",
+      "incorrectDetections": "不正確的偵測: ",
       "prefix": "物件: ",
       "rows": "資料列: ",
       "search": "搜尋",
@@ -1446,9 +1459,9 @@
       "CorrectPredictions": "正確的預測",
       "GlobalExplanation": "彙總特徵重要度",
       "IncorrectPredictions": "不正確的預測",
-      "InfoTitle": "資料分析資料表檢視的其他資訊",
+      "InfoTitle": "功能重要性值的其他資訊",
       "IndividualFeatureTabular": "按一下資料表中的資料點 (最多 5 個資料點) 選取資料點，以在檢視其局部特徵重要度值 (區域解釋)，以個別條件預測 (ICE) 繪圖。",
-      "IndividualFeatureText": "按一下資料表中的資料點以選取資料點，以檢視本機特徵重要度值 (本機說明)。",
+      "IndividualFeatureText": "按一下資料表中的資料點以選取資料點，以從 SHAP 的文字解釋者檢視本機特徵重要度值 (本機說明)。",
       "LocalExplanation": "個別特徵重要度",
       "SelectionCounter": "已選取 {0}/{1} 個資料點",
       "SelectionLimit": "目前最多可選取 5 個資料點。",

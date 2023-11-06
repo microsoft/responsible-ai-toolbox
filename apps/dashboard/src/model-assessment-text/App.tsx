@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { ITheme } from "@fluentui/react";
+import { IModelExplanationData } from "@responsible-ai/core-ui";
 import { HelpMessageDict } from "@responsible-ai/error-analysis";
 import { Language } from "@responsible-ai/localization";
 import {
@@ -11,6 +12,8 @@ import {
 } from "@responsible-ai/model-assessment";
 import React from "react";
 
+import { getSquadModelExplanationData } from "./__mock_data__/squad";
+
 interface IAppProps extends IModelAssessmentData {
   theme: ITheme;
   language: Language;
@@ -19,7 +22,15 @@ interface IAppProps extends IModelAssessmentData {
   featureFlights?: string[];
 }
 
-export class App extends React.Component<IAppProps> {
+interface IAppState {
+  modelExplanationData:
+    | Array<
+        Omit<IModelExplanationData, "method" | "predictedY" | "probabilityY">
+      >
+    | undefined;
+}
+
+export class App extends React.PureComponent<IAppProps, IAppState> {
   private messages: HelpMessageDict = {
     LocalExpAndTestReq: [{ displayText: "LocalExpAndTestReq", format: "text" }],
     LocalOrGlobalAndTestReq: [
@@ -29,20 +40,46 @@ export class App extends React.Component<IAppProps> {
     TestReq: [{ displayText: "TestReq", format: "text" }]
   };
 
+  public constructor(props: IAppProps) {
+    super(props);
+    this.state = {
+      modelExplanationData: props.modelExplanationData
+    };
+  }
+
   public render(): React.ReactNode {
-    if (this.props.modelExplanationData) {
-      for (const exp of this.props.modelExplanationData) {
-        exp.modelClass = "blackbox";
-      }
-    }
+    let key = "modelAssessment";
     const modelAssessmentDashboardProps: IModelAssessmentDashboardProps = {
       ...this.props,
       locale: this.props.language,
       localUrl: "https://www.bing.com/",
+      modelExplanationData: this.state.modelExplanationData,
       stringParams: { contextualHelp: this.messages },
       theme: this.props.theme
     };
+    const isQuestionAnswering =
+      this.props.dataset.task_type === "question_answering";
+    if (modelAssessmentDashboardProps.modelExplanationData) {
+      for (const exp of modelAssessmentDashboardProps.modelExplanationData) {
+        exp.modelClass = "blackbox";
+      }
+      if (isQuestionAnswering) {
+        key = `modelAssessment_${this.props.dataset.task_type}`;
+      }
+    } else if (isQuestionAnswering) {
+      this.loadSquadDataset();
+    }
 
-    return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
+    // use key to re-create the component when the explanation data is updated
+    // for question answering
+    return (
+      <ModelAssessmentDashboard key={key} {...modelAssessmentDashboardProps} />
+    );
+  }
+
+  private loadSquadDataset(): void {
+    getSquadModelExplanationData().then((data) => {
+      this.setState({ modelExplanationData: [data] });
+    });
   }
 }

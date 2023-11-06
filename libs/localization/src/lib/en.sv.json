@@ -186,6 +186,12 @@
     "showTop": "Datapunkter med de största uppskattade orsakssvaren till behandlingsfunktionen: {0}",
     "whatifDescription": "Med konsekvensgranskning kan du perturbera funktioner för alla indata och se hur modellens förutsägelser förändras. Du kan perturbera funktioner manuellt eller ange önskad förutsägelse (t. ex. klassetikett för en klassificerare) för att visa en lista över närmaste datapunkter för den ursprungliga indata som leder till den önskade förutsägelsen. Du kan även använda dem för att utforska relationerna som modellen har lärt sig; förstå viktiga, nödvändiga funktioner för modellens förutsägelser; eller felsöka edge-fall för modellen. Börja med att välja indatapunkter från datatabellen- eller punktdiagrammet."
   },
+  "DataAnalysis": {
+    "TableView": {
+      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
+      "infoTitle": "Additional information on table view"
+    }
+  },
   "ErrorAnalysis": {
     "Cohort": {
       "cohort": "Kohort",
@@ -900,6 +906,8 @@
       "index": "Index",
       "output": "Utdata",
       "predictedY": "Förutsade Y",
+      "odIncorrect": "Incorrect",
+      "odCorrect": "Correct",
       "probabilityLabel": "Sannolikhet: {0}",
       "trueY": "Sant Y",
       "xValue": "X-värde:",
@@ -1155,7 +1163,8 @@
       "predictedAnswer": "Förutsagt svar: ",
       "trueAnswer": "Sant svar: ",
       "inputs": "Indata",
-      "outputs": "Utdata"
+      "outputs": "Utdata",
+      "sliderAriaLabel": "Skjutreglage för de viktigaste orden"
     },
     "Legend": {
       "featureLegend": "FÖRKLARING AV TEXTFUNKTION",
@@ -1188,6 +1197,8 @@
       "columnTwo": "Index",
       "columnThree": "Sant Y",
       "columnFour": "Förutsade Y",
+      "columnThreeOD": "Korrekt",
+      "columnFourOD": "Fel",
       "columnFive": "Andra metadata",
       "chooseObject": "Välj ett identifierat objekt",
       "examples": "exempel",
@@ -1197,7 +1208,7 @@
       "labelVisibilityDropdown": "Välj etiketter som ska visas",
       "legendFailure": "fel",
       "legendSuccess": "lyckades",
-      "loading": "Beräkningsförklaring för index",
+      "loading": "Computing explanation for image of index",
       "multiselect": "Flera markeringar",
       "notdefined": "objektscenariot har inte definierats",
       "objectSelect": "Val av objekt",
@@ -1207,6 +1218,8 @@
       "panelInformation": "Information",
       "predictedLabel": "Förväntad etikett",
       "predictedY": "Förutsagt: ",
+      "correctDetections": "Korrekta identifieringar: ",
+      "incorrectDetections": "Felaktiga identifieringar: ",
       "prefix": "Objekt: ",
       "rows": "Rader: ",
       "search": "Sök",
@@ -1446,9 +1459,9 @@
       "CorrectPredictions": "Korrigera förutsägelser",
       "GlobalExplanation": "Mängdfunktionsprioritet",
       "IncorrectPredictions": "Felaktiga förutsägelser",
-      "InfoTitle": "Ytterligare information om dataanalystabellvyn",
+      "InfoTitle": "Additional information on feature importance values",
       "IndividualFeatureTabular": "Välj en datapunkt genom att klicka på en datapunkt (upp till 5 datapunkter) i tabellen för att visa de lokala funktionsrelevansvärdena (lokal förklaring) och individuellt villkorsstyrt förväntningsområden.",
-      "IndividualFeatureText": "Välj en datapunkt genom att klicka på en datapunkt i tabellen för att visa de lokala funktionsprioritetsvärdena (lokal förklaring).",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
       "LocalExplanation": "Enskild funktions prioritet",
       "SelectionCounter": "{0}/{1} datapunkter har valts",
       "SelectionLimit": "Upp till 5 datapunkter kan väljas just nu.",

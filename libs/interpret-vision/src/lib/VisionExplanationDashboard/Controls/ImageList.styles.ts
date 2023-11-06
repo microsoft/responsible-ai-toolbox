@@ -58,7 +58,7 @@ export const imageListStyles: () => IProcessedStyleSet<IDatasetExplorerTabStyles
         color: "white",
         fontSize: FontSizes.small,
         fontWeight: "600",
-        paddingLeft: 10
+        paddingLeft: 5
       },
       labelContainer: {
         background: "rgba(0,0,0,0.4)",

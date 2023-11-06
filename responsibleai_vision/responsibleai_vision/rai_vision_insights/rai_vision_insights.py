@@ -88,6 +88,7 @@ _DROPPED_FEATURES = 'dropped_features'
 _INCORRECT = 'incorrect'
 _CORRECT = 'correct'
 _AGGREGATE_LABEL = 'aggregate'
+_NOLABEL = '(none)'
 
 
 def reshape_image(image):
@@ -678,7 +679,7 @@ class RAIVisionInsights(RAIBaseInsights):
             encoded_images.append(b64)
 
         # passing to frontend to draw bounding boxes with the correct scale
-        dashboard_dataset.imageDimensions = image_dimensions
+        dashboard_dataset.image_dimensions = image_dimensions
 
         if len(encoded_images) > 0:
             dashboard_dataset.images = encoded_images
@@ -737,21 +738,28 @@ class RAIVisionInsights(RAIBaseInsights):
                 else:
                     image_labels[_INCORRECT][object_label] += 1
 
-                image_labels[_INCORRECT][object_label] += \
-                    np.count_nonzero(
-                        error_matrix[label_idx] ==
-                        ErrorLabelType.DUPLICATE_DETECTION)
+                duplicate_detections = np.count_nonzero(
+                    error_matrix[label_idx] ==
+                    ErrorLabelType.DUPLICATE_DETECTION)
+                if duplicate_detections > 0:
+                    image_labels[_INCORRECT][object_label] += \
+                        duplicate_detections
+
+            correct_labels = sorted(image_labels[_CORRECT].items(),
+                                    key=lambda x: class_names.index(x[0]))
+            incorrect_labels = sorted(image_labels[_INCORRECT].items(),
+                                      key=lambda x: class_names.index(x[0]))
 
             rendered_labels[_CORRECT] = ', '.join(
                 f'{value} {key}' for key, value in
-                image_labels[_CORRECT].items())
+                correct_labels)
             if len(rendered_labels[_CORRECT]) == 0:
-                rendered_labels[_CORRECT] = 'None'
+                rendered_labels[_CORRECT] = _NOLABEL
             rendered_labels[_INCORRECT] = ', '.join(
                 f'{value} {key}' for key, value in
-                image_labels[_INCORRECT].items())
+                incorrect_labels)
             if len(rendered_labels[_INCORRECT]) == 0:
-                rendered_labels[_INCORRECT] = 'None'
+                rendered_labels[_INCORRECT] = _NOLABEL
             rendered_labels[_AGGREGATE_LABEL] = \
                 f"{sum(image_labels[_CORRECT].values())} {_CORRECT}, \
                   {sum(image_labels[_INCORRECT].values())} \

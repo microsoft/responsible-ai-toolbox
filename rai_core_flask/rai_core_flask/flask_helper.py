@@ -7,8 +7,10 @@ import socket
 import threading
 import time
 import uuid
+import warnings
 
 from flask import Flask
+from flask_socketio import SocketIO
 from gevent.pywsgi import WSGIServer
 
 from .environment_detector import build_environment
@@ -31,12 +33,13 @@ class FlaskHelper(object):
         self.with_credentials = with_credentials
         # dictionary to store arbitrary state for use by consuming classes
         self.shared_state = {}
+        self.socketio = SocketIO(self.app)
         if self.ip is None:
             self.ip = "localhost"
         if self.port is None:
             # Try 100 different ports
             available = False
-            for port in range(5000, 5100):
+            for port in range(8704, 8994):
                 available = FlaskHelper._is_local_port_available(
                     self.ip, port, raise_error=False)
                 if available:
@@ -44,7 +47,7 @@ class FlaskHelper(object):
                     break
 
             if not available:
-                error_message = """Ports 5000 to 5100 not available.
+                error_message = """Ports 8704 to 8993 not available.
                     Please specify an open port for use via the 'port'
                     parameter"""
                 raise RuntimeError(
@@ -106,8 +109,14 @@ class FlaskHelper(object):
         logger.setLevel(logging.ERROR)
         self.server = WSGIServer((ip, self.port), self.app, log=logger)
         self.app.config["server"] = self.server
+        self.socketio.run(self.app, host=ip, port=self.port)
         self.server.serve_forever()
 
     def stop(self):
         if (self.server.started):
-            self.server.stop()
+            try:
+                self.server.stop()
+            except Exception as e:
+                warning_msg = "Caught exceptions when closing server: {}"
+                warning_msg = warning_msg.format(e)
+                warnings.warn(warning_msg, UserWarning)

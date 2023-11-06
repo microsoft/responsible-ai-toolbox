@@ -4,7 +4,6 @@
 import {
   ICounterfactualData,
   IDataset,
-  ifEnableLargeData,
   JointDataset
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -21,7 +20,7 @@ export function getOriginalData(
       index
     )
   };
-  if (ifEnableLargeData(dataset) && counterfactualData) {
+  if (counterfactualData) {
     const featureNames = counterfactualData.feature_names_including_target;
     const dataPoint = counterfactualData.test_data[0][0];
     featureNames.forEach((f, index) => {

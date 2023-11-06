@@ -354,18 +354,31 @@ export class TabsView extends React.PureComponent<
                             .FeatureImportances
                         }
                       </Text>
-                      {this.state.featureImportanceOption ===
-                        FeatureImportancesTabOptions.GlobalExplanation && (
-                        <div className={classNames.sectionTooltip}>
-                          <InfoCallout
-                            iconId={featureImportanceIconId}
-                            infoText={
-                              localization.Interpret.GlobalTab.helperText
-                            }
-                            title={localization.Interpret.GlobalTab.infoTitle}
-                          />
-                        </div>
-                      )}
+                      <div className={classNames.sectionTooltip}>
+                        <InfoCallout
+                          iconId={featureImportanceIconId}
+                          infoText={
+                            getInfo(
+                              t.key,
+                              this.props,
+                              undefined,
+                              undefined,
+                              undefined,
+                              this.state.featureImportanceOption
+                            ).body
+                          }
+                          title={
+                            getInfo(
+                              t.key,
+                              this.props,
+                              undefined,
+                              undefined,
+                              undefined,
+                              this.state.featureImportanceOption
+                            ).title
+                          }
+                        />
+                      </div>
                     </Stack>
                     <FeatureImportancesTab
                       allSelectedItems={this.state.allSelectedItems}

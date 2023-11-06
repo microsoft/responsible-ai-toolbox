@@ -86,6 +86,7 @@ export function describeModelOverview(
       });
 
       it("should show 'Feature cohorts' view with multiple features when selected", () => {
+        cy.get(Locators.ModelOverviewFeatureSelection).click();
         multiSelectComboBox(
           "#modelOverviewFeatureSelection",
           datasetShape.modelOverviewData?.featureCohortView

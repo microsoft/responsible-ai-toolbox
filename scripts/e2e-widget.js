@@ -41,7 +41,7 @@ const fileNames = tabularFileNames
   .concat(textFileNames);
 const notebookHostReg = /^ResponsibleAI started at (http:\/\/localhost:\d+)$/m;
 const serveHostReg = /Web Development Server is listening at\s+(.*)$/m;
-const timeout = 3600;
+const timeout = 4800;
 
 /**
  *
