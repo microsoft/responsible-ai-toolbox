@@ -57,14 +57,48 @@ export async function connectToFlaskService<TRequest, TResponse>(
     socket.on("disconnect", () => {
       console.log("socket disconnected");
     });
+    socket.on("error", (error: Error) => {
+      console.log(`Encountered socket error, aborting connection: ${error}`);
+      reject(error);
+    });
     socket.emit(
       urlPath,
       {
         data: JSON.stringify(data)
       },
       (response: IDataResponse<TResponse>) => {
+        console.log(response);
+        if (response === undefined) {
+          console.log("Encountered socket error, aborting connection");
+          return reject(new Error("No response from socket"));
+        }
         return resolve(response.data);
       }
+    );
+  });
+}
+
+export async function connectToFlaskServiceWithBackupCall<TRequest, TResponse>(
+  config: Pick<IAppConfig, "baseUrl" | "withCredentials">,
+  data: TRequest,
+  urlPathConnect: string,
+  urlPathCall: string,
+  abortSignal?: AbortSignal
+): Promise<TResponse> {
+  return connectToFlaskService<TRequest, TResponse>(
+    config,
+    data,
+    urlPathConnect,
+    abortSignal
+  ).catch((error) => {
+    console.log(
+      `Error connecting to socket, falling back to http request: ${error}`
+    );
+    return callFlaskService<TRequest, TResponse>(
+      config,
+      data,
+      urlPathCall,
+      abortSignal
     );
   });
 }
