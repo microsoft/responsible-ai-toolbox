@@ -188,8 +188,8 @@
   },
   "DataAnalysis": {
     "TableView": {
-      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
-      "infoTitle": "Additional information on table view"
+      "description": "Affichez le jeu de données dans une représentation de table avec les étiquettes vraies et prédites. La table est séparée par des sous-tables de prédictions correctes et incorrectes.",
+      "infoTitle": "Informations supplémentaires sur l’affichage table"
     }
   },
   "ErrorAnalysis": {
@@ -1208,7 +1208,7 @@
       "labelVisibilityDropdown": "Sélectionnez les libellés à afficher",
       "legendFailure": "échec",
       "legendSuccess": "succès",
-      "loading": "Explication informatique pour l'index",
+      "loading": "Calcul de l’explication pour l’image de l’index",
       "multiselect": "Sélection multiple",
       "notdefined": "scénario d'objet non défini",
       "objectSelect": "Sélection d'objet",
@@ -1459,9 +1459,9 @@
       "CorrectPredictions": "Prédictions correctes",
       "GlobalExplanation": "Importance des fonctionnalités agrégées",
       "IncorrectPredictions": "Prédictions incorrectes",
-      "InfoTitle": "Additional information on feature importance values",
+      "InfoTitle": "Informations supplémentaires sur les valeurs d’importance des fonctionnalités",
       "IndividualFeatureTabular": "Sélectionnez un point de données en cliquant sur un point de données (jusqu'à 5 points de données) dans le tableau pour afficher leurs valeurs d'importance des caractéristiques locales (explication locale) et les parcelles d'attente conditionnelle individuelle (ICE).",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
+      "IndividualFeatureText": "Sélectionnez un point de données en cliquant sur un point de données dans la table pour afficher les valeurs d’importance des caractéristiques locales (explication locale) à partir de l’explicatif de texte de SHAP.",
       "LocalExplanation": "Importance des fonctionnalités individuelles",
       "SelectionCounter": "points de données{0}/{1} sélectionnés",
       "SelectionLimit": "Vous pouvez sélectionner jusqu’à 5 points de données pour le moment.",

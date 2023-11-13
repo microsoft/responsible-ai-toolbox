@@ -188,8 +188,8 @@
   },
   "DataAnalysis": {
     "TableView": {
-      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
-      "infoTitle": "Additional information on table view"
+      "description": "以具有地面事實和預測標籤的資料表標記法檢視資料集。資料表會以正確和不正確的預測分隔成子資料工作表。",
+      "infoTitle": "資料表檢視的其他資訊"
     }
   },
   "ErrorAnalysis": {
@@ -906,8 +906,8 @@
       "index": "索引",
       "output": "輸出",
       "predictedY": "預測的 Y",
-      "odIncorrect": "Incorrect",
-      "odCorrect": "Correct",
+      "odIncorrect": "不正確",
+      "odCorrect": "正確",
       "probabilityLabel": "機率 : {0}",
       "trueY": "實際的 Y",
       "xValue": "X 值:",
@@ -1208,7 +1208,7 @@
       "labelVisibilityDropdown": "選取要顯示的標記",
       "legendFailure": "失敗",
       "legendSuccess": "成功",
-      "loading": "索引的計算說明",
+      "loading": "正在計算索引映像的說明",
       "multiselect": "多重選取",
       "notdefined": "物件案例未定義",
       "objectSelect": "物件選取項目",
@@ -1459,9 +1459,9 @@
       "CorrectPredictions": "正確的預測",
       "GlobalExplanation": "彙總特徵重要度",
       "IncorrectPredictions": "不正確的預測",
-      "InfoTitle": "Additional information on feature importance values",
+      "InfoTitle": "功能重要性值的其他資訊",
       "IndividualFeatureTabular": "按一下資料表中的資料點 (最多 5 個資料點) 選取資料點，以在檢視其局部特徵重要度值 (區域解釋)，以個別條件預測 (ICE) 繪圖。",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
+      "IndividualFeatureText": "按一下資料表中的資料點以選取資料點，以從 SHAP 的文字解釋者檢視本機特徵重要度值 (本機說明)。",
       "LocalExplanation": "個別特徵重要度",
       "SelectionCounter": "已選取 {0}/{1} 個資料點",
       "SelectionLimit": "目前最多可選取 5 個資料點。",

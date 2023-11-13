@@ -34,7 +34,7 @@ class TestEnvironmentDetector(object):
                      return_value=False)
         with pytest.raises(RuntimeError) as exception:
             FlaskHelper(ip="not localhost", with_credentials=False)
-        assert "Ports 5000 to 5100 not available." in \
+        assert "Ports 8704 to 8993 not available." in \
             exception.value.args[0]
 
     def test_local(self):

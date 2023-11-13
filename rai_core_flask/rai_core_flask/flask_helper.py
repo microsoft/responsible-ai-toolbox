@@ -39,7 +39,7 @@ class FlaskHelper(object):
         if self.port is None:
             # Try 100 different ports
             available = False
-            for port in range(5000, 5100):
+            for port in range(8704, 8994):
                 available = FlaskHelper._is_local_port_available(
                     self.ip, port, raise_error=False)
                 if available:
@@ -47,7 +47,7 @@ class FlaskHelper(object):
                     break
 
             if not available:
-                error_message = """Ports 5000 to 5100 not available.
+                error_message = """Ports 8704 to 8993 not available.
                     Please specify an open port for use via the 'port'
                     parameter"""
                 raise RuntimeError(
