@@ -332,11 +332,12 @@ def run_rai_insights(model, test_data, target_column,
         ignore_index)
     if task_type == ModelTask.OBJECT_DETECTION:
         selection_indexes = [[0]]
-        aggregate_method = 'Macro'
         class_name = classes[0]
         iou_threshold = 70
         object_detection_cache = {}
-        metrics = rai_insights.compute_object_detection_metrics(
-            selection_indexes, aggregate_method, class_name, iou_threshold,
-            object_detection_cache)
-        assert len(metrics) == 2
+        aggregate_methods = ['macro', 'micro']
+        for aggregate_method in aggregate_methods:
+            metrics = rai_insights.compute_object_detection_metrics(
+                selection_indexes, aggregate_method, class_name, iou_threshold,
+                object_detection_cache)
+            assert len(metrics) == 2
