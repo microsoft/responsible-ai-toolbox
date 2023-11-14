@@ -236,6 +236,7 @@ export class AxisConfigDialog extends React.PureComponent<
       );
     }
     this.props.onAccept(this.state.selectedColumn);
+    this.props.onCancel();
     this.context.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
       type: TelemetryEventName.NewAxisConfigSelected
