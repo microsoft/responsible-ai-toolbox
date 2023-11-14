@@ -129,10 +129,12 @@ export class ShiftCohort extends React.Component<
           <PrimaryButton
             onClick={this.shiftCohort}
             text={localizationBase.apply}
+            ariaLabel="Shift cohort button"
           />
           <DefaultButton
             onClick={this.props.onDismiss}
             text={localizationBase.cancel}
+            ariaLabel="Cancel cohort button"
           />
         </DialogFooter>
       </Dialog>

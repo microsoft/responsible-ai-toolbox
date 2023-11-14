@@ -209,12 +209,14 @@ export class ProbabilityDistributionChart extends React.Component<
             }
           }}
           text={localization.ModelAssessment.ModelOverview.chartConfigApply}
+          ariaLabel="Apply button"
         />
         <DefaultButton
           onClick={(): void => {
             this.setState({ probabilityFlyoutIsVisible: false });
           }}
           text={localization.ModelAssessment.ModelOverview.chartConfigCancel}
+          ariaLabel="Cancel button"
         />
       </Stack>
     );

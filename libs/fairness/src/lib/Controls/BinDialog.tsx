@@ -82,11 +82,13 @@ export class BinDialog extends React.PureComponent<
             className={styles.saveButton}
             text={localization.Fairness.BinDialog.save}
             onClick={this.onSave}
+            ariaLabel="Save binning button"
           />
           <DefaultButton
             className={styles.cancelButton}
             text={localization.Fairness.BinDialog.cancel}
             onClick={this.props.onCancel}
+            ariaLabel="Cancel binning button"
           />
         </div>
       </div>

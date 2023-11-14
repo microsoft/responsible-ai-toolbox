@@ -101,18 +101,21 @@ export class SaveCohort extends React.Component<
               this.saveCohort();
             }}
             text={localization.ErrorAnalysis.SaveCohort.save}
+            ariaLabel="Save cohort button"
           />
           <DefaultButton
             onClick={(): void => {
               this.props.onDismiss();
               this.saveCohort(true);
             }}
+            ariaLabel="Save cohort and switch button"
           >
             {localization.Interpret.CohortEditor.saveAndSwitch}
           </DefaultButton>
           <DefaultButton
             onClick={this.props.onDismiss}
             text={localization.ErrorAnalysis.SaveCohort.cancel}
+            ariaLabel="Cancel save cohort button"
           />
         </DialogFooter>
       </Dialog>

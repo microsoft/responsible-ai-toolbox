@@ -179,12 +179,14 @@ export class ModelOverviewMetricChart extends React.Component<
             this.props.onApplyMetric(this.state.newlySelectedMetric);
           }}
           text={localization.ModelAssessment.ModelOverview.chartConfigApply}
+          ariaLabel="Apply button"
         />
         <DefaultButton
           onClick={(): void => {
             this.setState({ metricSelectionFlyoutIsVisible: false });
           }}
           text={localization.ModelAssessment.ModelOverview.chartConfigCancel}
+          ariaLabel="Cancel button"
         />
       </Stack>
     );

@@ -40,10 +40,12 @@ export class ConfirmationDialog extends React.Component<IConfirmationDialogProps
           <PrimaryButton
             onClick={this.props.onConfirm}
             text={this.props.confirmButtonText}
+            ariaLabel="Confirm button"
           />
           <DefaultButton
             onClick={this.props.onClose}
             text={this.props.cancelButtonText}
+            ariaLabel="Cancel button"
           />
         </DialogFooter>
       </Dialog>

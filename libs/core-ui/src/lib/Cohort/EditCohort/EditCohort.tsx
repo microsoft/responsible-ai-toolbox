@@ -112,8 +112,16 @@ export class EditCohort extends React.Component<
             </Stack.Item>
             <Stack.Item align="end">
               <Stack horizontal tokens={stackTokens}>
-                <PrimaryButton onClick={this.editCohort} text="Save" />
-                <DefaultButton onClick={this.props.onDismiss} text="Cancel" />
+                <PrimaryButton
+                  onClick={this.editCohort}
+                  text="Save"
+                  ariaLabel="Save cohort button"
+                />
+                <DefaultButton
+                  onClick={this.props.onDismiss}
+                  text="Cancel"
+                  ariaLabel="Cancel cohort button"
+                />
               </Stack>
             </Stack.Item>
           </Stack>

@@ -39,6 +39,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
               text={localization.Interpret.CohortBanner.addCohort}
               iconProps={{ iconName: "Add" }}
               styles={{ label: { whiteSpace: "nowrap" } }}
+              ariaLabel="New cohort button"
             />
             <DefaultButton
               disabled={!this.props.jointDataset.dataDict?.length}
@@ -46,6 +47,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
               text={localization.Interpret.CohortBanner.editCohort}
               iconProps={{ iconName: "Edit" }}
               styles={{ label: { whiteSpace: "nowrap" } }}
+              ariaLabel="Edit cohort button"
             />
           </Stack>
         </Stack.Item>

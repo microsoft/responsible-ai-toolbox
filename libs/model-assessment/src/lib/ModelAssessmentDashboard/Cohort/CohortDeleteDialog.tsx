@@ -49,10 +49,12 @@ export class CohortDeleteDialog extends React.Component<ICohortDeleteDialogProps
           <PrimaryButton
             onClick={this.props.onDeleteClick}
             text={localization.ModelAssessment.Cohort.delete}
+            ariaLabel="Delete cohort button"
           />
           <DefaultButton
             onClick={this.props.onDismiss}
             text={localization.ModelAssessment.Cohort.cancel}
+            ariaLabel="Cancel button"
           />
         </DialogFooter>
       </Dialog>

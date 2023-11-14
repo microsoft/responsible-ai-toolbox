@@ -115,6 +115,7 @@ export class CohortEditor extends React.PureComponent<
             disabled={this.props.deleteIsDisabled}
             onClick={this.deleteCohort}
             className={styles.deleteCohort}
+            ariaLabel="Delete cohort button"
           >
             {localization.Interpret.CohortEditor.delete}
           </DefaultButton>
@@ -122,16 +123,21 @@ export class CohortEditor extends React.PureComponent<
         <PrimaryButton
           onClick={(): void => this.saveCohort()}
           disabled={this.isSaveDisabled()}
+          ariaLabel="Save cohort button"
         >
           {localization.Interpret.CohortEditor.save}
         </PrimaryButton>
         <DefaultButton
           onClick={(): void => this.saveCohort(true)}
           disabled={this.isSaveDisabled()}
+          ariaLabel="Save cohort and switch button"
         >
           {localization.Interpret.CohortEditor.saveAndSwitch}
         </DefaultButton>
-        <DefaultButton onClick={this.onCancelClick}>
+        <DefaultButton
+          onClick={this.onCancelClick}
+          ariaLabel="Cancel cohort button"
+        >
           {localization.Interpret.CohortEditor.cancel}
         </DefaultButton>
       </Stack>

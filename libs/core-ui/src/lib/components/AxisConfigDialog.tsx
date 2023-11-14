@@ -152,10 +152,16 @@ export class AxisConfigDialog extends React.PureComponent<
   private renderFooter = (): JSX.Element => {
     return (
       <Stack horizontal tokens={{ childrenGap: "l1", padding: "l1" }}>
-        <PrimaryButton onClick={this.saveState}>
+        <PrimaryButton
+          onClick={this.saveState}
+          ariaLabel="Apply cohort button"
+        >
           {localization.Interpret.AxisConfigDialog.apply}
         </PrimaryButton>
-        <DefaultButton onClick={this.props.onCancel}>
+        <DefaultButton
+          onClick={this.props.onCancel}
+          ariaLabel="Cancel cohort button"
+        >
           {localization.Interpret.CohortEditor.cancel}
         </DefaultButton>
       </Stack>

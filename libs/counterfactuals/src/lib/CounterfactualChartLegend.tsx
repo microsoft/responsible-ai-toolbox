@@ -93,6 +93,7 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
               ? localization.Counterfactuals.createWhatIfCounterfactual
               : localization.Counterfactuals.createCounterfactual
           }
+          ariaLabel="Counterfactual creation button"
         />
         {this.displayRevertButton() && (
           <DefaultButton
