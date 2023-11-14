@@ -116,6 +116,7 @@ export class ShiftCohort extends React.Component<
           selectedKey={this.state.selectedCohort}
           options={this.state.options}
           onChange={this.onChange}
+          ariaLabel="Time series selection dropdown"
         />
         <CohortEditorFilterList
           compositeFilters={

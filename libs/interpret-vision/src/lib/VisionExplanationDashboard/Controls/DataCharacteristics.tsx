@@ -96,6 +96,7 @@ export class DataCharacteristics extends React.Component<
                       options={this.state.labelTypeDropdownOptions}
                       selectedKey={this.state.labelType}
                       onChange={this.onLabelTypeChange}
+                      ariaLabel="Label type dropdown"
                     />
                   </Stack.Item>
                   <Stack.Item>
@@ -118,6 +119,7 @@ export class DataCharacteristics extends React.Component<
                       }
                       onChange={this.onLabelVisibilitySelect}
                       multiSelect
+                      ariaLabel="Label visibility dropdown"
                     />
                   </Stack.Item>
                 </Stack>
