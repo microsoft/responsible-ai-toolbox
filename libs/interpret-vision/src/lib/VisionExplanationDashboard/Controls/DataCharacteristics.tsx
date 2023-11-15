@@ -163,7 +163,7 @@ export class DataCharacteristics extends React.Component<
                         onRenderCell={this.onRenderCell}
                         loadPrevItems={this.loadPrevItems}
                         loadNextItems={this.loadNextItems}
-                        getPageHeight={this.getPageHeight}
+                        getPageHeight={() => this.rowHeight}
                         getItemCountForPage={this.getItemCountForPageWrapper(
                           index
                         )}
@@ -271,8 +271,6 @@ export class DataCharacteristics extends React.Component<
   private callbackWrapper = (item: IVisionListItem) => (): void => {
     this.props.selectItem(item);
   };
-
-  private getPageHeight = (): number => this.rowHeight;
 
   private getItemCountForPageWrapper = (
     index: number
