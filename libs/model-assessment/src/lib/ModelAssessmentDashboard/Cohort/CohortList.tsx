@@ -84,6 +84,7 @@ export class CohortList extends React.Component<
           selectionMode={SelectionMode.none}
           checkboxVisibility={CheckboxVisibility.hidden}
           onRenderItemColumn={this.renderItemColumn}
+          ariaLabel="Cohort list"
         />
         {this.state.currentEditCohort && (
           <CohortEditor

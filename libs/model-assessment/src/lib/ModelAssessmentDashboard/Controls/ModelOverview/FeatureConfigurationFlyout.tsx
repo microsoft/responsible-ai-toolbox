@@ -168,6 +168,8 @@ export class FeatureConfigurationFlyout extends React.Component<
             selectionMode={SelectionMode.multiple}
             selection={this._selection}
             checkboxVisibility={CheckboxVisibility.always}
+            ariaLabelForSelectAllCheckbox="Select all rows"
+            ariaLabel="Feature selection table"
           />
         </Stack>
       </Panel>

@@ -120,6 +120,7 @@ export class CohortList extends React.Component<
             selectionPreservedOnEmptyClick
             checkboxVisibility={CheckboxVisibility.hidden}
             onRenderItemColumn={this.renderItemColumn}
+            ariaLabel="Cohort List"
           />
         </div>
       </div>

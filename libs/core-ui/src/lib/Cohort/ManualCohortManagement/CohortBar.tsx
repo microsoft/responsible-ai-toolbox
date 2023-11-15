@@ -112,6 +112,7 @@ export class CohortBar extends React.Component<
                 items={this.props.cohorts}
                 selectionMode={SelectionMode.none}
                 columns={columns}
+                ariaLabel="Cohort list"
               />
             </Panel>
           ))}

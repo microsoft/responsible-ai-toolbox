@@ -163,6 +163,7 @@ export class TableList extends React.Component<
                 selection={this._selection}
                 setKey="set"
                 onItemInvoked={this.props.selectItem}
+                ariaLabel="Table view list"
               />
             </MarqueeSelection>
           </Stack.Item>

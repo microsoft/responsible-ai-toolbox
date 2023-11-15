@@ -110,6 +110,8 @@ export class AggregateBalanceMeasuresTable extends React.PureComponent<IAggregat
             selectionMode={SelectionMode.none}
             layoutMode={DetailsListLayoutMode.justified}
             checkboxVisibility={CheckboxVisibility.hidden}
+            ariaLabelForSelectAllCheckbox="Select all rows"
+            ariaLabel="Aggregate balance measures list"
           />
         </Stack.Item>
       </Stack>
