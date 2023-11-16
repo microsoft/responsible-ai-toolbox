@@ -116,7 +116,7 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
           options={displayOptions}
           disabled={false}
           onChange={this.onChange}
-          ariaLabel="Chart selection dropdown"
+          ariaLabel={localization.Fairness.Report.chartChoiceAriaLabel}
         />
         {this.state.chartKey === performanceKey && (
           <PerformancePlot

@@ -57,7 +57,7 @@ export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
           options={featureOptions}
           disabled={false}
           onChange={this.props.parentFeatureChanged}
-          ariaLabel="Sensitive feature dropdown"
+          ariaLabel={localization.Fairness.DropdownHeaders.sensitiveFeatureAriaLabel}
         />
         <Dropdown
           id="performanceMetricDropdown"
@@ -68,7 +68,7 @@ export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
           options={performanceDropDown}
           disabled={false}
           onChange={this.props.parentPerformanceChanged}
-          ariaLabel="Performance metric dropdown"
+          ariaLabel={localization.Fairness.DropdownHeaders.performanceMetricAriaLabel}
         />
         <Dropdown
           style={{ minWidth: "240px" }}
@@ -80,7 +80,7 @@ export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
           options={fairnessDropdown}
           disabled={false}
           onChange={this.props.parentFairnessChanged}
-          ariaLabel="Fairness metric dropdown"
+          ariaLabel={localization.Fairness.DropdownHeaders.fairnessMetricAriaLabel}
         />
       </Stack>
     );

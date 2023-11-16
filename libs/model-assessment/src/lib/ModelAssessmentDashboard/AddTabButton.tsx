@@ -72,12 +72,12 @@ export class AddTabButton extends React.Component<
                 <Dropdown
                   options={this.props.availableTabs}
                   onChange={this.onChange}
-                  ariaLabel="Add dashboard component"
+                  ariaLabel={localization.ModelAssessment.AddingTab.AddComponentAriaLabel}
                 />
                 <PrimaryButton
                   onClick={this.addTab}
                   text={localization.ModelAssessment.AddingTab.AddButtonText}
-                  ariaLabel="Add dashboard button"
+                  ariaLabel={localization.ModelAssessment.AddingTab.AddButtonAriaLabel}
                 />
               </Stack>
             </Callout>

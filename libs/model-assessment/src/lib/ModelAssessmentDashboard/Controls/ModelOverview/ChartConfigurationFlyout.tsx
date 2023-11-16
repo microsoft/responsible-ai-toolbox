@@ -227,7 +227,7 @@ export class ChartConfigurationFlyout extends React.Component<
                 .chartConfigDatasetCohortSelectionPlaceholder
             }
             disabled={!this.state.datasetCohortViewIsNewlySelected}
-            ariaLabel="Dataset cohort dropdown"
+            ariaLabel={localization.ModelAssessment.ModelOverview.dataCohortsChartSelectionAriaLabel}
           />
           {this.props.featureBasedCohorts.length > 0 && (
             <Dropdown
@@ -251,7 +251,7 @@ export class ChartConfigurationFlyout extends React.Component<
                   .chartConfigFeatureBasedCohortSelectionPlaceholder
               }
               disabled={this.state.datasetCohortViewIsNewlySelected}
-              ariaLabel="Feature cohort dropdown"
+              ariaLabel={localization.ModelAssessment.ModelOverview.featureCohortsChartSelectionAriaLabel}
             />
           )}
         </Stack>

@@ -117,7 +117,7 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
                     options={labelOptions}
                     selectedKey={this.state.selectedLabelIndex}
                     onChange={this.setSelectedLabel}
-                    ariaLabel="Positive label dropdown"
+                    ariaLabel={measuresLocalization.LabelPickerAriaLabel}
                   />
                 </Stack.Item>
               </Stack>
@@ -136,7 +136,7 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
                     options={featureOptions}
                     selectedKey={this.state.selectedFeatureIndex}
                     onChange={this.setSelectedFeature}
-                    ariaLabel="Feature dropdown"
+                    ariaLabel={measuresLocalization.FeaturePickerAriaLabel}
                   />
                 </Stack.Item>
               </Stack>
@@ -155,7 +155,7 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
                     options={measureOptions}
                     selectedKey={this.state.selectedMeasureIndex}
                     onChange={this.setSelectedMeasure}
-                    ariaLabel="Measure dropdown"
+                    ariaLabel={measuresLocalization.MeasurePickerAriaLabel}
                   />
                 </Stack.Item>
               </Stack>

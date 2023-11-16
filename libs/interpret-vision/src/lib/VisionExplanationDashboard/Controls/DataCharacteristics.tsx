@@ -96,7 +96,7 @@ export class DataCharacteristics extends React.Component<
                       options={this.state.labelTypeDropdownOptions}
                       selectedKey={this.state.labelType}
                       onChange={this.onLabelTypeChange}
-                      ariaLabel="Label type dropdown"
+                      ariaLabel={localization.InterpretVision.Dashboard.labelTypeAriaLabel}
                     />
                   </Stack.Item>
                   <Stack.Item>
@@ -119,7 +119,7 @@ export class DataCharacteristics extends React.Component<
                       }
                       onChange={this.onLabelVisibilitySelect}
                       multiSelect
-                      ariaLabel="Label visibility dropdown"
+                      ariaLabel={localization.InterpretVision.Dashboard.labelVisibilityAriaLabel}
                     />
                   </Stack.Item>
                 </Stack>
@@ -163,7 +163,7 @@ export class DataCharacteristics extends React.Component<
                         onRenderCell={this.onRenderCell}
                         loadPrevItems={this.loadPrevItems}
                         loadNextItems={this.loadNextItems}
-                        getPageHeight={() => this.rowHeight}
+                        getPageHeight={(): number => this.rowHeight}
                         getItemCountForPage={this.getItemCountForPageWrapper(
                           index
                         )}
