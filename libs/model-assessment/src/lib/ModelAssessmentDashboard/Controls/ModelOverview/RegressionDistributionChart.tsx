@@ -126,16 +126,11 @@ export class RegressionDistributionChart extends React.Component<
       return;
     }
 
-    if (targetOptions.length === 0) {
-      return React.Fragment;
-    }
-
-    if (this.state.targetOption === undefined) {
+    if (targetOptions.length === 0 || this.state.targetOption === undefined) {
       return React.Fragment;
     }
 
     const noCohortSelected = this.props.cohorts.length === 0;
-
     const selectedCohortNames = this.props.cohorts.map(
       (cohort) => cohort.cohort.name
     );
@@ -217,7 +212,6 @@ export class RegressionDistributionChart extends React.Component<
                   }
                 }}
               />
-
               <Stack.Item className={classNames.horizontalAxis}>
                 <DefaultButton
                   id="modelOverviewRegressionDistributionChartLabelSelectionButton"
