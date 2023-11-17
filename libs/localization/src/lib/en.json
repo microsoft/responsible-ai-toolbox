@@ -2007,6 +2007,7 @@
       "cancel": "Cancel",
       "cohortList": "Time series list",
       "selectCohort": "Select a time series",
+      "selectCohortAriaLabel": "Time series selection dropdown",
       "shiftCohort": "Switch time series",
       "shiftCohortDescription": "Select a time series from the time series list. Apply the time series to the dashboard."
     },
