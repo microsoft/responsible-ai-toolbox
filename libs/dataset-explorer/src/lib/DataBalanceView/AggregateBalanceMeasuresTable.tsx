@@ -110,8 +110,14 @@ export class AggregateBalanceMeasuresTable extends React.PureComponent<IAggregat
             selectionMode={SelectionMode.none}
             layoutMode={DetailsListLayoutMode.justified}
             checkboxVisibility={CheckboxVisibility.hidden}
-            ariaLabelForSelectAllCheckbox={localization.ModelAssessment.ModelOverview.featureConfiguration.selectAllRowsAriaLabel}
-            ariaLabel={localization.ModelAssessment.ModelOverview.featureConfiguration.flyoutAriaLabel}
+            ariaLabelForSelectAllCheckbox={
+              localization.ModelAssessment.ModelOverview.featureConfiguration
+                .selectAllRowsAriaLabel
+            }
+            ariaLabel={
+              localization.ModelAssessment.ModelOverview.featureConfiguration
+                .flyoutAriaLabel
+            }
           />
         </Stack.Item>
       </Stack>

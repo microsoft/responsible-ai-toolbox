@@ -88,7 +88,10 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
         />
         <Slider
           id="modelOverviewIoUThreshold"
-          ariaLabel={localization.ModelAssessment.ModelOverview.iouThresholdDropdown.AriaLabel}
+          ariaLabel={
+            localization.ModelAssessment.ModelOverview.iouThresholdDropdown
+              .AriaLabel
+          }
           label={
             localization.ModelAssessment.ModelOverview.iouThresholdDropdown.name
           }
