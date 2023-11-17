@@ -111,7 +111,7 @@ export class ShiftCohort extends React.Component<
       >
         <Dropdown
           placeholder="Select a cohort"
-          label="Cohort list"
+          label={localization.Core.ShiftCohort.cohortList}
           selectedKey={this.state.selectedCohort}
           options={this.state.options}
           styles={dropdownStyles}

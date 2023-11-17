@@ -26,7 +26,7 @@ export class CohortListPanel extends React.Component<ICohortListPanelProps> {
     const classNames = cohortListStyles();
     return (
       <Panel
-        headerText="Cohort List"
+        headerText={localization.Core.ShiftCohort.cohortList}
         isOpen={this.props.isOpen}
         focusTrapZoneProps={focusTrapZoneProps}
         // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
