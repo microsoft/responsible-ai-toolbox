@@ -47,7 +47,9 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
               text={localization.Interpret.CohortBanner.editCohort}
               iconProps={{ iconName: "Edit" }}
               styles={{ label: { whiteSpace: "nowrap" } }}
-              ariaLabel={localization.Interpret.CohortBanner.editCohortAriaLabel}
+              ariaLabel={
+                localization.Interpret.CohortBanner.editCohortAriaLabel
+              }
             />
           </Stack>
         </Stack.Item>

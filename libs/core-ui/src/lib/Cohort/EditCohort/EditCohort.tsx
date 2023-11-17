@@ -121,7 +121,9 @@ export class EditCohort extends React.Component<
                 <DefaultButton
                   onClick={this.props.onDismiss}
                   text={localization.Interpret.CohortEditor.cancel}
-                  ariaLabel={localization.Interpret.CohortEditor.cancelAriaLabel}
+                  ariaLabel={
+                    localization.Interpret.CohortEditor.cancelAriaLabel
+                  }
                 />
               </Stack>
             </Stack.Item>

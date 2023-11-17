@@ -41,12 +41,16 @@ export class ConfirmationDialog extends React.Component<IConfirmationDialogProps
           <PrimaryButton
             onClick={this.props.onConfirm}
             text={this.props.confirmButtonText}
-            ariaLabel={localization.Interpret.CohortEditor.confirmButtonAriaLabel}
+            ariaLabel={
+              localization.Interpret.CohortEditor.confirmButtonAriaLabel
+            }
           />
           <DefaultButton
             onClick={this.props.onClose}
             text={this.props.cancelButtonText}
-            ariaLabel={localization.Interpret.CohortEditor.cancelButtonAriaLabel}
+            ariaLabel={
+              localization.Interpret.CohortEditor.cancelButtonAriaLabel
+            }
           />
         </DialogFooter>
       </Dialog>
