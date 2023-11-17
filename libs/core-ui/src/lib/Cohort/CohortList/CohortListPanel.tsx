@@ -2,13 +2,13 @@
 // Licensed under the MIT License.
 
 import { IFocusTrapZoneProps, Panel } from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { ErrorCohort } from "../ErrorCohort";
 
 import { CohortList } from "./CohortList";
 import { cohortListStyles } from "./CohortList.styles";
-import { localization } from "@responsible-ai/localization";
 
 export interface ICohortListPanelProps {
   isOpen: boolean;
