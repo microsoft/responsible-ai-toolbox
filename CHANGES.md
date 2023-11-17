@@ -24,7 +24,38 @@ this file to understand what changed.
 - bug fixes and tests
 - other
 
-## v0.30.0
+## v0.32.0
+
+- new features
+  - ## Responsible AI Dashboard
+    - add socket implementation to RAI dashboard object detection and question answering metrics calls by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2394
+    - Dashboard Port Updates by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2406
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - release rai-core-flask 0.7.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2398
+    - update raiwidgets to rai-core-flask v0.7.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2401
+    - Release new version of rai_core_flask by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2407
+    - fallback to request if socket connection fails for object detection and question answering metrics for backcompat by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2409
+    - Side Panel Bug Fix by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2414
+  - ## RAI Vision
+    - OD Explanation Loader Fix by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2381
+    - Optional support for IS_CROWD for OD COCO label format by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2395
+    - Import & data loading fixes for IC & multilabel notebooks by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2410
+    - fix RangeIndex error in error analysis for object detection models by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2411
+    - add average parameter to MeanAveragePrecision to specify micro or macro calculation by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2412
+  - ## Counterfactual
+    - Update requirements.txt to upgrade dice-ml to 0.11.0 by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2397
+    - Refer to predicted value from Counterfactual data by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2402
+  - ## Error analysis
+    - Accessibility fix for 'Error Analysis' header by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2415
+- other
+  - Localized file check-in by OneLocBuild Task: Build definition ID 21368: Build ID 107831016 by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/2393
+  - LEGO: Pull request from JUNO/hb_a12a4630-4852-4e7d-9cbc-c0e1117da1ab_20231003114057604 to main by @csigs in https://github.com/microsoft/responsible-ai-toolbox/pull/2384
+  - LEGO: Pull request from JUNO/hb_a12a4630-4852-4e7d-9cbc-c0e1117da1ab_20231030114314322 to main by @csigs in https://github.com/microsoft/responsible-ai-toolbox/pull/2400
+  - Localized file check-in by OneLocBuild Task: Build definition ID 21368: Build ID 109426168 by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/2408
+  - fix build errors due to changed exception messages and UCI repository expired certificate by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2413
+
+## v0.31.0
 
 - new features
   - ## Responsible AI Dashboard
