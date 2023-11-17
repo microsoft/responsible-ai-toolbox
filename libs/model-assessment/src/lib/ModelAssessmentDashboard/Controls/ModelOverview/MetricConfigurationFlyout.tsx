@@ -173,12 +173,12 @@ export class MetricConfigurationFlyout extends React.Component<
             onClick={this.onConfirm}
             text={localization.ModelAssessment.ModelOverview.chartConfigApply}
             disabled={noMetricsSelected}
-            ariaLabel="Apply button"
+            ariaLabel={localization.ModelAssessment.ModelOverview.chartConfigApplyAriaLabel}
           />
           <DefaultButton
             onClick={this.props.onDismissFlyout}
             text={localization.ModelAssessment.ModelOverview.chartConfigCancel}
-            ariaLabel="Cancel button"
+            ariaLabel={localization.ModelAssessment.ModelOverview.chartConfigCancelAriaLabel}
           />
         </Stack>
       </Stack>

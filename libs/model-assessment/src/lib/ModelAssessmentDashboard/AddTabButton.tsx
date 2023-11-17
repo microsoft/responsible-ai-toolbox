@@ -76,7 +76,7 @@ export class AddTabButton extends React.Component<
                 <PrimaryButton
                   onClick={this.addTab}
                   text={localization.ModelAssessment.AddingTab.AddButtonText}
-                  ariaLabel="Add tab button"
+                  ariaLabel={localization.ModelAssessment.AddingTab.AddButtonTextAriaLabel}
                 />
               </Stack>
             </Callout>

@@ -88,7 +88,7 @@ export class IntroTab extends React.PureComponent<IIntroTabProps> {
               id="nextButton"
               className={styles.getStarted}
               onClick={this.onNext}
-              ariaLabel="Get started button"
+              ariaLabel={localization.Fairness.Intro.getStartedAriaLabel}
             >
               {localization.Fairness.Intro.getStarted}
             </PrimaryButton>

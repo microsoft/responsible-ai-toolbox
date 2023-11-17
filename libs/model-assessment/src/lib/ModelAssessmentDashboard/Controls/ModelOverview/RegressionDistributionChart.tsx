@@ -274,14 +274,14 @@ export class RegressionDistributionChart extends React.Component<
             }
           }}
           text={localization.ModelAssessment.ModelOverview.chartConfigApply}
-          ariaLabel="Apply button"
+          ariaLabel={localization.ModelAssessment.ModelOverview.chartConfigApplyAriaLabel}
         />
         <DefaultButton
           onClick={(): void => {
             this.setState({ targetFlyoutIsVisible: false });
           }}
           text={localization.ModelAssessment.ModelOverview.chartConfigCancel}
-          ariaLabel="Cancel button"
+          ariaLabel={localization.ModelAssessment.ModelOverview.chartConfigCancelAriaLabel}
         />
       </Stack>
     );

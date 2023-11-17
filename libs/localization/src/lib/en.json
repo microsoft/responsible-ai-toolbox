@@ -155,6 +155,7 @@
     "counterfactualName": "What-if counterfactual name",
     "createWhatIfCounterfactual": "Create what-if counterfactual",
     "createCounterfactual": "Counterfactual",
+    "counterfactualAriaLabel": "Counterfactual creation button",
     "revertToBubbleChart": "View bubble chart",
     "createOwn": "Create your own counterfactual:",
     "currentClass": "Current class",
@@ -180,6 +181,7 @@
     "recommendedPolicy": "Recommended policy gain",
     "referenceDatapoint": "Reference datapoint: Row {0}",
     "saveAsNew": "Save as new datapoint",
+    "saveAsNewAriaLabel": "Save as new datapoint button",
     "saveDescription": "These counterfactuals are based on the model's prediction, and therefore may be capturing the same correlations that were picked up by the model. We do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life decision-making scenarios.",
     "seePrediction": "See prediction deltas",
     "selectedDatapoint": "Selected datapoint",
@@ -484,11 +486,13 @@
     },
     "BinDialog": {
       "cancel": "Cancel",
+      "cancelAriaLabel": "Cancel binning button",
       "categoryHeader": "Bin values:",
       "header": "Configure bins",
       "makeCategorical": "Treat as categorical",
       "numberOfBins": "Number of bins:",
-      "save": "Save"
+      "save": "Save",
+      "saveAriaLabel": "Save binning button"
     },
     "DropdownHeaders": {
       "errorMetric": "Enable error bars",
@@ -527,7 +531,9 @@
     },
     "Footer": {
       "back": "Back",
-      "next": "Next"
+      "backAriaLabel": "Back button",
+      "next": "Next",
+      "nextAriaLabel": "Next button"
     },
     "Header": {
       "documentation": "Documentation",
@@ -541,6 +547,7 @@
       "features": "Sensitive features",
       "featuresInfo": "Sensitive features are used to split your data into groups. Fairness of your model across these groups is measured by fairness metrics. Fairness metrics quantify how much your model's behavior varies across these groups.",
       "getStarted": "Get started",
+      "getStartedAriaLabel": "Get started button",
       "introBody": "The fairness dashboard enables you to assess tradeoffs between performance and fairness of your models",
       "performance": "Performance metric",
       "performanceInfo": "Performance metrics are used to evaluate the overall quality of your model as well as the quality of your model in each group. The difference between the extreme values of the performance metric across the groups is reported as the disparity in performance.",
@@ -1489,6 +1496,7 @@
   "ModelAssessment": {
     "AddingTab": {
       "AddButtonText": "Add",
+      "AddButtonTextAriaLabel": "Add tab button",
       "CalloutContent": "Adding some components (error tree view, error heat map) will allow you to filter down the data from the global cohort that you see in the components below.",
       "CalloutTitle": "Add component",
       "TabAddedMessage": {
@@ -1517,7 +1525,9 @@
     "Cohort": {
       "apply": "Apply",
       "delete": "Delete",
+      "deleteAriaLabel": "Delete cohort button",
       "cancel": "Cancel",
+      "cancelAriaLabel": "Cancel cohort button",
       "cohortInfo": "Cohort info",
       "cohortList": "Cohort list",
       "deleteCohort": "Deleting {0}?",
@@ -1894,7 +1904,9 @@
         "upperQuartile": "Upper quartile"
       },
       "chartConfigApply": "Apply",
+      "chartConfigApplyAriaLabel": "Apply button",
       "chartConfigCancel": "Cancel",
+      "chartConfigCancelAriaLabel": "Cancel button",
       "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
       "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",
       "confusionMatrix": {
