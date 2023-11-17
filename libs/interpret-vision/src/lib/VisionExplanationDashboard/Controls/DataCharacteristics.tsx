@@ -247,12 +247,11 @@ export class DataCharacteristics extends React.Component<
     _event: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption<any> | undefined
   ): void => {
-    if (!item) {
-      return;
+    if (item) {
+      this.setState(
+        getLabelVisibility(item, this.state, this.predOrIncorrectLabelType)
+      );
     }
-    this.setState(
-      getLabelVisibility(item, this.state, this.predOrIncorrectLabelType)
-    );
   };
 
   private loadNextItems = (index: number) => (): void => {
@@ -274,9 +273,8 @@ export class DataCharacteristics extends React.Component<
     this.setState({ renderStartIndex, showBackArrow });
   };
 
-  private callbackWrapper = (item: IVisionListItem) => (): void => {
+  private callbackWrapper = (item: IVisionListItem) => (): void =>
     this.props.selectItem(item);
-  };
 
   private getItemCountForPageWrapper = (
     index: number
@@ -289,10 +287,7 @@ export class DataCharacteristics extends React.Component<
       visibleRect?: IRectangle | undefined
     ): number => {
       const columnCount = this.state.columnCount;
-      if (!visibleRect) {
-        return columnCount[index];
-      }
-      if (itemIndex === 0) {
+      if (visibleRect && itemIndex === 0) {
         columnCount[index] =
           Math.floor(visibleRect.width / this.props.imageDim) - 1;
         this.setState({ columnCount: [...columnCount] });
