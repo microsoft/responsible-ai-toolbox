@@ -8,6 +8,7 @@ import {
   DialogType,
   PrimaryButton
 } from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 export interface IConfirmationDialogProps {
@@ -40,12 +41,12 @@ export class ConfirmationDialog extends React.Component<IConfirmationDialogProps
           <PrimaryButton
             onClick={this.props.onConfirm}
             text={this.props.confirmButtonText}
-            ariaLabel="Confirm button"
+            ariaLabel={localization.Interpret.CohortEditor.confirmButtonAriaLabel}
           />
           <DefaultButton
             onClick={this.props.onClose}
             text={this.props.cancelButtonText}
-            ariaLabel="Cancel button"
+            ariaLabel={localization.Interpret.CohortEditor.cancelButtonAriaLabel}
           />
         </DialogFooter>
       </Dialog>

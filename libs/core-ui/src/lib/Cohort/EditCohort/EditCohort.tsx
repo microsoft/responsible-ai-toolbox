@@ -106,7 +106,8 @@ export class EditCohort extends React.Component<
             <Stack.Item align="start">
               <DefaultButton
                 onClick={this.deleteCohort}
-                text="Delete"
+                text={localization.Interpret.CohortEditor.delete}
+                ariaLabel={localization.Interpret.CohortEditor.deleteAriaLabel}
                 disabled={disableDelete}
               />
             </Stack.Item>
@@ -114,13 +115,13 @@ export class EditCohort extends React.Component<
               <Stack horizontal tokens={stackTokens}>
                 <PrimaryButton
                   onClick={this.editCohort}
-                  text="Save"
-                  ariaLabel="Save cohort button"
+                  text={localization.Interpret.CohortEditor.save}
+                  ariaLabel={localization.Interpret.CohortEditor.saveAriaLabel}
                 />
                 <DefaultButton
                   onClick={this.props.onDismiss}
-                  text="Cancel"
-                  ariaLabel="Cancel cohort button"
+                  text={localization.Interpret.CohortEditor.cancel}
+                  ariaLabel={localization.Interpret.CohortEditor.cancelAriaLabel}
                 />
               </Stack>
             </Stack.Item>

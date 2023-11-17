@@ -154,13 +154,13 @@ export class AxisConfigDialog extends React.PureComponent<
       <Stack horizontal tokens={{ childrenGap: "l1", padding: "l1" }}>
         <PrimaryButton
           onClick={this.saveState}
-          ariaLabel="Apply cohort button"
+          ariaLabel={localization.Core.ShiftCohort.applyAriaLabel}
         >
           {localization.Interpret.AxisConfigDialog.apply}
         </PrimaryButton>
         <DefaultButton
           onClick={this.props.onCancel}
-          ariaLabel="Cancel cohort button"
+          ariaLabel={localization.Interpret.CohortEditor.cancelAriaLabel}
         >
           {localization.Interpret.CohortEditor.cancel}
         </DefaultButton>

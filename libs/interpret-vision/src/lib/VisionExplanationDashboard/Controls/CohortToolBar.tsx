@@ -98,7 +98,7 @@ export class CohortToolBar extends React.Component<
             <PrimaryButton
               text={localization.InterpretVision.Cohort.save}
               onClick={this.openDialogue}
-              ariaLabel="Save cohort button"
+              ariaLabel={localization.Interpret.CohortEditor.saveAriaLabel}
             />
           </Stack.Item>
         </Stack>
@@ -131,12 +131,12 @@ export class CohortToolBar extends React.Component<
                   <PrimaryButton
                     onClick={this.addCohortWrapper(true)}
                     text={localization.InterpretVision.Cohort.saveAndSwitch}
-                    ariaLabel="Save and switch cohort button"
+                    ariaLabel={localization.Interpret.CohortEditor.saveAndSwitchAriaLabel}
                   />
                   <DefaultButton
                     onClick={this.addCohortWrapper(false)}
                     text={localization.InterpretVision.Cohort.saveAndClose}
-                    ariaLabel="Save and close cohort button"
+                    ariaLabel={localization.InterpretVision.Cohort.saveAndCloseAriaLabel}
                   />
                 </DialogFooter>
               </Stack.Item>

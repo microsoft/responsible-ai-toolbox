@@ -154,14 +154,14 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
                   onClick={(): void =>
                     this.props.saveState(this.props.filterIndex)
                   }
-                  ariaLabel="Save cohort button"
+                  ariaLabel={localization.Interpret.CohortEditor.saveAriaLabel}
                 />
               </Stack.Item>
               <Stack.Item>
                 <DefaultButton
                   text={localization.Interpret.CohortEditor.cancel}
                   onClick={(): void => this.props.cancelFilter()}
-                  ariaLabel="Cancel cohort button"
+                  ariaLabel={localization.Interpret.CohortEditor.cancelAriaLabel}
                 />
               </Stack.Item>
             </>
@@ -170,7 +170,7 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
               <PrimaryButton
                 text={localization.Interpret.CohortEditor.addFilter}
                 onClick={this.onAddFilterClick}
-                ariaLabel="Add cohort filter button"
+                ariaLabel={localization.Interpret.CohortEditor.addFilterAriaLabel}
               />
             </Stack.Item>
           )}
