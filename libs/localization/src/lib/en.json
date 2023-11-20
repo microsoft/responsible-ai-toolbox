@@ -493,7 +493,7 @@
       "errorMetric": "Enable error bars",
       "fairnessMetric": "Fairness metric",
       "performanceMetric": "Performance metric",
-      "sensitiveFeature": "Sensitive feature",
+      "sensitiveFeature": "Sensitive feature"
     },
     "ErrorBounds": {
       "howToRead": "How to read these error bars",
