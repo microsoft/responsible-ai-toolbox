@@ -229,7 +229,7 @@ export class ChartConfigurationFlyout extends React.Component<
             disabled={!this.state.datasetCohortViewIsNewlySelected}
             ariaLabel={
               localization.ModelAssessment.ModelOverview
-                .dataCohortsChartSelectionAriaLabel
+                .dataCohortsChartSelectionHeader
             }
           />
           {this.props.featureBasedCohorts.length > 0 && (
@@ -256,7 +256,7 @@ export class ChartConfigurationFlyout extends React.Component<
               disabled={this.state.datasetCohortViewIsNewlySelected}
               ariaLabel={
                 localization.ModelAssessment.ModelOverview
-                  .featureCohortsChartSelectionAriaLabel
+                  .featureBasedCohortsChartSelectionHeader
               }
             />
           )}

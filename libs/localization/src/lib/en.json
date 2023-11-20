@@ -492,11 +492,8 @@
     "DropdownHeaders": {
       "errorMetric": "Enable error bars",
       "fairnessMetric": "Fairness metric",
-      "fairnessMetricAriaLabel": "Fairness metric dropdown",
       "performanceMetric": "Performance metric",
-      "performanceMetricAriaLabel": "Performance metric dropdown",
       "sensitiveFeature": "Sensitive feature",
-      "sensitiveFeatureAriaLabel": "Sensitive feature dropdown"
     },
     "ErrorBounds": {
       "howToRead": "How to read these error bars",
@@ -707,7 +704,7 @@
       "backToComparisons": "Back to all models",
       "backToComparisonsLegacy": "Multimodel view",
       "chartChoiceDropdownHeader": "Charts",
-      "chartChoiceAriaLabel": "Chart selection dropdown",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "The bar chart shows the selection rate in each group, meaning the fraction of points classified as 1.",
       "classificationPerformanceHowToRead1": "The bar chart shows the distribution of errors in each group.",
       "classificationPerformanceHowToRead2": "Errors are split into overprediction errors (predicting 1 when the true label is 0), and underprediction errors (predicting 0 when the true label is 1).",
@@ -998,7 +995,7 @@
       "individualDatapoints": "Individual datapoints",
       "missingParameters": "This tab requires an evaluation dataset be supplied.",
       "noColor": "None",
-      "datasetCohortDropdown": "Dataset cohort dropdown"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "_featureImportanceOf.comment": "axis label on chart showing the importance of a selected feature (column)",
@@ -1450,9 +1447,9 @@
       "filter": "Filter",
       "indexLabel": "Image ",
       "labelTypeDropdown": "Select label type",
-      "labelTypeAriaLabel": "Label type dropdown",
+      "labelTypeAriaLabel": "Label type",
       "labelVisibilityDropdown": "Select labels to display",
-      "labelVisibilityAriaLabel": "Label visibility dropdown",
+      "labelVisibilityAriaLabel": "Label visibility",
       "legendFailure": "failure",
       "legendSuccess": "success",
       "loading": "Computing explanation for image of index",
@@ -1522,7 +1519,7 @@
       "deleteCohort": "Deleting {0}?",
       "deleteConfirm": "Are you sure you want to delete this cohort?",
       "selectCohort": "Select a cohort",
-      "selectCohortAriaLabel": "Cohort selection dropdown",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "Switch cohort",
       "shiftCohortDescription": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
@@ -1664,11 +1661,8 @@
         "Description2": "gaps on all classes of",
         "Description3": "for label",
         "FeaturePicker": "Feature",
-        "FeaturePickerAriaLabel": "Feature dropdown",
         "LabelPicker": "Positive label",
-        "LabelPickerAriaLabel": "Positive label dropdown",
         "MeasurePicker": "Measure",
-        "MeasurePickerAriaLabel": "Measure dropdown",
         "Measures": {
           "JaccardIndex": {
             "Description": "gap represents the difference between the Jaccard Index of Class A and Jaccard Index of Class B. Jaccard Index itself is an intersection-over-union measure and therefore has a range of [0, 1], where 0 means that the distributions are completely disjoint and 1 means they are completely identical.",
@@ -1858,9 +1852,7 @@
       "countColumnHeader": "Sample size",
       "dataCohortsHeatmapHeader": "Cohorts",
       "dataCohortsChartSelectionHeader": "Dataset cohorts",
-      "dataCohortsChartSelectionAriaLabel": "Dataset cohort dropdown",
       "featureBasedCohortsChartSelectionHeader": "Feature cohorts",
-      "featureCohortsChartSelectionAriaLabel": "Feature cohort dropdown",
       "disaggregatedAnalysisHeatmapHeader": "Feature cohorts",
       "fairnessMetricsHeatmapHeader": "Fairness metrics",
       "featuresDropdown": "Feature(s)",
@@ -2007,7 +1999,7 @@
       "cancel": "Cancel",
       "cohortList": "Time series list",
       "selectCohort": "Select a time series",
-      "selectCohortAriaLabel": "Time series selection dropdown",
+      "selectCohortAriaLabel": "Time series selection",
       "shiftCohort": "Switch time series",
       "shiftCohortDescription": "Select a time series from the time series list. Apply the time series to the dashboard."
     },
