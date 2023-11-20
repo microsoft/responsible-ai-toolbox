@@ -115,7 +115,7 @@ export class CohortEditor extends React.PureComponent<
             disabled={this.props.deleteIsDisabled}
             onClick={this.deleteCohort}
             className={styles.deleteCohort}
-            ariaLabel="Delete cohort button"
+            ariaLabel={localization.Interpret.CohortEditor.deleteAriaLabel}
           >
             {localization.Interpret.CohortEditor.delete}
           </DefaultButton>

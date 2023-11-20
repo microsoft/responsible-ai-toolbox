@@ -210,7 +210,7 @@ export class ProbabilityDistributionChart extends React.Component<
           }}
           text={localization.ModelAssessment.ModelOverview.chartConfigApply}
           ariaLabel={
-            localization.ModelAssessment.ModelOverview.chartConfigApplyAriaLabel
+            localization.ModelAssessment.ModelOverview.chartConfigApply
           }
         />
         <DefaultButton
@@ -219,8 +219,7 @@ export class ProbabilityDistributionChart extends React.Component<
           }}
           text={localization.ModelAssessment.ModelOverview.chartConfigCancel}
           ariaLabel={
-            localization.ModelAssessment.ModelOverview
-              .chartConfigCancelAriaLabel
+            localization.ModelAssessment.ModelOverview.chartConfigCancel
           }
         />
       </Stack>

@@ -283,15 +283,14 @@ export class ChartConfigurationFlyout extends React.Component<
             this.state.newlySelectedFeatureBasedCohorts
           )}
           ariaLabel={
-            localization.ModelAssessment.ModelOverview.chartConfigApplyAriaLabel
+            localization.ModelAssessment.ModelOverview.chartConfigApply
           }
         />
         <DefaultButton
           onClick={this.onDismiss}
           text={localization.ModelAssessment.ModelOverview.chartConfigCancel}
           ariaLabel={
-            localization.ModelAssessment.ModelOverview
-              .chartConfigCancelAriaLabel
+            localization.ModelAssessment.ModelOverview.chartConfigCancel
           }
         />
       </Stack>
