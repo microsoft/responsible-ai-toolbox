@@ -8,7 +8,6 @@ import {
   DialogType,
   PrimaryButton
 } from "@fluentui/react";
-import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 export interface IConfirmationDialogProps {
