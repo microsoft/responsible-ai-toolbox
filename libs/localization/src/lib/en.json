@@ -117,7 +117,7 @@
       "title": "Switch Cohort",
       "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard.",
       "selectCohort": "Select a cohort",
-      "cohortList": "Cohort list"
+      "cohortList": "Cohort"
     },
     "PreBuiltCohort": {
       "featureNameNotFound": "Feature name not found in the dataset",
@@ -129,7 +129,7 @@
     }
   },
   "Counterfactuals": {
-    "AriaLabel": "Counterfactual list",
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "Current treatment",
     "EffectLowerBound": "CI lower",
     "EffectOfTreatment": "Effect of recommendation",
@@ -1471,9 +1471,7 @@
       "tabOptionFirst": "Image explorer view",
       "tabOptionSecond": "Table view",
       "tabOptionThird": "Class view",
-      "tableListAriaLabel": "Table view list",
       "thumbnailSize": "Thumbnail size",
-      "thumbnailSizeAriaLabel": "Slider for image thumbnail size",
       "titleBarError": "Error instances",
       "titleBarSuccess": "Success instances",
       "trueY": "Ground truth: "
@@ -1843,7 +1841,6 @@
         "description": "Intersection over Union quantifies the degree of overlap between the prediction and ground truth bounding box of a detected object in an image. For example, setting an IoU threshold of 70% means that a prediction with greater than 70% overlap with ground truth is True, thus influencing the definition of prediction correctness and calculation of other performance metrics.",
         "iconId": "iouThresholdIconId",
         "title": "Learn about the IoU threshold",
-        "AriaLabel": "Slider for IoU threshold"
       },
       "notAvailable": "N/A",
       "countColumnHeader": "Sample size",
@@ -1913,7 +1910,7 @@
         "flyoutSubHeader": "Along which features would you like to evaluate your model's fairness?",
         "flyoutDescription": "Fairness is evaluated in terms of disparities in your model's behavior. We will split your data according to values of each selected feature, and evaluate how your model's performance metrics differ across these splits.",
         "selectAllRowsAriaLabel": "Select all rows",
-        "flyoutAriaLabel": "Aggregate balance measures list",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "Features",
         "featureSelectionAriaLabel": "Feature selection table",
         "metricSelectionAriaLabel": "Metric selection table",

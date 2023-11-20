@@ -164,7 +164,7 @@ export class TableList extends React.Component<
                 setKey="set"
                 onItemInvoked={this.props.selectItem}
                 ariaLabel={
-                  localization.InterpretVision.Dashboard.tableListAriaLabel
+                  localization.InterpretVision.Dashboard.tabOptionSecond
                 }
               />
             </MarqueeSelection>

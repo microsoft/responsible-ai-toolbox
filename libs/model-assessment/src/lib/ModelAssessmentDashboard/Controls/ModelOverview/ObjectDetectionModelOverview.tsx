@@ -90,7 +90,7 @@ export class ObjectDetectionWidgets extends React.PureComponent<IObjectDetection
           id="modelOverviewIoUThreshold"
           ariaLabel={
             localization.ModelAssessment.ModelOverview.iouThresholdDropdown
-              .AriaLabel
+              .name
           }
           label={
             localization.ModelAssessment.ModelOverview.iouThresholdDropdown.name
