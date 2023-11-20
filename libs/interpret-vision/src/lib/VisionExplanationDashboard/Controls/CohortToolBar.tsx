@@ -134,7 +134,7 @@ export class CohortToolBar extends React.Component<
                     ariaLabel={
                       this.state.errorMessage
                         ? this.state.errorMessage
-                        : undefined
+                        : localization.InterpretVision.Cohort.saveAndSwitch
                     }
                   />
                   <DefaultButton
@@ -143,7 +143,7 @@ export class CohortToolBar extends React.Component<
                     ariaLabel={
                       this.state.errorMessage
                         ? this.state.errorMessage
-                        : undefined
+                        : localization.InterpretVision.Cohort.saveAndClose
                     }
                   />
                 </DialogFooter>
