@@ -109,6 +109,7 @@ export class CounterfactualList extends React.Component<
         onRenderItemColumn={this.renderItemColumn}
         onRenderRow={this.renderRow}
         onRenderDetailsFooter={this.onRenderDetailsFooter}
+        ariaLabel={localization.Counterfactuals.AriaLabel}
       />
     );
   }

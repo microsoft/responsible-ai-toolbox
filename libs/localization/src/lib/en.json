@@ -129,6 +129,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "Current treatment",
     "EffectLowerBound": "CI lower",
     "EffectOfTreatment": "Effect of recommendation",
@@ -1915,7 +1916,11 @@
         "flyoutHeader": "Choose your features",
         "flyoutSubHeader": "Along which features would you like to evaluate your model's fairness?",
         "flyoutDescription": "Fairness is evaluated in terms of disparities in your model's behavior. We will split your data according to values of each selected feature, and evaluate how your model's performance metrics differ across these splits.",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "Features",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "Groups",
         "categoricalGroupsCountRemark": "This feature has {0} unique values.",
         "continuousGroupsCountRemark": "This feature is continuous and split into {0} bins.",
