@@ -130,7 +130,7 @@ export class CohortEditor extends React.PureComponent<
         <DefaultButton
           onClick={(): void => this.saveCohort(true)}
           disabled={this.isSaveDisabled()}
-          ariaLabel={localization.Interpret.CohortEditor.saveAndSwitchAriaLabel}
+          ariaLabel={localization.Interpret.CohortEditor.saveAndSwitch}
         >
           {localization.Interpret.CohortEditor.saveAndSwitch}
         </DefaultButton>
