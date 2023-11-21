@@ -108,9 +108,7 @@ export class SaveCohort extends React.Component<
               this.props.onDismiss();
               this.saveCohort(true);
             }}
-            ariaLabel={
-              localization.Interpret.CohortEditor.saveAndSwitch
-            }
+            ariaLabel={localization.Interpret.CohortEditor.saveAndSwitch}
           >
             {localization.Interpret.CohortEditor.saveAndSwitch}
           </DefaultButton>
