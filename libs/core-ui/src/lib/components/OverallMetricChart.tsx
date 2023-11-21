@@ -115,6 +115,9 @@ export class OverallMetricChart extends React.PureComponent<
               selectedKey={this.state.selectedCohortIndex}
               onChange={this.setSelectedCohort}
               id={"modelPerformanceCohortPicker"}
+              ariaLabel={
+                localization.Interpret.DatasetExplorer.datasetCohortDropdown
+              }
             />
           </div>
         )}

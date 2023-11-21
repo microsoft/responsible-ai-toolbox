@@ -704,6 +704,7 @@
       "backToComparisons": "Back to all models",
       "backToComparisonsLegacy": "Multimodel view",
       "chartChoiceDropdownHeader": "Charts",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "The bar chart shows the selection rate in each group, meaning the fraction of points classified as 1.",
       "classificationPerformanceHowToRead1": "The bar chart shows the distribution of errors in each group.",
       "classificationPerformanceHowToRead2": "Errors are split into overprediction errors (predicting 1 when the true label is 0), and underprediction errors (predicting 0 when the true label is 1).",
@@ -994,7 +995,7 @@
       "individualDatapoints": "Individual datapoints",
       "missingParameters": "This tab requires an evaluation dataset be supplied.",
       "noColor": "None",
-      "datasetCohortDropdown": "Dataset cohort dropdown"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "_featureImportanceOf.comment": "axis label on chart showing the importance of a selected feature (column)",
@@ -1446,7 +1447,9 @@
       "filter": "Filter",
       "indexLabel": "Image ",
       "labelTypeDropdown": "Select label type",
+      "labelTypeAriaLabel": "Label type",
       "labelVisibilityDropdown": "Select labels to display",
+      "labelVisibilityAriaLabel": "Label visibility",
       "legendFailure": "failure",
       "legendSuccess": "success",
       "loading": "Computing explanation for image of index",
@@ -1463,6 +1466,7 @@
       "incorrectDetections": "Incorrect detections: ",
       "prefix": "Object: ",
       "rows": "Rows: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "Search",
       "selectAll": "Select all",
       "settings": "Settings",
@@ -1480,6 +1484,8 @@
     "AddingTab": {
       "AddButtonText": "Add",
       "CalloutContent": "Adding some components (error tree view, error heat map) will allow you to filter down the data from the global cohort that you see in the components below.",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard button",
       "CalloutTitle": "Add component",
       "TabAddedMessage": {
         "DataAnalysis": "Data analysis component added",
@@ -1513,6 +1519,7 @@
       "deleteCohort": "Deleting {0}?",
       "deleteConfirm": "Are you sure you want to delete this cohort?",
       "selectCohort": "Select a cohort",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "Switch cohort",
       "shiftCohortDescription": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
@@ -1992,6 +1999,7 @@
       "cancel": "Cancel",
       "cohortList": "Time series list",
       "selectCohort": "Select a time series",
+      "selectCohortAriaLabel": "Time series selection",
       "shiftCohort": "Switch time series",
       "shiftCohortDescription": "Select a time series from the time series list. Apply the time series to the dashboard."
     },
