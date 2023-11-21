@@ -116,6 +116,7 @@ export class ShiftCohort extends React.Component<
           options={this.state.options}
           styles={dropdownStyles}
           onChange={this.onChange}
+          ariaLabel={localization.Core.ShiftCohort.cohortList}
         />
         <CohortStats
           temporaryCohort={this.state.savedCohorts[this.state.selectedCohort]}
