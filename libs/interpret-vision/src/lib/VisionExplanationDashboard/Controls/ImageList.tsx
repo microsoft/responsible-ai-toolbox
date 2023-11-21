@@ -79,6 +79,7 @@ export class ImageList extends React.Component<
           className={classNames.list}
           getPageHeight={this.getPageHeight}
           getItemCountForPage={this.getItemCountForPage}
+          tabIndex={0}
         />
       </FocusZone>
     );
