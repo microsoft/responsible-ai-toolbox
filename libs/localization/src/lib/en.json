@@ -117,7 +117,7 @@
       "title": "Switch Cohort",
       "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard.",
       "selectCohort": "Select a cohort",
-      "cohortList": "Cohort"
+      "cohortList": "Cohort list"
     },
     "PreBuiltCohort": {
       "featureNameNotFound": "Feature name not found in the dataset",
