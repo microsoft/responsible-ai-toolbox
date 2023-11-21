@@ -42,6 +42,7 @@ export class PageSizeSelectors extends React.Component<IPageSizeSelectorsProps> 
             defaultSelectedKey="3"
             options={NumRowsOptions}
             onChange={this.props.onNumRowsSelect}
+            ariaLabel={localization.InterpretVision.Dashboard.rowsAriaLabel}
           />
         </Stack.Item>
       </Stack>
