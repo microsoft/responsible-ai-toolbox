@@ -146,6 +146,14 @@ export class MetricConfigurationFlyout extends React.Component<
             selectionMode={SelectionMode.multiple}
             selection={this._selection}
             checkboxVisibility={CheckboxVisibility.always}
+            ariaLabelForSelectAllCheckbox={
+              localization.ModelAssessment.ModelOverview.featureConfiguration
+                .selectAllRowsAriaLabel
+            }
+            ariaLabel={
+              localization.ModelAssessment.ModelOverview.featureConfiguration
+                .metricSelectionAriaLabel
+            }
           />
         </Stack>
       </Panel>
