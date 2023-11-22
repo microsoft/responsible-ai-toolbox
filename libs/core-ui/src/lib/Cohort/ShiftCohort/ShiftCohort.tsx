@@ -110,7 +110,7 @@ export class ShiftCohort extends React.Component<
         maxWidth={1000}
       >
         <Dropdown
-          placeholder="Select a cohort"
+          placeholder={localization.Core.ShiftCohort.selectCohort}
           label={localization.Core.ShiftCohort.cohortList}
           selectedKey={this.state.selectedCohort}
           options={this.state.options}
@@ -125,10 +125,12 @@ export class ShiftCohort extends React.Component<
           <PrimaryButton
             onClick={this.onApplyClick}
             text={localization.Core.ShiftCohort.apply}
+            ariaLabel={localization.Core.ShiftCohort.applyAriaLabel}
           />
           <DefaultButton
             onClick={this.props.onDismiss}
             text={localization.Core.ShiftCohort.cancel}
+            ariaLabel={localization.Interpret.CohortEditor.cancelAriaLabel}
           />
         </DialogFooter>
       </Dialog>

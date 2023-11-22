@@ -98,6 +98,7 @@ export class CohortToolBar extends React.Component<
             <PrimaryButton
               text={localization.InterpretVision.Cohort.save}
               onClick={this.openDialogue}
+              ariaLabel={localization.InterpretVision.Cohort.save}
             />
           </Stack.Item>
         </Stack>
@@ -120,6 +121,7 @@ export class CohortToolBar extends React.Component<
                   <Text
                     className={classNames.errorMessage}
                     variant="mediumPlus"
+                    aria-label={this.state.errorMessage}
                   >
                     {this.state.errorMessage}
                   </Text>
@@ -130,10 +132,20 @@ export class CohortToolBar extends React.Component<
                   <PrimaryButton
                     onClick={this.addCohortWrapper(true)}
                     text={localization.InterpretVision.Cohort.saveAndSwitch}
+                    ariaLabel={
+                      this.state.errorMessage
+                        ? this.state.errorMessage
+                        : localization.InterpretVision.Cohort.saveAndSwitch
+                    }
                   />
                   <DefaultButton
                     onClick={this.addCohortWrapper(false)}
                     text={localization.InterpretVision.Cohort.saveAndClose}
+                    ariaLabel={
+                      this.state.errorMessage
+                        ? this.state.errorMessage
+                        : localization.InterpretVision.Cohort.saveAndClose
+                    }
                   />
                 </DialogFooter>
               </Stack.Item>
