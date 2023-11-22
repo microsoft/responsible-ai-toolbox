@@ -129,6 +129,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "現在の処理",
     "EffectLowerBound": "CI lower",
     "EffectOfTreatment": "推奨の効果",
@@ -683,6 +684,7 @@
       "backToComparisons": "すべてのモデルに戻る",
       "backToComparisonsLegacy": "マルチモデル ビュー",
       "chartChoiceDropdownHeader": "グラフ",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "横棒グラフは、各グループの選択率を示しており、ポイントの割合が 1 として分類されます。",
       "classificationPerformanceHowToRead1": "横棒グラフは、各グループの誤差の分布を示します。",
       "classificationPerformanceHowToRead2": "誤差は過大予測による誤差 (true ラベルが 0 の場合に 1 を予測) と過少予測による誤差 (true ラベルが 1 の場合に 0 を予測) に分割されます。",
@@ -890,7 +892,7 @@
       "individualDatapoints": "個々のデータポイント",
       "missingParameters": "このタブには、評価データセットを指定する必要があります。",
       "noColor": "なし",
-      "datasetCohortDropdown": "データセットのコーホート ドロップダウン"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "特徴量の重要度:",
@@ -1205,7 +1207,9 @@
       "filter": "フィルター",
       "indexLabel": "画像 ",
       "labelTypeDropdown": "ラベルの種類の選択",
+      "labelTypeAriaLabel": "Label type",
       "labelVisibilityDropdown": "表示するラベルの選択",
+      "labelVisibilityAriaLabel": "Label visibility",
       "legendFailure": "失敗",
       "legendSuccess": "成功",
       "loading": "Computing explanation for image of index",
@@ -1222,6 +1226,7 @@
       "incorrectDetections": "正しくない検出:",
       "prefix": "オブジェクト: ",
       "rows": "行: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "検索",
       "selectAll": "すべてを選択",
       "settings": "設定",
@@ -1239,6 +1244,8 @@
     "AddingTab": {
       "AddButtonText": "追加",
       "CalloutContent": "コンポーネント (エラー ツリー ビュー、エラー ヒート マップ) を追加すると、下のコンポーネントに表示されるグローバル コーホートからデータをフィルター処理できるようになります。",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard button",
       "CalloutTitle": "コンポーネントの追加",
       "TabAddedMessage": {
         "DataAnalysis": "データ分析コンポーネントが追加されました",
@@ -1272,6 +1279,7 @@
       "deleteCohort": "{0} を削除中ですか?",
       "deleteConfirm": "このコーホートを削除しますか?",
       "selectCohort": "コーホートの選択",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "コーホートの切り替え",
       "shiftCohortDescription": "コーホート リストでコーホートを選択します。デジタル ダッシュボードにコーホートを適用します。"
     },
@@ -1667,7 +1675,11 @@
         "flyoutHeader": "特徴の選択",
         "flyoutSubHeader": "モデルの公平性を評価する特徴量",
         "flyoutDescription": "公平性は、モデルの動作における不均衡の観点から評価されます。選択された各特徴量の値に従ってデータが分割され、モデルのパフォーマンス メトリックがこれらの分割間でどのように異なるかが評価されます。",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "特徴",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "グループ",
         "categoricalGroupsCountRemark": "この特徴には {0} 個の一意の値があります。",
         "continuousGroupsCountRemark": "この特徴は連続しており、{0} 個のビンに分割されます。",
@@ -1751,6 +1763,7 @@
       "cancel": "キャンセル",
       "cohortList": "時系列リスト",
       "selectCohort": "タイム シリーズの選択",
+      "selectCohortAriaLabel": "Time series selection",
       "shiftCohort": "時系列の切り替え",
       "shiftCohortDescription": "時系列リストから時系列を選択します。時系列をダッシュボードに適用します。"
     },

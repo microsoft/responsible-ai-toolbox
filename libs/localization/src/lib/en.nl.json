@@ -129,6 +129,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "Huidige behandeling",
     "EffectLowerBound": "CI lager",
     "EffectOfTreatment": "Effect van aanbeveling",
@@ -683,6 +684,7 @@
       "backToComparisons": "Terug naar alle modellen",
       "backToComparisonsLegacy": "Weergave met meerdere modellen",
       "chartChoiceDropdownHeader": "Grafieken",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "Het staafdiagram toont het selectiepercentage in elke groep, dat wil zeggen het aantal punten dat wordt geclassificeerd als 1.",
       "classificationPerformanceHowToRead1": "In het staafdiagram wordt de distributie van fouten in elke groep weergegeven.",
       "classificationPerformanceHowToRead2": "Fouten zijn opgesplitst in fouten met overschatting (voorspelling 1 wanneer het werkelijke label 0 is) en fouten met onderschatting (voorspelling 0 wanneer het werkelijke label 1 is).",
@@ -890,7 +892,7 @@
       "individualDatapoints": "Afzonderlijke gegevenspunten",
       "missingParameters": "Op dit tabblad moet een evaluatiegegevensset worden opgegeven.",
       "noColor": "Geen",
-      "datasetCohortDropdown": "Vervolgkeuzelijst gegevensset-cohort"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "Functie-urgentie van",
@@ -1205,7 +1207,9 @@
       "filter": "Filteren",
       "indexLabel": "Afbeelding ",
       "labelTypeDropdown": "Labeltype selecteren",
+      "labelTypeAriaLabel": "Label type",
       "labelVisibilityDropdown": "Labels selecteren om weer te geven",
+      "labelVisibilityAriaLabel": "Label visibility",
       "legendFailure": "mislukte poging",
       "legendSuccess": "geslaagd",
       "loading": "Uitleg voor installatiekopie van index berekenen",
@@ -1222,6 +1226,7 @@
       "incorrectDetections": "Onjuiste detecties: ",
       "prefix": "Object: ",
       "rows": "Rijen: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "Zoeken",
       "selectAll": "Alles selecteren",
       "settings": "Instellingen",
@@ -1239,6 +1244,8 @@
     "AddingTab": {
       "AddButtonText": "Toevoegen",
       "CalloutContent": "Door bepaalde onderdelen toe te voegen (foutstructuurweergave, heatmap met fouten) kunt u de gegevens uit de globale cohort filteren die u in de onderstaande onderdelen ziet.",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard button",
       "CalloutTitle": "Onderdeel toevoegen",
       "TabAddedMessage": {
         "DataAnalysis": "Onderdeel voor gegevensanalyse toegevoegd",
@@ -1272,6 +1279,7 @@
       "deleteCohort": "{0}verwijderen?",
       "deleteConfirm": "Weet u zeker dat u dit cohort wilt verwijderen?",
       "selectCohort": "Een cohort selecteren",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "Cohort wisselen",
       "shiftCohortDescription": "Selecteer een cohort in de lijst met cohorten. Pas het cohort toe op het dashboard."
     },
@@ -1667,7 +1675,11 @@
         "flyoutHeader": "Kies uw functies",
         "flyoutSubHeader": "Voor welke functies wilt u de eerlijkheid van uw model evalueren?",
         "flyoutDescription": "Evenredigheid wordt geëvalueerd in termen van beoordeling van het gedrag van uw model. We splitsen uw gegevens op basis van de waarden van elke geselecteerde functie en evalueren hoe de metrische gegevens prestaties van uw model verschillen in deze splitsingen.",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "Functies",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "Groepen",
         "categoricalGroupsCountRemark": "Deze functie heeft {0} unieke waarden.",
         "continuousGroupsCountRemark": "Deze functie is doorlopend en opgesplitst in {0} opslaglocaties.",
@@ -1751,6 +1763,7 @@
       "cancel": "Annuleren",
       "cohortList": "Lijst met tijdreeksen",
       "selectCohort": "Een tijdreeks selecteren",
+      "selectCohortAriaLabel": "Time series selection",
       "shiftCohort": "Tijdreeks wisselen",
       "shiftCohortDescription": "Selecteer een tijdreeks in de lijst met tijdreeksen. Pas de tijdreeks toe op het dashboard."
     },

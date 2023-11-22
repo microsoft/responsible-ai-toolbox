@@ -129,6 +129,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "Aktuell behandling",
     "EffectLowerBound": "CI lower",
     "EffectOfTreatment": "Rekommendationens verkan",
@@ -683,6 +684,7 @@
       "backToComparisons": "Tillbaka till alla modeller",
       "backToComparisonsLegacy": "Multimodellvy",
       "chartChoiceDropdownHeader": "Diagram",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "I stapeldiagrammet visas markeringshastigheten i varje grupp, vilket innebär fraktionen punkter som klassificeras som 1.",
       "classificationPerformanceHowToRead1": "Stapeldiagrammet visar distributionen av fel i varje grupp.",
       "classificationPerformanceHowToRead2": "Fel delas upp i överskattningsfel (förutsäger 1 när den sanna etiketten är 0) och underskattningsfel (förutsäger 0 när den sanna etiketten är 1).",
@@ -890,7 +892,7 @@
       "individualDatapoints": "Enskilda datapunkter",
       "missingParameters": "Den här fliken kräver att en utvärderingsdatauppsättning anges.",
       "noColor": "Inget",
-      "datasetCohortDropdown": "Listruta för datamängdskohort"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "Funktionsprioritet för",
@@ -1205,7 +1207,9 @@
       "filter": "Filter",
       "indexLabel": "Bild ",
       "labelTypeDropdown": "Välj etiketttyp",
+      "labelTypeAriaLabel": "Label type",
       "labelVisibilityDropdown": "Välj etiketter som ska visas",
+      "labelVisibilityAriaLabel": "Label visibility",
       "legendFailure": "fel",
       "legendSuccess": "lyckades",
       "loading": "Computing explanation for image of index",
@@ -1222,6 +1226,7 @@
       "incorrectDetections": "Felaktiga identifieringar: ",
       "prefix": "Objekt: ",
       "rows": "Rader: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "Sök",
       "selectAll": "Välj allt",
       "settings": "Inställningar",
@@ -1239,6 +1244,8 @@
     "AddingTab": {
       "AddButtonText": "Lägg till",
       "CalloutContent": "När du lägger till vissa komponenter (fel trädsvy, fel heatmap) kan du filtrera data från den globala kohorten som visas i komponenterna nedan.",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard button",
       "CalloutTitle": "Lägg till komponent",
       "TabAddedMessage": {
         "DataAnalysis": "Dataanalyskomponent har lagts till",
@@ -1272,6 +1279,7 @@
       "deleteCohort": "Tar du bort {0}?",
       "deleteConfirm": "Vill du ta bort den här kohorten?",
       "selectCohort": "Välj en kohort",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "Byt kohort",
       "shiftCohortDescription": "Välj en kohort från kohort-listan. Tillämpa kohorten på instrumentpanelen."
     },
@@ -1667,7 +1675,11 @@
         "flyoutHeader": "Välj dina funktioner",
         "flyoutSubHeader": "Efter vilka funktioner vill du utvärdera din modells rättvisa?",
         "flyoutDescription": "Rättvisa utvärderas i förhållande till diskrepanser i modellens beteende. Vi delar upp dina data enligt värdena för varje vald funktion och utvärderar hur modellens prestandamått skiljer sig åt i dessa delningar.",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "Funktioner",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "Grupper",
         "categoricalGroupsCountRemark": "Den här funktionen har {0} unika värden.",
         "continuousGroupsCountRemark": "Den här funktionen är kontinuerlig och uppdelad i {0} fack.",
@@ -1751,6 +1763,7 @@
       "cancel": "Avbryt",
       "cohortList": "Lista över tidsserier",
       "selectCohort": "Välj en tidsserie",
+      "selectCohortAriaLabel": "Time series selection",
       "shiftCohort": "Växla tidsserie",
       "shiftCohortDescription": "Välj en tidsserie i tidsserielistan. Använd tidsserierna på instrumentpanelen."
     },

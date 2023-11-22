@@ -129,6 +129,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "Bieżące działanie",
     "EffectLowerBound": "Dolny przedział ufności",
     "EffectOfTreatment": "Skutek zalecenia",
@@ -683,6 +684,7 @@
       "backToComparisons": "Powrót do wszystkich modeli",
       "backToComparisonsLegacy": "Widok wielu modeli",
       "chartChoiceDropdownHeader": "Wykresy",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "Wykres słupkowy pokazuje współczynnik wyboru w każdej grupie, co oznacza ułamek punktów sklasyfikowanych jako 1.",
       "classificationPerformanceHowToRead1": "Wykres słupkowy pokazuje rozkład błędów w każdej grupie.",
       "classificationPerformanceHowToRead2": "Błędy są podzielone na błędy przeszacowania (przewidywanie 1, gdy rzeczywista etykieta to 0) i niedoszacowania (przewidywanie 0, gdy rzeczywista etykieta to 1).",
@@ -890,7 +892,7 @@
       "individualDatapoints": "Poszczególne punkty danych",
       "missingParameters": "Ta karta wymaga dostarczenia zestawu danych oceny.",
       "noColor": "Brak",
-      "datasetCohortDropdown": "Lista rozwijana kohorty zestawu danych"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "Ważność cechy",
@@ -1205,7 +1207,9 @@
       "filter": "Filtr",
       "indexLabel": "Obraz ",
       "labelTypeDropdown": "Wybierz typ etykiety",
+      "labelTypeAriaLabel": "Label type",
       "labelVisibilityDropdown": "Wybierz etykiety do wyświetlenia",
+      "labelVisibilityAriaLabel": "Label visibility",
       "legendFailure": "niepowodzenie",
       "legendSuccess": "sukces",
       "loading": "Computing explanation for image of index",
@@ -1222,6 +1226,7 @@
       "incorrectDetections": "Nieprawidłowe wykrycia: ",
       "prefix": "Obiekt: ",
       "rows": "Wiersze: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "Wyszukaj",
       "selectAll": "Wybierz wszystkie",
       "settings": "Ustawienia",
@@ -1239,6 +1244,8 @@
     "AddingTab": {
       "AddButtonText": "Dodaj",
       "CalloutContent": "Dodanie niektórych składników (widok drzewa błędów, mapa cieplna błędów) umożliwi Ci filtrowanie danych z kohorty globalnej, które są widoczne w składnikach poniżej.",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard button",
       "CalloutTitle": "Dodaj składnik",
       "TabAddedMessage": {
         "DataAnalysis": "Dodano składnik analizy danych",
@@ -1272,6 +1279,7 @@
       "deleteCohort": "Usuwanie {0}?",
       "deleteConfirm": "Czy na pewno chcesz usunąć tę kohortę?",
       "selectCohort": "Wybieranie kohorty",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "Przełącz kohortę",
       "shiftCohortDescription": "Wybierz kohortę z listy kohort. Zastosuj kohortę do pulpitu nawigacyjnego."
     },
@@ -1667,7 +1675,11 @@
         "flyoutHeader": "Wybierz funkcje",
         "flyoutSubHeader": "Względem jakich cech chcesz ocenić uczciwość modelu?",
         "flyoutDescription": "Uczciwość jest oceniana pod względem rozbieżności w zachowaniu modelu. Dane zostaną podzielone według wartości każdej wybranej funkcji, a następnie zostaną ocenione różnice między metryką wydajności modelu a tymi podziałami.",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "Funkcje",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "Grupy",
         "categoricalGroupsCountRemark": "Liczba unikatowych wartości tej funkcji to {0}.",
         "continuousGroupsCountRemark": "Ta funkcja jest ciągła i podzielona na {0} pojemniki.",
@@ -1751,6 +1763,7 @@
       "cancel": "Anuluj",
       "cohortList": "Lista szeregów czasowych",
       "selectCohort": "Wybierz szereg czasowy",
+      "selectCohortAriaLabel": "Time series selection",
       "shiftCohort": "Przełączanie szeregów czasowych",
       "shiftCohortDescription": "Wybierz szereg czasowy z listy szeregów czasowych. Zastosuj szeregi czasowe do pulpitu nawigacyjnego."
     },

@@ -129,6 +129,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "Tratamiento actual",
     "EffectLowerBound": "IC inferior",
     "EffectOfTreatment": "Efecto de la recomendación",
@@ -683,6 +684,7 @@
       "backToComparisons": "Volver a todos los modelos",
       "backToComparisonsLegacy": "Vista multimodelo",
       "chartChoiceDropdownHeader": "Gráficos",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "El gráfico de barras muestra la probabilidad de selecciones de cada grupo, es decir, la fracción de puntos que se clasifica como 1.",
       "classificationPerformanceHowToRead1": "El gráfico de barras muestra la distribución de los errores en cada grupo.",
       "classificationPerformanceHowToRead2": "Los errores se dividen en errores de sobrepredicción (se predice 1 cuando la etiqueta verdadera es 0) y los errores de infrapredicción (se predice 0 cuando la etiqueta verdadera es 1).",
@@ -890,7 +892,7 @@
       "individualDatapoints": "Puntos de datos individuales",
       "missingParameters": "Esta pestaña requiere proporcionar un conjunto de datos de evaluación.",
       "noColor": "Ninguna",
-      "datasetCohortDropdown": "Lista desplegable del cohorte del conjunto de datos"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "Importancia de la característica de",
@@ -1205,7 +1207,9 @@
       "filter": "Filtro",
       "indexLabel": "Imagen ",
       "labelTypeDropdown": "Seleccionar tipo de etiqueta",
+      "labelTypeAriaLabel": "Label type",
       "labelVisibilityDropdown": "Seleccionar etiquetas para mostrar",
+      "labelVisibilityAriaLabel": "Label visibility",
       "legendFailure": "error",
       "legendSuccess": "correcto",
       "loading": "Computing explanation for image of index",
@@ -1222,6 +1226,7 @@
       "incorrectDetections": "Detecciones incorrectas: ",
       "prefix": "Objeto: ",
       "rows": "Filas: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "Buscar",
       "selectAll": "Seleccionar todo",
       "settings": "Configuración",
@@ -1239,6 +1244,8 @@
     "AddingTab": {
       "AddButtonText": "Agregar",
       "CalloutContent": "Agregar algunos componentes (vista de árbol de error, mapa térmico de error) le permitirá filtrar los datos de la cohorte global que puede ver en los componentes a continuación.",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard button",
       "CalloutTitle": "Agregar componente",
       "TabAddedMessage": {
         "DataAnalysis": "Componente de análisis de datos agregado",
@@ -1272,6 +1279,7 @@
       "deleteCohort": "¿Eliminar {0}?",
       "deleteConfirm": "¿Está seguro de que desea eliminar esta cohorte?",
       "selectCohort": "Seleccionar un cohorte",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "Cambiar cohorte",
       "shiftCohortDescription": "Seleccione un cohorte de la lista de cohortes. Aplique el cohorte al panel."
     },
@@ -1667,7 +1675,11 @@
         "flyoutHeader": "Elegir las características",
         "flyoutSubHeader": "¿Con respecto a qué características quiere evaluar la equidad de su modelo?",
         "flyoutDescription": "La equidad se evalúa en términos de disparidades en el comportamiento del modelo. Se dividirán los datos en función de los valores de las características seleccionadas y se evaluarán las diferencias entre las métricas de rendimiento del modelo de acuerdo con estas divisiones.",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "Características",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "Grupos",
         "categoricalGroupsCountRemark": "Esta característica tiene {0} valores únicos.",
         "continuousGroupsCountRemark": "Esta característica es continua y se divide en {0} contenedores.",
@@ -1751,6 +1763,7 @@
       "cancel": "Cancelar",
       "cohortList": "Lista de series temporales",
       "selectCohort": "Seleccionar una serie temporal",
+      "selectCohortAriaLabel": "Time series selection",
       "shiftCohort": "Cambiar serie temporal",
       "shiftCohortDescription": "Seleccione una serie temporal de la lista de series temporales. Aplique la serie temporal al panel."
     },

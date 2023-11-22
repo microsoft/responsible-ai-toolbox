@@ -129,6 +129,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "현재 처리 값",
     "EffectLowerBound": "CI 하한",
     "EffectOfTreatment": "권장 사항 효과",
@@ -683,6 +684,7 @@
       "backToComparisons": "모든 모델로 돌아가기",
       "backToComparisonsLegacy": "다중 모델 보기",
       "chartChoiceDropdownHeader": "차트",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "가로 막대형 차트는 각 그룹의 선택 비율을 보여 주며, 1로 분류된 요소의 비율을 의미합니다.",
       "classificationPerformanceHowToRead1": "가로 막대형 차트는 각 그룹의 오차 분포를 보여 줍니다.",
       "classificationPerformanceHowToRead2": "오차는 과대 예측 오차(실제 레이블이 0인 경우 1을 예측)와 과소 예측 오차(실제 레이블이 1인 경우 0을 예측)로 나뉩니다.",
@@ -890,7 +892,7 @@
       "individualDatapoints": "개별 데이터 포인트",
       "missingParameters": "이 탭에서 평가 데이터 세트를 제공해야 합니다.",
       "noColor": "없음",
-      "datasetCohortDropdown": "데이터 세트 동질 집단 드롭다운"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "다음의 기능 중요도",
@@ -1205,7 +1207,9 @@
       "filter": "필터",
       "indexLabel": "이미지 ",
       "labelTypeDropdown": "레이블 유형 선택",
+      "labelTypeAriaLabel": "Label type",
       "labelVisibilityDropdown": "표시할 레이블 선택",
+      "labelVisibilityAriaLabel": "Label visibility",
       "legendFailure": "실패",
       "legendSuccess": "성공",
       "loading": "Computing explanation for image of index",
@@ -1222,6 +1226,7 @@
       "incorrectDetections": "잘못된 탐지: ",
       "prefix": "개체: ",
       "rows": "행: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "검색",
       "selectAll": "모두 선택",
       "settings": "설정",
@@ -1239,6 +1244,8 @@
     "AddingTab": {
       "AddButtonText": "추가",
       "CalloutContent": "일부 구성 요소(오류 트리 보기, 오류 열 지도)를 추가하면 아래 구성 요소에 있는 전역 코호트의 데이터를 필터링할 수 있습니다.",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard button",
       "CalloutTitle": "구성 요소 추가",
       "TabAddedMessage": {
         "DataAnalysis": "데이터 분석 구성 요소 추가됨",
@@ -1272,6 +1279,7 @@
       "deleteCohort": "{0}을(를) 삭제하시겠습니까?",
       "deleteConfirm": "이 코호트를 삭제하시겠습니까?",
       "selectCohort": "코호트 선택",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "코호트 전환",
       "shiftCohortDescription": "코호트 목록에서 코호트를 선택합니다. 대시보드에 코호트를 적용합니다."
     },
@@ -1667,7 +1675,11 @@
         "flyoutHeader": "기능 선택",
         "flyoutSubHeader": "어떤 기능에 따라 모델의 공정성을 평가하시겠습니까?",
         "flyoutDescription": "공정성은 모델 동작의 불일치 측면에서 평가됩니다. 선택한 각 기능의 값에 따라 데이터를 분할하고 모델의 성능 메트릭이 이러한 분할 간에 어떻게 다른지 평가합니다.",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "기능",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "그룹",
         "categoricalGroupsCountRemark": "이 기능에는 {0} 고유 값이 있습니다.",
         "continuousGroupsCountRemark": "이 기능은 연속되며 {0} bin으로 분할됩니다.",
@@ -1751,6 +1763,7 @@
       "cancel": "취소",
       "cohortList": "시계열 목록",
       "selectCohort": "시계열 선택",
+      "selectCohortAriaLabel": "Time series selection",
       "shiftCohort": "시계열 전환",
       "shiftCohortDescription": "시계열 목록에서 시계열을 선택합니다. 대시보드에 시계열을 적용합니다."
     },

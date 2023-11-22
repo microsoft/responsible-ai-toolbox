@@ -129,6 +129,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "Geçerli tedavi",
     "EffectLowerBound": "CI_lower",
     "EffectOfTreatment": "Öneri etkisi",
@@ -683,6 +684,7 @@
       "backToComparisons": "Tüm modellere dön",
       "backToComparisonsLegacy": "Çoklu model görünümü",
       "chartChoiceDropdownHeader": "Grafikler",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "Çubuk grafik, her gruptaki seçim oranını gösterir. Bu, 1 olarak sınıflandırılan noktaların kesir değerini ifade eder.",
       "classificationPerformanceHowToRead1": "Çubuk grafik, her gruptaki hataların dağılımını gösterir.",
       "classificationPerformanceHowToRead2": "Hatalar, fazla tahmin hataları (1 tahmin edilirken gerçek etiketin 0 olması) ve düşük tahmin hataları (0 tahmin edilirken gerçek etiketin 1 olması) olarak ayrılır.",
@@ -890,7 +892,7 @@
       "individualDatapoints": "Ayrı ayrı veri noktaları",
       "missingParameters": "Bu sekme için değerlendirme veri kümesi sağlanması gerekir.",
       "noColor": "Yok",
-      "datasetCohortDropdown": "Veri kümesi kohortu açılan listesi"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "Şu özellik için önem derecesi:",
@@ -1205,7 +1207,9 @@
       "filter": "Filtre",
       "indexLabel": "Resim ",
       "labelTypeDropdown": "Etiket türünü seçin",
+      "labelTypeAriaLabel": "Label type",
       "labelVisibilityDropdown": "Görüntülenecek etiketleri seçin",
+      "labelVisibilityAriaLabel": "Label visibility",
       "legendFailure": "hata",
       "legendSuccess": "başarılı",
       "loading": "Computing explanation for image of index",
@@ -1222,6 +1226,7 @@
       "incorrectDetections": "Yanlış algılamalar: ",
       "prefix": "Nesne: ",
       "rows": "Satırlar: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "Ara",
       "selectAll": "Tümünü seç",
       "settings": "Ayarlar",
@@ -1239,6 +1244,8 @@
     "AddingTab": {
       "AddButtonText": "Ekle",
       "CalloutContent": "Bazı bileşenlerin (hata ağaç görünümü, hata ısı haritası) eklenmesi, aşağıdaki bileşenlerde gördüğünüz genel kohort verilerini filtrelemenizi sağlar.",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard button",
       "CalloutTitle": "Bileşen ekle",
       "TabAddedMessage": {
         "DataAnalysis": "Veri analizi bileşeni eklendi",
@@ -1272,6 +1279,7 @@
       "deleteCohort": "{0} silinsin mi?",
       "deleteConfirm": "Bu kohortu silmek istediğinizden emin misiniz?",
       "selectCohort": "Kohort seçin",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "Kohort değiştir",
       "shiftCohortDescription": "Kohort listesinden bir kohort seçin. Kohortu panoya uygulayın."
     },
@@ -1667,7 +1675,11 @@
         "flyoutHeader": "Özelliklerinizi seçin",
         "flyoutSubHeader": "Modelinizin eşitliğini hangi özelliklerle birlikte değerlendirmek istiyorsunuz?",
         "flyoutDescription": "Eşitlik, modelinizin davranışındaki farklara göre değerlendirilir. Verilerinizi seçilen her bir özelliğin değerlerine göre böleriz ve modelinizin performans ölçümleri ile tahminlerinin bu bölmeler arasında nasıl farklılık gösterdiğini değerlendiririz.",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "Özellikler",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "Gruplar",
         "categoricalGroupsCountRemark": "Bu özelliğin {0} benzersiz değeri var.",
         "continuousGroupsCountRemark": "Bu özellik süreklidir ve {0} bölmeye bölünmüştür.",
@@ -1751,6 +1763,7 @@
       "cancel": "İptal",
       "cohortList": "Zaman serisi listesi",
       "selectCohort": "Zaman serisi seç",
+      "selectCohortAriaLabel": "Time series selection",
       "shiftCohort": "Zaman serisini değiştir",
       "shiftCohortDescription": "Zaman serisi listesinden bir zaman serisi seçin. Zaman serisini panoya uygulayın."
     },

@@ -129,6 +129,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "Aktuální léčba",
     "EffectLowerBound": "Dolní interval spolehlivosti",
     "EffectOfTreatment": "Vliv doporučení",
@@ -683,6 +684,7 @@
       "backToComparisons": "Zpět na všechny modely",
       "backToComparisonsLegacy": "Vícemodelové zobrazení",
       "chartChoiceDropdownHeader": "Grafy",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "Pruhový graf zobrazuje míru výběru v jednotlivých skupinách, tedy podíl bodů klasifikovaných jako 1.",
       "classificationPerformanceHowToRead1": "Pruhový graf zobrazuje distribuci chyb v jednotlivých skupinách.",
       "classificationPerformanceHowToRead2": "Chyby jsou rozdělené na chyby nadhodnocení (predikuje se 1, když skutečný popisek je 0) a chyby podhodnocení (predikuje se 0, když skutečný popisek je 1).",
@@ -890,7 +892,7 @@
       "individualDatapoints": "Jednotlivé datové body",
       "missingParameters": "Tato karta vyžaduje zadání datové sady pro vyhodnocení.",
       "noColor": "Žádné",
-      "datasetCohortDropdown": "Rozevírací seznam kohorty datové sady"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "Důležitost atributu",
@@ -1205,7 +1207,9 @@
       "filter": "Filtrovat",
       "indexLabel": "Obrázek ",
       "labelTypeDropdown": "Vybrat typ popisku",
+      "labelTypeAriaLabel": "Label type",
       "labelVisibilityDropdown": "Vyberte popisky, které se mají zobrazit.",
+      "labelVisibilityAriaLabel": "Label visibility",
       "legendFailure": "selhání",
       "legendSuccess": "úspěch",
       "loading": "Computing explanation for image of index",
@@ -1222,6 +1226,7 @@
       "incorrectDetections": "Nesprávná zjištění: ",
       "prefix": "Objekt: ",
       "rows": "Řádky: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "Hledat",
       "selectAll": "Vybrat vše",
       "settings": "Nastavení",
@@ -1239,6 +1244,8 @@
     "AddingTab": {
       "AddButtonText": "Přidat",
       "CalloutContent": "Přidání některých komponent (stromové zobrazení chyb, heat mapa chyb) vám umožní filtrovat data z globální kohorty, kterou vidíte v níže uvedených komponentách.",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard button",
       "CalloutTitle": "Přidat komponentu",
       "TabAddedMessage": {
         "DataAnalysis": "Byla přidána komponenta analýzy dat",
@@ -1272,6 +1279,7 @@
       "deleteCohort": "Odstraňuje se: {0}?",
       "deleteConfirm": "Určitě chcete odstranit tuto kohortu?",
       "selectCohort": "Vybrat kohortu",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "Přepnout kohortu",
       "shiftCohortDescription": "Vyberte kohortu ze seznamu kohort. Použije kohortu na řídicí panel."
     },
@@ -1667,7 +1675,11 @@
         "flyoutHeader": "Zvolte si funkce",
         "flyoutSubHeader": "Se kterým příznakem byste chtěli vyhodnotit nestrannost modelu?",
         "flyoutDescription": "Nestrannost se vyhodnocuje ve smyslu nekonzistence chování modelů. Vaše data rozdělíme podle hodnot každého vybraného příznaku a vyhodnotíme, jak se mezi jednotlivými částmi liší metrika výkonu modelu.",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "Atributy",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "Skupiny",
         "categoricalGroupsCountRemark": "Tato funkce má následující počet jedinečných hodnot: {0}",
         "continuousGroupsCountRemark": "Tato funkce je průběžná a rozdělená do {0} přihrádek.",
@@ -1751,6 +1763,7 @@
       "cancel": "Zrušit",
       "cohortList": "Seznam časových řad",
       "selectCohort": "Vyberte časovou řadu",
+      "selectCohortAriaLabel": "Time series selection",
       "shiftCohort": "Přepnout časovou řadu",
       "shiftCohortDescription": "Vyberte časovou řadu ze seznamu časových řad. Použije časovou řadu na řídicí panel."
     },

@@ -129,6 +129,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "Aktuelle Behandlung",
     "EffectLowerBound": "ci_lower",
     "EffectOfTreatment": "Effekt der Empfehlung",
@@ -683,6 +684,7 @@
       "backToComparisons": "Zurück zu allen Modellen",
       "backToComparisonsLegacy": "Ansicht mit mehreren Modellen",
       "chartChoiceDropdownHeader": "Diagramme",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "Das Balkendiagramm zeigt die Auswahlrate der einzelnen Gruppen, d. h. den Anteil der als 1 klassifizierten Punkte.",
       "classificationPerformanceHowToRead1": "Das Balkendiagramm zeigt die Verteilung von Fehlern in den einzelnen Gruppen.",
       "classificationPerformanceHowToRead2": "Fehler werden in falsch positive Vorhersagen (Vorhersage von 1 bei einer Beschriftung von 0) und falsch negative Vorhersagen (Vorhersage von 0 bei einer Beschriftung von 1) unterteilt.",
@@ -890,7 +892,7 @@
       "individualDatapoints": "Einzelne Datenpunkte",
       "missingParameters": "Auf dieser Registerkarte muss ein Auswertungsdataset angegeben werden.",
       "noColor": "Keine",
-      "datasetCohortDropdown": "Dropdown für Datasetkohorten"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "Attributrelevanz von",
@@ -1205,7 +1207,9 @@
       "filter": "Filter",
       "indexLabel": "Image ",
       "labelTypeDropdown": "Bezeichnungstyp auswählen",
+      "labelTypeAriaLabel": "Label type",
       "labelVisibilityDropdown": "Anzuzeigende Bezeichnungen auswählen",
+      "labelVisibilityAriaLabel": "Label visibility",
       "legendFailure": "Fehler",
       "legendSuccess": "erfolgreich",
       "loading": "Berechnungserläuterung für das Bild des Indexes",
@@ -1222,6 +1226,7 @@
       "incorrectDetections": "Falsche Erkennungen: ",
       "prefix": "Objekt: ",
       "rows": "Zeilen: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "Suchen",
       "selectAll": "Alles auswählen",
       "settings": "Einstellungen",
@@ -1239,6 +1244,8 @@
     "AddingTab": {
       "AddButtonText": "Hinzufügen",
       "CalloutContent": "Durch das Hinzufügen einiger Komponenten (Fehlerstrukturansicht, Fehlerwärmebild) können Sie die Daten aus der globalen Kohorte abwärts filtern, um sie in den nachstehenden Komponenten entsprechend anzuzeigen.",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard button",
       "CalloutTitle": "Komponente hinzufügen",
       "TabAddedMessage": {
         "DataAnalysis": "Datenanalysekomponente hinzugefügt",
@@ -1272,6 +1279,7 @@
       "deleteCohort": "{0} löschen?",
       "deleteConfirm": "Möchten Sie diese Kohorte wirklich löschen?",
       "selectCohort": "Kohorte auswählen",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "Kohorte wechseln",
       "shiftCohortDescription": "Wählen Sie eine Kohorte aus der Kohortenliste aus. Wenden Sie die Kohorte auf das Dashboard an."
     },
@@ -1667,7 +1675,11 @@
         "flyoutHeader": "Wählen Sie Ihre Features aus",
         "flyoutSubHeader": "Anhand welcher Features möchten Sie die Fairness Ihres Modells auswerten?",
         "flyoutDescription": "Die Fairness wird hinsichtlich der Abweichungen im Verhalten Ihres Modells ausgewertet. Wir teilen Ihre Daten entsprechend den Werten der einzelnen ausgewählten Features auf und bewerten, wie sich die Leistungsmetrik Ihres Modells in den einzelnen Teilen unterscheiden.",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "Attribute",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "Gruppen",
         "categoricalGroupsCountRemark": "Dieses Attribut verfügt über {0} eindeutige Werte.",
         "continuousGroupsCountRemark": "Dieses Feature ist fortlaufend und in {0} Bins unterteilt.",
@@ -1751,6 +1763,7 @@
       "cancel": "Abbrechen",
       "cohortList": "Zeitreihenliste",
       "selectCohort": "Zeitreihe auswählen",
+      "selectCohortAriaLabel": "Time series selection",
       "shiftCohort": "Zeitreihe wechseln",
       "shiftCohortDescription": "Wählen Sie eine Zeitreihe aus der Zeitreihenliste aus. Wenden Sie die Zeitreihe auf das Dashboard an."
     },

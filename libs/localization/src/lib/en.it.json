@@ -129,6 +129,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "Trattamento corrente",
     "EffectLowerBound": "CI lower",
     "EffectOfTreatment": "Effetto della raccomandazione",
@@ -683,6 +684,7 @@
       "backToComparisons": "Torna a tutti i modelli",
       "backToComparisonsLegacy": "Vista multimodello",
       "chartChoiceDropdownHeader": "Grafici",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "Il grafico a barre mostra il tasso di selezione in ogni gruppo, ovvero la frazione dei punti classificati come 1.",
       "classificationPerformanceHowToRead1": "Il grafico a barre mostra la distribuzione degli errori in ogni gruppo.",
       "classificationPerformanceHowToRead2": "Gli errori vengono suddivisi in errori di sovrastima (previsione di 1 quando l'etichetta vero è 0) ed errori di sottostima (previsione di 0 quando l'etichetta vero è 1).",
@@ -890,7 +892,7 @@
       "individualDatapoints": "Singoli punti dati",
       "missingParameters": "Questa scheda richiede che sia fornito un set di dati di valutazione.",
       "noColor": "Nessuno",
-      "datasetCohortDropdown": "Elenco a discesa della coorte del set di dati"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "Importanza della caratteristica di",
@@ -1205,7 +1207,9 @@
       "filter": "Filtro",
       "indexLabel": "Immagine ",
       "labelTypeDropdown": "Selezionare il tipo di etichetta",
+      "labelTypeAriaLabel": "Label type",
       "labelVisibilityDropdown": "Selezionare le etichette da visualizzare",
+      "labelVisibilityAriaLabel": "Label visibility",
       "legendFailure": "errore",
       "legendSuccess": "operazione completata",
       "loading": "Computing explanation for image of index",
@@ -1222,6 +1226,7 @@
       "incorrectDetections": "Rilevamenti non corretti: ",
       "prefix": "Oggetto: ",
       "rows": "Righe: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "Cerca",
       "selectAll": "Seleziona tutto",
       "settings": "Impostazioni",
@@ -1239,6 +1244,8 @@
     "AddingTab": {
       "AddButtonText": "Aggiungi",
       "CalloutContent": "L'aggiunta di alcuni componenti (visualizzazione struttura ad albero degli errori, mappa termica degli errori) consentirà di filtrare i dati della coorte globale visualizzata nei componenti seguenti.",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard button",
       "CalloutTitle": "Aggiungi componente",
       "TabAddedMessage": {
         "DataAnalysis": "Componente di analisi dei dati aggiunto",
@@ -1272,6 +1279,7 @@
       "deleteCohort": "Eliminare {0}?",
       "deleteConfirm": "Eliminare questa coorte?",
       "selectCohort": "Selezionare una coorte",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "Cambiare coorte",
       "shiftCohortDescription": "Selezionare una coorte dall'elenco di coorte. Applicare la coorte al dashboard."
     },
@@ -1667,7 +1675,11 @@
         "flyoutHeader": "Scegli le funzionalità",
         "flyoutSubHeader": "Con quali funzionalità si vuole valutare l'equità del modello?",
         "flyoutDescription": "L'equità viene valutata in termini di disparità nel comportamento del modello. I dati verranno suddivisi in base ai valori di ogni funzionalità selezionata e verrà valutato il modo in cui le previsioni e la metrica delle prestazioni del modello differiscono tra queste suddivisioni.",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "Funzionalità",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "Gruppi",
         "categoricalGroupsCountRemark": "Questa caratteristica include {0} valori univoci.",
         "continuousGroupsCountRemark": "Questa funzionalità è continua e suddivisa in {0} bin.",
@@ -1751,6 +1763,7 @@
       "cancel": "Annulla",
       "cohortList": "Elenco serie temporali",
       "selectCohort": "Selezionare una serie temporale",
+      "selectCohortAriaLabel": "Time series selection",
       "shiftCohort": "Cambiare serie temporale",
       "shiftCohortDescription": "Selezionare una serie temporale dall'elenco delle serie temporali. Consente di applicare la serie temporale al dashboard."
     },

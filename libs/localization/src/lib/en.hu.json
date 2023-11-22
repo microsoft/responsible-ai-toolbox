@@ -129,6 +129,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "Aktuális kezelés",
     "EffectLowerBound": "CI_alsó",
     "EffectOfTreatment": "Az ajánlás hatása",
@@ -683,6 +684,7 @@
       "backToComparisons": "Vissza az összes modellhez",
       "backToComparisonsLegacy": "Többmodelles nézet",
       "chartChoiceDropdownHeader": "Diagramok",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "A sávdiagram az egyes csoportok kiválasztási arányát, vagyis az 1-es osztályozású ponthányadokat jeleníti meg.",
       "classificationPerformanceHowToRead1": "A sávdiagram az eltérések eloszlását mutatja az egyes csoportokban.",
       "classificationPerformanceHowToRead2": "Az eltéréseket a rendszer túlbecslési eltérésekre (az előrejelzés 1, miközben a valós címke 0) és alulbecslési eltérésekre (az előrejelzés 0, miközben a valós címke 1) bontja.",
@@ -890,7 +892,7 @@
       "individualDatapoints": "Egyéni adatpontok",
       "missingParameters": "Ehhez a laphoz meg kell adni egy kiértékelési adathalmazt.",
       "noColor": "Nincs",
-      "datasetCohortDropdown": "Adathalmaz-kohorsz legördülő listája"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "A következő jellemzőfontossága:",
@@ -1205,7 +1207,9 @@
       "filter": "Szűrő",
       "indexLabel": "Kép ",
       "labelTypeDropdown": "Címketípus kiválasztása",
+      "labelTypeAriaLabel": "Label type",
       "labelVisibilityDropdown": "Megjelenítendő címkék kiválasztása",
+      "labelVisibilityAriaLabel": "Label visibility",
       "legendFailure": "hiba",
       "legendSuccess": "sikeres",
       "loading": "Computing explanation for image of index",
@@ -1222,6 +1226,7 @@
       "incorrectDetections": "Helytelen észlelések: ",
       "prefix": "Objektum: ",
       "rows": "Sorok: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "Keresés",
       "selectAll": "Az összes kijelölése",
       "settings": "Beállítások",
@@ -1239,6 +1244,8 @@
     "AddingTab": {
       "AddButtonText": "Hozzáadás",
       "CalloutContent": "Bizonyos összetevők (hibafanézet vagy hibahőtérkép) hozzáadásával szűrheti az adatokat az alábbi összetevőkben látható globális kohorszból.",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard button",
       "CalloutTitle": "Összetevő hozzáadása",
       "TabAddedMessage": {
         "DataAnalysis": "Adatelemzési összetevő hozzáadva",
@@ -1272,6 +1279,7 @@
       "deleteCohort": "Törli a következőt: {0}?",
       "deleteConfirm": "Biztos, hogy törli a kohorszt?",
       "selectCohort": "Kohorsz kiválasztása",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "Kohorszváltás",
       "shiftCohortDescription": "Válasszon ki egy kohorszt a kohorszok listájából. Alakalmazza a kohorszt az irányítópultra."
     },
@@ -1667,7 +1675,11 @@
         "flyoutHeader": "Funkciók kiválasztása",
         "flyoutSubHeader": "Mely jellemzők mellett szeretné kiértékelni a modell semlegességét?",
         "flyoutDescription": "A semlegességet a rendszer a modell viselkedésében mutatkozó egyenlőtlenségek alapján értékeli ki. Az adatokat az egyes kiválasztott jellemzők értékei szerint osztjuk fel, és kiértékeljük, hogy a modell teljesítménymutatója felosztásonként hogyan változik.",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "Funkciók",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "Csoportok",
         "categoricalGroupsCountRemark": "Ez a funkció {0} egyedi értékeket tartalmaz.",
         "continuousGroupsCountRemark": "Ez a funkció folyamatos, és {0} tárolóra van osztva.",
@@ -1751,6 +1763,7 @@
       "cancel": "Mégse",
       "cohortList": "Idősorozatok listája",
       "selectCohort": "Idősorozat kiválasztása",
+      "selectCohortAriaLabel": "Time series selection",
       "shiftCohort": "Idősor váltása",
       "shiftCohortDescription": "Válasszon ki egy idősort az idősorlistából, majd alkalmazza azt az irányítópultra."
     },
