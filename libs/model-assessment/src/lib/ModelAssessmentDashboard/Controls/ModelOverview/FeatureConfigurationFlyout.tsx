@@ -235,10 +235,16 @@ export class FeatureConfigurationFlyout extends React.Component<
               tooManyFeaturesSelected ||
               (!featureSelectionChanged && !continuousFeatureBinningChanged)
             }
+            ariaLabel={
+              localization.ModelAssessment.ModelOverview.chartConfigApply
+            }
           />
           <DefaultButton
             onClick={this.props.onDismissFlyout}
             text={localization.ModelAssessment.ModelOverview.chartConfigCancel}
+            ariaLabel={
+              localization.ModelAssessment.ModelOverview.chartConfigCancel
+            }
           />
         </Stack>
       </Stack>

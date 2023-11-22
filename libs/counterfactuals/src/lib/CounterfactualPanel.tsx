@@ -227,6 +227,7 @@ export class CounterfactualPanel extends React.Component<
             className={classes.button}
             text={localization.Counterfactuals.saveAsNew}
             onClick={this.handleSavePoint}
+            ariaLabel={localization.Counterfactuals.saveAsNew}
           />
         </Stack.Item>
         <Stack.Item align="end" grow={3}>

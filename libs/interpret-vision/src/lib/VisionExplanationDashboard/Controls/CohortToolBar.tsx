@@ -98,6 +98,7 @@ export class CohortToolBar extends React.Component<
             <PrimaryButton
               text={localization.InterpretVision.Cohort.save}
               onClick={this.openDialogue}
+              ariaLabel={localization.InterpretVision.Cohort.save}
             />
           </Stack.Item>
         </Stack>

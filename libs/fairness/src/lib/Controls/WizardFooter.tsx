@@ -22,12 +22,14 @@ export class WizardFooter extends React.PureComponent<IWizardFooterProps> {
           className={styles.next}
           text={localization.Fairness.Footer.next}
           onClick={this.onNext}
+          ariaLabel={localization.Fairness.Footer.next}
         />
         {!!this.props.previousTabKey && (
           <DefaultButton
             className={styles.back}
             text={localization.Fairness.Footer.back}
             onClick={this.onPrevious}
+            ariaLabel={localization.Fairness.Footer.back}
           />
         )}
       </div>

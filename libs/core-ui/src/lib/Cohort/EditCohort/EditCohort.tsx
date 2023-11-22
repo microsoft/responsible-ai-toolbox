@@ -106,14 +106,25 @@ export class EditCohort extends React.Component<
             <Stack.Item align="start">
               <DefaultButton
                 onClick={this.deleteCohort}
-                text="Delete"
+                text={localization.Interpret.CohortEditor.delete}
+                ariaLabel={localization.Interpret.CohortEditor.deleteAriaLabel}
                 disabled={disableDelete}
               />
             </Stack.Item>
             <Stack.Item align="end">
               <Stack horizontal tokens={stackTokens}>
-                <PrimaryButton onClick={this.editCohort} text="Save" />
-                <DefaultButton onClick={this.props.onDismiss} text="Cancel" />
+                <PrimaryButton
+                  onClick={this.editCohort}
+                  text={localization.Interpret.CohortEditor.save}
+                  ariaLabel={localization.Interpret.CohortEditor.saveAriaLabel}
+                />
+                <DefaultButton
+                  onClick={this.props.onDismiss}
+                  text={localization.Interpret.CohortEditor.cancel}
+                  ariaLabel={
+                    localization.Interpret.CohortEditor.cancelAriaLabel
+                  }
+                />
               </Stack>
             </Stack.Item>
           </Stack>
