@@ -14,7 +14,10 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
       Locators.VisionDataExplorerImageExplorerViewObjectDetectionContainer
     ).should("exist");
 
-    cy.get(Locators.VisionDataExplorerImageExplorerViewImageODAggLabel).should(
+    cy.get(Locators.VisionDataExplorerImageExplorerViewImageODAggLabelCorrect).should(
+      "exist"
+    );
+    cy.get(Locators.VisionDataExplorerImageExplorerViewImageODAggLabelIncorrect).should(
       "exist"
     );
   } else {
