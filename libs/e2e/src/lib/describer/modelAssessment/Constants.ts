@@ -226,5 +226,5 @@ export enum Locators {
   VisionDataExplorerImageExplorerViewImagePredictedY = "#VisionDataExplorer #predictedY_0",
   VisionDataExplorerImageExplorerViewImageTrueY = "#VisionDataExplorer #trueY_0",
   VisionDataExplorerImageExplorerViewImageODAggLabelCorrect = "#VisionDataExplorer #odAggregateLabel_correct_0",
-  VisionDataExplorerImageExplorerViewImageODAggLabelIncorrect = "#VisionDataExplorer #odAggregateLabel_incorrect_0",
+  VisionDataExplorerImageExplorerViewImageODAggLabelIncorrect = "#VisionDataExplorer #odAggregateLabel_incorrect_0"
 }

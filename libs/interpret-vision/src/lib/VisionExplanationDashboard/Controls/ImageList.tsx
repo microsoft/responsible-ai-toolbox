@@ -144,10 +144,7 @@ export class ImageList extends React.Component<
             />
           </Stack.Item>
           {this.props.taskType === DatasetTaskType.ObjectDetection ? (
-            <Stack
-              horizontal
-              tokens={{ childrenGap: "10px" }}
-            >
+            <Stack horizontal tokens={{ childrenGap: "10px" }}>
               <Stack.Item
                 className={classNames.successIndicator}
                 style={{
@@ -155,13 +152,17 @@ export class ImageList extends React.Component<
                 }}
                 id={`odAggregateLabel_correct_${item?.index}`}
               >
-                <Text className={classNames.labelPredicted}>{`✅ Correct: ${odAggregate[0].split(' ')[0]}`}</Text>
+                <Text className={classNames.labelPredicted}>{`✅ Correct: ${
+                  odAggregate[0].split(" ")[0]
+                }`}</Text>
               </Stack.Item>
               <Stack.Item
                 className={classNames.errorIndicator}
                 id={`odAggregateLabel_incorrect_${item?.index}`}
               >
-                <Text className={classNames.labelPredicted}>{`❌ Wrong: ${odAggregate[1].split(' ')[0]}`}</Text>
+                <Text className={classNames.labelPredicted}>{`❌ Wrong: ${
+                  odAggregate[1].split(" ")[0]
+                }`}</Text>
               </Stack.Item>
             </Stack>
           ) : (
