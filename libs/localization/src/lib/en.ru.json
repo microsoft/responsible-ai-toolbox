@@ -113,6 +113,7 @@
     },
     "ShiftCohort": {
       "apply": "Применить",
+      "applyAriaLabel": "Apply cohort",
       "cancel": "Отмена",
       "title": "Переключить когорту",
       "subText": "Выберите когорту из списка когорт. Примените когорту к панели мониторинга.",
@@ -129,6 +130,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "Текущая обработка",
     "EffectLowerBound": "Нижний доверительный интервал",
     "EffectOfTreatment": "Эффект рекомендации",
@@ -154,6 +156,7 @@
     "counterfactualName": "Название противоречащего фактам предположения для анализа \"что если\"",
     "createWhatIfCounterfactual": "Создать противоречащее фактам предположение для анализа \"что если\"",
     "createCounterfactual": "Противоречащее фактам предположение",
+    "counterfactualAriaLabel": "Counterfactual creation",
     "revertToBubbleChart": "Просмотреть пузырьковую диаграмму",
     "createOwn": "Создайте собственное предположение, противоречащее фактам:",
     "currentClass": "Текущий класс",
@@ -474,11 +477,13 @@
     },
     "BinDialog": {
       "cancel": "Отмена",
+      "cancelAriaLabel": "Cancel binning",
       "categoryHeader": "Значения интервалов:",
       "header": "Настройка интервалов",
       "makeCategorical": "Рассматривать как категориальные",
       "numberOfBins": "Число интервалов:",
-      "save": "Сохранить"
+      "save": "Сохранить",
+      "saveAriaLabel": "Save binning"
     },
     "DropdownHeaders": {
       "errorMetric": "Включить планки погрешностей",
@@ -683,6 +688,7 @@
       "backToComparisons": "Вернуться ко всем моделям",
       "backToComparisonsLegacy": "Многомодельное представление",
       "chartChoiceDropdownHeader": "Диаграммы",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "Линейчатая диаграмма показывает степень отбора в каждой группе, то есть долю точек с классификацией 1.",
       "classificationPerformanceHowToRead1": "Линейчатая диаграмма показывает распределение ошибок в каждой группе.",
       "classificationPerformanceHowToRead2": "Ошибки разделяются на ошибки перепрогноза (прогнозирование значения 1, когда истинная метка — 0) и недопрогноза (прогнозирование 0, когда истинная метка — 1).",
@@ -831,8 +837,10 @@
       },
       "TreatAsCategorical": "Рассматривать как категориальные",
       "addFilter": "Добавить фильтр",
+      "addFilterAriaLabel": "Add cohort filter",
       "addedFilters": "Фильтры",
       "cancel": "Отмена",
+      "cancelAriaLabel": "Cancel cohort",
       "cancelExistingCohort": "Вы действительно хотите отменить изменение когорты и вернуться назад?",
       "cancelNewCohort": "Вы действительно хотите отменить создание когорты и вернуться назад?",
       "cancelNo": "Нет",
@@ -845,11 +853,13 @@
       "clearAllFilters": "Очистить все фильтры",
       "defaultFilterState": "Выберите фильтр, чтобы добавить параметры в когорту набора данных. Фильтры текущего просмотра когорты предварительно заполнены.",
       "delete": "Удалить",
+      "deleteAriaLabel": "Delete cohort",
       "invalidValueError": "Значение должно быть в диапазоне от {0} до {1}",
       "minimumGreaterThanMaximum": "Минимальные значения входных данных должны быть меньше максимальных значений.",
       "noAddedFilters": "Нет фильтров",
       "placeholderName": "Когорта {0}",
       "save": "Сохранить",
+      "saveAriaLabel": "Save cohort",
       "saveAndSwitch": "Сохранить и переключить",
       "selectFilter": "Выберите фильтр",
       "noFiltersApplied": "Ни один фильтр не применен.",
@@ -890,7 +900,7 @@
       "individualDatapoints": "Отдельные точки данных",
       "missingParameters": "На этой вкладке требуется указать набор данных для оценки.",
       "noColor": "Нет",
-      "datasetCohortDropdown": "Раскрывающийся список когорт набора данных"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "Важность признака",
@@ -1205,7 +1215,9 @@
       "filter": "Фильтр",
       "indexLabel": "Изображение ",
       "labelTypeDropdown": "Выбрать тип метки",
+      "labelTypeAriaLabel": "Label type",
       "labelVisibilityDropdown": "Выберите метки для показа",
+      "labelVisibilityAriaLabel": "Label visibility",
       "legendFailure": "сбой",
       "legendSuccess": "успешно",
       "loading": "Computing explanation for image of index",
@@ -1222,6 +1234,7 @@
       "incorrectDetections": "Неправильные обнаружения: ",
       "prefix": "Объект: ",
       "rows": "Строк: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "Поиск",
       "selectAll": "Выделить все",
       "settings": "Параметры",
@@ -1239,6 +1252,8 @@
     "AddingTab": {
       "AddButtonText": "Добавить",
       "CalloutContent": "Добавление некоторых компонентов (представления ошибок в виде дерева, тепловой карты ошибок) позволит отфильтровать данные из глобальной когорты, которые отображаются в списке компонентов ниже.",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard",
       "CalloutTitle": "Добавление компонента",
       "TabAddedMessage": {
         "DataAnalysis": "Добавлен компонент анализа данных",
@@ -1266,13 +1281,17 @@
     "Cohort": {
       "apply": "Применить",
       "delete": "Удалить",
+      "deleteAriaLabel": "Delete cohort",
       "cancel": "Отмена",
+      "cancelAriaLabel": "Cancel cohort",
       "cohortInfo": "Сведения о когорте",
       "cohortList": "Список когорт",
       "deleteCohort": "Удаление {0}?",
       "deleteConfirm": "Действительно удалить эту когорту?",
       "selectCohort": "Выберите когорту",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "Переключить когорту",
+      "shiftCohortAriaLabel": "Switch cohort",
       "shiftCohortDescription": "Выберите когорту из списка когорт. Примените когорту к панели мониторинга."
     },
     "CohortInformation": {
@@ -1667,7 +1686,11 @@
         "flyoutHeader": "Выберите функции",
         "flyoutSubHeader": "Для каких признаков вы хотите оценить справедливость модели?",
         "flyoutDescription": "Справедливость оценивается с точки зрения несоответствий в поведении модели. Мы разделим ваши данные по значениям каждого выбранного признака и оценим, насколько метрики производительности вашей модели различаются в этих группах.",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "Функции",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "Группы",
         "categoricalGroupsCountRemark": "Уникальных значений функции: {0}.",
         "continuousGroupsCountRemark": "Эта функция непрерывна и разделена на {0} ячеек.",
@@ -1751,7 +1774,9 @@
       "cancel": "Отмена",
       "cohortList": "Список временных рядов",
       "selectCohort": "Выберите временной ряд",
+      "selectCohortAriaLabel": "Time series selection",
       "shiftCohort": "Переключить временные ряды",
+      "shiftCohortAriaLabel": "Switch time series",
       "shiftCohortDescription": "Выберите временной ряд из списка. Примените его к панели мониторинга."
     },
     "TimeSeriesSettings": {

@@ -113,6 +113,7 @@
     },
     "ShiftCohort": {
       "apply": "Zastosuj",
+      "applyAriaLabel": "Apply cohort",
       "cancel": "Anuluj",
       "title": "Przełącz kohortę",
       "subText": "Wybierz kohortę z listy kohort. Zastosuj kohortę do pulpitu nawigacyjnego.",
@@ -129,6 +130,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "Bieżące działanie",
     "EffectLowerBound": "Dolny przedział ufności",
     "EffectOfTreatment": "Skutek zalecenia",
@@ -154,6 +156,7 @@
     "counterfactualName": "Nazwa dla analizy co-jeżeli hipotez przeciwnych",
     "createWhatIfCounterfactual": "Utwórz hipotezę przeciwną analizy co-jeżeli",
     "createCounterfactual": "Hipoteza przeciwna",
+    "counterfactualAriaLabel": "Counterfactual creation",
     "revertToBubbleChart": "Wyświetl wykres bąbelkowy",
     "createOwn": "Utwórz własne hipotezy przeciwne:",
     "currentClass": "Bieżąca klasa",
@@ -474,11 +477,13 @@
     },
     "BinDialog": {
       "cancel": "Anuluj",
+      "cancelAriaLabel": "Cancel binning",
       "categoryHeader": "Wartości przedziału:",
       "header": "Konfiguruj przedziały",
       "makeCategorical": "Traktuj jako kategorialne",
       "numberOfBins": "Liczba przedziałów:",
-      "save": "Zapisz"
+      "save": "Zapisz",
+      "saveAriaLabel": "Save binning"
     },
     "DropdownHeaders": {
       "errorMetric": "Włącz paski błędów",
@@ -683,6 +688,7 @@
       "backToComparisons": "Powrót do wszystkich modeli",
       "backToComparisonsLegacy": "Widok wielu modeli",
       "chartChoiceDropdownHeader": "Wykresy",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "Wykres słupkowy pokazuje współczynnik wyboru w każdej grupie, co oznacza ułamek punktów sklasyfikowanych jako 1.",
       "classificationPerformanceHowToRead1": "Wykres słupkowy pokazuje rozkład błędów w każdej grupie.",
       "classificationPerformanceHowToRead2": "Błędy są podzielone na błędy przeszacowania (przewidywanie 1, gdy rzeczywista etykieta to 0) i niedoszacowania (przewidywanie 0, gdy rzeczywista etykieta to 1).",
@@ -831,8 +837,10 @@
       },
       "TreatAsCategorical": "Traktuj jako kategorialne",
       "addFilter": "Dodawanie filtru",
+      "addFilterAriaLabel": "Add cohort filter",
       "addedFilters": "Filtry",
       "cancel": "Anuluj",
+      "cancelAriaLabel": "Cancel cohort",
       "cancelExistingCohort": "Czy na pewno chcesz anulować edytowanie kohorty i przejść wstecz?",
       "cancelNewCohort": "Czy na pewno chcesz anulować tworzenie nowej kohorty i przejść wstecz?",
       "cancelNo": "Nie",
@@ -845,11 +853,13 @@
       "clearAllFilters": "Wyczyść wszystkie filtry",
       "defaultFilterState": "Wybierz filtr, aby dodać parametry do kohorty zestawu danych. Filtry z bieżącej kohorty wyświetlania są wstępnie wypełnione.",
       "delete": "Usuń",
+      "deleteAriaLabel": "Delete cohort",
       "invalidValueError": "Wartość musi należeć do zakresu od {0} do {1}",
       "minimumGreaterThanMaximum": "Minimalna wartość wejściowa musi być mniejsza niż maksymalna wartość wejściowa.",
       "noAddedFilters": "Brak filtrów",
       "placeholderName": "Kohorta {0}",
       "save": "Zapisz",
+      "saveAriaLabel": "Save cohort",
       "saveAndSwitch": "Zapisz i przełącz",
       "selectFilter": "Wybierz filtr",
       "noFiltersApplied": "Nie zastosowano żadnych filtrów",
@@ -890,7 +900,7 @@
       "individualDatapoints": "Poszczególne punkty danych",
       "missingParameters": "Ta karta wymaga dostarczenia zestawu danych oceny.",
       "noColor": "Brak",
-      "datasetCohortDropdown": "Lista rozwijana kohorty zestawu danych"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "Ważność cechy",
@@ -1205,7 +1215,9 @@
       "filter": "Filtr",
       "indexLabel": "Obraz ",
       "labelTypeDropdown": "Wybierz typ etykiety",
+      "labelTypeAriaLabel": "Label type",
       "labelVisibilityDropdown": "Wybierz etykiety do wyświetlenia",
+      "labelVisibilityAriaLabel": "Label visibility",
       "legendFailure": "niepowodzenie",
       "legendSuccess": "sukces",
       "loading": "Computing explanation for image of index",
@@ -1222,6 +1234,7 @@
       "incorrectDetections": "Nieprawidłowe wykrycia: ",
       "prefix": "Obiekt: ",
       "rows": "Wiersze: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "Wyszukaj",
       "selectAll": "Wybierz wszystkie",
       "settings": "Ustawienia",
@@ -1239,6 +1252,8 @@
     "AddingTab": {
       "AddButtonText": "Dodaj",
       "CalloutContent": "Dodanie niektórych składników (widok drzewa błędów, mapa cieplna błędów) umożliwi Ci filtrowanie danych z kohorty globalnej, które są widoczne w składnikach poniżej.",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard",
       "CalloutTitle": "Dodaj składnik",
       "TabAddedMessage": {
         "DataAnalysis": "Dodano składnik analizy danych",
@@ -1266,13 +1281,17 @@
     "Cohort": {
       "apply": "Zastosuj",
       "delete": "Usuń",
+      "deleteAriaLabel": "Delete cohort",
       "cancel": "Anuluj",
+      "cancelAriaLabel": "Cancel cohort",
       "cohortInfo": "Informacje dotyczące kohort",
       "cohortList": "Lista kohort",
       "deleteCohort": "Usuwanie {0}?",
       "deleteConfirm": "Czy na pewno chcesz usunąć tę kohortę?",
       "selectCohort": "Wybieranie kohorty",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "Przełącz kohortę",
+      "shiftCohortAriaLabel": "Switch cohort",
       "shiftCohortDescription": "Wybierz kohortę z listy kohort. Zastosuj kohortę do pulpitu nawigacyjnego."
     },
     "CohortInformation": {
@@ -1667,7 +1686,11 @@
         "flyoutHeader": "Wybierz funkcje",
         "flyoutSubHeader": "Względem jakich cech chcesz ocenić uczciwość modelu?",
         "flyoutDescription": "Uczciwość jest oceniana pod względem rozbieżności w zachowaniu modelu. Dane zostaną podzielone według wartości każdej wybranej funkcji, a następnie zostaną ocenione różnice między metryką wydajności modelu a tymi podziałami.",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "Funkcje",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "Grupy",
         "categoricalGroupsCountRemark": "Liczba unikatowych wartości tej funkcji to {0}.",
         "continuousGroupsCountRemark": "Ta funkcja jest ciągła i podzielona na {0} pojemniki.",
@@ -1751,7 +1774,9 @@
       "cancel": "Anuluj",
       "cohortList": "Lista szeregów czasowych",
       "selectCohort": "Wybierz szereg czasowy",
+      "selectCohortAriaLabel": "Time series selection",
       "shiftCohort": "Przełączanie szeregów czasowych",
+      "shiftCohortAriaLabel": "Switch time series",
       "shiftCohortDescription": "Wybierz szereg czasowy z listy szeregów czasowych. Zastosuj szeregi czasowe do pulpitu nawigacyjnego."
     },
     "TimeSeriesSettings": {
