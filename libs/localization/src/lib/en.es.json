@@ -113,6 +113,7 @@
     },
     "ShiftCohort": {
       "apply": "Aplicar",
+      "applyAriaLabel": "Apply cohort",
       "cancel": "Cancelar",
       "title": "Cambiar cohorte",
       "subText": "Seleccione un cohorte de la lista de cohortes. Aplique el cohorte al panel.",
@@ -129,6 +130,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "Tratamiento actual",
     "EffectLowerBound": "IC inferior",
     "EffectOfTreatment": "Efecto de la recomendación",
@@ -154,6 +156,7 @@
     "counterfactualName": "Nombre de contrafáctico hipotético",
     "createWhatIfCounterfactual": "Crear contrafáctico hipotético",
     "createCounterfactual": "Contrafactual",
+    "counterfactualAriaLabel": "Counterfactual creation",
     "revertToBubbleChart": "Ver gráfico de burbujas",
     "createOwn": "Cree su propia contrafactura:",
     "currentClass": "Clase actual",
@@ -474,11 +477,13 @@
     },
     "BinDialog": {
       "cancel": "Cancelar",
+      "cancelAriaLabel": "Cancel binning",
       "categoryHeader": "Valores de rangos:",
       "header": "Configuración de rangos",
       "makeCategorical": "Tratar como valor categórico",
       "numberOfBins": "Número de rangos:",
-      "save": "Guardar"
+      "save": "Guardar",
+      "saveAriaLabel": "Save binning"
     },
     "DropdownHeaders": {
       "errorMetric": "Habilitar barras de error",
@@ -683,6 +688,7 @@
       "backToComparisons": "Volver a todos los modelos",
       "backToComparisonsLegacy": "Vista multimodelo",
       "chartChoiceDropdownHeader": "Gráficos",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "El gráfico de barras muestra la probabilidad de selecciones de cada grupo, es decir, la fracción de puntos que se clasifica como 1.",
       "classificationPerformanceHowToRead1": "El gráfico de barras muestra la distribución de los errores en cada grupo.",
       "classificationPerformanceHowToRead2": "Los errores se dividen en errores de sobrepredicción (se predice 1 cuando la etiqueta verdadera es 0) y los errores de infrapredicción (se predice 0 cuando la etiqueta verdadera es 1).",
@@ -831,8 +837,10 @@
       },
       "TreatAsCategorical": "Tratar como valor categórico",
       "addFilter": "Añadir filtro",
+      "addFilterAriaLabel": "Add cohort filter",
       "addedFilters": "Filtros",
       "cancel": "Cancelar",
+      "cancelAriaLabel": "Cancel cohort",
       "cancelExistingCohort": "¿Está seguro de que quiere cancelar la edición de la cohorte y volver?",
       "cancelNewCohort": "¿Está seguro de que quiere cancelar la creación de una nueva cohorte y volver?",
       "cancelNo": "No",
@@ -845,11 +853,13 @@
       "clearAllFilters": "Borrar todos los filtros",
       "defaultFilterState": "Seleccione un filtro para agregar parámetros a la cohorte del conjunto de datos. Los filtros de la cohorte de visualización actual se rellenan previamente.",
       "delete": "Eliminar",
+      "deleteAriaLabel": "Delete cohort",
       "invalidValueError": "El valor debe estar entre {0} y {1}",
       "minimumGreaterThanMaximum": "Las entradas de valor mínimo deben ser menores que las entradas de valor máximo.",
       "noAddedFilters": "No hay ningún filtro.",
       "placeholderName": "Cohorte {0}",
       "save": "Guardar",
+      "saveAriaLabel": "Save cohort",
       "saveAndSwitch": "Guardar y cambiar",
       "selectFilter": "Seleccionar filtro",
       "noFiltersApplied": "No se han aplicado filtros",
@@ -890,7 +900,7 @@
       "individualDatapoints": "Puntos de datos individuales",
       "missingParameters": "Esta pestaña requiere proporcionar un conjunto de datos de evaluación.",
       "noColor": "Ninguna",
-      "datasetCohortDropdown": "Lista desplegable del cohorte del conjunto de datos"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "Importancia de la característica de",
@@ -1205,7 +1215,9 @@
       "filter": "Filtro",
       "indexLabel": "Imagen ",
       "labelTypeDropdown": "Seleccionar tipo de etiqueta",
+      "labelTypeAriaLabel": "Label type",
       "labelVisibilityDropdown": "Seleccionar etiquetas para mostrar",
+      "labelVisibilityAriaLabel": "Label visibility",
       "legendFailure": "error",
       "legendSuccess": "correcto",
       "loading": "Computing explanation for image of index",
@@ -1222,6 +1234,7 @@
       "incorrectDetections": "Detecciones incorrectas: ",
       "prefix": "Objeto: ",
       "rows": "Filas: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "Buscar",
       "selectAll": "Seleccionar todo",
       "settings": "Configuración",
@@ -1239,6 +1252,8 @@
     "AddingTab": {
       "AddButtonText": "Agregar",
       "CalloutContent": "Agregar algunos componentes (vista de árbol de error, mapa térmico de error) le permitirá filtrar los datos de la cohorte global que puede ver en los componentes a continuación.",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard",
       "CalloutTitle": "Agregar componente",
       "TabAddedMessage": {
         "DataAnalysis": "Componente de análisis de datos agregado",
@@ -1266,13 +1281,17 @@
     "Cohort": {
       "apply": "Aplicar",
       "delete": "Eliminar",
+      "deleteAriaLabel": "Delete cohort",
       "cancel": "Cancelar",
+      "cancelAriaLabel": "Cancel cohort",
       "cohortInfo": "Información de cohorte",
       "cohortList": "Lista de cohorte",
       "deleteCohort": "¿Eliminar {0}?",
       "deleteConfirm": "¿Está seguro de que desea eliminar esta cohorte?",
       "selectCohort": "Seleccionar un cohorte",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "Cambiar cohorte",
+      "shiftCohortAriaLabel": "Switch cohort",
       "shiftCohortDescription": "Seleccione un cohorte de la lista de cohortes. Aplique el cohorte al panel."
     },
     "CohortInformation": {
@@ -1667,7 +1686,11 @@
         "flyoutHeader": "Elegir las características",
         "flyoutSubHeader": "¿Con respecto a qué características quiere evaluar la equidad de su modelo?",
         "flyoutDescription": "La equidad se evalúa en términos de disparidades en el comportamiento del modelo. Se dividirán los datos en función de los valores de las características seleccionadas y se evaluarán las diferencias entre las métricas de rendimiento del modelo de acuerdo con estas divisiones.",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "Características",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "Grupos",
         "categoricalGroupsCountRemark": "Esta característica tiene {0} valores únicos.",
         "continuousGroupsCountRemark": "Esta característica es continua y se divide en {0} contenedores.",
@@ -1751,7 +1774,9 @@
       "cancel": "Cancelar",
       "cohortList": "Lista de series temporales",
       "selectCohort": "Seleccionar una serie temporal",
+      "selectCohortAriaLabel": "Time series selection",
       "shiftCohort": "Cambiar serie temporal",
+      "shiftCohortAriaLabel": "Switch time series",
       "shiftCohortDescription": "Seleccione una serie temporal de la lista de series temporales. Aplique la serie temporal al panel."
     },
     "TimeSeriesSettings": {

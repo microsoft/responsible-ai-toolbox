@@ -113,6 +113,7 @@
     },
     "ShiftCohort": {
       "apply": "应用",
+      "applyAriaLabel": "Apply cohort",
       "cancel": "取消",
       "title": "切换队列",
       "subText": "从队列列表中选择队列。将该队列应用到仪表板。",
@@ -129,6 +130,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "当前治疗",
     "EffectLowerBound": "CI 下限",
     "EffectOfTreatment": "建议的效果",
@@ -154,6 +156,7 @@
     "counterfactualName": "模拟反事实名",
     "createWhatIfCounterfactual": "创建 What-if 反事实",
     "createCounterfactual": "反事实",
+    "counterfactualAriaLabel": "Counterfactual creation",
     "revertToBubbleChart": "查看气泡图",
     "createOwn": "创建自己的反事实:",
     "currentClass": "当前类",
@@ -474,11 +477,13 @@
     },
     "BinDialog": {
       "cancel": "取消",
+      "cancelAriaLabel": "Cancel binning",
       "categoryHeader": "箱值:",
       "header": "配置箱",
       "makeCategorical": "视为类别",
       "numberOfBins": "箱数:",
-      "save": "保存"
+      "save": "保存",
+      "saveAriaLabel": "Save binning"
     },
     "DropdownHeaders": {
       "errorMetric": "启用错误栏",
@@ -683,6 +688,7 @@
       "backToComparisons": "返回到所有模型",
       "backToComparisonsLegacy": "多模型视图",
       "chartChoiceDropdownHeader": "图表",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "条形图显示每组的选择率，表示分类为 1 的点的分数。",
       "classificationPerformanceHowToRead1": "条形图显示每个组的误差分布。",
       "classificationPerformanceHowToRead2": "误差分为“过高预测”误差(true 标签为 0 时预测值为 1)和“过低预测”误差(true 标签为 1 时预测值为 0)。",
@@ -831,8 +837,10 @@
       },
       "TreatAsCategorical": "视为类别",
       "addFilter": "添加筛选器",
+      "addFilterAriaLabel": "Add cohort filter",
       "addedFilters": "筛选器",
       "cancel": "取消",
+      "cancelAriaLabel": "Cancel cohort",
       "cancelExistingCohort": "是否确定要取消编辑新队列并返回?",
       "cancelNewCohort": "是否确定要取消创建新队列并返回?",
       "cancelNo": "否",
@@ -845,11 +853,13 @@
       "clearAllFilters": "清除所有筛选器",
       "defaultFilterState": "选择一个筛选器，以将参数添加到数据集队列。预填充当前查看队列中的筛选器。",
       "delete": "删除",
+      "deleteAriaLabel": "Delete cohort",
       "invalidValueError": "值应介于 {0} 和 {1} 之间。",
       "minimumGreaterThanMaximum": "最小值输入必须小于最大值输入。",
       "noAddedFilters": "无筛选器",
       "placeholderName": "队列 {0}",
       "save": "保存",
+      "saveAriaLabel": "Save cohort",
       "saveAndSwitch": "保存并切换",
       "selectFilter": "选择筛选器",
       "noFiltersApplied": "未应用任何筛选器",
@@ -890,7 +900,7 @@
       "individualDatapoints": "单个数据点",
       "missingParameters": "此选项卡要求提供评估数据集。",
       "noColor": "无",
-      "datasetCohortDropdown": "数据集队列下拉列表"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "特性重要性",
@@ -1205,7 +1215,9 @@
       "filter": "筛选器",
       "indexLabel": "图像 ",
       "labelTypeDropdown": "选择标签类型",
+      "labelTypeAriaLabel": "Label type",
       "labelVisibilityDropdown": "选择要显示的标签",
+      "labelVisibilityAriaLabel": "Label visibility",
       "legendFailure": "故障",
       "legendSuccess": "成功",
       "loading": "索引图像的计算说明",
@@ -1222,6 +1234,7 @@
       "incorrectDetections": "检测不正确:",
       "prefix": "对象: ",
       "rows": "行数: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "搜索",
       "selectAll": "全选",
       "settings": "设置",
@@ -1239,6 +1252,8 @@
     "AddingTab": {
       "AddButtonText": "添加",
       "CalloutContent": "通过添加一些组件(错误树状视图、错误热度地图)，可以从在以下组件内看到的全局队列中筛选数据。",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard",
       "CalloutTitle": "添加组件",
       "TabAddedMessage": {
         "DataAnalysis": "添加了数据分析组件",
@@ -1266,13 +1281,17 @@
     "Cohort": {
       "apply": "应用",
       "delete": "删除",
+      "deleteAriaLabel": "Delete cohort",
       "cancel": "取消",
+      "cancelAriaLabel": "Cancel cohort",
       "cohortInfo": "队列信息",
       "cohortList": "队列列表",
       "deleteCohort": "正在删除 {0}?",
       "deleteConfirm": "是否确定要删除此队列?",
       "selectCohort": "选择队列",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "切换队列",
+      "shiftCohortAriaLabel": "Switch cohort",
       "shiftCohortDescription": "从队列列表中选择队列。将该队列应用到仪表板。"
     },
     "CohortInformation": {
@@ -1667,7 +1686,11 @@
         "flyoutHeader": "选择你的功能",
         "flyoutSubHeader": "你想要通过哪些特征评估模型的公平性?",
         "flyoutDescription": "根据模型行为差异评估公平性。我们将根据每个所选功能的值来拆分数据，并评估这些拆分之间的模型性能指标之间的差异。",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "功能",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "组",
         "categoricalGroupsCountRemark": "此功能具有 {0} 个唯一值。",
         "continuousGroupsCountRemark": "此功能是连续的，并拆分为 {0} 个箱。",
@@ -1751,7 +1774,9 @@
       "cancel": "取消",
       "cohortList": "时序列表",
       "selectCohort": "选择时序",
+      "selectCohortAriaLabel": "Time series selection",
       "shiftCohort": "切换时序",
+      "shiftCohortAriaLabel": "Switch time series",
       "shiftCohortDescription": "从时序列表中选择时序。将时序应用到仪表板。"
     },
     "TimeSeriesSettings": {
