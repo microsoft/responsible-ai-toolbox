@@ -113,6 +113,7 @@
     },
     "ShiftCohort": {
       "apply": "Toepassen",
+      "applyAriaLabel": "Apply cohort",
       "cancel": "Annuleren",
       "title": "Cohort wisselen",
       "subText": "Selecteer een cohort in de lijst met cohorten. Pas het cohort toe op het dashboard.",
@@ -129,6 +130,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "Huidige behandeling",
     "EffectLowerBound": "CI lager",
     "EffectOfTreatment": "Effect van aanbeveling",
@@ -154,6 +156,7 @@
     "counterfactualName": "Naam wat-als-nulscenario's",
     "createWhatIfCounterfactual": "Wat-als-counterfactual maken",
     "createCounterfactual": "Nulscenario",
+    "counterfactualAriaLabel": "Counterfactual creation",
     "revertToBubbleChart": "Bellendiagram weergeven",
     "createOwn": "Uw eigen nulscenario maken:",
     "currentClass": "Huidige klasse",
@@ -474,11 +477,13 @@
     },
     "BinDialog": {
       "cancel": "Annuleren",
+      "cancelAriaLabel": "Cancel binning",
       "categoryHeader": "Binwaarden:",
       "header": "Bins configureren",
       "makeCategorical": "Beschouwen als categorisch",
       "numberOfBins": "Aantal bins:",
-      "save": "Opslaan"
+      "save": "Opslaan",
+      "saveAriaLabel": "Save binning"
     },
     "DropdownHeaders": {
       "errorMetric": "Foutbalken inschakelen",
@@ -683,6 +688,7 @@
       "backToComparisons": "Terug naar alle modellen",
       "backToComparisonsLegacy": "Weergave met meerdere modellen",
       "chartChoiceDropdownHeader": "Grafieken",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "Het staafdiagram toont het selectiepercentage in elke groep, dat wil zeggen het aantal punten dat wordt geclassificeerd als 1.",
       "classificationPerformanceHowToRead1": "In het staafdiagram wordt de distributie van fouten in elke groep weergegeven.",
       "classificationPerformanceHowToRead2": "Fouten zijn opgesplitst in fouten met overschatting (voorspelling 1 wanneer het werkelijke label 0 is) en fouten met onderschatting (voorspelling 0 wanneer het werkelijke label 1 is).",
@@ -831,8 +837,10 @@
       },
       "TreatAsCategorical": "Beschouwen als categorisch",
       "addFilter": "Filter toevoegen",
+      "addFilterAriaLabel": "Add cohort filter",
       "addedFilters": "Filters",
       "cancel": "Annuleren",
+      "cancelAriaLabel": "Cancel cohort",
       "cancelExistingCohort": "Weet u zeker dat u het bewerken van een cohort wilt annuleren en terug wilt gaan?",
       "cancelNewCohort": "Weet u zeker dat u het maken van een nieuwe cohort wilt annuleren en terug wilt gaan?",
       "cancelNo": "Nee",
@@ -845,11 +853,13 @@
       "clearAllFilters": "Alle filters wissen",
       "defaultFilterState": "Selecteer een filter om parameters toe te voegen aan uw gegevensset-cohort. Filters uit uw huidige weergave-cohort zijn vooraf ingevuld.",
       "delete": "Verwijderen",
+      "deleteAriaLabel": "Delete cohort",
       "invalidValueError": "De waarde moet tussen {0} en {1} liggen",
       "minimumGreaterThanMaximum": "Invoer voor de minimumwaarde moet kleiner zijn dan de invoer voor de maximumwaarde.",
       "noAddedFilters": "Geen filters",
       "placeholderName": "Cohort {0}",
       "save": "Opslaan",
+      "saveAriaLabel": "Save cohort",
       "saveAndSwitch": "Opslaan en schakelen",
       "selectFilter": "Filter selecteren",
       "noFiltersApplied": "Geen filters toegepast",
@@ -890,7 +900,7 @@
       "individualDatapoints": "Afzonderlijke gegevenspunten",
       "missingParameters": "Op dit tabblad moet een evaluatiegegevensset worden opgegeven.",
       "noColor": "Geen",
-      "datasetCohortDropdown": "Vervolgkeuzelijst gegevensset-cohort"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "Functie-urgentie van",
@@ -1205,7 +1215,9 @@
       "filter": "Filteren",
       "indexLabel": "Afbeelding ",
       "labelTypeDropdown": "Labeltype selecteren",
+      "labelTypeAriaLabel": "Label type",
       "labelVisibilityDropdown": "Labels selecteren om weer te geven",
+      "labelVisibilityAriaLabel": "Label visibility",
       "legendFailure": "mislukte poging",
       "legendSuccess": "geslaagd",
       "loading": "Uitleg voor installatiekopie van index berekenen",
@@ -1222,6 +1234,7 @@
       "incorrectDetections": "Onjuiste detecties: ",
       "prefix": "Object: ",
       "rows": "Rijen: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "Zoeken",
       "selectAll": "Alles selecteren",
       "settings": "Instellingen",
@@ -1239,6 +1252,8 @@
     "AddingTab": {
       "AddButtonText": "Toevoegen",
       "CalloutContent": "Door bepaalde onderdelen toe te voegen (foutstructuurweergave, heatmap met fouten) kunt u de gegevens uit de globale cohort filteren die u in de onderstaande onderdelen ziet.",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard",
       "CalloutTitle": "Onderdeel toevoegen",
       "TabAddedMessage": {
         "DataAnalysis": "Onderdeel voor gegevensanalyse toegevoegd",
@@ -1266,13 +1281,17 @@
     "Cohort": {
       "apply": "Toepassen",
       "delete": "Verwijderen",
+      "deleteAriaLabel": "Delete cohort",
       "cancel": "Annuleren",
+      "cancelAriaLabel": "Cancel cohort",
       "cohortInfo": "Cohortgegevens",
       "cohortList": "Cohortlijst",
       "deleteCohort": "{0}verwijderen?",
       "deleteConfirm": "Weet u zeker dat u dit cohort wilt verwijderen?",
       "selectCohort": "Een cohort selecteren",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "Cohort wisselen",
+      "shiftCohortAriaLabel": "Switch cohort",
       "shiftCohortDescription": "Selecteer een cohort in de lijst met cohorten. Pas het cohort toe op het dashboard."
     },
     "CohortInformation": {
@@ -1667,7 +1686,11 @@
         "flyoutHeader": "Kies uw functies",
         "flyoutSubHeader": "Voor welke functies wilt u de eerlijkheid van uw model evalueren?",
         "flyoutDescription": "Evenredigheid wordt geëvalueerd in termen van beoordeling van het gedrag van uw model. We splitsen uw gegevens op basis van de waarden van elke geselecteerde functie en evalueren hoe de metrische gegevens prestaties van uw model verschillen in deze splitsingen.",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "Functies",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "Groepen",
         "categoricalGroupsCountRemark": "Deze functie heeft {0} unieke waarden.",
         "continuousGroupsCountRemark": "Deze functie is doorlopend en opgesplitst in {0} opslaglocaties.",
@@ -1751,7 +1774,9 @@
       "cancel": "Annuleren",
       "cohortList": "Lijst met tijdreeksen",
       "selectCohort": "Een tijdreeks selecteren",
+      "selectCohortAriaLabel": "Time series selection",
       "shiftCohort": "Tijdreeks wisselen",
+      "shiftCohortAriaLabel": "Switch time series",
       "shiftCohortDescription": "Selecteer een tijdreeks in de lijst met tijdreeksen. Pas de tijdreeks toe op het dashboard."
     },
     "TimeSeriesSettings": {
