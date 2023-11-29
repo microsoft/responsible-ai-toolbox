@@ -107,8 +107,20 @@ export class ShiftCohort extends React.Component<
           },
           isBlocking: true
         }}
-        minWidth={740}
-        maxWidth={1000}
+        styles={{
+          main: {
+            selectors: {
+              "@media (max-width: 740px)": {
+                maxWidth: "740px",
+                minWidth: "100px"
+              },
+              "@media (min-width: 740px)": {
+                maxWidth: "1000px",
+                minWidth: "740px"
+              }
+            }
+          }
+        }}
       >
         <Dropdown
           placeholder={localizationBase.selectCohort}

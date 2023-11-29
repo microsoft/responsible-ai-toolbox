@@ -25,6 +25,7 @@ export interface IFlyoutStyles {
   successIcon: IStyle;
   sectionIndent: IStyle;
   separator: IStyle;
+  stackDynamicScreenSize: IStyle;
   title: IStyle;
 }
 
@@ -89,6 +90,14 @@ export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
     },
     separator: {
       width: "100%"
+    },
+    stackDynamicScreenSize: {
+      selectors: {
+        "@media (max-width: 740px)": {
+          alignItems: "flex-start",
+          flexFlow: "column"
+        }
+      }
     },
     successIcon: {
       color: theme.semanticColors.successIcon,

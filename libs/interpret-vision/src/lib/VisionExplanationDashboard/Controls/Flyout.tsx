@@ -124,6 +124,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                 tokens={stackTokens.medium}
                 horizontalAlign="space-around"
                 verticalAlign="center"
+                className={classNames.stackDynamicScreenSize}
               >
                 <Stack.Item>
                   <Stack
