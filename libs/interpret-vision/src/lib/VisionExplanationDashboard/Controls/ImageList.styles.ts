@@ -72,7 +72,8 @@ export const imageListStyles: () => IProcessedStyleSet<IDatasetExplorerTabStyles
       },
       labelPredicted: {
         color: "black",
-        fontSize: FontSizes.small
+        fontSize: FontSizes.small,
+        fontWeight: "600"
       },
       list: {
         fontSize: 0,

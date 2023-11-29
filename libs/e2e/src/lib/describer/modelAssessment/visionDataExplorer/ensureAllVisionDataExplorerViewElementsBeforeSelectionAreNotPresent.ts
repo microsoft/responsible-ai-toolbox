@@ -43,9 +43,12 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsBeforeSelect
   cy.get(Locators.VisionDataExplorerImageExplorerViewImageTrueY).should(
     "not.exist"
   );
-  cy.get(Locators.VisionDataExplorerImageExplorerViewImageODAggLabel).should(
-    "not.exist"
-  );
+  cy.get(
+    Locators.VisionDataExplorerImageExplorerViewImageODAggLabelCorrect
+  ).should("not.exist");
+  cy.get(
+    Locators.VisionDataExplorerImageExplorerViewImageODAggLabelIncorrect
+  ).should("not.exist");
 }
 
 export function ensureAllVisionDataExplorerTableViewElementsBeforeSelectionAreNotPresent(): void {
