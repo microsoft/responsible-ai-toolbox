@@ -111,11 +111,6 @@ jobs:
           pip install -v -e .[qa]
         working-directory: ${{ matrix.packageDirectory }}
 
-      - name: Install numpy 1.20.3
-        shell: bash -l {0}
-        run: |
-          pip install numpy==1.20.3
-
       - name: Run tests
         shell: bash -l {0}
         run: |
