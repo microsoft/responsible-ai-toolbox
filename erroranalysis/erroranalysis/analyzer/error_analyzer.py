@@ -480,7 +480,8 @@ class BaseAnalyzer(ABC):
             importances = self._compute_error_correlation(
                 input_data, diff, error_correlation_method)
         except ValueError:
-            # For numerical data types to make calculation/imputation error-free
+            # For numerical data types to make calculation/
+            # imputation error-free
             input_data = input_data.astype(float)
             # Impute input_data if it contains NaNs, infinity or a value too
             # large for dtype('float64')
