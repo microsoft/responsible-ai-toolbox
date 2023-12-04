@@ -476,6 +476,8 @@ class BaseAnalyzer(ABC):
                                                      IMPORTANCES_THRESHOLD)
             input_data = input_data[indexes]
             diff = diff[indexes]
+        # For numerical data types to make calculation/imputation error-free
+        input_data = input_data.astype(float)
         try:
             importances = self._compute_error_correlation(
                 input_data, diff, error_correlation_method)
