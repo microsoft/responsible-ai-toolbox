@@ -681,18 +681,19 @@ export class ModelOverview extends React.Component<
             ) {
               for (const [i, cohortMetric] of cohortMetrics.entries()) {
                 const [mAP, aP, aR] = cohortMetric;
+                const cohortClassName = cohortClasses[cohortIndex][i];
 
                 const key: [number[], string, string, number] = [
                   selectionIndexes[cohortIndex],
                   this.state.aggregateMethod,
-                  cohortClasses[i],
+                  cohortClassName,
                   this.state.iouThreshold
                 ];
                 if (!this.objectDetectionCache.has(key.toString())) {
                   this.objectDetectionCache.set(key.toString(), [mAP, aP, aR]);
                 }
 
-                if (this.state.className === cohortClasses[i]) {
+                if (this.state.className === cohortClassName) {
                   [meanAveragePrecision, averagePrecision, averageRecall] =
                     cohortMetric;
                 }
