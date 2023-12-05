@@ -174,7 +174,7 @@ class TestImportances(object):
         model_analyzer = ModelAnalyzer(model, X_test, y_test,
                                        feature_names,
                                        categorical_features)
-        scores = model_analyzer.compute_importances(error_correlation_method)
+        model_analyzer.compute_importances(error_correlation_method)
 
     @pytest.mark.parametrize('error_correlation_method',
                              [MUTUAL_INFO, EBM, GBM_SHAP])
