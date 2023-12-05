@@ -143,9 +143,9 @@ class TestImportances(object):
     @pytest.mark.parametrize('num_rows', [1, 2, 3, 4])
     @pytest.mark.parametrize('nan_correlation_method',
                              [MUTUAL_INFO, EBM, GBM_SHAP])
-    def test_nan_data_importances(self, num_rows, error_correlation_method):
+    def test_nan_data_importances(self, num_rows, nan_correlation_method):
         # validate we can run on very few rows
-        X_train, y_train, X_test, y_test, _ = \
+        X_train, _, X_test, y_test, _ = \
             create_binary_classification_dataset(NUM_SAMPLE_ROWS)
         feature_names = list(X_train.columns)
 
@@ -174,7 +174,7 @@ class TestImportances(object):
         model_analyzer = ModelAnalyzer(model, X_test, y_test,
                                        feature_names,
                                        categorical_features)
-        model_analyzer.compute_importances(error_correlation_method)
+        model_analyzer.compute_importances(nan_correlation_method)
 
     @pytest.mark.parametrize('error_correlation_method',
                              [MUTUAL_INFO, EBM, GBM_SHAP])
