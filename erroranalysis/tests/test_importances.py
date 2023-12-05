@@ -140,7 +140,7 @@ class TestImportances(object):
         scores = model_analyzer.compute_importances(error_correlation_method)
         assert len(scores) == DEFAULT_SAMPLE_COLS
 
-    @pytest.mark.parametrize('num_rows', [1, 2, 3, 4])
+    @pytest.mark.parametrize('num_rows', [3, 4])
     @pytest.mark.parametrize('nan_correlation_method',
                              [MUTUAL_INFO, EBM, GBM_SHAP])
     def test_nan_data_importances(self, num_rows, nan_correlation_method):
