@@ -5,8 +5,8 @@ import time
 
 import numpy as np
 import pytest
-from sklearn.base import BaseEstimator
 from common_utils import replicate_dataset
+from sklearn.base import BaseEstimator
 
 from erroranalysis._internal.constants import (ErrorCorrelationMethods,
                                                ModelTask)
