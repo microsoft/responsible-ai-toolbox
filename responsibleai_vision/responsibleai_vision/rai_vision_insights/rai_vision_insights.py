@@ -1189,11 +1189,13 @@ class RAIVisionInsights(RAIBaseInsights):
             device = torch.device(self.device)
         normalized_iou_threshold = [iou_threshold / 100.0]
         all_cohort_metrics = []
+        all_cohort_classes = []
         for cohort_indices in selection_indexes:
             key = ','.join([str(cid) for cid in cohort_indices] +
                            [aggregate_method, class_name, str(iou_threshold)])
             if key in object_detection_cache:
                 all_cohort_metrics.append(object_detection_cache[key])
+                all_cohort_classes.append([class_name])
                 continue
 
             metric_OD = MeanAveragePrecision(
@@ -1243,6 +1245,7 @@ class RAIVisionInsights(RAIBaseInsights):
             # to catch if the class is not in the cohort
             if class_name not in cohort_classes:
                 all_cohort_metrics.append([-1, -1, -1])
+                all_cohort_classes.append([class_name])
             else:
                 metric_OD.update(cohort_pred,
                                  cohort_gt)
@@ -1264,4 +1267,5 @@ class RAIVisionInsights(RAIBaseInsights):
                 all_submetrics = [[mAP, APs[i], ARs[i]]
                                   for i in range(len(APs))]
                 all_cohort_metrics.append(all_submetrics)
-        return [all_cohort_metrics, cohort_classes]
+                all_cohort_classes.append(cohort_classes)
+        return [all_cohort_metrics, all_cohort_classes]
