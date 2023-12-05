@@ -437,6 +437,16 @@ class ImageClassificationPipelineSerializer(object):
         return os.path.join(path, 'image-classification-model')
 
 
+class ObjectDetectionPipelineSerializer(object):
+    def save(self, model, path):
+        pass
+
+    def load(self, path):
+        return retrieve_fridge_object_detection_model(
+            load_fridge_weights=True
+        )
+
+
 class DummyFlowersPipelineSerializer(object):
     def save(self, model, path):
         pass
