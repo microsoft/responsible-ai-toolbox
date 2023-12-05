@@ -137,7 +137,11 @@ class TestRAIVisionInsights(object):
                 pass
 
             def predict(self, X):
-                return self.model.predict(X).tolist()
+                prediction = self.model.predict(X).tolist()
+                if len(prediction) == 1:
+                    # fix ndim error for some versions of pandas in tests
+                    prediction = prediction[0]
+                return prediction
 
             def predict_proba(self, X):
                 return self.model.predict_proba(X)
@@ -146,7 +150,10 @@ class TestRAIVisionInsights(object):
         class_names = np.array(['can', 'carton',
                                 'milk_bottle', 'water_bottle'])
         # test case where there are different numbers of objects in labels
-        data = data.iloc[[1, 50, 120]]
+        images = ['10.jpg', '29.jpg', '92.jpg']
+        images = ["./data/odFridgeObjects/images/{}".format(i) for i in images]
+        data = data.loc[data[ImageColumns.IMAGE.value].isin(images)]
+        data = data.reset_index(drop=True)
         run_rai_insights(wrapped_model, data, ImageColumns.LABEL,
                          task_type, class_names,
                          test_error_analysis=True,
