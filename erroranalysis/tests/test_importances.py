@@ -5,6 +5,7 @@ import time
 
 import numpy as np
 import pytest
+from sklearn.base import BaseEstimator
 from common_utils import replicate_dataset
 
 from erroranalysis._internal.constants import (ErrorCorrelationMethods,
@@ -147,8 +148,6 @@ class TestImportances(object):
         X_train, y_train, X_test, y_test, _ = \
             create_binary_classification_dataset(NUM_SAMPLE_ROWS)
         feature_names = list(X_train.columns)
-
-        from sklearn.base import BaseEstimator
 
         class DummyModel(BaseEstimator):
             def fit(self, X, y=None):
