@@ -24,6 +24,30 @@ this file to understand what changed.
 - bug fixes and tests
 - other
 
+## v0.32.1
+
+- new features
+  - ## Responsible AI Dashboard
+    - UI Improvement for Aggregate Object Detection Labels by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2431
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - Update raiwidgets to rai-core-flask v0.7.1 by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2437
+  - ## RAI Vision
+    - update responsibleai-text and responsibleai-vision packages to responsibleai 0.32.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2420
+    - release responsibleai-vision 0.3.3 and responsibleai-text 0.2.3 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2421
+    - Added aria-labels to dropdowns by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2417
+    - make elements under image explorer view tab keyboard accessible by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2422
+    - Added aria-labels for sliders and checkboxes/DetailsList by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2419
+    - Added aria-labels to buttons by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2418
+    - fix switch cohort window getting clipped when zoomed in for accessibility by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2430
+    - fix vision dashboard flyout accessibility on smaller screen size by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2432
+    - fix image downloader failing with automl format on deserialize due to missing label transformations by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2435
+    - fix save and switch button text overflowing for accessibility by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2438
+    - Object Detection Model Overview missing-class fix for Cohorts by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2429
+- other
+  - Localized file check-in by OneLocBuild Task: Build definition ID 21368: Build ID 111947035 by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/2433
+  - LEGO: Pull request from JUNO/hb_a12a4630-4852-4e7d-9cbc-c0e1117da1ab_20231125124253772 to main by @csigs in https://github.com/microsoft/responsible-ai-toolbox/pull/2428
+
 ## v0.32.0
 
 - new features
