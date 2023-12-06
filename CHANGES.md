@@ -48,6 +48,7 @@ this file to understand what changed.
   - Localized file check-in by OneLocBuild Task: Build definition ID 21368: Build ID 111947035 by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/2433
   - LEGO: Pull request from JUNO/hb_a12a4630-4852-4e7d-9cbc-c0e1117da1ab_20231125124253772 to main by @csigs in https://github.com/microsoft/responsible-ai-toolbox/pull/2428
   - Removed python 3.6 from CI-notebook gate by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2441
+  - Localized file check-in by OneLocBuild Task: Build definition ID 21368: Build ID 112224195 by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/2434
 
 ## v0.32.0
 
