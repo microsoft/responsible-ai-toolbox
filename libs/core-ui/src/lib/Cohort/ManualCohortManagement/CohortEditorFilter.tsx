@@ -113,6 +113,20 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
               label={localization.Interpret.CohortEditor.TreatAsCategorical}
               checked={isCategorical}
               onChange={this.props.setAsCategorical}
+              ariaLabel={
+                isCategorical
+                  ? localization.formatString(
+                      localization.Interpret.CohortEditor
+                        .TreatAsCategoricalAriaLabelChecked,
+                      categoricalOptions?.length
+                    )
+                  : localization.formatString(
+                      localization.Interpret.CohortEditor
+                        .TreatAsCategoricalAriaLabelUnchecked,
+                      columnRange.min,
+                      columnRange.max
+                    )
+              }
             />
           )}
         {isCategorical ? (
