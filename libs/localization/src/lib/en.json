@@ -915,6 +915,8 @@
         "regressionError": "Error"
       },
       "TreatAsCategorical": "Treat as categorical",
+      "TreatAsCategoricalAriaLabelChecked": "Treat as categorical checked, number of unique values: {0}",
+      "TreatAsCategoricalAriaLabelUnchecked": "Treat as categorical unchecked, min value: {0}, max value: {1}",
       "_TreatAsCategorical.comment": "a checkbox label to treat integers as categories instead of as numbers",
       "_addFilter.comment": "button text to add the current settings as a new filter",
       "_addedFilters.comment": "header above the list of filters that have been saved",
