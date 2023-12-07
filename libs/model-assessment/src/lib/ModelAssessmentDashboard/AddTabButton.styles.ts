@@ -24,7 +24,11 @@ export const addTabButtonStyles =
         backgroundColor: theme.semanticColors.bodyBackground,
         span: {
           i: {
-            fontSize: "32px"
+            fontSize: "32px",
+            letterSpacing: "0px !important;",
+            lineHeight: "10px !important;",
+            marginBottom: "-8px !important;",
+            wordSpacing: "0px !important;"
           }
         }
       },
