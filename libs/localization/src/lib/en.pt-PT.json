@@ -836,6 +836,8 @@
         "regressionError": "Erro"
       },
       "TreatAsCategorical": "Tratar como categórica",
+      "TreatAsCategoricalAriaLabelChecked": "Treat as categorical checked, number of unique values: {0}",
+      "TreatAsCategoricalAriaLabelUnchecked": "Treat as categorical unchecked, min value: {0}, max value: {1}",
       "addFilter": "Adicionar filtro",
       "addFilterAriaLabel": "Add cohort filter",
       "addedFilters": "Filtros",
