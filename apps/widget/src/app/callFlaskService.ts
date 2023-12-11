@@ -49,7 +49,8 @@ export async function connectToFlaskService<TRequest, TResponse>(
     }
     const url = config.baseUrl;
     const socket = io(url, {
-      reconnectionDelayMax: 10000
+      reconnectionDelayMax: 10000,
+      withCredentials: config.withCredentials
     });
     socket.on("connect", () => {
       console.log(`socket connected, socket id: ${socket.id}, url: ${url}`);

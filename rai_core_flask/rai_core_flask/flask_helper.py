@@ -33,7 +33,6 @@ class FlaskHelper(object):
         self.with_credentials = with_credentials
         # dictionary to store arbitrary state for use by consuming classes
         self.shared_state = {}
-        self.socketio = SocketIO(self.app)
         if self.ip is None:
             self.ip = "localhost"
         if self.port is None:
@@ -57,6 +56,11 @@ class FlaskHelper(object):
             FlaskHelper._is_local_port_available(self.ip, self.port,
                                                  raise_error=True)
         self.env = build_environment(self)
+        if hasattr(self.env, 'nbvm_origins'):
+            self.socketio = SocketIO(
+                self.app, cors_allowed_origins=self.env.nbvm_origins)
+        else:
+            self.socketio = SocketIO(self.app)
         if self.env.base_url is None:
             return
         # Sleep for 1 second in order to prevent random errors while
