@@ -836,6 +836,8 @@
         "regressionError": "エラー"
       },
       "TreatAsCategorical": "カテゴリ別として扱う",
+      "TreatAsCategoricalAriaLabelChecked": "Treat as categorical checked, number of unique values: {0}",
+      "TreatAsCategoricalAriaLabelUnchecked": "Treat as categorical unchecked, min value: {0}, max value: {1}",
       "addFilter": "フィルターの追加",
       "addFilterAriaLabel": "コーホート フィルターの追加",
       "addedFilters": "フィルター",
