@@ -41,7 +41,12 @@ class AzureNBEnvironment(BaseEnvironment):
                 self.successfully_detected = True
                 self.nbvm_origins = [
                     f"https://{instance_name}.{domain_suffix}",
-                    f"https://{instance_name}-{service.port}.{domain_suffix}"
+                    f"https://{instance_name}-{service.port}.{domain_suffix}",
+                    f"wss://{instance_name}.{domain_suffix}",
+                    f"wss://{instance_name}-{service.port}.{domain_suffix}",
+                    "https://ml.azure.com",
+                    "https://dev.ml.azure.com",
+                    "https://int.ml.azure.com"
                 ]
 
     def get_nbvm_config(self):
