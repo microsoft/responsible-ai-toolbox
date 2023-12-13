@@ -6,6 +6,7 @@ import time
 import numpy as np
 import pytest
 from common_utils import replicate_dataset
+from sklearn.base import BaseEstimator
 
 from erroranalysis._internal.constants import (ErrorCorrelationMethods,
                                                ModelTask)
@@ -138,6 +139,42 @@ class TestImportances(object):
                                        categorical_features)
         scores = model_analyzer.compute_importances(error_correlation_method)
         assert len(scores) == DEFAULT_SAMPLE_COLS
+
+    @pytest.mark.parametrize('num_rows', [3, 4])
+    @pytest.mark.parametrize('nan_correlation_method',
+                             [MUTUAL_INFO, EBM, GBM_SHAP])
+    def test_nan_data_importances(self, num_rows, nan_correlation_method):
+        # validate we can run on very few rows
+        X_train, _, X_test, y_test, _ = \
+            create_binary_classification_dataset(NUM_SAMPLE_ROWS)
+        feature_names = list(X_train.columns)
+
+        class DummyModel(BaseEstimator):
+            def fit(self, X, y=None):
+                return self
+
+            def predict(self, X):
+                return np.zeros((len(X),), dtype=bool)
+
+            def predict_proba(self, X):
+                return np.zeros((len(X),), dtype=bool)
+
+        # Use the dummy model
+        model = DummyModel()
+
+        X_test = X_test[:num_rows]
+        y_test = y_test[:num_rows]
+
+        # Randomly replace some values in X_test with NaN
+        nan_mask = np.random.choice([True, False], size=X_test.shape)
+        X_test = X_test.astype(float)
+        X_test[nan_mask] = np.nan
+
+        categorical_features = []
+        model_analyzer = ModelAnalyzer(model, X_test, y_test,
+                                       feature_names,
+                                       categorical_features)
+        model_analyzer.compute_importances(nan_correlation_method)
 
     @pytest.mark.parametrize('error_correlation_method',
                              [MUTUAL_INFO, EBM, GBM_SHAP])
