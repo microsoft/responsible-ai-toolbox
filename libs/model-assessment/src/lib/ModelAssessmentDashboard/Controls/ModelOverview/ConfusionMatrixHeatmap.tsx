@@ -236,7 +236,6 @@ export class ConfusionMatrixHeatmap extends React.Component<
                   },
                   yAxis: {
                     categories: this.state.selectedClasses,
-                    reversed: true,
                     title: {
                       text: `<b>${confusionMatrixLocString.confusionMatrixYAxisLabel}</b>`
                     }
