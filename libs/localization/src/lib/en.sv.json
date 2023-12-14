@@ -836,6 +836,8 @@
         "regressionError": "Fel"
       },
       "TreatAsCategorical": "Hantera som kategoriskt",
+      "TreatAsCategoricalAriaLabelChecked": "Treat as categorical checked, number of unique values: {0}",
+      "TreatAsCategoricalAriaLabelUnchecked": "Treat as categorical unchecked, min value: {0}, max value: {1}",
       "addFilter": "Lägg till filter",
       "addFilterAriaLabel": "Lägg till kohortfilter",
       "addedFilters": "Filter",
