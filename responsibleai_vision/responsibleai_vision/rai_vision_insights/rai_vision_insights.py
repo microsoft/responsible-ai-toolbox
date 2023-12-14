@@ -37,7 +37,7 @@ from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
 from responsibleai.serialization_utilities import serialize_json_safe
 from responsibleai_vision.common.constants import (CommonTags,
                                                    ExplainabilityDefaults,
-                                                   ImageColumns,
+                                                   ImageColumns, ImageModes,
                                                    MLFlowSchemaLiterals,
                                                    ModelTask)
 from responsibleai_vision.managers.error_analysis_manager import \
@@ -135,7 +135,7 @@ class RAIVisionInsights(RAIBaseInsights):
                  classes: Optional[np.ndarray] = None,
                  serializer: Optional[Any] = None,
                  maximum_rows_for_test: int = 5000,
-                 image_mode: str = "RGB",
+                 image_mode: str = ImageModes.RGB,
                  test_data_path: Optional[str] = None,
                  transformations: Optional[Any] = None,
                  image_downloader: Optional[Any] = None,
@@ -267,7 +267,7 @@ class RAIVisionInsights(RAIBaseInsights):
             serializer)
 
         ext_test, ext_features = extract_features(
-            self.test, self.target_column, self.task_type,
+            self.test, self.target_column,
             self.image_mode,
             self._feature_metadata)
         self._ext_test = ext_test

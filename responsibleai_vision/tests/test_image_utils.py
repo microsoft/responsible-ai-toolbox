@@ -63,6 +63,7 @@ class TestImageUtils(object):
                 assert label_j[5] == o_label_j[IS_CROWD]
 
     def test_retry_sessions_match_domain_count(self):
+        sessions_before_test = len(image_reader_requests_sessions)
         urls = [f"https://{i}.com/image.png" for i in range(10)]
         duplicates = urls.copy()
         urls.extend(duplicates)
@@ -72,7 +73,9 @@ class TestImageUtils(object):
         for url in urls:
             image_reader_get_retry_session(url)
 
-        assert len(image_reader_requests_sessions) == domain_unique_count
+        new_session_count = len(image_reader_requests_sessions)
+        new_session_count -= sessions_before_test
+        assert new_session_count == domain_unique_count
 
     @patch("urllib3.connectionpool.HTTPConnectionPool._make_request")
     def test_retry_sessions_retries_on_conn_failure(self, request_mock):

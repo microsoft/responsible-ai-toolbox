@@ -25,7 +25,7 @@ from rai_vision_insights_validator import validate_rai_vision_insights
 from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai_vision import ModelTask, RAIVisionInsights
 from responsibleai_vision.common.constants import (ExplainabilityDefaults,
-                                                   ImageColumns)
+                                                   ImageColumns, ImageModes)
 
 DEFAULT_MAX_EVALS = ExplainabilityDefaults.DEFAULT_MAX_EVALS
 DEFAULT_NUM_MASKS = ExplainabilityDefaults.DEFAULT_NUM_MASKS
@@ -40,7 +40,7 @@ class TestRAIVisionInsights(object):
         task_type = ModelTask.IMAGE_CLASSIFICATION
         class_names = load_imagenet_labels()
         run_rai_insights(pred, data[:3], ImageColumns.LABEL,
-                         task_type, class_names, image_mode='RGB')
+                         task_type, class_names, image_mode=ImageModes.RGB)
 
     @pytest.mark.parametrize('max_evals', [None, 10, 200])
     def test_rai_insights_image_classification_max_evals(self, max_evals):
@@ -51,7 +51,7 @@ class TestRAIVisionInsights(object):
         # run on a single image to avoid running out of memory on
         # test machines
         run_rai_insights(pred, data[:1], ImageColumns.LABEL,
-                         task_type, class_names, image_mode='RGB',
+                         task_type, class_names, image_mode=ImageModes.RGB,
                          test_explainer=True, max_evals=max_evals)
 
     @pytest.mark.parametrize('max_evals', [-100, -1, 0])
@@ -63,7 +63,8 @@ class TestRAIVisionInsights(object):
         with pytest.raises(ValueError,
                            match="max_evals must be greater than 0"):
             run_rai_insights(pred, data[:1], ImageColumns.LABEL,
-                             task_type, class_names, image_mode='RGB',
+                             task_type, class_names,
+                             image_mode=ImageModes.RGB,
                              test_explainer=True, max_evals=max_evals)
 
     def test_rai_insights_image_classification_fridge(self):

@@ -15,7 +15,6 @@ from common_text_utils import (COVID19_EVENTS_LABELS, EMOTION,
                                create_text_classification_pipeline,
                                load_covid19_emergency_event_dataset,
                                load_emotion_dataset)
-from huggingface_hub.utils._validators import HFValidationError
 from rai_text_insights_validator import validate_rai_text_insights
 
 from responsibleai._internal.constants import ManagerNames
@@ -134,8 +133,8 @@ class TestRAITextInsightsSaveAndLoadScenarios(object):
                 match_msg = 'Can\'t load the configuration'
                 expected_error = OSError
             else:
-                match_msg = 'Repo id must'
-                expected_error = HFValidationError
+                match_msg = 'local folder'
+                expected_error = OSError
             with pytest.raises(expected_error, match=match_msg):
                 without_model_rai_insights = RAITextInsights.load(save_path)
                 assert without_model_rai_insights.model is None
