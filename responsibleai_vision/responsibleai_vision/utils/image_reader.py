@@ -94,7 +94,8 @@ def get_all_exif_feature_names(image_dataset):
                         data = exifdata.get(tag_id)
                         if isinstance(data, str) or \
                            isinstance(data, int) or \
-                           isinstance(data, float):
+                           isinstance(data, float) or \
+                           isinstance(data, bytes):
                             exif_feature_names.add(tag)
     return list(exif_feature_names)
 

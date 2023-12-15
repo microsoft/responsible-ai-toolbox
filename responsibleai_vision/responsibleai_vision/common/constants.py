@@ -4,6 +4,12 @@
 from enum import Enum
 
 
+class ExtractedFeatures(str, Enum):
+    """Provide constants related to the extracted image features."""
+
+    MEAN_PIXEL_VALUE = 'mean_pixel_value'
+
+
 class ModelTask(str, Enum):
     """Provide model task constants.
 
@@ -26,6 +32,12 @@ class ImageColumns(str, Enum):
     IMAGE = 'image'
     LABEL = 'label'
     IMAGE_DETAILS = 'image_details'
+
+
+class ImageModes(str, Enum):
+    """Provide constants related to the image modes."""
+
+    RGB = 'RGB'
 
 
 class ExplainabilityLiterals:
