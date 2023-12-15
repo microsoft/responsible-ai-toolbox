@@ -1,13 +1,27 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as FluentUI from "@fluentui/react";
+import {
+  ComboBox,
+  FocusZone,
+  IComboBox,
+  IComboBoxOption,
+  Image,
+  List,
+  Panel,
+  PanelType,
+  Separator,
+  Spinner,
+  Stack,
+  Text
+} from "@fluentui/react";
 import { FluentUIStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import * as React from "react";
 import { CanvasTools } from "vott-ct";
 
 import * as FlyoutStyles from "../utils/FlyoutUtils";
+import { getObjectDetectionImageAltText } from "../utils/getAltTextUtils";
 import { getJoinedLabelString } from "../utils/labelUtils";
 
 import {
@@ -76,114 +90,118 @@ export class FlyoutObjectDetection extends React.Component<
       return <div />;
     }
     const classNames = flyoutStyles();
-    const correctDetections = getJoinedLabelString(item?.odCorrect);
-    const incorrectDetections = getJoinedLabelString(item?.odIncorrect);
-
+    const odCorrect = item.odCorrect;
+    const odIncorrect = item.odIncorrect;
+    const correctDetections = getJoinedLabelString(odCorrect);
+    const incorrectDetections = getJoinedLabelString(odIncorrect);
+    const alt = getObjectDetectionImageAltText(
+      odCorrect,
+      odIncorrect,
+      item.index
+    );
     return (
-      <FluentUI.FocusZone>
-        <FluentUI.Panel
+      <FocusZone>
+        <Panel
           headerText={localization.InterpretVision.Dashboard.panelTitle}
           isOpen={isOpen}
           closeButtonAriaLabel="Close"
           onDismiss={this.callbackWrapper}
           isLightDismiss
-          type={FluentUI.PanelType.large}
+          type={PanelType.large}
           className={classNames.odFlyoutContainer}
         >
-          <FluentUI.Stack tokens={FlyoutODUtils.stackTokens.medium}>
-            <FluentUI.Stack tokens={FlyoutODUtils.stackTokens.medium}>
-              <FluentUI.Stack.Item>
-                <FluentUI.Separator className={classNames.separator} />
-              </FluentUI.Stack.Item>
-              <FluentUI.Stack.Item>
-                <FluentUI.Stack
+          <Stack tokens={FlyoutODUtils.stackTokens.medium}>
+            <Stack tokens={FlyoutODUtils.stackTokens.medium}>
+              <Stack.Item>
+                <Separator className={classNames.separator} />
+              </Stack.Item>
+              <Stack.Item>
+                <Stack
                   tokens={FlyoutODUtils.stackTokens.medium}
                   horizontalAlign="space-around"
                   verticalAlign="center"
                 >
-                  <FluentUI.Stack.Item>
-                    <FluentUI.Stack
+                  <Stack.Item>
+                    <Stack
                       tokens={FlyoutODUtils.stackTokens.large}
                       horizontalAlign="start"
                       verticalAlign="start"
                     >
-                      <FluentUI.Stack
+                      <Stack
                         horizontal
                         tokens={FlyoutODUtils.stackTokens.medium}
                         horizontalAlign="center"
                         verticalAlign="center"
                       />
-                      <FluentUI.Stack.Item>
-                        <FluentUI.Text variant="large">
+                      <Stack.Item>
+                        <Text variant="large">
                           {localization.InterpretVision.Dashboard.indexLabel}
                           {item?.index}
-                        </FluentUI.Text>
-                      </FluentUI.Stack.Item>
-                      <FluentUI.Stack.Item>
-                        <FluentUI.Text variant="large">
+                        </Text>
+                      </Stack.Item>
+                      <Stack.Item>
+                        <Text variant="large">
                           {
                             localization.InterpretVision.Dashboard
                               .correctDetections
                           }
                           {correctDetections}
-                        </FluentUI.Text>
-                      </FluentUI.Stack.Item>
-                      <FluentUI.Stack.Item>
-                        <FluentUI.Text variant="large">
+                        </Text>
+                      </Stack.Item>
+                      <Stack.Item>
+                        <Text variant="large">
                           {
                             localization.InterpretVision.Dashboard
                               .incorrectDetections
                           }
                           {incorrectDetections}
-                        </FluentUI.Text>
-                      </FluentUI.Stack.Item>
-                    </FluentUI.Stack>
-                  </FluentUI.Stack.Item>
-                </FluentUI.Stack>
-              </FluentUI.Stack.Item>
-              <FluentUI.Stack.Item>
-                <FluentUI.Separator className={classNames.separator} />
-              </FluentUI.Stack.Item>
-              <FluentUI.Stack
+                        </Text>
+                      </Stack.Item>
+                    </Stack>
+                  </Stack.Item>
+                </Stack>
+              </Stack.Item>
+              <Stack.Item>
+                <Separator className={classNames.separator} />
+              </Stack.Item>
+              <Stack
                 tokens={FlyoutODUtils.stackTokens.large}
                 className={classNames.sectionIndent}
               >
-                <FluentUI.Stack.Item>
-                  <FluentUI.Text variant="large" className={classNames.title}>
+                <Stack.Item>
+                  <Text variant="large" className={classNames.title}>
                     {localization.InterpretVision.Dashboard.panelInformation}
-                  </FluentUI.Text>
-                </FluentUI.Stack.Item>
-                <FluentUI.Stack.Item
-                  className={classNames.featureListContainer}
-                >
-                  <FluentUI.List
+                  </Text>
+                </Stack.Item>
+                <Stack.Item className={classNames.featureListContainer}>
+                  <List
                     items={this.state.metadata}
                     onRenderCell={FlyoutStyles.onRenderCell}
                   />
-                </FluentUI.Stack.Item>
-              </FluentUI.Stack>
-              <FluentUI.Stack>
-                <FluentUI.Stack.Item className={classNames.imageContainer}>
-                  <FluentUI.Stack.Item id="canvasToolsDiv">
-                    <FluentUI.Stack.Item id="selectionDiv">
+                </Stack.Item>
+              </Stack>
+              <Stack>
+                <Stack.Item className={classNames.imageContainer}>
+                  <Stack.Item id="canvasToolsDiv">
+                    <Stack.Item id="selectionDiv">
                       <div ref={this.callbackRef} id="editorDiv" />
-                    </FluentUI.Stack.Item>
-                  </FluentUI.Stack.Item>
-                </FluentUI.Stack.Item>
-              </FluentUI.Stack>
-            </FluentUI.Stack>
-            <FluentUI.Stack>
-              <FluentUI.Stack.Item>
-                <FluentUI.Separator className={classNames.separator} />
-              </FluentUI.Stack.Item>
-              <FluentUI.Stack.Item>
-                <FluentUI.Text variant="large" className={classNames.title}>
+                    </Stack.Item>
+                  </Stack.Item>
+                </Stack.Item>
+              </Stack>
+            </Stack>
+            <Stack>
+              <Stack.Item>
+                <Separator className={classNames.separator} />
+              </Stack.Item>
+              <Stack.Item>
+                <Text variant="large" className={classNames.title}>
                   {localization.InterpretVision.Dashboard.panelExplanation}
-                </FluentUI.Text>
-              </FluentUI.Stack.Item>
-              <FluentUI.Stack>
+                </Text>
+              </Stack.Item>
+              <Stack>
                 {
-                  <FluentUI.ComboBox
+                  <ComboBox
                     id={localization.InterpretVision.Dashboard.objectSelect}
                     label={localization.InterpretVision.Dashboard.chooseObject}
                     onChange={this.selectODChoiceFromDropdown}
@@ -193,14 +211,15 @@ export class FlyoutObjectDetection extends React.Component<
                     styles={FluentUIStyles.smallDropdownStyle}
                   />
                 }
-                <FluentUI.Stack>
+                <Stack>
                   {!this.props.loadingExplanation[item.index][
                     +this.state.odSelectedKey.slice(
                       FlyoutODUtils.ExcessLabelLen
                     )
                   ] && (
-                    <FluentUI.Stack.Item className={classNames.imageContainer}>
-                      <FluentUI.Image
+                    <Stack.Item className={classNames.imageContainer}>
+                      <Image
+                        alt={alt}
                         src={`data:image/jpg;base64,${this.props.explanations
                           .get(item.index)
                           ?.get(
@@ -211,7 +230,7 @@ export class FlyoutObjectDetection extends React.Component<
                         width={explanationImageWidth}
                         style={explanationImage}
                       />
-                    </FluentUI.Stack.Item>
+                    </Stack.Item>
                   )}
                   {this.state.odSelectedKey !== "" &&
                     this.props.loadingExplanation[item.index][
@@ -219,18 +238,18 @@ export class FlyoutObjectDetection extends React.Component<
                         FlyoutODUtils.ExcessLabelLen
                       )
                     ] && (
-                      <FluentUI.Stack.Item>
-                        <FluentUI.Spinner
+                      <Stack.Item>
+                        <Spinner
                           label={`${localization.InterpretVision.Dashboard.loading} ${item?.index}`}
                         />
-                      </FluentUI.Stack.Item>
+                      </Stack.Item>
                     )}
-                </FluentUI.Stack>
-              </FluentUI.Stack>
-            </FluentUI.Stack>
-          </FluentUI.Stack>
-        </FluentUI.Panel>
-      </FluentUI.FocusZone>
+                </Stack>
+              </Stack>
+            </Stack>
+          </Stack>
+        </Panel>
+      </FocusZone>
     );
   }
   private callbackWrapper = (): void => {
@@ -239,8 +258,8 @@ export class FlyoutObjectDetection extends React.Component<
     callback();
   };
   private selectODChoiceFromDropdown = (
-    _event: React.FormEvent<FluentUI.IComboBox>,
-    item?: FluentUI.IComboBoxOption
+    _event: React.FormEvent<IComboBox>,
+    item?: IComboBoxOption
   ): void => {
     if (typeof item?.key === "string") {
       this.setState({ odSelectedKey: item?.key });
@@ -259,10 +278,16 @@ export class FlyoutObjectDetection extends React.Component<
     const editor = new CanvasTools.Editor(editorCallback);
     const loadImage = async (): Promise<void> => {
       if (this.state.item) {
+        const item = this.state.item;
+        const altText = getObjectDetectionImageAltText(
+          item.odCorrect,
+          item.odIncorrect,
+          item.index
+        );
         // this.state.item.image is base64 encoded string
-        await FlyoutODUtils.loadImageFromBase64(this.state.item.image, editor);
+        await FlyoutODUtils.loadImageFromBase64(item.image, editor, altText);
         FlyoutODUtils.drawBoundingBoxes(
-          this.state.item,
+          item,
           editorCallback,
           editor,
           this.props.dataset
