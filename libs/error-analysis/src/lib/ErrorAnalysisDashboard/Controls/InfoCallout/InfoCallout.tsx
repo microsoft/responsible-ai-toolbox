@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Callout, FocusZone, IconButton } from "@fluentui/react";
+import { FocusTrapCallout, FocusZone, IconButton } from "@fluentui/react";
 import { FluentUIStyles } from "@responsible-ai/core-ui";
 import React from "react";
 
@@ -46,7 +46,7 @@ export class InfoCallout extends React.Component<
           }}
         />
         {this.state.isCalloutVisible && (
-          <Callout
+          <FocusTrapCallout
             target={`#${this.props.iconId}`}
             setInitialFocus
             onDismiss={this.onDismiss}
@@ -58,7 +58,7 @@ export class InfoCallout extends React.Component<
                 <span>{this.props.infoText}</span>
               </div>
             </FocusZone>
-          </Callout>
+          </FocusTrapCallout>
         )}
       </span>
     );
