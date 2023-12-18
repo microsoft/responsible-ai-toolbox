@@ -2,40 +2,34 @@
 // Licensed under the MIT License.
 
 import {
-  Callout,
   DirectionalHint,
   Dropdown,
-  IconButton,
   IDropdownOption,
   Text
 } from "@fluentui/react";
-import { WeightVectorOption, FluentUIStyles } from "@responsible-ai/core-ui";
+import {
+  WeightVectorOption,
+  LabelWithCallout,
+  ITelemetryEvent,
+  TelemetryEventName
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import { Dictionary } from "lodash";
 import React from "react";
-
-import { classImportanceWeightsStyles } from "./ClassImportanceWeights.styles";
 
 export interface IClassImportanceWeightsProps {
   onWeightChange: (option: WeightVectorOption) => void;
   selectedWeightVector: WeightVectorOption;
   weightOptions: WeightVectorOption[];
-  weightLabels: any;
+  weightLabels: Dictionary<string>;
   disabled?: boolean;
-}
-interface IClassImportanceWeightsState {
-  crossClassInfoVisible: boolean;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
-export class ClassImportanceWeights extends React.Component<
-  IClassImportanceWeightsProps,
-  IClassImportanceWeightsState
-> {
+export class ClassImportanceWeights extends React.Component<IClassImportanceWeightsProps> {
   private weightOptions: IDropdownOption[] | undefined;
   public constructor(props: IClassImportanceWeightsProps) {
     super(props);
-    this.state = {
-      crossClassInfoVisible: false
-    };
     this.weightOptions = this.props.weightOptions.map((option) => {
       return {
         key: option,
@@ -44,73 +38,51 @@ export class ClassImportanceWeights extends React.Component<
     });
   }
   public render(): React.ReactNode {
-    const classNames = classImportanceWeightsStyles();
+    const iconButtonId = "cross-class-weight-info";
+    const calloutTarget = `#${iconButtonId}`;
     return (
       <div id="ClassImportanceWeights">
-        <div className={classNames.multiclassWeightLabel}>
-          <Text
-            variant={"medium"}
-            className={classNames.multiclassWeightLabelText}
-          >
-            {localization.Interpret.GlobalTab.weightOptions}
-          </Text>
-          <IconButton
-            id={"cross-class-weight-info"}
-            iconProps={{ iconName: "Info" }}
-            title={localization.Interpret.CrossClass.info}
-            onClick={this.toggleCrossClassInfo}
-          />
-        </div>
         {this.weightOptions && (
-          <Dropdown
-            options={this.weightOptions}
-            selectedKey={this.props.selectedWeightVector}
-            onChange={this.setWeightOption}
-            ariaLabel={localization.Interpret.GlobalTab.weightOptions}
-            disabled={this.props.disabled ?? false}
-          />
-        )}
-        {this.state.crossClassInfoVisible && (
-          <Callout
-            doNotLayer
-            target={"#cross-class-weight-info"}
-            setInitialFocus
-            onDismiss={this.toggleCrossClassInfo}
-            directionalHint={DirectionalHint.leftCenter}
-            role="alertdialog"
-            styles={{ container: FluentUIStyles.calloutContainer }}
-          >
-            <div className={classNames.calloutWrapper}>
-              <div className={classNames.calloutHeader}>
-                <Text className={classNames.calloutTitle}>
-                  {localization.Interpret.CrossClass.crossClassWeights}
-                </Text>
-              </div>
-              <div className={classNames.calloutInner}>
-                <Text>{localization.Interpret.CrossClass.overviewInfo}</Text>
-                <ul>
-                  <li>
-                    <Text>
-                      {localization.Interpret.CrossClass.absoluteValInfo}
-                    </Text>
-                  </li>
-                  <li>
-                    <Text>
-                      {localization.Interpret.CrossClass.enumeratedClassInfo}
-                    </Text>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </Callout>
+          <div>
+            <LabelWithCallout
+              calloutTitle={localization.Interpret.CrossClass.crossClassWeights}
+              label={localization.Interpret.GlobalTab.weightOptions}
+              telemetryHook={this.props.telemetryHook}
+              calloutEventName={
+                TelemetryEventName.FeatureImportancesCrossClassWeightsCalloutClick
+              }
+              iconButtonId={iconButtonId}
+              calloutTarget={calloutTarget}
+              renderOnNewLayer
+              directionalHint={DirectionalHint.leftCenter}
+            >
+              <Text>{localization.Interpret.CrossClass.overviewInfo}</Text>
+              <ul>
+                <li>
+                  <Text>
+                    {localization.Interpret.CrossClass.absoluteValInfo}
+                  </Text>
+                </li>
+                <li>
+                  <Text>
+                    {localization.Interpret.CrossClass.enumeratedClassInfo}
+                  </Text>
+                </li>
+              </ul>
+            </LabelWithCallout>
+            <Dropdown
+              id={"classWeightDropdown"}
+              options={this.weightOptions}
+              selectedKey={this.props.selectedWeightVector}
+              onChange={this.setWeightOption}
+              ariaLabel={localization.Interpret.GlobalTab.weightOptionsDropdown}
+              disabled={this.props.disabled ?? false}
+            />
+          </div>
         )}
       </div>
     );
   }
-
-  private toggleCrossClassInfo = (): void => {
-    this.setState({ crossClassInfoVisible: !this.state.crossClassInfoVisible });
-  };
 
   private setWeightOption = (
     _event: React.FormEvent<HTMLDivElement>,

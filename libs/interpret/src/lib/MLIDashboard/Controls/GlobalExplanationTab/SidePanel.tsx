@@ -6,8 +6,7 @@ import {
   Dropdown,
   IChoiceGroupOption,
   IDropdownOption,
-  Stack,
-  Text
+  Stack
 } from "@fluentui/react";
 import {
   Cohort,
@@ -15,9 +14,7 @@ import {
   IsClassifier,
   WeightVectorOption,
   ChartTypes,
-  LabelWithCallout,
   ITelemetryEvent,
-  TelemetryEventName,
   ifEnableLargeData,
   ModelAssessmentContext,
   defaultModelAssessmentContext
@@ -25,6 +22,8 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
 import React from "react";
+
+import { ClassImportanceWeights } from "../ClassImportanceWeights/ClassImportanceWeights";
 
 import { globalTabStyles } from "./GlobalExplanationTab.styles";
 import { IGlobalSeries } from "./IGlobalSeries";
@@ -106,39 +105,13 @@ export class SidePanel extends React.Component<
         {IsClassifier(this.props.metadata.modelType) &&
           this.state.weightOptions && (
             <div>
-              <LabelWithCallout
-                calloutTitle={
-                  localization.Interpret.CrossClass.crossClassWeights
-                }
-                label={localization.Interpret.GlobalTab.weightOptions}
-                telemetryHook={this.props.telemetryHook}
-                calloutEventName={
-                  TelemetryEventName.FeatureImportancesCrossClassWeightsCalloutClick
-                }
-              >
-                <Text>{localization.Interpret.CrossClass.overviewInfo}</Text>
-                <ul>
-                  <li>
-                    <Text>
-                      {localization.Interpret.CrossClass.absoluteValInfo}
-                    </Text>
-                  </li>
-                  <li>
-                    <Text>
-                      {localization.Interpret.CrossClass.enumeratedClassInfo}
-                    </Text>
-                  </li>
-                </ul>
-              </LabelWithCallout>
-              <Dropdown
-                id={"classWeightDropdown"}
-                options={this.state.weightOptions}
-                selectedKey={this.props.selectedWeightVector}
-                onChange={this.setWeightOption}
+              <ClassImportanceWeights
+                onWeightChange={this.props.onWeightChange}
+                selectedWeightVector={this.props.selectedWeightVector}
+                weightOptions={this.props.weightOptions}
+                weightLabels={this.props.weightLabels}
                 disabled={this.props.loading}
-                ariaLabel={
-                  localization.Interpret.GlobalTab.weightOptionsDropdown
-                }
+                telemetryHook={this.props.telemetryHook}
               />
             </div>
           )}
@@ -175,16 +148,6 @@ export class SidePanel extends React.Component<
     }
     return undefined;
   }
-
-  private setWeightOption = (
-    _event: React.FormEvent<HTMLDivElement>,
-    item?: IDropdownOption
-  ): void => {
-    if (item?.key !== undefined) {
-      const newIndex = item.key as WeightVectorOption;
-      this.props.onWeightChange(newIndex);
-    }
-  };
 
   private getChartOptions(): IChoiceGroupOption[] {
     if (ifEnableLargeData(this.context.dataset)) {
