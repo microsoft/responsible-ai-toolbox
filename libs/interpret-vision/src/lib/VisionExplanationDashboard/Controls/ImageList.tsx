@@ -15,6 +15,7 @@ import { DatasetTaskType, IVisionListItem } from "@responsible-ai/core-ui";
 import React from "react";
 
 import { ISearchable } from "../Interfaces/ISearchable";
+import { getAltTextForItem } from "../utils/getAltTextUtils";
 import { getFilteredDataFromSearch } from "../utils/getFilteredData";
 import { getJoinedLabelString } from "../utils/labelUtils";
 
@@ -105,11 +106,11 @@ export class ImageList extends React.Component<
     if (!item) {
       return;
     }
-    const itemPredY = item?.predictedY;
+    const itemPredY = item.predictedY;
     const predictedY = getJoinedLabelString(itemPredY);
-    const itemTrueY = item?.trueY;
+    const itemTrueY = item.trueY;
     const trueY = getJoinedLabelString(itemTrueY);
-    const alt = predictedY;
+    const alt = getAltTextForItem(item, this.props.taskType);
     const odAggregate = getJoinedLabelString(item?.odAggregate)?.split(", ");
 
     return (
