@@ -18,7 +18,7 @@
     "**/yarn.lock": true
   },
   "editor.codeActionsOnSave": {
-    "source.fixAll": true
+    "source.fixAll": "explicit"
   },
   "[json]": {
     "editor.formatOnSave": true,
