@@ -15,6 +15,7 @@ export interface ITableListProps extends ISearchable {
   selectItem: (item: IVisionListItem) => void;
   updateSelectedIndices: (indices: number[]) => void;
   taskType: string;
+  onSearchUpdated: (successCount: number, errorCount: number) => void;
 }
 
 export interface ITableListState {

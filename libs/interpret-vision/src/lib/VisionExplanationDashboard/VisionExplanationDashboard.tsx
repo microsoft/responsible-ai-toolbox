@@ -17,7 +17,7 @@ import { TabsView } from "./Controls/TabsView";
 import { IVisionExplanationDashboardProps } from "./Interfaces/IVisionExplanationDashboardProps";
 import { IVisionExplanationDashboardState } from "./Interfaces/IVisionExplanationDashboardState";
 import { visionExplanationDashboardStyles } from "./VisionExplanationDashboard.styles";
-import { VisionExplanationDashboardCommon } from "./VisionExplanationDashboardCommon";
+import { VisionExplanationDashboardHeader } from "./VisionExplanationDashboardHeader";
 import {
   preprocessData,
   getItems,
@@ -35,10 +35,12 @@ export class VisionExplanationDashboard extends React.Component<
     defaultModelAssessmentContext;
   private originalErrorInstances: IVisionListItem[] = [];
   private originalSuccessInstances: IVisionListItem[] = [];
+
   public constructor(props: IVisionExplanationDashboardProps) {
     super(props);
     this.state = defaultState;
   }
+
   public componentDidMount(): void {
     const data = preprocessData(this.props, this.context.dataset);
     if (!data) {
@@ -48,6 +50,7 @@ export class VisionExplanationDashboard extends React.Component<
     this.originalSuccessInstances = data.successInstances;
     this.setState(data);
   }
+
   public componentDidUpdate(prevProps: IVisionExplanationDashboardProps): void {
     if (this.props.selectedCohort !== prevProps.selectedCohort) {
       this.setState(
@@ -59,6 +62,7 @@ export class VisionExplanationDashboard extends React.Component<
       );
     }
   }
+
   public render(): React.ReactNode {
     const classNames = visionExplanationDashboardStyles();
     const imageStyles = imageListStyles();
@@ -69,11 +73,22 @@ export class VisionExplanationDashboard extends React.Component<
         id="VisionDataExplorer"
         tokens={{ childrenGap: "l1", padding: "m 40px" }}
       >
-        <VisionExplanationDashboardCommon
-          thisdashboard={this}
+        <VisionExplanationDashboardHeader
+          cohorts={this.props.cohorts}
+          selectedKey={this.state.selectedKey}
+          searchResultsAriaLabel={this.state.searchResultsAriaLabel}
+          searchValue={this.state.searchValue}
+          selectedCohort={this.props.selectedCohort}
           imageStyles={imageStyles}
           classNames={classNames}
           taskType={this.context.dataset.task_type}
+          handleLinkClick={this.handleLinkClick}
+          setSelectedCohort={this.props.setSelectedCohort}
+          onSearch={this.onSearch}
+          selectedIndices={this.state.selectedIndices}
+          onSliderChange={this.onSliderChange}
+          onNumRowsSelect={this.onNumRowsSelect}
+          addCohortWrapper={this.addCohortWrapper}
         />
         <Stack.Item>
           <TabsView
@@ -87,6 +102,7 @@ export class VisionExplanationDashboard extends React.Component<
             selectedItem={this.state.selectedItem}
             selectedKey={this.state.selectedKey}
             onItemSelect={this.onItemSelect}
+            onSearchUpdated={this.onSearchUpdated}
             updateSelectedIndices={this.updateSelectedIndices}
             selectedCohort={this.props.selectedCohort}
             setSelectedCohort={this.props.setSelectedCohort}
@@ -118,9 +134,11 @@ export class VisionExplanationDashboard extends React.Component<
       </Stack>
     );
   }
+
   public updateSelectedIndices = (indices: number[]): void => {
     this.setState({ selectedIndices: indices });
   };
+
   public addCohortWrapper = (name: string, switchCohort: boolean): void => {
     this.context.addCohort(
       getCohort(name, this.state.selectedIndices, this.context.jointDataset),
@@ -128,15 +146,22 @@ export class VisionExplanationDashboard extends React.Component<
       switchCohort
     );
   };
+
   public onPanelClose = (): void => {
     this.setState({ panelOpen: !this.state.panelOpen });
   };
+
   public onSearch = (
     _event?: React.ChangeEvent<HTMLInputElement>,
     newValue?: string
   ): void => {
     this.setState({ searchValue: newValue || "" });
   };
+
+  public onSearchUpdated = (searchResultsAriaLabel: string): void => {
+    this.setState({ searchResultsAriaLabel });
+  };
+
   public onItemSelect = (item: IVisionListItem): void => {
     this.setState({ panelOpen: !this.state.panelOpen, selectedItem: item });
     const index = item.index;
@@ -165,6 +190,7 @@ export class VisionExplanationDashboard extends React.Component<
         });
     }
   };
+
   public onItemSelectObjectDetection = (
     item: IVisionListItem,
     selectedObject = -1
@@ -202,6 +228,7 @@ export class VisionExplanationDashboard extends React.Component<
         });
     }
   };
+
   /* For onSliderChange, the max imageDims per tab (400 and 100) are selected arbitrary to look like the Figma. 
   For handleLinkClick, the default are half the max values chosen in onSliderChange. */
   public onSliderChange = (value: number): void => {
@@ -214,12 +241,14 @@ export class VisionExplanationDashboard extends React.Component<
       this.setState({ imageDim: Math.floor((value / 100) * 100) });
     }
   };
+
   public onNumRowsSelect = (
     _event: React.FormEvent<HTMLDivElement>,
     item: IDropdownOption | undefined
   ): void => {
     this.setState({ numRows: Number(item?.text) });
   };
+
   public handleLinkClick = (item?: PivotItem): void => {
     if (item && item.props.itemKey !== undefined) {
       this.setState({ selectedKey: item.props.itemKey });

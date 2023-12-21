@@ -12,6 +12,7 @@ export interface IVisionExplanationDashboardState {
   otherMetadataFieldNames: string[];
   numRows: number;
   panelOpen: boolean;
+  searchResultsAriaLabel: string;
   searchValue: string;
   selectedIndices: number[];
   selectedItem: IVisionListItem | undefined;

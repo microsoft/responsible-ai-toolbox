@@ -1489,6 +1489,11 @@
       "titleBarError": "Error instances",
       "titleBarSuccess": "Success instances",
       "trueY": "Ground truth: "
+    },
+    "Search": {
+      "defaultSearchLabel": "Search for image instances",
+      "searchResultsAriaLabel": "{0} results found for the entered keyword {1} where the number of success instances is {2} and the number of error instances is {3}",
+      "emptySearchResultsAriaLabel": "No results found for the entered keyword {0}"
     }
   },
   "ModelAssessment": {
