@@ -3,26 +3,26 @@
     "close": "关闭",
     "tooltipButton": "工具提示按钮",
     "identityFeature": "标识特征",
-    "infoTitle": "Additional information",
-    "spinButton": "Spin",
-    "editButton": "Edit",
-    "decreaseValue": "Decrease value",
-    "increaseValue": "Increase value",
-    "decreaseValueByOne": "Decrease value by 1",
-    "increaseValueByOne": "Increase value by 1",
-    "loading": "Loading..."
+    "infoTitle": "其他信息",
+    "spinButton": "旋转",
+    "editButton": "编辑",
+    "decreaseValue": "将值减少",
+    "increaseValue": "增加价值",
+    "decreaseValueByOne": "将值减少 1",
+    "increaseValueByOne": "将值增加 1",
+    "loading": "正在加载..."
   },
   "ChartContextMenu": {
-    "hideData": "Hide data table",
-    "viewData": "View data table",
-    "viewInFullScreen": "View in full screen",
-    "printChart": "Print chart",
-    "downloadCSV": "Download CSV",
-    "downloadPNG": "Download PNG image",
-    "downloadJPEG": "Download JPEG image",
-    "downloadPDF": "Download PDF document",
-    "downloadSVG": "Download SVG vector image",
-    "downloadXLS": "Download XLS"
+    "hideData": "隐藏数据表",
+    "viewData": "查看数据表",
+    "viewInFullScreen": "全屏查看",
+    "printChart": "打印图表",
+    "downloadCSV": "下载 CSV",
+    "downloadPNG": "下载 PNG 图像",
+    "downloadJPEG": "下载 JPEG 图像",
+    "downloadPDF": "下载 PDF 文档",
+    "downloadSVG": "下载 SVG 矢量映像",
+    "downloadXLS": "下载 XLS"
   },
   "CausalAnalysis": {
     "AggregateView": {
@@ -39,7 +39,7 @@
       "description": "因果分析回答“假设”问题，即在不同的策略选择下，现实世界结果会如何变化，例如产品的不同定价策略或患者的替代治疗方法。与识别重要关联模式的模型预测不同，这些工具可帮助你识别直接影响所关注结果的最重要的因果关系特征。这些模型在保持其他混杂特征不变的情况下可确定一个特征(通常称为“治疗”)的因果效应。为了获得最佳结果，请确保完整数据集包含所有可能作为混杂因素而与结果关联的可用特征。",
       "directAggregate": "每种处理的直接聚合因果效应(置信区间为 95%)",
       "here": "此处",
-      "infoTitle": "Additional information on aggregated causal effects",
+      "infoTitle": "有关聚合因果效应的其他信息",
       "lasso": "套索(或逻辑回归，如果 y 是二元的)适合从 X[-i] 预测 y，套索(或逻辑回归，如果 X[i] 是分类的)适合从 X[-i] 预测 X[i]。可将因果效应视为两个预测任务的残差/意外变体的平均相关性。了解有关双重机器学习的详细信息",
       "unconfounding": "什么是混杂特征?"
     },
@@ -51,7 +51,7 @@
       "description": "个体因果效应可以为个性化干预提供信息，例如针对客户的针对性促销或个性化治疗计划。具有一组特定特征的个人如何响应因果特征或治疗中的变化? 如果更改特定个体的治疗级别，则因果 what-if 工具将计算特定个体在现实世界中的边际更改。通过此分析，可以了解在不同的策略选择(例如产品的不同定价策略或患者的替代治疗方法)下现实世界结果的更改情况。请指定感兴趣的治疗方法，并观察现实世界结果将如何变化。",
       "directIndividual": "每种处理的直接个体因果效应(置信区间为 95%)",
       "index": "数据点索引",
-      "infoTitle": "Additional information on individual causal what-if",
+      "infoTitle": "有关单个因果关系模拟的其他信息",
       "missingParameters": "此选项卡要求提供评估数据集。",
       "newOutcome": "新结果",
       "selectTreatment": "选择处理",
@@ -85,7 +85,7 @@
       "averageGainBinary": "将治疗 {0} 设置为其基线值 {1} 的平均增益。",
       "averageGainContinuous": "替代策略相对于无“{0}”治疗的平均增益。",
       "header": "这些工具有助于构建策略以供进行干预。你可以确定示例的哪些部分对因果特征或治疗的变化做出最大响应，并构造规则来定义特定干预未来应针对哪些人群。",
-      "infoTitle": "Additional information on treatment policy",
+      "infoTitle": "有关治疗策略的其他信息",
       "nSample": "n = {0}",
       "noData": "无数据"
     }
@@ -113,11 +113,12 @@
     },
     "ShiftCohort": {
       "apply": "应用",
+      "applyAriaLabel": "Apply cohort",
       "cancel": "取消",
       "title": "切换队列",
       "subText": "从队列列表中选择队列。将该队列应用到仪表板。",
-      "selectCohort": "Select a cohort",
-      "cohortList": "Cohort list"
+      "selectCohort": "选择队列",
+      "cohortList": "队列列表"
     },
     "PreBuiltCohort": {
       "featureNameNotFound": "在数据集中找不到功能名称",
@@ -129,6 +130,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "当前治疗",
     "EffectLowerBound": "CI 下限",
     "EffectOfTreatment": "建议的效果",
@@ -148,13 +150,14 @@
       "predictedClass": "预测类",
       "predictedValue": "预测值"
     },
-    "Size": "Size",
-    "loading": "Loading...",
+    "Size": "大小",
+    "loading": "正在加载...",
     "counterfactualEx": "反事实示例 {0}",
     "counterfactualName": "模拟反事实名",
     "createWhatIfCounterfactual": "创建 What-if 反事实",
     "createCounterfactual": "反事实",
-    "revertToBubbleChart": "View bubble chart",
+    "counterfactualAriaLabel": "Counterfactual creation",
+    "revertToBubbleChart": "查看气泡图",
     "createOwn": "创建自己的反事实:",
     "currentClass": "当前类",
     "currentRange": "当前范围",
@@ -167,9 +170,9 @@
     "listDescription": "此列表根据估计因果模型中包含的所有特征，显示当前数据示例中的哪些数据点对所选治疗具有最大的因果响应。左五列报告是否建议治疗用于观察、当前治疗、估计的治疗效果(对二元治疗从无治疗的基线应用治疗的效果，或将治疗特征增加/减少示例中典型治疗大小的 10% 的效果: [动态: 报告所用治疗中的数值变化])，以及此效果的下部和上部置信区间(CI)。其余列显示当前治疗状态和每次观察的其他特征。",
     "localImportanceDescription": "要扰乱以实现所需模型预测的行 {0} 中排在前列的特征。基于对预测 {1} 的模拟分析",
     "localImportanceSelectData": "选择数据点以查看本地重要性图表",
-    "largeLocalImportanceSelectData": "Select a bubble, followed by a data point to view local importance chart",
-    "localImportanceFetchError": "There was an error while fetching the local importance data. Error details: {0} Please check the data used.",
-    "BubbleChartFetchError": "There was an error while fetching the data. Error details: {0} Please check the data used.",
+    "largeLocalImportanceSelectData": "选择气泡，后跟一个数据点以查看本地重要性图表",
+    "localImportanceFetchError": "提取本地重要性数据时出错。错误详细信息: {0} 请检查使用的数据。",
+    "BubbleChartFetchError": "提取数据时出错。错误详细信息: {0} 请检查使用的数据。",
     "noData": "无数据",
     "noFeatures": "无可用特征",
     "panelDescription": "浏览并创建自己的反事实。搜索特征以查看一组不同的反事实示例中的建议值。通过单击每个反事实名称下的“设置值”文本，设置建议的反事实特征值。为反事实命名并保存它。",
@@ -188,8 +191,8 @@
   },
   "DataAnalysis": {
     "TableView": {
-      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
-      "infoTitle": "Additional information on table view"
+      "description": "以表的表示形式查看数据集，其中包含真实值和预测的标签。表分隔为包含正确预测和错误预测的子表。",
+      "infoTitle": "有关表视图的其他信息"
     }
   },
   "ErrorAnalysis": {
@@ -223,13 +226,13 @@
       "subText": "了解选中的队列。编辑其队列名。删除此队列。"
     },
     "FeatureList": {
-      "featureList": "Feature List",
+      "featureList": "功能列表",
       "apply": "应用",
       "features": "特征",
       "importances": "重要性",
       "treeMapDescription": "若要重新训练树状图，请选择并保存下面的特征。特征重要性使用共同信息计算得出(错误标注在真实标签上)。 请将其用做训练树状图的指南。",
       "staticTreeMapDescription": "查看用于训练树状图的功能。使用相互信息计算特征重要性，并在真实标签上显示错误。",
-      "searchResultMessage": "Results displayed out of {resultLength} for {searchValue}"
+      "searchResultMessage": "为 {searchValue} 显示 {resultLength} 之外的结果"
     },
     "TreeViewParameters": {
       "maximumDepth": "最大深度",
@@ -295,7 +298,7 @@
       "disabledWarning": "除非将全局队列切换为表示“全部数据”，否则禁用错误热度地图，因为正在为完整数据集生成热度地图。切换回完整数据集以查看错误热度地图。"
     },
     "MatrixSummary": {
-      "heatMapInfoTitle": "Additional information on heat map",
+      "heatMapInfoTitle": "热度地图上的其他信息",
       "heatMapDescription": "借助热度地图，可以专注于特定的相交特征筛选器和计算非聚合错误率。请从要比较的两个数据集特征开始。",
       "heatMapStaticDescription": "借助热度地图，可以专注于特定的交集功能筛选器和计算非聚合错误率。在查看仪表板之前，必需最多选择两个功能才能通过 SDK 创建热度地图。"
     },
@@ -311,108 +314,108 @@
     },
     "Metrics": {
       "AccuracyScore": {
-        "Name": "Accuracy score",
-        "Info": "The accuracy score represents the ratio of correct to total instances in the data.",
-        "Short": "Accuracy",
-        "Title": "Additional information on accuracy score"
+        "Name": "准确度分数",
+        "Info": "准确度分数表示数据中正确实例数与实例总数的比率。",
+        "Short": "准确度",
+        "Title": "有关准确度分数的其他信息"
       },
       "ErrorRate": {
-        "Name": "Error rate",
-        "Info": "The error rate represents the percentage of instances in the node for which the system has failed.",
-        "Short": "Error rate",
-        "Title": "Additional information on error rate"
+        "Name": "错误率",
+        "Info": "错误率表示系统失败节点中实例的百分比。",
+        "Short": "错误率",
+        "Title": "有关错误率的其他信息"
       },
       "F1Score": {
-        "Name": "F1 score",
-        "Info": "The F1 score is the harmonic mean of the precision and recall metrics.",
-        "Short": "F1 score",
-        "Title": "Additional information on F1 score"
+        "Name": "F1 分数",
+        "Info": "F1 分数是精准率和召回率指标的调和平均值。",
+        "Short": "F1 分数",
+        "Title": "有关 F1 分数的其他信息"
       },
       "MeanAbsoluteError": {
-        "Name": "Mean absolute error",
-        "Info": "The mean absolute error is the average of the sum of the errors.",
-        "Short": "Mean abs. error",
-        "Title": "Additional information on mean absolute error"
+        "Name": "平均绝对误差",
+        "Info": "平均绝对误差是误差总和的平均值。",
+        "Short": "平均 abs. 误差",
+        "Title": "有关平均绝对误差的其他信息"
       },
       "MeanSquaredError": {
-        "Name": "Mean squared error",
-        "Info": "The mean squared error is the average of the squares of the errors.",
-        "Short": "Mean sq. error",
-        "Title": "Additional information on mean squared error"
+        "Name": "均方误差",
+        "Info": "均方误差是错误平方的平均值。",
+        "Short": "平均 sq. 误差",
+        "Title": "有关均方误差的其他信息"
       },
       "Precision": {
-        "Name": "Precision score",
-        "Info": "The precision is the ratio of true positives over all predicted positives.",
-        "Short": "Precision",
-        "Title": "Additional information on precision"
+        "Name": "精准率分数",
+        "Info": "精准率是真阳性与所有预测阳性的比率。",
+        "Short": "精准率",
+        "Title": "有关精准率的其他信息"
       },
       "Recall": {
-        "Name": "Recall score",
-        "Info": "The recall is the ratio of true positives over all actual positives.",
-        "Short": "Recall",
-        "Title": "Additional information on recall"
+        "Name": "召回率分数",
+        "Info": "召回率是指真阳性与所有实际阳性之比。",
+        "Short": "召回率",
+        "Title": "有关召回率的其他信息"
       },
       "MacroPrecision": {
-        "Name": "Macro averaged precision score",
-        "Info": "The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.",
-        "Short": "Macro precision",
-        "Title": "Additional information on macro averaged precision"
+        "Name": "宏平均精准率分数",
+        "Info": "宏平均精准率是指真阳性与按每个类和平均独立计算的所有预测阳性之间的比率。",
+        "Short": "宏精准率",
+        "Title": "有关宏平均精准率的其他信息"
       },
       "MicroPrecision": {
-        "Name": "Micro averaged precision score",
-        "Info": "The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.",
-        "Short": "Micro precision",
-        "Title": "Additional information on micro averaged precision"
+        "Name": "微平均精准率分数",
+        "Info": "微平均精准率是指真阳性与所有类聚合的所有预测阳性之比。",
+        "Short": "微精准率",
+        "Title": "有关微平均精准率的其他信息"
       },
       "MacroRecall": {
-        "Name": "Macro averaged recall score",
-        "Info": "The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.",
-        "Short": "Macro recall",
-        "Title": "Additional information on macro averaged recall"
+        "Name": "宏平均召回率分数",
+        "Info": "宏平均召回率是指真阳性与按每个类和平均独立计算的所有实际阳性之间的比率。",
+        "Short": "宏召回率",
+        "Title": "有关宏平均召回率的其他信息"
       },
       "MicroRecall": {
-        "Name": "Micro averaged recall score",
-        "Info": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
-        "Short": "Micro recall",
-        "Title": "Additional information on micro averaged recall"
+        "Name": "微平均召回率分数",
+        "Info": "微平均召回率是指真阳性与所有类聚合的所有实际阳性之比。",
+        "Short": "微召回率",
+        "Title": "有关微平均召回率的其他信息"
       },
       "MacroF1Score": {
-        "Name": "Macro averaged F1 score",
-        "Info": "The macro averaged F1 score is the harmonic mean of the macro averaged precision and recall metrics.",
-        "Short": "Macro F1 score",
-        "Title": "Additional information on macro averaged F1 score"
+        "Name": "宏平均 F1 分数",
+        "Info": "宏平均 F1 分数是宏平均精准率和召回率指标的调和平均值。",
+        "Short": "宏 F1 分数",
+        "Title": "有关宏平均 F1 分数的其他信息"
       },
       "MicroF1Score": {
-        "Name": "Micro averaged F1 score",
-        "Info": "The micro averaged F1 score is the harmonic mean of the micro averaged precision and recall metrics.",
-        "Short": "Micro F1 score",
-        "Title": "Additional information on micro averaged F1 score"
+        "Name": "微平均 F1 分数",
+        "Info": "微平均 F1 分数是微平均精度和召回率指标的调和平均值。",
+        "Short": "微 F1 分数",
+        "Title": "有关微平均召回率 F1 分数的其他信息"
       },
       "MeanAveragePrecision": {
-        "Name": "Mean average precision score",
-        "Info": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall.",
-        "Short": "Mean avg precision",
-        "Title": "Additional information on mean average precision score"
+        "Name": "平均精度分数",
+        "Info": "对象检测模型的平均精度是所有类中 AP 的平均精度(平均精度)。这将评估对象检测模型的可靠性，并封装精度和召回率之间的权衡。",
+        "Short": "平均精度平均值",
+        "Title": "有关平均精确度平均值的其他信息"
       },
       "AveragePrecision": {
-        "Name": "Average precision score",
-        "Info": "Average precision for object detection models is calculated for a selected class.",
-        "Short": "Avg precision",
-        "Title": "Additional information on average precision score"
+        "Name": "平均精度分数",
+        "Info": "为所选类计算对象检测模型的平均精度。",
+        "Short": "平均精度",
+        "Title": "有关平均精度分数的其他信息"
       },
       "AverageRecall": {
-        "Name": "Average recall score",
-        "Info": "Average recall for object detection models is calculated for a selected class.",
-        "Short": "Avg recall",
-        "Title": "Additional information on average recall score"
+        "Name": "平均召回率分数",
+        "Info": "为所选类计算对象检测模型的平均召回率。",
+        "Short": "平均召回率",
+        "Title": "有关平均召回率分数的其他信息"
       },
       "metricName": "指标名",
       "metricValue": "指标值"
     },
     "MetricSelector": {
       "selectorLabel": "选择指标",
-      "feature1SelectorLabel": "Rows: Feature 1",
-      "feature2SelectorLabel": "Columns: Feature 2"
+      "feature1SelectorLabel": "行: 功能 1",
+      "feature2SelectorLabel": "列: 功能 2"
     },
     "Navigation": {
       "cohortSaved": "已保存新队列! 请参阅队列设置下的队列列表。",
@@ -433,9 +436,9 @@
       "defaultLabelCopy": "所有数据复制"
     },
     "TreeView": {
-      "ariaLabel": "Interactive chart",
-      "disabledArialLabel": "Disabled interactive chart",
-      "treeMapInfoTitle": "Additional information on tree map",
+      "ariaLabel": "交互式图表",
+      "disabledArialLabel": "禁用的交互式图表",
+      "treeMapInfoTitle": "有关树状图的其他信息",
       "treeDescription": "树可视化效果使用每个功能和错误之间的相互信息，以最好地将错误实例与数据中的成功实例进行分层分离。这简化了发现和突出显示常见失败模式的过程。要查找重要的失败模式，请查找红色更深的节点(即高错误率)和较高的填充线(即高错误覆盖率)。要编辑树中正在使用的功能列表，请单击“功能列表”。使用“选择指标”下拉菜单以详细了解错误和成功节点的性能。请注意，此指标选择将不会影响错误树的生成方式。",
       "treeStaticDescription": "树可视化效果使用每个功能和错误之间的相互信息，以最好地将错误实例与数据中的成功实例进行分层分离。这简化了发现和突出显示常见失败模式的过程。要查找重要的失败模式，请查找红色更深的节点(即高错误率)和较高的填充线(即高错误覆盖率)。要查看创建此错误树时使用的功能列表，请单击“功能列表”。使用“选择指标”下拉菜单以详细了解错误和成功节点的性能。请注意，此指标选择将不会影响错误树的生成方式。",
       "disabledWarning": "除非全局队列切换为表示“所有数据”，否则将禁用错误树状图，因为正在为完整数据集生成树状图。切换回完整数据集以查看错误树状图。"
@@ -474,11 +477,13 @@
     },
     "BinDialog": {
       "cancel": "取消",
+      "cancelAriaLabel": "Cancel binning",
       "categoryHeader": "箱值:",
       "header": "配置箱",
       "makeCategorical": "视为类别",
       "numberOfBins": "箱数:",
-      "save": "保存"
+      "save": "保存",
+      "saveAriaLabel": "Save binning"
     },
     "DropdownHeaders": {
       "errorMetric": "启用错误栏",
@@ -683,6 +688,7 @@
       "backToComparisons": "返回到所有模型",
       "backToComparisonsLegacy": "多模型视图",
       "chartChoiceDropdownHeader": "图表",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "条形图显示每组的选择率，表示分类为 1 的点的分数。",
       "classificationPerformanceHowToRead1": "条形图显示每个组的误差分布。",
       "classificationPerformanceHowToRead2": "误差分为“过高预测”误差(true 标签为 0 时预测值为 1)和“过低预测”误差(true 标签为 1 时预测值为 0)。",
@@ -770,7 +776,7 @@
       "countHelperText": "点数直方图",
       "ditherLabel": "应抖动",
       "groupByCohort": "按队列分组",
-      "logarithmicScaling": "Enable logarithmic scaling",
+      "logarithmicScaling": "启用对数缩放",
       "numOfBins": "箱数",
       "selectClass": "选择类",
       "selectFeature": "选择特征",
@@ -794,7 +800,7 @@
       "importancePrefix": "重要性",
       "numberOfDatapoints": "数据点数量",
       "rowIndex": "行索引",
-      "absoluteIndex": "Absolute index",
+      "absoluteIndex": "绝对索引",
       "xValue": "X 值",
       "yValue": "Y 值"
     },
@@ -822,17 +828,19 @@
     },
     "CohortEditor": {
       "columns": {
-        "index": "Index",
-        "dataset": "Dataset",
-        "predictedY": "Predicted Y",
-        "trueY": "True Y",
-        "classificationOutcome": "Classification outcome",
-        "regressionError": "Error"
+        "index": "索引",
+        "dataset": "数据集",
+        "predictedY": "预测的 Y",
+        "trueY": "真实 Y",
+        "classificationOutcome": "分类结果",
+        "regressionError": "错误"
       },
       "TreatAsCategorical": "视为类别",
       "addFilter": "添加筛选器",
+      "addFilterAriaLabel": "Add cohort filter",
       "addedFilters": "筛选器",
       "cancel": "取消",
+      "cancelAriaLabel": "Cancel cohort",
       "cancelExistingCohort": "是否确定要取消编辑新队列并返回?",
       "cancelNewCohort": "是否确定要取消创建新队列并返回?",
       "cancelNo": "否",
@@ -845,15 +853,17 @@
       "clearAllFilters": "清除所有筛选器",
       "defaultFilterState": "选择一个筛选器，以将参数添加到数据集队列。预填充当前查看队列中的筛选器。",
       "delete": "删除",
+      "deleteAriaLabel": "Delete cohort",
       "invalidValueError": "值应介于 {0} 和 {1} 之间。",
       "minimumGreaterThanMaximum": "最小值输入必须小于最大值输入。",
       "noAddedFilters": "无筛选器",
       "placeholderName": "队列 {0}",
       "save": "保存",
+      "saveAriaLabel": "Save cohort",
       "saveAndSwitch": "保存并切换",
       "selectFilter": "选择筛选器",
-      "noFiltersApplied": "No filters applied",
-      "filterAdded": "Filter added"
+      "noFiltersApplied": "未应用任何筛选器",
+      "filterAdded": "已添加筛选器"
     },
     "Columns": {
       "classificationOutcome": "分类结果",
@@ -863,8 +873,8 @@
       "falsePositive": "假正",
       "none": "计数",
       "predictedProbabilities": "预测概率",
-      "predictedLabels": "Predicted labels",
-      "trueLabels": "True labels",
+      "predictedLabels": "预测的标签",
+      "trueLabels": "True 标签",
       "regressionError": "回归错误",
       "trueNegative": "真负",
       "truePositive": "真正",
@@ -885,12 +895,12 @@
       "aggregatePlots": "聚合绘图",
       "chartType": "图表类型",
       "colorValue": "颜色值",
-      "infoTitle": "Additional information on data analysis chart view",
+      "infoTitle": "有关数据分析图表视图的其他信息",
       "helperText": "创建数据集队列，以按筛选器分析数据统计信息，如预测结果、数据集特征和错误组。了解数据集中的呈现过度/不足。",
       "individualDatapoints": "单个数据点",
       "missingParameters": "此选项卡要求提供评估数据集。",
       "noColor": "无",
-      "datasetCohortDropdown": "数据集队列下拉列表"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "特性重要性",
@@ -906,6 +916,8 @@
       "index": "索引",
       "output": "输出",
       "predictedY": "预测的 Y",
+      "odIncorrect": "不正确",
+      "odCorrect": "正确",
       "probabilityLabel": "概率: {0}",
       "trueY": "真实 Y",
       "xValue": "X 值:",
@@ -974,10 +986,10 @@
       "dependencePlotHelperText": "此相关性图显示特征值与其相应特征重要性值之间的关系。",
       "dependencePlotTitle": "相关性绘图",
       "helperText": "探索影响总体模型预测的前 k 个重要特征(即全局解释)。使用滑块降序显示特征重要性。并排显示所有队列的功能重要性，并且可以通过选择图例中的队列来切换关闭。单击关系图中的任何特征以查看下面的密度图，以了解所选特征的值如何影响预测。",
-      "infoTitle": "Additional information on aggregate feature importance",
+      "infoTitle": "有关聚合特征重要性的其他信息",
       "legendHelpText": "通过单击图例项在绘图中切换启用/禁用队列。",
       "missingParameters": "此选项卡要求提供局部特征重要性参数。",
-      "sortByCohort": "Sort by cohort",
+      "sortByCohort": "按队列排序",
       "sortBy": "按数据点排序",
       "topAtoB": "前 {0} 个特征(按重要性排列)",
       "viewDependencePlotFor": "查看以下特征的相关性绘图:",
@@ -1020,15 +1032,15 @@
     },
     "Statistics": {
       "accuracy": "准确度: {0}",
-      "bleuScore": "Bleu score: {0}",
-      "bertScore": "Bert score: {0}",
-      "exactMatchRatio": "Exact match ratio: {0}",
-      "rougeScore": "Rouge Score: {0}",
+      "bleuScore": "Bleu 评分: {0}",
+      "bertScore": "Bert 评分: {0}",
+      "exactMatchRatio": "完全匹配比率: {0}",
+      "rougeScore": "Rouge 评分: {0}",
       "fnr": "误报率: {0}",
       "fpr": "漏报率: {0}",
-      "hammingScore": "Hamming score: {0}",
+      "hammingScore": "汉明评分: {0}",
       "meanPrediction": "平均值预测 {0}",
-      "meteorScore": "Meteor Score: {0}",
+      "meteorScore": "流星评分: {0}",
       "mse": "均方误差: {0}",
       "precision": "精准率: {0}",
       "rSquared": "R²: {0}",
@@ -1036,10 +1048,10 @@
       "selectionRate": "选择率: {0}",
       "mae": "平均绝对误差: {0}",
       "f1Score": "F1 分数: {0}",
-      "samples": "Sample size: {0}",
-      "meanAveragePrecision": "Mean average precision: {0}",
-      "averagePrecision": "Average precision: {0}",
-      "averageRecall": "Average recall: {0}"
+      "samples": "样本大小: {0}",
+      "meanAveragePrecision": "平均精度均值: {0}",
+      "averagePrecision": "平均精度: {0}",
+      "averageRecall": "平均召回率: {0}"
     },
     "ValidationErrors": {
       "addFilters": "添加筛选器",
@@ -1147,30 +1159,30 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "可解释性仪表板",
-      "importantWords": "Show most important words",
+      "importantWords": "显示最重要的字词",
       "topFeatureList": "主要特征列表分析",
       "allButton": "所有特征",
       "negButton": "负特征",
       "posButton": "正特征",
-      "legendText": "Positive scalar feature importances represent the extent that the words were important towards the classification of your selected label, and negative scalar feature importances represent words that encouraged your model away from your selected label.",
-      "legendTextForQA": "The left text box and the bar chart display the predictions of the model. The right text box shows the feature importance associated with a selected token. Positive feature importances represent the extent that the words were important towards marking the selected token as the starting/ending position of the answer.",
+      "legendText": "正标量特征重要性表示该词对你所选标签的分类的重要程度，而负标量特征重要性表示驱使你的模型远离你所选标签的词。",
+      "legendTextForQA": "左侧文本框和条形图显示模型的预测。右侧文本框显示与所选令牌关联的功能重要性。正面特征重要性表示字词对于将所选令牌标记为答案的开始/结束位置非常重要的程度。",
       "label": "标签",
       "colon": ":",
-      "startingPosition": "STARTING POSITION",
-      "endingPosition": "ENDING POSITION",
-      "predictedAnswer": "Predicted answer: ",
-      "trueAnswer": "True answer: ",
-      "inputs": "Inputs",
-      "outputs": "Outputs",
-      "sliderAriaLabel": "Slider for most important words"
+      "startingPosition": "起始位置",
+      "endingPosition": "结束位置",
+      "predictedAnswer": "预测的答案:",
+      "trueAnswer": "真实答案:",
+      "inputs": "输入",
+      "outputs": "输出",
+      "sliderAriaLabel": "用于最重要的字词的滑块"
     },
     "Legend": {
       "featureLegend": "文本特征图例",
       "posFeatureImportance": "正特征重要性",
       "negFeatureImportance": "负特征重要性",
-      "cls": "CLS: start of the sentence",
-      "sep": "SEP: end of the sentence",
-      "selectedWord": "Selected word: "
+      "cls": "CLS: 句子的开头",
+      "sep": "SEP: 句子结尾",
+      "selectedWord": "所选字词:"
     },
     "BarChart": {
       "featureImportance": "特征重要性"
@@ -1178,76 +1190,81 @@
   },
   "InterpretVision": {
     "Cohort": {
-      "close": "Close",
-      "errorCohortName": "Please choose a unique cohort name.",
-      "errorNumSelected": "Please select at least one (1) item.",
-      "itemsSelectedSingular": "item selected",
-      "itemsSelectedPlural": "items selected",
-      "save": "Save cohort",
-      "saveAndClose": "Save and close",
-      "saveAndSwitch": "Save and switch",
-      "textField": "New cohort name",
-      "title": "Save new cohort"
+      "close": "关闭",
+      "errorCohortName": "请选择唯一的队列名称。",
+      "errorNumSelected": "请选择至少 (1) 项。",
+      "itemsSelectedSingular": "已选择项",
+      "itemsSelectedPlural": "选定项目",
+      "save": "保存对列",
+      "saveAndClose": "保存并关闭",
+      "saveAndSwitch": "保存并切换",
+      "textField": "新队列名称",
+      "title": "保存新队列"
     },
     "Dashboard": {
       "allData": "所有数据",
-      "columnOne": "Image",
+      "columnOne": "图像",
       "columnTwo": "指标",
       "columnThree": "真实 Y",
       "columnFour": "预测的 Y",
-      "columnThreeOD": "Correct",
-      "columnFourOD": "Incorrect",
+      "columnThreeOD": "正确",
+      "columnFourOD": "不正确",
       "columnFive": "其他元数据",
-      "chooseObject": "Choose a detected object",
-      "examples": "examples",
+      "chooseObject": "选择检测到的对象",
+      "examples": "示例",
       "filter": "筛选器",
-      "indexLabel": "Image ",
-      "labelTypeDropdown": "Select label type",
-      "labelVisibilityDropdown": "Select labels to display",
-      "legendFailure": "failure",
-      "legendSuccess": "success",
-      "loading": "Computing explanation for index",
-      "multiselect": "Multiselect",
-      "notdefined": "object scenario not defined",
-      "objectSelect": "Object Selection",
+      "indexLabel": "图像 ",
+      "labelTypeDropdown": "选择标签类型",
+      "labelTypeAriaLabel": "Label type",
+      "labelVisibilityDropdown": "选择要显示的标签",
+      "labelVisibilityAriaLabel": "Label visibility",
+      "legendFailure": "故障",
+      "legendSuccess": "成功",
+      "loading": "索引图像的计算说明",
+      "multiselect": "多选",
+      "notdefined": "未定义对象方案",
+      "objectSelect": "对象选择",
       "pageSize": "页面大小:",
-      "panelTitle": "Selected instance",
-      "panelExplanation": "Explanation",
-      "panelInformation": "Information",
-      "predictedLabel": "Predicted label",
-      "predictedY": "Predicted: ",
-      "correctDetections": "Correct detections: ",
-      "incorrectDetections": "Incorrect detections: ",
-      "prefix": "Object: ",
-      "rows": "Rows: ",
+      "panelTitle": "所选实例",
+      "panelExplanation": "说明",
+      "panelInformation": "信息",
+      "predictedLabel": "预测标签",
+      "predictedY": "预测:",
+      "correctDetections": "检测正确:",
+      "incorrectDetections": "检测不正确:",
+      "prefix": "对象: ",
+      "rows": "行数: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "搜索",
-      "selectAll": "Select all",
+      "selectAll": "全选",
       "settings": "设置",
-      "showAll": "Show all",
+      "showAll": "全部显示",
       "tabOptionFirst": "图像资源管理器视图",
       "tabOptionSecond": "表视图",
-      "tabOptionThird": "Class view",
+      "tabOptionThird": "类视图",
       "thumbnailSize": "缩略图大小",
       "titleBarError": "错误实例",
       "titleBarSuccess": "成功实例",
-      "trueY": "Ground truth: "
+      "trueY": "基本事实:"
     }
   },
   "ModelAssessment": {
     "AddingTab": {
       "AddButtonText": "添加",
       "CalloutContent": "通过添加一些组件(错误树状视图、错误热度地图)，可以从在以下组件内看到的全局队列中筛选数据。",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard",
       "CalloutTitle": "添加组件",
       "TabAddedMessage": {
-        "DataAnalysis": "Data analysis component added",
-        "FeatureImportances": "Feature importances component added",
-        "ErrorAnalysis": "Error analysis component added",
-        "Fairness": "Fairness component added",
-        "ModelOverview": "Model overview component added",
-        "CausalAnalysis": "Causal analysis component added",
-        "Counterfactuals": "Counterfactuals component added",
-        "Vision": "Vision data explorer component added",
-        "Forecasting": "Forecasting what-if component added"
+        "DataAnalysis": "添加了数据分析组件",
+        "FeatureImportances": "添加了特征重要性组件",
+        "ErrorAnalysis": "添加了错误分析组件",
+        "Fairness": "添加了公平性组件",
+        "ModelOverview": "已添加模型概述组件",
+        "CausalAnalysis": "添加了因果分析组件",
+        "Counterfactuals": "添加了反事实组件",
+        "Vision": "已添加视觉数据资源管理器组件",
+        "Forecasting": "预测添加模拟组件"
       }
     },
     "CausalAnalysis": {
@@ -1264,18 +1281,22 @@
     "Cohort": {
       "apply": "应用",
       "delete": "删除",
+      "deleteAriaLabel": "Delete cohort",
       "cancel": "取消",
+      "cancelAriaLabel": "Cancel cohort",
       "cohortInfo": "队列信息",
       "cohortList": "队列列表",
       "deleteCohort": "正在删除 {0}?",
       "deleteConfirm": "是否确定要删除此队列?",
       "selectCohort": "选择队列",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "切换队列",
+      "shiftCohortAriaLabel": "Switch cohort",
       "shiftCohortDescription": "从队列列表中选择队列。将该队列应用到仪表板。"
     },
     "CohortInformation": {
       "ShiftCohort": "切换队列",
-      "SwitchTimeSeries": "Switch time series",
+      "SwitchTimeSeries": "切换时序",
       "NewCohort": "新建队列",
       "DataPoints": "数据点数量",
       "DefaultCohort": " (默认)",
@@ -1287,7 +1308,7 @@
       "CohortSettingsTitle": "队列设置"
     },
     "ComponentNames": {
-      "ChartView": "Chart view",
+      "ChartView": "图表视图",
       "CausalAnalysis": "因果分析",
       "Counterfactuals": "反事实",
       "DataAnalysis": "数据分析",
@@ -1296,10 +1317,10 @@
       "ErrorAnalysis": "错误分析",
       "Fairness": "公平度",
       "FeatureImportances": "特征重要性",
-      "Forecasting": "Forecasting",
+      "Forecasting": "预测",
       "ModelOverview": "模型概述",
-      "TableView": "Table view",
-      "VisionTab": "Vision data explorer"
+      "TableView": "表视图",
+      "VisionTab": "视觉数据资源管理器"
     },
     "DashboardSettings": {
       "Content": "此表显示了仪表板的布局。可以使用错误分析组件向下筛选要在以下组件中查看的数据。",
@@ -1457,17 +1478,17 @@
       "CorrectPredictions": "正确的预测",
       "GlobalExplanation": "聚合特征重要性",
       "IncorrectPredictions": "不正确的预测",
-      "InfoTitle": "Additional information on feature importance values",
-      "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
+      "InfoTitle": "有关特征重要性值的其他信息",
+      "IndividualFeatureTabular": "通过单击表中的一个数据点(最多 5 个数据点)来选择数据点，以查看其本地特征重要性值(本地解释)和单个条件预期(ICE)绘图。",
+      "IndividualFeatureText": "通过单击表中的数据点来选择数据点，以查看来自 SHAP 文本解释器的局部特征重要性值(局部说明)。",
       "LocalExplanation": "单个特征重要性",
       "SelectionCounter": "已选择 {0} 个数据点(共 {1} 个)",
       "SelectionLimit": "此时最多可选择 5 个数据点。",
-      "RowCheckboxAriaLabel": "Row checkbox",
-      "SelectionColumnAriaLabel": "Toggle selection"
+      "RowCheckboxAriaLabel": "行复选框",
+      "SelectionColumnAriaLabel": "切换所选内容"
     },
     "IndividualFeatureImportanceView": {
-      "SmallInstanceSelection": "Instance selection"
+      "SmallInstanceSelection": "实例选择"
     },
     "MainMenu": {
       "DashboardSettings": "仪表板配置",
@@ -1483,44 +1504,44 @@
     "ModelOverview": {
       "metrics": {
         "accuracy": {
-          "name": "Accuracy score",
+          "name": "准确度分数",
           "description": "正确分类的数据点的分数。"
         },
         "exactMatchRatio": {
-          "name": "Exact match ratio",
-          "description": "The ratio of instances classified correctly for every label."
+          "name": "完全匹配比率",
+          "description": "为每个标签正确分类的实例的比率。"
         },
         "meteorScore": {
-          "name": "Meteor Score",
-          "description": "METEOR Score is calculated based on the harmonic mean of precision and recall, with recall weighted more than precision in question answering task."
+          "name": "流星评分",
+          "description": "METEOR 分数是根据精度和召回率的协调平均值计算得出的，在问题解答任务中，召回率加权超过精度。"
         },
         "bleuScore": {
-          "name": "Bleu Score",
-          "description": "Bleu Score measures the ratio of words (and/or n-grams) in the machine generated text that appeared in the reference text in question answering task."
+          "name": "Bleu 评分",
+          "description": "Bleu 评分度量在计算机生成的文本中字词(和/或 n-gram)的比率，这些文本出现在问题解答任务的引用文本中。"
         },
         "bertScore": {
-          "name": "Bert Score",
-          "description": "BERTScore focuses on computing semantic similarity between tokens of reference and machine generated text in question answering task."
+          "name": "Bert 评分",
+          "description": "BERTScore 专注于计算在问题解答任务中引用令牌和计算机生成的文本之间的语义相似性。"
         },
         "rougeScore": {
-          "name": "Rouge Score",
-          "description": "Rouge Score measures the ratio of words (and/or n-grams) in the reference text that appeared in the machine generated text in question answering task."
+          "name": "Rouge 评分",
+          "description": "Rouge 评分度量在计算机生成的问题解答任务中生成的文本中出现的引用文本中的单词(和/或 n-gram)的比率。"
         },
         "hammingScore": {
-          "name": "Hamming score",
-          "description": "The average ratio of labels classified correctly among those classified as 1 in multilabel task."
+          "name": "汉明评分",
+          "description": "在多标签任务中分类为 1 的标签中，正确分类的标签的平均比率。"
         },
         "f1Score": {
           "name": "F1 分数",
           "description": "F1-分数是精准率和召回率的调和平均值。"
         },
         "f1ScoreMacro": {
-          "name": "Macro F1 score",
-          "description": "Macro F1 score is the harmonic mean of precision and recall for each class, with each class weighted equally."
+          "name": "宏 F1 分数",
+          "description": "宏 F1 分数是每个类的精度和召回率的协调平均值，每个类加权均等。"
         },
         "f1ScoreMicro": {
-          "name": "Micro F1 score",
-          "description": "Micro F1 score is the harmonic mean of precision and recall for each class, with each class weighted according to how many instances it contains."
+          "name": "微 F1 分数",
+          "description": "微 F1 分数是每个类的精度和召回率的协调平均值，每个类根据其包含的实例数进行加权。"
         },
         "meanAbsoluteError": {
           "name": "平均绝对误差",
@@ -1535,24 +1556,24 @@
           "description": "分类为 1 的数据中正确分类的数据点的分数。"
         },
         "precisionMacro": {
-          "name": "Macro Precision score",
-          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted equally."
+          "name": "宏精度分数",
+          "description": "在每个类分类为 1，且每个类加权相等的数据点中正确分类的数据点的分数。"
         },
         "precisionMicro": {
-          "name": "Micro Precision score",
-          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted according to how many instances it contains."
+          "name": "微精度分数",
+          "description": "根据每个类包含的实例数加权，在分类为 1 的类中正确分类的数据点的分数。"
         },
         "recall": {
           "name": "召回率分数",
           "description": "真实标签为 1 的数据中正确分类的数据点的分数。其他名称: 真正率、敏感度。"
         },
         "recallMacro": {
-          "name": "Macro Recall score",
-          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted equally."
+          "name": "宏召回分数",
+          "description": "在每个类的真正标签为 1，且每个类加权均等的数据点中正确分类的数据点的分数。"
         },
         "recallMicro": {
-          "name": "Micro Recall score",
-          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted according to how many instances it contains."
+          "name": "微召回率分数",
+          "description": "在每个类的真正标签为 1 的数据点中正确分类的数据点的分数，每个类根据其包含的实例数进行加权。"
         },
         "falsePositiveRate": {
           "name": "误报率",
@@ -1571,32 +1592,32 @@
           "description": "所有预测的平均值。"
         },
         "meanAveragePrecision": {
-          "name": "Mean Average Precision score",
-          "description": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall."
+          "name": "平均精度分数",
+          "description": "对象检测模型的平均精度是所有类中 AP 的平均精度(平均精度)。这将评估对象检测模型的可靠性，并封装精度和召回率之间的权衡。"
         },
         "averagePrecision": {
-          "name": "Average Precision score",
-          "description": "Average precision for object detection models is calculated for a selected class."
+          "name": "平均精度分数",
+          "description": "为所选类计算对象检测模型的平均精度。"
         },
         "averageRecall": {
-          "name": "Average Recall score",
-          "description": "Average recall for object detection models is calculated for a selected class."
+          "name": "平均召回率分数",
+          "description": "为所选类计算对象检测模型的平均召回率。"
         },
         "fairnessMetricDifference": "差异",
         "fairnessMetricRatio": "比率"
       },
       "metricsDropdown": "指标",
-      "metricsTypeDropdown": "Aggregate method",
+      "metricsTypeDropdown": "聚合方法",
       "metricTypes": {
-        "macro": "Macro",
-        "micro": "Micro"
+        "macro": "宏",
+        "micro": "微"
       },
-      "classSelectionDropdown": "Select class(es)",
+      "classSelectionDropdown": "选择类",
       "iouThresholdDropdown": {
-        "name": "IoU Threshold",
-        "description": "Intersection over Union quantifies the degree of overlap between the prediction and ground truth bounding box of a detected object in an image. For example, setting an IoU threshold of 70% means that a prediction with greater than 70% overlap with ground truth is True, thus influencing the definition of prediction correctness and calculation of other performance metrics.",
+        "name": "IOU 阈值",
+        "description": "交并比量化了图像中检测到的物体的预测边界框与真实边界框之间的重叠程度。例如，将 IoU 阈值设置为 70% 意味着与真实边界框有超过 70% 重叠的预测结果将认为是 True，从而影响了对预测准确性和其他性能指标计算方式的定义。",
         "iconId": "iouThresholdIconId",
-        "title": "Learn about the IoU threshold"
+        "title": "了解 IoU 阈值"
       },
       "notAvailable": "N/A",
       "countColumnHeader": "样本大小",
@@ -1608,14 +1629,14 @@
       "featuresDropdown": "功能",
       "metricChartDropdownSelectionHeader": "指标",
       "probabilityForClassSelectionHeader": "类的概率",
-      "targetSelectionHeader": "Target",
+      "targetSelectionHeader": "目标",
       "metricSelectionDropdownPlaceholder": "选择指标以比较队列。",
-      "classSelectionDropdownPlaceholder": "Select class name for class-based analysis.",
+      "classSelectionDropdownPlaceholder": "为基于类的分析选择类名。",
       "featureSelectionDropdownPlaceholder": "选择要用于基于功能的分析的功能。",
       "probabilityDistributionPivotItem": "概率分布",
-      "regressionDistributionPivotItem": "Target distribution",
+      "regressionDistributionPivotItem": "目标分布",
       "metricsVisualizationsPivotItem": "指标可视化效果",
-      "confusionMatrixPivotItem": "Confusion matrix",
+      "confusionMatrixPivotItem": "混淆矩阵",
       "disaggregatedAnalysisFeatureSelectionPlaceholder": "选择要生成基于功能的分析的功能。",
       "tableCountTooltip": "队列 {0} 包含 {1} 个实例。",
       "tableMetricTooltip": "队列 {1} 上模型的 {0} 为 {2}",
@@ -1626,36 +1647,36 @@
       "metricSelectionButton": "选择指标",
       "cohortSelectionButton": "选择队列",
       "probabilityLabelSelectionButton": "选择标签",
-      "regressionTargetSelectionButton": "Choose target",
+      "regressionTargetSelectionButton": "选择目标",
       "selectAllCohortsOption": "全选",
       "other": "其他",
       "BoxPlot": {
         "outlierProbability": "概率",
         "outlierLabel": "离群值",
         "boxPlotSeriesLabel": "箱形图",
-        "lowerWhisker": "Lower whisker",
-        "upperWhisker": "Upper whisker",
-        "median": "Median",
-        "lowerQuartile": "Lower quartile",
-        "upperQuartile": "Upper quartile"
+        "lowerWhisker": "下须",
+        "upperWhisker": "上须",
+        "median": "中值",
+        "lowerQuartile": "下四分位数",
+        "upperQuartile": "上四分位数"
       },
       "chartConfigApply": "应用",
       "chartConfigCancel": "取消",
       "chartConfigDatasetCohortSelectionPlaceholder": "选择数据集队列",
       "chartConfigFeatureBasedCohortSelectionPlaceholder": "选择基于功能的队列",
       "confusionMatrix": {
-        "confusionMatrixCohortSelectionLabel": "Select dataset cohort",
-        "confusionMatrixClassSelectionLabel": "Select classes",
-        "confusionMatrixClassMinSelectionError": "Select at least {0} classes to visualize the confusion matrix.",
-        "confusionMatrixClassMaxSelectionError": "Select at most {0} classes to visualize the confusion matrix.",
-        "confusionMatrixClassSelectionDefaultPlaceholder": "Choose classes",
-        "confusionMatrixHeatmapTooltip": "{0} datapoints should be {1}, predicted to be {2}",
-        "confusionMatrixYAxisLabel": "True Class",
-        "confusionMatrixXAxisLabel": "Predicted Class",
-        "class": "Class"
+        "confusionMatrixCohortSelectionLabel": "选择数据集队列",
+        "confusionMatrixClassSelectionLabel": "选择类",
+        "confusionMatrixClassMinSelectionError": "至少选择 {0} 类以可视化混淆矩阵。",
+        "confusionMatrixClassMaxSelectionError": "最多选择 {0} 类以可视化混淆矩阵。",
+        "confusionMatrixClassSelectionDefaultPlaceholder": "选择类",
+        "confusionMatrixHeatmapTooltip": "{0} 数据点应为 {1}，预测为 {2}",
+        "confusionMatrixYAxisLabel": "真实类",
+        "confusionMatrixXAxisLabel": "预测类",
+        "class": "类"
       },
       "nA": "N/A",
-      "disaggregatedAnalysisBaseCohortDisclaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
+      "disaggregatedAnalysisBaseCohortDisclaimer": "以下基于功能的分析中的队列基于全局队列，{0}。",
       "disaggregatedAnalysisBaseCohortWarning": "与 {0} 队列不同，{1} 包含筛选器。因此，它只捕获整个数据集的子集，而见解可能不会推广到完整的数据集。",
       "probabilitySplineChartToggleLabel": "使用自由绘制曲线图",
       "countAxisLabel": "计数",
@@ -1665,7 +1686,11 @@
         "flyoutHeader": "选择你的功能",
         "flyoutSubHeader": "你想要通过哪些特征评估模型的公平性?",
         "flyoutDescription": "根据模型行为差异评估公平性。我们将根据每个所选功能的值来拆分数据，并评估这些拆分之间的模型性能指标之间的差异。",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "功能",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "组",
         "categoricalGroupsCountRemark": "此功能具有 {0} 个唯一值。",
         "continuousGroupsCountRemark": "此功能是连续的，并拆分为 {0} 个箱。",
@@ -1685,76 +1710,78 @@
         "flyoutDescription": "可以选择查看数据集队列或功能队列。如果功能队列不可用，则需要先在功能队列视图中选择一个或多个功能。随后会生成功能队列，你可以在此处选择它们。"
       },
       "regressionTargetOptions": {
-        "predictedY": "Predicted Y",
-        "trueY": "True Y",
-        "error": "Error"
+        "predictedY": "预测的 Y",
+        "trueY": "真实 Y",
+        "error": "错误"
       },
       "topLevelDescription": "通过浏览预测值的分布和模型性能指标值来评估模型的性能。使用“数据集队列”选项卡，通过查看其在不同预构建或新建数据集队列之间的性能比较分析来研究你的模型。使用“功能队列”，通过查看其在敏感/非敏感功能子队列之间的性能比较分析来研究你的模型。(例如，不同性别、收入水平的性能)。",
-      "infoTitle": "Additional information on model overview",
+      "infoTitle": "有关模型概述的其他信息",
       "visualDisplayToggleLabel": "显示热度地图",
       "featureBasedViewDescription": "最多选择两个功能，以查看基于功能的队列(如果已选择一个功能)或相交队列(如果已选择两个功能)的模型性能细分。"
     },
     "TableViewTab": {
-      "Heading": "View the dataset in a table format for all features and rows."
+      "Heading": "以表格式查看所有功能和行的数据集。"
     }
   },
   "Forecasting": {
-    "target": "Target",
-    "whatIfForecastingHeader": "What-if analysis",
-    "forecastHeader": "Forecast analysis",
-    "whatIfForecastingDescription": "What-if allows you to perturb features for your entire time series and observe how the model's forecast changes.",
-    "whatIfForecastingChooseTimeSeries": "To start, choose a time series from the options below.",
-    "forecastDescription": "Forecast analysis compares your model's forecast to the actual values of your time series. To enable what-if analysis, provide a dataset with features.",
-    "timeSeries": "Time series",
-    "selectTimeSeries": "Select a time series.",
-    "singleTimeSeries": "The dataset contains only a single time series '{0}' which has been selected by default.",
-    "trueY": "True Y",
-    "baselinePrediction": "Baseline prediction",
-    "forecastComparisonHeader": "Compare What-if Forecasts",
-    "forecastComparisonChartTitle": "Forecasts",
-    "forecastComparisonChartTimeAxisLabel": "Time",
+    "target": "目标",
+    "whatIfForecastingHeader": "模拟分析",
+    "forecastHeader": "预测分析",
+    "whatIfForecastingDescription": "模拟允许你扰动整个时序的功能，并观察模型的预测变化。",
+    "whatIfForecastingChooseTimeSeries": "若要开始，请从以下选项中选择时序。",
+    "forecastDescription": "预测分析将模型的预测与时序的实际值进行比较。若要启用模拟分析，请为数据集提供功能。",
+    "timeSeries": "时序",
+    "selectTimeSeries": "选择时序。",
+    "singleTimeSeries": "数据集仅包含默认已选择的单个时序“{0}”。",
+    "trueY": "真实 Y",
+    "baselinePrediction": "基线预测",
+    "forecastComparisonHeader": "比较模拟预测",
+    "forecastComparisonChartTitle": "预测",
+    "forecastComparisonChartTimeAxisLabel": "时间",
     "Transformations": {
-      "multiply": "multiply",
-      "divide": "divide",
-      "add": "add",
-      "subtract": "subtract",
-      "change": "change to"
+      "multiply": "乘",
+      "divide": "除",
+      "add": "加",
+      "subtract": "减",
+      "change": "更改为"
     },
     "TransformationCreation": {
-      "title": "Create what-if scenario",
-      "nameLabel": "What-if scenario name",
-      "featureInstructions": "Choose a feature to perturb.",
-      "operationInstructions": "Choose an operation to apply to the feature.",
-      "operationDropdownHeader": "Operation",
-      "featureDropdownHeader": "Feature",
-      "valueSpinButtonHeader": "Value",
-      "scenarioNamingInstructionsPlaceholder": "Enter a unique name",
-      "scenarioNamingInstructions": "Enter a name for your what-if scenario.",
-      "scenarioNamingCollisionMessage": "This name exists already. Please enter a unique name.",
-      "scenarioNamingLengthMessage": "The name must be between 1 and 50 characters. The actual length is {0}.",
-      "scenarioNamingInvalidCharactersMessage": "The name can only contain alphanumeric characters, whitespaces, dashes, or underscores, and needs to start with an alphanumeric character.",
-      "valueErrorMessage": "For operation {0} please select a value other than {1}.",
-      "invalidCombinationErrorMessage": "This is identical to an existing what-if scenario. Please change the feature, operation, or value.",
-      "addTransformationButton": "Add Transformation",
-      "divisionAndMultiplicationBy": "by"
+      "title": "创建模拟方案",
+      "nameLabel": "模拟方案名称",
+      "featureInstructions": "选择一个要扰动的特征。",
+      "operationInstructions": "选择要应用于该功能的操作。",
+      "operationDropdownHeader": "操作",
+      "featureDropdownHeader": "特征",
+      "valueSpinButtonHeader": "值",
+      "scenarioNamingInstructionsPlaceholder": "输入唯一名称",
+      "scenarioNamingInstructions": "输入模拟方案的名称。",
+      "scenarioNamingCollisionMessage": "此名称已存在。请输入唯一名称。",
+      "scenarioNamingLengthMessage": "名称必须介于 1 到 50 个字符之间。实际长度为 {0}。",
+      "scenarioNamingInvalidCharactersMessage": "名称只能包含字母数字字符、空格、短划线或下划线，并且需要以字母数字字符开头。",
+      "valueErrorMessage": "对于操作 {0}，请选择除 {1} 以外的值。",
+      "invalidCombinationErrorMessage": "这与现有的模拟方案相同。请更改功能、操作或值。",
+      "addTransformationButton": "添加转换",
+      "divisionAndMultiplicationBy": "执行者"
     },
     "TransformationTable": {
-      "nameColumnHeader": "Name",
-      "methodColumnHeader": "Method",
-      "divisionAndMultiplicationBy": "by ",
-      "header": "What-if Forecasts ({0})"
+      "nameColumnHeader": "名称",
+      "methodColumnHeader": "方法",
+      "divisionAndMultiplicationBy": "执行者 ",
+      "header": "模拟预测 ({0})"
     },
     "TimeSeries": {
-      "apply": "Apply",
-      "cancel": "Cancel",
-      "cohortList": "Time series list",
-      "selectCohort": "Select a time series",
-      "shiftCohort": "Switch time series",
-      "shiftCohortDescription": "Select a time series from the time series list. Apply the time series to the dashboard."
+      "apply": "应用",
+      "cancel": "取消",
+      "cohortList": "时序列表",
+      "selectCohort": "选择时序",
+      "selectCohortAriaLabel": "Time series selection",
+      "shiftCohort": "切换时序",
+      "shiftCohortAriaLabel": "Switch time series",
+      "shiftCohortDescription": "从时序列表中选择时序。将时序应用到仪表板。"
     },
     "TimeSeriesSettings": {
-      "CohortSettingsDescription": "Time series are pre-defined based on time series identifying columns.",
-      "CohortSettingsTitle": "Time series settings"
+      "CohortSettingsDescription": "时序是根据时间序列标识列预先定义的。",
+      "CohortSettingsTitle": "时序设置"
     }
   }
 }

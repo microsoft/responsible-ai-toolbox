@@ -1,5 +1,6 @@
 Flask
 Flask-Cors
+flask-socketio
 ipython<=7.16.3; python_version <= '3.6'
 ipython>=7.31.1; python_version > '3.6'
 itsdangerous>=2.0.1

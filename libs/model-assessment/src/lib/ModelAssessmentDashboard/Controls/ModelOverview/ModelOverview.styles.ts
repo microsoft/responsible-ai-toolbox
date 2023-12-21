@@ -65,7 +65,6 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
           "[role='tablist'].ms-Pivot": {
             display: "flex",
             flexWrap: "wrap",
-            overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap"
           }

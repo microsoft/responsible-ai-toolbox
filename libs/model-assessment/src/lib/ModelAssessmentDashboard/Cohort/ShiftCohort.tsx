@@ -107,8 +107,20 @@ export class ShiftCohort extends React.Component<
           },
           isBlocking: true
         }}
-        minWidth={740}
-        maxWidth={1000}
+        styles={{
+          main: {
+            selectors: {
+              "@media (max-width: 740px)": {
+                maxWidth: "740px",
+                minWidth: "100px"
+              },
+              "@media (min-width: 740px)": {
+                maxWidth: "1000px",
+                minWidth: "740px"
+              }
+            }
+          }
+        }}
       >
         <Dropdown
           placeholder={localizationBase.selectCohort}
@@ -116,6 +128,7 @@ export class ShiftCohort extends React.Component<
           selectedKey={this.state.selectedCohort}
           options={this.state.options}
           onChange={this.onChange}
+          ariaLabel={localizationBase.selectCohortAriaLabel}
         />
         <CohortEditorFilterList
           compositeFilters={
@@ -129,10 +142,12 @@ export class ShiftCohort extends React.Component<
           <PrimaryButton
             onClick={this.shiftCohort}
             text={localizationBase.apply}
+            ariaLabel={localizationBase.shiftCohortAriaLabel}
           />
           <DefaultButton
             onClick={this.props.onDismiss}
             text={localizationBase.cancel}
+            ariaLabel={localization.Interpret.CohortEditor.cancelAriaLabel}
           />
         </DialogFooter>
       </Dialog>

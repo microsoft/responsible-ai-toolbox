@@ -17,7 +17,7 @@ jobs:
       matrix:
         packageDirectory: ["raiwidgets"]
         operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
-        pythonVersion: [3.6, 3.7, 3.8, 3.9, "3.10"]
+        pythonVersion: [3.7, 3.8, 3.9, "3.10"]
         exclude:
           - packageDirectory: "raiwidgets"
             operatingSystem: macos-latest
@@ -29,15 +29,15 @@ jobs:
     runs-on: ${{ matrix.operatingSystem }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: conda-incubator/setup-miniconda@v2
+      - uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
           python-version: ${{ matrix.pythonVersion }}
 
       - name: Use Node.js ${{ env.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.node-version }}
 

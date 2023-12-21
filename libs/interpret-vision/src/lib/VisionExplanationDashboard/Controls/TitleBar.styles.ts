@@ -34,7 +34,7 @@ export const titleBarStyles: () => IProcessedStyleSet<ITitleBarStyles> = () => {
       fontWeight: "600"
     },
     titleBarNumber: {
-      color: theme.palette.blue
+      color: theme.palette.blueDark
     }
   });
 };

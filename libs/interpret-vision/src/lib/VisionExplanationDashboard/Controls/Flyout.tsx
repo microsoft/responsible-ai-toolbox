@@ -18,6 +18,7 @@ import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { getImageAltText } from "../utils/getAltTextUtils";
 import { getJoinedLabelString } from "../utils/labelUtils";
 
 import { flyoutStyles } from "./Flyout.styles";
@@ -124,6 +125,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                 tokens={stackTokens.medium}
                 horizontalAlign="space-around"
                 verticalAlign="center"
+                className={classNames.stackDynamicScreenSize}
               >
                 <Stack.Item>
                   <Stack
@@ -195,6 +197,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                 </Stack.Item>
                 <Stack.Item className={classNames.imageContainer}>
                   <Image
+                    alt={getImageAltText(predictedY, trueY, item?.index)}
                     id={`flyoutImage_${item?.index}`}
                     src={`data:image/jpg;base64,${item?.image}`}
                     className={classNames.image}
@@ -218,6 +221,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
               {!this.props.loadingExplanation[0][index] ? (
                 <Stack.Item>
                   <Image
+                    alt={getImageAltText(predictedY, trueY, item?.index, true)}
                     src={`data:image/jpg;base64,${this.props.explanations
                       .get(0)
                       ?.get(index)}`}

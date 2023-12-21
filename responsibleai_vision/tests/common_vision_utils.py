@@ -12,6 +12,7 @@ from zipfile import ZipFile
 
 import numpy as np
 import pandas as pd
+import piexif
 import shap
 import torch
 import torch.nn as nn
@@ -172,7 +173,7 @@ def retrieve_unzip_file(download_url, data_file):
     os.remove(data_file)
 
 
-def load_fridge_dataset():
+def load_fridge_dataset(add_extra_mixed_metadata=False):
     # create data folder if it doesnt exist.
     os.makedirs("data", exist_ok=True)
 
@@ -186,6 +187,14 @@ def load_fridge_dataset():
     for folder in os.listdir("./data/fridgeObjects"):
         for file in os.listdir("./data/fridgeObjects/" + folder):
             image_path = "./data/fridgeObjects/" + folder + "/" + file
+            if add_extra_mixed_metadata and file.endswith("1.jpg"):
+                with Image.open(image_path) as im:
+                    exif_dict = piexif.load(im.info['exif'])
+                    comment = 'Extra metadata for {}'.format(file).encode()
+                    exif_dict['0th'][piexif.ImageIFD.XPComment] = comment
+                    exif_dict['1st'][piexif.ImageIFD.XPComment] = comment
+                    exif_bytes = piexif.dump(exif_dict)
+                    im.save(image_path, exif=exif_bytes)
             data = data.append({IMAGE: image_path, LABEL: folder},
                                ignore_index=True)
     return data
@@ -435,6 +444,16 @@ class ImageClassificationPipelineSerializer(object):
 
     def _get_model_path(self, path):
         return os.path.join(path, 'image-classification-model')
+
+
+class ObjectDetectionPipelineSerializer(object):
+    def save(self, model, path):
+        pass
+
+    def load(self, path):
+        return retrieve_fridge_object_detection_model(
+            load_fridge_weights=True
+        )
 
 
 class DummyFlowersPipelineSerializer(object):

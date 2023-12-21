@@ -18,13 +18,14 @@ from common_vision_utils import (FRIDGE_MULTILABEL_TARGETS, ImageTransformEnum,
                                  load_multilabel_fridge_dataset,
                                  retrieve_fridge_object_detection_model,
                                  retrieve_or_train_fridge_model)
+from ml_wrappers import wrap_model
 from ml_wrappers.common.constants import Device
 from rai_vision_insights_validator import validate_rai_vision_insights
 
 from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai_vision import ModelTask, RAIVisionInsights
 from responsibleai_vision.common.constants import (ExplainabilityDefaults,
-                                                   ImageColumns)
+                                                   ImageColumns, ImageModes)
 
 DEFAULT_MAX_EVALS = ExplainabilityDefaults.DEFAULT_MAX_EVALS
 DEFAULT_NUM_MASKS = ExplainabilityDefaults.DEFAULT_NUM_MASKS
@@ -39,7 +40,7 @@ class TestRAIVisionInsights(object):
         task_type = ModelTask.IMAGE_CLASSIFICATION
         class_names = load_imagenet_labels()
         run_rai_insights(pred, data[:3], ImageColumns.LABEL,
-                         task_type, class_names, image_mode='RGB')
+                         task_type, class_names, image_mode=ImageModes.RGB)
 
     @pytest.mark.parametrize('max_evals', [None, 10, 200])
     def test_rai_insights_image_classification_max_evals(self, max_evals):
@@ -50,7 +51,7 @@ class TestRAIVisionInsights(object):
         # run on a single image to avoid running out of memory on
         # test machines
         run_rai_insights(pred, data[:1], ImageColumns.LABEL,
-                         task_type, class_names, image_mode='RGB',
+                         task_type, class_names, image_mode=ImageModes.RGB,
                          test_explainer=True, max_evals=max_evals)
 
     @pytest.mark.parametrize('max_evals', [-100, -1, 0])
@@ -62,7 +63,8 @@ class TestRAIVisionInsights(object):
         with pytest.raises(ValueError,
                            match="max_evals must be greater than 0"):
             run_rai_insights(pred, data[:1], ImageColumns.LABEL,
-                             task_type, class_names, image_mode='RGB',
+                             task_type, class_names,
+                             image_mode=ImageModes.RGB,
                              test_explainer=True, max_evals=max_evals)
 
     def test_rai_insights_image_classification_fridge(self):
@@ -118,6 +120,45 @@ class TestRAIVisionInsights(object):
                          task_type, class_names,
                          num_masks=num_masks, mask_res=mask_res,
                          test_error_analysis=True)
+
+    def test_rai_insights_object_detection_jagged_list(self):
+        data = load_fridge_object_detection_dataset()
+        model = retrieve_fridge_object_detection_model(
+            load_fridge_weights=True
+        )
+        task_type = ModelTask.OBJECT_DETECTION
+        wrapped_model = wrap_model(model, data, ModelTask.OBJECT_DETECTION)
+
+        class DummyPredictWrapper(object):
+            def __init__(self, model):
+                self.model = model
+                self._model = model._model
+
+            def to(self, dummy):
+                pass
+
+            def predict(self, X):
+                prediction = self.model.predict(X).tolist()
+                if len(prediction) == 1:
+                    # fix ndim error for some versions of pandas in tests
+                    prediction = prediction[0]
+                return prediction
+
+            def predict_proba(self, X):
+                return self.model.predict_proba(X)
+
+        wrapped_model = DummyPredictWrapper(wrapped_model)
+        class_names = np.array(['can', 'carton',
+                                'milk_bottle', 'water_bottle'])
+        # test case where there are different numbers of objects in labels
+        images = ['10.jpg', '29.jpg', '92.jpg']
+        images = ["./data/odFridgeObjects/images/{}".format(i) for i in images]
+        data = data.loc[data[ImageColumns.IMAGE.value].isin(images)]
+        data = data.reset_index(drop=True)
+        run_rai_insights(wrapped_model, data, ImageColumns.LABEL,
+                         task_type, class_names,
+                         test_error_analysis=True,
+                         ignore_index=True)
 
     @pytest.mark.parametrize('num_masks', [-100, -1, 0])
     def test_rai_insights_invalid_num_masks(self, num_masks):
@@ -264,7 +305,8 @@ def run_rai_insights(model, test_data, target_column,
                      upscale=False, max_evals=DEFAULT_MAX_EVALS,
                      num_masks=DEFAULT_NUM_MASKS,
                      mask_res=DEFAULT_MASK_RES,
-                     device=Device.AUTO.value):
+                     device=Device.AUTO.value,
+                     ignore_index=False):
     feature_metadata = None
     if dropped_features:
         feature_metadata = FeatureMetadata(dropped_features=dropped_features)
@@ -294,14 +336,16 @@ def run_rai_insights(model, test_data, target_column,
     # Validate
     validate_rai_vision_insights(
         rai_insights, test_data,
-        target_column, task_type)
+        target_column, task_type,
+        ignore_index)
     if task_type == ModelTask.OBJECT_DETECTION:
         selection_indexes = [[0]]
-        aggregate_method = 'Macro'
         class_name = classes[0]
         iou_threshold = 70
         object_detection_cache = {}
-        metrics = rai_insights.compute_object_detection_metrics(
-            selection_indexes, aggregate_method, class_name, iou_threshold,
-            object_detection_cache)
-        assert len(metrics) == 2
+        aggregate_methods = ['macro', 'micro']
+        for aggregate_method in aggregate_methods:
+            metrics = rai_insights.compute_object_detection_metrics(
+                selection_indexes, aggregate_method, class_name, iou_threshold,
+                object_detection_cache)
+            assert len(metrics) == 2

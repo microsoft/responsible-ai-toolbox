@@ -18,6 +18,7 @@ import { DatasetTaskType, IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { getAltTextForItem } from "../utils/getAltTextUtils";
 import { getFilteredDataFromSearch } from "../utils/getFilteredData";
 import { isItemPredTrueEqual } from "../utils/labelUtils";
 import { visionExplanationDashboardStyles } from "../VisionExplanationDashboard.styles";
@@ -163,6 +164,9 @@ export class TableList extends React.Component<
                 selection={this._selection}
                 setKey="set"
                 onItemInvoked={this.props.selectItem}
+                ariaLabel={
+                  localization.InterpretVision.Dashboard.tabOptionSecond
+                }
               />
             </MarqueeSelection>
           </Stack.Item>
@@ -246,7 +250,6 @@ export class TableList extends React.Component<
     column?: IColumn | undefined
   ): React.ReactNode => {
     const classNames = visionExplanationDashboardStyles();
-
     let value =
       item && column && column.fieldName
         ? item[column.fieldName as keyof IVisionListItem]
@@ -267,9 +270,10 @@ export class TableList extends React.Component<
         : "";
     return (
       <Stack horizontal tokens={{ childrenGap: "s1" }}>
-        {image ? (
+        {image && item ? (
           <Stack.Item>
             <Image
+              alt={getAltTextForItem(item, this.props.taskType)}
               className={classNames.tableListImage}
               src={`data:image/jpg;base64,${image}`}
               style={{ width: this.props.imageDim }}

@@ -31,7 +31,6 @@ export const featureImportanceTabStyles: () => IProcessedStyleSet<IFeatureImport
           "[role='tablist'].ms-Pivot": {
             display: "flex",
             flexWrap: "wrap",
-            overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap"
           }

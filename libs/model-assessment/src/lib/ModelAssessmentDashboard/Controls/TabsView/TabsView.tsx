@@ -213,7 +213,7 @@ export class TabsView extends React.PureComponent<
                       className={classNames.sectionHeader}
                       id="errorAnalysisHeader"
                     >
-                      <Text variant={"xxLarge"}>
+                      <Text as="h2" variant={"xxLarge"}>
                         {
                           localization.ModelAssessment.ComponentNames
                             .ErrorAnalysis

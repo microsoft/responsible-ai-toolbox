@@ -15,6 +15,7 @@ import { DatasetTaskType, IVisionListItem } from "@responsible-ai/core-ui";
 import React from "react";
 
 import { ISearchable } from "../Interfaces/ISearchable";
+import { getAltTextForItem } from "../utils/getAltTextUtils";
 import { getFilteredDataFromSearch } from "../utils/getFilteredData";
 import { getJoinedLabelString } from "../utils/labelUtils";
 
@@ -79,6 +80,7 @@ export class ImageList extends React.Component<
           className={classNames.list}
           getPageHeight={this.getPageHeight}
           getItemCountForPage={this.getItemCountForPage}
+          tabIndex={0}
         />
       </FocusZone>
     );
@@ -104,12 +106,12 @@ export class ImageList extends React.Component<
     if (!item) {
       return;
     }
-    const itemPredY = item?.predictedY;
+    const itemPredY = item.predictedY;
     const predictedY = getJoinedLabelString(itemPredY);
-    const itemTrueY = item?.trueY;
+    const itemTrueY = item.trueY;
     const trueY = getJoinedLabelString(itemTrueY);
-    const alt = predictedY;
-    const odAggregate = getJoinedLabelString(item?.odAggregate);
+    const alt = getAltTextForItem(item, this.props.taskType);
+    const odAggregate = getJoinedLabelString(item?.odAggregate)?.split(", ");
 
     return (
       <Stack
@@ -143,12 +145,25 @@ export class ImageList extends React.Component<
             />
           </Stack.Item>
           {this.props.taskType === DatasetTaskType.ObjectDetection ? (
-            <Stack>
+            <Stack horizontal tokens={{ childrenGap: "10px" }}>
               <Stack.Item
-                className={classNames.labelContainer}
-                id={`odAggregateLabel_${item?.index}`}
+                className={classNames.successIndicator}
+                style={{
+                  left: ImagePadding
+                }}
+                id={`odAggregateLabel_correct_${item?.index}`}
               >
-                <Text className={classNames.label}>{odAggregate}</Text>
+                <Text className={classNames.labelPredicted}>{`✅ Correct: ${
+                  odAggregate[0].split(" ")[0]
+                }`}</Text>
+              </Stack.Item>
+              <Stack.Item
+                className={classNames.errorIndicator}
+                id={`odAggregateLabel_incorrect_${item?.index}`}
+              >
+                <Text className={classNames.labelPredicted}>{`❌ Wrong: ${
+                  odAggregate[1].split(" ")[0]
+                }`}</Text>
               </Stack.Item>
             </Stack>
           ) : (

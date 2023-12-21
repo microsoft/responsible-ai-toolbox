@@ -113,6 +113,7 @@
     },
     "ShiftCohort": {
       "apply": "Alkalmaz",
+      "applyAriaLabel": "Kohorsz alkalmazása",
       "cancel": "Mégse",
       "title": "Kohorszváltás",
       "subText": "Válasszon ki egy kohorszt a kohorszok listájából. Alakalmazza a kohorszt az irányítópultra.",
@@ -129,6 +130,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Ellenpélda",
     "CurrentTreatment": "Aktuális kezelés",
     "EffectLowerBound": "CI_alsó",
     "EffectOfTreatment": "Az ajánlás hatása",
@@ -154,6 +156,7 @@
     "counterfactualName": "Lehetőségelemzési ellenpélda neve",
     "createWhatIfCounterfactual": "Lehetőségelemzési ellenpélda létrehozása",
     "createCounterfactual": "Ellenpélda",
+    "counterfactualAriaLabel": "Ellenpélda létrehozása",
     "revertToBubbleChart": "Buborékdiagram megtekintése",
     "createOwn": "Hozza létre a saját ellenpéldáját:",
     "currentClass": "Aktuális osztály",
@@ -188,8 +191,8 @@
   },
   "DataAnalysis": {
     "TableView": {
-      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
-      "infoTitle": "Additional information on table view"
+      "description": "Az adathalmazt táblázatos ábrázolásban tekintheti meg az alapigazsággal és az előre jelzett címkékkel. A táblázat a helyes és helytelen előrejelzéseket tartalmazó altáblákra van bontva.",
+      "infoTitle": "További információ a táblázatnézetről"
     }
   },
   "ErrorAnalysis": {
@@ -474,11 +477,13 @@
     },
     "BinDialog": {
       "cancel": "Mégse",
+      "cancelAriaLabel": "Kvantálás megszakítása",
       "categoryHeader": "Dobozértékek:",
       "header": "Dobozok konfigurálása",
       "makeCategorical": "Kezelés kategorikusként",
       "numberOfBins": "Dobozok száma:",
-      "save": "Mentés"
+      "save": "Mentés",
+      "saveAriaLabel": "Kvantálás mentése"
     },
     "DropdownHeaders": {
       "errorMetric": "Hibasávok engedélyezése",
@@ -683,6 +688,7 @@
       "backToComparisons": "Vissza az összes modellhez",
       "backToComparisonsLegacy": "Többmodelles nézet",
       "chartChoiceDropdownHeader": "Diagramok",
+      "chartChoiceAriaLabel": "Diagram kiválasztása",
       "classificationOutcomesHowToRead": "A sávdiagram az egyes csoportok kiválasztási arányát, vagyis az 1-es osztályozású ponthányadokat jeleníti meg.",
       "classificationPerformanceHowToRead1": "A sávdiagram az eltérések eloszlását mutatja az egyes csoportokban.",
       "classificationPerformanceHowToRead2": "Az eltéréseket a rendszer túlbecslési eltérésekre (az előrejelzés 1, miközben a valós címke 0) és alulbecslési eltérésekre (az előrejelzés 0, miközben a valós címke 1) bontja.",
@@ -831,8 +837,10 @@
       },
       "TreatAsCategorical": "Kezelés kategorikusként",
       "addFilter": "Szűrő hozzáadása",
+      "addFilterAriaLabel": "Kohorszszűrő hozzáadása",
       "addedFilters": "Szűrők",
       "cancel": "Mégse",
+      "cancelAriaLabel": "Kohorsz érvénytelenítése",
       "cancelExistingCohort": "Biztosan megszakítja a kohorsz szerkesztését, és visszalép?",
       "cancelNewCohort": "Biztosan megszakítja az új kohorsz létrehozását, és visszalép?",
       "cancelNo": "Nem",
@@ -845,11 +853,13 @@
       "clearAllFilters": "Minden szűrő kikapcsolása",
       "defaultFilterState": "Válasszon ki egy szűrőt, hogy paramétereket adjon hozzá az adatkészlet-kohorszhoz. A jelenleg megtekintett kohorsz szűrői előre ki vannak töltve.",
       "delete": "Törlés",
+      "deleteAriaLabel": "Kohorsz törlése",
       "invalidValueError": "Az értéknek {0} és {1} közöttinek kell lennie.",
       "minimumGreaterThanMaximum": "A minimális érték bemeneteinek kisebbnek kell lenniük a maximális érték bemeneteinél.",
       "noAddedFilters": "Nincsenek szűrők",
       "placeholderName": "Kohorsz: {0}",
       "save": "Mentés",
+      "saveAriaLabel": "Kohorsz mentése",
       "saveAndSwitch": "Mentés és váltás",
       "selectFilter": "Szűrő kiválasztása",
       "noFiltersApplied": "Nincsenek aktív szűrők",
@@ -890,7 +900,7 @@
       "individualDatapoints": "Egyéni adatpontok",
       "missingParameters": "Ehhez a laphoz meg kell adni egy kiértékelési adathalmazt.",
       "noColor": "Nincs",
-      "datasetCohortDropdown": "Adathalmaz-kohorsz legördülő listája"
+      "datasetCohortDropdown": "Adathalmaz kohorsza"
     },
     "DependencePlot": {
       "featureImportanceOf": "A következő jellemzőfontossága:",
@@ -906,6 +916,8 @@
       "index": "Index",
       "output": "Kimenet",
       "predictedY": "Előrejelzett Y",
+      "odIncorrect": "Helytelen",
+      "odCorrect": "Helyes",
       "probabilityLabel": "Valószínűség: {0}",
       "trueY": "Valós Y",
       "xValue": "X-érték:",
@@ -1147,7 +1159,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Értelmezhetőségi irányítópult",
-      "importantWords": "Show most important words",
+      "importantWords": "A legfontosabb szavak megjelenítése",
       "topFeatureList": "Kiemelt jellemzők listájának elemzése",
       "allButton": "MINDEN JELLEMZŐ",
       "negButton": "NEGATÍV JELLEMZŐK",
@@ -1162,7 +1174,7 @@
       "trueAnswer": "Igaz válasz: ",
       "inputs": "Bemenetek",
       "outputs": "Kimenetek",
-      "sliderAriaLabel": "Slider for most important words"
+      "sliderAriaLabel": "Csúszka a legfontosabb szavakhoz"
     },
     "Legend": {
       "featureLegend": "SZÖVEGJELLEMZŐ JELMAGYARÁZATA",
@@ -1195,18 +1207,20 @@
       "columnTwo": "Index",
       "columnThree": "Valós Y",
       "columnFour": "Előrejelzett Y",
-      "columnThreeOD": "Correct",
-      "columnFourOD": "Incorrect",
+      "columnThreeOD": "Helyes",
+      "columnFourOD": "Helytelen",
       "columnFive": "Egyéb metaadatok",
       "chooseObject": "Észlelt objektum kiválasztása",
       "examples": "példák",
       "filter": "Szűrő",
       "indexLabel": "Kép ",
       "labelTypeDropdown": "Címketípus kiválasztása",
+      "labelTypeAriaLabel": "Címke típusa",
       "labelVisibilityDropdown": "Megjelenítendő címkék kiválasztása",
+      "labelVisibilityAriaLabel": "Címke láthatósága",
       "legendFailure": "hiba",
       "legendSuccess": "sikeres",
-      "loading": "Az index kiszámítási magyarázata",
+      "loading": "Az index képének kiszámítási magyarázata",
       "multiselect": "Többszörös kijelölés",
       "notdefined": "az objektum forgatókönyve nincs definiálva",
       "objectSelect": "Objektumválasztás",
@@ -1216,10 +1230,11 @@
       "panelInformation": "Információ",
       "predictedLabel": "Előrejelzett címke",
       "predictedY": "Előre jelzett: ",
-      "correctDetections": "Correct detections: ",
-      "incorrectDetections": "Incorrect detections: ",
+      "correctDetections": "Helyes észlelések: ",
+      "incorrectDetections": "Helytelen észlelések: ",
       "prefix": "Objektum: ",
       "rows": "Sorok: ",
+      "rowsAriaLabel": "Oldalankénti sorok száma",
       "search": "Keresés",
       "selectAll": "Az összes kijelölése",
       "settings": "Beállítások",
@@ -1237,6 +1252,8 @@
     "AddingTab": {
       "AddButtonText": "Hozzáadás",
       "CalloutContent": "Bizonyos összetevők (hibafanézet vagy hibahőtérkép) hozzáadásával szűrheti az adatokat az alábbi összetevőkben látható globális kohorszból.",
+      "AddComponentAriaLabel": "Irányítópult-összetevő hozzáadása",
+      "AddButtonAriaLabel": "Irányítópult hozzáadása",
       "CalloutTitle": "Összetevő hozzáadása",
       "TabAddedMessage": {
         "DataAnalysis": "Adatelemzési összetevő hozzáadva",
@@ -1264,13 +1281,17 @@
     "Cohort": {
       "apply": "Alkalmaz",
       "delete": "Törlés",
+      "deleteAriaLabel": "Kohorsz törlése",
       "cancel": "Mégse",
+      "cancelAriaLabel": "Kohorsz érvénytelenítése",
       "cohortInfo": "Kohorsz adatai",
       "cohortList": "Kohorszlista",
       "deleteCohort": "Törli a következőt: {0}?",
       "deleteConfirm": "Biztos, hogy törli a kohorszt?",
       "selectCohort": "Kohorsz kiválasztása",
+      "selectCohortAriaLabel": "Kohorsz kiválasztása",
       "shiftCohort": "Kohorszváltás",
+      "shiftCohortAriaLabel": "Kohorszváltás",
       "shiftCohortDescription": "Válasszon ki egy kohorszt a kohorszok listájából. Alakalmazza a kohorszt az irányítópultra."
     },
     "CohortInformation": {
@@ -1457,9 +1478,9 @@
       "CorrectPredictions": "Helyes előrejelzések",
       "GlobalExplanation": "Aggregált jellemzőfontosság",
       "IncorrectPredictions": "Helytelen előrejelzések",
-      "InfoTitle": "Additional information on feature importance values",
+      "InfoTitle": "További információ a jellemzőfontossági értékekről",
       "IndividualFeatureTabular": "Jelöljön ki egy adatpontot. Ehhez kattintson egy adatpontra (legfeljebb 5 adatpontra) a táblában a helyi jellemzőfontossági értékek (helyi magyarázat) és az egyéni feltételes elvárások (ICE) diagram megtekintéséhez.",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
+      "IndividualFeatureText": "Jelöljön ki egy adatpontot. Ehhez kattintson egy adatpontra a táblában a helyi jellemzőfontossági értékek (helyi magyarázat) megtekintéséhez az SHAP szöveg magyarázójából.",
       "LocalExplanation": "Egyéni jellemzőfontosság",
       "SelectionCounter": "{0}/{1} adatpont kiválasztva",
       "SelectionLimit": "Jelenleg legfeljebb 5 adatpont választható ki.",
@@ -1665,7 +1686,11 @@
         "flyoutHeader": "Funkciók kiválasztása",
         "flyoutSubHeader": "Mely jellemzők mellett szeretné kiértékelni a modell semlegességét?",
         "flyoutDescription": "A semlegességet a rendszer a modell viselkedésében mutatkozó egyenlőtlenségek alapján értékeli ki. Az adatokat az egyes kiválasztott jellemzők értékei szerint osztjuk fel, és kiértékeljük, hogy a modell teljesítménymutatója felosztásonként hogyan változik.",
+        "selectAllRowsAriaLabel": "Az összes sor kijelölése",
+        "flyoutAriaLabel": "Aggregált egyensúlymértékek",
         "featureColumnHeader": "Funkciók",
+        "featureSelectionAriaLabel": "Funkciókiválasztási táblázat",
+        "metricSelectionAriaLabel": "Metrikakiválasztási táblázat",
         "groupsColumnHeader": "Csoportok",
         "categoricalGroupsCountRemark": "Ez a funkció {0} egyedi értékeket tartalmaz.",
         "continuousGroupsCountRemark": "Ez a funkció folyamatos, és {0} tárolóra van osztva.",
@@ -1749,7 +1774,9 @@
       "cancel": "Mégse",
       "cohortList": "Idősorozatok listája",
       "selectCohort": "Idősorozat kiválasztása",
+      "selectCohortAriaLabel": "Idősor kiválasztása",
       "shiftCohort": "Idősor váltása",
+      "shiftCohortAriaLabel": "Idősor váltása",
       "shiftCohortDescription": "Válasszon ki egy idősort az idősorlistából, majd alkalmazza azt az irányítópultra."
     },
     "TimeSeriesSettings": {

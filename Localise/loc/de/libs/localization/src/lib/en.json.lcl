@@ -1477,6 +1477,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";DataAnalysis.TableView.description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Zeigen Sie das Dataset in einer Tabellendarstellung mit der Grundwahrheit und den vorhergesagten Bezeichnungen an. Die Tabelle ist in Untertabellen mit richtigen und falschen Vorhersagen unterteilt.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";DataAnalysis.TableView.infoTitle" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Additional information on table view]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Zusätzliche Informationen zur Tabellenansicht]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";ErrorAnalysis.Cohort.cohort" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cohort]]></Val>
@@ -7123,6 +7141,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Interpret.ExplanationScatter.odCorrect" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Correct]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Richtig]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Interpret.ExplanationScatter.odIncorrect" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Incorrect]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Fehlerhaft]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Interpret.ExplanationScatter.output" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Output]]></Val>
@@ -9531,10 +9567,13 @@
       </Item>
       <Item ItemId=";InterpretVision.Dashboard.loading" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Computing explanation for index]]></Val>
+          <Val><![CDATA[Computing explanation for image of index]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Berechnen der Erklärung für den Index]]></Val>
+            <Val><![CDATA[Berechnungserläuterung für das Bild des Indexes]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Computing explanation for index]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10968,19 +11007,25 @@
       </Item>
       <Item ItemId=";ModelAssessment.FeatureImportances.IndividualFeatureText" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).]]></Val>
+          <Val><![CDATA[Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Wählen Sie einen Datenpunkt aus, indem Sie auf einen Datenpunkt in der Tabelle klicken, um die Wichtigkeitswerte für lokale Features anzuzeigen (lokale Erklärung).]]></Val>
+            <Val><![CDATA[Wählen Sie einen Datenpunkt aus, indem Sie auf einen Datenpunkt in der Tabelle klicken, um die lokalen Featurerelevanzwerte (lokale Erklärung) aus dem Texterklärer von SHAP anzuzeigen.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ModelAssessment.FeatureImportances.InfoTitle" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Additional information on data analysis table view]]></Val>
+          <Val><![CDATA[Additional information on feature importance values]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zusätzliche Informationen zur Tabellenansicht für die Datenanalyse]]></Val>
+            <Val><![CDATA[Zusätzliche Informationen zu Featurerelevanzwerten]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Additional information on data analysis table view]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>

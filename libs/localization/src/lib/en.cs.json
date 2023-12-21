@@ -113,6 +113,7 @@
     },
     "ShiftCohort": {
       "apply": "Použít",
+      "applyAriaLabel": "Apply cohort",
       "cancel": "Zrušit",
       "title": "Přepnout kohortu",
       "subText": "Vyberte kohortu ze seznamu kohort. Použije kohortu na řídicí panel.",
@@ -129,6 +130,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "Aktuální léčba",
     "EffectLowerBound": "Dolní interval spolehlivosti",
     "EffectOfTreatment": "Vliv doporučení",
@@ -154,6 +156,7 @@
     "counterfactualName": "Název protifaktoru citlivostní analýzy",
     "createWhatIfCounterfactual": "Vytvořit protifaktory citlivostní analýzy",
     "createCounterfactual": "Protifaktor",
+    "counterfactualAriaLabel": "Counterfactual creation",
     "revertToBubbleChart": "Zobrazit bublinový graf",
     "createOwn": "Vytvořte si vlastní protifaktoru:",
     "currentClass": "Aktuální třída",
@@ -474,11 +477,13 @@
     },
     "BinDialog": {
       "cancel": "Zrušit",
+      "cancelAriaLabel": "Cancel binning",
       "categoryHeader": "Hodnoty intervalů:",
       "header": "Nakonfigurovat intervaly",
       "makeCategorical": "Považovat za kategorické",
       "numberOfBins": "Počet intervalů:",
-      "save": "Uložit"
+      "save": "Uložit",
+      "saveAriaLabel": "Save binning"
     },
     "DropdownHeaders": {
       "errorMetric": "Povolit chybové úsečky",
@@ -683,6 +688,7 @@
       "backToComparisons": "Zpět na všechny modely",
       "backToComparisonsLegacy": "Vícemodelové zobrazení",
       "chartChoiceDropdownHeader": "Grafy",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "Pruhový graf zobrazuje míru výběru v jednotlivých skupinách, tedy podíl bodů klasifikovaných jako 1.",
       "classificationPerformanceHowToRead1": "Pruhový graf zobrazuje distribuci chyb v jednotlivých skupinách.",
       "classificationPerformanceHowToRead2": "Chyby jsou rozdělené na chyby nadhodnocení (predikuje se 1, když skutečný popisek je 0) a chyby podhodnocení (predikuje se 0, když skutečný popisek je 1).",
@@ -831,8 +837,10 @@
       },
       "TreatAsCategorical": "Považovat za kategorické",
       "addFilter": "Přidat filtr",
+      "addFilterAriaLabel": "Add cohort filter",
       "addedFilters": "Filtry",
       "cancel": "Zrušit",
+      "cancelAriaLabel": "Cancel cohort",
       "cancelExistingCohort": "Opravdu chcete zrušit úpravy nové kohorty a vrátit se zpět?",
       "cancelNewCohort": "Opravdu chcete zrušit vytváření nové kohorty a vrátit se zpět?",
       "cancelNo": "Ne",
@@ -845,11 +853,13 @@
       "clearAllFilters": "Vymazat všechny filtry",
       "defaultFilterState": "Vyberte filtr pro přidání parametrů do kohorty datové sady. Filtry z vaší aktuální kohorty zobrazení jsou zadané předem.",
       "delete": "Odstranit",
+      "deleteAriaLabel": "Delete cohort",
       "invalidValueError": "Tato hodnota by měla spadat do rozmezí od {0} do {1}.",
       "minimumGreaterThanMaximum": "Vstupní minimální hodnoty musí být menší než vstupní maximální hodnoty.",
       "noAddedFilters": "Žádné filtry",
       "placeholderName": "Kohorta {0}",
       "save": "Uložit",
+      "saveAriaLabel": "Save cohort",
       "saveAndSwitch": "Uložit a přepnout",
       "selectFilter": "Vybrat filtr",
       "noFiltersApplied": "Nejsou použité žádné filtry",
@@ -890,7 +900,7 @@
       "individualDatapoints": "Jednotlivé datové body",
       "missingParameters": "Tato karta vyžaduje zadání datové sady pro vyhodnocení.",
       "noColor": "Žádné",
-      "datasetCohortDropdown": "Rozevírací seznam kohorty datové sady"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "Důležitost atributu",
@@ -906,6 +916,8 @@
       "index": "Index",
       "output": "Výstup",
       "predictedY": "Predikované Y",
+      "odIncorrect": "Incorrect",
+      "odCorrect": "Correct",
       "probabilityLabel": "Pravděpodobnost : {0}",
       "trueY": "Skutečné Y",
       "xValue": "Hodnota X:",
@@ -1147,7 +1159,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Řídicí panel interpretovatelnosti",
-      "importantWords": "Show most important words",
+      "importantWords": "Zobrazit nejdůležitější slova",
       "topFeatureList": "Analýza seznamu hlavních funkcí",
       "allButton": "VŠECHNY FUNKCE",
       "negButton": "NEGATIVNÍ FUNKCE",
@@ -1162,7 +1174,7 @@
       "trueAnswer": "Skutečná odpověď: ",
       "inputs": "Vstupy",
       "outputs": "Výstupy",
-      "sliderAriaLabel": "Slider for most important words"
+      "sliderAriaLabel": "Posuvník pro nejdůležitější slova"
     },
     "Legend": {
       "featureLegend": "LEGENDA TEXTOVÉ FUNKCE",
@@ -1195,18 +1207,20 @@
       "columnTwo": "Index",
       "columnThree": "Skutečné Y",
       "columnFour": "Predikované Y",
-      "columnThreeOD": "Correct",
-      "columnFourOD": "Incorrect",
+      "columnThreeOD": "Správně",
+      "columnFourOD": "Nesprávně",
       "columnFive": "Další metadata",
       "chooseObject": "Zvolte zjištěný objekt",
       "examples": "Příklady",
       "filter": "Filtrovat",
       "indexLabel": "Obrázek ",
       "labelTypeDropdown": "Vybrat typ popisku",
+      "labelTypeAriaLabel": "Label type",
       "labelVisibilityDropdown": "Vyberte popisky, které se mají zobrazit.",
+      "labelVisibilityAriaLabel": "Label visibility",
       "legendFailure": "selhání",
       "legendSuccess": "úspěch",
-      "loading": "Vysvětlení výpočtu indexu",
+      "loading": "Computing explanation for image of index",
       "multiselect": "Vícenásobný výběr",
       "notdefined": "scénář objektu není definovaný.",
       "objectSelect": "Výběr objektu",
@@ -1216,10 +1230,11 @@
       "panelInformation": "Informace",
       "predictedLabel": "Predikovaný popisek",
       "predictedY": "Předpověď: ",
-      "correctDetections": "Correct detections: ",
-      "incorrectDetections": "Incorrect detections: ",
+      "correctDetections": "Správná zjištění: ",
+      "incorrectDetections": "Nesprávná zjištění: ",
       "prefix": "Objekt: ",
       "rows": "Řádky: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "Hledat",
       "selectAll": "Vybrat vše",
       "settings": "Nastavení",
@@ -1237,6 +1252,8 @@
     "AddingTab": {
       "AddButtonText": "Přidat",
       "CalloutContent": "Přidání některých komponent (stromové zobrazení chyb, heat mapa chyb) vám umožní filtrovat data z globální kohorty, kterou vidíte v níže uvedených komponentách.",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard",
       "CalloutTitle": "Přidat komponentu",
       "TabAddedMessage": {
         "DataAnalysis": "Byla přidána komponenta analýzy dat",
@@ -1264,13 +1281,17 @@
     "Cohort": {
       "apply": "Použít",
       "delete": "Odstranit",
+      "deleteAriaLabel": "Delete cohort",
       "cancel": "Zrušit",
+      "cancelAriaLabel": "Cancel cohort",
       "cohortInfo": "Informace o kohortě",
       "cohortList": "Seznam kohort",
       "deleteCohort": "Odstraňuje se: {0}?",
       "deleteConfirm": "Určitě chcete odstranit tuto kohortu?",
       "selectCohort": "Vybrat kohortu",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "Přepnout kohortu",
+      "shiftCohortAriaLabel": "Switch cohort",
       "shiftCohortDescription": "Vyberte kohortu ze seznamu kohort. Použije kohortu na řídicí panel."
     },
     "CohortInformation": {
@@ -1665,7 +1686,11 @@
         "flyoutHeader": "Zvolte si funkce",
         "flyoutSubHeader": "Se kterým příznakem byste chtěli vyhodnotit nestrannost modelu?",
         "flyoutDescription": "Nestrannost se vyhodnocuje ve smyslu nekonzistence chování modelů. Vaše data rozdělíme podle hodnot každého vybraného příznaku a vyhodnotíme, jak se mezi jednotlivými částmi liší metrika výkonu modelu.",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "Atributy",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "Skupiny",
         "categoricalGroupsCountRemark": "Tato funkce má následující počet jedinečných hodnot: {0}",
         "continuousGroupsCountRemark": "Tato funkce je průběžná a rozdělená do {0} přihrádek.",
@@ -1749,7 +1774,9 @@
       "cancel": "Zrušit",
       "cohortList": "Seznam časových řad",
       "selectCohort": "Vyberte časovou řadu",
+      "selectCohortAriaLabel": "Time series selection",
       "shiftCohort": "Přepnout časovou řadu",
+      "shiftCohortAriaLabel": "Switch time series",
       "shiftCohortDescription": "Vyberte časovou řadu ze seznamu časových řad. Použije časovou řadu na řídicí panel."
     },
     "TimeSeriesSettings": {

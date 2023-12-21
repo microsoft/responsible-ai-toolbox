@@ -23,10 +23,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Use Node.js ${{ env.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.node-version }}
 
@@ -63,10 +63,10 @@ jobs:
     runs-on: ${{ matrix.operatingSystem }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Use Node.js ${{ env.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.node-version }}
 
@@ -82,7 +82,7 @@ jobs:
           name: raiwidgets-js
           path: raiwidgets/raiwidgets/widget
 
-      - uses: conda-incubator/setup-miniconda@v2
+      - uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
           python-version: ${{ matrix.pythonVersion }}
@@ -90,7 +90,7 @@ jobs:
       - name: Install pytorch with python 3.7
         shell: bash -l {0}
         run: |
-          conda install --yes --quiet "pytorch==1.13.1" "torchvision<0.15" captum cpuonly -c pytorch
+          conda install --yes --quiet "pytorch==1.13.1" "torchvision<0.15" cpuonly -c pytorch
 
       - name: Setup tools
         shell: bash -l {0}
@@ -102,6 +102,7 @@ jobs:
       - name: Install dependencies
         shell: bash -l {0}
         run: |
+          pip install captum
           pip install -r requirements-dev.txt
           pip install -v -e .
         working-directory: raiwidgets

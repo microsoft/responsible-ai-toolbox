@@ -14,9 +14,12 @@ export function ensureAllVisionDataExplorerImageExplorerViewElementsAfterSelecti
       Locators.VisionDataExplorerImageExplorerViewObjectDetectionContainer
     ).should("exist");
 
-    cy.get(Locators.VisionDataExplorerImageExplorerViewImageODAggLabel).should(
-      "exist"
-    );
+    cy.get(
+      Locators.VisionDataExplorerImageExplorerViewImageODAggLabelCorrect
+    ).should("exist");
+    cy.get(
+      Locators.VisionDataExplorerImageExplorerViewImageODAggLabelIncorrect
+    ).should("exist");
   } else {
     cy.get(Locators.VisionDataExplorerPredictedLabel).should("exist");
     cy.get(Locators.VisionDataExplorerLegendFailure).should("exist");

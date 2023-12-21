@@ -19,9 +19,16 @@ def validate_rai_vision_insights(
     rai_vision_insights,
     test_data,
     target_column,
-    task_type
+    task_type,
+    ignore_index=False,
+    ignore_test_data=False
 ):
-    pd.testing.assert_frame_equal(rai_vision_insights.test, test_data)
+    if not ignore_test_data:
+        rai_vision_test = rai_vision_insights.test
+        if ignore_index:
+            rai_vision_test = rai_vision_test.reset_index(drop=True)
+            test_data = test_data.reset_index(drop=True)
+        pd.testing.assert_frame_equal(rai_vision_test, test_data)
     assert rai_vision_insights.target_column == target_column
     assert rai_vision_insights.task_type == task_type
 
@@ -33,7 +40,9 @@ def run_and_validate_serialization(
     class_names,
     label,
     serializer,
-    image_width=None
+    image_width=None,
+    ignore_test_data=False,
+    image_downloader=None
 ):
     """Run and validate serialization.
 
@@ -52,16 +61,27 @@ def run_and_validate_serialization(
     :param image_width: Image width in inches
     :type image_width: int
     """
-    rai_insights = RAIVisionInsights(
-        pred, test, label,
-        task_type=task_type,
-        classes=class_names,
-        serializer=serializer,
-        image_width=image_width)
-
     with TemporaryDirectory() as tmpdir:
         save_1 = Path(tmpdir) / "first_save"
         save_2 = Path(tmpdir) / "second_save"
+
+        test_data_path = None
+        if image_downloader is not None:
+            test_data_path = str(Path(tmpdir) / "fake_downloaded_test_data")
+            dir_path = Path(test_data_path)
+            dir_path.mkdir(exist_ok=True, parents=True)
+            fake_file_path = dir_path / 'fake_file.txt'
+            with open(fake_file_path, 'w') as file:
+                file.write("fake content")
+
+        rai_insights = RAIVisionInsights(
+            pred, test, label,
+            test_data_path=test_data_path,
+            task_type=task_type,
+            classes=class_names,
+            serializer=serializer,
+            image_width=image_width,
+            image_downloader=image_downloader)
 
         # Save it
         rai_insights.save(save_1)
@@ -75,7 +95,11 @@ def run_and_validate_serialization(
         # Validate
         validate_rai_vision_insights(
             rai_2, test,
-            label, task_type)
+            label, task_type,
+            ignore_test_data=ignore_test_data)
+
+        # Test calling get_data works
+        rai_2.get_data()
 
         # Save again
         rai_2.save(save_2)

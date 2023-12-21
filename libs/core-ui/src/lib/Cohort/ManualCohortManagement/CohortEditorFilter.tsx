@@ -113,6 +113,20 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
               label={localization.Interpret.CohortEditor.TreatAsCategorical}
               checked={isCategorical}
               onChange={this.props.setAsCategorical}
+              ariaLabel={
+                isCategorical
+                  ? localization.formatString(
+                      localization.Interpret.CohortEditor
+                        .TreatAsCategoricalAriaLabelChecked,
+                      categoricalOptions?.length
+                    )
+                  : localization.formatString(
+                      localization.Interpret.CohortEditor
+                        .TreatAsCategoricalAriaLabelUnchecked,
+                      columnRange.min,
+                      columnRange.max
+                    )
+              }
             />
           )}
         {isCategorical ? (
@@ -154,12 +168,16 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
                   onClick={(): void =>
                     this.props.saveState(this.props.filterIndex)
                   }
+                  ariaLabel={localization.Interpret.CohortEditor.saveAriaLabel}
                 />
               </Stack.Item>
               <Stack.Item>
                 <DefaultButton
                   text={localization.Interpret.CohortEditor.cancel}
                   onClick={(): void => this.props.cancelFilter()}
+                  ariaLabel={
+                    localization.Interpret.CohortEditor.cancelAriaLabel
+                  }
                 />
               </Stack.Item>
             </>
@@ -168,6 +186,9 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
               <PrimaryButton
                 text={localization.Interpret.CohortEditor.addFilter}
                 onClick={this.onAddFilterClick}
+                ariaLabel={
+                  localization.Interpret.CohortEditor.addFilterAriaLabel
+                }
               />
             </Stack.Item>
           )}

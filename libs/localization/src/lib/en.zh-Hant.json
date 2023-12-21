@@ -113,6 +113,7 @@
     },
     "ShiftCohort": {
       "apply": "套用",
+      "applyAriaLabel": "套用世代",
       "cancel": "取消",
       "title": "切換世代",
       "subText": "從世代清單中選取世代。將世代套用到儀表板。",
@@ -129,6 +130,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "反事實",
     "CurrentTreatment": "目前的處理方式",
     "EffectLowerBound": "CI 較低",
     "EffectOfTreatment": "建議的效果",
@@ -154,6 +156,7 @@
     "counterfactualName": "模擬反事實名稱",
     "createWhatIfCounterfactual": "建立模擬反事實",
     "createCounterfactual": "反事實",
+    "counterfactualAriaLabel": "反事實建立",
     "revertToBubbleChart": "檢視泡泡圖",
     "createOwn": "建立您自己的反事實:",
     "currentClass": "目前類別",
@@ -188,8 +191,8 @@
   },
   "DataAnalysis": {
     "TableView": {
-      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
-      "infoTitle": "Additional information on table view"
+      "description": "以具有地面事實和預測標籤的資料表標記法檢視資料集。資料表會以正確和不正確的預測分隔成子資料工作表。",
+      "infoTitle": "資料表檢視的其他資訊"
     }
   },
   "ErrorAnalysis": {
@@ -474,11 +477,13 @@
     },
     "BinDialog": {
       "cancel": "取消",
+      "cancelAriaLabel": "取消量化",
       "categoryHeader": "組界值:",
       "header": "設定組界",
       "makeCategorical": "視為類別",
       "numberOfBins": "組界數目:",
-      "save": "儲存"
+      "save": "儲存",
+      "saveAriaLabel": "儲存量化"
     },
     "DropdownHeaders": {
       "errorMetric": "啟用誤差線",
@@ -683,6 +688,7 @@
       "backToComparisons": "返回所有模型",
       "backToComparisonsLegacy": "多重模型檢視",
       "chartChoiceDropdownHeader": "圖表",
+      "chartChoiceAriaLabel": "圖表選取項目",
       "classificationOutcomesHowToRead": "橫條圖會顯示各群組中的選擇率，表示分類為 1 的資料點。",
       "classificationPerformanceHowToRead1": "橫條圖會顯示各群組中的誤差分佈。",
       "classificationPerformanceHowToRead2": "錯誤會分割成預測過度錯誤 (當 True 標籤為 0 時，預測 1) 及預測不足錯誤 (當 True 標籤為 1 時，預測 0)。",
@@ -831,8 +837,10 @@
       },
       "TreatAsCategorical": "視為類別",
       "addFilter": "新增篩選",
+      "addFilterAriaLabel": "新增世代篩選",
       "addedFilters": "篩選",
       "cancel": "取消",
+      "cancelAriaLabel": "取消世代",
       "cancelExistingCohort": "確定要取消編輯新的世代並返回嗎?",
       "cancelNewCohort": "確定要取消建立新的世代並返回嗎?",
       "cancelNo": "否",
@@ -845,11 +853,13 @@
       "clearAllFilters": "清除所有篩選",
       "defaultFilterState": "選取篩選以將參數加入您的資料集世代。已預先填入您目前檢視世代的篩選。",
       "delete": "刪除",
+      "deleteAriaLabel": "刪除世代",
       "invalidValueError": "值應介於 {0} 到 {1} 之間。",
       "minimumGreaterThanMaximum": "最小輸入值必須小於最大輸入值。",
       "noAddedFilters": "沒有任何篩選",
       "placeholderName": "世代 {0}",
       "save": "儲存",
+      "saveAriaLabel": "儲存世代",
       "saveAndSwitch": "儲存並切換",
       "selectFilter": "選取篩選",
       "noFiltersApplied": "未套用任何篩選條件",
@@ -890,7 +900,7 @@
       "individualDatapoints": "個別資料點",
       "missingParameters": "此索引標籤需要提供評估資料集。",
       "noColor": "無",
-      "datasetCohortDropdown": "資料集世代下拉式清單"
+      "datasetCohortDropdown": "資料集世代"
     },
     "DependencePlot": {
       "featureImportanceOf": "特徵重要度:",
@@ -906,6 +916,8 @@
       "index": "索引",
       "output": "輸出",
       "predictedY": "預測的 Y",
+      "odIncorrect": "不正確",
+      "odCorrect": "正確",
       "probabilityLabel": "機率 : {0}",
       "trueY": "實際的 Y",
       "xValue": "X 值:",
@@ -1147,7 +1159,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "可解譯性儀表板",
-      "importantWords": "Show most important words",
+      "importantWords": "顯示最重要的字詞",
       "topFeatureList": "熱門特徵清單分析",
       "allButton": "所有特徵",
       "negButton": "負特徵",
@@ -1162,7 +1174,7 @@
       "trueAnswer": "正確答案:",
       "inputs": "輸入",
       "outputs": "輸出",
-      "sliderAriaLabel": "Slider for most important words"
+      "sliderAriaLabel": "重要字詞的滑桿"
     },
     "Legend": {
       "featureLegend": "文字特徵圖例",
@@ -1195,18 +1207,20 @@
       "columnTwo": "索引",
       "columnThree": "實際的 Y",
       "columnFour": "預測的 Y",
-      "columnThreeOD": "Correct",
-      "columnFourOD": "Incorrect",
+      "columnThreeOD": "正確",
+      "columnFourOD": "不正確",
       "columnFive": "其他中繼資料",
       "chooseObject": "選擇偵測到的物件",
       "examples": "範例",
       "filter": "篩選",
       "indexLabel": "影像 ",
       "labelTypeDropdown": "選取標記類型",
+      "labelTypeAriaLabel": "標籤類型",
       "labelVisibilityDropdown": "選取要顯示的標記",
+      "labelVisibilityAriaLabel": "標籤可見度",
       "legendFailure": "失敗",
       "legendSuccess": "成功",
-      "loading": "索引的計算說明",
+      "loading": "正在計算索引映像的說明",
       "multiselect": "多重選取",
       "notdefined": "物件案例未定義",
       "objectSelect": "物件選取項目",
@@ -1216,10 +1230,11 @@
       "panelInformation": "資訊",
       "predictedLabel": "預測標記",
       "predictedY": "預測: ",
-      "correctDetections": "Correct detections: ",
-      "incorrectDetections": "Incorrect detections: ",
+      "correctDetections": "正確的偵測: ",
+      "incorrectDetections": "不正確的偵測: ",
       "prefix": "物件: ",
       "rows": "資料列: ",
+      "rowsAriaLabel": "每頁的資料列數目",
       "search": "搜尋",
       "selectAll": "全選",
       "settings": "設定",
@@ -1237,6 +1252,8 @@
     "AddingTab": {
       "AddButtonText": "新增",
       "CalloutContent": "新增部分元件 (錯誤樹狀檢視、錯誤熱度圖) 可讓您篩選從下方元件中所看到的全域世代資料。",
+      "AddComponentAriaLabel": "新增儀表板元件",
+      "AddButtonAriaLabel": "加入儀表板",
       "CalloutTitle": "新增元件",
       "TabAddedMessage": {
         "DataAnalysis": "已新增資料分析元件",
@@ -1264,13 +1281,17 @@
     "Cohort": {
       "apply": "套用",
       "delete": "刪除",
+      "deleteAriaLabel": "刪除世代",
       "cancel": "取消",
+      "cancelAriaLabel": "取消世代",
       "cohortInfo": "世代資訊",
       "cohortList": "世代清單",
       "deleteCohort": "刪除 {0}?",
       "deleteConfirm": "確定要刪除此世代嗎?",
       "selectCohort": "選取世代",
+      "selectCohortAriaLabel": "世代選取項目",
       "shiftCohort": "切換世代",
+      "shiftCohortAriaLabel": "切換世代",
       "shiftCohortDescription": "從世代清單中選取世代。將世代套用到儀表板。"
     },
     "CohortInformation": {
@@ -1457,9 +1478,9 @@
       "CorrectPredictions": "正確的預測",
       "GlobalExplanation": "彙總特徵重要度",
       "IncorrectPredictions": "不正確的預測",
-      "InfoTitle": "Additional information on feature importance values",
+      "InfoTitle": "功能重要性值的其他資訊",
       "IndividualFeatureTabular": "按一下資料表中的資料點 (最多 5 個資料點) 選取資料點，以在檢視其局部特徵重要度值 (區域解釋)，以個別條件預測 (ICE) 繪圖。",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
+      "IndividualFeatureText": "按一下資料表中的資料點以選取資料點，以從 SHAP 的文字解釋者檢視本機特徵重要度值 (本機說明)。",
       "LocalExplanation": "個別特徵重要度",
       "SelectionCounter": "已選取 {0}/{1} 個資料點",
       "SelectionLimit": "目前最多可選取 5 個資料點。",
@@ -1665,7 +1686,11 @@
         "flyoutHeader": "選擇您的特徵",
         "flyoutSubHeader": "要依循哪些特徵評估模型公平性?",
         "flyoutDescription": "公平性會根據模型行為中的差距部分進行評估。我們會依據各個所選特徵的值來分割資料，並評估模型的效能計量在這些分割中有何差異。",
+        "selectAllRowsAriaLabel": "全選資料列",
+        "flyoutAriaLabel": "彙總平衡量值",
         "featureColumnHeader": "特徵",
+        "featureSelectionAriaLabel": "功能選取資料表",
+        "metricSelectionAriaLabel": "計量選取項目資料表",
         "groupsColumnHeader": "群組",
         "categoricalGroupsCountRemark": "此特徵有 {0} 個唯一值。",
         "continuousGroupsCountRemark": "此特徵是連續的，並分割成 {0} 個間隔。",
@@ -1749,7 +1774,9 @@
       "cancel": "取消",
       "cohortList": "時間系列清單",
       "selectCohort": "選取時間序列",
+      "selectCohortAriaLabel": "時間序列選取項目",
       "shiftCohort": "切換時間系列",
+      "shiftCohortAriaLabel": "切換時間序列",
       "shiftCohortDescription": "從時間系列清單中選取時間系列。將時間系列套用至儀表板。"
     },
     "TimeSeriesSettings": {

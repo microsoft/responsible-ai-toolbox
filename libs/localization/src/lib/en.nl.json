@@ -3,26 +3,26 @@
     "close": "Sluiten",
     "tooltipButton": "Knop Knopinfo",
     "identityFeature": "Identiteitsfunctie",
-    "infoTitle": "Additional information",
-    "spinButton": "Spin",
-    "editButton": "Edit",
-    "decreaseValue": "Decrease value",
-    "increaseValue": "Increase value",
-    "decreaseValueByOne": "Decrease value by 1",
-    "increaseValueByOne": "Increase value by 1",
-    "loading": "Loading..."
+    "infoTitle": "Aanvullende informatie",
+    "spinButton": "Draaien",
+    "editButton": "Bewerken",
+    "decreaseValue": "Waarde verlagen",
+    "increaseValue": "Waarde verhogen",
+    "decreaseValueByOne": "Waarde met 1 verlagen",
+    "increaseValueByOne": "Waarde met 1 verhogen",
+    "loading": "Laden..."
   },
   "ChartContextMenu": {
-    "hideData": "Hide data table",
-    "viewData": "View data table",
-    "viewInFullScreen": "View in full screen",
-    "printChart": "Print chart",
-    "downloadCSV": "Download CSV",
-    "downloadPNG": "Download PNG image",
-    "downloadJPEG": "Download JPEG image",
-    "downloadPDF": "Download PDF document",
-    "downloadSVG": "Download SVG vector image",
-    "downloadXLS": "Download XLS"
+    "hideData": "Gegevenstabel verbergen",
+    "viewData": "Gegevenstabel weergeven",
+    "viewInFullScreen": "Weergeven in volledig scherm",
+    "printChart": "Grafiek afdrukken",
+    "downloadCSV": "CSV downloaden",
+    "downloadPNG": "PNG-afbeelding downloaden",
+    "downloadJPEG": "JPEG-afbeelding downloaden",
+    "downloadPDF": "PDF-document downloaden",
+    "downloadSVG": "SVG-vectorafbeelding downloaden",
+    "downloadXLS": "XLS downloaden"
   },
   "CausalAnalysis": {
     "AggregateView": {
@@ -39,7 +39,7 @@
       "description": "De oorzakelijke analyse beantwoordt 'Wat als'-vragen over de manier waarop reële resultaten zouden zijn gewijzigd als iemand zich anders zou hebben gedragen, zoals het vervolgen van een andere prijsstrategie voor een product of een alternatieve behandeling voor een patiënt. In tegenstelling tot modelvoorspellingen die belangrijke correlatiepatronen identificeren, helpen deze hulpprogramma's u de belangrijkste oorzakelijke functies te identificeren die direct van invloed zijn op het resultaat van belang. Met deze modellen wordt het oorzakelijke effect van één kenmerk bepaald (ofwel 'behandeling'), waarbij andere variabele kenmerken constant zijn. Voor de beste resultaten moet u ervoor zorgen dat u de volledige gegevensset alle beschikbare kenmerken bevat die kunnen correleren met het resultaat van de variabelen.",
       "directAggregate": "Directe aggregatie van het oorzakelijk effect van elke behandeling met een betrouwbaarheidsinterval van 95%",
       "here": "hier",
-      "infoTitle": "Additional information on aggregated causal effects",
+      "infoTitle": "Aanvullende informatie over geaggregeerde oorzakelijke effecten",
       "lasso": "Een lasso (of logistieke regressie als y binair is) was geschikt om y van X[-i] te voorspellen en een lasso (of logistieke regressie als X[i] categorisch is) was geschikt om X[i] te voorspellen vanuit Χ [-i]. Het oorzakelijke effect kan worden weergegeven als de gemiddelde correlatie van de residuen/verrassingsvariatie van de twee voorspellingstaken. Meer informatie over Double Machine Learning",
       "unconfounding": "Wat zijn verwarrende kenmerken?"
     },
@@ -51,7 +51,7 @@
       "description": "Individuele oorzakelijke effecten kunnen gepersonaliseerde tussenkomsten inlichten, zoals een gerichte promotie naar klanten of een geïndividualiseerd behandelplan. Hoe zou een persoon met een bepaalde set kenmerken reageren op een wijziging in een oorzakelijke functie of behandeling?  Het oorzakelijke wat-als-hulpprogramma berekent marginale veranderingen in de werkelijke resultaten voor een bepaalde persoon als u het niveau van een behandeling wijzigt. Met deze analyse kunt u begrijpen hoe de werkelijke resultaten zouden zijn gewijzigd onder verschillende beleidskeuzes, zoals een andere prijsstrategie voor een product of een alternatieve behandeling voor een patiënt. Geef de behandeling van interesse op en kijk hoe het werkelijke resultaat zou veranderen.",
       "directIndividual": "Direct individueel oorzakelijk effect van elke behandeling met een betrouwbaarheidsinterval van 95%",
       "index": "Gegevenspunt-index",
-      "infoTitle": "Additional information on individual causal what-if",
+      "infoTitle": "Aanvullende informatie over individuele oorzakelijke wat-als",
       "missingParameters": "Op dit tabblad moet een evaluatiegegevensset worden opgegeven.",
       "newOutcome": "Nieuw resultaat",
       "selectTreatment": "Behandeling selecteren",
@@ -85,7 +85,7 @@
       "averageGainBinary": "Gemiddelde winst van het instellen van de behandeling {0} naar de basislijnwaarde {1}.",
       "averageGainContinuous": "Gemiddelde winst van alternatief beleid ten opzichte van geen '{0}' behandeling.",
       "header": "Deze hulpprogramma's helpen bij het bouwen van beleid voor toekomstige interventies. U kunt bepalen welke delen van uw steekproef het meeste antwoord geven op wijzigingen in oorzakelijke kenmerken of behandelingen, en regels opstellen om te definiëren welke toekomstige populaties moeten worden gericht op bepaalde interventies.",
-      "infoTitle": "Additional information on treatment policy",
+      "infoTitle": "Aanvullende informatie over het behandelingsbeleid",
       "nSample": "n = {0}",
       "noData": "Geen gegevens"
     }
@@ -113,11 +113,12 @@
     },
     "ShiftCohort": {
       "apply": "Toepassen",
+      "applyAriaLabel": "Apply cohort",
       "cancel": "Annuleren",
       "title": "Cohort wisselen",
       "subText": "Selecteer een cohort in de lijst met cohorten. Pas het cohort toe op het dashboard.",
-      "selectCohort": "Select a cohort",
-      "cohortList": "Cohort list"
+      "selectCohort": "Een cohort selecteren",
+      "cohortList": "Cohortlijst"
     },
     "PreBuiltCohort": {
       "featureNameNotFound": "Kan de functienaam niet vinden in de gegevensset",
@@ -129,6 +130,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "Huidige behandeling",
     "EffectLowerBound": "CI lager",
     "EffectOfTreatment": "Effect van aanbeveling",
@@ -148,13 +150,14 @@
       "predictedClass": "Voorspelde klasse",
       "predictedValue": "Voorspelde waarde"
     },
-    "Size": "Size",
-    "loading": "Loading...",
+    "Size": "Grootte",
+    "loading": "Laden...",
     "counterfactualEx": "Counterfactual Ex {0}",
     "counterfactualName": "Naam wat-als-nulscenario's",
     "createWhatIfCounterfactual": "Wat-als-counterfactual maken",
     "createCounterfactual": "Nulscenario",
-    "revertToBubbleChart": "View bubble chart",
+    "counterfactualAriaLabel": "Counterfactual creation",
+    "revertToBubbleChart": "Bellendiagram weergeven",
     "createOwn": "Uw eigen nulscenario maken:",
     "currentClass": "Huidige klasse",
     "currentRange": "Huidig bereik",
@@ -167,9 +170,9 @@
     "listDescription": "In deze lijst ziet u welke gegevenspunten in het huidige gegevensvoorbeeld het meeste oorzakelijke antwoord op de geselecteerde behandeling hebben, op basis van alle behandelingen die zijn opgenomen in het geschatte oorzakelijke model. In de linker vijf kolommen wordt aangegeven of de behandeling wordt aanbevolen voor de observatie, de huidige behandeling, het geschatte effect van de behandeling (effect van het toepassen van een behandeling vanaf een basislijn van geen behandeling voor binaire behandelingen of het vergroten/verkleinen van de behandelingsfunctie met 10% van de normale behandelgrootte in het voorbeeld: [dynamisch: de numerieke wijziging in de behandeling die gebruikt is] rapporteren), en de lage en hogere betrouwbaarheidsintervallen (CI) voor dit effect. In de resterende kolommen worden de huidige behandelingsstatus en andere kenmerken van elke observatie weergegeven.",
     "localImportanceDescription": "De belangrijkste functies in rij {0} die moeten verstoord worden om de gewenste modelvoorspelling te bereiken. Op basis van wat-als-analyse voor voorspelling: {1}",
     "localImportanceSelectData": "Selecteer een gegevenspunt om de lokale belangrijkheidsgrafiek te bekijken",
-    "largeLocalImportanceSelectData": "Select a bubble, followed by a data point to view local importance chart",
-    "localImportanceFetchError": "There was an error while fetching the local importance data. Error details: {0} Please check the data used.",
-    "BubbleChartFetchError": "There was an error while fetching the data. Error details: {0} Please check the data used.",
+    "largeLocalImportanceSelectData": "Selecteer een bel, gevolgd door een gegevenspunt om het lokale urgentiediagram weer te geven",
+    "localImportanceFetchError": "Er is een fout opgetreden bij het ophalen van de lokale urgentiegegevens. Foutdetails: {0} Controleer de gebruikte gegevens.",
+    "BubbleChartFetchError": "Er is een fout opgetreden bij het ophalen van de gegevens. Foutdetails: {0} Controleer de gebruikte gegevens.",
     "noData": "Geen gegevens",
     "noFeatures": "Er zijn geen functies beschikbaar",
     "panelDescription": "Blader door nulscenario's en maak er zelf een. Zoek door functies om voorgestelde waarden uit een verscheidenheid aan voorbeelden van nulscenario's weer te geven. Stel voorgestelde functiewaarden voor nulscenario's in door onder elk nulscenario op de tekst 'waarden instellen' te klikken. Benoem uw nulscenario en sla deze op.",
@@ -188,8 +191,8 @@
   },
   "DataAnalysis": {
     "TableView": {
-      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
-      "infoTitle": "Additional information on table view"
+      "description": "Bekijk de gegevensset in een tabelweergave met de basis-waarheid en voorspelde labels. De tabel is onderverdeeld in subtabellen met juiste en onjuiste voorspellingen.",
+      "infoTitle": "Aanvullende informatie over de tabelweergave"
     }
   },
   "ErrorAnalysis": {
@@ -223,13 +226,13 @@
       "subText": "Meer informatie over de geselecteerde cohort. Bewerk de cohortnaam. Verwijder deze cohort."
     },
     "FeatureList": {
-      "featureList": "Feature List",
+      "featureList": "Functielijst",
       "apply": "Toepassen",
       "features": "Functies",
       "importances": "Urgenties",
       "treeMapDescription": "Als u de structuurkaart opnieuw wilt trainen, selecteert u de onderstaande functies en slaat u deze op. De functie-urgenties zijn berekend met behulp van de gemeenschappelijke informatie met de fout in de labels voor true. Gebruik deze als een richtlijn voor het trainen van de structuurkaart.",
       "staticTreeMapDescription": "Bekijk de functies die zijn gebruikt om de structuurkaart te trainen. De functie-urgenties zijn berekend aan de hand van wederzijdse informatie met de fout op de werkelijke labels.",
-      "searchResultMessage": "Results displayed out of {resultLength} for {searchValue}"
+      "searchResultMessage": "Resultaten weergegeven van {resultLength} voor {searchValue}"
     },
     "TreeViewParameters": {
       "maximumDepth": "Maximale diepte",
@@ -295,7 +298,7 @@
       "disabledWarning": "De fout-heatmap is uitgeschakeld, tenzij het globale cohort wordt omgeschakeld naar 'Alle gegevens' omdat de heatmap wordt gegenereerd voor de volledige gegevensset. Schakel terug naar de volledige gegevensset om de fout-heatmap te bekijken."
     },
     "MatrixSummary": {
-      "heatMapInfoTitle": "Additional information on heat map",
+      "heatMapInfoTitle": "Aanvullende informatie over heatmap",
       "heatMapDescription": "Met de heatmap kunt u zich richten op specifieke intersectionele functiefilters en geaggregeerde foutpercentages berekenen. Begin met twee gegevenssetfuncties om te vergelijken.",
       "heatMapStaticDescription": "Met de heatmap kunt u zich richten op specifieke intersectionele functiefilters en geaggregeerde foutpercentages berekenen. Er moeten maximaal twee functies worden geselecteerd om een heatmap te maken via SDK voordat u het dashboard weergeeft."
     },
@@ -311,108 +314,108 @@
     },
     "Metrics": {
       "AccuracyScore": {
-        "Name": "Accuracy score",
-        "Info": "The accuracy score represents the ratio of correct to total instances in the data.",
-        "Short": "Accuracy",
-        "Title": "Additional information on accuracy score"
+        "Name": "Nauwkeurigheidsscore",
+        "Info": "De nauwkeurigheidsscore vertegenwoordigt de verhouding tussen de juiste en het totale aantal exemplaren in de gegevens.",
+        "Short": "Nauwkeurigheid",
+        "Title": "Aanvullende informatie over nauwkeurigheidsscore"
       },
       "ErrorRate": {
-        "Name": "Error rate",
-        "Info": "The error rate represents the percentage of instances in the node for which the system has failed.",
-        "Short": "Error rate",
-        "Title": "Additional information on error rate"
+        "Name": "Aantal fouten",
+        "Info": "Met het foutpercentage wordt het percentage exemplaren in het knooppunt aangegeven waarvoor een systeemfout optreedt.",
+        "Short": "Aantal fouten",
+        "Title": "Aanvullende informatie over het foutpercentage"
       },
       "F1Score": {
-        "Name": "F1 score",
-        "Info": "The F1 score is the harmonic mean of the precision and recall metrics.",
-        "Short": "F1 score",
-        "Title": "Additional information on F1 score"
+        "Name": "F1-score",
+        "Info": "De F1-score is het metrische gemiddelde van de meetwaarden voor precisie en relevante metrische gegevens.",
+        "Short": "F1-score",
+        "Title": "Aanvullende informatie over F1-score"
       },
       "MeanAbsoluteError": {
-        "Name": "Mean absolute error",
-        "Info": "The mean absolute error is the average of the sum of the errors.",
-        "Short": "Mean abs. error",
-        "Title": "Additional information on mean absolute error"
+        "Name": "Gemiddelde absolute fout",
+        "Info": "De gemiddelde absolute fout is het gemiddelde van de som van de fouten.",
+        "Short": "Gemiddelde abs. fout",
+        "Title": "Aanvullende informatie over gemiddelde absolute fout"
       },
       "MeanSquaredError": {
-        "Name": "Mean squared error",
-        "Info": "The mean squared error is the average of the squares of the errors.",
-        "Short": "Mean sq. error",
-        "Title": "Additional information on mean squared error"
+        "Name": "Gemiddelde kwadratische fout",
+        "Info": "De gemiddelde kwadratenfout is het gemiddelde van de kwadraten van de fouten.",
+        "Short": "Gemiddelde sq. fout",
+        "Title": "Aanvullende informatie over gemiddelde kwadratische fout"
       },
       "Precision": {
-        "Name": "Precision score",
-        "Info": "The precision is the ratio of true positives over all predicted positives.",
-        "Short": "Precision",
-        "Title": "Additional information on precision"
+        "Name": "Precisiescore",
+        "Info": "De precisie is de verhouding van terecht-positieven ten opzichte van alle voorspelde positieven.",
+        "Short": "Precisie",
+        "Title": "Aanvullende informatie over precisie"
       },
       "Recall": {
-        "Name": "Recall score",
-        "Info": "The recall is the ratio of true positives over all actual positives.",
-        "Short": "Recall",
-        "Title": "Additional information on recall"
+        "Name": "Score intrekken",
+        "Info": "De intrekking is de verhouding van terecht-positieven ten opzichte van alle werkelijke positieven.",
+        "Short": "Terughalen",
+        "Title": "Aanvullende informatie over intrekken"
       },
       "MacroPrecision": {
-        "Name": "Macro averaged precision score",
-        "Info": "The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.",
-        "Short": "Macro precision",
-        "Title": "Additional information on macro averaged precision"
+        "Name": "Gemiddelde precisiescore voor macro's",
+        "Info": "De gemiddelde precisie van de macro is de verhouding van terecht-positieven ten opzichte van alle voorspelde positieven die onafhankelijk per klasse en gemiddeld worden berekend.",
+        "Short": "Macroprecisie",
+        "Title": "Aanvullende informatie over gemiddelde precisie van macro's"
       },
       "MicroPrecision": {
-        "Name": "Micro averaged precision score",
-        "Info": "The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.",
-        "Short": "Micro precision",
-        "Title": "Additional information on micro averaged precision"
+        "Name": "Gemiddelde precisiescore voor micro's",
+        "Info": "De microgemiddelde precisie is de verhouding van terecht-positieven ten opzichte van alle voorspelde positieven die voor alle klassen zijn geaggregeerd.",
+        "Short": "Microprecisie",
+        "Title": "Aanvullende informatie over gemiddelde intrekking van micro's"
       },
       "MacroRecall": {
-        "Name": "Macro averaged recall score",
-        "Info": "The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.",
-        "Short": "Macro recall",
-        "Title": "Additional information on macro averaged recall"
+        "Name": "Gemiddelde score voor intrekken van macro's",
+        "Info": "Het microgemiddelde van het intrekken is de verhouding van terecht-positieven ten opzichte van alle werkelijke positieven die onafhankelijk per klasse en gemiddeld worden berekend.",
+        "Short": "Macro-intrekking",
+        "Title": "Aanvullende informatie over gemiddelde intrekking van macro's"
       },
       "MicroRecall": {
-        "Name": "Micro averaged recall score",
-        "Info": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
-        "Short": "Micro recall",
-        "Title": "Additional information on micro averaged recall"
+        "Name": "Gemiddelde score voor intrekken van micro's",
+        "Info": "Het microgemiddelde van het intrekken is de verhouding van terecht-positieven ten opzichte van alle werkelijke positieven die voor alle klassen zijn geaggregeerd.",
+        "Short": "Micro-intrekking",
+        "Title": "Aanvullende informatie over gemiddelde intrekking van micro's"
       },
       "MacroF1Score": {
-        "Name": "Macro averaged F1 score",
-        "Info": "The macro averaged F1 score is the harmonic mean of the macro averaged precision and recall metrics.",
-        "Short": "Macro F1 score",
-        "Title": "Additional information on macro averaged F1 score"
+        "Name": "Gemiddelde F1-score voor macro's",
+        "Info": "De gemiddelde F1-score voor macro's is het harmonische gemiddelde van de gemiddelde precisie en relevante metrische gegevens van de macro.",
+        "Short": "Macro F1-score",
+        "Title": "Aanvullende informatie over de gemiddelde F1-score voor macro's"
       },
       "MicroF1Score": {
-        "Name": "Micro averaged F1 score",
-        "Info": "The micro averaged F1 score is the harmonic mean of the micro averaged precision and recall metrics.",
-        "Short": "Micro F1 score",
-        "Title": "Additional information on micro averaged F1 score"
+        "Name": "Microgemiddelde F1-score",
+        "Info": "De microgemiddelde F1-score is het harmonische gemiddelde van de microgemiddelde precisie en relevante metrische gegevens.",
+        "Short": "Micro F1-score",
+        "Title": "Aanvullende informatie over een microgemiddelde F1-score"
       },
       "MeanAveragePrecision": {
-        "Name": "Mean average precision score",
-        "Info": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall.",
-        "Short": "Mean avg precision",
-        "Title": "Additional information on mean average precision score"
+        "Name": "Mean-gemiddelde precisiescore",
+        "Info": "Gemiddelde precisie voor objectdetectiemodellen is het gemiddelde van AP (gemiddelde precisie) in alle klassen. Hiermee wordt de robuustheid van uw objectdetectiemodel geëvalueerd en omsluit de afweging tussen precisie en intrekken.",
+        "Short": "Mean-gemiddelde precisie",
+        "Title": "Aanvullende informatie over gemiddelde precisiescore"
       },
       "AveragePrecision": {
-        "Name": "Average precision score",
-        "Info": "Average precision for object detection models is calculated for a selected class.",
-        "Short": "Avg precision",
-        "Title": "Additional information on average precision score"
+        "Name": "Gemiddelde precisiescore",
+        "Info": "Gemiddelde precisie voor objectdetectiemodellen wordt berekend voor een geselecteerde klasse.",
+        "Short": "Gemiddelde precisie",
+        "Title": "Aanvullende informatie over de gemiddelde precisiescore"
       },
       "AverageRecall": {
-        "Name": "Average recall score",
-        "Info": "Average recall for object detection models is calculated for a selected class.",
-        "Short": "Avg recall",
-        "Title": "Additional information on average recall score"
+        "Name": "Gemiddelde score voor relevante overeenkomsten",
+        "Info": "Gemiddelde precisie voor objectdetectiemodellen wordt berekend voor een geselecteerde klasse.",
+        "Short": "Gemiddelde relevante overeenkomsten",
+        "Title": "Aanvullende informatie over de gemiddelde score voor relevante overeenkomsten"
       },
       "metricName": "Naam van de meetwaarde",
       "metricValue": "Metrische waarde"
     },
     "MetricSelector": {
       "selectorLabel": "Metrische waarde selecteren",
-      "feature1SelectorLabel": "Rows: Feature 1",
-      "feature2SelectorLabel": "Columns: Feature 2"
+      "feature1SelectorLabel": "Rijen: functie 1",
+      "feature2SelectorLabel": "Kolommen: functie 2"
     },
     "Navigation": {
       "cohortSaved": "Nieuw cohort is opgeslagen. Zie de cohortlijst onder Cohortinstellingen.",
@@ -433,9 +436,9 @@
       "defaultLabelCopy": "Alle gegevens kopiëren"
     },
     "TreeView": {
-      "ariaLabel": "Interactive chart",
-      "disabledArialLabel": "Disabled interactive chart",
-      "treeMapInfoTitle": "Additional information on tree map",
+      "ariaLabel": "Interactieve grafiek",
+      "disabledArialLabel": "Uitgeschakelde interactieve grafiek",
+      "treeMapInfoTitle": "Aanvullende informatie over structuurkaart",
       "treeDescription": "De structuurvisualisatie maakt gebruik van de wederzijdse informatie tussen elke functie en de fout om foutexemplaren het beste te scheiden van geslaagde exemplaren hiërarchisch in de gegevens. Dit vereenvoudigt het proces van het detecteren en markeren van veelvoorkomende foutpatronen. Als u belangrijke foutpatronen wilt vinden, zoekt u naar knooppunten met een sterkere rode kleur (bijvoorbeeld hoge foutfrequentie) en een hogere opvullijn (d.w.v. hoge foutdekking). Als u de lijst die in de structuur worden gebruikt met functies wilt bewerken, klikt u op Onderdelenlijst. Gebruik de vervolgkeuzelijst Metrische gegevens selecteren voor meer informatie over de prestaties van uw fout- en succesknooppunten. Houd er rekening mee dat deze selectie van metrische gegevens geen invloed heeft op de manier waarop uw foutstructuur wordt gegenereerd.",
       "treeStaticDescription": "De structuurvisualisatie maakt gebruik van de wederzijdse informatie tussen elke functie en de fout om, hiërarchisch in de gegevens, foutexemplaren het beste te scheiden van geslaagde exemplaren. Dit vereenvoudigt het proces van het detecteren en markeren van veelvoorkomende foutpatronen. Als u belangrijke foutpatronen wilt vinden, zoekt u naar knooppunten met een sterkere rode kleur (bijvoorbeeld hoge foutfrequentie) en een hogere opvullijn (d.w.v. hoge foutdekking). Als u de lijst die in de structuur worden gebruikt met functies wilt bewerken, klikt u op Functielijst. Gebruik de vervolgkeuzelijst Metrische gegevens selecteren voor meer informatie over de prestaties van uw fout- en succesknooppunten. Houd er rekening mee dat deze selectie van metrische gegevens geen invloed heeft op de manier waarop uw foutstructuur wordt gegenereerd.",
       "disabledWarning": "De fout-treemap is uitgeschakeld, tenzij het globale cohort wordt omgeschakeld naar 'Alle gegevens' omdat de treemap wordt gegenereerd voor de volledige gegevensset. Schakel terug naar de volledige gegevensset om de fout-treemap te bekijken."
@@ -474,11 +477,13 @@
     },
     "BinDialog": {
       "cancel": "Annuleren",
+      "cancelAriaLabel": "Cancel binning",
       "categoryHeader": "Binwaarden:",
       "header": "Bins configureren",
       "makeCategorical": "Beschouwen als categorisch",
       "numberOfBins": "Aantal bins:",
-      "save": "Opslaan"
+      "save": "Opslaan",
+      "saveAriaLabel": "Save binning"
     },
     "DropdownHeaders": {
       "errorMetric": "Foutbalken inschakelen",
@@ -683,6 +688,7 @@
       "backToComparisons": "Terug naar alle modellen",
       "backToComparisonsLegacy": "Weergave met meerdere modellen",
       "chartChoiceDropdownHeader": "Grafieken",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "Het staafdiagram toont het selectiepercentage in elke groep, dat wil zeggen het aantal punten dat wordt geclassificeerd als 1.",
       "classificationPerformanceHowToRead1": "In het staafdiagram wordt de distributie van fouten in elke groep weergegeven.",
       "classificationPerformanceHowToRead2": "Fouten zijn opgesplitst in fouten met overschatting (voorspelling 1 wanneer het werkelijke label 0 is) en fouten met onderschatting (voorspelling 0 wanneer het werkelijke label 1 is).",
@@ -770,7 +776,7 @@
       "countHelperText": "Een histogram van het aantal punten",
       "ditherLabel": "Moet op raster worden weergegeven",
       "groupByCohort": "Groeperen op cohort",
-      "logarithmicScaling": "Enable logarithmic scaling",
+      "logarithmicScaling": "Logaritmische schaal inschakelen",
       "numOfBins": "Aantal bins",
       "selectClass": "Klasse selecteren",
       "selectFeature": "Functie selecteren",
@@ -823,16 +829,18 @@
     "CohortEditor": {
       "columns": {
         "index": "Index",
-        "dataset": "Dataset",
-        "predictedY": "Predicted Y",
-        "trueY": "True Y",
-        "classificationOutcome": "Classification outcome",
-        "regressionError": "Error"
+        "dataset": "Gegevensset",
+        "predictedY": "Voorspelde Y",
+        "trueY": "Ware Y",
+        "classificationOutcome": "Classificatieresultaten",
+        "regressionError": "Fout"
       },
       "TreatAsCategorical": "Beschouwen als categorisch",
       "addFilter": "Filter toevoegen",
+      "addFilterAriaLabel": "Add cohort filter",
       "addedFilters": "Filters",
       "cancel": "Annuleren",
+      "cancelAriaLabel": "Cancel cohort",
       "cancelExistingCohort": "Weet u zeker dat u het bewerken van een cohort wilt annuleren en terug wilt gaan?",
       "cancelNewCohort": "Weet u zeker dat u het maken van een nieuwe cohort wilt annuleren en terug wilt gaan?",
       "cancelNo": "Nee",
@@ -845,15 +853,17 @@
       "clearAllFilters": "Alle filters wissen",
       "defaultFilterState": "Selecteer een filter om parameters toe te voegen aan uw gegevensset-cohort. Filters uit uw huidige weergave-cohort zijn vooraf ingevuld.",
       "delete": "Verwijderen",
+      "deleteAriaLabel": "Delete cohort",
       "invalidValueError": "De waarde moet tussen {0} en {1} liggen",
       "minimumGreaterThanMaximum": "Invoer voor de minimumwaarde moet kleiner zijn dan de invoer voor de maximumwaarde.",
       "noAddedFilters": "Geen filters",
       "placeholderName": "Cohort {0}",
       "save": "Opslaan",
+      "saveAriaLabel": "Save cohort",
       "saveAndSwitch": "Opslaan en schakelen",
       "selectFilter": "Filter selecteren",
-      "noFiltersApplied": "No filters applied",
-      "filterAdded": "Filter added"
+      "noFiltersApplied": "Geen filters toegepast",
+      "filterAdded": "Filter toegevoegd"
     },
     "Columns": {
       "classificationOutcome": "Classificatieresultaten",
@@ -863,8 +873,8 @@
       "falsePositive": "Fout-positief",
       "none": "Aantal",
       "predictedProbabilities": "Voorspellingskansen",
-      "predictedLabels": "Predicted labels",
-      "trueLabels": "True labels",
+      "predictedLabels": "Voorspelde labels",
+      "trueLabels": "Waar-labels",
       "regressionError": "Regressiefout",
       "trueNegative": "Terecht-negatief",
       "truePositive": "Terecht-positief",
@@ -885,12 +895,12 @@
       "aggregatePlots": "Plots samenvoegen",
       "chartType": "Grafiektype",
       "colorValue": "Kleurwaarde",
-      "infoTitle": "Additional information on data analysis chart view",
+      "infoTitle": "Aanvullende informatie over de grafiekweergave voor gegevensanalyse",
       "helperText": "Maak gegevensset-cohorten om gegevenssetstatistieken te analyseren, samen met filters zoals voorspeld resultaat, gegevenssetfuncties en foutgroepen. Meer informatie over de over/onderpresentatie in uw gegevensset.",
       "individualDatapoints": "Afzonderlijke gegevenspunten",
       "missingParameters": "Op dit tabblad moet een evaluatiegegevensset worden opgegeven.",
       "noColor": "Geen",
-      "datasetCohortDropdown": "Vervolgkeuzelijst gegevensset-cohort"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "Functie-urgentie van",
@@ -906,6 +916,8 @@
       "index": "Index",
       "output": "Uitvoer",
       "predictedY": "Voorspelde Y",
+      "odIncorrect": "Onjuist",
+      "odCorrect": "Juist",
       "probabilityLabel": "Waarschijnlijkheid: {0}",
       "trueY": "Terecht-Y",
       "xValue": "X-waarde:",
@@ -974,10 +986,10 @@
       "dependencePlotHelperText": "Deze afhankelijkheidsgrafiek toont de relatie van de waarden van een functie met de bijbehorende waarden voor functie-urgentie.",
       "dependencePlotTitle": "Plots met afhankelijkheden",
       "helperText": "Verken de belangrijkste functies die van invloed zijn op uw algemene modelvoorspellingen (ook wel globale uitleg). Gebruik de schuifregelaar om aflopende functie-urgenties weer te geven. Alle cohortenfunctie-urgenties worden naast elkaar weergegeven en kunnen worden uitgeschakeld door het cohort in de legenda te selecteren. Klik op een van de functies in de grafiek om een dichtheidsdiagram te zien onder de invloed van de waarden van de geselecteerde functie op de voorspelling.",
-      "infoTitle": "Additional information on aggregate feature importance",
+      "infoTitle": "Aanvullende informatie over de geaggregeerde functie-urgentie",
       "legendHelpText": "Schakel cohorten in en uit in de plot door op de legenda-items te klikken.",
       "missingParameters": "Op dit tabblad moet de parameter voor de lokale functie-urgentie worden opgegeven.",
-      "sortByCohort": "Sort by cohort",
+      "sortByCohort": "Sorteren op cohort",
       "sortBy": "Sorteren op gegevenspunt",
       "topAtoB": "Belangrijkste {0} functies op basis van hun belang",
       "viewDependencePlotFor": "Plot met afhankelijkheden weergeven voor:",
@@ -1020,15 +1032,15 @@
     },
     "Statistics": {
       "accuracy": "Nauwkeurigheid: {0}",
-      "bleuScore": "Bleu score: {0}",
-      "bertScore": "Bert score: {0}",
-      "exactMatchRatio": "Exact match ratio: {0}",
-      "rougeScore": "Rouge Score: {0}",
+      "bleuScore": "Bleu-score: {0}",
+      "bertScore": "Bert-score: {0}",
+      "exactMatchRatio": "Exacte overeenkomstverhouding: {0}",
+      "rougeScore": "Rouge-score: {0}",
       "fnr": "Percentage fout-negatief: {0}",
       "fpr": "Percentage fout-positief: {0}",
-      "hammingScore": "Hamming score: {0}",
+      "hammingScore": "Hamming-score: {0}",
       "meanPrediction": "Gemiddelde voorspelling {0}",
-      "meteorScore": "Meteor Score: {0}",
+      "meteorScore": "Meteor-score: {0}",
       "mse": "Gemiddelde kwadratische fout: {0}",
       "precision": "Precisie: {0}",
       "rSquared": "R²: {0}",
@@ -1036,10 +1048,10 @@
       "selectionRate": "Selectiefrequentie: {0}",
       "mae": "Gemiddelde absolute fout: {0}",
       "f1Score": "F1-score: {0}",
-      "samples": "Sample size: {0}",
-      "meanAveragePrecision": "Mean average precision: {0}",
-      "averagePrecision": "Average precision: {0}",
-      "averageRecall": "Average recall: {0}"
+      "samples": "Voorbeeldgrootte: {0}",
+      "meanAveragePrecision": "Gemiddelde precisie: {0}",
+      "averagePrecision": "Gemiddelde precisie: {0}",
+      "averageRecall": "Gemiddelde intrekking: {0}"
     },
     "ValidationErrors": {
       "addFilters": "Filters toevoegen",
@@ -1147,30 +1159,30 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Dashboard interpreteerbaarheid",
-      "importantWords": "Show most important words",
+      "importantWords": "Belangrijkste woorden weergeven",
       "topFeatureList": "Analyse van lijst met belangrijkste functies",
       "allButton": "ALLE FUNCTIES",
       "negButton": "NEGATIEVE FUNCTIES",
       "posButton": "POSITIEVE FUNCTIES",
-      "legendText": "Positive scalar feature importances represent the extent that the words were important towards the classification of your selected label, and negative scalar feature importances represent words that encouraged your model away from your selected label.",
-      "legendTextForQA": "The left text box and the bar chart display the predictions of the model. The right text box shows the feature importance associated with a selected token. Positive feature importances represent the extent that the words were important towards marking the selected token as the starting/ending position of the answer.",
+      "legendText": "Een positief scalaire functie-urgenties geeft aan in hoeverre de woorden belangrijk waren voor de classificatie van uw geselecteerde label. Een negatief scalaire functie-urgenties geeft aan welke woorden uw model van uw geselecteerde label wegleiden.",
+      "legendTextForQA": "Het linkertekstvak en het staafdiagram geven de voorspellingen van het model weer. Het rechtertekstvak geeft de functie-urgentie weer die is gekoppeld aan een geselecteerd token. Positieve functie-urgenties geven aan in welke mate de woorden belangrijk waren voor het markeren van het geselecteerde token als de begin-/eindpositie van het antwoord.",
       "label": "Label",
       "colon": ": ",
-      "startingPosition": "STARTING POSITION",
-      "endingPosition": "ENDING POSITION",
-      "predictedAnswer": "Predicted answer: ",
-      "trueAnswer": "True answer: ",
-      "inputs": "Inputs",
-      "outputs": "Outputs",
-      "sliderAriaLabel": "Slider for most important words"
+      "startingPosition": "BEGINPOSITIE",
+      "endingPosition": "EINDPOSITIE",
+      "predictedAnswer": "Voorspeld antwoord: ",
+      "trueAnswer": "Waar antwoord: ",
+      "inputs": "Invoer",
+      "outputs": "Uitvoer",
+      "sliderAriaLabel": "Schuifregelaar voor de belangrijkste woorden"
     },
     "Legend": {
       "featureLegend": "LEGENDA VAN TEKSTFUNCTIE",
       "posFeatureImportance": "POSITIEVE FUNCTIE-URGENTIE",
       "negFeatureImportance": "NEGATIEVE FUNCTIE-URGENTIE",
-      "cls": "CLS: start of the sentence",
-      "sep": "SEP: end of the sentence",
-      "selectedWord": "Selected word: "
+      "cls": "CLS: begin van de zin",
+      "sep": "SEP: einde van de zin",
+      "selectedWord": "Geselecteerd woord: "
     },
     "BarChart": {
       "featureImportance": "FUNCTIE-URGENTIE"
@@ -1178,76 +1190,81 @@
   },
   "InterpretVision": {
     "Cohort": {
-      "close": "Close",
-      "errorCohortName": "Please choose a unique cohort name.",
-      "errorNumSelected": "Please select at least one (1) item.",
-      "itemsSelectedSingular": "item selected",
-      "itemsSelectedPlural": "items selected",
-      "save": "Save cohort",
-      "saveAndClose": "Save and close",
-      "saveAndSwitch": "Save and switch",
-      "textField": "New cohort name",
-      "title": "Save new cohort"
+      "close": "Sluiten",
+      "errorCohortName": "Kies een unieke cohortnaam.",
+      "errorNumSelected": "Selecteer ten minste één (1) item.",
+      "itemsSelectedSingular": "item geselecteerd",
+      "itemsSelectedPlural": "items geselecteerd",
+      "save": "Cohort opslaan",
+      "saveAndClose": "Opslaan en sluiten",
+      "saveAndSwitch": "Opslaan en schakelen",
+      "textField": "Nieuwe cohortnaam",
+      "title": "Nieuw cohort opslaan"
     },
     "Dashboard": {
       "allData": "Alle gegevens",
-      "columnOne": "Image",
+      "columnOne": "Afbeelding",
       "columnTwo": "Index",
       "columnThree": "Waar Y",
       "columnFour": "Voorspelde Y",
-      "columnThreeOD": "Correct",
-      "columnFourOD": "Incorrect",
+      "columnThreeOD": "Juist",
+      "columnFourOD": "Onjuist",
       "columnFive": "Andere metagegevens",
-      "chooseObject": "Choose a detected object",
-      "examples": "examples",
+      "chooseObject": "Een gedetecteerd object kiezen",
+      "examples": "voorbeelden",
       "filter": "Filteren",
-      "indexLabel": "Image ",
-      "labelTypeDropdown": "Select label type",
-      "labelVisibilityDropdown": "Select labels to display",
-      "legendFailure": "failure",
-      "legendSuccess": "success",
-      "loading": "Computing explanation for index",
+      "indexLabel": "Afbeelding ",
+      "labelTypeDropdown": "Labeltype selecteren",
+      "labelTypeAriaLabel": "Label type",
+      "labelVisibilityDropdown": "Labels selecteren om weer te geven",
+      "labelVisibilityAriaLabel": "Label visibility",
+      "legendFailure": "mislukte poging",
+      "legendSuccess": "geslaagd",
+      "loading": "Uitleg voor installatiekopie van index berekenen",
       "multiselect": "Multiselect",
-      "notdefined": "object scenario not defined",
-      "objectSelect": "Object Selection",
+      "notdefined": "objectscenario niet gedefinieerd",
+      "objectSelect": "Objectselectie",
       "pageSize": "Paginaformaat: ",
-      "panelTitle": "Selected instance",
-      "panelExplanation": "Explanation",
-      "panelInformation": "Information",
-      "predictedLabel": "Predicted label",
-      "predictedY": "Predicted: ",
-      "correctDetections": "Correct detections: ",
-      "incorrectDetections": "Incorrect detections: ",
+      "panelTitle": "Geselecteerd exemplaar",
+      "panelExplanation": "Uitleg",
+      "panelInformation": "Informatie",
+      "predictedLabel": "Voorspeld label",
+      "predictedY": "Voorspeld: ",
+      "correctDetections": "Juiste detecties: ",
+      "incorrectDetections": "Onjuiste detecties: ",
       "prefix": "Object: ",
-      "rows": "Rows: ",
+      "rows": "Rijen: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "Zoeken",
-      "selectAll": "Select all",
+      "selectAll": "Alles selecteren",
       "settings": "Instellingen",
-      "showAll": "Show all",
+      "showAll": "Alles weergeven",
       "tabOptionFirst": "Afbeeldingsverkenner-weergave",
       "tabOptionSecond": "Tabelweergave",
-      "tabOptionThird": "Class view",
+      "tabOptionThird": "Klasseweergave",
       "thumbnailSize": "Miniatuurgrootte",
       "titleBarError": "Foutexemplaren",
       "titleBarSuccess": "Geslaagde exemplaren",
-      "trueY": "Ground truth: "
+      "trueY": "Basiswaarheid: "
     }
   },
   "ModelAssessment": {
     "AddingTab": {
       "AddButtonText": "Toevoegen",
       "CalloutContent": "Door bepaalde onderdelen toe te voegen (foutstructuurweergave, heatmap met fouten) kunt u de gegevens uit de globale cohort filteren die u in de onderstaande onderdelen ziet.",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard",
       "CalloutTitle": "Onderdeel toevoegen",
       "TabAddedMessage": {
-        "DataAnalysis": "Data analysis component added",
-        "FeatureImportances": "Feature importances component added",
-        "ErrorAnalysis": "Error analysis component added",
-        "Fairness": "Fairness component added",
-        "ModelOverview": "Model overview component added",
-        "CausalAnalysis": "Causal analysis component added",
-        "Counterfactuals": "Counterfactuals component added",
-        "Vision": "Vision data explorer component added",
-        "Forecasting": "Forecasting what-if component added"
+        "DataAnalysis": "Onderdeel voor gegevensanalyse toegevoegd",
+        "FeatureImportances": "Onderdeel voor functie-urgenties toegevoegd",
+        "ErrorAnalysis": "Onderdeel voor foutanalyse toegevoegd",
+        "Fairness": "Verdelingsonderdeel toegevoegd",
+        "ModelOverview": "Modeloverzichtsonderdeel toegevoegd",
+        "CausalAnalysis": "Oorzakelijk analyseonderdeel toegevoegd",
+        "Counterfactuals": "Onderdeel Counterfactuals toegevoegd",
+        "Vision": "Onderdeel toegevoegd aan Vision-gegevensverkenner",
+        "Forecasting": "Wat-als-onderdeel voor prognoses toegevoegd"
       }
     },
     "CausalAnalysis": {
@@ -1264,18 +1281,22 @@
     "Cohort": {
       "apply": "Toepassen",
       "delete": "Verwijderen",
+      "deleteAriaLabel": "Delete cohort",
       "cancel": "Annuleren",
+      "cancelAriaLabel": "Cancel cohort",
       "cohortInfo": "Cohortgegevens",
       "cohortList": "Cohortlijst",
       "deleteCohort": "{0}verwijderen?",
       "deleteConfirm": "Weet u zeker dat u dit cohort wilt verwijderen?",
       "selectCohort": "Een cohort selecteren",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "Cohort wisselen",
+      "shiftCohortAriaLabel": "Switch cohort",
       "shiftCohortDescription": "Selecteer een cohort in de lijst met cohorten. Pas het cohort toe op het dashboard."
     },
     "CohortInformation": {
       "ShiftCohort": "Cohort wisselen",
-      "SwitchTimeSeries": "Switch time series",
+      "SwitchTimeSeries": "Tijdreeks wisselen",
       "NewCohort": "Nieuwe cohort",
       "DataPoints": "Aantal gegevenspunten",
       "DefaultCohort": " (standaard)",
@@ -1287,7 +1308,7 @@
       "CohortSettingsTitle": "Cohortinstellingen"
     },
     "ComponentNames": {
-      "ChartView": "Chart view",
+      "ChartView": "Grafiekweergave",
       "CausalAnalysis": "Oorzakelijke analyse",
       "Counterfactuals": "Nulscenario's",
       "DataAnalysis": "Gegevensanalyse",
@@ -1296,10 +1317,10 @@
       "ErrorAnalysis": "Foutenanalyse",
       "Fairness": "Eerlijkheid",
       "FeatureImportances": "Functie-urgenties",
-      "Forecasting": "Forecasting",
+      "Forecasting": "Prognose",
       "ModelOverview": "Modeloverzicht",
-      "TableView": "Table view",
-      "VisionTab": "Vision data explorer"
+      "TableView": "Tabelweergave",
+      "VisionTab": "Vision-gegevensverkenner"
     },
     "DashboardSettings": {
       "Content": "In deze lijst wordt de indeling van het dashboard weergegeven. U kunt gegevens filteren met behulp van het foutanalyseonderdeel, dat u in de onderstaande onderdelen kunt bekijken.",
@@ -1457,17 +1478,17 @@
       "CorrectPredictions": "Juiste voorspellingen",
       "GlobalExplanation": "Functie-urgentie samenvoegen",
       "IncorrectPredictions": "Onjuiste voorspellingen",
-      "InfoTitle": "Additional information on feature importance values",
-      "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
+      "InfoTitle": "Aanvullende informatie over waarden voor functie-urgentie",
+      "IndividualFeatureTabular": "Selecteer een gegevenspunt door op een gegevenspunt (maximaal 5 gegevenspunten) in de tabel te klikken om de waarden voor de lokale functie-urgentie (lokale uitleg) en de afzonderlijke ICE-plot (voorwaardelijke verwachting) weer te geven.",
+      "IndividualFeatureText": "Selecteer een gegevenspunt door op een gegevenspunt in de tabel te klikken om de waarden van de lokale functie-urgentie weer te geven (lokale uitleg) vanuit de tekstuitlegger van SHAP.",
       "LocalExplanation": "Belang van afzonderlijke functies",
       "SelectionCounter": "{0}/{1} gegevenspunten geselecteerd",
       "SelectionLimit": "Er kunnen momenteel maximaal 5 gegevenspunten worden geselecteerd.",
-      "RowCheckboxAriaLabel": "Row checkbox",
-      "SelectionColumnAriaLabel": "Toggle selection"
+      "RowCheckboxAriaLabel": "Selectievakje Rij",
+      "SelectionColumnAriaLabel": "Selectie in-/uitschakelen"
     },
     "IndividualFeatureImportanceView": {
-      "SmallInstanceSelection": "Instance selection"
+      "SmallInstanceSelection": "Exemplaar selecteren"
     },
     "MainMenu": {
       "DashboardSettings": "Dashboardconfiguratie",
@@ -1483,44 +1504,44 @@
     "ModelOverview": {
       "metrics": {
         "accuracy": {
-          "name": "Accuracy score",
+          "name": "Nauwkeurigheidsscore",
           "description": "Het deel van de gegevenspunten dat op de juiste wijze is ingedeeld."
         },
         "exactMatchRatio": {
-          "name": "Exact match ratio",
-          "description": "The ratio of instances classified correctly for every label."
+          "name": "Exacte overeenkomstverhouding",
+          "description": "De verhouding van exemplaren die correct zijn geclassificeerd voor elk label."
         },
         "meteorScore": {
-          "name": "Meteor Score",
-          "description": "METEOR Score is calculated based on the harmonic mean of precision and recall, with recall weighted more than precision in question answering task."
+          "name": "Meteor-score",
+          "description": "De METEOR-score wordt berekend op basis van het harmonische gemiddelde van precisie en intrekken, waarbij intrekken meer gewicht heeft dan precisie bij een vraagsbeantwoordingstaak."
         },
         "bleuScore": {
-          "name": "Bleu Score",
-          "description": "Bleu Score measures the ratio of words (and/or n-grams) in the machine generated text that appeared in the reference text in question answering task."
+          "name": "Bleu-score",
+          "description": "Met de Bleu-score wordt de verhouding gemeten tussen woorden (en/of n-grammen) in de door de computer gegenereerde tekst die voorkomt in de referentietekst in een vraagsbeantwoordingstaak."
         },
         "bertScore": {
-          "name": "Bert Score",
-          "description": "BERTScore focuses on computing semantic similarity between tokens of reference and machine generated text in question answering task."
+          "name": "Bert-score",
+          "description": "BERTScore richt zich op het berekenen van semantische overeenkomsten tussen referentietokens en door de computer gegenereerde tekst in een vraagsbeantwoordingstaak."
         },
         "rougeScore": {
-          "name": "Rouge Score",
-          "description": "Rouge Score measures the ratio of words (and/or n-grams) in the reference text that appeared in the machine generated text in question answering task."
+          "name": "Rouge-score",
+          "description": "Met de Rouge-score wordt de verhouding gemeten tussen woorden (en/of n-grammen) in de door de computer gegenereerde tekst in een vraagsbeantwoordingstaak."
         },
         "hammingScore": {
-          "name": "Hamming score",
-          "description": "The average ratio of labels classified correctly among those classified as 1 in multilabel task."
+          "name": "Hamming-score",
+          "description": "De gemiddelde verhouding van labels die correct zijn geclassificeerd waaronder die zijn geclassificeerd als 1 in een taak met meerdere labels."
         },
         "f1Score": {
           "name": "F1-score",
           "description": "De F1-score is het harmonische gemiddelde van precisie en treffactor."
         },
         "f1ScoreMacro": {
-          "name": "Macro F1 score",
-          "description": "Macro F1 score is the harmonic mean of precision and recall for each class, with each class weighted equally."
+          "name": "Macro F1-score",
+          "description": "Macro F1-score is het harmonische gemiddelde van precisie en intrekken voor elke klasse, waarbij elke klasse gelijk wordt gewogen."
         },
         "f1ScoreMicro": {
-          "name": "Micro F1 score",
-          "description": "Micro F1 score is the harmonic mean of precision and recall for each class, with each class weighted according to how many instances it contains."
+          "name": "Micro F1-score",
+          "description": "Micro F1-score is het harmonische gemiddelde van precisie en intrekken voor elke klasse, waarbij elke klasse wordt gewogen op basis van het aantal exemplaren dat deze bevat."
         },
         "meanAbsoluteError": {
           "name": "Gemiddelde absolute fout",
@@ -1535,24 +1556,24 @@
           "description": "Het deel van de gegevenspunten dat correct is geclassificeerd van alle gegevenspunten die als 1 zijn geclassificeerd."
         },
         "precisionMacro": {
-          "name": "Macro Precision score",
-          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted equally."
+          "name": "Macroprecisiescore",
+          "description": "Het deel van de gegevenspunten dat correct is geclassificeerd waaronder die als 1 zijn geclassificeerd, voor elke klasse met elke klasse en dat gelijk is gewogen."
         },
         "precisionMicro": {
-          "name": "Micro Precision score",
-          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted according to how many instances it contains."
+          "name": "Microprecisiescore",
+          "description": "Het deel van de gegevenspunten dat correct is geclassificeerd waaronder die zijn geclassificeerd als 1 voor elke klasse met elke klasse, waarbij elke klasse wordt gewogen op basis van het aantal exemplaren dat het bevat."
         },
         "recall": {
           "name": "Score intrekken",
           "description": "Het deel van de gegevenspunten dat correct is geclassificeerd van alle gegevenspunten waarvan het werkelijke label 1 is. Alternatieve benamingen: frequentie terecht-positieven, gevoeligheid."
         },
         "recallMacro": {
-          "name": "Macro Recall score",
-          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted equally."
+          "name": "Score voor intrekken van macro's",
+          "description": "Het deel van de gegevenspunten dat correct is geclassificeerd waaronder die waarvan het label Waar 1 is voor elke klasse met elke klasse en dat gelijk is gewogen."
         },
         "recallMicro": {
-          "name": "Micro Recall score",
-          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted according to how many instances it contains."
+          "name": "Score voor intrekken van micro's",
+          "description": "Het deel van de gegevenspunten dat correct is geclassificeerd waaronder die waarvan het label Waar 1 is voor elke klasse met elke klasse, gewogen op basis van het aantal exemplaren dat het bevat."
         },
         "falsePositiveRate": {
           "name": "Percentage fout-positief",
@@ -1571,32 +1592,32 @@
           "description": "Het gemiddelde van alle voorspellingen."
         },
         "meanAveragePrecision": {
-          "name": "Mean Average Precision score",
-          "description": "Mean average precision for object detection models is the average of AP (average precision) across all classes. This evaluates the robustness of your object detection model and encapsulates the tradeoff between precision and recall."
+          "name": "Gemiddelde precisiescore",
+          "description": "Gemiddelde precisie voor objectdetectiemodellen is het gemiddelde van AP (gemiddelde precisie) in alle klassen. Hiermee wordt de robuustheid van uw objectdetectiemodel geëvalueerd en omsluit de afweging tussen precisie en intrekken."
         },
         "averagePrecision": {
-          "name": "Average Precision score",
-          "description": "Average precision for object detection models is calculated for a selected class."
+          "name": "Gemiddelde precisiescore",
+          "description": "Gemiddelde precisie voor objectdetectiemodellen wordt berekend voor een geselecteerde klasse."
         },
         "averageRecall": {
-          "name": "Average Recall score",
-          "description": "Average recall for object detection models is calculated for a selected class."
+          "name": "Gemiddelde score voor intrekken",
+          "description": "Gemiddelde precisie voor objectdetectiemodellen wordt berekend voor een geselecteerde klasse."
         },
         "fairnessMetricDifference": "Verschil",
         "fairnessMetricRatio": "Verhouding"
       },
       "metricsDropdown": "Metrische waarde(n)",
-      "metricsTypeDropdown": "Aggregate method",
+      "metricsTypeDropdown": "Aggregatiemethode",
       "metricTypes": {
         "macro": "Macro",
         "micro": "Micro"
       },
-      "classSelectionDropdown": "Select class(es)",
+      "classSelectionDropdown": "Klasse(n) selecteren",
       "iouThresholdDropdown": {
-        "name": "IoU Threshold",
-        "description": "Intersection over Union quantifies the degree of overlap between the prediction and ground truth bounding box of a detected object in an image. For example, setting an IoU threshold of 70% means that a prediction with greater than 70% overlap with ground truth is True, thus influencing the definition of prediction correctness and calculation of other performance metrics.",
+        "name": "IoU-drempelwaarde",
+        "description": "Doorsnede over Vereniging is de mate van overlap tussen de voorspelde en de basiswaarheidsgrens van een gedetecteerd object in een afbeelding. Als een IoU-drempel bijvoorbeeld wordt ingesteld op 70%, houdt dit in dat een voorspelling met een overlap van meer dan 70% met de basiswaarheid Waar is en dit is van invloed is op de definitie van de juistheid van de voorspelling en de berekening van andere metrische prestatiegegevens.",
         "iconId": "iouThresholdIconId",
-        "title": "Learn about the IoU threshold"
+        "title": "Meer informatie over de IoU-drempel"
       },
       "notAvailable": "N.v.t.",
       "countColumnHeader": "Steekproefgrootte",
@@ -1608,14 +1629,14 @@
       "featuresDropdown": "Functie(s)",
       "metricChartDropdownSelectionHeader": "Metrische gegevens",
       "probabilityForClassSelectionHeader": "Waarschijnlijkheid voor klasse",
-      "targetSelectionHeader": "Target",
+      "targetSelectionHeader": "Doel",
       "metricSelectionDropdownPlaceholder": "Selecteer metrische gegevens om uw cohorten te vergelijken.",
-      "classSelectionDropdownPlaceholder": "Select class name for class-based analysis.",
+      "classSelectionDropdownPlaceholder": "Selecteer de klassenaam voor analyse op basis van klassen.",
       "featureSelectionDropdownPlaceholder": "Selecteer functies die u wilt gebruiken voor een analyse op basis van functies.",
       "probabilityDistributionPivotItem": "Kansverdeling",
-      "regressionDistributionPivotItem": "Target distribution",
+      "regressionDistributionPivotItem": "Doeldistributie",
       "metricsVisualizationsPivotItem": "Visualisaties van metrische gegevens",
-      "confusionMatrixPivotItem": "Confusion matrix",
+      "confusionMatrixPivotItem": "Verwarringsmatrix",
       "disaggregatedAnalysisFeatureSelectionPlaceholder": "Selecteer functies om de analyse op basis van functies te genereren.",
       "tableCountTooltip": "Cohort {0} bevat {1} instanties.",
       "tableMetricTooltip": "De {0} van het model op cohort {1} is {2}",
@@ -1626,36 +1647,36 @@
       "metricSelectionButton": "Metrische gegevens kiezen",
       "cohortSelectionButton": "Cohorten kiezen",
       "probabilityLabelSelectionButton": "Label kiezen",
-      "regressionTargetSelectionButton": "Choose target",
+      "regressionTargetSelectionButton": "Doel kiezen",
       "selectAllCohortsOption": "Alles selecteren",
       "other": "Overige",
       "BoxPlot": {
         "outlierProbability": "waarschijnlijkheid",
         "outlierLabel": "Uitbijters",
         "boxPlotSeriesLabel": "Boxplot",
-        "lowerWhisker": "Lower whisker",
-        "upperWhisker": "Upper whisker",
-        "median": "Median",
-        "lowerQuartile": "Lower quartile",
-        "upperQuartile": "Upper quartile"
+        "lowerWhisker": "Onderste whisker",
+        "upperWhisker": "Bovenste whisker",
+        "median": "Mediaan",
+        "lowerQuartile": "Onderste kwartiel",
+        "upperQuartile": "Bovenste kwartiel"
       },
       "chartConfigApply": "Toepassen",
       "chartConfigCancel": "Annuleren",
       "chartConfigDatasetCohortSelectionPlaceholder": "Cohorten voor gegevensset selecteren",
       "chartConfigFeatureBasedCohortSelectionPlaceholder": "Cohorten op basis van functies selecteren",
       "confusionMatrix": {
-        "confusionMatrixCohortSelectionLabel": "Select dataset cohort",
-        "confusionMatrixClassSelectionLabel": "Select classes",
-        "confusionMatrixClassMinSelectionError": "Select at least {0} classes to visualize the confusion matrix.",
-        "confusionMatrixClassMaxSelectionError": "Select at most {0} classes to visualize the confusion matrix.",
-        "confusionMatrixClassSelectionDefaultPlaceholder": "Choose classes",
-        "confusionMatrixHeatmapTooltip": "{0} datapoints should be {1}, predicted to be {2}",
-        "confusionMatrixYAxisLabel": "True Class",
-        "confusionMatrixXAxisLabel": "Predicted Class",
-        "class": "Class"
+        "confusionMatrixCohortSelectionLabel": "Cohort voor gegevensset selecteren",
+        "confusionMatrixClassSelectionLabel": "Klassen selecteren",
+        "confusionMatrixClassMinSelectionError": "Selecteer ten minste {0} klassen om de verwarringsmatrix te visualiseren.",
+        "confusionMatrixClassMaxSelectionError": "Selecteer ten minste {0} klassen om de verwarringsmatrix te visualiseren.",
+        "confusionMatrixClassSelectionDefaultPlaceholder": "Klassen kiezen",
+        "confusionMatrixHeatmapTooltip": "{0} gegevenspunten moeten worden {1}, voorspeld als {2}",
+        "confusionMatrixYAxisLabel": "Klasse Waar",
+        "confusionMatrixXAxisLabel": "Voorspelde klasse",
+        "class": "Klasse"
       },
       "nA": "N.v.t.",
-      "disaggregatedAnalysisBaseCohortDisclaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
+      "disaggregatedAnalysisBaseCohortDisclaimer": "De cohorten in de volgende analyse op basis van functies zijn gebaseerd op het globale cohort, {0}.",
       "disaggregatedAnalysisBaseCohortWarning": "In tegenstelling tot het {0} cohort bevat {1} filters. Als gevolg hiervan wordt alleen een subset van de hele gegevensset vastgelegd en kunnen inzichten mogelijk niet generaliseren naar de volledige gegevensset.",
       "probabilitySplineChartToggleLabel": "Spline-grafiek gebruiken",
       "countAxisLabel": "Aantal",
@@ -1665,7 +1686,11 @@
         "flyoutHeader": "Kies uw functies",
         "flyoutSubHeader": "Voor welke functies wilt u de eerlijkheid van uw model evalueren?",
         "flyoutDescription": "Evenredigheid wordt geëvalueerd in termen van beoordeling van het gedrag van uw model. We splitsen uw gegevens op basis van de waarden van elke geselecteerde functie en evalueren hoe de metrische gegevens prestaties van uw model verschillen in deze splitsingen.",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "Functies",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "Groepen",
         "categoricalGroupsCountRemark": "Deze functie heeft {0} unieke waarden.",
         "continuousGroupsCountRemark": "Deze functie is doorlopend en opgesplitst in {0} opslaglocaties.",
@@ -1685,76 +1710,78 @@
         "flyoutDescription": "U kunt ervoor kiezen om cohorten van gegevenssets of van functies weer te geven. Als functie-cohorten niet beschikbaar zijn, moet u eerst een of meer functies selecteren in de weergave voor functie-cohorten. Vervolgens worden functie-cohorten gegenereerd en kunt u deze hier selecteren."
       },
       "regressionTargetOptions": {
-        "predictedY": "Predicted Y",
-        "trueY": "True Y",
-        "error": "Error"
+        "predictedY": "Voorspelde Y",
+        "trueY": "Ware Y",
+        "error": "Fout"
       },
       "topLevelDescription": "Evalueer de prestaties van uw model door de distributie van uw voorspellingswaarden en de waarden van de metrische gegevens over de prestaties van uw model te verkennen. Gebruik het tabblad Gegevensset-cohorten om uw model te onderzoeken door te kijken naar een relatieve analyse van de prestaties in verschillende vooraf gebouwde of nieuw gemaakte gegevensset-cohorten. Gebruik de Functie-cohorten om uw model te onderzoeken door te kijken naar een relatieve analyse van de prestaties van gevoelige/niet-gevoelige Functie-subcohorten. (bijvoorbeeld prestaties voor verschillende geslachten, inkomstenniveaus).",
-      "infoTitle": "Additional information on model overview",
+      "infoTitle": "Aanvullende informatie over modeloverzicht",
       "visualDisplayToggleLabel": "Heatmap weergeven",
       "featureBasedViewDescription": "Selecteer maximaal twee functies om de uitsplitsing van de modelprestaties te zien over op functies gebaseerde cohorten (als één functie is geselecteerd) of intersectionele cohorten (als er twee functies zijn geselecteerd)."
     },
     "TableViewTab": {
-      "Heading": "View the dataset in a table format for all features and rows."
+      "Heading": "De gegevensset weergeven in een tabelindeling voor alle functies en rijen."
     }
   },
   "Forecasting": {
-    "target": "Target",
-    "whatIfForecastingHeader": "What-if analysis",
-    "forecastHeader": "Forecast analysis",
-    "whatIfForecastingDescription": "What-if allows you to perturb features for your entire time series and observe how the model's forecast changes.",
-    "whatIfForecastingChooseTimeSeries": "To start, choose a time series from the options below.",
-    "forecastDescription": "Forecast analysis compares your model's forecast to the actual values of your time series. To enable what-if analysis, provide a dataset with features.",
-    "timeSeries": "Time series",
-    "selectTimeSeries": "Select a time series.",
-    "singleTimeSeries": "The dataset contains only a single time series '{0}' which has been selected by default.",
-    "trueY": "True Y",
-    "baselinePrediction": "Baseline prediction",
-    "forecastComparisonHeader": "Compare What-if Forecasts",
-    "forecastComparisonChartTitle": "Forecasts",
-    "forecastComparisonChartTimeAxisLabel": "Time",
+    "target": "Doel",
+    "whatIfForecastingHeader": "Wat-als-analyse",
+    "forecastHeader": "Prognoseanalyse",
+    "whatIfForecastingDescription": "Met Wat-als kunt u functies voor uw hele tijdreeks verstoren en zien hoe de prognose van het model verandert.",
+    "whatIfForecastingChooseTimeSeries": "Kies een tijdreeks uit de onderstaande opties om te beginnen.",
+    "forecastDescription": "De prognoseanalyse vergelijkt de prognose van uw model met de werkelijke waarden van uw tijdreeks. Geef een gegevensset met functies op om wat-als-analyse in te schakelen.",
+    "timeSeries": "Tijdreeks",
+    "selectTimeSeries": "Een tijdreeks selecteren.",
+    "singleTimeSeries": "De gegevensset bevat slechts één tijdreeks {0} die standaard is geselecteerd.",
+    "trueY": "Ware Y",
+    "baselinePrediction": "Basislijnvoorspelling",
+    "forecastComparisonHeader": "Wat-als-prognoses vergelijken",
+    "forecastComparisonChartTitle": "Prognoses",
+    "forecastComparisonChartTimeAxisLabel": "Tijd",
     "Transformations": {
-      "multiply": "multiply",
-      "divide": "divide",
-      "add": "add",
-      "subtract": "subtract",
-      "change": "change to"
+      "multiply": "vermenigvuldigen",
+      "divide": "delen",
+      "add": "optellen",
+      "subtract": "aftrekken",
+      "change": "wijzigen in"
     },
     "TransformationCreation": {
-      "title": "Create what-if scenario",
-      "nameLabel": "What-if scenario name",
-      "featureInstructions": "Choose a feature to perturb.",
-      "operationInstructions": "Choose an operation to apply to the feature.",
-      "operationDropdownHeader": "Operation",
-      "featureDropdownHeader": "Feature",
-      "valueSpinButtonHeader": "Value",
-      "scenarioNamingInstructionsPlaceholder": "Enter a unique name",
-      "scenarioNamingInstructions": "Enter a name for your what-if scenario.",
-      "scenarioNamingCollisionMessage": "This name exists already. Please enter a unique name.",
-      "scenarioNamingLengthMessage": "The name must be between 1 and 50 characters. The actual length is {0}.",
-      "scenarioNamingInvalidCharactersMessage": "The name can only contain alphanumeric characters, whitespaces, dashes, or underscores, and needs to start with an alphanumeric character.",
-      "valueErrorMessage": "For operation {0} please select a value other than {1}.",
-      "invalidCombinationErrorMessage": "This is identical to an existing what-if scenario. Please change the feature, operation, or value.",
-      "addTransformationButton": "Add Transformation",
-      "divisionAndMultiplicationBy": "by"
+      "title": "Wat-als-scenario maken",
+      "nameLabel": "Wat-als-scenarionaam",
+      "featureInstructions": "Kies een functie die u wilt verstoren.",
+      "operationInstructions": "Kies een bewerking om toe te passen op de functie.",
+      "operationDropdownHeader": "Bewerking",
+      "featureDropdownHeader": "Functie",
+      "valueSpinButtonHeader": "Waarde",
+      "scenarioNamingInstructionsPlaceholder": "Voer een unieke naam in",
+      "scenarioNamingInstructions": "Voer een naam in voor uw wat-als-scenario.",
+      "scenarioNamingCollisionMessage": "Deze naam bestaat al. Voer een unieke naam in.",
+      "scenarioNamingLengthMessage": "De naam moet tussen 1 en 50 tekens lang zijn. De huidige lengte is {0}.",
+      "scenarioNamingInvalidCharactersMessage": "De naam mag alleen alfanumerieke tekens, spaties, streepjes of onderstrepingstekens bevatten en moet beginnen met een alfanumeriek teken.",
+      "valueErrorMessage": "Selecteer voor de bewerking {0} selecteert u een andere waarde dan {1}.",
+      "invalidCombinationErrorMessage": "Dit is identiek aan een bestaand wat-als-scenario. Wijzig de functie, bewerking of waarde.",
+      "addTransformationButton": "Transformatie toevoegen",
+      "divisionAndMultiplicationBy": "per"
     },
     "TransformationTable": {
-      "nameColumnHeader": "Name",
-      "methodColumnHeader": "Method",
-      "divisionAndMultiplicationBy": "by ",
-      "header": "What-if Forecasts ({0})"
+      "nameColumnHeader": "Naam",
+      "methodColumnHeader": "Methode",
+      "divisionAndMultiplicationBy": "per ",
+      "header": "Wat als-prognoses ({0})"
     },
     "TimeSeries": {
-      "apply": "Apply",
-      "cancel": "Cancel",
-      "cohortList": "Time series list",
-      "selectCohort": "Select a time series",
-      "shiftCohort": "Switch time series",
-      "shiftCohortDescription": "Select a time series from the time series list. Apply the time series to the dashboard."
+      "apply": "Toepassen",
+      "cancel": "Annuleren",
+      "cohortList": "Lijst met tijdreeksen",
+      "selectCohort": "Een tijdreeks selecteren",
+      "selectCohortAriaLabel": "Time series selection",
+      "shiftCohort": "Tijdreeks wisselen",
+      "shiftCohortAriaLabel": "Switch time series",
+      "shiftCohortDescription": "Selecteer een tijdreeks in de lijst met tijdreeksen. Pas de tijdreeks toe op het dashboard."
     },
     "TimeSeriesSettings": {
-      "CohortSettingsDescription": "Time series are pre-defined based on time series identifying columns.",
-      "CohortSettingsTitle": "Time series settings"
+      "CohortSettingsDescription": "Tijdreeksen zijn vooraf gedefinieerd op basis van tijdreeksen die kolommen identificeren.",
+      "CohortSettingsTitle": "Tijdreeksinstellingen"
     }
   }
 }

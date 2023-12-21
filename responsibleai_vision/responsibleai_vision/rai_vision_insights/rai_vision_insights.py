@@ -37,7 +37,7 @@ from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
 from responsibleai.serialization_utilities import serialize_json_safe
 from responsibleai_vision.common.constants import (CommonTags,
                                                    ExplainabilityDefaults,
-                                                   ImageColumns,
+                                                   ImageColumns, ImageModes,
                                                    MLFlowSchemaLiterals,
                                                    ModelTask)
 from responsibleai_vision.managers.error_analysis_manager import \
@@ -135,7 +135,7 @@ class RAIVisionInsights(RAIBaseInsights):
                  classes: Optional[np.ndarray] = None,
                  serializer: Optional[Any] = None,
                  maximum_rows_for_test: int = 5000,
-                 image_mode: str = "RGB",
+                 image_mode: str = ImageModes.RGB,
                  test_data_path: Optional[str] = None,
                  transformations: Optional[Any] = None,
                  image_downloader: Optional[Any] = None,
@@ -267,7 +267,7 @@ class RAIVisionInsights(RAIBaseInsights):
             serializer)
 
         ext_test, ext_features = extract_features(
-            self.test, self.target_column, self.task_type,
+            self.test, self.target_column,
             self.image_mode,
             self._feature_metadata)
         self._ext_test = ext_test
@@ -650,6 +650,8 @@ class RAIVisionInsights(RAIBaseInsights):
         for _, image in enumerate(images):
             if isinstance(image, str):
                 image = get_image_from_path(image, self.image_mode)
+            if isinstance(image, list):
+                image = np.array(image)
             s = io.BytesIO()
             # IMshow only accepts floats in range [0, 1]
             try:
@@ -787,7 +789,8 @@ class RAIVisionInsights(RAIBaseInsights):
             object_labels_lst = [0] * len(class_names)
             for detection in image:
                 # tracking number of same objects in the image
-                object_labels_lst[int(detection[0] - 1)] += 1
+                object_index = int(detection[0] - 1)
+                object_labels_lst[object_index] += 1
             formatted_labels.append(object_labels_lst)
 
         return formatted_labels
@@ -855,11 +858,12 @@ class RAIVisionInsights(RAIBaseInsights):
             os.makedirs(mltable_directory, exist_ok=True)
             mltable_data_dict = {}
             if self.test_mltable_path:
-                mltable_dir = self.test_mltable_path.split('/')[-1]
+                test_mltable_path = Path(self.test_mltable_path)
+                mltable_dir = test_mltable_path.name
                 mltable_data_dict[_TEST_MLTABLE_PATH] = mltable_dir
                 test_dir = mltable_directory / mltable_dir
                 shutil.copytree(
-                    Path(self.test_mltable_path), test_dir
+                    test_mltable_path, test_dir
                 )
             if mltable_data_dict:
                 dict_path = mltable_directory / _MLTABLE_METADATA_FILENAME
@@ -1095,12 +1099,14 @@ class RAIVisionInsights(RAIBaseInsights):
             mltable_dict = {}
             with open(mltable_dict_path, 'r') as file:
                 mltable_dict = json.load(file)
-
             if mltable_dict.get(_TEST_MLTABLE_PATH, ''):
                 inst.test_mltable_path = str(mltable_directory / mltable_dict[
                     _TEST_MLTABLE_PATH])
                 test_dataset = inst._image_downloader(inst.test_mltable_path)
                 inst.test = test_dataset._images_df
+                if inst.task_type == ModelTask.OBJECT_DETECTION.value:
+                    inst.test = transform_object_detection_labels(
+                        inst.test, target_column, inst._classes)
 
     @staticmethod
     def _load_transformations(inst, path):
@@ -1183,14 +1189,17 @@ class RAIVisionInsights(RAIBaseInsights):
             device = torch.device(self.device)
         normalized_iou_threshold = [iou_threshold / 100.0]
         all_cohort_metrics = []
+        all_cohort_classes = []
         for cohort_indices in selection_indexes:
             key = ','.join([str(cid) for cid in cohort_indices] +
                            [aggregate_method, class_name, str(iou_threshold)])
             if key in object_detection_cache:
                 all_cohort_metrics.append(object_detection_cache[key])
+                all_cohort_classes.append([class_name])
                 continue
 
             metric_OD = MeanAveragePrecision(
+                average=aggregate_method.lower(),
                 class_metrics=True,
                 iou_thresholds=normalized_iou_threshold).to(device)
             true_y_cohort = [true_y[cohort_index] for cohort_index
@@ -1236,6 +1245,7 @@ class RAIVisionInsights(RAIBaseInsights):
             # to catch if the class is not in the cohort
             if class_name not in cohort_classes:
                 all_cohort_metrics.append([-1, -1, -1])
+                all_cohort_classes.append([class_name])
             else:
                 metric_OD.update(cohort_pred,
                                  cohort_gt)
@@ -1257,4 +1267,5 @@ class RAIVisionInsights(RAIBaseInsights):
                 all_submetrics = [[mAP, APs[i], ARs[i]]
                                   for i in range(len(APs))]
                 all_cohort_metrics.append(all_submetrics)
-        return [all_cohort_metrics, cohort_classes]
+                all_cohort_classes.append(cohort_classes)
+        return [all_cohort_metrics, all_cohort_classes]

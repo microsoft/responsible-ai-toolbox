@@ -127,6 +127,15 @@ export class SidePanel extends React.Component<
                   this.props.chartProps.colorAxis.property
                 ].label
               }
+              ariaLabel={
+                this.props.chartProps.colorAxis
+                  ? `${localization.Interpret.DatasetExplorer.colorValue} - ${
+                      this.props.jointDataset.metaDict[
+                        this.props.chartProps.colorAxis.property
+                      ].label
+                    }`
+                  : localization.Interpret.DatasetExplorer.colorValue
+              }
             />
             <div className={classNames.legendAndText}>
               {colorSeries?.length && (

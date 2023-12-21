@@ -227,6 +227,10 @@ export class ChartConfigurationFlyout extends React.Component<
                 .chartConfigDatasetCohortSelectionPlaceholder
             }
             disabled={!this.state.datasetCohortViewIsNewlySelected}
+            ariaLabel={
+              localization.ModelAssessment.ModelOverview
+                .dataCohortsChartSelectionHeader
+            }
           />
           {this.props.featureBasedCohorts.length > 0 && (
             <Dropdown
@@ -250,6 +254,10 @@ export class ChartConfigurationFlyout extends React.Component<
                   .chartConfigFeatureBasedCohortSelectionPlaceholder
               }
               disabled={this.state.datasetCohortViewIsNewlySelected}
+              ariaLabel={
+                localization.ModelAssessment.ModelOverview
+                  .featureBasedCohortsChartSelectionHeader
+              }
             />
           )}
         </Stack>
@@ -282,10 +290,16 @@ export class ChartConfigurationFlyout extends React.Component<
             this.state.newlySelectedDatasetCohorts,
             this.state.newlySelectedFeatureBasedCohorts
           )}
+          ariaLabel={
+            localization.ModelAssessment.ModelOverview.chartConfigApply
+          }
         />
         <DefaultButton
           onClick={this.onDismiss}
           text={localization.ModelAssessment.ModelOverview.chartConfigCancel}
+          ariaLabel={
+            localization.ModelAssessment.ModelOverview.chartConfigCancel
+          }
         />
       </Stack>
     );

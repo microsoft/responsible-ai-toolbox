@@ -113,6 +113,7 @@
     },
     "ShiftCohort": {
       "apply": "Använda",
+      "applyAriaLabel": "Använd kohort",
       "cancel": "Avbryt",
       "title": "Byt kohort",
       "subText": "Välj en kohort från kohort-listan. Tillämpa kohorten på instrumentpanelen.",
@@ -129,6 +130,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Kontrafaktiskt",
     "CurrentTreatment": "Aktuell behandling",
     "EffectLowerBound": "CI lower",
     "EffectOfTreatment": "Rekommendationens verkan",
@@ -154,6 +156,7 @@
     "counterfactualName": "Kontrafaktual namn för konsekvensgranskning",
     "createWhatIfCounterfactual": "Skapa kontrafaktual namn för konsekvensgranskning",
     "createCounterfactual": "Kontrafaktiskt",
+    "counterfactualAriaLabel": "Kontrafaktiskt skapande",
     "revertToBubbleChart": "Visa bubbeldiagram",
     "createOwn": "Skapa din egen kontrafaktiska villkorssats:",
     "currentClass": "Aktuell klass",
@@ -188,8 +191,8 @@
   },
   "DataAnalysis": {
     "TableView": {
-      "description": "View the dataset in a table representation with the ground truth and predicted labels. The table is separated into sub-tables of correct and incorrect predictions.",
-      "infoTitle": "Additional information on table view"
+      "description": "Visa datamängdem i en tabellrepresentation med grundsanningen och förutsagda etiketter. Tabellen är uppdelad i undertabeller med korrekta och felaktiga förutsägelser.",
+      "infoTitle": "Ytterligare information om tabellvyn"
     }
   },
   "ErrorAnalysis": {
@@ -474,11 +477,13 @@
     },
     "BinDialog": {
       "cancel": "Avbryt",
+      "cancelAriaLabel": "Avbryt gruppering",
       "categoryHeader": "Diskretiserade värden:",
       "header": "Konfigurera diskretiseringar",
       "makeCategorical": "Hantera som kategoriskt",
       "numberOfBins": "Antal diskretiseringar:",
-      "save": "Spara"
+      "save": "Spara",
+      "saveAriaLabel": "Spara gruppering"
     },
     "DropdownHeaders": {
       "errorMetric": "Aktivera felstaplar",
@@ -683,6 +688,7 @@
       "backToComparisons": "Tillbaka till alla modeller",
       "backToComparisonsLegacy": "Multimodellvy",
       "chartChoiceDropdownHeader": "Diagram",
+      "chartChoiceAriaLabel": "Val av diagram",
       "classificationOutcomesHowToRead": "I stapeldiagrammet visas markeringshastigheten i varje grupp, vilket innebär fraktionen punkter som klassificeras som 1.",
       "classificationPerformanceHowToRead1": "Stapeldiagrammet visar distributionen av fel i varje grupp.",
       "classificationPerformanceHowToRead2": "Fel delas upp i överskattningsfel (förutsäger 1 när den sanna etiketten är 0) och underskattningsfel (förutsäger 0 när den sanna etiketten är 1).",
@@ -831,8 +837,10 @@
       },
       "TreatAsCategorical": "Hantera som kategoriskt",
       "addFilter": "Lägg till filter",
+      "addFilterAriaLabel": "Lägg till kohortfilter",
       "addedFilters": "Filter",
       "cancel": "Avbryt",
+      "cancelAriaLabel": "Avbryta kohort",
       "cancelExistingCohort": "Vill du avbryta redigeringen av en ny kohort och gå tillbaka?",
       "cancelNewCohort": "Vill du avbryta skapandet av en ny kohort och gå tillbaka?",
       "cancelNo": "Nej",
@@ -845,11 +853,13 @@
       "clearAllFilters": "Rensa alla filter",
       "defaultFilterState": "Välj ett filter för att lägga till parametrar till din datauppsättningskohort. Filter från din aktuella visningskohort är förifyllda.",
       "delete": "Ta bort",
+      "deleteAriaLabel": "Ta bort kohort",
       "invalidValueError": "Värdet måste vara mellan {0} och {1}",
       "minimumGreaterThanMaximum": "Minsta värdeindata måste vara mindre än maximala värdeindata.",
       "noAddedFilters": "Inga filter",
       "placeholderName": "Kohort {0}",
       "save": "Spara",
+      "saveAriaLabel": "Spara kohort",
       "saveAndSwitch": "Spara och växla",
       "selectFilter": "Välj filter",
       "noFiltersApplied": "Inga filter används",
@@ -890,7 +900,7 @@
       "individualDatapoints": "Enskilda datapunkter",
       "missingParameters": "Den här fliken kräver att en utvärderingsdatauppsättning anges.",
       "noColor": "Inget",
-      "datasetCohortDropdown": "Listruta för datamängdskohort"
+      "datasetCohortDropdown": "Datamängdskohort"
     },
     "DependencePlot": {
       "featureImportanceOf": "Funktionsprioritet för",
@@ -906,6 +916,8 @@
       "index": "Index",
       "output": "Utdata",
       "predictedY": "Förutsade Y",
+      "odIncorrect": "Fel",
+      "odCorrect": "Korrekt",
       "probabilityLabel": "Sannolikhet: {0}",
       "trueY": "Sant Y",
       "xValue": "X-värde:",
@@ -1147,7 +1159,7 @@
   "InterpretText": {
     "View": {
       "interpretibilityDashboard": "Instrumentpanel för tolkning",
-      "importantWords": "Show most important words",
+      "importantWords": "Visa de viktigaste orden",
       "topFeatureList": "Analys av toppfunktionslistan",
       "allButton": "ALLA FUNKTIONER",
       "negButton": "NEGATIVA FUNKTIONER",
@@ -1162,7 +1174,7 @@
       "trueAnswer": "Sant svar: ",
       "inputs": "Indata",
       "outputs": "Utdata",
-      "sliderAriaLabel": "Slider for most important words"
+      "sliderAriaLabel": "Skjutreglage för de viktigaste orden"
     },
     "Legend": {
       "featureLegend": "FÖRKLARING AV TEXTFUNKTION",
@@ -1195,18 +1207,20 @@
       "columnTwo": "Index",
       "columnThree": "Sant Y",
       "columnFour": "Förutsade Y",
-      "columnThreeOD": "Correct",
-      "columnFourOD": "Incorrect",
+      "columnThreeOD": "Korrekt",
+      "columnFourOD": "Fel",
       "columnFive": "Andra metadata",
       "chooseObject": "Välj ett identifierat objekt",
       "examples": "exempel",
       "filter": "Filter",
       "indexLabel": "Bild ",
       "labelTypeDropdown": "Välj etiketttyp",
+      "labelTypeAriaLabel": "Etiketttyp",
       "labelVisibilityDropdown": "Välj etiketter som ska visas",
+      "labelVisibilityAriaLabel": "Etikettsynlighet",
       "legendFailure": "fel",
       "legendSuccess": "lyckades",
-      "loading": "Beräkningsförklaring för index",
+      "loading": "Beräkningsförklaring för bild av index",
       "multiselect": "Flera markeringar",
       "notdefined": "objektscenariot har inte definierats",
       "objectSelect": "Val av objekt",
@@ -1216,10 +1230,11 @@
       "panelInformation": "Information",
       "predictedLabel": "Förväntad etikett",
       "predictedY": "Förutsagt: ",
-      "correctDetections": "Correct detections: ",
-      "incorrectDetections": "Incorrect detections: ",
+      "correctDetections": "Korrekta identifieringar: ",
+      "incorrectDetections": "Felaktiga identifieringar: ",
       "prefix": "Objekt: ",
       "rows": "Rader: ",
+      "rowsAriaLabel": "Antal rader per sida",
       "search": "Sök",
       "selectAll": "Välj allt",
       "settings": "Inställningar",
@@ -1237,6 +1252,8 @@
     "AddingTab": {
       "AddButtonText": "Lägg till",
       "CalloutContent": "När du lägger till vissa komponenter (fel trädsvy, fel heatmap) kan du filtrera data från den globala kohorten som visas i komponenterna nedan.",
+      "AddComponentAriaLabel": "Lägg till instrumentpanelskomponent",
+      "AddButtonAriaLabel": "Lägg till instrumentpanel",
       "CalloutTitle": "Lägg till komponent",
       "TabAddedMessage": {
         "DataAnalysis": "Dataanalyskomponent har lagts till",
@@ -1264,13 +1281,17 @@
     "Cohort": {
       "apply": "Använda",
       "delete": "Ta bort",
+      "deleteAriaLabel": "Ta bort kohort",
       "cancel": "Avbryt",
+      "cancelAriaLabel": "Avbryta kohort",
       "cohortInfo": "Kohortinformation",
       "cohortList": "Kohortlista",
       "deleteCohort": "Tar du bort {0}?",
       "deleteConfirm": "Vill du ta bort den här kohorten?",
       "selectCohort": "Välj en kohort",
+      "selectCohortAriaLabel": "Kohortval",
       "shiftCohort": "Byt kohort",
+      "shiftCohortAriaLabel": "Byt kohort",
       "shiftCohortDescription": "Välj en kohort från kohort-listan. Tillämpa kohorten på instrumentpanelen."
     },
     "CohortInformation": {
@@ -1457,9 +1478,9 @@
       "CorrectPredictions": "Korrigera förutsägelser",
       "GlobalExplanation": "Mängdfunktionsprioritet",
       "IncorrectPredictions": "Felaktiga förutsägelser",
-      "InfoTitle": "Additional information on feature importance values",
+      "InfoTitle": "Ytterligare information om funktionsprioritetsvärden",
       "IndividualFeatureTabular": "Välj en datapunkt genom att klicka på en datapunkt (upp till 5 datapunkter) i tabellen för att visa de lokala funktionsrelevansvärdena (lokal förklaring) och individuellt villkorsstyrt förväntningsområden.",
-      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation) from SHAP's text explainer.",
+      "IndividualFeatureText": "Välj en datapunkt genom att klicka på en datapunkt i tabellen för att visa de lokala funktionsprioritetsvärdena (lokal förklaring) från SHAP:s textförklaring.",
       "LocalExplanation": "Enskild funktions prioritet",
       "SelectionCounter": "{0}/{1} datapunkter har valts",
       "SelectionLimit": "Upp till 5 datapunkter kan väljas just nu.",
@@ -1665,7 +1686,11 @@
         "flyoutHeader": "Välj dina funktioner",
         "flyoutSubHeader": "Efter vilka funktioner vill du utvärdera din modells rättvisa?",
         "flyoutDescription": "Rättvisa utvärderas i förhållande till diskrepanser i modellens beteende. Vi delar upp dina data enligt värdena för varje vald funktion och utvärderar hur modellens prestandamått skiljer sig åt i dessa delningar.",
+        "selectAllRowsAriaLabel": "Välj alla rader",
+        "flyoutAriaLabel": "Aggregerade saldomått",
         "featureColumnHeader": "Funktioner",
+        "featureSelectionAriaLabel": "Tabell för val av funktion",
+        "metricSelectionAriaLabel": "Tabell för måttval",
         "groupsColumnHeader": "Grupper",
         "categoricalGroupsCountRemark": "Den här funktionen har {0} unika värden.",
         "continuousGroupsCountRemark": "Den här funktionen är kontinuerlig och uppdelad i {0} fack.",
@@ -1749,7 +1774,9 @@
       "cancel": "Avbryt",
       "cohortList": "Lista över tidsserier",
       "selectCohort": "Välj en tidsserie",
+      "selectCohortAriaLabel": "Val av tidsserie",
       "shiftCohort": "Växla tidsserie",
+      "shiftCohortAriaLabel": "Växla tidsserie",
       "shiftCohortDescription": "Välj en tidsserie i tidsserielistan. Använd tidsserierna på instrumentpanelen."
     },
     "TimeSeriesSettings": {

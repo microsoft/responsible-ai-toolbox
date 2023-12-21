@@ -3,6 +3,7 @@
 
 import json
 import random
+import ssl
 
 import numpy as np
 import pandas as pd
@@ -87,6 +88,9 @@ class FetchDiceAdultCensusIncomeDataset(object):
 
 
 def create_adult_income_dataset(create_small_dataset=True):
+    # workaround for SSL expiration error from UCI website
+    default_http_context = ssl._create_default_https_context
+    ssl._create_default_https_context = ssl._create_unverified_context
     fetcher = FetchDiceAdultCensusIncomeDataset()
     action_name = "Adult dataset download"
     err_msg = "Failed to download adult dataset"
@@ -122,6 +126,7 @@ def create_adult_income_dataset(create_small_dataset=True):
         data_train, data_test, y_train, y_test = train_test_split(
             dataset, target, test_size=5000, random_state=7, stratify=target
         )
+    ssl._create_default_https_context = default_http_context
     return (
         data_train,
         data_test,

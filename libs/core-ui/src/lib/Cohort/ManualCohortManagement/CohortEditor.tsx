@@ -109,12 +109,13 @@ export class CohortEditor extends React.PureComponent<
   private renderFooter = (): JSX.Element => {
     const styles = cohortEditorStyles();
     return (
-      <Stack horizontal tokens={{ childrenGap: "l1", padding: "l1" }}>
+      <Stack horizontal tokens={{ childrenGap: "s1", padding: "s1" }}>
         {!this.props.isNewCohort && !this.props.disableEditName && (
           <DefaultButton
             disabled={this.props.deleteIsDisabled}
             onClick={this.deleteCohort}
             className={styles.deleteCohort}
+            ariaLabel={localization.Interpret.CohortEditor.deleteAriaLabel}
           >
             {localization.Interpret.CohortEditor.delete}
           </DefaultButton>
@@ -122,16 +123,21 @@ export class CohortEditor extends React.PureComponent<
         <PrimaryButton
           onClick={(): void => this.saveCohort()}
           disabled={this.isSaveDisabled()}
+          ariaLabel={localization.Interpret.CohortEditor.saveAriaLabel}
         >
           {localization.Interpret.CohortEditor.save}
         </PrimaryButton>
         <DefaultButton
           onClick={(): void => this.saveCohort(true)}
           disabled={this.isSaveDisabled()}
+          ariaLabel={localization.Interpret.CohortEditor.saveAndSwitch}
         >
           {localization.Interpret.CohortEditor.saveAndSwitch}
         </DefaultButton>
-        <DefaultButton onClick={this.onCancelClick}>
+        <DefaultButton
+          onClick={this.onCancelClick}
+          ariaLabel={localization.Interpret.CohortEditor.cancelAriaLabel}
+        >
           {localization.Interpret.CohortEditor.cancel}
         </DefaultButton>
       </Stack>

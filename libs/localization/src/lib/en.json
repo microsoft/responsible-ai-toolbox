@@ -113,6 +113,7 @@
     },
     "ShiftCohort": {
       "apply": "Apply",
+      "applyAriaLabel": "Apply cohort",
       "cancel": "Cancel",
       "title": "Switch Cohort",
       "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard.",
@@ -129,6 +130,7 @@
     }
   },
   "Counterfactuals": {
+    "AriaLabel": "Counterfactual",
     "CurrentTreatment": "Current treatment",
     "EffectLowerBound": "CI lower",
     "EffectOfTreatment": "Effect of recommendation",
@@ -154,6 +156,7 @@
     "counterfactualName": "What-if counterfactual name",
     "createWhatIfCounterfactual": "Create what-if counterfactual",
     "createCounterfactual": "Counterfactual",
+    "counterfactualAriaLabel": "Counterfactual creation",
     "revertToBubbleChart": "View bubble chart",
     "createOwn": "Create your own counterfactual:",
     "currentClass": "Current class",
@@ -483,11 +486,13 @@
     },
     "BinDialog": {
       "cancel": "Cancel",
+      "cancelAriaLabel": "Cancel binning",
       "categoryHeader": "Bin values:",
       "header": "Configure bins",
       "makeCategorical": "Treat as categorical",
       "numberOfBins": "Number of bins:",
-      "save": "Save"
+      "save": "Save",
+      "saveAriaLabel": "Save binning"
     },
     "DropdownHeaders": {
       "errorMetric": "Enable error bars",
@@ -704,6 +709,7 @@
       "backToComparisons": "Back to all models",
       "backToComparisonsLegacy": "Multimodel view",
       "chartChoiceDropdownHeader": "Charts",
+      "chartChoiceAriaLabel": "Chart selection",
       "classificationOutcomesHowToRead": "The bar chart shows the selection rate in each group, meaning the fraction of points classified as 1.",
       "classificationPerformanceHowToRead1": "The bar chart shows the distribution of errors in each group.",
       "classificationPerformanceHowToRead2": "Errors are split into overprediction errors (predicting 1 when the true label is 0), and underprediction errors (predicting 0 when the true label is 1).",
@@ -909,6 +915,8 @@
         "regressionError": "Error"
       },
       "TreatAsCategorical": "Treat as categorical",
+      "TreatAsCategoricalAriaLabelChecked": "Treat as categorical checked, number of unique values: {0}",
+      "TreatAsCategoricalAriaLabelUnchecked": "Treat as categorical unchecked, min value: {0}, max value: {1}",
       "_TreatAsCategorical.comment": "a checkbox label to treat integers as categories instead of as numbers",
       "_addFilter.comment": "button text to add the current settings as a new filter",
       "_addedFilters.comment": "header above the list of filters that have been saved",
@@ -920,8 +928,10 @@
       "_placeholderName.comment": "starting name for a new cohort",
       "_selectFilter.comment": "prompt to select an attribute to filter on",
       "addFilter": "Add filter",
+      "addFilterAriaLabel": "Add cohort filter",
       "addedFilters": "Filters",
       "cancel": "Cancel",
+      "cancelAriaLabel": "Cancel cohort",
       "cancelExistingCohort": "Are you sure you want to cancel editing cohort and go back?",
       "cancelNewCohort": "Are you sure you want to cancel creating a new cohort and go back?",
       "cancelNo": "No",
@@ -934,11 +944,13 @@
       "clearAllFilters": "Clear all filters",
       "defaultFilterState": "Select a filter to add parameters to your dataset cohort. Filters from your current viewing cohort are pre-populated.",
       "delete": "Delete",
+      "deleteAriaLabel": "Delete cohort",
       "invalidValueError": "Value should be between {0} and {1}",
       "minimumGreaterThanMaximum": "Minimum value inputs must be less than maximum value inputs.",
       "noAddedFilters": "No filters",
       "placeholderName": "Cohort {0}",
       "save": "Save",
+      "saveAriaLabel": "Save cohort",
       "saveAndSwitch": "Save and switch",
       "selectFilter": "Select filter",
       "noFiltersApplied": "No filters applied",
@@ -994,7 +1006,7 @@
       "individualDatapoints": "Individual datapoints",
       "missingParameters": "This tab requires an evaluation dataset be supplied.",
       "noColor": "None",
-      "datasetCohortDropdown": "Dataset cohort dropdown"
+      "datasetCohortDropdown": "Dataset cohort"
     },
     "DependencePlot": {
       "_featureImportanceOf.comment": "axis label on chart showing the importance of a selected feature (column)",
@@ -1446,10 +1458,12 @@
       "filter": "Filter",
       "indexLabel": "Image ",
       "labelTypeDropdown": "Select label type",
+      "labelTypeAriaLabel": "Label type",
       "labelVisibilityDropdown": "Select labels to display",
+      "labelVisibilityAriaLabel": "Label visibility",
       "legendFailure": "failure",
       "legendSuccess": "success",
-      "loading": "Computing explanation for index",
+      "loading": "Computing explanation for image of index",
       "multiselect": "Multiselect",
       "notdefined": "object scenario not defined",
       "objectSelect": "Object Selection",
@@ -1463,6 +1477,7 @@
       "incorrectDetections": "Incorrect detections: ",
       "prefix": "Object: ",
       "rows": "Rows: ",
+      "rowsAriaLabel": "Number of rows per page",
       "search": "Search",
       "selectAll": "Select all",
       "settings": "Settings",
@@ -1480,6 +1495,8 @@
     "AddingTab": {
       "AddButtonText": "Add",
       "CalloutContent": "Adding some components (error tree view, error heat map) will allow you to filter down the data from the global cohort that you see in the components below.",
+      "AddComponentAriaLabel": "Add dashboard component",
+      "AddButtonAriaLabel": "Add dashboard",
       "CalloutTitle": "Add component",
       "TabAddedMessage": {
         "DataAnalysis": "Data analysis component added",
@@ -1507,13 +1524,17 @@
     "Cohort": {
       "apply": "Apply",
       "delete": "Delete",
+      "deleteAriaLabel": "Delete cohort",
       "cancel": "Cancel",
+      "cancelAriaLabel": "Cancel cohort",
       "cohortInfo": "Cohort info",
       "cohortList": "Cohort list",
       "deleteCohort": "Deleting {0}?",
       "deleteConfirm": "Are you sure you want to delete this cohort?",
       "selectCohort": "Select a cohort",
+      "selectCohortAriaLabel": "Cohort selection",
       "shiftCohort": "Switch cohort",
+      "shiftCohortAriaLabel": "Switch cohort",
       "shiftCohortDescription": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
     "CohortInformation": {
@@ -1908,7 +1929,11 @@
         "flyoutHeader": "Choose your features",
         "flyoutSubHeader": "Along which features would you like to evaluate your model's fairness?",
         "flyoutDescription": "Fairness is evaluated in terms of disparities in your model's behavior. We will split your data according to values of each selected feature, and evaluate how your model's performance metrics differ across these splits.",
+        "selectAllRowsAriaLabel": "Select all rows",
+        "flyoutAriaLabel": "Aggregate balance measures",
         "featureColumnHeader": "Features",
+        "featureSelectionAriaLabel": "Feature selection table",
+        "metricSelectionAriaLabel": "Metric selection table",
         "groupsColumnHeader": "Groups",
         "categoricalGroupsCountRemark": "This feature has {0} unique values.",
         "continuousGroupsCountRemark": "This feature is continuous and split into {0} bins.",
@@ -1992,7 +2017,9 @@
       "cancel": "Cancel",
       "cohortList": "Time series list",
       "selectCohort": "Select a time series",
+      "selectCohortAriaLabel": "Time series selection",
       "shiftCohort": "Switch time series",
+      "shiftCohortAriaLabel": "Switch time series",
       "shiftCohortDescription": "Select a time series from the time series list. Apply the time series to the dashboard."
     },
     "TimeSeriesSettings": {

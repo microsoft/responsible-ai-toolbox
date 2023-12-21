@@ -115,6 +115,22 @@ class WrappedIndexPredictorModel:
             self.predictions = np.array(predictions_joined)
         self.predict_proba = self.model.predict_proba(test)
 
+    def index_predictions(self, index, predictions):
+        """Index the predictions.
+
+        :param index: The index to use.
+        :type index: list
+        :param predictions: The predictions to index.
+        :type predictions: list
+        """
+        if not isinstance(index, list):
+            index = list(index)
+        if isinstance(predictions, list):
+            predictions = [predictions[i] for i in index]
+        else:
+            predictions = predictions[index]
+        return predictions
+
     def predict(self, X):
         """Predict the class labels for the provided data.
 
@@ -124,7 +140,7 @@ class WrappedIndexPredictorModel:
         :rtype: list
         """
         index = X.index
-        predictions = self.predictions[index]
+        predictions = self.index_predictions(index, self.predictions)
         if self.task_type == ModelTask.MULTILABEL_IMAGE_CLASSIFICATION or \
                 self.task_type == ModelTask.OBJECT_DETECTION:
             return predictions
@@ -141,7 +157,7 @@ class WrappedIndexPredictorModel:
         :rtype: list[list]
         """
         index = X.index
-        pred_proba = self.predict_proba[index]
+        pred_proba = self.index_predictions(index, self.predict_proba)
         return pred_proba
 
 

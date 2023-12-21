@@ -3,6 +3,7 @@
 
 """Defines the feature extractors."""
 
+import warnings
 from typing import Optional
 
 import pandas as pd
@@ -11,13 +12,17 @@ from PIL.ExifTags import TAGS
 from tqdm import tqdm
 
 from responsibleai.feature_metadata import FeatureMetadata
+from responsibleai_vision.common.constants import ExtractedFeatures
 from responsibleai_vision.utils.image_reader import (
     get_all_exif_feature_names, get_image_from_path,
     get_image_pointer_from_path)
 
+MEAN_PIXEL_VALUE = ExtractedFeatures.MEAN_PIXEL_VALUE.value
+MAX_CUSTOM_LEN = 100
+
 
 def extract_features(image_dataset: pd.DataFrame,
-                     target_column: str, task_type: str,
+                     target_column: str,
                      image_mode: str = None,
                      feature_metadata: Optional[FeatureMetadata] = None):
     '''Extract tabular data features from the image dataset.
@@ -27,8 +32,6 @@ def extract_features(image_dataset: pd.DataFrame,
     :param target_column: The name of the label column or list of columns.
         This is a list of columns for multilabel models.
     :type target_column: str or list[str]
-    :param task_type: The type of task to be performed.
-    :type task_type: str
     :param image_mode: The mode to open the image in.
         See pillow documentation for all modes:
         https://pillow.readthedocs.io/en/stable/handbook/concepts.html
@@ -45,7 +48,7 @@ def extract_features(image_dataset: pd.DataFrame,
     if feature_metadata and feature_metadata.categorical_features is None:
         feature_metadata.categorical_features = []
     exif_feature_names = get_all_exif_feature_names(image_dataset)
-    feature_names = ["mean_pixel_value"] + exif_feature_names
+    feature_names = [MEAN_PIXEL_VALUE] + exif_feature_names
 
     # append all feature names other than target column and label
     column_names = image_dataset.columns
@@ -58,6 +61,7 @@ def extract_features(image_dataset: pd.DataFrame,
             continue
         feature_names.append(column_names[j])
 
+    blacklisted_tags = {}
     # append all features
     for i in tqdm(range(image_dataset.shape[0])):
         image = image_dataset.iloc[i, 0]
@@ -81,9 +85,26 @@ def extract_features(image_dataset: pd.DataFrame,
                     # decode bytes
                     if isinstance(data, bytes):
                         data = data.decode()
+                        if len(data) > MAX_CUSTOM_LEN:
+                            data = data[:MAX_CUSTOM_LEN] + '...'
                     if isinstance(data, str):
-                        feature_metadata.categorical_features.append(str(tag))
-                        row_feature_values[feature_names.index(tag)] = data
+                        if not feature_metadata:
+                            feature_metadata = FeatureMetadata()
+                            feature_metadata.categorical_features = []
+                        if tag in feature_names:
+                            feature_metadata.categorical_features.append(
+                                str(tag))
+                            tag_index = feature_names.index(tag)
+                            row_feature_values[tag_index] = data
+                        else:
+                            # in theory this should now never happen with
+                            # latest code, but adding this check for safety
+                            if tag not in blacklisted_tags:
+                                blacklisted_tags.add(tag)
+                                warnings.warn(
+                                    f'Exif tag {tag} could not be found '
+                                    'in the feature names. Ignoring tag '
+                                    'from extracted metadata.')
                     elif isinstance(data, int) or isinstance(data, float):
                         row_feature_values[feature_names.index(tag)] = data
 

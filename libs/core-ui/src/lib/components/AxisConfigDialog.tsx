@@ -152,10 +152,16 @@ export class AxisConfigDialog extends React.PureComponent<
   private renderFooter = (): JSX.Element => {
     return (
       <Stack horizontal tokens={{ childrenGap: "l1", padding: "l1" }}>
-        <PrimaryButton onClick={this.saveState}>
+        <PrimaryButton
+          onClick={this.saveState}
+          ariaLabel={localization.Core.ShiftCohort.applyAriaLabel}
+        >
           {localization.Interpret.AxisConfigDialog.apply}
         </PrimaryButton>
-        <DefaultButton onClick={this.props.onCancel}>
+        <DefaultButton
+          onClick={this.props.onCancel}
+          ariaLabel={localization.Interpret.CohortEditor.cancelAriaLabel}
+        >
           {localization.Interpret.CohortEditor.cancel}
         </DefaultButton>
       </Stack>
@@ -236,6 +242,7 @@ export class AxisConfigDialog extends React.PureComponent<
       );
     }
     this.props.onAccept(this.state.selectedColumn);
+    this.props.onCancel();
     this.context.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
       type: TelemetryEventName.NewAxisConfigSelected

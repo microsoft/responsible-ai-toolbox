@@ -34,7 +34,7 @@ export const messages = {
 
 // calculateMetrics can be used with local flask server for debugging
 /*export function calculateMetrics(postData: IMetricRequest): Promise<IMetricResponse> {
-  return fetch("http://localhost:5000/1/metrics", {
+  return fetch("http://localhost:8704/1/metrics", {
     method: "post",
     body: JSON.stringify(postData),
     headers: {

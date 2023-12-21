@@ -3,6 +3,7 @@
 
 import os
 import shutil
+import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -128,8 +129,13 @@ class TestRAITextInsightsSaveAndLoadScenarios(object):
             model_name = 'text-classification-model'
             model_pkl_path = Path(tmpdir) / "rai_insights" / model_name
             shutil.rmtree(model_pkl_path)
-            match_msg = 'Can\'t load the configuration'
-            with pytest.raises(OSError, match=match_msg):
+            if sys.version_info[:2] == (3, 7):
+                match_msg = 'Can\'t load the configuration'
+                expected_error = OSError
+            else:
+                match_msg = 'local folder'
+                expected_error = OSError
+            with pytest.raises(expected_error, match=match_msg):
                 without_model_rai_insights = RAITextInsights.load(save_path)
                 assert without_model_rai_insights.model is None
 

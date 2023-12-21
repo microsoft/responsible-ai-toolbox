@@ -15,6 +15,7 @@ import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { getAltTextForItem } from "../utils/getAltTextUtils";
 import { getFilteredDataFromSearch } from "../utils/getFilteredData";
 import { getJoinedLabelString } from "../utils/labelUtils";
 
@@ -47,16 +48,14 @@ export class DataCharacteristics extends React.Component<
   private classNames = dataCharacteristicsStyles();
   public constructor(props: IDataCharacteristicsProps) {
     super(props);
+    const labelType = this.predOrIncorrectLabelType;
     const labelTypeDropdownOptions: IDropdownOption[] = [
-      {
-        key: this.predOrIncorrectLabelType,
-        text: this.predOrIncorrectLabelType
-      },
+      { key: labelType, text: labelType },
       { key: this.trueOrCorrectLabelType, text: this.trueOrCorrectLabelType }
     ];
     this.state = {
       ...defaultState,
-      labelType: this.predOrIncorrectLabelType,
+      labelType,
       labelTypeDropdownOptions
     };
   }
@@ -75,6 +74,12 @@ export class DataCharacteristics extends React.Component<
     const predicted = this.state.labelType === this.predOrIncorrectLabelType;
     const items = predicted ? this.state.itemsPredicted : this.state.itemsTrue;
     const keys = sortKeys([...items.keys()], items, this.props.taskType);
+    const dropdownOptions = predicted
+      ? this.state.dropdownOptionsPredicted
+      : this.state.dropdownOptionsTrue;
+    const dropdownKeys = predicted
+      ? this.state.selectedKeysPredicted
+      : this.state.selectedKeysTrue;
     return (
       <FocusZone>
         <Stack tokens={stackTokens}>
@@ -96,6 +101,10 @@ export class DataCharacteristics extends React.Component<
                       options={this.state.labelTypeDropdownOptions}
                       selectedKey={this.state.labelType}
                       onChange={this.onLabelTypeChange}
+                      ariaLabel={
+                        localization.InterpretVision.Dashboard
+                          .labelTypeAriaLabel
+                      }
                     />
                   </Stack.Item>
                   <Stack.Item>
@@ -106,18 +115,14 @@ export class DataCharacteristics extends React.Component<
                         localization.InterpretVision.Dashboard
                           .labelVisibilityDropdown
                       }
-                      options={
-                        this.state.labelType === this.predOrIncorrectLabelType
-                          ? this.state.dropdownOptionsPredicted
-                          : this.state.dropdownOptionsTrue
-                      }
-                      selectedKeys={
-                        this.state.labelType === this.predOrIncorrectLabelType
-                          ? this.state.selectedKeysPredicted
-                          : this.state.selectedKeysTrue
-                      }
+                      options={dropdownOptions}
+                      selectedKeys={dropdownKeys}
                       onChange={this.onLabelVisibilitySelect}
                       multiSelect
+                      ariaLabel={
+                        localization.InterpretVision.Dashboard
+                          .labelVisibilityAriaLabel
+                      }
                     />
                   </Stack.Item>
                 </Stack>
@@ -161,7 +166,7 @@ export class DataCharacteristics extends React.Component<
                         onRenderCell={this.onRenderCell}
                         loadPrevItems={this.loadPrevItems}
                         loadNextItems={this.loadNextItems}
-                        getPageHeight={this.getPageHeight}
+                        getPageHeight={(): number => this.rowHeight}
                         getItemCountForPage={this.getItemCountForPageWrapper(
                           index
                         )}
@@ -197,24 +202,27 @@ export class DataCharacteristics extends React.Component<
   private onRenderCell = (
     item?: IVisionListItem | undefined
   ): React.ReactElement => {
+    if (!item) {
+      return <div />;
+    }
     const imageDim = this.props.imageDim;
-    const predictedY = getJoinedLabelString(item?.predictedY);
-    const trueY = getJoinedLabelString(item?.trueY);
+    const predictedY = getJoinedLabelString(item.predictedY);
+    const trueY = getJoinedLabelString(item.trueY);
+    const indicator =
+      predictedY === trueY
+        ? this.classNames.successIndicator
+        : this.classNames.errorIndicator;
     const indicatorStyle = mergeStyles(
       this.classNames.indicator,
       { width: imageDim },
-      predictedY === trueY
-        ? this.classNames.successIndicator
-        : this.classNames.errorIndicator
+      indicator
     );
-    return !item ? (
-      <div />
-    ) : (
+    return (
       <Stack className={this.classNames.tile}>
         <Stack.Item style={{ height: imageDim, width: imageDim }}>
           <Image
-            alt={predictedY}
-            src={`data:image/jpg;base64,${item?.image}`}
+            alt={getAltTextForItem(item, this.props.taskType)}
+            src={`data:image/jpg;base64,${item.image}`}
             onClick={this.callbackWrapper(item)}
             className={this.classNames.image}
             style={{ display: "inline", height: imageDim }}
@@ -239,12 +247,11 @@ export class DataCharacteristics extends React.Component<
     _event: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption<any> | undefined
   ): void => {
-    if (!item) {
-      return;
+    if (item) {
+      this.setState(
+        getLabelVisibility(item, this.state, this.predOrIncorrectLabelType)
+      );
     }
-    this.setState(
-      getLabelVisibility(item, this.state, this.predOrIncorrectLabelType)
-    );
   };
 
   private loadNextItems = (index: number) => (): void => {
@@ -266,11 +273,8 @@ export class DataCharacteristics extends React.Component<
     this.setState({ renderStartIndex, showBackArrow });
   };
 
-  private callbackWrapper = (item: IVisionListItem) => (): void => {
+  private callbackWrapper = (item: IVisionListItem) => (): void =>
     this.props.selectItem(item);
-  };
-
-  private getPageHeight = (): number => this.rowHeight;
 
   private getItemCountForPageWrapper = (
     index: number
@@ -283,10 +287,7 @@ export class DataCharacteristics extends React.Component<
       visibleRect?: IRectangle | undefined
     ): number => {
       const columnCount = this.state.columnCount;
-      if (!visibleRect) {
-        return columnCount[index];
-      }
-      if (itemIndex === 0) {
+      if (visibleRect && itemIndex === 0) {
         columnCount[index] =
           Math.floor(visibleRect.width / this.props.imageDim) - 1;
         this.setState({ columnCount: [...columnCount] });

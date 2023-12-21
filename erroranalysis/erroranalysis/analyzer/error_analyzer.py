@@ -482,7 +482,7 @@ class BaseAnalyzer(ABC):
         except ValueError:
             # Impute input_data if it contains NaNs, infinity or a value too
             # large for dtype('float64')
-            input_data = np.nan_to_num(input_data)
+            input_data = np.nan_to_num(input_data.astype(float))
             importances = self._compute_error_correlation(
                 input_data, diff, error_correlation_method)
         return importances
