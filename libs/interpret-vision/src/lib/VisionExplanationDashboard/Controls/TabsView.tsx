@@ -7,8 +7,10 @@ import {
   ErrorCohort,
   DatasetTaskType
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { updateSearchTextAriaLabel } from "../utils/searchTextUtils";
 import { visionExplanationDashboardStyles } from "../VisionExplanationDashboard.styles";
 import {
   TitleBarOptions,
@@ -31,6 +33,7 @@ export interface ITabsViewProps {
   selectedItem: IVisionListItem | undefined;
   selectedKey: string;
   onItemSelect: (item: IVisionListItem) => void;
+  onSearchUpdated: (searchResultsAriaLabel: string) => void;
   updateSelectedIndices: (indices: number[]) => void;
   selectedCohort: ErrorCohort;
   setSelectedCohort: (cohort: ErrorCohort) => void;
@@ -39,6 +42,8 @@ export interface ITabsViewProps {
 
 export interface ITabViewState {
   items: IVisionListItem[];
+  errorInstancesCount?: number;
+  successInstancesCount?: number;
 }
 
 const stackTokens = {
@@ -62,6 +67,17 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
         items: this.props.errorInstances.concat(...this.props.successInstances)
       });
     }
+    if (
+      this.props.searchValue !== prevProps.searchValue &&
+      (!this.props.searchValue || this.props.searchValue === "")
+    ) {
+      this.setState({
+        errorInstancesCount: undefined,
+        successInstancesCount: undefined
+      });
+      const label = localization.InterpretVision.Search.defaultSearchLabel;
+      this.props.onSearchUpdated(label);
+    }
   }
 
   public render(): React.ReactNode {
@@ -78,6 +94,7 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
                 items={this.state.items}
                 imageDim={this.props.imageDim}
                 numRows={this.props.numRows}
+                onSearchUpdated={this.onSearchCountUpdated}
                 searchValue={this.props.searchValue}
                 selectItem={this.props.onItemSelect}
                 taskType={this.props.taskType}
@@ -94,6 +111,7 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
               successInstances={this.props.successInstances}
               imageDim={this.props.imageDim}
               otherMetadataFieldNames={this.props.otherMetadataFieldNames}
+              onSearchUpdated={this.onSearchCountUpdated}
               searchValue={this.props.searchValue}
               selectItem={this.props.onItemSelect}
               updateSelectedIndices={this.props.updateSelectedIndices}
@@ -122,6 +140,7 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
                     <ImageList
                       items={this.state.items}
                       imageDim={this.props.imageDim}
+                      onSearchUpdated={this.onSearchCountUpdated}
                       searchValue={this.props.searchValue}
                       selectItem={this.props.onItemSelect}
                       taskType={this.props.taskType}
@@ -151,6 +170,7 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
                       <ImageList
                         items={this.props.errorInstances}
                         imageDim={this.props.imageDim}
+                        onSearchUpdated={this.onSearchUpdatedError}
                         searchValue={this.props.searchValue}
                         selectItem={this.props.onItemSelect}
                         taskType={this.props.taskType}
@@ -174,6 +194,7 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
                       <ImageList
                         items={this.props.successInstances}
                         imageDim={this.props.imageDim}
+                        onSearchUpdated={this.onSearchUpdatedSuccess}
                         searchValue={this.props.searchValue}
                         selectItem={this.props.onItemSelect}
                         taskType={this.props.taskType}
@@ -187,4 +208,35 @@ export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
         );
     }
   }
+
+  private onSearchCountUpdated = (
+    successCount: number,
+    errorCount: number
+  ): void => {
+    updateSearchTextAriaLabel(
+      this.props.onSearchUpdated,
+      successCount,
+      errorCount,
+      this.props.searchValue
+    );
+  };
+
+  private updateSuccessErrorInstancesAriaLabel = (): void => {
+    this.onSearchCountUpdated(
+      this.state.successInstancesCount ?? 0,
+      this.state.errorInstancesCount ?? 0
+    );
+  };
+
+  private onSearchUpdatedError = (_: number, errorCount: number): void => {
+    this.setState({ errorInstancesCount: errorCount }, () => {
+      this.updateSuccessErrorInstancesAriaLabel();
+    });
+  };
+
+  private onSearchUpdatedSuccess = (successCount: number): void => {
+    this.setState({ successInstancesCount: successCount }, () => {
+      this.updateSuccessErrorInstancesAriaLabel();
+    });
+  };
 }

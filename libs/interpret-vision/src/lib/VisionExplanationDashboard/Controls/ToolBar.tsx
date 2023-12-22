@@ -22,6 +22,7 @@ export interface IToolBarProps {
     newValue?: string
   ) => void;
   selectedCohort: ErrorCohort;
+  searchResultsAriaLabel: string;
   setSelectedCohort: (cohort: ErrorCohort) => void;
 }
 
@@ -68,6 +69,7 @@ export class ToolBar extends React.Component<IToolBarProps> {
                 placeholder={localization.InterpretVision.Dashboard.search}
                 value={this.props.searchValue}
                 onChange={this.props.onSearch}
+                ariaLabel={this.props.searchResultsAriaLabel}
               />
             </Stack.Item>
           </Stack>

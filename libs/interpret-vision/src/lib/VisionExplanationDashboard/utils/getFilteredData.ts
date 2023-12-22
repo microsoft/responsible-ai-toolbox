@@ -3,12 +3,15 @@
 
 import { DatasetTaskType, IVisionListItem } from "@responsible-ai/core-ui";
 
+import { updateSearchSuccessErrorCounts } from "./searchTextUtils";
+
 export function getFilteredDataFromSearch(
   searchVal: string,
   items: IVisionListItem[],
-  taskType: string
+  taskType: string,
+  onSearchUpdated: (successCount: number, errorCount: number) => void
 ): IVisionListItem[] {
-  return items.filter((item) => {
+  const filteredItems = items.filter((item) => {
     const predOrIncorrectY =
       taskType === DatasetTaskType.ObjectDetection
         ? item.odIncorrect
@@ -27,6 +30,8 @@ export function getFilteredDataFromSearch(
     );
     return predOrIncorrectYIncludesSearchVal || trueOrCorrectYIncludesSearchVal;
   });
+  updateSearchSuccessErrorCounts(onSearchUpdated, filteredItems, taskType);
+  return filteredItems;
 }
 
 export function includesSearchVal(

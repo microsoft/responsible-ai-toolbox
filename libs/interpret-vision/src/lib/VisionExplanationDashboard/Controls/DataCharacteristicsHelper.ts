@@ -13,6 +13,7 @@ export interface IDataCharacteristicsProps extends ISearchable {
   imageDim: number;
   numRows: number;
   taskType: string;
+  onSearchUpdated: (successCount: number, errorCount: number) => void;
   selectItem(item: IVisionListItem): void;
 }
 
@@ -188,7 +189,7 @@ export function processItems(
     showBackArrow.push(false);
     columnCount.push(0);
   });
-  return {
+  const result = {
     columnCount,
     dropdownOptionsPredicted,
     dropdownOptionsTrue,
@@ -201,6 +202,7 @@ export function processItems(
     selectedKeysTrue,
     showBackArrow
   };
+  return result;
 }
 
 export function getLabelVisibility(

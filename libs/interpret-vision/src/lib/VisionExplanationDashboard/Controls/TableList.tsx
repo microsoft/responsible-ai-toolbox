@@ -187,7 +187,8 @@ export class TableList extends React.Component<
     const filteredItems = getFilteredDataFromSearch(
       searchValue,
       items,
-      this.props.taskType
+      this.props.taskType,
+      this.props.onSearchUpdated
     );
     return filteredItems;
   }

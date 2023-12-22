@@ -26,6 +26,7 @@ export interface IImageListProps extends ISearchable {
   imageDim: number;
   selectItem: (item: IVisionListItem) => void;
   taskType: string;
+  onSearchUpdated: (successCount: number, errorCount: number) => void;
 }
 
 export interface IImageListState {
@@ -93,7 +94,8 @@ export class ImageList extends React.Component<
       filteredItems = getFilteredDataFromSearch(
         searchValue,
         filteredItems,
-        this.props.taskType
+        this.props.taskType,
+        this.props.onSearchUpdated
       );
     }
     return filteredItems;
