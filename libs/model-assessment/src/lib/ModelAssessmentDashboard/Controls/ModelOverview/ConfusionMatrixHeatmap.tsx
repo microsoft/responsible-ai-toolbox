@@ -19,12 +19,12 @@ import {
   ErrorCohort
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Point, PointOptionsObject } from "highcharts";
+import { PointOptionsObject } from "highcharts";
 import * as _ from "lodash";
 import React from "react";
 
+import { getHeatmapConfig } from "./ConfusionMatrixHeatmapConfig";
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
-import { wrapText } from "./StatsTableUtils";
 
 interface IConfusionMatrixState {
   selectedClasses: string[];
@@ -118,6 +118,7 @@ export class ConfusionMatrixHeatmap extends React.Component<
         this.maxDisplayableClasses
       );
     }
+    const selectedClasses = this.state.selectedClasses;
 
     return (
       <Stack id="modelOverviewConfusionMatrix">
@@ -150,7 +151,7 @@ export class ConfusionMatrixHeatmap extends React.Component<
               label={
                 confusionMatrixLocString.confusionMatrixClassSelectionLabel
               }
-              selectedKey={this.state.selectedClasses}
+              selectedKey={selectedClasses}
               options={this.state.allClasses.map((category: string) => {
                 return { key: category, text: category };
               })}
@@ -161,86 +162,16 @@ export class ConfusionMatrixHeatmap extends React.Component<
             />
           </StackItem>
         </Stack>
-        {this.state.selectedClasses.length >= this.minDisplayableClasses &&
-          this.state.selectedClasses.length <= this.maxDisplayableClasses && (
+        {selectedClasses.length >= this.minDisplayableClasses &&
+          selectedClasses.length <= this.maxDisplayableClasses && (
             <StackItem className={classNames.chart}>
               <HeatmapHighChart
                 id="ModelOverviewConfusionMatrix"
-                configOverride={{
-                  chart: {
-                    height: this.state.selectedClasses.length * 40 + 200,
-                    marginBottom: 80,
-                    marginTop: 80,
-                    plotBorderWidth: 1,
-                    type: "heatmap",
-                    width: this.state.selectedClasses.length * 100 + 200
-                  },
-                  colorAxis: {
-                    maxColor: theme.palette.blue,
-                    min: 0,
-                    minColor: theme.palette.white
-                  },
-                  custom: {
-                    minHeight: 300
-                  },
-                  legend: {
-                    align: "right",
-                    enabled: true,
-                    layout: "vertical",
-                    symbolHeight: this.state.selectedClasses.length * 40 + 40,
-                    verticalAlign: "middle"
-                  },
-                  series: [
-                    {
-                      borderWidth: 1,
-                      data: confusionMatrix,
-                      dataLabels: {
-                        color: theme.palette.black,
-                        enabled: true,
-                        style: {
-                          color: theme.semanticColors.bodyText
-                        }
-                      },
-                      type: "heatmap"
-                    }
-                  ],
-                  tooltip: {
-                    formatter(): string | undefined {
-                      return wrapText(
-                        localization.formatString(
-                          localization.ModelAssessment.ModelOverview
-                            .confusionMatrix.confusionMatrixHeatmapTooltip,
-                          `<b>${
-                            (this.point as Point & { value: number }).value
-                          } </b>`,
-                          `<b>${
-                            this.series.yAxis.categories[this.point.y ?? 0]
-                          }</b>`,
-                          `<b>${
-                            this.series.xAxis.categories[this.point.x ?? 0]
-                          }</b>`
-                        ),
-                        40,
-                        10
-                      );
-                    }
-                  },
-                  xAxis: {
-                    categories: this.state.selectedClasses,
-                    title: {
-                      style: {
-                        fontWeight: "bold"
-                      },
-                      text: `${confusionMatrixLocString.confusionMatrixXAxisLabel}`
-                    }
-                  },
-                  yAxis: {
-                    categories: this.state.selectedClasses,
-                    title: {
-                      text: `<b>${confusionMatrixLocString.confusionMatrixYAxisLabel}</b>`
-                    }
-                  }
-                }}
+                configOverride={getHeatmapConfig(
+                  confusionMatrix,
+                  selectedLabels,
+                  theme
+                )}
               />
             </StackItem>
           )}
