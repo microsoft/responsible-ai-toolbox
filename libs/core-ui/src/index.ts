@@ -67,6 +67,7 @@ export * from "./lib/util/ITelemetryEvent";
 export * from "./lib/util/TelemetryEventName";
 export * from "./lib/util/generateDefaultChartAxes";
 export * from "./lib/util/datasetUtils/getColumnRanges";
+export * from "./lib/components/AccessibleDetailsList";
 export * from "./lib/components/Announce";
 export * from "./lib/components/OverallMetricChart";
 export * from "./lib/components/AxisConfig";

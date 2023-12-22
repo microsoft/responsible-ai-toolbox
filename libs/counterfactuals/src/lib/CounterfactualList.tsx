@@ -5,7 +5,6 @@ import {
   IComboBoxOption,
   IComboBox,
   ConstrainMode,
-  DetailsList,
   DetailsListLayoutMode,
   DetailsRow,
   DetailsRowFields,
@@ -17,6 +16,7 @@ import {
   SelectionMode
 } from "@fluentui/react";
 import {
+  AccessibleDetailsList,
   defaultModelAssessmentContext,
   ICounterfactualData,
   ITelemetryEvent,
@@ -99,7 +99,7 @@ export class CounterfactualList extends React.Component<
       );
     }
     return (
-      <DetailsList
+      <AccessibleDetailsList
         items={items}
         columns={columns}
         selectionMode={SelectionMode.none}

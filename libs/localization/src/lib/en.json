@@ -91,6 +91,16 @@
     }
   },
   "Core": {
+    "AccessibleDetailsList": {
+      "ResizableDialog": {
+        "title": "Resize Column",
+        "subText": "Enter desired column width in pixels:"
+      },
+      "resize": "Resize",
+      "cancel": "Cancel",
+      "minErrorMessage": "Column width must be a positive integer greater than {0}.",
+      "minMaxErrorMessage": "Column width must be a positive integer greater than {0} and less than {1}."
+    },
     "ExpandableText": {
       "SeeLess": "See less",
       "SeeMore": "See more"

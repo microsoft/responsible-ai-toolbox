@@ -1,13 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  DetailsList,
-  IColumn,
-  Panel,
-  SelectionMode,
-  Text
-} from "@fluentui/react";
+import { IColumn, Panel, SelectionMode, Text } from "@fluentui/react";
+import { AccessibleDetailsList } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
@@ -50,7 +45,7 @@ export class DashboardSettings extends React.PureComponent<IDashboardSettingsPro
         title={localization.ModelAssessment.DashboardSettings.Title}
       >
         <Text>{localization.ModelAssessment.DashboardSettings.Content}</Text>
-        <DetailsList
+        <AccessibleDetailsList
           items={this.props.activeGlobalTabs.map((a) => ({
             // removing key here because fluent ui also pick it to identify row
             name: a.name
