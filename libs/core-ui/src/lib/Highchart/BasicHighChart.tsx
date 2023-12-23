@@ -14,7 +14,6 @@ export class BasicHighChart extends React.Component<ICommonChartProps> {
     const defaultOptions = getDefaultHighchartOptions(getTheme());
     const { className, id, fallback, configOverride = {}, theme } = this.props;
     const chartOptions = _.merge({}, defaultOptions, configOverride);
-
     return (
       <HighchartWrapper
         key={this.props.configOverride?.chart?.type}

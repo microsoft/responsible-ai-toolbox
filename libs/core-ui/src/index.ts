@@ -53,6 +53,7 @@ export * from "./lib/util/getCommonStyles";
 export * from "./lib/util/getCompositeFilterString";
 export * from "./lib/util/getFeatureOptions";
 export * from "./lib/util/getFilterBoundsArgs";
+export * from "./lib/util/calculateAUCData";
 export * from "./lib/util/calculateBoxData";
 export * from "./lib/util/calculateConfusionMatrixData";
 export * from "./lib/util/calculateLineData";

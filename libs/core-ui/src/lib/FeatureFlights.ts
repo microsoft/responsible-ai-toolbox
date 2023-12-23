@@ -2,10 +2,14 @@
 // Licensed under the MIT License.
 
 export const dataBalanceExperienceFlight = "dataBalanceExperience";
+export const aucChartExperienceFlight = "aucChartExperience";
 export const featureFlightSeparator = "&";
 
 // add more entries for new feature flights
-export const featureFlights = [dataBalanceExperienceFlight];
+export const featureFlights = [
+  dataBalanceExperienceFlight,
+  aucChartExperienceFlight
+];
 
 export function parseFeatureFlights(featureFlights?: string): string[] {
   if (featureFlights) {
