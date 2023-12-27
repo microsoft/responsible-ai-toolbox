@@ -1,11 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DetailsList, SelectionMode, Stack, Text } from "@fluentui/react";
+import { SelectionMode, Stack, Text } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   JointDataset,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  AccessibleDetailsList
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -102,7 +103,7 @@ export class TransformationsTable extends React.Component<
           </Text>
         </Stack.Item>
         <Stack.Item>
-          <DetailsList
+          <AccessibleDetailsList
             items={this.state.rows}
             columns={[
               {

@@ -9,7 +9,6 @@ import {
   DefaultButton,
   Text,
   PanelType,
-  DetailsList,
   IColumn,
   Label,
   SpinButton,
@@ -19,6 +18,7 @@ import {
   MessageBarType
 } from "@fluentui/react";
 import {
+  AccessibleDetailsList,
   defaultModelAssessmentContext,
   getCompositeFilterString,
   ModelAssessmentContext
@@ -162,7 +162,7 @@ export class FeatureConfigurationFlyout extends React.Component<
                 .flyoutDescription
             }
           </Text>
-          <DetailsList
+          <AccessibleDetailsList
             items={items}
             columns={columns}
             selectionMode={SelectionMode.multiple}

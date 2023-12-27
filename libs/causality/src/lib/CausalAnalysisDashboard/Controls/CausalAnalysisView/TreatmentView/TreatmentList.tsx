@@ -3,7 +3,6 @@
 
 import {
   CheckboxVisibility,
-  DetailsList,
   DetailsListLayoutMode,
   IColumn,
   IDetailsColumnRenderTooltipProps,
@@ -14,6 +13,7 @@ import {
   Text
 } from "@fluentui/react";
 import {
+  AccessibleDetailsList,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
   toScientific
@@ -106,7 +106,7 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
     const convertedItems = items.map((item) => toScientific(item));
     return (
       <div className={styles.listContainer}>
-        <DetailsList
+        <AccessibleDetailsList
           items={convertedItems}
           columns={columns}
           selectionMode={SelectionMode.none}
