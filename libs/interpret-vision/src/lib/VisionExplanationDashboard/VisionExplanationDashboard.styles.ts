@@ -7,6 +7,7 @@ import {
   IProcessedStyleSet,
   getTheme
 } from "@fluentui/react";
+import { flexMdDown } from "@responsible-ai/core-ui";
 export interface IVisionExplanationDashboardStyles {
   cohortDropdown: IStyle;
   cohortPickerLabel: IStyle;
@@ -17,6 +18,7 @@ export interface IVisionExplanationDashboardStyles {
   toolBarContainer: IStyle;
   itemsSelectedContainer: IStyle;
   legendIndicator: IStyle;
+  lowerToolbarContainer: IStyle;
   mainContainer: IStyle;
   mainImageContainer: IStyle;
   halfContainer: IStyle;
@@ -67,6 +69,7 @@ export const visionExplanationDashboardStyles: () => IProcessedStyleSet<IVisionE
         paddingRight: 20,
         paddingTop: 2
       },
+      lowerToolbarContainer: flexMdDown,
       mainContainer: {
         alignItems: "center",
         justifyContent: "space-between",
@@ -103,6 +106,7 @@ export const visionExplanationDashboardStyles: () => IProcessedStyleSet<IVisionE
         position: "relative"
       },
       toolBarContainer: {
+        ...flexMdDown,
         width: "100%"
       }
     });

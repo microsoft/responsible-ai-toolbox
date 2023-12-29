@@ -87,6 +87,7 @@ export class VisionExplanationDashboardHeader extends React.Component<
             horizontal
             horizontalAlign="space-between"
             verticalAlign="start"
+            className={this.props.classNames.lowerToolbarContainer}
           >
             <Stack.Item>
               <Slider
