@@ -87,10 +87,10 @@ jobs:
           auto-update-conda: true
           python-version: ${{ matrix.pythonVersion }}
 
-      - name: Install pytorch with python 3.7
+      - name: Install pytorch
         shell: bash -l {0}
         run: |
-          conda install --yes --quiet "pytorch==1.13.1" "torchvision<0.15" cpuonly -c pytorch
+          conda install --yes --quiet "pytorch==1.13.1" "torchvision<0.15" cpuonly "numpy<1.24.0" -c pytorch
 
       - name: Setup tools
         shell: bash -l {0}
