@@ -45,7 +45,9 @@ def extract_features(image_dataset: pd.DataFrame,
     results = []
     dropped_features = feature_metadata.dropped_features \
         if feature_metadata else None
-    if feature_metadata and feature_metadata.categorical_features is None:
+    if not feature_metadata:
+        feature_metadata = FeatureMetadata()
+    if feature_metadata.categorical_features is None:
         feature_metadata.categorical_features = []
     exif_feature_names = get_all_exif_feature_names(image_dataset)
     feature_names = [MEAN_PIXEL_VALUE] + exif_feature_names
@@ -73,40 +75,8 @@ def extract_features(image_dataset: pd.DataFrame,
         row_feature_values = [mean_pixel_value] + \
             [None] * len(exif_feature_names)
 
-        # append all exif features
-        if isinstance(image, str):
-            image_pointer_path = get_image_pointer_from_path(image)
-            with Image.open(image_pointer_path) as im:
-                exifdata = im.getexif()
-                for tag_id in exifdata:
-                    # get the tag name, instead of human unreadable tag id
-                    tag = TAGS.get(tag_id, tag_id)
-                    data = exifdata.get(tag_id)
-                    # decode bytes
-                    if isinstance(data, bytes):
-                        data = data.decode()
-                        if len(data) > MAX_CUSTOM_LEN:
-                            data = data[:MAX_CUSTOM_LEN] + '...'
-                    if isinstance(data, str):
-                        if not feature_metadata:
-                            feature_metadata = FeatureMetadata()
-                            feature_metadata.categorical_features = []
-                        if tag in feature_names:
-                            feature_metadata.categorical_features.append(
-                                str(tag))
-                            tag_index = feature_names.index(tag)
-                            row_feature_values[tag_index] = data
-                        else:
-                            # in theory this should now never happen with
-                            # latest code, but adding this check for safety
-                            if tag not in blacklisted_tags:
-                                blacklisted_tags.add(tag)
-                                warnings.warn(
-                                    f'Exif tag {tag} could not be found '
-                                    'in the feature names. Ignoring tag '
-                                    'from extracted metadata.')
-                    elif isinstance(data, int) or isinstance(data, float):
-                        row_feature_values[feature_names.index(tag)] = data
+        append_exif_features(image, row_feature_values, feature_names,
+                             blacklisted_tags, feature_metadata)
 
         # append all features other than target column and label
         for j in range(start_meta_index, image_dataset.shape[1]):
@@ -115,3 +85,37 @@ def extract_features(image_dataset: pd.DataFrame,
             row_feature_values.append(image_dataset.iloc[i, j])
         results.append(row_feature_values)
     return results, feature_names
+
+
+def append_exif_features(image, row_feature_values, feature_names,
+                         blacklisted_tags, feature_metadata):
+    if isinstance(image, str):
+        image_pointer_path = get_image_pointer_from_path(image)
+        with Image.open(image_pointer_path) as im:
+            exifdata = im.getexif()
+            for tag_id in exifdata:
+                # get the tag name, instead of human unreadable tag id
+                tag = str(TAGS.get(tag_id, tag_id))
+                data = exifdata.get(tag_id)
+                # decode bytes
+                if isinstance(data, bytes):
+                    data = data.decode()
+                    if len(data) > MAX_CUSTOM_LEN:
+                        data = data[:MAX_CUSTOM_LEN] + '...'
+                if isinstance(data, str):
+                    if tag in feature_names:
+                        if tag not in feature_metadata.categorical_features:
+                            feature_metadata.categorical_features.append(tag)
+                        tag_index = feature_names.index(tag)
+                        row_feature_values[tag_index] = data
+                    else:
+                        # in theory this should now never happen with
+                        # latest code, but adding this check for safety
+                        if tag not in blacklisted_tags:
+                            blacklisted_tags.add(tag)
+                            warnings.warn(
+                                f'Exif tag {tag} could not be found '
+                                'in the feature names. Ignoring tag '
+                                'from extracted metadata.')
+                elif isinstance(data, int) or isinstance(data, float):
+                    row_feature_values[feature_names.index(tag)] = data
