@@ -27,7 +27,7 @@ import {
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import memoize from "memoize-one";
-import Plotly from "plotly.js";
+import Plotly, { PlotMarker } from "plotly.js";
 import React from "react";
 
 import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
@@ -253,7 +253,7 @@ export class Beehive extends React.PureComponent<
           selectedOption.text
         );
         if (selectedOption.data.isNormalized && plotlyProps.data[0].marker) {
-          plotlyProps.data[0].marker.colorscale = [
+          (plotlyProps.data[0].marker as Partial<PlotMarker>).colorscale = [
             [0, "rgba(0,0,255,0.5)"],
             [1, "rgba(255,0,0,0.5)"]
           ];

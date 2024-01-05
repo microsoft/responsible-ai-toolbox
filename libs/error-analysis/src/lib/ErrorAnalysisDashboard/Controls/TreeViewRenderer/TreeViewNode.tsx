@@ -3,10 +3,10 @@
 
 import { getTheme } from "@fluentui/react";
 import { getRandomId, SVGToolTip } from "@responsible-ai/core-ui";
-import { HierarchyPointNode } from "d3-hierarchy";
 import React from "react";
 
 import { ColorPalette } from "../../ColorPalette";
+import { IHierarchyPointNode as HierarchyPointNode } from "../../Interfaces/IHierarchyPointNode";
 import { FilterTooltip } from "../FilterTooltip/FilterTooltip";
 
 import { treeViewRendererStyles } from "./TreeViewRenderer.styles";

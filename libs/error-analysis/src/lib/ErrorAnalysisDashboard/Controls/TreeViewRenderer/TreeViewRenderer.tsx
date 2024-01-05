@@ -27,11 +27,7 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { Property } from "csstype";
 import { max as d3max } from "d3-array";
-import {
-  stratify as d3stratify,
-  tree as d3tree,
-  HierarchyPointNode
-} from "d3-hierarchy";
+import { stratify as d3stratify, tree as d3tree } from "d3-hierarchy";
 import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
 import { scaleLinear as d3scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
@@ -41,6 +37,7 @@ import React from "react";
 
 import { ColorPalette } from "../../ColorPalette";
 import { FilterProps } from "../../FilterProps";
+import { IHierarchyPointNode as HierarchyPointNode } from "../../Interfaces/IHierarchyPointNode";
 import { TreeLegend } from "../TreeLegend/TreeLegend";
 
 import { TreeViewNode } from "./TreeViewNode";
