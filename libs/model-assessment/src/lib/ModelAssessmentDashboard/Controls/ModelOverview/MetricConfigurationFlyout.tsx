@@ -154,6 +154,10 @@ export class MetricConfigurationFlyout extends React.Component<
               localization.ModelAssessment.ModelOverview.featureConfiguration
                 .metricSelectionAriaLabel
             }
+            checkButtonAriaLabel={
+              localization.ModelAssessment.FeatureImportances
+                .RowCheckboxAriaLabel
+            }
           />
         </Stack>
       </Panel>
