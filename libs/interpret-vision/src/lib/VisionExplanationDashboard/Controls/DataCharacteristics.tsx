@@ -186,7 +186,8 @@ export class DataCharacteristics extends React.Component<
     const filteredItems = getFilteredDataFromSearch(
       this.props.searchValue,
       this.props.items,
-      this.props.taskType
+      this.props.taskType,
+      this.props.onSearchUpdated
     );
     this.setState(
       processItems(
@@ -262,7 +263,6 @@ export class DataCharacteristics extends React.Component<
     showBackArrow[index] = true;
     this.setState({ renderStartIndex, showBackArrow });
   };
-
   private loadPrevItems = (index: number) => (): void => {
     const { renderStartIndex, showBackArrow } = this.state;
     renderStartIndex[index] -= this.state.columnCount[index];

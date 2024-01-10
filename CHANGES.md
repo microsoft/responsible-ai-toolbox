@@ -24,6 +24,43 @@ this file to understand what changed.
 - bug fixes and tests
 - other
 
+## v0.33.0
+
+- new features
+  - ## Responsible AI Dashboard
+    - add AccessibleDetailsList with resizable columns for accessibility by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2470
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - fix aria label for screen reader on scatter plot color axis picker by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2440
+    - fix RAI dashboard treat as categorical accessibility on new cohort create by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2446
+    - fix line-height override on add tab button for accessibility by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2449
+    - fix pivot focus indicator for accessibility by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2450
+    - fix confusion matrix highcharts heatmap keyboard focus order accessibility by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2452
+    - fix class importance weights callout truncated in small view for accessibility by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2462
+    - fix tooltip callout keyboard focus order for accessibility by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2464
+    - announce highcharts confusion matrix heatmap tooltip aria label for accessibility by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2467
+    - announce search results in RAI Vision dashboard toolbar for accessibility by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2466
+  - ## RAIInsights
+    - remove python 3.6 from builds, tests and packages by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2442
+    - Upgrade setup python from v4 to v5 by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/2454
+    - release rai-core-flask 0.7.2 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2458
+    - update raiwidgets to rai-core-flask v0.7.2 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2459
+    - update numpy and numba dependencies by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2473
+  - ## RAI Vision
+    - fix luminosity ratio of RAI Vision dashboard success and failure instances text to background for accessibility by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2444
+    - fix error when extracting exif metadata features from images in RAI Vision dashboard by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2461
+    - fix images missing alternate text in RAI Vision dashboard for accessibility by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2463
+  - ## RAI Vision and Text
+    - update responsibleai-text and responsibleai-vision packages to responsibleai 0.32.1 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2445
+    - release responsibleai-vision 0.3.4 and responsibleai-text 0.2.4 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2447
+    - fix socketio cors authentication for object detection and qa metrics requests by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2455
+  - ## Error analysis
+    - Data Imputation Fix in `erroranalysis` by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2436
+    - release erroranalysis 0.5.3 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2468
+    - update responsibleai and raiwidgets to erroranalysis 0.5.3 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2471
+- other
+  - update vscode settings for codeActionsOnSave to use new field instead of boolean by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2465
+
 ## v0.32.1
 
 - new features

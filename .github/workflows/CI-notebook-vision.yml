@@ -52,25 +52,25 @@ jobs:
         name: Install pytorch on non-MacOS with python 3.7
         shell: bash -l {0}
         run: |
-          conda install --yes --quiet "pytorch==1.13.1" "torchvision<0.15" cpuonly -c pytorch
+          conda install --yes --quiet "pytorch==1.13.1" "torchvision<0.15" cpuonly "numpy<1.24.0" -c pytorch
 
       - if: ${{ matrix.operatingSystem == 'macos-latest' && matrix.pythonVersion == '3.7' }}
         name: Install Anaconda packages on MacOS with python 3.7
         shell: bash -l {0}
         run: |
-          conda install --yes --quiet "pytorch==1.13.1" "torchvision<0.15" -c pytorch
+          conda install --yes --quiet "pytorch==1.13.1" "torchvision<0.15" "numpy<1.24.0" -c pytorch
 
       - if: ${{ matrix.operatingSystem != 'macos-latest' && matrix.pythonVersion != '3.7' }}
         name: Install pytorch on non-MacOS
         shell: bash -l {0}
         run: |
-          conda install --yes --quiet "pytorch<2.1,>1.13.1" "torchvision<0.16" cpuonly -c pytorch
+          conda install --yes --quiet "pytorch<2.1,>1.13.1" "torchvision<0.16" cpuonly "numpy<1.24.0" -c pytorch
 
       - if: ${{ matrix.operatingSystem == 'macos-latest' && matrix.pythonVersion != '3.7' }}
         name: Install Anaconda packages on MacOS, which should not include cpuonly according to official docs
         shell: bash -l {0}
         run: |
-          conda install --yes --quiet "pytorch<2.1,>1.13.1" "torchvision<0.16" -c pytorch
+          conda install --yes --quiet "pytorch<2.1,>1.13.1" "torchvision<0.16" "numpy<1.24.0" -c pytorch
 
       - name: Setup tools
         shell: bash -l {0}
@@ -99,7 +99,7 @@ jobs:
         shell: bash -l {0}
         run: |
           pip install --force-reinstall pyarrow==11.0.0
-          pip install "numpy<=1.22.4"
+          pip install "numpy<=1.26.2"
 
       - name: Pip freeze
         shell: bash -l {0}

@@ -12,11 +12,11 @@ import {
   Text,
   Selection,
   SelectionMode,
-  DetailsList,
   PanelType,
   IColumn
 } from "@fluentui/react";
 import {
+  AccessibleDetailsList,
   defaultModelAssessmentContext,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
@@ -140,7 +140,7 @@ export class MetricConfigurationFlyout extends React.Component<
                 .flyoutDescription
             }
           </Text>
-          <DetailsList
+          <AccessibleDetailsList
             items={this.state.items}
             columns={columns}
             selectionMode={SelectionMode.multiple}
@@ -153,6 +153,10 @@ export class MetricConfigurationFlyout extends React.Component<
             ariaLabel={
               localization.ModelAssessment.ModelOverview.featureConfiguration
                 .metricSelectionAriaLabel
+            }
+            checkButtonAriaLabel={
+              localization.ModelAssessment.FeatureImportances
+                .RowCheckboxAriaLabel
             }
           />
         </Stack>

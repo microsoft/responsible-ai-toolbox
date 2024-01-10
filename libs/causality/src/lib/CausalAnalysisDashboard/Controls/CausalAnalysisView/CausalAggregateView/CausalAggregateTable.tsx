@@ -3,7 +3,6 @@
 
 import {
   CheckboxVisibility,
-  DetailsList,
   DetailsListLayoutMode,
   IColumn,
   IDetailsColumnRenderTooltipProps,
@@ -13,6 +12,7 @@ import {
   TooltipHost
 } from "@fluentui/react";
 import {
+  AccessibleDetailsList,
   defaultModelAssessmentContext,
   ICausalAnalysisSingleData,
   ModelAssessmentContext,
@@ -113,7 +113,7 @@ export class CausalAggregateTable extends React.PureComponent<ICausalAggregateTa
         return roundedData;
       }) ?? [];
     return (
-      <DetailsList
+      <AccessibleDetailsList
         items={items}
         columns={columns}
         selectionMode={SelectionMode.none}

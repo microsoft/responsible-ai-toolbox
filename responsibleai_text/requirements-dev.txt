@@ -6,7 +6,7 @@ requirements-parser==0.2.0
 
 transformers
 datasets
-tensorflow<2.11.0
+tensorflow
 opencv-python
 
 fastai

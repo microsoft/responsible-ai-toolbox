@@ -3,7 +3,6 @@
 
 import {
   FocusZone,
-  DetailsList,
   DetailsHeader,
   IDetailsHeaderProps,
   IGroup,
@@ -14,12 +13,17 @@ import {
   Selection,
   MarqueeSelection
 } from "@fluentui/react";
-import { DatasetTaskType, IVisionListItem } from "@responsible-ai/core-ui";
+import {
+  DatasetTaskType,
+  IVisionListItem,
+  AccessibleDetailsList
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { getAltTextForItem } from "../utils/getAltTextUtils";
 import { getFilteredDataFromSearch } from "../utils/getFilteredData";
+import { getTableListColumns } from "../utils/getTableListColumns";
 import { isItemPredTrueEqual } from "../utils/labelUtils";
 import { visionExplanationDashboardStyles } from "../VisionExplanationDashboard.styles";
 
@@ -68,76 +72,10 @@ export class TableList extends React.Component<
       filteredItems,
       groups
     );
-    const columns: IColumn[] = [
-      {
-        fieldName: "image",
-        isResizable: true,
-        key: "image",
-        maxWidth: 400,
-        minWidth: 200,
-        name: localization.InterpretVision.Dashboard.columnOne
-      },
-      {
-        fieldName: "index",
-        isResizable: true,
-        key: "index",
-        maxWidth: 400,
-        minWidth: 200,
-        name: localization.InterpretVision.Dashboard.columnTwo
-      }
-    ];
-    const labelColumns: IColumn[] = [
-      {
-        fieldName: "trueY",
-        isResizable: true,
-        key: "truey",
-        maxWidth: 400,
-        minWidth: 200,
-        name: localization.InterpretVision.Dashboard.columnThree
-      },
-      {
-        fieldName: "predictedY",
-        isResizable: true,
-        key: "predictedy",
-        maxWidth: 400,
-        minWidth: 200,
-        name: localization.InterpretVision.Dashboard.columnFour
-      }
-    ];
-    const objectDetectionLabelColumns: IColumn[] = [
-      {
-        fieldName: "correctDetections",
-        isResizable: true,
-        key: "correctDetections",
-        maxWidth: 400,
-        minWidth: 200,
-        name: localization.InterpretVision.Dashboard.columnThreeOD
-      },
-      {
-        fieldName: "incorrectDetections",
-        isResizable: true,
-        key: "incorrectDetections",
-        maxWidth: 400,
-        minWidth: 200,
-        name: localization.InterpretVision.Dashboard.columnFourOD
-      }
-    ];
-    if (this.props.taskType === DatasetTaskType.ObjectDetection) {
-      columns.push(...objectDetectionLabelColumns);
-    } else {
-      columns.push(...labelColumns);
-    }
-    const fieldNames = this.props.otherMetadataFieldNames;
-    fieldNames.forEach((fieldName) => {
-      columns.push({
-        fieldName,
-        isResizable: true,
-        key: fieldName,
-        maxWidth: 400,
-        minWidth: 200,
-        name: fieldName
-      });
-    });
+    const columns = getTableListColumns(
+      this.props.taskType,
+      this.props.otherMetadataFieldNames
+    );
     this.setState({
       columns,
       filteredGroups,
@@ -153,7 +91,7 @@ export class TableList extends React.Component<
         <Stack id="tabsViewTableList">
           <Stack.Item>
             <MarqueeSelection selection={this._selection}>
-              <DetailsList
+              <AccessibleDetailsList
                 key={this.props.searchValue}
                 items={this.state.filteredItems}
                 groups={this.state.filteredGroups}
@@ -187,7 +125,8 @@ export class TableList extends React.Component<
     const filteredItems = getFilteredDataFromSearch(
       searchValue,
       items,
-      this.props.taskType
+      this.props.taskType,
+      this.props.onSearchUpdated
     );
     return filteredItems;
   }

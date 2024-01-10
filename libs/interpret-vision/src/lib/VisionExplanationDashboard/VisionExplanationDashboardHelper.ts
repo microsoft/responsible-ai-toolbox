@@ -202,6 +202,8 @@ export const defaultState: IVisionExplanationDashboardState = {
   numRows: 3,
   otherMetadataFieldNames: ["mean_pixel_value"],
   panelOpen: false,
+  searchResultsAriaLabel:
+    localization.InterpretVision.Search.defaultSearchLabel,
   searchValue: "",
   selectedIndices: [],
   selectedItem: undefined,

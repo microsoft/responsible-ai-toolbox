@@ -3,7 +3,6 @@
 
 import {
   ConstrainMode,
-  DetailsList,
   DetailsListLayoutMode,
   IGroup,
   MarqueeSelection,
@@ -26,7 +25,8 @@ import {
   LabelWithCallout,
   ModelAssessmentContext,
   TelemetryEventName,
-  TelemetryLevels
+  TelemetryLevels,
+  AccessibleDetailsList
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -181,7 +181,7 @@ export class TableView extends React.Component<
     selectionMode: SelectionMode
   ): React.ReactNode {
     return (
-      <DetailsList
+      <AccessibleDetailsList
         items={this.state.rows}
         columns={this.state.columns}
         groups={this.state.groups}

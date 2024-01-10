@@ -3,13 +3,13 @@
 
 import {
   CheckboxVisibility,
-  DetailsList,
   DetailsListLayoutMode,
   IColumn,
   SelectionMode,
   Stack
 } from "@fluentui/react";
 import {
+  AccessibleDetailsList,
   HeaderWithInfo,
   IAggregateBalanceMeasures,
   MissingParametersPlaceholder
@@ -104,7 +104,7 @@ export class AggregateBalanceMeasuresTable extends React.PureComponent<IAggregat
         <Stack.Item>{headerWithInfo}</Stack.Item>
 
         <Stack.Item>
-          <DetailsList
+          <AccessibleDetailsList
             items={items}
             columns={columns}
             selectionMode={SelectionMode.none}

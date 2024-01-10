@@ -4,7 +4,6 @@
 import {
   Checkbox,
   IColumn,
-  DetailsList,
   DetailsListLayoutMode,
   DetailsRow,
   DetailsRowFields,
@@ -38,7 +37,8 @@ import {
   ModelAssessmentContext,
   defaultModelAssessmentContext,
   Announce,
-  stringFormat
+  stringFormat,
+  AccessibleDetailsList
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -205,7 +205,7 @@ export class FeatureList extends React.Component<
                     selection={this._selection}
                     isEnabled={this.props.isEnabled}
                   >
-                    <DetailsList
+                    <AccessibleDetailsList
                       items={this.state.tableState.rows}
                       columns={this.state.tableState.columns}
                       setKey="set"

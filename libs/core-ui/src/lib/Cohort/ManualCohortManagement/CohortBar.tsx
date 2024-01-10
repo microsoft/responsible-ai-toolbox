@@ -1,17 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  DetailsList,
-  IColumn,
-  Panel,
-  SelectionMode,
-  Stack,
-  Text
-} from "@fluentui/react";
+import { IColumn, Panel, SelectionMode, Stack, Text } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { AccessibleDetailsList } from "../../components/AccessibleDetailsList";
 import { ICohort } from "../../Interfaces/ICohort";
 import { IExplanationModelMetadata } from "../../Interfaces/IExplanationContext";
 import { JointDataset } from "../../util/JointDataset";
@@ -108,7 +102,7 @@ export class CohortBar extends React.Component<
             />
           ) : (
             <Panel isOpen onDismiss={this.hideEditList} isLightDismiss>
-              <DetailsList
+              <AccessibleDetailsList
                 items={this.props.cohorts}
                 selectionMode={SelectionMode.none}
                 columns={columns}

@@ -4,7 +4,6 @@
 import {
   CheckboxVisibility,
   IColumn,
-  DetailsList,
   DetailsListLayoutMode,
   Stack,
   Text
@@ -12,6 +11,7 @@ import {
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { AccessibleDetailsList } from "../../components/AccessibleDetailsList";
 import { ErrorCohort } from "../ErrorCohort";
 
 import { cohortListStyles } from "./CohortList.styles";
@@ -112,7 +112,7 @@ export class CohortList extends React.Component<
       <div className={classNames.section}>
         <div className={classNames.subsection}>
           <div className={classNames.header}>Cohort List</div>
-          <DetailsList
+          <AccessibleDetailsList
             items={items}
             columns={this.columns}
             setKey="set"

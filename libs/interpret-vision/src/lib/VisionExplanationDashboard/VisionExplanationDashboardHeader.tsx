@@ -7,9 +7,15 @@ import {
   Stack,
   Slider,
   Separator,
-  Text
+  Text,
+  PivotItem,
+  IDropdownOption
 } from "@fluentui/react";
-import { DatasetTaskType, IVisionListItem } from "@responsible-ai/core-ui";
+import {
+  DatasetTaskType,
+  ErrorCohort,
+  IVisionListItem
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
@@ -18,33 +24,49 @@ import { IDatasetExplorerTabStyles } from "./Controls/ImageList.styles";
 import { PageSizeSelectors } from "./Controls/PageSizeSelectors";
 import { Pivots } from "./Controls/Pivots";
 import { ToolBar } from "./Controls/ToolBar";
-import { VisionExplanationDashboard } from "./VisionExplanationDashboard";
 import { IVisionExplanationDashboardStyles } from "./VisionExplanationDashboard.styles";
 import { VisionDatasetExplorerTabOptions } from "./VisionExplanationDashboardHelper";
 
-export interface IVisionExplanationDashboardCommonProps {
-  thisdashboard: VisionExplanationDashboard;
+export interface IVisionExplanationDashboardHeaderProps {
+  cohorts: ErrorCohort[];
+  selectedKey: string;
+  searchValue: string;
+  selectedCohort: ErrorCohort;
+  searchResultsAriaLabel: string;
   imageStyles: IProcessedStyleSet<IDatasetExplorerTabStyles>;
   classNames: IProcessedStyleSet<IVisionExplanationDashboardStyles>;
   taskType: string;
+  selectedIndices: number[];
+  handleLinkClick: (item?: PivotItem) => void;
+  setSelectedCohort: (cohort: ErrorCohort) => void;
+  onSliderChange: (value: number) => void;
+  onNumRowsSelect: (
+    _event: React.FormEvent<HTMLDivElement>,
+    item: IDropdownOption | undefined
+  ) => void;
+  addCohortWrapper: (name: string, switchCohort: boolean) => void;
+  onSearch: (
+    _event?: React.ChangeEvent<HTMLInputElement>,
+    newValue?: string
+  ) => void;
 }
 
-export interface IVisionExplanationDashboardCommonState {
+export interface IVisionExplanationDashboardHeaderState {
   item: IVisionListItem | undefined;
   metadata: Array<Array<string | number | boolean>> | undefined;
 }
 
-export class VisionExplanationDashboardCommon extends React.Component<
-  IVisionExplanationDashboardCommonProps,
-  IVisionExplanationDashboardCommonState
+export class VisionExplanationDashboardHeader extends React.Component<
+  IVisionExplanationDashboardHeaderProps,
+  IVisionExplanationDashboardHeaderState
 > {
   public render(): React.ReactNode {
     return (
       <Stack>
         <Stack.Item>
           <Pivots
-            selectedKey={this.props.thisdashboard.state.selectedKey}
-            onLinkClick={this.props.thisdashboard.handleLinkClick}
+            selectedKey={this.props.selectedKey}
+            onLinkClick={this.props.handleLinkClick}
           />
         </Stack.Item>
         <Stack.Item>
@@ -52,11 +74,12 @@ export class VisionExplanationDashboardCommon extends React.Component<
         </Stack.Item>
         <Stack.Item>
           <ToolBar
-            cohorts={this.props.thisdashboard.props.cohorts}
-            searchValue={this.props.thisdashboard.state.searchValue}
-            onSearch={this.props.thisdashboard.onSearch}
-            selectedCohort={this.props.thisdashboard.props.selectedCohort}
-            setSelectedCohort={this.props.thisdashboard.props.setSelectedCohort}
+            cohorts={this.props.cohorts}
+            searchResultsAriaLabel={this.props.searchResultsAriaLabel}
+            searchValue={this.props.searchValue}
+            onSearch={this.props.onSearch}
+            selectedCohort={this.props.selectedCohort}
+            setSelectedCohort={this.props.setSelectedCohort}
           />
         </Stack.Item>
         <Stack.Item>
@@ -64,6 +87,7 @@ export class VisionExplanationDashboardCommon extends React.Component<
             horizontal
             horizontalAlign="space-between"
             verticalAlign="start"
+            className={this.props.classNames.lowerToolbarContainer}
           >
             <Stack.Item>
               <Slider
@@ -75,23 +99,23 @@ export class VisionExplanationDashboardCommon extends React.Component<
                 label={localization.InterpretVision.Dashboard.thumbnailSize}
                 defaultValue={50}
                 showValue={false}
-                onChange={this.props.thisdashboard.onSliderChange}
+                onChange={this.props.onSliderChange}
                 disabled={
-                  this.props.thisdashboard.state.selectedKey ===
+                  this.props.selectedKey ===
                   VisionDatasetExplorerTabOptions.ClassView
                 }
               />
             </Stack.Item>
-            {this.props.thisdashboard.state.selectedKey ===
+            {this.props.selectedKey ===
               VisionDatasetExplorerTabOptions.ClassView && (
               <Stack.Item>
                 <PageSizeSelectors
-                  selectedKey={this.props.thisdashboard.state.selectedKey}
-                  onNumRowsSelect={this.props.thisdashboard.onNumRowsSelect}
+                  selectedKey={this.props.selectedKey}
+                  onNumRowsSelect={this.props.onNumRowsSelect}
                 />
               </Stack.Item>
             )}
-            {this.props.thisdashboard.state.selectedKey ===
+            {this.props.selectedKey ===
               VisionDatasetExplorerTabOptions.ImageExplorerView &&
               this.props.taskType !== DatasetTaskType.ObjectDetection && (
                 <Stack
@@ -130,13 +154,13 @@ export class VisionExplanationDashboardCommon extends React.Component<
               )}
           </Stack>
         </Stack.Item>
-        {this.props.thisdashboard.state.selectedKey ===
+        {this.props.selectedKey ===
           VisionDatasetExplorerTabOptions.TableView && (
           <Stack.Item>
             <CohortToolBar
-              addCohort={this.props.thisdashboard.addCohortWrapper}
-              cohorts={this.props.thisdashboard.props.cohorts}
-              selectedIndices={this.props.thisdashboard.state.selectedIndices}
+              addCohort={this.props.addCohortWrapper}
+              cohorts={this.props.cohorts}
+              selectedIndices={this.props.selectedIndices}
             />
           </Stack.Item>
         )}
