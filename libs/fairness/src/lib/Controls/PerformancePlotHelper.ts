@@ -93,7 +93,7 @@ export function buildCustomTooltips(
             : "";
         const customdata = barPlotlyProps?.data?.[j]?.customdata;
         if (customdata && _.isArray(customdata)) {
-          customdata.push({
+          (customdata as Datum[]).push({
             outcomeMetric,
             x:
               x !== undefined
