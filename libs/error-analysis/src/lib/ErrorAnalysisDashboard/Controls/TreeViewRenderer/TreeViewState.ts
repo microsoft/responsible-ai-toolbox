@@ -7,9 +7,9 @@ import {
   Metrics
 } from "@responsible-ai/core-ui";
 import { Property } from "csstype";
-import { HierarchyPointNode } from "d3-hierarchy";
 
 import { FilterProps } from "../../FilterProps";
+import { IHierarchyPointNode as HierarchyPointNode } from "../../Interfaces/IHierarchyPointNode";
 
 export interface IErrorColorStyle {
   fill: string | undefined;

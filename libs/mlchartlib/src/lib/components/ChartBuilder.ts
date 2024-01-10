@@ -15,10 +15,7 @@ interface IRow {
   size: any;
 }
 export class ChartBuilder {
-  public static buildPlotlySeries<T>(
-    datum: IData,
-    rows: T[]
-  ): Array<Partial<Data>> {
+  public static buildPlotlySeries<T>(datum: IData, rows: T[]): IData[] {
     const groupingDictionary: { [key: string]: Partial<Data> } = {};
     let defaultSeries: Partial<Data> | undefined;
     const datumLevelPaths: string = datum.datapointLevelAccessors
@@ -43,7 +40,7 @@ export class ChartBuilder {
     // the preferred solution of size ref
     const maxBubbleValue = 10;
     projectedRows.forEach((row) => {
-      let series: Partial<Data>;
+      let series: IData;
 
       // Handle mutiple group by in the future
       if (datum.groupBy && datum.groupBy.length > 0) {
@@ -52,20 +49,20 @@ export class ChartBuilder {
           if (defaultSeries === undefined) {
             defaultSeries = ChartBuilder.buildDefaultSeries(datum);
           }
-          series = defaultSeries;
+          series = defaultSeries as IData;
         } else {
           if (groupingDictionary[key] === undefined) {
             const temp = ChartBuilder.buildDefaultSeries(datum);
             temp.name = key;
             groupingDictionary[key] = temp;
           }
-          series = groupingDictionary[key];
+          series = groupingDictionary[key] as IData;
         }
       } else {
         if (defaultSeries === undefined) {
           defaultSeries = ChartBuilder.buildDefaultSeries(datum);
         }
-        series = defaultSeries;
+        series = defaultSeries as IData;
       }
 
       // Due to logging supporting heterogeneous metric types, a metric can be a scalar on one run and a vector on another
@@ -146,7 +143,7 @@ export class ChartBuilder {
     Object.keys(groupingDictionary).forEach((key) => {
       result.push(groupingDictionary[key]);
     });
-    return result;
+    return result as IData[];
   }
 
   private static getHasVectors(row: IRow): {
