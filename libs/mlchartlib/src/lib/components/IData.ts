@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Data } from "plotly.js";
+import { BoxPlotData, PlotData } from "plotly.js";
 
 import { IAccessor } from "./IAccessor";
 
-export interface IData extends Data {
+export type IData = (Partial<PlotData> | Partial<BoxPlotData>) & {
   xAccessor?: string;
   xAccessorLowerBound?: string;
   xAccessorUpperBound?: string;
@@ -20,4 +20,4 @@ export interface IData extends Data {
   maxMarkerSize?: number;
   seriesLevelAccessors?: { [key: string]: IAccessor };
   datapointLevelAccessors?: { [key: string]: IAccessor };
-}
+};

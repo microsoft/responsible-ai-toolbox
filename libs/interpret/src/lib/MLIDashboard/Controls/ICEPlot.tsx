@@ -18,6 +18,7 @@ import { localization } from "@responsible-ai/localization";
 import {
   AccessibleChart,
   ICategoricalRange,
+  IData,
   INumericRange,
   IPlotlyProperty,
   PlotlyMode,
@@ -25,7 +26,6 @@ import {
 } from "@responsible-ai/mlchartlib";
 import _, { toNumber } from "lodash";
 import memoize from "memoize-one";
-import { Data } from "plotly.js";
 import React from "react";
 
 import { HelpMessageDict } from "../Interfaces/IStringsParam";
@@ -87,7 +87,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
       const transposedY: number[][] = Array.isArray(yData[0])
         ? ModelExplanationUtils.transpose2DArray(yData as number[][])
         : [yData as number[]];
-      const data: Data[] = transposedY.map((singleClassValue, classIndex) => {
+      const data: IData[] = transposedY.map((singleClassValue, classIndex) => {
         return {
           hoverinfo: "text",
           mode:

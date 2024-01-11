@@ -10,6 +10,7 @@ import { v4 } from "uuid";
 
 import { accessibleChartStyles } from "./AccessibleChart.styles";
 import { formatValue } from "./DisplayFormatters";
+import { IData } from "./IData";
 import { IPlotlyProperty } from "./IPlotlyProperty";
 import { PlotlyThemes, IPlotlyTheme } from "./PlotlyThemes";
 
@@ -97,7 +98,7 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
     );
   }
 
-  private createTableWithPlotlyData(data: Plotly.Data[]): React.ReactNode {
+  private createTableWithPlotlyData(data: IData[]): React.ReactNode {
     return (
       <table className={accessibleChartStyles.plotlyTable}>
         <tbody>
