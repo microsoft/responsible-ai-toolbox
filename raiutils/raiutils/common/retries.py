@@ -33,7 +33,11 @@ def retry_function(function, action_name, err_msg,
             print(e)
             if i + 1 != max_retries:
                 print("Will retry after {0} seconds".format(retry_delay))
-                time.sleep(retry_delay)
+                try:
+                    for _ in range(retry_delay):
+                        time.sleep(1)
+                except TypeError:
+                    time.sleep(retry_delay)
                 retry_delay = retry_delay * 2
     else:
         raise RuntimeError(err_msg)
