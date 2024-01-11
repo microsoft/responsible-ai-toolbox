@@ -1,7 +1,9 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 import time
+
 import pytest
+
 from raiutils.common.retries import retry_function
 
 
