@@ -170,7 +170,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
               ).toFixed(digitsOfPrecision)}%]`
             : "";
 
-        barPlotlyProps.data[0].customdata.push({
+        (barPlotlyProps.data[0].customdata as Datum[]).push({
           outcomeMetric: outcomeMetric.title,
           x: x !== undefined ? (100 * x).toFixed(digitsOfPrecision) : undefined,
           xBounds,

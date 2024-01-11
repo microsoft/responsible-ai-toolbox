@@ -3,9 +3,9 @@
 
 import { Metrics } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { HierarchyPointNode } from "d3-hierarchy";
 
 import { FilterProps } from "../../FilterProps";
+import { IHierarchyPointNode as HierarchyPointNode } from "../../Interfaces/IHierarchyPointNode";
 import { MetricLocalizationType, MetricUtils } from "../../MetricUtils";
 
 import { ITreeNode } from "./TreeViewState";
