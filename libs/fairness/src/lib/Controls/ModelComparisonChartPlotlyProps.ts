@@ -165,7 +165,7 @@ export function getPlotlyProps(
           y
         );
 
-        series.customdata.push({
+        (series.customdata as Datum[]).push({
           modelId,
           x: x?.toFixed(digitsOfPrecision),
           xBounds,
