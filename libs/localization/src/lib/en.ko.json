@@ -836,6 +836,8 @@
         "regressionError": "오류"
       },
       "TreatAsCategorical": "범주로 처리",
+      "TreatAsCategoricalAriaLabelChecked": "Treat as categorical checked, number of unique values: {0}",
+      "TreatAsCategoricalAriaLabelUnchecked": "Treat as categorical unchecked, min value: {0}, max value: {1}",
       "addFilter": "필터 추가",
       "addFilterAriaLabel": "코호트 필터 추가",
       "addedFilters": "필터",
