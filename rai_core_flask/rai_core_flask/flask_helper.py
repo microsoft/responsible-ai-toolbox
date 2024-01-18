@@ -25,14 +25,14 @@ class FlaskHelper(object):
     """FlaskHelper is a class for common Flask utilities used in dashboards."""
 
     def __init__(self, ip=None, port=None, with_credentials=False,
-                 is_private_link_aml_workspace=False):
+                 is_private_link=False):
         # The name passed to Flask needs to be unique per instance.
         self.app = Flask(uuid.uuid4().hex)
 
         self.port = port
         self.ip = ip
         self.with_credentials = with_credentials
-        self.is_private_link_aml_workspace = is_private_link_aml_workspace
+        self.is_private_link = is_private_link
         # dictionary to store arbitrary state for use by consuming classes
         self.shared_state = {}
         if self.ip is None:

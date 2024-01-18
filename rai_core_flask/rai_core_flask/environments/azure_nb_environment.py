@@ -36,7 +36,7 @@ class AzureNBEnvironment(BaseEnvironment):
             else:
                 instance_name = self.nbvm["instance"]
                 domain_suffix = self.nbvm["domainsuffix"]
-                if service.is_private_link_aml_workspace:
+                if service.is_private_link:
                     url_format = f"{instance_name}.{domain_suffix}:{service.port}"
                 else:
                     url_format = f"{instance_name}-{service.port}.{domain_suffix}"
