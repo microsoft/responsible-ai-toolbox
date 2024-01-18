@@ -60,6 +60,19 @@ def extract_features(text_dataset: pd.DataFrame,
             feature_names.append(prefix + "maximum_parse_tree_depth")
         feature_names.append("question_type")
         feature_names.append("context_overlap")
+    elif task_type == ModelTask.GENERATIVE_TEXT:
+        # TODO: Add feature names for generative text
+        start_meta_index += 1
+        feature_names = []
+        prefixes = [QuestionAnsweringFields.CONTEXT + "_",
+                    QuestionAnsweringFields.QUESTION + "_"]
+        for prefix in prefixes:
+            for feature_name in base_feature_names:
+                feature_names.append(prefix + feature_name)
+            feature_names.append(prefix + "average_parse_tree_depth")
+            feature_names.append(prefix + "maximum_parse_tree_depth")
+        feature_names.append("question_type")
+        feature_names.append("context_overlap")
     else:
         raise ValueError("Unknown task type: {}".format(task_type))
     # copy over the metadata column names
@@ -101,6 +114,9 @@ def extract_features(text_dataset: pd.DataFrame,
                                    extracted_features, has_dropped_features,
                                    dropped_features, column_names)
             results.append(extracted_features)
+    elif task_type == ModelTask.GENERATIVE_TEXT:
+        # TODO: Add feature extraction for generative text
+        pass
     else:
         raise ValueError("Unknown task type: {}".format(task_type))
     return results, feature_names
