@@ -131,6 +131,8 @@ class ExplainerManager(BaseManager):
                 eval_examples.append(question + SEP + context)
             self._explanation = [explainer_start(eval_examples),
                                  explainer_end(eval_examples)]
+        elif self._task_type == ModelTask.GENERATIVE_TEXT:
+            raise NotImplementedError('Generative text is not supported yet')
         else:
             raise ValueError("Unknown task type: {}".format(self._task_type))
 

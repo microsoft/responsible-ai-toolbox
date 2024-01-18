@@ -100,6 +100,10 @@ def _add_extra_metadata_features(task_type, feature_metadata):
         if is_cat_empty:
             feature_metadata.categorical_features = []
         feature_metadata.categorical_features.append(_QUESTION_TYPE)
+    if task_type == ModelTask.GENERATIVE_TEXT:
+        # TODO: Make this configurable
+        feature_metadata.prompt_col = 'questions'
+        feature_metadata.context_col = 'context'
     return feature_metadata
 
 
@@ -269,7 +273,9 @@ class RAITextInsights(RAIBaseInsights):
             target_column, axis=1)
         small_test_data = get_text_columns(small_test_data, text_column)
         small_test_data = small_test_data.iloc[0]
-        if task_type != ModelTask.QUESTION_ANSWERING:
+        if task_type not in [
+                ModelTask.QUESTION_ANSWERING,
+                ModelTask.GENERATIVE_TEXT]:
             small_test_data = small_test_data.tolist()
         # Call the model
         try:
@@ -319,7 +325,8 @@ class RAITextInsights(RAIBaseInsights):
             ModelTask.SENTIMENT_ANALYSIS.value,
             ModelTask.QUESTION_ANSWERING.value,
             ModelTask.ENTAILMENT.value,
-            ModelTask.SUMMARIZATIONS.value
+            ModelTask.SUMMARIZATIONS.value,
+            ModelTask.GENERATIVE_TEXT.value,
         ]
 
         if task_type not in valid_tasks:
@@ -514,6 +521,8 @@ class RAITextInsights(RAIBaseInsights):
             dataset = self.test.drop(target_column, axis=1)
         elif self.task_type == ModelTask.QUESTION_ANSWERING:
             dataset = self.test.drop([self.target_column], axis=1)
+        elif self.task_type == ModelTask.GENERATIVE_TEXT:
+            dataset = self.test.drop([self.target_column], axis=1)
         else:
             raise ValueError("Unknown task type: {}".format(self.task_type))
         dataset = get_text_columns(dataset, self._text_column)
@@ -591,6 +600,18 @@ class RAITextInsights(RAIBaseInsights):
                 raise ValueError(
                     "Model predict_proba output of unsupported type,") from ex
             dashboard_dataset.probability_y = probability_y
+
+        # add prompt and (optionally) context to dataset
+        # for generative text tasks
+        if self.task_type == ModelTask.GENERATIVE_TEXT:
+            prompt = self.test[self._feature_metadata.prompt_col]
+            context = self.test.get(self._feature_metadata.context_col)
+
+            dashboard_dataset.prompt = convert_to_list(prompt)
+            if context is None:
+                dashboard_dataset.context = None
+            else:
+                dashboard_dataset.context = convert_to_list(context)
 
         return dashboard_dataset
 
@@ -811,6 +832,8 @@ class RAITextInsights(RAIBaseInsights):
         selection_indexes,
         question_answering_cache
     ):
+        # return self.compute_genai_metrics(selection_indexes, question_answering_cache)
+        print('compute_question_answering_metrics')
         dashboard_dataset = self.get_data().dataset
         true_y = dashboard_dataset.true_y
         predicted_y = dashboard_dataset.predicted_y
@@ -852,4 +875,94 @@ class RAITextInsights(RAIBaseInsights):
                      bert_f1_score, rouge_results['rougeL']])
             except ValueError:
                 all_cohort_metrics.append([0, 0, 0, 0, 0, 0])
+        return all_cohort_metrics
+
+    def compute_genai_metrics(
+        self,
+        selection_indexes,
+        question_answering_cache
+    ):
+        print('compute_genai_metrics')
+        curr_file_dir = Path(__file__).resolve().parent
+
+        dashboard_dataset = self.get_data().dataset
+        true_y = dashboard_dataset.true_y
+        predicted_y = dashboard_dataset.predicted_y
+
+        eval_model = self.temp_eval_model
+        questions = self.temp_questions
+        context = self.temp_context
+
+        all_cohort_metrics = []
+        for cohort_indices in selection_indexes:
+            print('cohort metrics')
+            true_y_cohort = [true_y[cohort_index] for cohort_index
+                             in cohort_indices]
+            predicted_y_cohort = [predicted_y[cohort_index] for cohort_index
+                                  in cohort_indices]
+            questions_cohort = [questions[cohort_index] for cohort_index
+                                in cohort_indices]
+            context_cohort = [context[cohort_index] for cohort_index
+                                in cohort_indices]
+            try:
+                print('exact match')
+                exact_match = evaluate.load('exact_match')
+                exact_match_results = exact_match.compute(
+                    predictions=predicted_y_cohort, references=true_y_cohort)
+
+                print('coherence')
+                coherence = evaluate.load(
+                    str(curr_file_dir.joinpath('metrics/coherence.py')))
+                coherence_results = coherence.compute(
+                    predictions=predicted_y_cohort,
+                    references=questions_cohort,
+                    wrapper_model=eval_model)
+                # coherence_results = {'scores' : [3.4]}
+
+                print('equivalence')
+                equivalence = evaluate.load(
+                    str(curr_file_dir.joinpath('metrics/equivalence.py')))
+                equivalence_results = equivalence.compute(
+                    predictions=predicted_y_cohort,
+                    references=questions_cohort,
+                    answers=true_y_cohort,
+                    wrapper_model=eval_model)
+
+                print('fluency')
+                fluency = evaluate.load(
+                    str(curr_file_dir.joinpath('metrics/fluency.py')))
+                fluency_results = fluency.compute(
+                    predictions=predicted_y_cohort,
+                    references=questions_cohort,
+                    wrapper_model=eval_model)
+
+                print('groundedness')
+                # groundedness = evaluate.load(
+                #     str(curr_file_dir.joinpath('metrics/groundedness.py')))
+                # groundedness_results = groundedness.compute(
+                #     predictions=predicted_y_cohort,
+                #     references=context_cohort,
+                #     wrapper_model=eval_model)
+                groundedness_results = {'scores' : [3.4]}
+
+                print('relevance')
+                # relevance = evaluate.load(
+                #     str(curr_file_dir.joinpath('metrics/relevance.py')))
+                # relevance_results = relevance.compute(
+                #     predictions=predicted_y_cohort,
+                #     references=context_cohort,
+                #     questions=questions_cohort,
+                #     wrapper_model=eval_model)
+                relevance_results = {'scores' : [3.5]}
+
+                all_cohort_metrics.append([
+                    exact_match_results['exact_match'],
+                    np.mean(coherence_results['scores']),
+                    np.mean(equivalence_results['scores']),
+                    np.mean(fluency_results['scores']),
+                    np.mean(groundedness_results['scores']),
+                    np.mean(relevance_results['scores'])])
+            except ValueError:
+                all_cohort_metrics.append([0, 0, 0, 0, 0, 0])
+        print('all done')
         return all_cohort_metrics
