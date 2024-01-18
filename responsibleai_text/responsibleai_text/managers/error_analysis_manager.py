@@ -83,6 +83,11 @@ class WrappedIndexPredictorModel:
             self.predictions = self.model.predict(
                 self.dataset.loc[:, ['context', 'questions']])
             self.predictions = np.array(self.predictions)
+        elif self.task_type == ModelTask.GENERATIVE_TEXT:
+            # FIXME: Copying from QUESTION_ANSWERING for now
+            self.predictions = self.model.predict(
+                self.dataset.loc[:, ['context', 'questions']])
+            self.predictions = np.array(self.predictions)
         else:
             raise ValueError("Unknown task type: {}".format(self.task_type))
 
