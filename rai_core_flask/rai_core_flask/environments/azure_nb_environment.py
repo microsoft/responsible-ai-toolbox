@@ -36,14 +36,18 @@ class AzureNBEnvironment(BaseEnvironment):
             else:
                 instance_name = self.nbvm["instance"]
                 domain_suffix = self.nbvm["domainsuffix"]
+                if service.is_private_link_aml_workspace:
+                    url_format = f"{instance_name}.{domain_suffix}:{service.port}"
+                else:
+                    url_format = f"{instance_name}-{service.port}.{domain_suffix}"
                 self.base_url = \
-                    f"https://{instance_name}-{service.port}.{domain_suffix}"
+                    f"https://{url_format}"
                 self.successfully_detected = True
                 self.nbvm_origins = [
                     f"https://{instance_name}.{domain_suffix}",
-                    f"https://{instance_name}-{service.port}.{domain_suffix}",
+                    f"https://{url_format}",
                     f"wss://{instance_name}.{domain_suffix}",
-                    f"wss://{instance_name}-{service.port}.{domain_suffix}",
+                    f"wss://{url_format}",
                     "https://ml.azure.com",
                     "https://dev.ml.azure.com",
                     "https://int.ml.azure.com"
