@@ -46,10 +46,10 @@ jobs:
         run: |
           if [[ '${{ github.event_name }}' == 'push' ]]
           then
-            echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container_for_js}/index.html"
+            echo "url=https://${blob_account}.blob.core.windows.net/${blob_container_for_js}/index.html" >> $GITHUB_OUTPUT
           elif [[ '${{ github.event_name }}' == 'pull_request' ]]
           then
-            echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container_for_pull_request}/${blob_path_for_pull_request}/${dashboardDirectory}/index.html"
+            echo "url=https://${blob_account}.blob.core.windows.net/${blob_container_for_pull_request}/${blob_path_for_pull_request}/${dashboardDirectory}/index.html" >> $GITHUB_OUTPUT
           else
             echo "Invalid event $${{ github.event_name }}"
           fi
@@ -62,7 +62,7 @@ jobs:
         run: yarn auto-version
       - name: Get version
         id: version
-        run: echo ::set-output name=version::$(cat version.cfg)
+        run: echo "version=$(cat version.cfg)" >> $GITHUB_OUTPUT
 
       - name: Build Typescript
         run: yarn buildall
@@ -175,7 +175,7 @@ jobs:
 
       - name: Get retention cut off date
         id: retention_date
-        run: echo "::set-output name=date::$(date --date='${{env.retentionDays}} days ago' +'%Y-%m-%dT00:00Z')"
+        run: echo "date=$(date --date='${{env.retentionDays}} days ago' +'%Y-%m-%dT00:00Z')" >> $GITHUB_OUTPUT
 
       - if: ${{ (steps.uploaddashboard.outcome != 'failure') }}
         name: Delete old files before ${{steps.retention_date.outputs.date}}
