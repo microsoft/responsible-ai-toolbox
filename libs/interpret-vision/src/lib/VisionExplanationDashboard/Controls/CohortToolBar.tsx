@@ -180,7 +180,9 @@ export class CohortToolBar extends React.Component<
       this.setState({
         errorMessage: localization.InterpretVision.Cohort.errorNumSelected
       });
-    } else if (this.state.cohortNames.includes(cohortName.toLocaleLowerCase())) {
+    } else if (
+      this.state.cohortNames.includes(cohortName.toLocaleLowerCase())
+    ) {
       this.setState({
         errorMessage: localization.InterpretVision.Cohort.errorCohortName
       });
