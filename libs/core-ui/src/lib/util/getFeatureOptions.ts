@@ -31,7 +31,7 @@ export function getFeatureOptions(
       return {
         data: {
           categoricalOptions: options,
-          fullLabel: meta.label.toLowerCase()
+          fullLabel: meta.label.toLocaleLowerCase()
         },
         key,
         text: meta.abbridgedLabel

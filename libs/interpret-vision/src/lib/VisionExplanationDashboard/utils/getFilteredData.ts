@@ -39,7 +39,7 @@ export function includesSearchVal(
   searchVal: string
 ): boolean {
   if (Array.isArray(labels)) {
-    return labels.some((label) => label.toLowerCase().includes(searchVal));
+    return labels.some((label) => label.toLocaleLowerCase().includes(searchVal.toLocaleLowerCase()));
   }
-  return labels.toLowerCase().includes(searchVal);
+  return labels.toLocaleLowerCase().includes(searchVal.toLocaleLowerCase());
 }
