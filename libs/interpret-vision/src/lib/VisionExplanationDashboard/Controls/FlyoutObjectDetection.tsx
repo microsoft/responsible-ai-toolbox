@@ -182,12 +182,12 @@ export class FlyoutObjectDetection extends React.Component<
                   />
                 </Stack.Item>
               </Stack>
-              <Stack horizontal tokens={{ childrenGap: 20 }}>
-                <Stack horizontal tokens={{ childrenGap: 10 }}>
+              <Stack horizontal tokens={FlyoutODUtils.stackTokens.large}>
+                <Stack horizontal tokens={FlyoutODUtils.stackTokens.medium}>
                   <div style={{ width: 20, height: 20, backgroundColor: theme.palette.green }} />
                   <Text variant="medium">Ground Truth</Text>
                 </Stack>
-                <Stack horizontal tokens={{ childrenGap: 10 }}>
+                <Stack horizontal tokens={FlyoutODUtils.stackTokens.medium}>
                   <div style={{ width: 20, height: 20, backgroundColor: theme.palette.magenta }} />
                   <Text variant="medium">Predicted</Text>
                 </Stack>
