@@ -7,6 +7,7 @@ import {
   IComboBox,
   IComboBoxOption,
   Image,
+  Label,
   List,
   Panel,
   PanelType,
@@ -175,7 +176,7 @@ export class FlyoutObjectDetection extends React.Component<
                     {localization.InterpretVision.Dashboard.panelInformation}
                   </Text>
                 </Stack.Item>
-                <Stack.Item className={classNames.featureListContainer}>
+                <Stack.Item className={classNames.featureListContainer} tabIndex={0}>
                   <List
                     items={this.state.metadata}
                     onRenderCell={FlyoutStyles.onRenderCell}
@@ -184,12 +185,12 @@ export class FlyoutObjectDetection extends React.Component<
               </Stack>
               <Stack horizontal tokens={FlyoutODUtils.stackTokens.large}>
                 <Stack horizontal tokens={FlyoutODUtils.stackTokens.medium}>
+                  <Text variant="medium">{localization.InterpretVision.Dashboard.trueY}</Text>
                   <div style={{ width: 20, height: 20, backgroundColor: theme.palette.green }} />
-                  <Text variant="medium">Ground Truth</Text>
                 </Stack>
                 <Stack horizontal tokens={FlyoutODUtils.stackTokens.medium}>
+                  <Text variant="medium">{localization.InterpretVision.Dashboard.predictedY}</Text>
                   <div style={{ width: 20, height: 20, backgroundColor: theme.palette.magenta }} />
-                  <Text variant="medium">Predicted</Text>
                 </Stack>
               </Stack>
               <Stack>
@@ -213,15 +214,22 @@ export class FlyoutObjectDetection extends React.Component<
               </Stack.Item>
               <Stack>
                 {
-                  <ComboBox
-                    id={localization.InterpretVision.Dashboard.objectSelect}
-                    label={localization.InterpretVision.Dashboard.chooseObject}
-                    onChange={this.selectODChoiceFromDropdown}
-                    selectedKey={this.state.odSelectedKey}
-                    options={this.state.selectableObjectIndexes}
-                    className={"classNames.dropdown"}
-                    styles={FluentUIStyles.smallDropdownStyle}
-                  />
+                  <>
+                    <Label
+                      id={localization.InterpretVision.Dashboard.objectSelectionLabel}>
+                      {localization.InterpretVision.Dashboard.chooseObject}
+                    </Label>
+                    <ComboBox
+                      id={localization.InterpretVision.Dashboard.objectSelect}
+                      onChange={this.selectODChoiceFromDropdown}
+                      selectedKey={this.state.odSelectedKey}
+                      options={this.state.selectableObjectIndexes}
+                      className="classNames.dropdown"
+                      styles={FluentUIStyles.smallDropdownStyle}
+                      ariaLabel={localization.InterpretVision.Dashboard.chooseObject}
+                      aria-labelledby={localization.InterpretVision.Dashboard.objectSelectionLabel}
+                    />
+                  </>
                 }
                 <Stack>
                   {!this.props.loadingExplanation[item.index][

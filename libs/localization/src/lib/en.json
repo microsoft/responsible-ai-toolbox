@@ -1477,6 +1477,7 @@
       "multiselect": "Multiselect",
       "notdefined": "object scenario not defined",
       "objectSelect": "Object Selection",
+      "objectSelectionLabel": "objectSelectLabel",
       "pageSize": "Page size: ",
       "panelTitle": "Selected instance",
       "panelExplanation": "Explanation",
