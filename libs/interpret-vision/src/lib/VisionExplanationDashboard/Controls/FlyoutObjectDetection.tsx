@@ -13,7 +13,8 @@ import {
   Separator,
   Spinner,
   Stack,
-  Text
+  Text,
+  getTheme
 } from "@fluentui/react";
 import { FluentUIStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -99,6 +100,7 @@ export class FlyoutObjectDetection extends React.Component<
       odIncorrect,
       item.index
     );
+    const theme = getTheme();
     return (
       <FocusZone>
         <Panel
@@ -179,6 +181,16 @@ export class FlyoutObjectDetection extends React.Component<
                     onRenderCell={FlyoutStyles.onRenderCell}
                   />
                 </Stack.Item>
+              </Stack>
+              <Stack horizontal tokens={{ childrenGap: 20 }}>
+                <Stack horizontal tokens={{ childrenGap: 10 }}>
+                  <div style={{ width: 20, height: 20, backgroundColor: theme.palette.green }} />
+                  <Text variant="medium">Ground Truth</Text>
+                </Stack>
+                <Stack horizontal tokens={{ childrenGap: 10 }}>
+                  <div style={{ width: 20, height: 20, backgroundColor: theme.palette.magenta }} />
+                  <Text variant="medium">Predicted</Text>
+                </Stack>
               </Stack>
               <Stack>
                 <Stack.Item className={classNames.imageContainer}>
