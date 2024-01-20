@@ -22,6 +22,7 @@ export interface ITreatmentViewProps {
 }
 export interface ITreatmentViewState {
   selectedPolicy?: ICausalPolicy;
+  selectedIndex: number;
 }
 
 export class TreatmentView extends React.Component<
@@ -31,6 +32,7 @@ export class TreatmentView extends React.Component<
   public constructor(props: ITreatmentViewProps) {
     super(props);
     this.state = {
+      selectedIndex: 0,
       selectedPolicy: props.data?.[0]
     };
   }
@@ -71,9 +73,28 @@ export class TreatmentView extends React.Component<
     );
   }
 
+  public componentDidUpdate(prevProps: ITreatmentViewProps): void {
+    if (
+      prevProps.data &&
+      this.props.data &&
+      prevProps.data[0].local_policies &&
+      this.props.data[0].local_policies
+    ) {
+      if (
+        prevProps.data[0].local_policies.length !==
+        this.props.data[0].local_policies.length
+      ) {
+        this.setState({
+          selectedPolicy: this.props.data[this.state.selectedIndex]
+        });
+      }
+    }
+  }
+
   private onSelect = (index: number): void => {
     if (this.props.data) {
       this.setState({
+        selectedIndex: index,
         selectedPolicy: this.props.data[index]
       });
     }
