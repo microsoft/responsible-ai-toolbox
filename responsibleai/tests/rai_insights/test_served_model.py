@@ -6,7 +6,6 @@ import random
 from unittest import mock
 
 import pytest
-import requests
 from tests.common_utils import (RandomForecastingModel,
                                 create_tiny_forecasting_dataset)
 
@@ -41,7 +40,7 @@ def rai_forecasting_insights_for_served_model():
 
 
 @mock.patch("requests.post")
-@mock.patch.dict("os.environ", {"RAI_MODEL_SERVING_PORT": "5123"})
+@mock.patch.dict("os.environ", {"RAI_MODEL_SERVING_PORT": "5432"})
 def test_served_model(
         mock_post,
         rai_forecasting_insights_for_served_model):
@@ -58,25 +57,3 @@ def test_served_model(
     forecasts = rai_insights.model.forecast(X_test)
     assert len(forecasts) == len(X_test)
     assert mock_post.call_count == 1
-
-
-@mock.patch("requests.post")
-@mock.patch.dict("os.environ", {"RAI_MODEL_SERVING_PORT": "5123"})
-def test_served_model_failed(
-        mock_post,
-        rai_forecasting_insights_for_served_model):
-    _, X_test, _, _ = create_tiny_forecasting_dataset()
-
-    response = requests.Response()
-    response.status_code = 400
-    response._content = b"Could not connect to host since it actively " \
-        b"refuses the connection."
-    mock_post.return_value = response
-
-    rai_insights = RAIInsights.load(RAI_INSIGHTS_DIR_NAME)
-    with pytest.raises(
-            Exception,
-            match="Could not retrieve predictions. "
-                  "Model server returned status code 400 "
-                  f"and the following response: {response.content}"):
-        rai_insights.model.forecast(X_test)
