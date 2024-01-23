@@ -74,10 +74,13 @@ class ExplainerManager(BaseManager):
         """
         self._model = model
         self._target_column = target_column
-        if not isinstance(target_column, list):
+        if not isinstance(target_column, (list, type(None))):
             target_column = [target_column]
-        self._evaluation_examples = \
-            evaluation_examples.drop(columns=target_column)
+        if target_column is None:
+            self._evaluation_examples = evaluation_examples
+        else:
+            self._evaluation_examples = \
+                evaluation_examples.drop(columns=target_column)
         self._is_run = False
         self._is_added = False
         self._features = list(self._evaluation_examples.columns)

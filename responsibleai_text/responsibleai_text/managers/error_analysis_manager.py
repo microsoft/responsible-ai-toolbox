@@ -231,7 +231,8 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
         :return: A wrapped predictor that uses index to retrieve text data.
         :rtype: WrappedIndexPredictorModel
         """
-        dataset = dataset.drop(columns=[target_column])
+        if target_column is not None:
+            dataset = dataset.drop(columns=[target_column])
         dataset = get_text_columns(dataset, text_column)
         index_predictor = WrappedIndexPredictorModel(
             model, dataset, is_multilabel, task_type, classes)
