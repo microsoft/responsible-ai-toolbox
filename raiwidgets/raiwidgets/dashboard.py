@@ -61,7 +61,7 @@ class Dashboard(object):
                  port,
                  locale,
                  no_inline_dashboard=False,
-                 is_private_link=False
+                 is_private_link=False,
                  **kwargs):
         """Initialize the dashboard."""
 
