@@ -125,11 +125,11 @@ export class FlyoutObjectDetection extends React.Component<
                   verticalAlign="center"
                 >
                   <Stack.Item>
-                  <FlyoutODUtils.DetectionDetails
-                    item={item}
-                    correctDetections={correctDetections}
-                    incorrectDetections={incorrectDetections}
-                  />
+                    <FlyoutODUtils.DetectionDetails
+                      item={item}
+                      correctDetections={correctDetections}
+                      incorrectDetections={incorrectDetections}
+                    />
                   </Stack.Item>
                 </Stack>
               </Stack.Item>
@@ -145,7 +145,10 @@ export class FlyoutObjectDetection extends React.Component<
                     {localization.InterpretVision.Dashboard.panelInformation}
                   </Text>
                 </Stack.Item>
-                <Stack.Item className={classNames.featureListContainer} tabIndex={0}>
+                <Stack.Item
+                  className={classNames.featureListContainer}
+                  tabIndex={0}
+                >
                   <List
                     items={this.state.metadata}
                     onRenderCell={FlyoutStyles.onRenderCell}
@@ -154,12 +157,28 @@ export class FlyoutObjectDetection extends React.Component<
               </Stack>
               <Stack horizontal tokens={FlyoutODUtils.stackTokens.large}>
                 <Stack horizontal tokens={FlyoutODUtils.stackTokens.medium}>
-                  <Text variant="medium">{localization.InterpretVision.Dashboard.trueY}</Text>
-                  <div style={{ backgroundColor: theme.palette.green, height: 20, width: 20 }} />
+                  <Text variant="medium">
+                    {localization.InterpretVision.Dashboard.trueY}
+                  </Text>
+                  <div
+                    style={{
+                      backgroundColor: theme.palette.green,
+                      height: 20,
+                      width: 20
+                    }}
+                  />
                 </Stack>
                 <Stack horizontal tokens={FlyoutODUtils.stackTokens.medium}>
-                  <Text variant="medium">{localization.InterpretVision.Dashboard.predictedY}</Text>
-                  <div style={{ backgroundColor: theme.palette.magenta, height: 20, width: 20 }} />
+                  <Text variant="medium">
+                    {localization.InterpretVision.Dashboard.predictedY}
+                  </Text>
+                  <div
+                    style={{
+                      backgroundColor: theme.palette.magenta,
+                      height: 20,
+                      width: 20
+                    }}
+                  />
                 </Stack>
               </Stack>
               <Stack>
@@ -183,7 +202,10 @@ export class FlyoutObjectDetection extends React.Component<
               </Stack.Item>
               <Stack>
                 <Label
-                  id={localization.InterpretVision.Dashboard.objectSelectionLabel}>
+                  id={
+                    localization.InterpretVision.Dashboard.objectSelectionLabel
+                  }
+                >
                   {localization.InterpretVision.Dashboard.chooseObject}
                 </Label>
                 <ComboBox
@@ -193,8 +215,12 @@ export class FlyoutObjectDetection extends React.Component<
                   options={this.state.selectableObjectIndexes}
                   className="classNames.dropdown"
                   styles={FluentUIStyles.smallDropdownStyle}
-                  ariaLabel={localization.InterpretVision.Dashboard.chooseObject}
-                  aria-labelledby={localization.InterpretVision.Dashboard.objectSelectionLabel}
+                  ariaLabel={
+                    localization.InterpretVision.Dashboard.chooseObject
+                  }
+                  aria-labelledby={
+                    localization.InterpretVision.Dashboard.objectSelectionLabel
+                  }
                 />
                 <Stack>
                   {!this.props.loadingExplanation[item.index][
