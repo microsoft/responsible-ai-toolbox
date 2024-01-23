@@ -14,8 +14,7 @@ import {
   Separator,
   Spinner,
   Stack,
-  Text,
-  getTheme
+  Text
 } from "@fluentui/react";
 import { FluentUIStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -101,7 +100,6 @@ export class FlyoutObjectDetection extends React.Component<
       odIncorrect,
       item.index
     );
-    const theme = getTheme();
     return (
       <FocusZone>
         <Panel
@@ -155,32 +153,7 @@ export class FlyoutObjectDetection extends React.Component<
                   />
                 </Stack.Item>
               </Stack>
-              <Stack horizontal tokens={FlyoutODUtils.stackTokens.large}>
-                <Stack horizontal tokens={FlyoutODUtils.stackTokens.medium}>
-                  <Text variant="medium">
-                    {localization.InterpretVision.Dashboard.trueY}
-                  </Text>
-                  <div
-                    style={{
-                      backgroundColor: theme.palette.green,
-                      height: 20,
-                      width: 20
-                    }}
-                  />
-                </Stack>
-                <Stack horizontal tokens={FlyoutODUtils.stackTokens.medium}>
-                  <Text variant="medium">
-                    {localization.InterpretVision.Dashboard.predictedY}
-                  </Text>
-                  <div
-                    style={{
-                      backgroundColor: theme.palette.magenta,
-                      height: 20,
-                      width: 20
-                    }}
-                  />
-                </Stack>
-              </Stack>
+              <FlyoutODUtils.ColorLegend />
               <Stack>
                 <Stack.Item className={classNames.imageContainer}>
                   <Stack.Item id="canvasToolsDiv">

@@ -39,6 +39,8 @@ export const stackTokens = {
   medium: { childrenGap: "l1" }
 };
 
+const theme = getTheme();
+
 export class DetectionDetails extends React.Component<IDetectionDetailsProps> {
   public render(): React.ReactNode {
     return (
@@ -71,6 +73,39 @@ export class DetectionDetails extends React.Component<IDetectionDetailsProps> {
             {this.props.incorrectDetections}
           </Text>
         </Stack.Item>
+      </Stack>
+    );
+  }
+}
+
+export class ColorLegend extends React.Component {
+  public render(): React.ReactNode {
+    return (
+      <Stack horizontal tokens={stackTokens.large}>
+        <Stack horizontal tokens={stackTokens.medium}>
+          <Text variant="medium">
+            {localization.InterpretVision.Dashboard.trueY}
+          </Text>
+          <div
+            style={{
+              backgroundColor: theme.palette.green,
+              height: 20,
+              width: 20
+            }}
+          />
+        </Stack>
+        <Stack horizontal tokens={stackTokens.medium}>
+          <Text variant="medium">
+            {localization.InterpretVision.Dashboard.predictedY}
+          </Text>
+          <div
+            style={{
+              backgroundColor: theme.palette.magenta,
+              height: 20,
+              width: 20
+            }}
+          />
+        </Stack>
       </Stack>
     );
   }
@@ -153,8 +188,6 @@ export function drawBoundingBoxes(
   if (!editorCallback) {
     return;
   }
-
-  const theme = getTheme();
 
   // Ensuring object detection labels are populated
   if (
