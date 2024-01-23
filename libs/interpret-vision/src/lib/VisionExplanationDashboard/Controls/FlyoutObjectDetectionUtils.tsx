@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, getTheme } from "@fluentui/react";
+import React from 'react';
+import { IComboBoxOption, getTheme, Stack, Text } from "@fluentui/react";
 import { IDataset, IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { CanvasTools } from "vott-ct";
@@ -26,6 +27,53 @@ export interface IFlyoutState {
   odSelectedKey: string;
   editorCallback?: HTMLDivElement;
 }
+
+interface DetectionDetailsProps {
+  item: IVisionListItem; // replace with actual type
+  correctDetections: string;
+  incorrectDetections: string;
+}
+
+export const DetectionDetails: React.FC<DetectionDetailsProps> = ({ item, correctDetections, incorrectDetections }) => {
+  return (
+    <Stack
+      tokens={stackTokens.large}
+      horizontalAlign="start"
+      verticalAlign="start"
+    >
+      <Stack
+        horizontal
+        tokens={stackTokens.medium}
+        horizontalAlign="center"
+        verticalAlign="center"
+      />
+      <Stack.Item>
+        <Text variant="large">
+          {localization.InterpretVision.Dashboard.indexLabel}
+          {item?.index}
+        </Text>
+      </Stack.Item>
+      <Stack.Item>
+        <Text variant="large">
+          {
+            localization.InterpretVision.Dashboard
+              .correctDetections
+          }
+          {correctDetections}
+        </Text>
+      </Stack.Item>
+      <Stack.Item>
+        <Text variant="large">
+          {
+            localization.InterpretVision.Dashboard
+              .incorrectDetections
+          }
+          {incorrectDetections}
+        </Text>
+      </Stack.Item>
+    </Stack>
+  );
+};
 
 export const stackTokens = {
   large: { childrenGap: "l2" },

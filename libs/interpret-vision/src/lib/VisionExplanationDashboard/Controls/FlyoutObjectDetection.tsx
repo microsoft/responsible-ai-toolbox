@@ -125,42 +125,11 @@ export class FlyoutObjectDetection extends React.Component<
                   verticalAlign="center"
                 >
                   <Stack.Item>
-                    <Stack
-                      tokens={FlyoutODUtils.stackTokens.large}
-                      horizontalAlign="start"
-                      verticalAlign="start"
-                    >
-                      <Stack
-                        horizontal
-                        tokens={FlyoutODUtils.stackTokens.medium}
-                        horizontalAlign="center"
-                        verticalAlign="center"
-                      />
-                      <Stack.Item>
-                        <Text variant="large">
-                          {localization.InterpretVision.Dashboard.indexLabel}
-                          {item?.index}
-                        </Text>
-                      </Stack.Item>
-                      <Stack.Item>
-                        <Text variant="large">
-                          {
-                            localization.InterpretVision.Dashboard
-                              .correctDetections
-                          }
-                          {correctDetections}
-                        </Text>
-                      </Stack.Item>
-                      <Stack.Item>
-                        <Text variant="large">
-                          {
-                            localization.InterpretVision.Dashboard
-                              .incorrectDetections
-                          }
-                          {incorrectDetections}
-                        </Text>
-                      </Stack.Item>
-                    </Stack>
+                  <FlyoutODUtils.DetectionDetails
+                    item={item}
+                    correctDetections={correctDetections}
+                    incorrectDetections={incorrectDetections}
+                  />
                   </Stack.Item>
                 </Stack>
               </Stack.Item>
@@ -213,20 +182,20 @@ export class FlyoutObjectDetection extends React.Component<
                 </Text>
               </Stack.Item>
               <Stack>
-                  <Label
-                    id={localization.InterpretVision.Dashboard.objectSelectionLabel}>
-                    {localization.InterpretVision.Dashboard.chooseObject}
-                  </Label>
-                  <ComboBox
-                    id={localization.InterpretVision.Dashboard.objectSelect}
-                    onChange={this.selectODChoiceFromDropdown}
-                    selectedKey={this.state.odSelectedKey}
-                    options={this.state.selectableObjectIndexes}
-                    className="classNames.dropdown"
-                    styles={FluentUIStyles.smallDropdownStyle}
-                    ariaLabel={localization.InterpretVision.Dashboard.chooseObject}
-                    aria-labelledby={localization.InterpretVision.Dashboard.objectSelectionLabel}
-                  />
+                <Label
+                  id={localization.InterpretVision.Dashboard.objectSelectionLabel}>
+                  {localization.InterpretVision.Dashboard.chooseObject}
+                </Label>
+                <ComboBox
+                  id={localization.InterpretVision.Dashboard.objectSelect}
+                  onChange={this.selectODChoiceFromDropdown}
+                  selectedKey={this.state.odSelectedKey}
+                  options={this.state.selectableObjectIndexes}
+                  className="classNames.dropdown"
+                  styles={FluentUIStyles.smallDropdownStyle}
+                  ariaLabel={localization.InterpretVision.Dashboard.chooseObject}
+                  aria-labelledby={localization.InterpretVision.Dashboard.objectSelectionLabel}
+                />
                 <Stack>
                   {!this.props.loadingExplanation[item.index][
                     +this.state.odSelectedKey.slice(
