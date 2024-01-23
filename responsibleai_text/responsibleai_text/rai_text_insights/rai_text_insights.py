@@ -183,7 +183,8 @@ class RAITextInsights(RAIBaseInsights):
         self._ext_test = ext_test
         self._ext_features = ext_features
         self._ext_test_df = pd.DataFrame(ext_test, columns=ext_features)
-        self._ext_test_df[target_column] = test[target_column]
+        if target_column is not None:
+            self._ext_test_df[target_column] = test[target_column]
         self.predict_output = None
 
         super(RAITextInsights, self).__init__(
@@ -266,11 +267,13 @@ class RAITextInsights(RAIBaseInsights):
             an exception will be raised.
         :type text_column: str or list[str]
         """
-        if not isinstance(target_column, list):
-            target_column = [target_column]
-        # Pick one row from test data
-        small_test_data = test.iloc[0:1].drop(
-            target_column, axis=1)
+        small_test_data = test.iloc[0:1]
+        if target_column is not None:
+            if not isinstance(target_column, list):
+                target_column = [target_column]
+            # Pick one row from test data
+            small_test_data = small_test_data.drop(
+                target_column, axis=1)
         small_test_data = get_text_columns(small_test_data, text_column)
         small_test_data = small_test_data.iloc[0]
         if task_type not in [
@@ -369,6 +372,9 @@ class RAITextInsights(RAIBaseInsights):
             if not target_columns_set.issubset(set(test.columns)):
                 raise UserConfigValidationException(
                     'The list of target_column(s) should be in test data')
+        elif task_type==ModelTask.GENERATIVE_TEXT.value and target_column is None:
+            # target column is optional for generative text
+            pass
         else:
             if target_column not in list(test.columns):
                 raise UserConfigValidationException(
@@ -522,7 +528,10 @@ class RAITextInsights(RAIBaseInsights):
         elif self.task_type == ModelTask.QUESTION_ANSWERING:
             dataset = self.test.drop([self.target_column], axis=1)
         elif self.task_type == ModelTask.GENERATIVE_TEXT:
-            dataset = self.test.drop([self.target_column], axis=1)
+            if self.target_column is None:
+                dataset = self.test.copy()
+            else:
+                dataset = self.test.drop([self.target_column], axis=1)
         else:
             raise ValueError("Unknown task type: {}".format(self.task_type))
         dataset = get_text_columns(dataset, self._text_column)
@@ -578,13 +587,16 @@ class RAITextInsights(RAIBaseInsights):
 
         dashboard_dataset.features = self._ext_test
 
-        true_y = self.test[self.target_column]
-        if true_y is not None and len(true_y) == row_length:
-            true_y = convert_to_list(true_y)
-            if is_classification_task:
-                true_y = self._convert_labels(
-                    true_y, dashboard_dataset.class_names)
-            dashboard_dataset.true_y = true_y
+        if self.target_column is None:
+            dashboard_dataset.true_y = None
+        else:
+            true_y = self.test[self.target_column]
+            if true_y is not None and len(true_y) == row_length:
+                true_y = convert_to_list(true_y)
+                if is_classification_task:
+                    true_y = self._convert_labels(
+                        true_y, dashboard_dataset.class_names)
+                dashboard_dataset.true_y = true_y
 
         dashboard_dataset.feature_names = self._ext_features
         dashboard_dataset.target_column = self.target_column
