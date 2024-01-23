@@ -151,7 +151,9 @@ export class CohortStatsHeatmap extends React.Component<
                     localization.ModelAssessment.ModelOverview
                       .tableMetricTooltip,
                     // make metric name lower case in sentence
-                    this.series.xAxis.categories[this.point.x].toLowerCase(),
+                    this.series.xAxis.categories[
+                      this.point.x
+                    ].toLocaleLowerCase(),
                     cohortNameBold,
                     pointValue === null
                       ? localization.ModelAssessment.ModelOverview.nA
