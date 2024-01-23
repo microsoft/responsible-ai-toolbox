@@ -17,7 +17,8 @@ from responsibleai_vision.utils.image_reader import \
     _requests_sessions as image_reader_requests_sessions
 from responsibleai_vision.utils.image_reader import get_all_exif_feature_names
 from responsibleai_vision.utils.image_utils import (
-    BOTTOM_X, BOTTOM_Y, HEIGHT, IS_CROWD, TOP_X, TOP_Y, WIDTH, classes_to_dict,
+    _NOLABEL, BOTTOM_X, BOTTOM_Y, HEIGHT, IS_CROWD, TOP_X, TOP_Y, WIDTH,
+    classes_to_dict, generate_od_error_labels,
     transform_object_detection_labels)
 
 LABEL = ImageColumns.LABEL.value
@@ -99,3 +100,35 @@ class TestImageUtils(object):
             set(['Orientation', 'ExifOffset', 'ImageWidth', 'GPSInfo',
                  'Model', 'DateTime', 'YCbCrPositioning', 'ImageLength',
                  'ResolutionUnit', 'Software', 'Make'])
+
+    def test_generate_od_error_labels(self):
+        true_y = np.array([[[3, 142, 257, 395, 463, 0]],
+                           [[3, 107, 272, 240, 501, 0],
+                            [1, 261, 274, 393, 449, 0]],
+                           [[4, 139, 253, 339, 506, 0]],
+                           [[2, 100, 173, 233, 521, 0]],
+                           [[1, 175, 253, 355, 416, 0]],
+                           [[2, 86, 102, 216, 439, 0],
+                            [3, 150, 377, 445, 490, 0]],
+                           [[3, 103, 272, 358, 475, 0]],
+                           [[4, 65, 289, 436, 414, 0]],
+                           [[1, 130, 271, 367, 467, 0]],
+                           [[1, 144, 260, 318, 429, 0]]])
+        pred_y = np.array([[[3, 140, 260, 396, 469, 0]],
+                           [[3, 108, 270, 237, 505, 0],
+                            [1, 259, 271, 401, 450, 0]],
+                           [[4, 131, 250, 330, 485, 0]],
+                           [[2, 97, 170, 241, 516, 0]],
+                           [[1, 175, 250, 354, 414, 0]],
+                           [[2, 83, 98, 222, 445, 0],
+                            [3, 130, 366, 438, 496, 0]],
+                           [[3, 104, 265, 360, 468, 0]],
+                           [[4, 58, 284, 483, 420, 0]],
+                           [[1, 128, 265, 367, 471, 0]],
+                           [[1, 137, 260, 325, 430, 0]]])
+        class_names = ["can", "carton", "milk_bottle", "water_bottle"]
+        error_labels = generate_od_error_labels(true_y, pred_y, class_names)
+        assert len(error_labels) == 10
+        assert error_labels[0]['aggregate'] == "1 correct, 0 incorrect"
+        assert error_labels[0]['correct'] == "1 milk_bottle"
+        assert error_labels[0]['incorrect'] == _NOLABEL

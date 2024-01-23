@@ -53,7 +53,7 @@ export class TableList extends React.Component<
       this.props.searchValue !== prevProps.searchValue
     ) {
       const filteredItems: IVisionListItem[] = this.getFilteredItems();
-      const searchVal = this.props.searchValue.toLowerCase();
+      const searchVal = this.props.searchValue.toLocaleLowerCase();
       const groups: IGroup[] =
         searchVal.length === 0
           ? this.getGroups()
@@ -118,7 +118,7 @@ export class TableList extends React.Component<
 
     items = items.concat(this.props.successInstances);
     items = items.concat(this.props.errorInstances);
-    const searchValue = this.props.searchValue.toLowerCase();
+    const searchValue = this.props.searchValue.toLocaleLowerCase();
     if (searchValue.length === 0) {
       return items;
     }
@@ -155,7 +155,7 @@ export class TableList extends React.Component<
     filteredItems: IVisionListItem[],
     groups: IGroup[]
   ): IGroup[] {
-    const searchValue = this.props.searchValue.toLowerCase();
+    const searchValue = this.props.searchValue.toLocaleLowerCase();
     if (searchValue.length === 0) {
       return groups;
     }

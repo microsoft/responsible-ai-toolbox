@@ -10,7 +10,6 @@ import os
 import pickle
 import shutil
 import warnings
-from collections import defaultdict
 from enum import Enum
 from pathlib import Path
 from typing import Any, Optional
@@ -22,8 +21,6 @@ import torch
 from ml_wrappers import wrap_model
 from ml_wrappers.common.constants import Device
 from torchmetrics.detection.mean_ap import MeanAveragePrecision
-from vision_explanation_methods.error_labeling.error_labeling import (
-    ErrorLabeling, ErrorLabelType)
 
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from raiutils.data_processing import convert_to_list
@@ -47,7 +44,8 @@ from responsibleai_vision.utils.feature_extractors import extract_features
 from responsibleai_vision.utils.image_reader import (
     get_base64_string_from_path, get_image_from_path, is_automl_image_model)
 from responsibleai_vision.utils.image_utils import (
-    convert_images, get_images, transform_object_detection_labels)
+    convert_images, generate_od_error_labels, get_images,
+    transform_object_detection_labels)
 
 IMAGE = ImageColumns.IMAGE.value
 IMAGE_URL = ImageColumns.IMAGE_URL.value
@@ -85,10 +83,6 @@ _DATETIME_FEATURES = 'datetime_features'
 _TIME_SERIES_ID_FEATURES = 'time_series_id_features'
 _CATEGORICAL_FEATURES = 'categorical_features'
 _DROPPED_FEATURES = 'dropped_features'
-_INCORRECT = 'incorrect'
-_CORRECT = 'correct'
-_AGGREGATE_LABEL = 'aggregate'
-_NOLABEL = '(none)'
 
 
 def reshape_image(image):
@@ -701,75 +695,13 @@ class RAIVisionInsights(RAIBaseInsights):
             )
 
             dashboard_dataset.object_detection_labels = \
-                self._generate_od_error_labels(
+                generate_od_error_labels(
                     dashboard_dataset.object_detection_true_y,
                     dashboard_dataset.object_detection_predicted_y,
                     class_names=dashboard_dataset.class_names
                 )
 
         return dashboard_dataset
-
-    def _generate_od_error_labels(self, true_y, pred_y, class_names):
-        """Utilized Error Labeling to generate labels
-        with correct and incorrect objects.
-
-        :param true_y: The true labels.
-        :type true_y: list
-        :param pred_y: The predicted labels.
-        :type pred_y: list
-        :param class_names: The class labels in the dataset.
-        :type class_names: list
-        :return: The aggregated labels.
-        :rtype: List[str]
-        """
-        object_detection_labels = []
-        for image_idx in range(len(true_y)):
-            image_labels = defaultdict(lambda: defaultdict(int))
-            rendered_labels = {}
-            error_matrix = ErrorLabeling(
-                ModelTask.OBJECT_DETECTION,
-                pred_y[image_idx],
-                true_y[image_idx]
-            ).compute_error_labels()
-
-            for label_idx in range(len(error_matrix)):
-                object_label = class_names[
-                    int(true_y[image_idx][label_idx][0] - 1)]
-                if ErrorLabelType.MATCH in error_matrix[label_idx]:
-                    image_labels[_CORRECT][object_label] += 1
-                else:
-                    image_labels[_INCORRECT][object_label] += 1
-
-                duplicate_detections = np.count_nonzero(
-                    error_matrix[label_idx] ==
-                    ErrorLabelType.DUPLICATE_DETECTION)
-                if duplicate_detections > 0:
-                    image_labels[_INCORRECT][object_label] += \
-                        duplicate_detections
-
-            correct_labels = sorted(image_labels[_CORRECT].items(),
-                                    key=lambda x: class_names.index(x[0]))
-            incorrect_labels = sorted(image_labels[_INCORRECT].items(),
-                                      key=lambda x: class_names.index(x[0]))
-
-            rendered_labels[_CORRECT] = ', '.join(
-                f'{value} {key}' for key, value in
-                correct_labels)
-            if len(rendered_labels[_CORRECT]) == 0:
-                rendered_labels[_CORRECT] = _NOLABEL
-            rendered_labels[_INCORRECT] = ', '.join(
-                f'{value} {key}' for key, value in
-                incorrect_labels)
-            if len(rendered_labels[_INCORRECT]) == 0:
-                rendered_labels[_INCORRECT] = _NOLABEL
-            rendered_labels[_AGGREGATE_LABEL] = \
-                f"{sum(image_labels[_CORRECT].values())} {_CORRECT}, \
-                  {sum(image_labels[_INCORRECT].values())} \
-                  {_INCORRECT}"
-
-            object_detection_labels.append(rendered_labels)
-
-        return object_detection_labels
 
     def _format_od_labels(self, y, class_names):
         """Formats the Object Detection label representation to
