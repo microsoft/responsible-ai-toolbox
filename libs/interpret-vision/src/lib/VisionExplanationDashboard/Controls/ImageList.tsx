@@ -88,7 +88,7 @@ export class ImageList extends React.Component<
   }
 
   private getFilteredItems(): IVisionListItem[] {
-    const searchValue = this.props.searchValue.toLowerCase();
+    const searchValue = this.props.searchValue.toLocaleLowerCase();
     let filteredItems: IVisionListItem[] = this.props.items;
     if (searchValue.length > 0) {
       filteredItems = getFilteredDataFromSearch(
