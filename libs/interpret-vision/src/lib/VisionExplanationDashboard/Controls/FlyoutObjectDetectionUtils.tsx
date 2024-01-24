@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, getTheme } from "@fluentui/react";
+import { IComboBoxOption, getTheme, Stack, Text } from "@fluentui/react";
 import { IDataset, IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import React from "react";
 import { CanvasTools } from "vott-ct";
 import { Editor } from "vott-ct/lib/js/CanvasTools/CanvasTools.Editor";
 import { RegionData } from "vott-ct/lib/js/CanvasTools/Core/RegionData";
@@ -31,6 +32,42 @@ export const stackTokens = {
   large: { childrenGap: "l2" },
   medium: { childrenGap: "l1" }
 };
+
+const theme = getTheme();
+
+export class ColorLegend extends React.Component {
+  public render(): React.ReactNode {
+    return (
+      <Stack horizontal tokens={stackTokens.large}>
+        <Stack horizontal tokens={stackTokens.medium}>
+          <Text variant="medium">
+            {localization.InterpretVision.Dashboard.trueY}
+          </Text>
+          <div
+            style={{
+              backgroundColor: theme.palette.green,
+              height: 20,
+              width: 20
+            }}
+          />
+        </Stack>
+        <Stack horizontal tokens={stackTokens.medium}>
+          <Text variant="medium">
+            {localization.InterpretVision.Dashboard.predictedY}
+          </Text>
+          <div
+            style={{
+              backgroundColor: theme.palette.magenta,
+              height: 20,
+              width: 20
+            }}
+          />
+        </Stack>
+      </Stack>
+    );
+  }
+}
+
 export const ExcessLabelLen =
   localization.InterpretVision.Dashboard.prefix.length;
 
@@ -108,8 +145,6 @@ export function drawBoundingBoxes(
   if (!editorCallback) {
     return;
   }
-
-  const theme = getTheme();
 
   // Ensuring object detection labels are populated
   if (
