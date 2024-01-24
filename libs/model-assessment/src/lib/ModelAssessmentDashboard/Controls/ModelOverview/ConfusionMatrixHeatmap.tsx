@@ -215,7 +215,7 @@ export class ConfusionMatrixHeatmap extends React.Component<
     if (this.context.dataset.class_names) {
       return this.context.dataset.class_names;
     }
-    if (this.context.dataset.predicted_y) {
+    if (this.context.dataset.predicted_y && this.context.dataset.true_y) {
       const allClasses = _.uniq([
         ...this.context.dataset.true_y,
         ...this.context.dataset.predicted_y
