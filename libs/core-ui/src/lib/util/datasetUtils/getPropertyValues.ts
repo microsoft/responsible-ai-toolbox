@@ -44,9 +44,12 @@ export function getPropertyValues(
     });
   }
   if (property === DatasetCohortColumns.TrueY) {
-    return indexes.map((index) => {
-      return dataset.true_y[index];
-    });
+    const trueYs = dataset.true_y;
+    if (trueYs) {
+      return indexes.map((index) => {
+        return trueYs[index];
+      });
+    }
   }
   if (dataset.predicted_y && dataset.true_y) {
     return getErrors(property, indexes, dataset, modelType);
@@ -62,6 +65,7 @@ function getErrors(
 ): unknown[] {
   if (
     dataset.predicted_y &&
+    dataset.true_y &&
     !Array.isArray(dataset.true_y) &&
     !Array.isArray(dataset.predicted_y)
   ) {
