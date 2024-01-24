@@ -34,13 +34,14 @@ export function onRenderCell(
 
 export function generateSelectableObjectDetectionIndexes(
   prefix: string,
-  item: IVisionListItem | undefined
+  item: IVisionListItem | undefined,
+  class_names: string[] | undefined
 ): IComboBoxOption[] {
   const temp = item?.odPredictedY;
   const selectableObjectIndexes: IComboBoxOption[] = [];
-  if (temp) {
+  if (temp && class_names) {
     for (let i = 0; i < Object.values(temp).length; i++) {
-      const className = item?.predictedY[i];
+      const className = class_names[temp[i][0] - 1];
       selectableObjectIndexes.push({
         key: prefix + String(i),
         text: String(i) + String(": ") + className
