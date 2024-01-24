@@ -160,6 +160,7 @@ export class TabsView extends React.PureComponent<
               {t.key === GlobalTabKeys.VisionTab &&
                 this.props.dataset.images &&
                 this.props.dataset.predicted_y &&
+                this.props.dataset.true_y &&
                 this.props.dataset.class_names && (
                   <>
                     <div className={classNames.sectionHeader}>
