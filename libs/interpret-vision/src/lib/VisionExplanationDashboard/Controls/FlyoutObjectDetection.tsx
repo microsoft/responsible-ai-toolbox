@@ -20,12 +20,12 @@ import { FluentUIStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import * as React from "react";
 import { CanvasTools } from "vott-ct";
-import { DetectionDetails } from "./DetectionDetails";
 
 import * as FlyoutStyles from "../utils/FlyoutUtils";
 import { getObjectDetectionImageAltText } from "../utils/getAltTextUtils";
 import { getJoinedLabelString } from "../utils/labelUtils";
 
+import { DetectionDetails } from "./DetectionDetails";
 import {
   flyoutStyles,
   explanationImage,
