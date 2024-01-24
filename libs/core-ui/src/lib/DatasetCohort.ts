@@ -120,7 +120,7 @@ export class DatasetCohort {
         dataDict[index][featureName] = val;
       });
     });
-    this.dataset.true_y.forEach((val, index) => {
+    this.dataset.true_y?.forEach((val, index) => {
       if (Array.isArray(val)) {
         val.forEach((subVal, subIndex) => {
           dataDict[index][DatasetCohortColumns.TrueY + subIndex.toString()] =

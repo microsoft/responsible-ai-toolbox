@@ -28,7 +28,9 @@ mockForecastingDataSingleTimeSeries.predicted_y =
     startingIndexBobsSandwichesTimeSeries,
     endingIndexBobsSandwichesTimeSeries
   );
-mockForecastingDataSingleTimeSeries.true_y = mockForecastingData.true_y.slice(
-  startingIndexBobsSandwichesTimeSeries,
-  endingIndexBobsSandwichesTimeSeries
-);
+if (mockForecastingData.true_y) {
+  mockForecastingDataSingleTimeSeries.true_y = mockForecastingData.true_y.slice(
+    startingIndexBobsSandwichesTimeSeries,
+    endingIndexBobsSandwichesTimeSeries
+  );
+}
