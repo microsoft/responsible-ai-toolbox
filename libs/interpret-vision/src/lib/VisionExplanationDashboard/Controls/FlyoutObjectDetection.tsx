@@ -57,7 +57,8 @@ export class FlyoutObjectDetection extends React.Component<
     const selectableObjectIndexes =
       FlyoutStyles.generateSelectableObjectDetectionIndexes(
         localization.InterpretVision.Dashboard.prefix,
-        item
+        item,
+        this.props.dataset.class_names
       );
     this.setState({ item, metadata, selectableObjectIndexes });
   }
@@ -75,7 +76,8 @@ export class FlyoutObjectDetection extends React.Component<
       const selectableObjectIndexes =
         FlyoutStyles.generateSelectableObjectDetectionIndexes(
           localization.InterpretVision.Dashboard.prefix,
-          item
+          item,
+          this.props.dataset.class_names
         );
       this.setState({
         item: this.props.item,
