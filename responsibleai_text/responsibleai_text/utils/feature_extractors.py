@@ -110,7 +110,8 @@ def extract_features(text_dataset: pd.DataFrame,
                                    dropped_features, column_names)
             results.append(extracted_features)
     elif task_type == ModelTask.GENERATIVE_TEXT:
-        for i, row in tqdm(text_features.iterrows(), desc='feature extraction'):
+        for i, row in tqdm(text_features.iterrows(),
+                           desc='feature extraction'):
             extracted_features = []
             add_extracted_features_for_sentence(
                 row[GenerativeTextFields.PROMPT], extracted_features,
