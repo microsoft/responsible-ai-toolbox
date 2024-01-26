@@ -37,6 +37,7 @@ class QuestionAnsweringFields(object):
     CONTEXT = "context"
     ANSWERS = "answers"
 
+
 class GenerativeTextFields(object):
     PROMPT = "prompt"
     SYS_PROMPT = "sys_prompt"

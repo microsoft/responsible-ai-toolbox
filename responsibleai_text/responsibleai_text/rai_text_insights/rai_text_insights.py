@@ -102,9 +102,8 @@ def _add_extra_metadata_features(task_type, feature_metadata):
             feature_metadata.categorical_features = []
         feature_metadata.categorical_features.append(_QUESTION_TYPE)
     if task_type == ModelTask.GENERATIVE_TEXT:
-        # TODO: Make this configurable
-        feature_metadata.prompt_col = 'questions'
-        feature_metadata.context_col = 'context'
+        # No extra metadata features for now
+        pass
     return feature_metadata
 
 class RAITextInsights(RAIBaseInsights):
@@ -372,7 +371,8 @@ class RAITextInsights(RAIBaseInsights):
             if not target_columns_set.issubset(set(test.columns)):
                 raise UserConfigValidationException(
                     'The list of target_column(s) should be in test data')
-        elif task_type==ModelTask.GENERATIVE_TEXT.value and target_column is None:
+        elif (task_type == ModelTask.GENERATIVE_TEXT.value and
+              target_column is None):
             # target column is optional for generative text
             pass
         else:
@@ -846,8 +846,6 @@ class RAITextInsights(RAIBaseInsights):
         selection_indexes,
         question_answering_cache
     ):
-        # return self.compute_genai_metrics(selection_indexes, question_answering_cache)
-        print('compute_question_answering_metrics')
         dashboard_dataset = self.get_data().dataset
         true_y = dashboard_dataset.true_y
         predicted_y = dashboard_dataset.predicted_y
@@ -894,10 +892,8 @@ class RAITextInsights(RAIBaseInsights):
     def compute_genai_metrics(
         self,
         selection_indexes,
-        question_answering_cache
+        genai_cache
     ):
-        print('compute_genai_metrics')
-
         dashboard_dataset = self.get_data().dataset
         prompt_idx = dashboard_dataset.feature_names.index('prompt')
         prompts = [feat[prompt_idx] for feat in dashboard_dataset.features]
@@ -912,7 +908,7 @@ class RAITextInsights(RAIBaseInsights):
                 true_y_cohort = None
             else:
                 true_y_cohort = [true_y[cohort_index] for cohort_index
-                                in cohort_indices]
+                                 in cohort_indices]
             predicted_y_cohort = [predicted_y[cohort_index] for cohort_index
                                   in cohort_indices]
             prompts_cohort = [prompts[cohort_index] for cohort_index
@@ -921,15 +917,14 @@ class RAITextInsights(RAIBaseInsights):
                 if true_y_cohort is not None:
                     exact_match = evaluate.load('exact_match')
                     cohort_metrics['exact_match'] = exact_match.compute(
-                        predictions=predicted_y_cohort, references=true_y_cohort)
+                        predictions=predicted_y_cohort,
+                        references=true_y_cohort)
 
                 cohort_metrics['coherence'] = get_genai_metric(
                     'coherence',
                     predictions=predicted_y_cohort,
                     references=prompts_cohort,
-                    wrapper_model=self._wrapped_model
-                    )
-                # coherence_results = {'scores' : [3.4]}
+                    wrapper_model=self._wrapped_model)
 
                 if true_y_cohort is not None:
                     cohort_metrics['equivalence'] = get_genai_metric(
@@ -937,35 +932,25 @@ class RAITextInsights(RAIBaseInsights):
                         predictions=predicted_y_cohort,
                         references=prompts_cohort,
                         answers=true_y_cohort,
-                        wrapper_model=self._wrapped_model
-                        )
-                # equivalence_results = {'scores' : [3.4]}
+                        wrapper_model=self._wrapped_model)
 
                 cohort_metrics['fluency'] = get_genai_metric(
                     'fluency',
                     predictions=predicted_y_cohort,
                     references=prompts_cohort,
-                    wrapper_model=self._wrapped_model
-                    )
-                # fluency_results = {'scores' : [3.4]}
+                    wrapper_model=self._wrapped_model)
 
-                print('groundedness')
                 cohort_metrics['groundedness'] = get_genai_metric(
                     'groundedness',
                     predictions=predicted_y_cohort,
                     references=prompts_cohort,
-                    wrapper_model=self._wrapped_model
-                    )
-                # groundedness_results = {'scores' : [3.4]}
+                    wrapper_model=self._wrapped_model)
 
-                print('relevance')
                 cohort_metrics['relevance'] = get_genai_metric(
                     'relevance',
                     predictions=predicted_y_cohort,
                     references=prompts_cohort,
-                    wrapper_model=self._wrapped_model
-                    )
-                # relevance_results = {'scores' : [3.5]}
+                    wrapper_model=self._wrapped_model)
 
                 all_cohort_metrics.append(cohort_metrics)
             except ValueError:

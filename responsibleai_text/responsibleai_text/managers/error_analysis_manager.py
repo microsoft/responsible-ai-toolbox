@@ -86,19 +86,12 @@ class WrappedIndexPredictorModel:
                 self.dataset.loc[:, ['context', 'questions']])
             self.predictions = np.array(self.predictions)
         elif self.task_type == ModelTask.GENERATIVE_TEXT:
-            # FIXME: Making constant predictions for now
-            # print('self dataset')
-            # print(self.dataset)
-            # self.predictions = [4] * len(self.dataset)
-            # self.predictions = np.array(self.predictions)
-            print('computing coherence score')
+            # TODO: Decide the final metric for error analysis
             coherence = get_genai_metric(
                 'coherence',
                 predictions=self.model.predict(self.dataset),
                 references=dataset['prompt'],
                 wrapper_model=self.model)
-            print('coherence score')
-            print(coherence['scores'])
             self.predictions = np.array(coherence['scores'])
         else:
             raise ValueError("Unknown task type: {}".format(self.task_type))

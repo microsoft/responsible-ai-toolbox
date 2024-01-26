@@ -152,13 +152,12 @@ class ExplainerManager(BaseManager):
             for context, question in zip(context, questions):
                 eval_examples.append(question + SEP + context)
 
-
             sentence_embedder = SentenceTransformer('all-MiniLM-L6-v2')
-            explainer = LocalExplanationSentenceEmbedder(sentence_embedder = sentence_embedder,
-                                                         perturbation_model="removal",
-                                                         partition_fn="sentences",
-                                                         progress_bar=None
-                                                        )
+            explainer = LocalExplanationSentenceEmbedder(
+                sentence_embedder=sentence_embedder,
+                perturbation_model="removal",
+                partition_fn="sentences",
+                progress_bar=None)
             max_completion = 50  # Define max tokens for the completion
 
             # open ai
