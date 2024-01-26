@@ -1,4 +1,7 @@
-"""Groundedness metric."""
+# Copyright (c) Microsoft Corporation
+# Licensed under the MIT License.
+
+"""Fluency metric."""
 
 import datasets
 import evaluate

@@ -1,4 +1,7 @@
-"""Groundedness metric."""
+# Copyright (c) Microsoft Corporation
+# Licensed under the MIT License.
+
+"""Equivalence metric."""
 
 import datasets
 import evaluate
