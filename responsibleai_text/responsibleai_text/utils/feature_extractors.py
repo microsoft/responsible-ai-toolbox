@@ -62,7 +62,6 @@ def extract_features(text_dataset: pd.DataFrame,
         feature_names.append("question_type")
         feature_names.append("context_overlap")
     elif task_type == ModelTask.GENERATIVE_TEXT:
-        # TODO: Add feature names for generative text
         start_meta_index = 0
         feature_names = base_feature_names
     else:
@@ -111,7 +110,6 @@ def extract_features(text_dataset: pd.DataFrame,
                                    dropped_features, column_names)
             results.append(extracted_features)
     elif task_type == ModelTask.GENERATIVE_TEXT:
-        # TODO: Add feature extraction for generative text
         for i, row in tqdm(text_features.iterrows(), desc='feature extraction'):
             extracted_features = []
             add_extracted_features_for_sentence(

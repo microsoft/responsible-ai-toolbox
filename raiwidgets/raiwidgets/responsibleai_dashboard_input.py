@@ -171,7 +171,7 @@ class ResponsibleAIDashboardInput:
 
     def debug_ml(self, data):
         try:
-            features = data[0] # TODO: Remove prompt feature
+            features = data[0]
             filters = data[1]
             composite_filters = data[2]
             max_depth = data[3]
@@ -496,8 +496,7 @@ class ResponsibleAIDashboardInput:
         for the Generative Text scenario.
 
         :param post_data: List of inputs in the order
-        # TODO: What is the data we are getting here?
-        (tentative) [true_y, predicted_y, aggregate_method, class_name, iou_threshold].
+        [true_y, predicted_y, aggregate_method, class_name, iou_threshold].
         :type post_data: List
 
         :return: JSON/dict data response
