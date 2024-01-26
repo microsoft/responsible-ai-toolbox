@@ -13,7 +13,8 @@ export enum DatasetTaskType {
   MultilabelImageClassification = "multilabel_image_classification",
   Forecasting = "forecasting",
   ObjectDetection = "object_detection",
-  QuestionAnswering = "question_answering"
+  QuestionAnswering = "question_answering",
+  GenerativeText = "generative_text"
 }
 
 export interface ITabularDatasetMetadata {
@@ -31,7 +32,7 @@ export interface IObjectDetectionLabelType {
 
 export interface IDataset {
   task_type: DatasetTaskType;
-  true_y: number[] | number[][] | string[];
+  true_y?: number[] | number[][] | string[];
   predicted_y?: number[] | number[][] | string[];
   probability_y?: number[][];
   features: unknown[][];

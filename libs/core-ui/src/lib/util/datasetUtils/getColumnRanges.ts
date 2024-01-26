@@ -161,7 +161,11 @@ function getRegressionErrorFeatureRange(
   dataset: IDataset,
   modelType: ModelTypes
 ): IColumnRange | undefined {
-  if (modelType === ModelTypes.Regression && dataset.predicted_y) {
+  if (
+    modelType === ModelTypes.Regression &&
+    dataset.predicted_y &&
+    dataset.true_y
+  ) {
     const regressionErrors = [];
     for (let index = 0; index < dataset.features.length; index++) {
       const trueY = dataset.true_y[index];
