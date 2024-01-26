@@ -13,7 +13,8 @@ from tqdm import tqdm
 
 from nlp_feature_extractors import attribute_extractors as exts
 from responsibleai_text.common.constants import (ModelTask,
-                                                 QuestionAnsweringFields)
+                                                 QuestionAnsweringFields,
+                                                 GenerativeTextFields)
 
 nlp = None
 
@@ -62,17 +63,8 @@ def extract_features(text_dataset: pd.DataFrame,
         feature_names.append("context_overlap")
     elif task_type == ModelTask.GENERATIVE_TEXT:
         # TODO: Add feature names for generative text
-        start_meta_index += 1
-        feature_names = []
-        prefixes = [QuestionAnsweringFields.CONTEXT + "_",
-                    QuestionAnsweringFields.QUESTION + "_"]
-        for prefix in prefixes:
-            for feature_name in base_feature_names:
-                feature_names.append(prefix + feature_name)
-            feature_names.append(prefix + "average_parse_tree_depth")
-            feature_names.append(prefix + "maximum_parse_tree_depth")
-        feature_names.append("question_type")
-        feature_names.append("context_overlap")
+        start_meta_index = 0
+        feature_names = base_feature_names
     else:
         raise ValueError("Unknown task type: {}".format(task_type))
     # copy over the metadata column names
@@ -80,9 +72,13 @@ def extract_features(text_dataset: pd.DataFrame,
         if has_dropped_features and column_names[j] in dropped_features:
             continue
         feature_names.append(column_names[j])
-    if not isinstance(target_column, list):
+
+    if not isinstance(target_column, (list, type(None))):
         target_column = [target_column]
-    text_features = text_dataset.drop(target_column, axis=1)
+
+    text_features = text_dataset.copy()
+    if target_column is not None:
+        text_features = text_features.drop(target_column, axis=1)
 
     if task_type in single_text_col_tasks:
         sentences = text_features.iloc[:, 0].tolist()
@@ -116,7 +112,17 @@ def extract_features(text_dataset: pd.DataFrame,
             results.append(extracted_features)
     elif task_type == ModelTask.GENERATIVE_TEXT:
         # TODO: Add feature extraction for generative text
-        pass
+        for i, row in tqdm(text_features.iterrows(), desc='feature extraction'):
+            extracted_features = []
+            add_extracted_features_for_sentence(
+                row[GenerativeTextFields.PROMPT], extracted_features,
+                task_type)
+
+            # append all other metadata features
+            append_metadata_values(start_meta_index, text_dataset, i,
+                                   extracted_features, has_dropped_features,
+                                   dropped_features, column_names)
+            results.append(extracted_features)
     else:
         raise ValueError("Unknown task type: {}".format(task_type))
     return results, feature_names

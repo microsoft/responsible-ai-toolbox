@@ -29,6 +29,17 @@ from responsibleai_text.common.constants import (ModelTask,
                                                  Tokens)
 from responsibleai_text.utils.question_answering import QAPredictor
 
+from interpret_text.generative.lime_tools.explainers import LocalExplanationHierarchical, LocalExplanationSentenceEmbedder, LocalExplanationLikelihood
+from interpret_text.generative.model_lib.openai_tooling import CompletionsOpenAI
+from interpret_text.generative.lime_tools.text_utils import split_into_sentences, extract_non_overlapping_ngrams
+from interpret_text.generative.model_lib.openai_tooling import CompletionsOpenAI, ChatOpenAI
+from sentence_transformers import SentenceTransformer
+
+# imports for huggingface model explanations
+# import transformers
+# from interpret_text.generative.model_lib.hf_tooling import HF_LM
+# import torch
+
 CONTEXT = QuestionAnsweringFields.CONTEXT
 QUESTIONS = QuestionAnsweringFields.QUESTIONS
 SEP = Tokens.SEP
@@ -74,10 +85,13 @@ class ExplainerManager(BaseManager):
         """
         self._model = model
         self._target_column = target_column
-        if not isinstance(target_column, list):
+        if not isinstance(target_column, (list, type(None))):
             target_column = [target_column]
-        self._evaluation_examples = \
-            evaluation_examples.drop(columns=target_column)
+        if target_column is None:
+            self._evaluation_examples = evaluation_examples
+        else:
+            self._evaluation_examples = \
+                evaluation_examples.drop(columns=target_column)
         self._is_run = False
         self._is_added = False
         self._features = list(self._evaluation_examples.columns)
@@ -132,7 +146,56 @@ class ExplainerManager(BaseManager):
             self._explanation = [explainer_start(eval_examples),
                                  explainer_end(eval_examples)]
         elif self._task_type == ModelTask.GENERATIVE_TEXT:
-            raise NotImplementedError('Generative text is not supported yet')
+            context = self._evaluation_examples[CONTEXT]
+            questions = self._evaluation_examples[QUESTIONS]
+            eval_examples = []
+            for context, question in zip(context, questions):
+                eval_examples.append(question + SEP + context)
+
+
+            sentence_embedder = SentenceTransformer('all-MiniLM-L6-v2')
+            explainer = LocalExplanationSentenceEmbedder(sentence_embedder = sentence_embedder,
+                                                         perturbation_model="removal",
+                                                         partition_fn="sentences",
+                                                         progress_bar=None
+                                                        )
+            max_completion = 50  # Define max tokens for the completion
+
+            # open ai
+            api_settings = {
+                "api_type": self._model.model.api_type,
+                "api_base": self._model.model.api_base,
+                "api_version": self._model.model.api_version,
+                "api_key": self._model.model.api_key
+            }
+            model_wrapped = ChatOpenAI(engine=self._model.model.engine, encoding="cl100k_base", api_settings=api_settings)
+            completions = model_wrapped.sample(eval_examples, max_new_tokens=max_completion)  
+
+            # in huggingface models do the following instead:
+
+            # def load_model(model_name: str):
+            #     print("Loading model...")
+            #     tokenizer = transformers.AutoTokenizer.from_pretrained(model_name)
+            #     model = transformers.AutoModelForCausalLM.from_pretrained(
+            #         model_name, trust_remote_code=True, torch_dtype=torch.bfloat16)
+                
+            #     model = model.eval()
+            #     model = model.to("cuda")
+            #     model_wrapped = HF_LM(model, tokenizer, device="cuda")
+            #     return model_wrapped
+            # # model_wrapped = load_model('VenkatManda/bert-tiny-squadV2')
+            # model_wrapped = load_model("EleutherAI/gpt-neo-1.3B")
+            # completion = model_wrapped.sample([eval_examples[0]], max_tokens=max_completion)[0]
+
+            explanation = []
+            for i,completion in enumerate(completions):
+                attribution, parts = explainer.attribution(model_wrapped,
+                                                           eval_examples[i],
+                                                           completion,
+                                                           )
+                explanation.append((attribution, parts))
+           
+            self._explanation = explanation
         else:
             raise ValueError("Unknown task type: {}".format(self._task_type))
 
