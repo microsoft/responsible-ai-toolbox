@@ -63,6 +63,7 @@ def extract_features(text_dataset: pd.DataFrame,
         feature_names.append("context_overlap")
     elif task_type == ModelTask.GENERATIVE_TEXT:
         # TODO: Add feature names for generative text
+        start_meta_index = 0
         feature_names = base_feature_names
     else:
         raise ValueError("Unknown task type: {}".format(task_type))

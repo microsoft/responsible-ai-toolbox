@@ -122,6 +122,15 @@ class ResponsibleAIDashboard(Dashboard):
             methods=["POST"]
         )
 
+        def get_generative_text_metrics():
+            data = request.get_json(force=True)
+            return jsonify(self.input.get_generative_text_metrics(data))
+        self.add_url_rule(
+            get_generative_text_metrics,
+            '/get_generative_text_metrics',
+            methods=["POST"]
+        )
+
         if hasattr(self._service, 'socketio'):
             @self._service.socketio.on('handle_object_detection_json')
             def handle_object_detection_json(od_json):
