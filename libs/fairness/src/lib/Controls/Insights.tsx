@@ -83,11 +83,11 @@ export class Insights extends React.Component<IInsightsProps> {
     // description of model with best performance
     const insights3 = localization.formatString(
       localization.Fairness.ModelComparison.insightsText3,
-      this.props.selectedMetric.title.toLowerCase(),
+      this.props.selectedMetric.title.toLocaleLowerCase(),
       this.props.selectedMetric.isMinimization
         ? formattedMinPerformance
         : formattedMaxPerformance,
-      this.props.selectedFairnessMetric.title.toLowerCase(),
+      this.props.selectedFairnessMetric.title.toLocaleLowerCase(),
       FormatMetrics.formatNumbers(
         this.props.fairnessArray[
           this.props.selectedMetric.isMinimization
@@ -101,12 +101,12 @@ export class Insights extends React.Component<IInsightsProps> {
     // description of model with best fairness metric value
     const insights4 = localization.formatString(
       localization.Fairness.ModelComparison.insightsText4,
-      this.props.selectedMetric.title.toLowerCase(),
+      this.props.selectedMetric.title.toLocaleLowerCase(),
       FormatMetrics.formatNumbers(
         this.props.performanceArray[minFairnessValueIndex],
         this.props.selectedPerformanceKey
       ),
-      this.props.selectedFairnessMetric.title.toLowerCase(),
+      this.props.selectedFairnessMetric.title.toLocaleLowerCase(),
       formattedMinFairnessValue
     );
 

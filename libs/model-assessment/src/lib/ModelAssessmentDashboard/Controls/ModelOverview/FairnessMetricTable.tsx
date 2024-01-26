@@ -140,7 +140,7 @@ export class FairnessMetricTable extends React.Component<
                       : localization.ModelAssessment.ModelOverview
                           .tableRatioTooltip,
                     // make metric name lower case in sentence
-                    this.series.xAxis.categories[point.x].toLowerCase(),
+                    this.series.xAxis.categories[point.x].toLocaleLowerCase(),
                     pointValue,
                     min,
                     `<b>${point.minCohort}</b>`,

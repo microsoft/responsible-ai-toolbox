@@ -59,7 +59,7 @@ export class CohortToolBar extends React.Component<
   public componentDidMount(): void {
     const cohortNames: string[] = [];
     this.props.cohorts.forEach((cohort: ErrorCohort) => {
-      cohortNames.push(cohort.cohort.name.toLowerCase());
+      cohortNames.push(cohort.cohort.name.toLocaleLowerCase());
     });
     const selectionCount: number = this.props.selectedIndices.length;
     this.setState({ cohortNames, selectionCount });
@@ -72,7 +72,7 @@ export class CohortToolBar extends React.Component<
     if (prevProps.cohorts !== this.props.cohorts) {
       const cohortNames: string[] = [];
       this.props.cohorts.forEach((cohort: ErrorCohort) => {
-        cohortNames.push(cohort.cohort.name.toLowerCase());
+        cohortNames.push(cohort.cohort.name.toLocaleLowerCase());
       });
       this.setState({ cohortNames });
     }
@@ -180,7 +180,9 @@ export class CohortToolBar extends React.Component<
       this.setState({
         errorMessage: localization.InterpretVision.Cohort.errorNumSelected
       });
-    } else if (this.state.cohortNames.includes(cohortName.toLowerCase())) {
+    } else if (
+      this.state.cohortNames.includes(cohortName.toLocaleLowerCase())
+    ) {
       this.setState({
         errorMessage: localization.InterpretVision.Cohort.errorCohortName
       });
