@@ -6,6 +6,7 @@
 from pathlib import Path
 import evaluate
 
+
 def get_genai_metric(metric_name, **metric_kwargs):
     """Get the metric from the genai library.
 

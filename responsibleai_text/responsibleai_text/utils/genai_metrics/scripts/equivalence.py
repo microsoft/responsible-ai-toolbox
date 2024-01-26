@@ -18,19 +18,29 @@ _KWARGS_DESCRIPTION = """
 """
 
 _SYS_PROMPT = """
-You are an AI assistant. You will be given the definition of an evaluation metric for assessing the quality of an answer in a question-answering task. Your job is to compute an accurate evaluation score using the provided evaluation metric.
-Your response will be used in automated evaluation of question-answering systems, and must be an integer between 1 and 5, and nothing else.
+You are an AI assistant. You will be given the definition of an evaluation \
+metric for assessing the quality of an answer in a question-answering task. \
+Your job is to compute an accurate evaluation score using the provided \
+evaluation metric.
+Your response will be used in automated evaluation of question-answering \
+systems, and must be an integer between 1 and 5, and nothing else.
 """.strip()
 
 _TEMPLATE = """
-Equivalence, as a metric, measures the similarity between the predicted answer and the correct answer. If the information and content in the predicted answer is similar or equivalent to the correct answer, then the value of the Equivalence metric should be high, else it should be low. Given the question, correct answer, and predicted answer, determine the value of Equivalence metric using the following rating scale:
+Equivalence, as a metric, measures the similarity between the predicted \
+answer and the correct answer. If the information and content in the \
+predicted answer is similar or equivalent to the correct answer, then the \
+value of the Equivalence metric should be high, else it should be low. Given \
+the question, correct answer, and predicted answer, determine the value of \
+Equivalence metric using the following rating scale:
 One star: the predicted answer is not at all similar to the correct answer
 Two stars: the predicted answer is mostly not similar to the correct answer
 Three stars: the predicted answer is somewhat similar to the correct answer
 Four stars: the predicted answer is mostly similar to the correct answer
 Five stars: the predicted answer is completely similar to the correct answer
 
-This rating value should always be an integer between 1 and 5. So the rating produced should be 1 or 2 or 3 or 4 or 5.
+This rating value should always be an integer between 1 and 5. So the rating \
+produced should be 1 or 2 or 3 or 4 or 5.
 
 QUESTION:
 {question}
@@ -43,7 +53,8 @@ PREDICTED ANSWER:
 """.strip()
 
 
-@evaluate.utils.file_utils.add_start_docstrings(_DESCRIPTION, _KWARGS_DESCRIPTION)
+@evaluate.utils.file_utils.add_start_docstrings(
+    _DESCRIPTION, _KWARGS_DESCRIPTION)
 class Equivalence(evaluate.Metric):
     def _info(self):
 
@@ -66,13 +77,14 @@ class Equivalence(evaluate.Metric):
 
         answers = kwargs['answers']
         for p, r, a in zip(predictions, references, answers):
-            templated_ques.append(_TEMPLATE.format(question=r, prediction=p, answer=a))
+            templated_ques.append(_TEMPLATE.format(
+                question=r, prediction=p, answer=a))
 
         model = kwargs['wrapper_model']
 
         inp = pd.DataFrame({
-            'questions' : templated_ques,
-            'sys_prompt' : _SYS_PROMPT})
+            'questions': templated_ques,
+            'sys_prompt': _SYS_PROMPT})
 
         responses = model.predict(inp)
 
@@ -82,5 +94,4 @@ class Equivalence(evaluate.Metric):
             except ValueError as e:
                 logger.warning('Failed to parse metric `%s`: %s', r, e)
                 m.append(0)
-        return {'scores' : m}
-            
+        return {'scores': m}
