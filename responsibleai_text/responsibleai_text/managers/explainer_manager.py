@@ -160,10 +160,7 @@ class ExplainerManager(BaseManager):
                 progress_bar=None)
             max_completion = 50  # Define max tokens for the completion
 
-
             # open ai
-            for context, question in zip(context, questions):
-                eval_examples.append(context + question)
             api_settings = {
                 "api_type": self._model.model.api_type,
                 "api_base": self._model.model.api_base,
@@ -171,8 +168,7 @@ class ExplainerManager(BaseManager):
                 "api_key": self._model.model.api_key
             }
             model_wrapped = ChatOpenAI(engine=self._model.model.engine, encoding="cl100k_base", api_settings=api_settings)
-            completion = model_wrapped.sample([eval_examples[0]], max_new_tokens=max_completion)[0]     
-
+            completions = model_wrapped.sample(eval_examples, max_new_tokens=max_completion)  
 
             # in huggingface models do the following instead:
 
@@ -190,17 +186,15 @@ class ExplainerManager(BaseManager):
             # model_wrapped = load_model("EleutherAI/gpt-neo-1.3B")
             # completion = model_wrapped.sample([eval_examples[0]], max_tokens=max_completion)[0]
 
-
-            attribution, parts = explainer.attribution(
-                model_wrapped,
-                eval_examples[0],
-                completion,
-            )
+            explanation = []
+            for i,completion in enumerate(completions):
+                attribution, parts = explainer.attribution(model_wrapped,
+                                                           eval_examples[i],
+                                                           completion,
+                                                           )
+                explanation.append((attribution, parts))
            
-            self._explanation = (attribution, parts)
-            print("origonal prompt: \n", eval_examples[0])
-            print("attribution_scores contain (feat_idx, score) pairs: \n", attribution)
-            print("\nlist of parts from the prompt: \n", parts)
+            self._explanation = explanation
         else:
             raise ValueError("Unknown task type: {}".format(self._task_type))
 

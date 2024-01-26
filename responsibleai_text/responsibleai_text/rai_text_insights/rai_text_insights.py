@@ -106,7 +106,6 @@ def _add_extra_metadata_features(task_type, feature_metadata):
         pass
     return feature_metadata
 
-
 class RAITextInsights(RAIBaseInsights):
     """Defines the top-level RAITextInsights API.
 
