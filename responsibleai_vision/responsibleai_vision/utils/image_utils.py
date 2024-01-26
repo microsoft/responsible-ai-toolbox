@@ -3,9 +3,13 @@
 
 """Contains image handling utilities."""
 
-import numpy as np
+from collections import defaultdict
 
-from responsibleai_vision.common.constants import ImageColumns
+import numpy as np
+from vision_explanation_methods.error_labeling.error_labeling import (
+    ErrorLabeling, ErrorLabelType)
+
+from responsibleai_vision.common.constants import ImageColumns, ModelTask
 from responsibleai_vision.utils.image_reader import get_image_from_path
 
 IMAGE = ImageColumns.IMAGE.value
@@ -19,6 +23,10 @@ TOP_Y = 'topY'
 BOTTOM_X = 'bottomX'
 BOTTOM_Y = 'bottomY'
 IS_CROWD = 'isCrowd'
+_INCORRECT = 'incorrect'
+_CORRECT = 'correct'
+_AGGREGATE_LABEL = 'aggregate'
+_NOLABEL = '(none)'
 
 
 def convert_images(dataset, image_mode):
@@ -141,3 +149,62 @@ def transform_object_detection_labels(test, target_column, classes):
                 err = invalid_msg + 'Image details and label must be present'
                 raise ValueError(err)
     return test
+
+
+def generate_od_error_labels(true_y, pred_y, class_names):
+    """Utilized Error Labeling to generate labels
+    with correct and incorrect objects.
+
+    :param true_y: The true labels.
+    :type true_y: list
+    :param pred_y: The predicted labels.
+    :type pred_y: list
+    :param class_names: The class labels in the dataset.
+    :type class_names: list
+    :return: The aggregated labels.
+    :rtype: List[str]
+    """
+    object_detection_labels = []
+    for image_idx in range(len(true_y)):
+        image_labels = defaultdict(lambda: defaultdict(int))
+        rendered_labels = {}
+        error_matrix = ErrorLabeling(
+            ModelTask.OBJECT_DETECTION,
+            pred_y[image_idx],
+            true_y[image_idx]
+        ).compute_error_labels()
+        for label_idx in range(len(error_matrix)):
+            object_label = class_names[
+                int(true_y[image_idx][label_idx][0] - 1)]
+            if ErrorLabelType.MATCH in error_matrix[label_idx]:
+                image_labels[_CORRECT][object_label] += 1
+            else:
+                image_labels[_INCORRECT][object_label] += 1
+
+            duplicate_detections = np.count_nonzero(
+                error_matrix[label_idx] ==
+                ErrorLabelType.DUPLICATE_DETECTION)
+            if duplicate_detections > 0:
+                image_labels[_INCORRECT][object_label] += \
+                    duplicate_detections
+        correct_labels = sorted(image_labels[_CORRECT].items(),
+                                key=lambda x: class_names.index(x[0]))
+        incorrect_labels = sorted(image_labels[_INCORRECT].items(),
+                                  key=lambda x: class_names.index(x[0]))
+        rendered_labels[_CORRECT] = ', '.join(
+            f'{value} {key}' for key, value in
+            correct_labels)
+        if len(rendered_labels[_CORRECT]) == 0:
+            rendered_labels[_CORRECT] = _NOLABEL
+        rendered_labels[_INCORRECT] = ', '.join(
+            f'{value} {key}' for key, value in
+            incorrect_labels)
+        if len(rendered_labels[_INCORRECT]) == 0:
+            rendered_labels[_INCORRECT] = _NOLABEL
+        num_correct = sum(image_labels[_CORRECT].values())
+        num_incorrect = sum(image_labels[_INCORRECT].values())
+        agg_label = f"{num_correct} {_CORRECT}, {num_incorrect} {_INCORRECT}"
+        rendered_labels[_AGGREGATE_LABEL] = agg_label
+        object_detection_labels.append(rendered_labels)
+
+    return object_detection_labels
