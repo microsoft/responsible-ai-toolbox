@@ -30,6 +30,7 @@ from responsibleai_text.managers.error_analysis_manager import \
 from responsibleai_text.managers.explainer_manager import ExplainerManager
 from responsibleai_text.utils.feature_extractors import (extract_features,
                                                          get_text_columns)
+from responsibleai_text.utils.genai_metrics.metrics import get_genai_metric
 
 module_logger = logging.getLogger(__name__)
 module_logger.setLevel(logging.INFO)
@@ -105,7 +106,6 @@ def _add_extra_metadata_features(task_type, feature_metadata):
         feature_metadata.prompt_col = 'questions'
         feature_metadata.context_col = 'context'
     return feature_metadata
-
 
 class RAITextInsights(RAIBaseInsights):
     """Defines the top-level RAITextInsights API.
@@ -616,14 +616,16 @@ class RAITextInsights(RAIBaseInsights):
         # add prompt and (optionally) context to dataset
         # for generative text tasks
         if self.task_type == ModelTask.GENERATIVE_TEXT:
-            prompt = self.test[self._feature_metadata.prompt_col]
-            context = self.test.get(self._feature_metadata.context_col)
+            # prompt = self.test[self._feature_metadata.prompt_col]
+            # context = self.test.get(self._feature_metadata.context_col)
 
-            dashboard_dataset.prompt = convert_to_list(prompt)
-            if context is None:
-                dashboard_dataset.context = None
-            else:
-                dashboard_dataset.context = convert_to_list(context)
+            # dashboard_dataset.prompt = convert_to_list(prompt)
+            # if context is None:
+            #     dashboard_dataset.context = None
+            # else:
+            #     dashboard_dataset.context = convert_to_list(context)
+            # NOT DOING FOR NOW
+            pass
 
         return dashboard_dataset
 
@@ -895,86 +897,77 @@ class RAITextInsights(RAIBaseInsights):
         question_answering_cache
     ):
         print('compute_genai_metrics')
-        curr_file_dir = Path(__file__).resolve().parent
 
         dashboard_dataset = self.get_data().dataset
+        prompt_idx = dashboard_dataset.feature_names.index('prompt')
+        prompts = [feat[prompt_idx] for feat in dashboard_dataset.features]
         true_y = dashboard_dataset.true_y
         predicted_y = dashboard_dataset.predicted_y
 
-        eval_model = self.temp_eval_model
-        questions = self.temp_questions
-        context = self.temp_context
-
         all_cohort_metrics = []
         for cohort_indices in selection_indexes:
-            print('cohort metrics')
-            true_y_cohort = [true_y[cohort_index] for cohort_index
-                             in cohort_indices]
+            cohort_metrics = dict()
+
+            if true_y is None:
+                true_y_cohort = None
+            else:
+                true_y_cohort = [true_y[cohort_index] for cohort_index
+                                in cohort_indices]
             predicted_y_cohort = [predicted_y[cohort_index] for cohort_index
                                   in cohort_indices]
-            questions_cohort = [questions[cohort_index] for cohort_index
-                                in cohort_indices]
-            context_cohort = [context[cohort_index] for cohort_index
-                                in cohort_indices]
+            prompts_cohort = [prompts[cohort_index] for cohort_index
+                              in cohort_indices]
             try:
-                print('exact match')
-                exact_match = evaluate.load('exact_match')
-                exact_match_results = exact_match.compute(
-                    predictions=predicted_y_cohort, references=true_y_cohort)
+                if true_y_cohort is not None:
+                    exact_match = evaluate.load('exact_match')
+                    cohort_metrics['exact_match'] = exact_match.compute(
+                        predictions=predicted_y_cohort, references=true_y_cohort)
 
-                print('coherence')
-                coherence = evaluate.load(
-                    str(curr_file_dir.joinpath('metrics/coherence.py')))
-                coherence_results = coherence.compute(
+                cohort_metrics['coherence'] = get_genai_metric(
+                    'coherence',
                     predictions=predicted_y_cohort,
-                    references=questions_cohort,
-                    wrapper_model=eval_model)
+                    references=prompts_cohort,
+                    wrapper_model=self._wrapped_model
+                    )
                 # coherence_results = {'scores' : [3.4]}
 
-                print('equivalence')
-                equivalence = evaluate.load(
-                    str(curr_file_dir.joinpath('metrics/equivalence.py')))
-                equivalence_results = equivalence.compute(
-                    predictions=predicted_y_cohort,
-                    references=questions_cohort,
-                    answers=true_y_cohort,
-                    wrapper_model=eval_model)
+                if true_y_cohort is not None:
+                    cohort_metrics['equivalence'] = get_genai_metric(
+                        'equivalence',
+                        predictions=predicted_y_cohort,
+                        references=prompts_cohort,
+                        answers=true_y_cohort,
+                        wrapper_model=self._wrapped_model
+                        )
+                # equivalence_results = {'scores' : [3.4]}
 
-                print('fluency')
-                fluency = evaluate.load(
-                    str(curr_file_dir.joinpath('metrics/fluency.py')))
-                fluency_results = fluency.compute(
+                cohort_metrics['fluency'] = get_genai_metric(
+                    'fluency',
                     predictions=predicted_y_cohort,
-                    references=questions_cohort,
-                    wrapper_model=eval_model)
+                    references=prompts_cohort,
+                    wrapper_model=self._wrapped_model
+                    )
+                # fluency_results = {'scores' : [3.4]}
 
                 print('groundedness')
-                # groundedness = evaluate.load(
-                #     str(curr_file_dir.joinpath('metrics/groundedness.py')))
-                # groundedness_results = groundedness.compute(
-                #     predictions=predicted_y_cohort,
-                #     references=context_cohort,
-                #     wrapper_model=eval_model)
-                groundedness_results = {'scores' : [3.4]}
+                cohort_metrics['groundedness'] = get_genai_metric(
+                    'groundedness',
+                    predictions=predicted_y_cohort,
+                    references=prompts_cohort,
+                    wrapper_model=self._wrapped_model
+                    )
+                # groundedness_results = {'scores' : [3.4]}
 
                 print('relevance')
-                # relevance = evaluate.load(
-                #     str(curr_file_dir.joinpath('metrics/relevance.py')))
-                # relevance_results = relevance.compute(
-                #     predictions=predicted_y_cohort,
-                #     references=context_cohort,
-                #     questions=questions_cohort,
-                #     wrapper_model=eval_model)
-                relevance_results = {'scores' : [3.5]}
+                cohort_metrics['relevance'] = get_genai_metric(
+                    'relevance',
+                    predictions=predicted_y_cohort,
+                    references=prompts_cohort,
+                    wrapper_model=self._wrapped_model
+                    )
+                # relevance_results = {'scores' : [3.5]}
 
-                all_cohort_metrics.append([
-                    exact_match_results['exact_match'],
-                    np.mean(coherence_results['scores']),
-                    np.mean(equivalence_results['scores']),
-                    np.mean(fluency_results['scores']),
-                    np.mean(groundedness_results['scores']),
-                    np.mean(relevance_results['scores'])])
+                all_cohort_metrics.append(cohort_metrics)
             except ValueError:
-                all_cohort_metrics.append([0, 0, 0, 0, 0, 0])
-        print('all done')
+                all_cohort_metrics.append({})
         return all_cohort_metrics
