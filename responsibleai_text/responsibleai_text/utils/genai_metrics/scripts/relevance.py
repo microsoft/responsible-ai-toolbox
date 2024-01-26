@@ -10,7 +10,7 @@ logger = evaluate.logging.get_logger(__name__)
 _CITATION = """
 """
 
-_DESCRIPTION = """The coherence metric.
+_DESCRIPTION = """The relevance metric.
 """
 
 _KWARGS_DESCRIPTION = """
@@ -23,16 +23,16 @@ Your response will be used in automated evaluation of question-answering systems
 """.strip()
 
 _TEMPLATE = """
-Coherence of an answer is measured by how well all the sentences fit together and sound naturally as a whole. Consider the overall quality of the answer when evaluating coherence. Given the question and answer, score the coherence of answer between one to five stars using the following rating scale:
-One star: the answer completely lacks coherence
-Two stars: the answer mostly lacks coherence
-Three stars: the answer is partially coherent
-Four stars: the answer is mostly coherent
-Five stars: the answer has perfect coherency
+Relevance measures how well the answer addresses the main aspects of the question, based on the context. Consider whether all and only the important aspects are contained in the answer when evaluating relevance. Given the context and question, score the relevance of the answer between one to five stars using the following rating scale:
+One star: the answer completely lacks relevance
+Two stars: the answer mostly lacks relevance
+Three stars: the answer is partially relevant
+Four stars: the answer is mostly relevant
+Five stars: the answer has perfect relevance
 
 This rating value should always be an integer between 1 and 5. So the rating produced should be 1 or 2 or 3 or 4 or 5.
 
-QUESTION:
+QUESTION AND CONTEXT:
 {question}
 
 ANSWER:
@@ -41,7 +41,7 @@ ANSWER:
 
 
 @evaluate.utils.file_utils.add_start_docstrings(_DESCRIPTION, _KWARGS_DESCRIPTION)
-class Coherence(evaluate.Metric):
+class Relevance(evaluate.Metric):
     def _info(self):
 
         return evaluate.MetricInfo(
