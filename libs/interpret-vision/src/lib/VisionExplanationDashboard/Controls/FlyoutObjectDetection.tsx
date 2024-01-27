@@ -7,6 +7,7 @@ import {
   IComboBox,
   IComboBoxOption,
   Image,
+  Label,
   List,
   Panel,
   PanelType,
@@ -24,6 +25,7 @@ import * as FlyoutStyles from "../utils/FlyoutUtils";
 import { getObjectDetectionImageAltText } from "../utils/getAltTextUtils";
 import { getJoinedLabelString } from "../utils/labelUtils";
 
+import { DetectionDetails } from "./DetectionDetails";
 import {
   flyoutStyles,
   explanationImage,
@@ -55,7 +57,8 @@ export class FlyoutObjectDetection extends React.Component<
     const selectableObjectIndexes =
       FlyoutStyles.generateSelectableObjectDetectionIndexes(
         localization.InterpretVision.Dashboard.prefix,
-        item
+        item,
+        this.props.dataset.class_names
       );
     this.setState({ item, metadata, selectableObjectIndexes });
   }
@@ -73,7 +76,8 @@ export class FlyoutObjectDetection extends React.Component<
       const selectableObjectIndexes =
         FlyoutStyles.generateSelectableObjectDetectionIndexes(
           localization.InterpretVision.Dashboard.prefix,
-          item
+          item,
+          this.props.dataset.class_names
         );
       this.setState({
         item: this.props.item,
@@ -122,42 +126,11 @@ export class FlyoutObjectDetection extends React.Component<
                   verticalAlign="center"
                 >
                   <Stack.Item>
-                    <Stack
-                      tokens={FlyoutODUtils.stackTokens.large}
-                      horizontalAlign="start"
-                      verticalAlign="start"
-                    >
-                      <Stack
-                        horizontal
-                        tokens={FlyoutODUtils.stackTokens.medium}
-                        horizontalAlign="center"
-                        verticalAlign="center"
-                      />
-                      <Stack.Item>
-                        <Text variant="large">
-                          {localization.InterpretVision.Dashboard.indexLabel}
-                          {item?.index}
-                        </Text>
-                      </Stack.Item>
-                      <Stack.Item>
-                        <Text variant="large">
-                          {
-                            localization.InterpretVision.Dashboard
-                              .correctDetections
-                          }
-                          {correctDetections}
-                        </Text>
-                      </Stack.Item>
-                      <Stack.Item>
-                        <Text variant="large">
-                          {
-                            localization.InterpretVision.Dashboard
-                              .incorrectDetections
-                          }
-                          {incorrectDetections}
-                        </Text>
-                      </Stack.Item>
-                    </Stack>
+                    <DetectionDetails
+                      item={item}
+                      correctDetections={correctDetections}
+                      incorrectDetections={incorrectDetections}
+                    />
                   </Stack.Item>
                 </Stack>
               </Stack.Item>
@@ -173,13 +146,17 @@ export class FlyoutObjectDetection extends React.Component<
                     {localization.InterpretVision.Dashboard.panelInformation}
                   </Text>
                 </Stack.Item>
-                <Stack.Item className={classNames.featureListContainer}>
+                <Stack.Item
+                  className={classNames.featureListContainer}
+                  tabIndex={0}
+                >
                   <List
                     items={this.state.metadata}
                     onRenderCell={FlyoutStyles.onRenderCell}
                   />
                 </Stack.Item>
               </Stack>
+              <FlyoutODUtils.ColorLegend />
               <Stack>
                 <Stack.Item className={classNames.imageContainer}>
                   <Stack.Item id="canvasToolsDiv">
@@ -200,17 +177,27 @@ export class FlyoutObjectDetection extends React.Component<
                 </Text>
               </Stack.Item>
               <Stack>
-                {
-                  <ComboBox
-                    id={localization.InterpretVision.Dashboard.objectSelect}
-                    label={localization.InterpretVision.Dashboard.chooseObject}
-                    onChange={this.selectODChoiceFromDropdown}
-                    selectedKey={this.state.odSelectedKey}
-                    options={this.state.selectableObjectIndexes}
-                    className={"classNames.dropdown"}
-                    styles={FluentUIStyles.smallDropdownStyle}
-                  />
-                }
+                <Label
+                  id={
+                    localization.InterpretVision.Dashboard.objectSelectionLabel
+                  }
+                >
+                  {localization.InterpretVision.Dashboard.chooseObject}
+                </Label>
+                <ComboBox
+                  id={localization.InterpretVision.Dashboard.objectSelect}
+                  onChange={this.selectODChoiceFromDropdown}
+                  selectedKey={this.state.odSelectedKey}
+                  options={this.state.selectableObjectIndexes}
+                  className="classNames.dropdown"
+                  styles={FluentUIStyles.smallDropdownStyle}
+                  ariaLabel={
+                    localization.InterpretVision.Dashboard.chooseObject
+                  }
+                  aria-labelledby={
+                    localization.InterpretVision.Dashboard.objectSelectionLabel
+                  }
+                />
                 <Stack>
                   {!this.props.loadingExplanation[item.index][
                     +this.state.odSelectedKey.slice(

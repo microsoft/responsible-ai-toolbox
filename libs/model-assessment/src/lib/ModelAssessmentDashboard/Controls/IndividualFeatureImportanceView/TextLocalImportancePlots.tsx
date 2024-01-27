@@ -86,7 +86,7 @@ export class TextLocalImportancePlots extends React.Component<ITextLocalImportan
       const importances: number[][] | number[][][] =
         textFeatureImportance?.localExplanations;
       const baseValues = textFeatureImportance?.baseValues;
-      const trueY = this.context.dataset.true_y[row[0]];
+      const trueY = this.context.dataset.true_y?.[row[0]];
       const predictedY = this.context.dataset.predicted_y?.[row[0]];
       return {
         baseValues,

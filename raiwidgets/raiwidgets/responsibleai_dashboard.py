@@ -29,10 +29,14 @@ class ResponsibleAIDashboard(Dashboard):
     :param cohort_list:
         List of cohorts defined by the user for the dashboard.
     :type cohort_list: List[Cohort]
+    :param is_private_link: If the dashboard environment is
+        a private link AML workspace.
+    :type is_private_link: bool
     """
     def __init__(self, analysis: RAIInsights,
                  public_ip=None, port=None, locale=None,
-                 cohort_list=None, **kwargs):
+                 cohort_list=None, is_private_link=False,
+                 **kwargs):
         self.input = ResponsibleAIDashboardInput(
             analysis, cohort_list=cohort_list)
 
@@ -43,6 +47,7 @@ class ResponsibleAIDashboard(Dashboard):
             port=port,
             locale=locale,
             no_inline_dashboard=True,
+            is_private_link=is_private_link,
             **kwargs)
 
         def predict():
