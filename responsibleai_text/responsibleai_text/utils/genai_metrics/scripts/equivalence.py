@@ -64,7 +64,6 @@ PREDICTED ANSWER:
     _DESCRIPTION, _KWARGS_DESCRIPTION)
 class Equivalence(evaluate.Metric):
     def _info(self):
-
         return evaluate.MetricInfo(
             description=_DESCRIPTION,
             citation=_CITATION,

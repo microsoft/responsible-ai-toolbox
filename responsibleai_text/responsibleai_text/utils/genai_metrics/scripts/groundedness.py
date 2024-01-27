@@ -59,7 +59,6 @@ ANSWER:
     _DESCRIPTION, _KWARGS_DESCRIPTION)
 class Groundedness(evaluate.Metric):
     def _info(self):
-
         return evaluate.MetricInfo(
             description=_DESCRIPTION,
             citation=_CITATION,
