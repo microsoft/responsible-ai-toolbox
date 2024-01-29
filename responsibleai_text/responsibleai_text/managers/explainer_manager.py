@@ -30,9 +30,8 @@ from responsibleai_text.common.constants import (ModelTask,
 from responsibleai_text.utils.question_answering import QAPredictor
 
 try:
-    from interpret_text.generative.lime_tools.explainers import (
+    from interpret_text.generative.lime_tools.explainers import \
         LocalExplanationSentenceEmbedder
-    )
 except ImportError as e:
     print("Could not import LocalExplanationSentenceEmbedder: ", e)
 
