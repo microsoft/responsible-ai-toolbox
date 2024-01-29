@@ -29,7 +29,7 @@ export const generateGenerativeTextStats: (
     const count = selectionArray.length;
 
     const value = generativeTextCache.get(selectionArray.toString());
-    const stat = value ? value : new Map<string, number>();
+    const stat: Map<string, number> = value ? value : new Map<string, number>();
 
     const stats = [
       {
