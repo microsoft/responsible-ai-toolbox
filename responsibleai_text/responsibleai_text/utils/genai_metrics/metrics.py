@@ -3,8 +3,17 @@
 
 """Compute AI-assisted metrics for generative text models."""
 
+import logging
 from pathlib import Path
-import evaluate
+
+module_logger = logging.getLogger(__name__)
+module_logger.setLevel(logging.INFO)
+
+try:
+    import evaluate
+except ImportError:
+    module_logger.debug(
+        'Could not import evaluate, required if using a genai model')
 
 
 def get_genai_metric(metric_name, **metric_kwargs):
