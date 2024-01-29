@@ -62,6 +62,7 @@ META_JSON = Metadata.META_JSON
 MODEL = Metadata.MODEL
 EXPLANATION = '_explanation'
 TASK_TYPE = '_task_type'
+PROMPT = 'prompt'
 
 
 class ExplainerManager(BaseManager):
@@ -176,12 +177,21 @@ class ExplainerManager(BaseManager):
                     "is not installed."
                 )
                 raise RuntimeError(error)
-            context = self._evaluation_examples[CONTEXT]
-            questions = self._evaluation_examples[QUESTIONS]
-            eval_examples = []
-            for context, question in zip(context, questions):
-                eval_examples.append(question + SEP + context)
 
+            if CONTEXT in self._evaluation_examples.columns and \
+                    QUESTIONS in self._evaluation_examples.columns:
+                context = self._evaluation_examples[CONTEXT]
+                questions = self._evaluation_examples[QUESTIONS]
+                eval_examples = []
+                for context, question in zip(context, questions):
+                    eval_examples.append(question + SEP + context)
+            elif PROMPT in self._evaluation_examples.columns:
+                eval_examples = self._evaluation_examples[PROMPT].tolist()
+            else:
+                raise ValueError(
+                    "Neither 'context'/'questions' nor 'prompt' columns "
+                    "are present in the evaluation_examples DataFrame"
+                )
             sentence_embedder = SentenceTransformer('all-MiniLM-L6-v2')
             explainer = LocalExplanationSentenceEmbedder(
                 sentence_embedder=sentence_embedder,
