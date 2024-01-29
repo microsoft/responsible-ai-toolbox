@@ -29,6 +29,24 @@ from responsibleai_text.common.constants import (ModelTask,
                                                  Tokens)
 from responsibleai_text.utils.question_answering import QAPredictor
 
+try:
+    from interpret_text.generative.lime_tools.explainers import (
+        LocalExplanationSentenceEmbedder
+    )
+except ImportError as e:
+    print("Could not import LocalExplanationSentenceEmbedder: ", e)
+
+try:
+    from interpret_text.generative.model_lib.openai_tooling import ChatOpenAI
+except ImportError as e:
+    print("Could not import ChatOpenAI: ", e)
+
+try:
+    from sentence_transformers import SentenceTransformer
+except ImportError as e:
+    print("Could not import SentenceTransformer: ", e)
+
+
 CONTEXT = QuestionAnsweringFields.CONTEXT
 QUESTIONS = QuestionAnsweringFields.QUESTIONS
 SEP = Tokens.SEP
@@ -74,10 +92,13 @@ class ExplainerManager(BaseManager):
         """
         self._model = model
         self._target_column = target_column
-        if not isinstance(target_column, list):
+        if not isinstance(target_column, (list, type(None))):
             target_column = [target_column]
-        self._evaluation_examples = \
-            evaluation_examples.drop(columns=target_column)
+        if target_column is None:
+            self._evaluation_examples = evaluation_examples
+        else:
+            self._evaluation_examples = \
+                evaluation_examples.drop(columns=target_column)
         self._is_run = False
         self._is_added = False
         self._features = list(self._evaluation_examples.columns)
@@ -131,6 +152,43 @@ class ExplainerManager(BaseManager):
                 eval_examples.append(question + SEP + context)
             self._explanation = [explainer_start(eval_examples),
                                  explainer_end(eval_examples)]
+        elif self._task_type == ModelTask.GENERATIVE_TEXT:
+            context = self._evaluation_examples[CONTEXT]
+            questions = self._evaluation_examples[QUESTIONS]
+            eval_examples = []
+            for context, question in zip(context, questions):
+                eval_examples.append(question + SEP + context)
+
+            sentence_embedder = SentenceTransformer('all-MiniLM-L6-v2')
+            explainer = LocalExplanationSentenceEmbedder(
+                sentence_embedder=sentence_embedder,
+                perturbation_model="removal",
+                partition_fn="sentences",
+                progress_bar=None)
+            max_completion = 50  # Define max tokens for the completion
+
+            api_settings = {
+                "api_type": self._model.model.api_type,
+                "api_base": self._model.model.api_base,
+                "api_version": self._model.model.api_version,
+                "api_key": self._model.model.api_key
+            }
+            model_wrapped = ChatOpenAI(
+                engine=self._model.model.engine,
+                encoding="cl100k_base",
+                api_settings=api_settings)
+            completions = model_wrapped.sample(
+                eval_examples, max_new_tokens=max_completion)
+
+            explanation = []
+            for i, completion in enumerate(completions):
+                attribution, parts = explainer.attribution(model_wrapped,
+                                                           eval_examples[i],
+                                                           completion,
+                                                           )
+                explanation.append((attribution, parts))
+
+            self._explanation = explanation
         else:
             raise ValueError("Unknown task type: {}".format(self._task_type))
 
