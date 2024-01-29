@@ -32,18 +32,21 @@ from responsibleai_text.utils.question_answering import QAPredictor
 try:
     from interpret_text.generative.lime_tools.explainers import \
         LocalExplanationSentenceEmbedder
-except ImportError as e:
-    print("Could not import LocalExplanationSentenceEmbedder: ", e)
+    interpret_text_explainers_installed = True
+except ImportError:
+    interpret_text_explainers_installed = False
 
 try:
     from interpret_text.generative.model_lib.openai_tooling import ChatOpenAI
-except ImportError as e:
-    print("Could not import ChatOpenAI: ", e)
+    interpret_text_openai_tooling_installed = True
+except ImportError:
+    interpret_text_openai_tooling_installed = False
 
 try:
     from sentence_transformers import SentenceTransformer
-except ImportError as e:
-    print("Could not import SentenceTransformer: ", e)
+    sentence_transformers_installed = True
+except ImportError:
+    sentence_transformers_installed = False
 
 
 CONTEXT = QuestionAnsweringFields.CONTEXT
@@ -152,6 +155,27 @@ class ExplainerManager(BaseManager):
             self._explanation = [explainer_start(eval_examples),
                                  explainer_end(eval_examples)]
         elif self._task_type == ModelTask.GENERATIVE_TEXT:
+            if not interpret_text_explainers_installed:
+                error = (
+                    "The required module"
+                    "'interpret_text.generative.lime_tools.explainers' "
+                    "is not installed."
+                )
+                raise RuntimeError(error)
+            if not interpret_text_openai_tooling_installed:
+                error = (
+                    "The required module"
+                    "'interpret_text.generative.model_lib.openai_tooling' "
+                    "is not installed."
+                )
+                raise RuntimeError(error)
+            if not sentence_transformers_installed:
+                error = (
+                    "The required package"
+                    "'sentence_transformers' "
+                    "is not installed."
+                )
+                raise RuntimeError(error)
             context = self._evaluation_examples[CONTEXT]
             questions = self._evaluation_examples[QUESTIONS]
             eval_examples = []
