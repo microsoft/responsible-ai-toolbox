@@ -1771,9 +1771,25 @@
           "name": "Accuracy score",
           "description": "The fraction of data points classified correctly."
         },
+        "coherence": {
+          "name": "Coherence",
+          "description": "Coherence of an answer is measured by how well all the sentences fit together and sound naturally as a whole."
+        },
+        "fluency": {
+          "name": "Fluency",
+          "description": "Fluency measures the quality of individual sentences in the answer, and whether they are well-written and grammatically correct."
+        },
+        "equivalence": {
+          "name": "Equivalence",
+          "description": "Equivalence, as a metric, measures the similarity between the predicted answer and the correct answer."
+        },
         "exactMatchRatio": {
           "name": "Exact match ratio",
           "description": "The ratio of instances classified correctly for every label."
+        },
+        "groundedness": {
+          "name": "Groundedness",
+          "description": "Groundedness measures whether the answer follows logically from the information in the context."
         },
         "meteorScore": {
           "name": "Meteor Score",
@@ -1786,6 +1802,10 @@
         "bertScore": {
           "name": "Bert Score",
           "description": "BERTScore focuses on computing semantic similarity between tokens of reference and machine generated text in question answering task."
+        },
+        "relevance": {
+          "name": "Relevance",
+          "description": "Relevance measures how well the answer addresses the main aspects of the question, based on the context"
         },
         "rougeScore": {
           "name": "Rouge Score",

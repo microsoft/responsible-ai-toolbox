@@ -174,6 +174,14 @@ export class ModelOverview extends React.Component<
         QuestionAnsweringMetrics.F1Score,
         QuestionAnsweringMetrics.BertScore
       ];
+    } else if (
+      this.context.dataset.task_type === DatasetTaskType.GenerativeText
+    ) {
+      defaultSelectedMetrics = [
+        GenerativeTextMetrics.Fluency,
+        GenerativeTextMetrics.Coherence,
+        GenerativeTextMetrics.Relevance
+      ];
     } else {
       // task_type === "regression"
       defaultSelectedMetrics = [
@@ -623,6 +631,10 @@ export class ModelOverview extends React.Component<
       this.context.modelMetadata.modelType === ModelTypes.QuestionAnswering
     ) {
       this.updateQuestionAnsweringMetrics(selectionIndexes, true);
+    } else if (
+      this.context.modelMetadata.modelType === ModelTypes.GenerativeText
+    ) {
+      this.updateGenerativeTextMetrics(selectionIndexes, true);
     }
   };
 
@@ -853,6 +865,7 @@ export class ModelOverview extends React.Component<
 
           for (const [cohortIndex, metrics] of result.entries()) {
             const count = selectionIndexes[cohortIndex].length;
+            const metricsMap = new Map<string, number>(Object.entries(metrics));
 
             if (
               !this.generativeTextCache.has(
@@ -861,7 +874,7 @@ export class ModelOverview extends React.Component<
             ) {
               this.generativeTextCache.set(
                 selectionIndexes[cohortIndex].toString(),
-                metrics
+                metricsMap
               );
             }
 
@@ -873,7 +886,7 @@ export class ModelOverview extends React.Component<
               }
             ];
 
-            for (const [key, value] of metrics.entries()) {
+            for (const [key, value] of metricsMap.entries()) {
               let label = "";
               switch (key) {
                 case GenerativeTextMetrics.Coherence:
@@ -1093,6 +1106,8 @@ export class ModelOverview extends React.Component<
       abortController = this.state.objectDetectionAbortController;
     } else if (taskType === DatasetTaskType.QuestionAnswering) {
       abortController = this.state.questionAnsweringAbortController;
+    } else if (taskType === DatasetTaskType.GenerativeText) {
+      abortController = this.state.generativeTextAbortController;
     }
     if (abortController !== undefined) {
       abortController.abort();

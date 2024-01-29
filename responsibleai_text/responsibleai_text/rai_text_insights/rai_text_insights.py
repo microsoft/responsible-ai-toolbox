@@ -30,7 +30,7 @@ from responsibleai_text.managers.error_analysis_manager import \
 from responsibleai_text.managers.explainer_manager import ExplainerManager
 from responsibleai_text.utils.feature_extractors import (extract_features,
                                                          get_text_columns)
-from responsibleai_text.utils.genai_metrics.metrics import get_genai_metric
+from responsibleai_text.utils.genai_metrics.metrics import get_genai_metric_mean
 
 module_logger = logging.getLogger(__name__)
 module_logger.setLevel(logging.INFO)
@@ -920,33 +920,33 @@ class RAITextInsights(RAIBaseInsights):
                         predictions=predicted_y_cohort,
                         references=true_y_cohort)
 
-                cohort_metrics['coherence'] = get_genai_metric(
+                cohort_metrics['coherence'] = get_genai_metric_mean(
                     'coherence',
                     predictions=predicted_y_cohort,
                     references=prompts_cohort,
                     wrapper_model=self._wrapped_model)
 
                 if true_y_cohort is not None:
-                    cohort_metrics['equivalence'] = get_genai_metric(
+                    cohort_metrics['equivalence'] = get_genai_metric_mean(
                         'equivalence',
                         predictions=predicted_y_cohort,
                         references=prompts_cohort,
                         answers=true_y_cohort,
                         wrapper_model=self._wrapped_model)
 
-                cohort_metrics['fluency'] = get_genai_metric(
+                cohort_metrics['fluency'] = get_genai_metric_mean(
                     'fluency',
                     predictions=predicted_y_cohort,
                     references=prompts_cohort,
                     wrapper_model=self._wrapped_model)
 
-                cohort_metrics['groundedness'] = get_genai_metric(
+                cohort_metrics['groundedness'] = get_genai_metric_mean(
                     'groundedness',
                     predictions=predicted_y_cohort,
                     references=prompts_cohort,
                     wrapper_model=self._wrapped_model)
 
-                cohort_metrics['relevance'] = get_genai_metric(
+                cohort_metrics['relevance'] = get_genai_metric_mean(
                     'relevance',
                     predictions=predicted_y_cohort,
                     references=prompts_cohort,
