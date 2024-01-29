@@ -119,7 +119,8 @@ class RAITextInsights(RAIBaseInsights):
                  serializer: Optional[Any] = None,
                  maximum_rows_for_test: int = 5000,
                  feature_metadata: Optional[FeatureMetadata] = None,
-                 text_column: Optional[Union[str, List]] = None):
+                 text_column: Optional[Union[str, List]] = None,
+                 eval_model: Any = None):
         """Creates an RAITextInsights object.
 
         :param model: The model to compute RAI insights for.
@@ -151,6 +152,10 @@ class RAITextInsights(RAIBaseInsights):
             If not provided, and there is additional feature metadata, then
             an exception will be raised.
         :type text_column: str or list[str]
+        :param eval_model: The model to use for evaluation.
+            If not provided, then the model passed in the model parameter
+            will be used.
+        :type eval_model: object
         """
         # drop index as this can cause issues later like when copying
         # target column below from test dataset to _ext_test_df
@@ -163,6 +168,10 @@ class RAITextInsights(RAIBaseInsights):
         self._text_column = text_column
         self._feature_metadata = feature_metadata
         self._wrapped_model = wrap_model(model, test, task_type)
+        if eval_model is None:
+            self._eval_model = self._wrapped_model
+        else:
+            self._eval_model = wrap_model(eval_model, test, task_type)
         self._validate_rai_insights_input_parameters(
             model=self._wrapped_model, test=test,
             target_column=target_column, task_type=task_type,
@@ -924,7 +933,7 @@ class RAITextInsights(RAIBaseInsights):
                     'coherence',
                     predictions=predicted_y_cohort,
                     references=prompts_cohort,
-                    wrapper_model=self._wrapped_model)
+                    wrapper_model=self._eval_model)
 
                 if true_y_cohort is not None:
                     cohort_metrics['equivalence'] = get_genai_metric_mean(
@@ -932,25 +941,25 @@ class RAITextInsights(RAIBaseInsights):
                         predictions=predicted_y_cohort,
                         references=prompts_cohort,
                         answers=true_y_cohort,
-                        wrapper_model=self._wrapped_model)
+                        wrapper_model=self._eval_model)
 
                 cohort_metrics['fluency'] = get_genai_metric_mean(
                     'fluency',
                     predictions=predicted_y_cohort,
                     references=prompts_cohort,
-                    wrapper_model=self._wrapped_model)
+                    wrapper_model=self._eval_model)
 
                 cohort_metrics['groundedness'] = get_genai_metric_mean(
                     'groundedness',
                     predictions=predicted_y_cohort,
                     references=prompts_cohort,
-                    wrapper_model=self._wrapped_model)
+                    wrapper_model=self._eval_model)
 
                 cohort_metrics['relevance'] = get_genai_metric_mean(
                     'relevance',
                     predictions=predicted_y_cohort,
                     references=prompts_cohort,
-                    wrapper_model=self._wrapped_model)
+                    wrapper_model=self._eval_model)
 
                 all_cohort_metrics.append(cohort_metrics)
             except ValueError:
