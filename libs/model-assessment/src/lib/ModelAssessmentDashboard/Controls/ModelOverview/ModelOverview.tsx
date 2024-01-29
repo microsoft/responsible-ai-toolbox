@@ -34,6 +34,7 @@ import {
   TelemetryEventName,
   DatasetTaskType,
   QuestionAnsweringMetrics,
+  GenerativeTextMetrics,
   TotalCohortSamples
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -53,20 +54,6 @@ import { getSelectableMetrics } from "./StatsTableUtils";
 
 interface IModelOverviewProps {
   telemetryHook?: (message: ITelemetryEvent) => void;
-  requestObjectDetectionMetrics?: (
-    selectionIndexes: number[][],
-    aggregateMethod: string,
-    className: string,
-    iouThreshold: number,
-    objectDetectionCache: Map<string, [number, number, number]>
-  ) => Promise<any[]>;
-  requestQuestionAnsweringMetrics?: (
-    selectionIndexes: number[][],
-    questionAnsweringCache: Map<
-      string,
-      [number, number, number, number, number, number]
-    >
-  ) => Promise<any[]>;
 }
 
 interface IModelOverviewState {
@@ -88,6 +75,7 @@ interface IModelOverviewState {
   featureBasedCohortLabeledStatistics: ILabeledStatistic[][];
   featureBasedCohorts: ErrorCohort[];
   iouThreshold: number;
+  generativeTextAbortController: AbortController | undefined;
   objectDetectionAbortController: AbortController | undefined;
   questionAnsweringAbortController: AbortController | undefined;
 }
@@ -100,6 +88,7 @@ export class ModelOverview extends React.Component<
   IModelOverviewState
 > {
   public static contextType = ModelAssessmentContext;
+  public generativeTextCache: Map<string, Map<string, number>> = new Map();
   public questionAnsweringCache: Map<
     string,
     [number, number, number, number, number, number]
@@ -125,6 +114,7 @@ export class ModelOverview extends React.Component<
       featureBasedCohortLabeledStatistics: [],
       featureBasedCohorts: [],
       featureConfigurationIsVisible: false,
+      generativeTextAbortController: undefined,
       iouThreshold: 70,
       metricConfigurationIsVisible: false,
       objectDetectionAbortController: undefined,
@@ -183,6 +173,14 @@ export class ModelOverview extends React.Component<
         QuestionAnsweringMetrics.ExactMatchRatio,
         QuestionAnsweringMetrics.F1Score,
         QuestionAnsweringMetrics.BertScore
+      ];
+    } else if (
+      this.context.dataset.task_type === DatasetTaskType.GenerativeText
+    ) {
+      defaultSelectedMetrics = [
+        GenerativeTextMetrics.Fluency,
+        GenerativeTextMetrics.Coherence,
+        GenerativeTextMetrics.Relevance
       ];
     } else {
       // task_type === "regression"
@@ -633,6 +631,10 @@ export class ModelOverview extends React.Component<
       this.context.modelMetadata.modelType === ModelTypes.QuestionAnswering
     ) {
       this.updateQuestionAnsweringMetrics(selectionIndexes, true);
+    } else if (
+      this.context.modelMetadata.modelType === ModelTypes.GenerativeText
+    ) {
+      this.updateGenerativeTextMetrics(selectionIndexes, true);
     }
   };
 
@@ -838,6 +840,108 @@ export class ModelOverview extends React.Component<
     }
   }
 
+  private updateGenerativeTextMetrics(
+    selectionIndexes: number[][],
+    isDatasetCohort: boolean
+  ): void {
+    if (this.state.generativeTextAbortController !== undefined) {
+      this.state.generativeTextAbortController.abort();
+    }
+    const newAbortController = new AbortController();
+    this.setState({ generativeTextAbortController: newAbortController });
+    if (
+      this.context.requestGenerativeTextMetrics &&
+      selectionIndexes.length > 0
+    ) {
+      this.context
+        .requestGenerativeTextMetrics(
+          selectionIndexes,
+          this.generativeTextCache,
+          newAbortController.signal
+        )
+        .then((result) => {
+          // Assumption: the lengths of `result` and `selectionIndexes` are the same.
+          const updatedMetricStats: ILabeledStatistic[][] = [];
+
+          for (const [cohortIndex, metrics] of result.entries()) {
+            const count = selectionIndexes[cohortIndex].length;
+            const metricsMap = new Map<string, number>(Object.entries(metrics));
+
+            if (
+              !this.generativeTextCache.has(
+                selectionIndexes[cohortIndex].toString()
+              )
+            ) {
+              this.generativeTextCache.set(
+                selectionIndexes[cohortIndex].toString(),
+                metricsMap
+              );
+            }
+
+            const updatedCohortMetricStats = [
+              {
+                key: TotalCohortSamples,
+                label: localization.Interpret.Statistics.samples,
+                stat: count
+              }
+            ];
+
+            for (const [key, value] of metricsMap.entries()) {
+              let label = "";
+              switch (key) {
+                case GenerativeTextMetrics.Coherence:
+                  label = localization.Interpret.Statistics.coherence;
+                  break;
+                case GenerativeTextMetrics.Fluency:
+                  label = localization.Interpret.Statistics.fluency;
+                  break;
+                case GenerativeTextMetrics.Equivalence:
+                  label = localization.Interpret.Statistics.equivalence;
+                  break;
+                case GenerativeTextMetrics.Groundedness:
+                  label = localization.Interpret.Statistics.groundedness;
+                  break;
+                case GenerativeTextMetrics.Relevance:
+                  label = localization.Interpret.Statistics.relevance;
+                  break;
+                case QuestionAnsweringMetrics.ExactMatchRatio:
+                  label = localization.Interpret.Statistics.exactMatchRatio;
+                  break;
+                case QuestionAnsweringMetrics.F1Score:
+                  label = localization.Interpret.Statistics.f1Score;
+                  break;
+                case QuestionAnsweringMetrics.MeteorScore:
+                  label = localization.Interpret.Statistics.meteorScore;
+                  break;
+                case QuestionAnsweringMetrics.BleuScore:
+                  label = localization.Interpret.Statistics.bleuScore;
+                  break;
+                case QuestionAnsweringMetrics.BertScore:
+                  label = localization.Interpret.Statistics.bertScore;
+                  break;
+                case QuestionAnsweringMetrics.RougeScore:
+                  label = localization.Interpret.Statistics.rougeScore;
+                  break;
+                default:
+                  break;
+              }
+              updatedCohortMetricStats.push({
+                key,
+                label,
+                stat: value
+              });
+            }
+
+            updatedMetricStats.push(updatedCohortMetricStats);
+          }
+
+          isDatasetCohort
+            ? this.updateDatasetCohortState(updatedMetricStats)
+            : this.updateFeatureCohortState(updatedMetricStats);
+        });
+    }
+  }
+
   private updateDatasetCohortState(
     cohortMetricStats: ILabeledStatistic[][]
   ): void {
@@ -884,6 +988,10 @@ export class ModelOverview extends React.Component<
       this.context.modelMetadata.modelType === ModelTypes.QuestionAnswering
     ) {
       this.updateQuestionAnsweringMetrics(selectionIndexes, false);
+    } else if (
+      this.context.modelMetadata.modelType === ModelTypes.GenerativeText
+    ) {
+      this.updateGenerativeTextMetrics(selectionIndexes, false);
     }
   };
 
@@ -998,6 +1106,8 @@ export class ModelOverview extends React.Component<
       abortController = this.state.objectDetectionAbortController;
     } else if (taskType === DatasetTaskType.QuestionAnswering) {
       abortController = this.state.questionAnsweringAbortController;
+    } else if (taskType === DatasetTaskType.GenerativeText) {
+      abortController = this.state.generativeTextAbortController;
     }
     if (abortController !== undefined) {
       abortController.abort();

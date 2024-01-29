@@ -115,6 +115,11 @@ export interface IModelAssessmentDashboardProps
     index: number | number[],
     abortSignal: AbortSignal
   ) => Promise<any[]>;
+  requestGenerativeTextMetrics?: (
+    selectionIndexes: number[][],
+    generativeTextCache: Map<string, Map<string, number>>,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   requestObjectDetectionMetrics?: (
     selectionIndexes: number[][],
     aggregateMethod: string,
