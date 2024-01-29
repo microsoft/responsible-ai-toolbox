@@ -141,3 +141,8 @@ class ResponsibleAIDashboard(Dashboard):
             def handle_question_answering_json(qa_json):
                 qa_data = json.loads(qa_json['data'])
                 return self.input.get_question_answering_metrics(qa_data)
+
+            @self._service.socketio.on('handle_generative_text_json')
+            def handle_generative_text_json(gt_json):
+                gt_data = json.loads(gt_json['data'])
+                return self.input.get_generative_text_metrics(gt_data)
