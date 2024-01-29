@@ -10,6 +10,7 @@ import {
 } from "../Interfaces/IStatistic";
 import { IsBinary } from "../util/ExplanationUtils";
 
+import { generateGenerativeTextStats } from "./GenerativeTextStatisticsUtils";
 import { JointDataset } from "./JointDataset";
 import { ClassificationEnum } from "./JointDatasetUtils";
 import { generateMulticlassStats } from "./MulticlassStatisticsUtils";
@@ -156,7 +157,8 @@ export const generateMetrics: (
   modelType: ModelTypes,
   objectDetectionCache?: Map<string, [number, number, number]>,
   objectDetectionInputs?: [string, string, number],
-  questionAnsweringCache?: QuestionAnsweringCacheType
+  questionAnsweringCache?: QuestionAnsweringCacheType,
+  generativeTextCache?: Map<string, Map<string, number>>
 ): ILabeledStatistic[][] => {
   if (
     modelType === ModelTypes.ImageMultilabel ||
@@ -191,6 +193,9 @@ export const generateMetrics: (
       objectDetectionCache,
       objectDetectionInputs
     );
+  }
+  if (modelType === ModelTypes.GenerativeText && generativeTextCache) {
+    return generateGenerativeTextStats(selectionIndexes, generativeTextCache);
   }
   const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
   if (IsBinary(modelType)) {

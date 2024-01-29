@@ -140,6 +140,13 @@ export interface IModelAssessmentContext {
   requestExp?:
     | ((index: number | number[], abortSignal: AbortSignal) => Promise<any[]>)
     | undefined;
+  requestGenerativeTextMetrics?:
+    | ((
+        selectionIndexes: number[][],
+        generativeTextCache: Map<string, Map<string, number>>,
+        abortSignal: AbortSignal
+      ) => Promise<any[]>)
+    | undefined;
   requestObjectDetectionMetrics?:
     | ((
         selectionIndexes: number[][],
