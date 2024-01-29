@@ -16,6 +16,7 @@ export interface IModelAssessmentProps {
 export type CallbackType = Pick<
   IModelAssessmentDashboardProps,
   | "requestExp"
+  | "requestGenerativeTextMetrics"
   | "requestObjectDetectionMetrics"
   | "requestPredictions"
   | "requestQuestionAnsweringMetrics"
