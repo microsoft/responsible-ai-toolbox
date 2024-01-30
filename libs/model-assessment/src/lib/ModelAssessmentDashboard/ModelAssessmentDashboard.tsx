@@ -89,6 +89,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
             this.props.requestDatasetAnalysisBoxChart,
           requestExp: this.props.requestExp,
           requestForecast: this.props.requestForecast,
+          requestGenerativeTextMetrics: this.props.requestGenerativeTextMetrics,
           requestGlobalCausalEffects: this.props.requestGlobalCausalEffects,
           requestGlobalCausalPolicy: this.props.requestGlobalCausalPolicy,
           requestGlobalExplanations: this.props.requestGlobalExplanations,
@@ -143,9 +144,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                 this.props.requestObjectDetectionMetrics
               }
               requestPredictions={this.props.requestPredictions}
-              requestQuestionAnsweringMetrics={
-                this.props.requestQuestionAnsweringMetrics
-              }
               requestDebugML={this.props.requestDebugML}
               requestImportances={this.props.requestImportances}
               requestMatrix={this.props.requestMatrix}

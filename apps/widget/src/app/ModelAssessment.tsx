@@ -71,6 +71,20 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
           abortSignal
         );
       };
+      callBack.requestGenerativeTextMetrics = async (
+        selectionIndexes: number[][],
+        generativeTextCache: Map<string, Map<string, number>>,
+        abortSignal: AbortSignal
+      ): Promise<any[]> => {
+        const parameters = [selectionIndexes, generativeTextCache];
+        return connectToFlaskServiceWithBackupCall(
+          this.props.config,
+          parameters,
+          "handle_generative_text_json",
+          "/get_generative_text_metrics",
+          abortSignal
+        );
+      };
       callBack.requestMatrix = async (
         data: any[]
       ): Promise<IErrorAnalysisMatrix> => {

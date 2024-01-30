@@ -1221,12 +1221,16 @@
       "_rSquared.comment": "the coefficient of determination, see https://en.wikipedia.org/wiki/Coefficient_of_determination",
       "_recall.comment": "computed recall of model, see https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers",
       "accuracy": "Accuracy: {0}",
+      "coherence": "Coherence: {0}",
       "bleuScore": "Bleu score: {0}",
       "bertScore": "Bert score: {0}",
       "exactMatchRatio": "Exact match ratio: {0}",
+      "equivalence": "Equivalence: {0}",
       "rougeScore": "Rouge Score: {0}",
+      "fluency": "Fluency: {0}",
       "fnr": "False negative rate: {0}",
       "fpr": "False positive rate: {0}",
+      "groundedness": "Groundedness: {0}",
       "hammingScore": "Hamming score: {0}",
       "meanPrediction": "Mean prediction {0}",
       "meteorScore": "Meteor Score: {0}",
@@ -1234,6 +1238,7 @@
       "precision": "Precision: {0}",
       "rSquared": "R²: {0}",
       "recall": "Recall: {0}",
+      "relevance": "Relevance: {0}",
       "selectionRate": "Selection rate: {0}",
       "mae": "Mean absolute error: {0}",
       "f1Score": "F1 score: {0}",
@@ -1766,9 +1771,25 @@
           "name": "Accuracy score",
           "description": "The fraction of data points classified correctly."
         },
+        "coherence": {
+          "name": "Coherence",
+          "description": "Coherence of an answer is measured by how well all the sentences fit together and sound naturally as a whole."
+        },
+        "fluency": {
+          "name": "Fluency",
+          "description": "Fluency measures the quality of individual sentences in the answer, and whether they are well-written and grammatically correct."
+        },
+        "equivalence": {
+          "name": "Equivalence",
+          "description": "Equivalence, as a metric, measures the similarity between the predicted answer and the correct answer."
+        },
         "exactMatchRatio": {
           "name": "Exact match ratio",
           "description": "The ratio of instances classified correctly for every label."
+        },
+        "groundedness": {
+          "name": "Groundedness",
+          "description": "Groundedness measures whether the answer follows logically from the information in the context."
         },
         "meteorScore": {
           "name": "Meteor Score",
@@ -1781,6 +1802,10 @@
         "bertScore": {
           "name": "Bert Score",
           "description": "BERTScore focuses on computing semantic similarity between tokens of reference and machine generated text in question answering task."
+        },
+        "relevance": {
+          "name": "Relevance",
+          "description": "Relevance measures how well the answer addresses the main aspects of the question, based on the context"
         },
         "rougeScore": {
           "name": "Rouge Score",
