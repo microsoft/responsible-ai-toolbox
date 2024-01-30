@@ -624,20 +624,6 @@ class RAITextInsights(RAIBaseInsights):
                     "Model predict_proba output of unsupported type,") from ex
             dashboard_dataset.probability_y = probability_y
 
-        # add prompt and (optionally) context to dataset
-        # for generative text tasks
-        if self.task_type == ModelTask.GENERATIVE_TEXT:
-            # prompt = self.test[self._feature_metadata.prompt_col]
-            # context = self.test.get(self._feature_metadata.context_col)
-
-            # dashboard_dataset.prompt = convert_to_list(prompt)
-            # if context is None:
-            #     dashboard_dataset.context = None
-            # else:
-            #     dashboard_dataset.context = convert_to_list(context)
-            # NOT DOING FOR NOW
-            pass
-
         return dashboard_dataset
 
     def _convert_labels(self, labels, class_names, unique_labels=None):
