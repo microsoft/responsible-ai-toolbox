@@ -24,6 +24,10 @@ EXTRAS = {
         'bert_score',
         'nltk',
         'rouge_score'
+    ],
+    "generative_text": [
+        'interpret_text',
+        'sentence_transformers'
     ]
 }
 setuptools.setup(
