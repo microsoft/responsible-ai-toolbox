@@ -171,7 +171,7 @@ class ResponsibleAIDashboardInput:
 
     def debug_ml(self, data):
         try:
-            features = data[0] # TODO: Remove prompt feature
+            features = data[0]  # TODO: Remove prompt feature
             filters = data[1]
             composite_filters = data[2]
             max_depth = data[3]

@@ -22,8 +22,8 @@ from responsibleai.managers.error_analysis_manager import \
     ErrorAnalysisManager as BaseErrorAnalysisManager
 from responsibleai.managers.error_analysis_manager import as_error_config
 from responsibleai_text.common.constants import ModelTask
-from responsibleai_text.utils.genai_metrics.metrics import get_genai_metric
 from responsibleai_text.utils.feature_extractors import get_text_columns
+from responsibleai_text.utils.genai_metrics.metrics import get_genai_metric
 
 LABELS = 'labels'
 

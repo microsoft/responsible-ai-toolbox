@@ -30,7 +30,8 @@ from responsibleai_text.managers.error_analysis_manager import \
 from responsibleai_text.managers.explainer_manager import ExplainerManager
 from responsibleai_text.utils.feature_extractors import (extract_features,
                                                          get_text_columns)
-from responsibleai_text.utils.genai_metrics.metrics import get_genai_metric_mean
+from responsibleai_text.utils.genai_metrics.metrics import \
+    get_genai_metric_mean
 
 module_logger = logging.getLogger(__name__)
 module_logger.setLevel(logging.INFO)
@@ -105,6 +106,7 @@ def _add_extra_metadata_features(task_type, feature_metadata):
         # No extra metadata features for now
         pass
     return feature_metadata
+
 
 class RAITextInsights(RAIBaseInsights):
     """Defines the top-level RAITextInsights API.

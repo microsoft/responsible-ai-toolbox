@@ -12,9 +12,9 @@ from negspacy.termsets import termset
 from tqdm import tqdm
 
 from nlp_feature_extractors import attribute_extractors as exts
-from responsibleai_text.common.constants import (ModelTask,
-                                                 QuestionAnsweringFields,
-                                                 GenerativeTextFields)
+from responsibleai_text.common.constants import (GenerativeTextFields,
+                                                 ModelTask,
+                                                 QuestionAnsweringFields)
 
 nlp = None
 

@@ -3,9 +3,10 @@
 
 """Compute AI-assisted metrics for generative text models."""
 
-import numpy as np
 import logging
 from pathlib import Path
+
+import numpy as np
 
 module_logger = logging.getLogger(__name__)
 module_logger.setLevel(logging.INFO)
