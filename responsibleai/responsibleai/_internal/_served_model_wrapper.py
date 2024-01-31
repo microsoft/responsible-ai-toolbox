@@ -3,8 +3,7 @@
 
 import json
 
-import requests
-
+from raiutils.webservice import post_with_retries
 from responsibleai.serialization_utilities import serialize_json_safe
 
 
@@ -37,14 +36,14 @@ class ServedModelWrapper:
         # request formatting according to mlflow docs
         # https://mlflow.org/docs/latest/cli.html#mlflow-models-serve
         # JSON safe serialization takes care of datetime columns
-        response = requests.post(
-            url=f"http://localhost:{self.port}/invocations",
-            headers={"Content-Type": "application/json"},
-            data=json.dumps(
-                {"dataframe_split": X.to_dict(orient='split')},
-                default=serialize_json_safe))
+        uri = f"http://localhost:{self.port}/invocations"
+        input_data = json.dumps(
+            {"dataframe_split": X.to_dict(orient='split')},
+            default=serialize_json_safe)
+        headers = {"Content-Type": "application/json"}
         try:
-            response.raise_for_status()
+            response = post_with_retries(uri, input_data, headers,
+                                         max_retries=15, retry_delay=30)
         except Exception:
             raise RuntimeError(
                 "Could not retrieve predictions. "
