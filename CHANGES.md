@@ -24,6 +24,48 @@ this file to understand what changed.
 - bug fixes and tests
 - other
 
+## v0.34.0
+
+- new features
+  - ## Responsible AI Dashboard
+    - Private Link URL support by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2493
+    - PL Support on raiwidgets by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2500
+    - Flyout Bounding Box legend & accessibility fixes by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2497
+    - update UI to support genai task for RAI text dashboard by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2508
+    - add genai metrics endpoint in UI for model overview metrics (#2517) by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2520
+  - ## RAI Text
+    - Added metrics for genai text by @kartik727 in https://github.com/microsoft/responsible-ai-toolbox/pull/2514
+    - added generative text explainer by @mohsinposts in https://github.com/microsoft/responsible-ai-toolbox/pull/2516
+    - Add helper method for genai metrics by @kartik727 in https://github.com/microsoft/responsible-ai-toolbox/pull/2519
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - upgrade plotly to latest version 2.27.1 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2484
+    - LEGO: Pull request from JUNO/hb_a12a4630-4852-4e7d-9cbc-c0e1117da1ab_20231212124106972 to main by @csigs in https://github.com/microsoft/responsible-ai-toolbox/pull/2457
+    - Localized file check-in by OneLocBuild Task: Build definition ID 21368: Build ID 113458687 by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/2460
+  - ## RAIInsights
+    - update responsibleai to interpret-community 0.31.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2488
+    - Release rai_core_flask 0.7.3 by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2496
+    - fix builds by supporting sparse_output renamed parameter in OneHotEncoder in new scikit-learn version update by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2507
+  - ## RAI Vision
+    - fix vision data explorer elements truncated in smaller screen by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2478
+    - fix duplicate categorical features added from image exif metadata in RAI Vision Dashboard by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2483
+    - Accessibility Fix for Metric Checkboxes by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2485
+    - fix wrong metrics count missing in vision explorer of RAI Vision dashboard for object detection by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2495
+    - Class View Search Case Fix by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2498
+    - Dropdown option fix by @Advitya17 in https://github.com/microsoft/responsible-ai-toolbox/pull/2505
+  - ## RAI Vision and Text
+    - update responsibleai-text and responsibleai-vision packages to responsibleai 0.33.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2477
+    - release responsibleai-vision 0.3.5 and responsibleai-text 0.2.5 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2481
+    - release tensorflow pin in RAI vision and text package tests which was added last year to fix huggingface transformer models by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2472
+  - ## Error analysis
+  - ## RAIUtils
+    - Fix retry function not stopping for long time after sending an interrupt by @kartik727 in https://github.com/microsoft/responsible-ai-toolbox/pull/2486
+- other
+  - Update MANIFEST.in for erroranalysis to include requirements-object-detection.txt by @rxm7706 in https://github.com/microsoft/responsible-ai-toolbox/pull/2476
+  - fix release script due to dependency test errors by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2482
+  - ignore error when uploading test dashboard from build for external forks by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2487
+  - ci: Use GITHUB_OUTPUT envvar instead of set-output command by @arunsathiya in https://github.com/microsoft/responsible-ai-toolbox/pull/2489
+
 ## v0.33.0
 
 - new features
