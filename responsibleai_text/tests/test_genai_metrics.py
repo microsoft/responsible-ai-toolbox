@@ -1,7 +1,8 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from responsibleai_text.utils.genai_metrics.metrics import get_genai_metric
+from responsibleai_text.utils.genai_metrics.metrics import (
+    get_genai_metric, get_genai_metric_mean)
 
 PREDICTIONS = ['This is a prediction']
 REFERENCES = ['This is a reference']
@@ -15,69 +16,48 @@ class DummyModelWrapper:
 
 class TestGenAIMetrics:
 
-    def test_coherence(self):
-        metric = get_genai_metric('coherence',
-                                  predictions=PREDICTIONS,
-                                  references=REFERENCES,
+    def assert_metrics(self, metric_name,
+                       expected, input_len,
+                       **metric_kwargs):
+        metric = get_genai_metric(metric_name, **metric_kwargs,
                                   wrapper_model=DummyModelWrapper())
-        assert metric['scores'] == [1]
+        assert metric['scores'] == [expected]
 
-        metric = get_genai_metric('coherence',
-                                  predictions=PREDICTIONS * 5,
-                                  references=REFERENCES * 5,
-                                  wrapper_model=DummyModelWrapper())
-        assert metric['scores'] == [1] * 5
+        metric_mean = get_genai_metric_mean(metric_name, **metric_kwargs,
+                                            wrapper_model=DummyModelWrapper())
+        assert metric_mean == expected
+
+        kwargs_multi = {k: v * input_len for k, v in metric_kwargs.items()}
+        metric_multi = get_genai_metric(metric_name, **kwargs_multi,
+                                        wrapper_model=DummyModelWrapper())
+        assert metric_multi['scores'] == [expected] * input_len
+
+        metric_mean_multi = get_genai_metric_mean(
+            metric_name, **kwargs_multi, wrapper_model=DummyModelWrapper())
+        assert metric_mean_multi == expected
+
+    def test_coherence(self):
+        self.assert_metrics('coherence', 1, 5,
+                            predictions=PREDICTIONS,
+                            references=REFERENCES)
 
     def test_equivalence(self):
-        metric = get_genai_metric('equivalence',
-                                  predictions=PREDICTIONS,
-                                  references=REFERENCES,
-                                  answers=ANSWERS,
-                                  wrapper_model=DummyModelWrapper())
-        assert metric['scores'] == [1]
-
-        metric = get_genai_metric('equivalence',
-                                  predictions=PREDICTIONS * 5,
-                                  references=REFERENCES * 5,
-                                  answers=ANSWERS * 5,
-                                  wrapper_model=DummyModelWrapper())
-        assert metric['scores'] == [1] * 5
+        self.assert_metrics('equivalence', 1, 5,
+                            predictions=PREDICTIONS,
+                            references=REFERENCES,
+                            answers=ANSWERS)
 
     def test_fluency(self):
-        metric = get_genai_metric('fluency',
-                                  predictions=PREDICTIONS,
-                                  references=REFERENCES,
-                                  wrapper_model=DummyModelWrapper())
-        assert metric['scores'] == [1]
-
-        metric = get_genai_metric('fluency',
-                                  predictions=PREDICTIONS * 5,
-                                  references=REFERENCES * 5,
-                                  wrapper_model=DummyModelWrapper())
-        assert metric['scores'] == [1] * 5
+        self.assert_metrics('fluency', 1, 5,
+                            predictions=PREDICTIONS,
+                            references=REFERENCES)
 
     def test_groundedness(self):
-        metric = get_genai_metric('groundedness',
-                                  predictions=PREDICTIONS,
-                                  references=REFERENCES,
-                                  wrapper_model=DummyModelWrapper())
-        assert metric['scores'] == [1]
-
-        metric = get_genai_metric('groundedness',
-                                  predictions=PREDICTIONS * 5,
-                                  references=REFERENCES * 5,
-                                  wrapper_model=DummyModelWrapper())
-        assert metric['scores'] == [1] * 5
+        self.assert_metrics('groundedness', 1, 5,
+                            predictions=PREDICTIONS,
+                            references=REFERENCES)
 
     def test_relevance(self):
-        metric = get_genai_metric('relevance',
-                                  predictions=PREDICTIONS,
-                                  references=REFERENCES,
-                                  wrapper_model=DummyModelWrapper())
-        assert metric['scores'] == [1]
-
-        metric = get_genai_metric('relevance',
-                                  predictions=PREDICTIONS * 5,
-                                  references=REFERENCES * 5,
-                                  wrapper_model=DummyModelWrapper())
-        assert metric['scores'] == [1] * 5
+        self.assert_metrics('relevance', 1, 5,
+                            predictions=PREDICTIONS,
+                            references=REFERENCES)
