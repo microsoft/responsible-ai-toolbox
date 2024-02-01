@@ -39,6 +39,11 @@ question, based on the context. Consider whether all and only the important \
 aspects are contained in the answer when evaluating relevance. Given the \
 context and question, score the relevance of the answer between one to five \
 stars using the following rating scale:
+Relevance measures how well the answer addresses the main aspects of the \
+question, based on the context. Consider whether all and only the important \
+aspects are contained in the answer when evaluating relevance. Given the \
+context and question, score the relevance of the answer between one to five \
+stars using the following rating scale:
 One star: the answer completely lacks relevance
 Two stars: the answer mostly lacks relevance
 Three stars: the answer is partially relevant

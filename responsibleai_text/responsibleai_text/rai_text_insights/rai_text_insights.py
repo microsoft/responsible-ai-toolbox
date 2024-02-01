@@ -105,6 +105,8 @@ def _add_extra_metadata_features(task_type, feature_metadata):
     if task_type == ModelTask.GENERATIVE_TEXT:
         # No extra metadata features for now
         pass
+        # No extra metadata features for now
+        pass
     return feature_metadata
 
 
