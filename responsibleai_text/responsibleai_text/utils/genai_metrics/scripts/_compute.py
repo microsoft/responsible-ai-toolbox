@@ -24,7 +24,7 @@ def _compute_metric(template, logger, wrapper_model, **kwargs):
     templated_ques = format_str(template, **kwargs)
 
     inp = pd.DataFrame({
-        'questions': templated_ques,
+        'prompt': templated_ques,
         'sys_prompt': _SYS_PROMPT})
 
     responses = wrapper_model.predict(inp)
