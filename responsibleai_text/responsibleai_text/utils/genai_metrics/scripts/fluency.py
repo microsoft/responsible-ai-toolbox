@@ -47,6 +47,15 @@ Five stars: the answer has perfect fluency
 
 This rating value should always be an integer between 1 and 5. So the rating \
 produced should be 1 or 2 or 3 or 4 or 5.
+Some examples of valid responses are:
+1
+2
+5
+Some examples of invalid responses are:
+1/5
+1.5
+3.0
+5 stars
 
 QUESTION:
 {question}

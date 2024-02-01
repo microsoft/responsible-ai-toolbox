@@ -18,6 +18,8 @@ class ModelTask(str, Enum):
     QUESTION_ANSWERING = 'question_answering'
     ENTAILMENT = 'entailment'
     SUMMARIZATIONS = 'summarizations'
+    GENERATIVE_TEXT = 'generative_text'
+    GENERATIVE_TEXT_CHAT = 'generative_text_chat'
     UNKNOWN = 'unknown'
 
 
@@ -34,3 +36,9 @@ class QuestionAnsweringFields(object):
     QUESTION = "question"
     CONTEXT = "context"
     ANSWERS = "answers"
+
+
+class GenerativeTextFields(object):
+    PROMPT = "prompt"
+    SYS_PROMPT = "sys_prompt"
+    RESPONSE = "response"

@@ -30,6 +30,8 @@ from responsibleai_text.managers.error_analysis_manager import \
 from responsibleai_text.managers.explainer_manager import ExplainerManager
 from responsibleai_text.utils.feature_extractors import (extract_features,
                                                          get_text_columns)
+from responsibleai_text.utils.genai_metrics.metrics import \
+    get_genai_metric_mean
 
 module_logger = logging.getLogger(__name__)
 module_logger.setLevel(logging.INFO)
@@ -116,7 +118,8 @@ class RAITextInsights(RAIBaseInsights):
                  serializer: Optional[Any] = None,
                  maximum_rows_for_test: int = 5000,
                  feature_metadata: Optional[FeatureMetadata] = None,
-                 text_column: Optional[Union[str, List]] = None):
+                 text_column: Optional[Union[str, List]] = None,
+                 eval_model: Any = None):
         """Creates an RAITextInsights object.
 
         :param model: The model to compute RAI insights for.
@@ -148,6 +151,10 @@ class RAITextInsights(RAIBaseInsights):
             If not provided, and there is additional feature metadata, then
             an exception will be raised.
         :type text_column: str or list[str]
+        :param eval_model: The model to use for evaluation with AI-assisted
+            metrics. If not provided, then the model passed in the model
+            parameter will be used.
+        :type eval_model: object
         """
         # drop index as this can cause issues later like when copying
         # target column below from test dataset to _ext_test_df
@@ -160,6 +167,10 @@ class RAITextInsights(RAIBaseInsights):
         self._text_column = text_column
         self._feature_metadata = feature_metadata
         self._wrapped_model = wrap_model(model, test, task_type)
+        if eval_model is None:
+            self._eval_model = self._wrapped_model
+        else:
+            self._eval_model = wrap_model(eval_model, test, task_type)
         self._validate_rai_insights_input_parameters(
             model=self._wrapped_model, test=test,
             target_column=target_column, task_type=task_type,
@@ -269,7 +280,9 @@ class RAITextInsights(RAIBaseInsights):
             target_column, axis=1)
         small_test_data = get_text_columns(small_test_data, text_column)
         small_test_data = small_test_data.iloc[0]
-        if task_type != ModelTask.QUESTION_ANSWERING:
+        if task_type not in [
+                ModelTask.QUESTION_ANSWERING,
+                ModelTask.GENERATIVE_TEXT]:
             small_test_data = small_test_data.tolist()
         # Call the model
         try:
@@ -319,7 +332,8 @@ class RAITextInsights(RAIBaseInsights):
             ModelTask.SENTIMENT_ANALYSIS.value,
             ModelTask.QUESTION_ANSWERING.value,
             ModelTask.ENTAILMENT.value,
-            ModelTask.SUMMARIZATIONS.value
+            ModelTask.SUMMARIZATIONS.value,
+            ModelTask.GENERATIVE_TEXT.value,
         ]
 
         if task_type not in valid_tasks:
@@ -362,6 +376,10 @@ class RAITextInsights(RAIBaseInsights):
             if not target_columns_set.issubset(set(test.columns)):
                 raise UserConfigValidationException(
                     'The list of target_column(s) should be in test data')
+        elif (task_type == ModelTask.GENERATIVE_TEXT.value and
+              target_column is None):
+            # target column is optional for generative text
+            pass
         else:
             if target_column not in list(test.columns):
                 raise UserConfigValidationException(
@@ -514,6 +532,11 @@ class RAITextInsights(RAIBaseInsights):
             dataset = self.test.drop(target_column, axis=1)
         elif self.task_type == ModelTask.QUESTION_ANSWERING:
             dataset = self.test.drop([self.target_column], axis=1)
+        elif self.task_type == ModelTask.GENERATIVE_TEXT:
+            if self.target_column is None:
+                dataset = self.test.copy()
+            else:
+                dataset = self.test.drop([self.target_column], axis=1)
         else:
             raise ValueError("Unknown task type: {}".format(self.task_type))
         dataset = get_text_columns(dataset, self._text_column)
@@ -852,4 +875,72 @@ class RAITextInsights(RAIBaseInsights):
                      bert_f1_score, rouge_results['rougeL']])
             except ValueError:
                 all_cohort_metrics.append([0, 0, 0, 0, 0, 0])
+        return all_cohort_metrics
+
+    def compute_genai_metrics(
+        self,
+        selection_indexes,
+        genai_cache
+    ):
+        dashboard_dataset = self.get_data().dataset
+        prompt_idx = dashboard_dataset.feature_names.index('prompt')
+        prompts = [feat[prompt_idx] for feat in dashboard_dataset.features]
+        true_y = dashboard_dataset.true_y
+        predicted_y = dashboard_dataset.predicted_y
+
+        all_cohort_metrics = []
+        for cohort_indices in selection_indexes:
+            cohort_metrics = dict()
+
+            if true_y is None:
+                true_y_cohort = None
+            else:
+                true_y_cohort = [true_y[cohort_index] for cohort_index
+                                 in cohort_indices]
+            predicted_y_cohort = [predicted_y[cohort_index] for cohort_index
+                                  in cohort_indices]
+            prompts_cohort = [prompts[cohort_index] for cohort_index
+                              in cohort_indices]
+            try:
+                if true_y_cohort is not None:
+                    exact_match = evaluate.load('exact_match')
+                    cohort_metrics['exact_match'] = exact_match.compute(
+                        predictions=predicted_y_cohort,
+                        references=true_y_cohort)
+
+                cohort_metrics['coherence'] = get_genai_metric_mean(
+                    'coherence',
+                    predictions=predicted_y_cohort,
+                    references=prompts_cohort,
+                    wrapper_model=self._eval_model)
+
+                if true_y_cohort is not None:
+                    cohort_metrics['equivalence'] = get_genai_metric_mean(
+                        'equivalence',
+                        predictions=predicted_y_cohort,
+                        references=prompts_cohort,
+                        answers=true_y_cohort,
+                        wrapper_model=self._eval_model)
+
+                cohort_metrics['fluency'] = get_genai_metric_mean(
+                    'fluency',
+                    predictions=predicted_y_cohort,
+                    references=prompts_cohort,
+                    wrapper_model=self._eval_model)
+
+                cohort_metrics['groundedness'] = get_genai_metric_mean(
+                    'groundedness',
+                    predictions=predicted_y_cohort,
+                    references=prompts_cohort,
+                    wrapper_model=self._eval_model)
+
+                cohort_metrics['relevance'] = get_genai_metric_mean(
+                    'relevance',
+                    predictions=predicted_y_cohort,
+                    references=prompts_cohort,
+                    wrapper_model=self._eval_model)
+
+                all_cohort_metrics.append(cohort_metrics)
+            except ValueError:
+                all_cohort_metrics.append({})
         return all_cohort_metrics
