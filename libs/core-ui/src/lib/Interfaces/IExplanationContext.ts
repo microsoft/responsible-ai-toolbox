@@ -8,6 +8,7 @@ import { JointDataset } from "../util/JointDataset";
 export enum ModelTypes {
   Regression = "regression",
   Binary = "binary",
+  GenerativeText = "generativetext",
   Multiclass = "multiclass",
   ImageBinary = "imagebinary",
   ImageMulticlass = "imagemulticlass",

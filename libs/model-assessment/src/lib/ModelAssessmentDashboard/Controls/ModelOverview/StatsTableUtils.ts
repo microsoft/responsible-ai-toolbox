@@ -6,6 +6,7 @@ import {
   BinaryClassificationMetrics,
   DatasetTaskType,
   ErrorCohort,
+  GenerativeTextMetrics,
   HighchartsNull,
   ILabeledStatistic,
   ModelTypes,
@@ -154,7 +155,8 @@ export function generateCohortsStatsTable(
           const colorConfig =
             useTexturedBackgroundForNaN &&
             modelType !== ModelTypes.ObjectDetection &&
-            modelType !== ModelTypes.QuestionAnswering
+            modelType !== ModelTypes.QuestionAnswering &&
+            modelType !== ModelTypes.GenerativeText
               ? {
                   color: {
                     pattern: {
@@ -458,6 +460,90 @@ export function getSelectableMetrics(
         text: localization.ModelAssessment.ModelOverview.metrics.bleuScore.name
       },
 
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.bertScore
+            .description,
+        key: QuestionAnsweringMetrics.BertScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.bertScore.name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.rougeScore
+            .description,
+        key: QuestionAnsweringMetrics.RougeScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.rougeScore.name
+      }
+    );
+  } else if (taskType === DatasetTaskType.GenerativeText) {
+    selectableMetrics.push(
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.coherence
+            .description,
+        key: GenerativeTextMetrics.Coherence,
+        text: localization.ModelAssessment.ModelOverview.metrics.coherence.name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.fluency
+            .description,
+        key: GenerativeTextMetrics.Fluency,
+        text: localization.ModelAssessment.ModelOverview.metrics.fluency.name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.equivalence
+            .description,
+        key: GenerativeTextMetrics.Equivalence,
+        text: localization.ModelAssessment.ModelOverview.metrics.equivalence
+          .name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.groundedness
+            .description,
+        key: GenerativeTextMetrics.Groundedness,
+        text: localization.ModelAssessment.ModelOverview.metrics.groundedness
+          .name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.relevance
+            .description,
+        key: GenerativeTextMetrics.Relevance,
+        text: localization.ModelAssessment.ModelOverview.metrics.relevance.name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.exactMatchRatio
+            .description,
+        key: QuestionAnsweringMetrics.ExactMatchRatio,
+        text: localization.ModelAssessment.ModelOverview.metrics.exactMatchRatio
+          .name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.meteorScore
+            .description,
+        key: QuestionAnsweringMetrics.MeteorScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.meteorScore
+          .name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.f1Score
+            .description,
+        key: QuestionAnsweringMetrics.F1Score,
+        text: localization.ModelAssessment.ModelOverview.metrics.f1Score.name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.bleuScore
+            .description,
+        key: QuestionAnsweringMetrics.BleuScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.bleuScore.name
+      },
       {
         description:
           localization.ModelAssessment.ModelOverview.metrics.bertScore

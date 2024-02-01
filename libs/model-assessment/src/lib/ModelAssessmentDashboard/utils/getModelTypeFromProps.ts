@@ -53,5 +53,8 @@ export function getModelTypeFromProps(
   if (taskType === DatasetTaskType.QuestionAnswering) {
     return ModelTypes.QuestionAnswering;
   }
+  if (taskType === DatasetTaskType.GenerativeText) {
+    return ModelTypes.GenerativeText;
+  }
   return modelType;
 }

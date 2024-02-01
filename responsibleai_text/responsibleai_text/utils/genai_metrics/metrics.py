@@ -6,6 +6,8 @@
 import logging
 from pathlib import Path
 
+import numpy as np
+
 module_logger = logging.getLogger(__name__)
 module_logger.setLevel(logging.INFO)
 
@@ -30,3 +32,16 @@ def get_genai_metric(metric_name, **metric_kwargs):
     metric = evaluate.load(
         str(curr_file_dir.joinpath(f'scripts/{metric_name}.py')))
     return metric.compute(**metric_kwargs)
+
+
+def get_genai_metric_mean(metric_name, **metric_kwargs):
+    """Get the mean of the metric from the genai library.
+
+    :param metric_name: The name of the metric.
+    :type metric_name: str
+    :param metric_kwargs: The keyword arguments to pass to the metric.
+    :type metric_kwargs: dict
+    :return: The mean of the metric.
+    :rtype: float
+    """
+    return np.mean(get_genai_metric(metric_name, **metric_kwargs)['scores'])
