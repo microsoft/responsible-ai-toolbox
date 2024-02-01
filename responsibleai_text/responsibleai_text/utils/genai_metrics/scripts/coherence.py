@@ -38,18 +38,12 @@ Coherence of an answer is measured by how well all the sentences fit together \
 and sound naturally as a whole. Consider the overall quality of the answer \
 when evaluating coherence. Given the question and answer, score the coherence \
 of answer between one to five stars using the following rating scale:
-Coherence of an answer is measured by how well all the sentences fit together \
-and sound naturally as a whole. Consider the overall quality of the answer \
-when evaluating coherence. Given the question and answer, score the coherence \
-of answer between one to five stars using the following rating scale:
 One star: the answer completely lacks coherence
 Two stars: the answer mostly lacks coherence
 Three stars: the answer is partially coherent
 Four stars: the answer is mostly coherent
 Five stars: the answer has perfect coherency
 
-This rating value should always be an integer between 1 and 5. So the rating \
-produced should be 1 or 2 or 3 or 4 or 5.
 This rating value should always be an integer between 1 and 5. So the rating \
 produced should be 1 or 2 or 3 or 4 or 5.
 Some examples of valid responses are:
@@ -72,8 +66,6 @@ RATING:
 """.strip()
 
 
-@evaluate.utils.file_utils.add_start_docstrings(
-    _DESCRIPTION, _KWARGS_DESCRIPTION)
 @evaluate.utils.file_utils.add_start_docstrings(
     _DESCRIPTION, _KWARGS_DESCRIPTION)
 class Coherence(evaluate.Metric):
