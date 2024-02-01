@@ -32,6 +32,8 @@ from responsibleai_text.utils.feature_extractors import (extract_features,
                                                          get_text_columns)
 from responsibleai_text.utils.genai_metrics.metrics import \
     get_genai_metric_mean
+from responsibleai_text.utils.genai_metrics.metrics import \
+    get_genai_metric_mean
 
 module_logger = logging.getLogger(__name__)
 module_logger.setLevel(logging.INFO)
@@ -154,9 +156,9 @@ class RAITextInsights(RAIBaseInsights):
             If not provided, and there is additional feature metadata, then
             an exception will be raised.
         :type text_column: str or list[str]
-        :param eval_model: The model to use for evaluation.
-            If not provided, then the model passed in the model parameter
-            will be used.
+        :param eval_model: The model to use for evaluation with AI-assisted
+            metrics. If not provided, then the model passed in the model
+            parameter will be used.
         :type eval_model: object
         """
         # drop index as this can cause issues later like when copying
