@@ -32,8 +32,6 @@ from responsibleai_text.utils.feature_extractors import (extract_features,
                                                          get_text_columns)
 from responsibleai_text.utils.genai_metrics.metrics import \
     get_genai_metric_mean
-from responsibleai_text.utils.genai_metrics.metrics import \
-    get_genai_metric_mean
 
 module_logger = logging.getLogger(__name__)
 module_logger.setLevel(logging.INFO)
@@ -288,9 +286,9 @@ class RAITextInsights(RAIBaseInsights):
                 target_column, axis=1)
         small_test_data = get_text_columns(small_test_data, text_column)
         small_test_data = small_test_data.iloc[0]
-        if task_type not in [
-                ModelTask.QUESTION_ANSWERING,
-                ModelTask.GENERATIVE_TEXT]:
+        list_task_outputs = [ModelTask.QUESTION_ANSWERING,
+                             ModelTask.GENERATIVE_TEXT]
+        if task_type not in list_task_outputs:
             small_test_data = small_test_data.tolist()
         # Call the model
         try:
