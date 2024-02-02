@@ -12,7 +12,8 @@ from negspacy.termsets import termset
 from tqdm import tqdm
 
 from nlp_feature_extractors import attribute_extractors as exts
-from responsibleai_text.common.constants import (ModelTask,
+from responsibleai_text.common.constants import (GenerativeTextFields,
+                                                 ModelTask,
                                                  QuestionAnsweringFields)
 
 nlp = None
@@ -60,6 +61,9 @@ def extract_features(text_dataset: pd.DataFrame,
             feature_names.append(prefix + "maximum_parse_tree_depth")
         feature_names.append("question_type")
         feature_names.append("context_overlap")
+    elif task_type == ModelTask.GENERATIVE_TEXT:
+        start_meta_index = 0
+        feature_names = base_feature_names
     else:
         raise ValueError("Unknown task type: {}".format(task_type))
     # copy over the metadata column names
@@ -96,6 +100,19 @@ def extract_features(text_dataset: pd.DataFrame,
             context_overlap = get_context_overlap(context=context,
                                                   question=question)
             extracted_features.append(context_overlap)
+            # append all other metadata features
+            append_metadata_values(start_meta_index, text_dataset, i,
+                                   extracted_features, has_dropped_features,
+                                   dropped_features, column_names)
+            results.append(extracted_features)
+    elif task_type == ModelTask.GENERATIVE_TEXT:
+        for i, row in tqdm(text_features.iterrows(),
+                           desc='feature extraction'):
+            extracted_features = []
+            add_extracted_features_for_sentence(
+                row[GenerativeTextFields.PROMPT], extracted_features,
+                task_type)
+
             # append all other metadata features
             append_metadata_values(start_meta_index, text_dataset, i,
                                    extracted_features, has_dropped_features,
