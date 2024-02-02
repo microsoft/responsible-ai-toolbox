@@ -207,8 +207,8 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
             sup_task_type = ErrorAnalysisTask.REGRESSION
             ext_dataset = ext_dataset.copy()
             del ext_dataset['prompt']
-            ext_dataset['target_score'] = 5
             target_column = 'target_score'
+            ext_dataset[target_column] = 5
         else:
             sup_task_type = ErrorAnalysisTask.CLASSIFICATION
         super(ErrorAnalysisManager, self).__init__(
