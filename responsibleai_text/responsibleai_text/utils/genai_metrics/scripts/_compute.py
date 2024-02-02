@@ -5,8 +5,8 @@
 
 import pandas as pd
 
-from responsibleai_text.utils.genai_metrics.constants import (
-    _SYS_PROMPT, _EXAMPLES)
+from responsibleai_text.utils.genai_metrics.constants import (_EXAMPLES,
+                                                              _SYS_PROMPT)
 
 
 def format_str(s, **kwargs):
