@@ -5,7 +5,8 @@
 
 import pandas as pd
 
-from responsibleai_text.utils.genai_metrics.constants import _SYS_PROMPT
+from responsibleai_text.utils.genai_metrics.constants import (
+    _SYS_PROMPT, _EXAMPLES)
 
 
 def format_str(s, **kwargs):
@@ -21,6 +22,7 @@ def format_str(s, **kwargs):
 
 def _compute_metric(template, logger, wrapper_model, **kwargs):
     m = []
+    template = template % _EXAMPLES
     templated_ques = format_str(template, **kwargs)
 
     inp = pd.DataFrame({
