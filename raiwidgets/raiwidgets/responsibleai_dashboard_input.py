@@ -171,14 +171,17 @@ class ResponsibleAIDashboardInput:
 
     def debug_ml(self, data):
         try:
-            features = data[0]  # TODO: Remove prompt feature
+            features = data[0]
             filters = data[1]
             composite_filters = data[2]
             max_depth = data[3]
             num_leaves = data[4]
             min_child_samples = data[5]
             metric = display_name_to_metric[data[6]]
-            text_cols = self._analysis._text_column
+            if not hasattr(self._analysis, '_text_column'):
+                text_cols = None
+            else:
+                text_cols = self._analysis._text_column
             if text_cols is None:
                 text_cols = []
             elif isinstance(text_cols, str):
