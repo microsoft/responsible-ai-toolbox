@@ -253,8 +253,12 @@ class ErrorAnalysisManager(BaseManager):
                             for evaluating the model.
         :type dropped_features: Optional[List[str]]
         """
-        self._true_y = dataset[target_column]
-        self._dataset = dataset.drop(columns=[target_column])
+        if target_column is None:
+            self._true_y = None
+            self._dataset = dataset.copy()
+        else:
+            self._true_y = dataset[target_column]
+            self._dataset = dataset.drop(columns=[target_column])
         self._feature_names = list(self._dataset.columns)
         self._model_task = model_task
         self._classes = classes
