@@ -71,9 +71,13 @@ def extract_features(text_dataset: pd.DataFrame,
         if has_dropped_features and column_names[j] in dropped_features:
             continue
         feature_names.append(column_names[j])
-    if not isinstance(target_column, list):
+
+    if not isinstance(target_column, (list, type(None))):
         target_column = [target_column]
-    text_features = text_dataset.drop(target_column, axis=1)
+
+    text_features = text_dataset.copy()
+    if target_column is not None:
+        text_features = text_features.drop(target_column, axis=1)
 
     if task_type in single_text_col_tasks:
         sentences = text_features.iloc[:, 0].tolist()

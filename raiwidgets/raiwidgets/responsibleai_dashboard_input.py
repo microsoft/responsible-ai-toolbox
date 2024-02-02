@@ -178,6 +178,15 @@ class ResponsibleAIDashboardInput:
             num_leaves = data[4]
             min_child_samples = data[5]
             metric = display_name_to_metric[data[6]]
+            if not hasattr(self._analysis, '_text_column'):
+                text_cols = None
+            else:
+                text_cols = self._analysis._text_column
+            if text_cols is None:
+                text_cols = []
+            elif isinstance(text_cols, str):
+                text_cols = [text_cols]
+            features = [f for f in features if f not in text_cols]
 
             filtered_data_df = self._prepare_filtered_error_analysis_data(
                 features, filters, composite_filters, metric)
