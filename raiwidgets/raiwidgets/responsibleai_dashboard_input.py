@@ -436,9 +436,6 @@ class ResponsibleAIDashboardInput:
             predictions = convert_to_list(
                 self._analysis.model.forecast(filtered_data_df),
                 EXP_VIZ_ERR_MSG)
-            # forecast should return a flat list of predictions
-            if all([len(p) == 1 for p in predictions]):
-                predictions = [p[0] for p in predictions]
             return {
                 WidgetRequestResponseConstants.data: predictions
             }
