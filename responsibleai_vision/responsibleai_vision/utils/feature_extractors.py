@@ -12,8 +12,8 @@ from PIL.ExifTags import TAGS
 from tqdm import tqdm
 
 from responsibleai.feature_metadata import FeatureMetadata
-from responsibleai_vision.common.constants import (
-    ExtractedFeatures, ImageColumns)
+from responsibleai_vision.common.constants import (ExtractedFeatures,
+                                                   ImageColumns)
 from responsibleai_vision.utils.image_reader import (
     get_all_exif_feature_names, get_image_from_path,
     get_image_pointer_from_path)
