@@ -31,6 +31,13 @@ def validate_rai_vision_insights(
         pd.testing.assert_frame_equal(rai_vision_test, test_data)
     assert rai_vision_insights.target_column == target_column
     assert rai_vision_insights.task_type == task_type
+    # make sure label column not in _ext_test extracted features data
+    assert target_column not in rai_vision_insights._ext_features
+    # also not in last column of _ext_test, which is prone to happen
+    # if incorrect number of metadata columns specified in
+    # feature_extractors call
+    first_row = rai_vision_insights._ext_test[0]
+    assert not isinstance(first_row[len(first_row) - 1], list)
 
 
 def run_and_validate_serialization(
