@@ -19,6 +19,8 @@ on:
 jobs:
   release-build:
     runs-on: ubuntu-latest
+    permissions:
+      content: write
 
     steps:
       - name: fail if Test nor Prod
