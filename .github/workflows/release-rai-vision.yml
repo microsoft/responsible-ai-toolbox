@@ -30,13 +30,13 @@ jobs:
       - name: Install pytorch
         shell: bash -l {0}
         run: |
-          conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
+          conda install --yes --quiet pytorch==1.13.1 "torchvision<0.15" cpuonly "numpy<1.24.0" -c pytorch
 
       # pycocotools is a downstream dependency of automl requirements, but fails to install with pip
       - name: Install pycocotools
         shell: bash -l {0}
         run: |
-          conda install pycocotools==2.0.4 -c conda-forge
+          conda install pycocotools==2.0.6 -c conda-forge
 
       - name: update and upgrade pip, setuptools, wheel, and twine
         shell: bash -l {0}
@@ -47,6 +47,7 @@ jobs:
       - name: install requirements.txt for responsibleai-vision
         shell: bash -l {0}
         run: |
+          pip install captum
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
         working-directory: responsibleai_vision
