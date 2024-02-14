@@ -11,6 +11,12 @@ from rai_core_flask.environments.base_environment import BaseEnvironment
 AZURE_NB = "azure_nb"
 
 
+def get_url_format(is_private_link, instance_name, domain_suffix, port):
+    if is_private_link:
+        return f"{instance_name}.{domain_suffix}:{port}"
+    return f"{instance_name}-{port}.{domain_suffix}"
+
+
 class AzureNBEnvironment(BaseEnvironment):
     """Environment class for Azure notebook environments.
 
@@ -36,14 +42,10 @@ class AzureNBEnvironment(BaseEnvironment):
             else:
                 instance_name = self.nbvm["instance"]
                 domain_suffix = self.nbvm["domainsuffix"]
-                if service.is_private_link:
-                    url_format = f"{instance_name}.{domain_suffix}\
-                        :{service.port}"
-                else:
-                    url_format = f"{instance_name}-{service.port}\
-                        .{domain_suffix}"
-                self.base_url = \
-                    f"https://{url_format}"
+                url_format = get_url_format(
+                    service.is_private_link, instance_name, domain_suffix,
+                    service.port)
+                self.base_url = f"https://{url_format}"
                 self.successfully_detected = True
                 self.nbvm_origins = [
                     f"https://{instance_name}.{domain_suffix}",
