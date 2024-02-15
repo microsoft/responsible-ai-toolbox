@@ -84,6 +84,10 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
         working-directory: ${{ env.widgetDirectory }}
+      - name: Install rai_test_utils locally until next version is released
+        run: |
+          pip install -v -e .
+        working-directory: rai_test_utils
       - name: pip freeze
         run: pip freeze
       - name: replace README for raiwidgets
