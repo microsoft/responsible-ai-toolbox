@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import pytest
 from common_vision_utils import (load_flowers_dataset, load_fridge_dataset,
                                  load_fridge_object_detection_dataset,
                                  load_imagenet_dataset)
@@ -39,8 +40,10 @@ def extract_dataset_features(data, feature_metadata=None):
 
 
 class TestFeatureExtractors(object):
-    def test_extract_features_fridge_object_detection(self):
-        data = load_fridge_object_detection_dataset(automl_format=False)
+    @pytest.mark.parametrize("automl_format", [True, False])
+    def test_extract_features_fridge_object_detection(self, automl_format):
+        data = load_fridge_object_detection_dataset(
+            automl_format=automl_format)
         extracted_features, feature_names = extract_dataset_features(data)
         expected_feature_names = [MEAN_PIXEL_VALUE] + FRIDGE_METADATA_FEATURES
         validate_extracted_features(extracted_features, feature_names,

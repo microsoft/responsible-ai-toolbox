@@ -24,6 +24,20 @@ this file to understand what changed.
 - bug fixes and tests
 - other
 
+## v0.34.1
+
+- new features
+  - ## Responsible AI Dashboard
+    - Fix forecast flattening prediction list error by @jamesbchao in https://github.com/microsoft/responsible-ai-toolbox/pull/2529
+  - ## RAI Text
+    - Add methods and constants for genai metrics by @kartik727 in https://github.com/microsoft/responsible-ai-toolbox/pull/2524
+    - Genai integration by @kartik727 in https://github.com/microsoft/responsible-ai-toolbox/pull/2522
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - fix CD.yml permissions errors for dashboard links on PRs by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2525
+  - ## RAI Vision and Text
+    - update responsibleai-text and responsibleai-vision packages to responsibleai 0.34.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2530
+
 ## v0.34.0
 
 - new features

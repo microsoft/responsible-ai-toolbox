@@ -12,13 +12,15 @@ from PIL.ExifTags import TAGS
 from tqdm import tqdm
 
 from responsibleai.feature_metadata import FeatureMetadata
-from responsibleai_vision.common.constants import ExtractedFeatures
+from responsibleai_vision.common.constants import (ExtractedFeatures,
+                                                   ImageColumns)
 from responsibleai_vision.utils.image_reader import (
     get_all_exif_feature_names, get_image_from_path,
     get_image_pointer_from_path)
 
 MEAN_PIXEL_VALUE = ExtractedFeatures.MEAN_PIXEL_VALUE.value
 MAX_CUSTOM_LEN = 100
+IMAGE_DETAILS = ImageColumns.IMAGE_DETAILS.value
 
 
 def extract_features(image_dataset: pd.DataFrame,
@@ -58,6 +60,8 @@ def extract_features(image_dataset: pd.DataFrame,
     start_meta_index = 2
     if isinstance(target_column, list):
         start_meta_index = len(target_column) + 1
+    if IMAGE_DETAILS in column_names:
+        start_meta_index += 1
     for j in range(start_meta_index, image_dataset.shape[1]):
         if has_dropped_features and column_names[j] in dropped_features:
             continue

@@ -30,7 +30,7 @@ jobs:
       - name: Install pytorch
         shell: bash -l {0}
         run: |
-          conda install --yes --quiet pytorch torchvision captum cpuonly "numpy<1.24.0" -c pytorch
+          conda install --yes --quiet pytorch==1.13.1 "torchvision<0.15" cpuonly "numpy<1.24.0" -c pytorch
 
       - name: update and upgrade pip, setuptools, wheel, and twine
         shell: bash -l {0}
@@ -41,6 +41,7 @@ jobs:
       - name: install requirements.txt for responsibleai-text
         shell: bash -l {0}
         run: |
+          pip install captum
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
         working-directory: responsibleai_text
@@ -62,7 +63,7 @@ jobs:
 
       - name: install responsibleai-text wheel locally
         shell: bash -l {0}
-        run: find ./dist/ -name '*.whl' -exec pip install {} \;
+        run: find ./dist/ -name '*.whl' -exec pip install {}[qa] \;
         working-directory: responsibleai_text
 
       - name: run responsibleai-text tests
