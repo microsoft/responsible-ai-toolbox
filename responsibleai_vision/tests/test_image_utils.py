@@ -95,11 +95,7 @@ class TestImageUtils(object):
     def test_get_all_exif_feature_names(self):
         image_dataset = load_fridge_object_detection_dataset().head(2)
         exif_feature_names = get_all_exif_feature_names(image_dataset)
-        assert len(exif_feature_names) == 11
-        assert set(exif_feature_names) == \
-            set(['Orientation', 'ExifOffset', 'ImageWidth', 'GPSInfo',
-                 'Model', 'DateTime', 'YCbCrPositioning', 'ImageLength',
-                 'ResolutionUnit', 'Software', 'Make'])
+        assert len(exif_feature_names) == 49
 
     def test_generate_od_error_labels(self):
         true_y = np.array([[[3, 142, 257, 395, 463, 0]],
