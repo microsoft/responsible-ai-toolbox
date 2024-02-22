@@ -23,6 +23,7 @@ MEAN_PIXEL_VALUE = ExtractedFeatures.MEAN_PIXEL_VALUE.value
 MAX_CUSTOM_LEN = 100
 IMAGE_DETAILS = ImageColumns.IMAGE_DETAILS.value
 
+
 def extract_features(image_dataset: pd.DataFrame,
                      target_column: str,
                      image_mode: str = None,
@@ -91,7 +92,12 @@ def extract_features(image_dataset: pd.DataFrame,
     return results, feature_names
 
 
-def process_data(data, tag, feature_names, feature_metadata, row_feature_values, blacklisted_tags):
+def process_data(data,
+                 tag,
+                 feature_names,
+                 feature_metadata,
+                 row_feature_values,
+                 blacklisted_tags):
     if isinstance(data, bytes):
         data = data.decode(errors='replace')
         if len(data) > MAX_CUSTOM_LEN:
@@ -110,7 +116,12 @@ def process_data(data, tag, feature_names, feature_metadata, row_feature_values,
                 'in the feature names. Ignoring tag '
                 'from extracted metadata.')
 
-def append_exif_features(image, row_feature_values, feature_names, blacklisted_tags, feature_metadata):
+
+def append_exif_features(image,
+                         row_feature_values,
+                         feature_names,
+                         blacklisted_tags,
+                         feature_metadata):
     if isinstance(image, str):
         image_pointer_path = get_image_pointer_from_path(image)
         with Image.open(image_pointer_path) as im:
@@ -119,9 +130,14 @@ def append_exif_features(image, row_feature_values, feature_names, blacklisted_t
                 if tag_id in IFD_CODE_LOOKUP:
                     ifd_data = exifdata.get_ifd(tag_id)
                     for nested_tag_id, data in ifd_data.items():
-                        tag = ExifTags.GPSTAGS.get(nested_tag_id, None) or ExifTags.TAGS.get(nested_tag_id, None) or nested_tag_id
-                        process_data(data, tag, feature_names, feature_metadata, row_feature_values, blacklisted_tags)
+                        tag = ExifTags.GPSTAGS.get(nested_tag_id, None) \
+                            or ExifTags.TAGS.get(nested_tag_id, None) \
+                            or nested_tag_id
+                        process_data(data, tag, feature_names,
+                                     feature_metadata, row_feature_values,
+                                     blacklisted_tags)
                 else:
                     tag = str(TAGS.get(tag_id, tag_id))
                     data = exifdata.get(tag_id)
-                    process_data(data, tag, feature_names, feature_metadata, row_feature_values, blacklisted_tags)
+                    process_data(data, tag, feature_names, feature_metadata,
+                                 row_feature_values, blacklisted_tags)

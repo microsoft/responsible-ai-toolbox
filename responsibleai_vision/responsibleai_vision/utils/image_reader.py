@@ -22,6 +22,7 @@ _requests_sessions = {}
 
 IFD_CODE_LOOKUP = {t.value: t.name for t in ExifTags.IFD}
 
+
 def _get_retry_session(url):
     domain = urlparse(url.lower()).netloc
     if domain in _requests_sessions:
@@ -94,7 +95,10 @@ def get_all_exif_feature_names(image_dataset):
                         ifd_data = exifdata.get_ifd(tag_id)
 
                         for nested_tag_id in ifd_data:
-                            nested_tag = ExifTags.GPSTAGS.get(nested_tag_id, None) or ExifTags.TAGS.get(nested_tag_id, None) or nested_tag_id
+                            nested_tag = ExifTags.GPSTAGS.get(nested_tag_id,
+                                                              None) \
+                                or ExifTags.TAGS.get(nested_tag_id, None) \
+                                or nested_tag_id
                             exif_feature_names.add(nested_tag)
                     else:
                         # get the tag name, instead of human unreadable tag id
