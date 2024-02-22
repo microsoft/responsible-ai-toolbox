@@ -10,7 +10,7 @@ from urllib.parse import urlparse
 
 import requests
 from numpy import asarray
-from PIL import Image, ExifTags
+from PIL import ExifTags, Image
 from PIL.ExifTags import TAGS
 from requests.adapters import HTTPAdapter, Retry
 

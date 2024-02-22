@@ -7,7 +7,7 @@ import warnings
 from typing import Optional
 
 import pandas as pd
-from PIL import Image, ExifTags
+from PIL import ExifTags, Image
 from PIL.ExifTags import TAGS
 from PIL.TiffImagePlugin import IFDRational
 from tqdm import tqdm
@@ -16,8 +16,8 @@ from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai_vision.common.constants import (ExtractedFeatures,
                                                    ImageColumns)
 from responsibleai_vision.utils.image_reader import (
-    get_all_exif_feature_names, get_image_from_path,
-    get_image_pointer_from_path, IFD_CODE_LOOKUP)
+    IFD_CODE_LOOKUP, get_all_exif_feature_names, get_image_from_path,
+    get_image_pointer_from_path)
 
 MEAN_PIXEL_VALUE = ExtractedFeatures.MEAN_PIXEL_VALUE.value
 MAX_CUSTOM_LEN = 100
