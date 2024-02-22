@@ -10,7 +10,7 @@ from urllib.parse import urlparse
 
 import requests
 from numpy import asarray
-from PIL import Image
+from PIL import Image, ExifTags
 from PIL.ExifTags import TAGS
 from requests.adapters import HTTPAdapter, Retry
 
@@ -20,6 +20,7 @@ from responsibleai_vision.common.constants import (AutoMLImagesModelIdentifier,
 # domain mapped session for reuse
 _requests_sessions = {}
 
+IFD_CODE_LOOKUP = {t.value: t.name for t in ExifTags.IFD}
 
 def _get_retry_session(url):
     domain = urlparse(url.lower()).netloc
@@ -88,15 +89,19 @@ def get_all_exif_feature_names(image_dataset):
             with Image.open(image_pointer_path) as im:
                 exifdata = im.getexif()
                 for tag_id in exifdata:
-                    # get the tag name, instead of human unreadable tag id
-                    tag = TAGS.get(tag_id, tag_id)
-                    if tag not in image_dataset.columns:
-                        data = exifdata.get(tag_id)
-                        if isinstance(data, str) or \
-                           isinstance(data, int) or \
-                           isinstance(data, float) or \
-                           isinstance(data, bytes):
+                    # nesting for IFD block tags
+                    if tag_id in IFD_CODE_LOOKUP:
+                        ifd_data = exifdata.get_ifd(tag_id)
+
+                        for nested_tag_id in ifd_data:
+                            nested_tag = ExifTags.GPSTAGS.get(nested_tag_id, None) or ExifTags.TAGS.get(nested_tag_id, None) or nested_tag_id
+                            exif_feature_names.add(nested_tag)
+                    else:
+                        # get the tag name, instead of human unreadable tag id
+                        tag = TAGS.get(tag_id, tag_id)
+                        if tag not in image_dataset.columns:
                             exif_feature_names.add(tag)
+
     return list(exif_feature_names)
 
 
