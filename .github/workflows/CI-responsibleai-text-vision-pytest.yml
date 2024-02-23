@@ -73,6 +73,12 @@ jobs:
           pip install --upgrade setuptools
           pip install --upgrade "pip-tools<=7.1.0"
 
+      - if: ${{ (matrix.operatingSystem == 'windows-latest') && (matrix.packageDirectory == 'responsibleai_vision') }}
+        name: Install matplotlib
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet matplotlib==3.8.3 -c conda-forge
+
       - name: Install dependencies
         shell: bash -l {0}
         run: |
