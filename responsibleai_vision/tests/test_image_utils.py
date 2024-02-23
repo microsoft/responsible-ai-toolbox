@@ -1,12 +1,12 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import platform
 from collections import Counter
 from http.client import HTTPMessage
 from math import isclose
 from unittest.mock import Mock, patch
 from urllib.parse import urlparse
-import platform
 
 import numpy as np
 from common_vision_utils import load_fridge_object_detection_dataset
