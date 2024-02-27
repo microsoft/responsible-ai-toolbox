@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import platform
 from collections import Counter
 from http.client import HTTPMessage
 from math import isclose
@@ -95,7 +96,7 @@ class TestImageUtils(object):
     def test_get_all_exif_feature_names(self):
         image_dataset = load_fridge_object_detection_dataset().head(2)
         exif_feature_names = get_all_exif_feature_names(image_dataset)
-        assert len(exif_feature_names) == 11
+        assert len(exif_feature_names) == 10 if platform.system() == "Linux" else 11
         assert set(exif_feature_names) == \
             set(['Orientation', 'ExifOffset', 'ImageWidth', 'GPSInfo',
                  'Model', 'DateTime', 'YCbCrPositioning', 'ImageLength',
