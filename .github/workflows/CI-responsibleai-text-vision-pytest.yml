@@ -37,7 +37,6 @@ jobs:
           - packageDirectory: "responsibleai_vision"
             operatingSystem: macos-latest
             pythonVersion: "3.10"
-          - pythonVersion: "3.7"
     runs-on: ${{ matrix.operatingSystem }}
 
     steps:
