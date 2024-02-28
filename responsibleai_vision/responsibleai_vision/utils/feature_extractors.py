@@ -98,11 +98,7 @@ def process_data(data,
                  feature_metadata,
                  row_feature_values,
                  blacklisted_tags):
-    if isinstance(data, bytes):
-        data = data.decode(errors='replace')
-        if len(data) > MAX_CUSTOM_LEN:
-            data = data[:MAX_CUSTOM_LEN] + '...'
-    elif isinstance(data, IFDRational):
+    if isinstance(data, IFDRational):
         data = data.numerator / data.denominator
     if isinstance(data, (str, int, float)):
         if tag in feature_names:
