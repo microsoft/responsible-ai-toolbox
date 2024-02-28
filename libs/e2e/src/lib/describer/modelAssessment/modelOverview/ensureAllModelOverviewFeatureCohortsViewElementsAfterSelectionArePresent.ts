@@ -55,8 +55,6 @@ function assertNumberOfChartRowsEqual(
   if (selectedFeatures > 1) {
     expectedNumberOfCohorts = featureCohortView?.multiFeatureCohorts;
   }
-  console.log(selectedFeatures);
-  console.log(expectedNumberOfCohorts);
   if (Array.isArray(expectedNumberOfCohorts)) {
     cy.get(getChartItems(chartIdentifier))
       .its("length")
