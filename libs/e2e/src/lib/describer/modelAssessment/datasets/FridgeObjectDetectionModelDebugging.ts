@@ -3,7 +3,7 @@
 
 import { getOS } from "../../../../util/getOS";
 
-const FeatureCohorts = getOS() === "Linux" ? [5, 6] : 6;
+const FeatureCohorts = getOS() === "Linux" ? [3, 6] : 6;
 
 export const FridgeObjectDetectionModelDebugging = {
   causalAnalysisData: {

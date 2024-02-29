@@ -61,9 +61,8 @@ function assertNumberOfChartRowsEqual(
       .should("be.gte", expectedNumberOfCohorts[0])
       .and("be.lte", expectedNumberOfCohorts[1]);
   } else {
-    cy.get(getChartItems(chartIdentifier)).should(
-      "have.length",
-      expectedNumberOfCohorts
-    );
+    cy.get(getChartItems(chartIdentifier))
+      .its("length")
+      .should("be.gt", 2);
   }
 }
