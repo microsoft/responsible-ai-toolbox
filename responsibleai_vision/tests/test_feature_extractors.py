@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import pytest
-from common_vision_utils import (load_flowers_dataset, load_fridge_dataset,
+from common_vision_utils import (load_clearsight_object_detection_dataset, load_flowers_dataset, load_fridge_dataset,
                                  load_fridge_object_detection_dataset,
                                  load_imagenet_dataset)
 
@@ -13,22 +13,10 @@ from responsibleai_vision.utils.feature_extractors import extract_features
 
 MEAN_PIXEL_VALUE = ExtractedFeatures.MEAN_PIXEL_VALUE.value
 FRIDGE_METADATA_FEATURES = [
-    'SensingMethod', 'GPSVersionID', 'ISOSpeedRatings', 'SceneType',
-    'SceneCaptureType', 'SubjectDistance', 'CustomRendered',
-    'SubjectDistanceRange', 'DigitalZoomRatio', 'ApertureValue',
-    'ImageWidth', 'GPSDOP', 'MaxApertureValue', 'ColorSpace',
-    'FocalLengthIn35mmFilm', 'ExposureMode', 'Saturation', 'ExposureTime',
-    'ExifImageHeight', 'FNumber', 'YCbCrPositioning', 'Make', 'MeteringMode',
-    'ExposureBiasValue', 'ExposureProgram', 'ComponentsConfiguration',
-    'ExifImageWidth', 'ExifInteroperabilityOffset', 'BrightnessValue',
-    'ImageLength', 'FlashPixVersion', 'SubsecTimeOriginal', 'Model',
-    'SubsecTimeDigitized', 'ResolutionUnit', 'DateTimeOriginal', 'XResolution',
-    'FocalLength', 'Sharpness', 'GPSLongitude', 'Contrast', 'Software',
-    'GPSLatitude', 'MakerNote', 'GPSDateStamp', 'GPSAltitude',
-    'GPSProcessingMethod', 'GPSTimeStamp', 'GPSLatitudeRef', 'WhiteBalance',
-    'GPSLongitudeRef', 'Flash', 'SubsecTime', 'YResolution',
-    'DateTimeDigitized', 'DateTime', 'GPSAltitudeRef', 'Orientation',
-    'ShutterSpeedValue', 'ExifVersion']
+    'Make', 'ResolutionUnit', 'ImageLength', 'ExifOffset', 'Model',
+    'GPSInfo', 'ImageWidth', 'DateTime', 'YCbCrPositioning',
+    'Software', 'Orientation'
+]
 
 
 def validate_extracted_features(extracted_features, feature_names,
@@ -91,6 +79,17 @@ class TestFeatureExtractors(object):
         extracted_features, feature_names = extract_dataset_features(
             data, feature_metadata=feature_metadata)
         expected_feature_names = [MEAN_PIXEL_VALUE, 'XPComment']
+        expected_feature_names += FRIDGE_METADATA_FEATURES
+        validate_extracted_features(extracted_features, feature_names,
+                                    expected_feature_names, data,
+                                    feature_metadata)
+
+    def test_extract_features_clearsight_metadata(self):
+        data = load_clearsight_object_detection_dataset()
+        feature_metadata = FeatureMetadata()
+        extracted_features, feature_names = extract_dataset_features(
+            data, feature_metadata=feature_metadata)
+        expected_feature_names = [MEAN_PIXEL_VALUE]
         expected_feature_names += FRIDGE_METADATA_FEATURES
         validate_extracted_features(extracted_features, feature_names,
                                     expected_feature_names, data,
