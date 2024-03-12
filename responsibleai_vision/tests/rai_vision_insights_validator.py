@@ -91,6 +91,7 @@ def run_and_validate_serialization(
             image_downloader=image_downloader)
 
         # Save it
+        save_1 = save_1.with_suffix(".keras")
         rai_insights.save(save_1)
         assert len(os.listdir(save_1 / ManagerNames.EXPLAINER)) == 0
         assert not os.path.exists(save_1 / DATA / TRAIN_JSON)
@@ -109,6 +110,7 @@ def run_and_validate_serialization(
         rai_2.get_data()
 
         # Save again
+        save_2 = save_2.with_suffix(".keras")
         rai_2.save(save_2)
         assert len(os.listdir(save_2 / ManagerNames.EXPLAINER)) == 0
         assert not os.path.exists(save_2 / DATA / TRAIN_JSON)
