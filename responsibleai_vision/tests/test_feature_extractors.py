@@ -13,6 +13,7 @@ from responsibleai_vision.utils.feature_extractors import extract_features
 
 MEAN_PIXEL_VALUE = ExtractedFeatures.MEAN_PIXEL_VALUE.value
 FRIDGE_METADATA_FEATURES = ['FlashPixVersion', 'WhiteBalance', 'Make', 'ExifImageHeight', 'ExposureProgram', 'Software', 'CustomRendered', 'Contrast', 'XResolution', 'GPSTimeStamp', 'Orientation', 'SubjectDistanceRange', 'MakerNote', 'SubsecTimeDigitized', 'ExifInteroperabilityOffset', 'ColorSpace', 'BrightnessValue', 'ExifImageWidth', 'SubsecTimeOriginal', 'YCbCrPositioning', 'ISOSpeedRatings', 'SubsecTime', 'ExposureBiasValue', 'ComponentsConfiguration', 'ResolutionUnit', 'ImageLength', 'GPSLatitudeRef', 'ExifVersion', 'Flash', 'ExposureMode', 'ApertureValue', 'GPSDOP', 'ImageWidth', 'SubjectDistance', 'GPSLongitudeRef', 'FNumber', 'DigitalZoomRatio', 'FocalLength', 'SceneCaptureType', 'FocalLengthIn35mmFilm', 'ShutterSpeedValue', 'DateTimeOriginal', 'Sharpness', 'GPSAltitude', 'GPSLatitude', 'Saturation', 'ExposureTime', 'GPSLongitude', 'SceneType', 'GPSDateStamp', 'GPSVersionID', 'GPSAltitudeRef', 'YResolution', 'GPSProcessingMethod', 'DateTime', 'MeteringMode', 'SensingMethod', 'DateTimeDigitized', 'Model', 'MaxApertureValue']
+CLEARSIGHT_METADATA_FEATURES = ['FocalLength', 'Make', 'OffsetTimeOriginal', 'FocalPlaneYResolution', 'ExposureMode', 'LensSerialNumber', 'ApertureValue', 'GPSLatitudeRef', 'DateTimeDigitized', 'Orientation', 'OffsetTime', 'FocalPlaneResolutionUnit', 'ExposureProgram', 'ComponentsConfiguration', 'Flash', 'BodySerialNumber', 'SubsecTimeDigitized', 'CameraOwnerName', 'SubsecTime', 'ExifInteroperabilityOffset', 'ExposureBiasValue', 'ISOSpeedRatings', 'SubsecTimeOriginal', 'FNumber', 'WhiteBalance', 'GPSLatitude', 'XResolution', 'GPSSatellites', 'ShutterSpeedValue', 'GPSLongitudeRef', 'ExposureTime', 'DigitalZoomRatio', 'MeteringMode', 'ExifImageHeight', 'GPSTimeStamp', 'LensSpecification', 'Artist', 'FlashPixVersion', 'YCbCrPositioning', 'SceneCaptureType', 'DateTime', 'LensModel', 'OffsetTimeDigitized', 'GPSStatus', 'CustomRendered', 'GPSVersionID', 'SensitivityType', 'DateTimeOriginal', 'Copyright', 'ColorSpace', 'RecommendedExposureIndex', 'ResolutionUnit', 'GPSAltitude', 'Model', 'YResolution', 'ExifVersion', 'UserComment', 'FocalPlaneXResolution', 'GPSAltitudeRef', 'MakerNote', 'GPSMapDatum', 'GPSLongitude', 'GPSDateStamp', 'ExifImageWidth']
 
 
 def validate_extracted_features(extracted_features, feature_names,
@@ -86,7 +87,7 @@ class TestFeatureExtractors(object):
         extracted_features, feature_names = extract_dataset_features(
             data, feature_metadata=feature_metadata)
         expected_feature_names = [MEAN_PIXEL_VALUE]
-        expected_feature_names += FRIDGE_METADATA_FEATURES
+        expected_feature_names += CLEARSIGHT_METADATA_FEATURES
         validate_extracted_features(extracted_features, feature_names,
                                     expected_feature_names, data,
                                     feature_metadata)

@@ -9,7 +9,7 @@ from unittest.mock import Mock, patch
 from urllib.parse import urlparse
 
 import numpy as np
-from common_vision_utils import load_fridge_object_detection_dataset
+from common_vision_utils import load_clearsight_object_detection_dataset, load_fridge_object_detection_dataset
 
 from responsibleai_vision.common.constants import ImageColumns
 from responsibleai_vision.utils.image_reader import \
@@ -97,6 +97,11 @@ class TestImageUtils(object):
         image_dataset = load_fridge_object_detection_dataset().head(2)
         exif_feature_names = get_all_exif_feature_names(image_dataset)
         assert len(exif_feature_names) == 60
+
+    def test_get_all_clearsight_feature_names(self):
+        image_dataset = load_clearsight_object_detection_dataset().head(2)
+        exif_feature_names = get_all_exif_feature_names(image_dataset)
+        assert len(exif_feature_names) == 64
 
     def test_generate_od_error_labels(self):
         true_y = np.array([[[3, 142, 257, 395, 463, 0]],
