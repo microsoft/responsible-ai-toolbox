@@ -12,11 +12,7 @@ from responsibleai_vision.common.constants import (ExtractedFeatures,
 from responsibleai_vision.utils.feature_extractors import extract_features
 
 MEAN_PIXEL_VALUE = ExtractedFeatures.MEAN_PIXEL_VALUE.value
-FRIDGE_METADATA_FEATURES = [
-    'Make', 'ResolutionUnit', 'ImageLength', 'ExifOffset', 'Model',
-    'GPSInfo', 'ImageWidth', 'DateTime', 'YCbCrPositioning',
-    'Software', 'Orientation'
-]
+FRIDGE_METADATA_FEATURES = ['FlashPixVersion', 'WhiteBalance', 'Make', 'ExifImageHeight', 'ExposureProgram', 'Software', 'CustomRendered', 'Contrast', 'XResolution', 'GPSTimeStamp', 'Orientation', 'SubjectDistanceRange', 'MakerNote', 'SubsecTimeDigitized', 'ExifInteroperabilityOffset', 'ColorSpace', 'BrightnessValue', 'ExifImageWidth', 'SubsecTimeOriginal', 'YCbCrPositioning', 'ISOSpeedRatings', 'SubsecTime', 'ExposureBiasValue', 'ComponentsConfiguration', 'ResolutionUnit', 'ImageLength', 'GPSLatitudeRef', 'ExifVersion', 'Flash', 'ExposureMode', 'ApertureValue', 'GPSDOP', 'ImageWidth', 'SubjectDistance', 'GPSLongitudeRef', 'FNumber', 'DigitalZoomRatio', 'FocalLength', 'SceneCaptureType', 'FocalLengthIn35mmFilm', 'ShutterSpeedValue', 'DateTimeOriginal', 'Sharpness', 'GPSAltitude', 'GPSLatitude', 'Saturation', 'ExposureTime', 'GPSLongitude', 'SceneType', 'GPSDateStamp', 'GPSVersionID', 'GPSAltitudeRef', 'YResolution', 'GPSProcessingMethod', 'DateTime', 'MeteringMode', 'SensingMethod', 'DateTimeDigitized', 'Model', 'MaxApertureValue']
 
 
 def validate_extracted_features(extracted_features, feature_names,

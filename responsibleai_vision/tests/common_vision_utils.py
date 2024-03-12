@@ -340,7 +340,7 @@ def load_clearsight_object_detection_dataset(automl_format=False):
                    ImageColumns.LABEL.value]
     features = []
     for i, file in enumerate(os.listdir("./data/clearsight_mini")):
-        image_path = "./data/clearsight_mini" + file
+        image_path = "./data/clearsight_mini/" + file
         if automl_format:
             row = {
                 ImageColumns.IMAGE.value: image_path,

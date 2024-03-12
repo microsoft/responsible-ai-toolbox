@@ -96,8 +96,7 @@ class TestImageUtils(object):
     def test_get_all_exif_feature_names(self):
         image_dataset = load_fridge_object_detection_dataset().head(2)
         exif_feature_names = get_all_exif_feature_names(image_dataset)
-        num_features = 49 if platform.system() == "Linux" else 60
-        assert len(exif_feature_names) == num_features
+        assert len(exif_feature_names) == 60
 
     def test_generate_od_error_labels(self):
         true_y = np.array([[[3, 142, 257, 395, 463, 0]],
