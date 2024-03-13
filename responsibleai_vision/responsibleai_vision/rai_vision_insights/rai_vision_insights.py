@@ -767,7 +767,7 @@ class RAIVisionInsights(RAIBaseInsights):
         :param path: The directory path to save the RAIInsights to.
         :type path: str
         """
-        super(RAIVisionInsights, self).save(path.with_suffix(".keras"))
+        super(RAIVisionInsights, self).save(path)
         # Save extracted features data
         self._save_ext_data(path)
         self._save_transformations(path)
