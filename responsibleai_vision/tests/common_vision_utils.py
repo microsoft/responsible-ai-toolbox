@@ -514,7 +514,7 @@ class ResNetPipeline(object):
         return self.model(tmp)
 
     def save(self, path):
-        self.model.save(path + '.keras')
+        self.model.save(path)
 
     @staticmethod
     def load(path):
