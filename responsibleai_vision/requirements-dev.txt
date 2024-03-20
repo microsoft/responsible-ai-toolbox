@@ -21,7 +21,7 @@ sphinx==3.1.1
 sphinx-gallery==0.8.1
 pydata-sphinx-theme==0.3.0
 
-tf-keras
+keras<3.0.0
 transformers
 datasets
 tensorflow<2.16
