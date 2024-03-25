@@ -75,7 +75,8 @@ jobs:
       - name: Install backwards-compatible keras for transformers
         shell: bash -l {0}
         run: |
-          pip install keras<=2.15
+          pip install tf-keras
+          pip install keras==2.15
 
       - name: Install dependencies
         shell: bash -l {0}
