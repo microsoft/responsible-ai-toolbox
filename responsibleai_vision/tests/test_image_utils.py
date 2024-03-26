@@ -1,7 +1,6 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import platform
 from collections import Counter
 from http.client import HTTPMessage
 from math import isclose
@@ -9,7 +8,8 @@ from unittest.mock import Mock, patch
 from urllib.parse import urlparse
 
 import numpy as np
-from common_vision_utils import load_clearsight_object_detection_dataset, load_fridge_object_detection_dataset
+from common_vision_utils import (load_clearsight_object_detection_dataset,
+                                 load_fridge_object_detection_dataset)
 
 from responsibleai_vision.common.constants import ImageColumns
 from responsibleai_vision.utils.image_reader import \
