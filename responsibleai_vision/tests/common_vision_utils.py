@@ -318,6 +318,46 @@ def load_fridge_object_detection_dataset(automl_format=False):
     return data
 
 
+def load_clearsight_object_detection_dataset(automl_format=False):
+    # create data folder if it doesnt exist.
+    os.makedirs("data", exist_ok=True)
+
+    # download data
+    download_url = ("https://publictestdatasets.blob.core.windows.net/" +
+                    "computervision/clearsight_mini.zip")
+    data_file = "./data/clearsight_mini.zip"
+    retrieve_unzip_file(download_url, data_file)
+
+    # dummy function to load labels
+    labels = load_fridge_object_detection_dataset_labels(automl_format)[:2]
+    if automl_format:
+        image_details = load_image_details()
+        columns = [ImageColumns.IMAGE.value,
+                   ImageColumns.IMAGE_DETAILS.value,
+                   ImageColumns.LABEL.value]
+    else:
+        columns = [ImageColumns.IMAGE.value,
+                   ImageColumns.LABEL.value]
+    features = []
+    for i, file in enumerate(os.listdir("./data/clearsight_mini")):
+        image_path = "./data/clearsight_mini/" + file
+        if automl_format:
+            row = {
+                ImageColumns.IMAGE.value: image_path,
+                ImageColumns.IMAGE_DETAILS.value: image_details[i],
+                ImageColumns.LABEL.value: labels[i]
+            }
+        else:
+            row = {
+                ImageColumns.IMAGE.value: image_path,
+                ImageColumns.LABEL.value: labels[i]
+            }
+        features.append(row)
+
+    data = pd.DataFrame(features, columns=columns)
+    return data
+
+
 class ImageTransformEnum(Enum):
     '''
     Possible modifications to images
