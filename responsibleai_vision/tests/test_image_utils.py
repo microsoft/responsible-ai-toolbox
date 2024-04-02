@@ -1,7 +1,6 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import platform
 from collections import Counter
 from http.client import HTTPMessage
 from math import isclose
@@ -9,7 +8,8 @@ from unittest.mock import Mock, patch
 from urllib.parse import urlparse
 
 import numpy as np
-from common_vision_utils import load_fridge_object_detection_dataset
+from common_vision_utils import (load_clearsight_object_detection_dataset,
+                                 load_fridge_object_detection_dataset)
 
 from responsibleai_vision.common.constants import ImageColumns
 from responsibleai_vision.utils.image_reader import \
@@ -96,8 +96,12 @@ class TestImageUtils(object):
     def test_get_all_exif_feature_names(self):
         image_dataset = load_fridge_object_detection_dataset().head(2)
         exif_feature_names = get_all_exif_feature_names(image_dataset)
-        num_features = 49 if platform.system() == "Linux" else 60
-        assert len(exif_feature_names) == num_features
+        assert len(exif_feature_names) == 60
+
+    def test_get_all_clearsight_feature_names(self):
+        image_dataset = load_clearsight_object_detection_dataset().head(2)
+        exif_feature_names = get_all_exif_feature_names(image_dataset)
+        assert len(exif_feature_names) == 64
 
     def test_generate_od_error_labels(self):
         true_y = np.array([[[3, 142, 257, 395, 463, 0]],
