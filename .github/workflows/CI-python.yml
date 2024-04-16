@@ -58,12 +58,6 @@ jobs:
           pip install -v -e .
         working-directory: ${{ matrix.packageDirectory }}
 
-      - if: ${{ (matrix.packageDirectory == 'erroranalysis') || (matrix.packageDirectory == 'responsibleai') }}
-        name: Install rai_test_utils locally until next version is released
-        run: |
-          pip install -v -e .
-        working-directory: rai_test_utils
-
       - name: Pip freeze
         run: |
           pip freeze > installed-requirements-dev.txt
