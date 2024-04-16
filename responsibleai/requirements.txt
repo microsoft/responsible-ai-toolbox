@@ -19,4 +19,4 @@ networkx<=2.5
 ipykernel<=6.8.0; python_version <= '3.7'
 ipykernel>=6.22.0; python_version > '3.7'
 markupsafe<=2.1.2
-raiutils>=0.4.0
+raiutils>=0.4.2
