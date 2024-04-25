@@ -12,8 +12,10 @@ import pytest
 from common_vision_utils import (DummyFlowersPipelineSerializer,
                                  ImageClassificationPipelineSerializer,
                                  ObjectDetectionPipelineSerializer,
+                                 TorchvisionDummyPipelineSerializer,
                                  create_dummy_model,
                                  create_image_classification_pipeline,
+                                 create_raw_torchvision_classification_model,
                                  load_flowers_dataset,
                                  load_fridge_object_detection_dataset,
                                  load_imagenet_dataset, load_imagenet_labels,
@@ -45,6 +47,22 @@ class TestRAIVisionInsightsSaveAndLoadScenarios(object):
         test = data[:3]
         label = ImageColumns.LABEL
         serializer = ImageClassificationPipelineSerializer()
+
+        run_and_validate_serialization(
+            pred, test, task_type, class_names, label, serializer)
+
+    def test_rai_insights_pytorch_empty_save_load_save(self):
+        data = load_flowers_dataset(upscale=False)
+        data = data[0:1]
+        # stack two of the same image since we need same
+        # image sizes for pytorch model
+        data = data.append(data).reset_index(drop=True)
+        pred = create_raw_torchvision_classification_model()
+        test = data
+        class_names = data[ImageColumns.LABEL.value].unique()
+        task_type = ModelTask.IMAGE_CLASSIFICATION
+        label = ImageColumns.LABEL
+        serializer = TorchvisionDummyPipelineSerializer()
 
         run_and_validate_serialization(
             pred, test, task_type, class_names, label, serializer)

@@ -164,6 +164,15 @@ def create_dummy_model(df):
     return DummyFlowersClassifier()
 
 
+def create_raw_torchvision_classification_model():
+    """Creates a dummy torchvision model for testing purposes.
+
+    :return: dummy torchvision model
+    :rtype: torchvision.models.resnet.ResNet
+    """
+    return torchvision_models.vgg16(pretrained=False, num_classes=2)
+
+
 def retrieve_unzip_file(download_url, data_file):
     fetch_dataset(download_url, data_file)
     # extract files
@@ -484,6 +493,14 @@ class ImageClassificationPipelineSerializer(object):
 
     def _get_model_path(self, path):
         return os.path.join(path, 'image-classification-model')
+
+
+class TorchvisionDummyPipelineSerializer(object):
+    def save(self, model, path):
+        pass
+
+    def load(self, path):
+        return create_raw_torchvision_classification_model()
 
 
 class ObjectDetectionPipelineSerializer(object):
