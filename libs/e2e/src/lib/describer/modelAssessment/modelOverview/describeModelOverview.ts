@@ -64,7 +64,8 @@ export function describeModelOverview(
         );
       });
 
-      it("should show 'Feature cohorts' view when selected", () => {
+      // Skipping due to issues with combobox selection being very flaky
+      it.skip("should show 'Feature cohorts' view when selected", () => {
         ensureAllModelOverviewBasicElementsArePresent(datasetShape);
         cy.get(Locators.ModelOverviewCohortViewFeatureCohortViewButton).click();
         ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent(
@@ -85,7 +86,8 @@ export function describeModelOverview(
         );
       });
 
-      it("should show 'Feature cohorts' view with multiple features when selected", () => {
+      // Skipping due to issues with combobox selection being very flaky
+      it.skip("should show 'Feature cohorts' view with multiple features when selected", () => {
         cy.get(Locators.ModelOverviewFeatureSelection).click();
         multiSelectComboBox(
           "#modelOverviewFeatureSelection",

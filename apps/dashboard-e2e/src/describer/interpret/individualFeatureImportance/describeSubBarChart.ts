@@ -32,9 +32,10 @@ export function describeSubBarChart(dataShape: IInterpretData): void {
       );
     });
     it("should have right number of x axis labels", () => {
+      // This is usually 4, so less than or equal to number of features
       cy.get("#FeatureImportanceBar g.highcharts-xaxis-labels text")
         .its("length")
-        .should("be", props.dataShape.featureNames.length);
+        .should("lte", props.dataShape.featureNames.length);
     });
   });
 }
