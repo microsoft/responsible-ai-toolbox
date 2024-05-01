@@ -316,13 +316,21 @@ class ErrorAnalysisManager(BaseErrorAnalysisManager):
         feature_names = list(dataset.columns)
         inst.__dict__['_feature_names'] = feature_names
         task_type = rai_insights.task_type
-        wrapped_model = wrap_model(rai_insights.model, dataset,
-                                   task_type,
-                                   classes=rai_insights._classes,
-                                   device=rai_insights.device)
+        classes = rai_insights._classes
+        device = rai_insights.device
+
+        test = rai_insights.test
+        image_mode = rai_insights.image_mode
+        transformations = rai_insights._transformations
+        sample = test.iloc[0:2]
+        sample = get_images(sample, image_mode, transformations)
+        wrapped_model = wrap_model(
+            rai_insights.model, sample, task_type, classes=classes,
+            device=device)
+
         inst.__dict__['_task_type'] = task_type
-        index_classes = rai_insights._classes
-        index_dataset = rai_insights.test
+        index_classes = classes
+        index_dataset = test
         if isinstance(target_column, list):
             # create copy of dataset as we will make modifications to it
             index_dataset = index_dataset.copy()
