@@ -23,7 +23,7 @@ this file to understand what changed.
 - breaking changes
 - bug fixes and tests
 - other
-- 
+
 ## v0.35.1
 
 - bug fixes and tests
