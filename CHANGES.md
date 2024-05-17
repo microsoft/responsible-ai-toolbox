@@ -35,7 +35,7 @@ this file to understand what changed.
     - fix wrapper constructor in ErrorAnalysisManager and RAIVisionInsights load call for RAI Vision Dashboard by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2560
   - ## RAI Vision and Text
     - update responsibleai-text and responsibleai-vision packages to responsibleai 0.35.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2563
-    - release responsibleai-vision 0.3.8 and responsibleai-text 0.2.7 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2564 
+    - release responsibleai-vision 0.3.8 and responsibleai-text 0.2.7 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2564
 
 ## v0.35.0
 
