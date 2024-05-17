@@ -30,7 +30,7 @@ this file to understand what changed.
   - ## Responsible AI Dashboard
     - upgrade nx to 12.10.1 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2561
     - remove pins on werkzeug, itsdangerous and markupsafe since they are currently not needed by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2565
-    - release rai-core-flask 0.7.6 by tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/2566
+    - release rai-core-flask 0.7.6 by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/2566
   - ## RAI Vision
     - fix wrapper constructor in ErrorAnalysisManager and RAIVisionInsights load call for RAI Vision Dashboard by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2560
   - ## RAI Vision and Text
