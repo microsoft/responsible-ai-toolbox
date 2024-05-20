@@ -369,7 +369,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       return;
     }
     const newCohorts = [...this.state.cohorts].filter(
-      (t) => t?.cohort.name !== cohort?.cohort.name
+      (t) => t?.cohort?.name !== cohort?.cohort?.name
     );
     this.setState({
       cohorts: newCohorts
