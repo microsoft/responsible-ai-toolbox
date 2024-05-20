@@ -69,7 +69,7 @@ export function generateCohortsStatsTable(
   let countMinCohortName = "";
   let countMaxCohortName = "";
   cohorts.forEach((errorCohort, cohortIndex) => {
-    const labeledStat = labeledStatistics[cohortIndex].find(
+    const labeledStat = labeledStatistics[cohortIndex]?.find(
       (labeledStat) => labeledStat.key === TotalCohortSamples
     );
     if (labeledStat) {
@@ -104,7 +104,7 @@ export function generateCohortsStatsTable(
       let metricMax = Number.MIN_SAFE_INTEGER;
       let metricMaxCohortName = "";
       cohorts.forEach((errorCohort, cohortIndex) => {
-        const labeledStat = labeledStatistics[cohortIndex].find(
+        const labeledStat = labeledStatistics[cohortIndex]?.find(
           (labeledStat) => labeledStat.key === metricOption.key
         );
         if (labeledStat) {
@@ -134,7 +134,7 @@ export function generateCohortsStatsTable(
       };
       fairnessStats.push(metricFairnessStats);
       cohorts.forEach((_errorCohort, cohortIndex) => {
-        const labeledStat = labeledStatistics[cohortIndex].find(
+        const labeledStat = labeledStatistics[cohortIndex]?.find(
           (labeledStat) => labeledStat.key === metricOption.key
         );
         if (labeledStat && !Number.isNaN(labeledStat.stat)) {
