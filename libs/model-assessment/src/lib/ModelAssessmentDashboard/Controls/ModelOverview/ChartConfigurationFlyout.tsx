@@ -68,9 +68,9 @@ export class ChartConfigurationFlyout extends React.Component<
       // maximum which indicates that new cohorts were created.
       newCohorts = this.props.datasetCohorts
         .filter(
-          (errorCohort) => errorCohort?.cohort.getCohortID() > prevMaxCohortID
+          (errorCohort) => errorCohort?.cohort?.getCohortID() > prevMaxCohortID
         )
-        .map((errorCohort) => errorCohort?.cohort.getCohortID());
+        .map((errorCohort) => errorCohort?.cohort?.getCohortID());
     }
 
     // reset feature-based cohort selection if the underlying feature-based cohorts changed
