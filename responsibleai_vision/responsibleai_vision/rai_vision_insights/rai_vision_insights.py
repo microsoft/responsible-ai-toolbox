@@ -1095,7 +1095,9 @@ class RAIVisionInsights(RAIBaseInsights):
         # load current state
         RAIBaseInsights._load(
             path, inst, manager_map, RAIVisionInsights._load_metadata)
-        inst._wrapped_model = wrap_model(inst.model, inst.test, inst.task_type,
+        sample = inst.test.iloc[0:2]
+        sample = get_images(sample, inst.image_mode, inst._transformations)
+        inst._wrapped_model = wrap_model(inst.model, sample, inst.task_type,
                                          classes=inst._classes,
                                          device=inst.device)
         inst.automl_image_model = is_automl_image_model(inst._wrapped_model)

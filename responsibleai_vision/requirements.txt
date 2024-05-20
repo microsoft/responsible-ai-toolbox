@@ -5,6 +5,6 @@ Pillow<10.0.0; python_version<="3.7" # Pillow v10.0.0 is only available starting
 scikit-learn>=0.22.1
 scipy>=1.4.1
 semver~=2.13.0
-responsibleai>=0.34.1
-torchmetrics
+responsibleai>=0.35.0
+torchmetrics[detection]
 vision_explanation_methods

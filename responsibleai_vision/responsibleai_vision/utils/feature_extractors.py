@@ -7,15 +7,16 @@ import warnings
 from typing import Optional
 
 import pandas as pd
-from PIL import Image
+from PIL import ExifTags, Image
 from PIL.ExifTags import TAGS
+from PIL.TiffImagePlugin import IFDRational
 from tqdm import tqdm
 
 from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai_vision.common.constants import (ExtractedFeatures,
                                                    ImageColumns)
 from responsibleai_vision.utils.image_reader import (
-    get_all_exif_feature_names, get_image_from_path,
+    IFD_CODE_LOOKUP, get_all_exif_feature_names, get_image_from_path,
     get_image_pointer_from_path)
 
 MEAN_PIXEL_VALUE = ExtractedFeatures.MEAN_PIXEL_VALUE.value
@@ -91,35 +92,48 @@ def extract_features(image_dataset: pd.DataFrame,
     return results, feature_names
 
 
-def append_exif_features(image, row_feature_values, feature_names,
-                         blacklisted_tags, feature_metadata):
+def process_data(data,
+                 tag,
+                 feature_names,
+                 feature_metadata,
+                 row_feature_values,
+                 blacklisted_tags):
+    if isinstance(data, IFDRational):
+        data = data.numerator / data.denominator
+    if isinstance(data, (str, int, float)):
+        if tag in feature_names:
+            if tag not in feature_metadata.categorical_features:
+                feature_metadata.categorical_features.append(tag)
+            row_feature_values[feature_names.index(tag)] = data
+        elif tag not in blacklisted_tags:
+            blacklisted_tags.add(tag)
+            warnings.warn(
+                f'Exif tag {tag} could not be found '
+                'in the feature names. Ignoring tag '
+                'from extracted metadata.')
+
+
+def append_exif_features(image,
+                         row_feature_values,
+                         feature_names,
+                         blacklisted_tags,
+                         feature_metadata):
     if isinstance(image, str):
         image_pointer_path = get_image_pointer_from_path(image)
         with Image.open(image_pointer_path) as im:
             exifdata = im.getexif()
             for tag_id in exifdata:
-                # get the tag name, instead of human unreadable tag id
-                tag = str(TAGS.get(tag_id, tag_id))
-                data = exifdata.get(tag_id)
-                # decode bytes
-                if isinstance(data, bytes):
-                    data = data.decode()
-                    if len(data) > MAX_CUSTOM_LEN:
-                        data = data[:MAX_CUSTOM_LEN] + '...'
-                if isinstance(data, str):
-                    if tag in feature_names:
-                        if tag not in feature_metadata.categorical_features:
-                            feature_metadata.categorical_features.append(tag)
-                        tag_index = feature_names.index(tag)
-                        row_feature_values[tag_index] = data
-                    else:
-                        # in theory this should now never happen with
-                        # latest code, but adding this check for safety
-                        if tag not in blacklisted_tags:
-                            blacklisted_tags.add(tag)
-                            warnings.warn(
-                                f'Exif tag {tag} could not be found '
-                                'in the feature names. Ignoring tag '
-                                'from extracted metadata.')
-                elif isinstance(data, int) or isinstance(data, float):
-                    row_feature_values[feature_names.index(tag)] = data
+                if tag_id in IFD_CODE_LOOKUP:
+                    ifd_data = exifdata.get_ifd(tag_id)
+                    for nested_tag_id, data in ifd_data.items():
+                        tag = ExifTags.GPSTAGS.get(nested_tag_id, None) \
+                            or ExifTags.TAGS.get(nested_tag_id, None) \
+                            or nested_tag_id
+                        process_data(data, tag, feature_names,
+                                     feature_metadata, row_feature_values,
+                                     blacklisted_tags)
+                else:
+                    tag = str(TAGS.get(tag_id, tag_id))
+                    data = exifdata.get(tag_id)
+                    process_data(data, tag, feature_names, feature_metadata,
+                                 row_feature_values, blacklisted_tags)

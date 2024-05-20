@@ -23,7 +23,7 @@ export const FridgeMultilabelModelDebugging = {
   modelOverviewData: {
     featureCohortView: {
       firstFeatureToSelect: "mean_pixel_value",
-      multiFeatureCohorts: 3,
+      multiFeatureCohorts: 6,
       secondFeatureToSelect: "Make",
       singleFeatureCohorts: 3
     },

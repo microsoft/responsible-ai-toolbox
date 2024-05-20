@@ -2,7 +2,8 @@
 # Licensed under the MIT License.
 
 import pytest
-from common_vision_utils import (load_flowers_dataset, load_fridge_dataset,
+from common_vision_utils import (load_clearsight_object_detection_dataset,
+                                 load_flowers_dataset, load_fridge_dataset,
                                  load_fridge_object_detection_dataset,
                                  load_imagenet_dataset)
 
@@ -13,9 +14,41 @@ from responsibleai_vision.utils.feature_extractors import extract_features
 
 MEAN_PIXEL_VALUE = ExtractedFeatures.MEAN_PIXEL_VALUE.value
 FRIDGE_METADATA_FEATURES = [
-    'Make', 'ResolutionUnit', 'ImageLength', 'ExifOffset', 'Model',
-    'GPSInfo', 'ImageWidth', 'DateTime', 'YCbCrPositioning',
-    'Software', 'Orientation'
+    'FlashPixVersion', 'WhiteBalance', 'Make', 'ExifImageHeight',
+    'ExposureProgram', 'Software', 'CustomRendered', 'Contrast', 'XResolution',
+    'GPSTimeStamp', 'Orientation', 'SubjectDistanceRange', 'MakerNote',
+    'SubsecTimeDigitized', 'ExifInteroperabilityOffset', 'ColorSpace',
+    'BrightnessValue', 'ExifImageWidth', 'SubsecTimeOriginal',
+    'YCbCrPositioning', 'ISOSpeedRatings', 'SubsecTime', 'ExposureBiasValue',
+    'ComponentsConfiguration', 'ResolutionUnit', 'ImageLength',
+    'GPSLatitudeRef', 'ExifVersion', 'Flash', 'ExposureMode', 'ApertureValue',
+    'GPSDOP', 'ImageWidth', 'SubjectDistance', 'GPSLongitudeRef', 'FNumber',
+    'DigitalZoomRatio', 'FocalLength', 'SceneCaptureType',
+    'FocalLengthIn35mmFilm', 'ShutterSpeedValue', 'DateTimeOriginal',
+    'Sharpness', 'GPSAltitude', 'GPSLatitude', 'Saturation', 'ExposureTime',
+    'GPSLongitude', 'SceneType', 'GPSDateStamp', 'GPSVersionID',
+    'GPSAltitudeRef', 'YResolution', 'GPSProcessingMethod', 'DateTime',
+    'MeteringMode', 'SensingMethod', 'DateTimeDigitized', 'Model',
+    'MaxApertureValue'
+]
+CLEARSIGHT_METADATA_FEATURES = [
+    'FocalLength', 'Make', 'OffsetTimeOriginal', 'FocalPlaneYResolution',
+    'ExposureMode', 'LensSerialNumber', 'ApertureValue', 'GPSLatitudeRef',
+    'DateTimeDigitized', 'Orientation', 'OffsetTime',
+    'FocalPlaneResolutionUnit', 'ExposureProgram', 'ComponentsConfiguration',
+    'Flash', 'BodySerialNumber', 'SubsecTimeDigitized', 'CameraOwnerName',
+    'SubsecTime', 'ExifInteroperabilityOffset', 'ExposureBiasValue',
+    'ISOSpeedRatings', 'SubsecTimeOriginal', 'FNumber', 'WhiteBalance',
+    'GPSLatitude', 'XResolution', 'GPSSatellites', 'ShutterSpeedValue',
+    'GPSLongitudeRef', 'ExposureTime', 'DigitalZoomRatio', 'MeteringMode',
+    'ExifImageHeight', 'GPSTimeStamp', 'LensSpecification', 'Artist',
+    'FlashPixVersion', 'YCbCrPositioning', 'SceneCaptureType', 'DateTime',
+    'LensModel', 'OffsetTimeDigitized', 'GPSStatus', 'CustomRendered',
+    'GPSVersionID', 'SensitivityType', 'DateTimeOriginal', 'Copyright',
+    'ColorSpace', 'RecommendedExposureIndex', 'ResolutionUnit', 'GPSAltitude',
+    'Model', 'YResolution', 'ExifVersion', 'UserComment',
+    'FocalPlaneXResolution', 'GPSAltitudeRef', 'MakerNote', 'GPSMapDatum',
+    'GPSLongitude', 'GPSDateStamp', 'ExifImageWidth'
 ]
 
 
@@ -80,6 +113,17 @@ class TestFeatureExtractors(object):
             data, feature_metadata=feature_metadata)
         expected_feature_names = [MEAN_PIXEL_VALUE, 'XPComment']
         expected_feature_names += FRIDGE_METADATA_FEATURES
+        validate_extracted_features(extracted_features, feature_names,
+                                    expected_feature_names, data,
+                                    feature_metadata)
+
+    def test_extract_features_clearsight_metadata(self):
+        data = load_clearsight_object_detection_dataset()
+        feature_metadata = FeatureMetadata()
+        extracted_features, feature_names = extract_dataset_features(
+            data, feature_metadata=feature_metadata)
+        expected_feature_names = [MEAN_PIXEL_VALUE]
+        expected_feature_names += CLEARSIGHT_METADATA_FEATURES
         validate_extracted_features(extracted_features, feature_names,
                                     expected_feature_names, data,
                                     feature_metadata)

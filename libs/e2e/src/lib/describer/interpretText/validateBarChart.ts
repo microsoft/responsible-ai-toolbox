@@ -21,7 +21,7 @@ export function checkNumLabels(
 ): void {
   cy.get(`${locator} g.highcharts-xaxis-labels text`)
     .its("length")
-    .should("be", expectedNumLabels);
+    .should("eq", expectedNumLabels);
 }
 
 export function validateBarChart(

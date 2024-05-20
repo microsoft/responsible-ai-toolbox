@@ -56,7 +56,7 @@ jobs:
       matrix:
         # TODO: add macos
         operatingSystem: [ubuntu-latest, windows-latest]
-        pythonVersion: [3.7, 3.8, 3.9, "3.10"]
+        pythonVersion: [3.8, 3.9, "3.10"]
         flights: [""]
         notebookGroup: ["vis_nb_group_1", "text_nb_group_1"]
 
@@ -98,6 +98,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install --upgrade setuptools
           pip install --upgrade "pip-tools<=7.1.0"
+
+      - name: Install backwards-compatible keras for transformers
+        shell: bash -l {0}
+        run: |
+          pip install tf-keras
+          pip install keras==2.15
 
       - name: Install dependencies
         shell: bash -l {0}

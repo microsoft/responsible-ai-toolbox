@@ -16,12 +16,9 @@ jobs:
       matrix:
         packageDirectory: ["responsibleai_text", "responsibleai_vision"]
         operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
-        pythonVersion: ["3.7", "3.8", "3.9", "3.10"]
+        pythonVersion: ["3.8", "3.9", "3.10"]
         # TODO: re-add macos-latest once build timeout issues are resolved
         exclude:
-          - packageDirectory: "responsibleai_text"
-            operatingSystem: macos-latest
-            pythonVersion: "3.7"
           - packageDirectory: "responsibleai_text"
             operatingSystem: macos-latest
             pythonVersion: "3.8"
@@ -31,9 +28,6 @@ jobs:
           - packageDirectory: "responsibleai_text"
             operatingSystem: macos-latest
             pythonVersion: "3.10"
-          - packageDirectory: "responsibleai_vision"
-            operatingSystem: macos-latest
-            pythonVersion: "3.7"
           - packageDirectory: "responsibleai_vision"
             operatingSystem: macos-latest
             pythonVersion: "3.8"
@@ -72,6 +66,18 @@ jobs:
           pip install --upgrade setuptools
           pip install --upgrade "pip-tools<=7.1.0"
 
+      - if: ${{ (matrix.operatingSystem == 'windows-latest') && (matrix.packageDirectory == 'responsibleai_vision') }}
+        name: Install matplotlib
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet matplotlib -c conda-forge
+
+      - name: Install backwards-compatible keras for transformers
+        shell: bash -l {0}
+        run: |
+          pip install tf-keras
+          pip install keras==2.15
+
       - name: Install dependencies
         shell: bash -l {0}
         run: |
@@ -86,13 +92,7 @@ jobs:
         run: |
           python -m spacy download en_core_web_sm
 
-      - if: ${{ (matrix.packageDirectory == 'responsibleai_vision') }}
-        name: Install pycocotools dependency
-        shell: bash -l {0}
-        run: |
-          conda install pycocotools==2.0.4 -c conda-forge
-
-      - if: ${{ (matrix.packageDirectory == 'responsibleai_vision') && ((matrix.pythonVersion == '3.7') || (matrix.pythonVersion == '3.8')) }}
+      - if: ${{ (matrix.packageDirectory == 'responsibleai_vision') && (matrix.pythonVersion == '3.8') }}
         name: Install automl dependencies
         shell: bash -l {0}
         run: |

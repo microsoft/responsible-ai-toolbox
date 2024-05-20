@@ -38,5 +38,5 @@ export function multiSelectComboBox(
         item
       )}`
     )
-    .click();
+    .click({ multiple: true });
 }

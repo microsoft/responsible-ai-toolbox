@@ -40,7 +40,8 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
     assertNumberOfChartRowsEqual(
       datasetShape,
       selectedFeatures,
-      defaultVisibleChart
+      defaultVisibleChart,
+      isVision
     );
   }
 }
@@ -48,20 +49,21 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
 function assertNumberOfChartRowsEqual(
   datasetShape: IModelAssessmentData,
   selectedFeatures: number,
-  chartIdentifier: Locators
+  chartIdentifier: Locators,
+  isVision: boolean
 ): void {
   const featureCohortView = datasetShape.modelOverviewData?.featureCohortView;
   let expectedNumberOfCohorts = featureCohortView?.singleFeatureCohorts;
   if (selectedFeatures > 1) {
     expectedNumberOfCohorts = featureCohortView?.multiFeatureCohorts;
   }
-  console.log(selectedFeatures);
-  console.log(expectedNumberOfCohorts);
   if (Array.isArray(expectedNumberOfCohorts)) {
     cy.get(getChartItems(chartIdentifier))
       .its("length")
       .should("be.gte", expectedNumberOfCohorts[0])
       .and("be.lte", expectedNumberOfCohorts[1]);
+  } else if (isVision) {
+    cy.get(getChartItems(chartIdentifier)).its("length").should("be.gte", 2);
   } else {
     cy.get(getChartItems(chartIdentifier)).should(
       "have.length",
