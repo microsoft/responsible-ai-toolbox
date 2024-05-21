@@ -83,12 +83,12 @@ export class ModelOverviewChartPivot extends React.Component<
       // only keep selected stats and cohorts based on cohort ID
       labeledStatistics = this.props.labeledStatistics.filter((_, i) =>
         this.props.selectedChartCohorts.includes(
-          chartCohorts[i].cohort.getCohortID()
+          chartCohorts[i]?.cohort.getCohortID()
         )
       );
       chartCohorts = chartCohorts.filter((errorCohort) =>
         this.props.selectedChartCohorts.includes(
-          errorCohort.cohort.getCohortID()
+          errorCohort?.cohort.getCohortID()
         )
       );
     } else {
