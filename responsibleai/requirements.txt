@@ -1,6 +1,5 @@
 dice-ml>=0.11,<0.12
 econml>=0.14.1
-statsmodels<0.14.0
 jsonschema
 erroranalysis>=0.5.4
 interpret-community>=0.31.0
