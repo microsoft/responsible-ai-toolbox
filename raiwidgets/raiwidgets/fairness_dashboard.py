@@ -149,6 +149,8 @@ class FairnessDashboard(Dashboard):
                     ][0].values()),
                 }}
                 if error_function_name in metric_method:
+                    group_by_error = metric_frame.by_group[error_function_name]
+                    bounds_list = list(group_by_error.to_dict().values())
                     result["data"].update({
                         "bounds": {
                             "lower":
@@ -161,9 +163,7 @@ class FairnessDashboard(Dashboard):
                             "lower": bounds[0],
                             "upper": bounds[1]
                         }
-                            for bounds in list(
-                                metric_frame.by_group[error_function_name]\
-                                .to_dict().values())]
+                            for bounds in bounds_list]
                     })
                 return jsonify(result)
             except Exception as ex:

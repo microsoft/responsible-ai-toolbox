@@ -188,8 +188,8 @@ def load_fridge_object_detection_dataset():
     os.makedirs("data", exist_ok=True)
 
     # download data
-    download_url = ("https://cvbp-secondary.z19.web.core.windows.net/" +
-                    "datasets/object_detection/odFridgeObjects.zip")
+    download_url = ("https://publictestdatasets.blob.core.windows.net/" +
+                    "computervision/odFridgeObjects.zip")
     data_file = "./odFridgeObjects.zip"
     request_file.urlretrieve(download_url, filename=data_file)
 
