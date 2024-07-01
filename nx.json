@@ -16,66 +16,10 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/workspace/tasks-runners/default",
-      "options": {}
-    }
-  },
-  "projects": {
-    "causality": {
-      "tags": []
-    },
-    "core-ui": {
-      "tags": []
-    },
-    "counterfactuals": {
-      "tags": []
-    },
-    "dashboard": {
-      "tags": []
-    },
-    "dashboard-e2e": {
-      "tags": [],
-      "implicitDependencies": ["dashboard"]
-    },
-    "dataset-explorer": {
-      "tags": []
-    },
-    "e2e": {
-      "tags": []
-    },
-    "error-analysis": {
-      "tags": []
-    },
-    "fairness": {
-      "tags": []
-    },
-    "forecasting": {
-      "tags": []
-    },
-    "interpret": {
-      "tags": []
-    },
-    "interpret-text": {
-      "tags": []
-    },
-    "interpret-vision": {
-      "tags": []
-    },
-    "localization": {
-      "tags": []
-    },
-    "mlchartlib": {
-      "tags": []
-    },
-    "model-assessment": {
-      "tags": []
-    },
-    "widget": {
-      "tags": []
-    },
-    "widget-e2e": {
-      "tags": [],
-      "implicitDependencies": ["widget"]
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "parallel": 1
+      }
     }
   },
   "targetDependencies": {
@@ -85,5 +29,74 @@
         "projects": "dependencies"
       }
     ]
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/react"
+  },
+  "defaultProject": "dashboard",
+  "generators": {
+    "@nrwl/workspace": {
+      "library": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/cypress": {
+      "cypress-project": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/react": {
+      "application": {
+        "style": "none",
+        "linter": "eslint",
+        "babel": true
+      },
+      "library": {
+        "style": "none",
+        "linter": "eslint"
+      },
+      "storybook-configuration": {
+        "linter": "eslint"
+      },
+      "component": {
+        "style": "none"
+      }
+    },
+    "@nrwl/next": {
+      "application": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/web": {
+      "application": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/node": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/nx-plugin": {
+      "plugin": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/nest": {
+      "application": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/express": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      }
+    }
   }
 }
