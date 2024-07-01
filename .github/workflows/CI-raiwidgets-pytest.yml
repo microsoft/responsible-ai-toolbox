@@ -48,7 +48,7 @@ jobs:
         name: Install latest numpy from conda-forge for MacOS
         shell: bash -l {0}
         run: |
-          conda install --yes --quiet -c conda-forge numpy
+          conda install --yes --quiet -c conda-forge "numpy<2.0.0"
 
       - if: ${{ matrix.operatingSystem == 'macos-latest' }}
         name: Use Homebrew to install libomp on MacOS

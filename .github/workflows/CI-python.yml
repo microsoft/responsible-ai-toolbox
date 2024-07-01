@@ -48,6 +48,11 @@ jobs:
           pip install --upgrade setuptools
           pip install --upgrade "pip-tools<=7.1.0"
 
+      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
+        name: Use Homebrew to install libomp on MacOS
+        run: |
+          brew install libomp
+
       - name: Install package dependencies
         run: |
           pip install -r requirements-dev.txt

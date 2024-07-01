@@ -112,6 +112,7 @@ def load_covid19_emergency_event_dataset(with_metadata=False):
 def load_blbooks_genre_dataset():
     config_kwargs = {"name": "annotated_raw"}
     dataset = datasets.load_dataset("blbooksgenre", split="train",
+                                    trust_remote_code=True,
                                     **config_kwargs)
     grouping_col = 'BL record ID'
     columns = {"text": dataset["Title"],

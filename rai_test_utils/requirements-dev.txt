@@ -5,6 +5,7 @@ pytest-mock==3.6.1
 requirements-parser==0.2.0
 
 pandas>=0.25.1,<2.0.0
+numpy<2.0.0
 ml-wrappers
 requests
 Pillow>=10.0.0; python_version>"3.7" # due to breaking changes in v10.0.0 (https://pillow.readthedocs.io/en/latest/releasenotes/10.0.0.html)
