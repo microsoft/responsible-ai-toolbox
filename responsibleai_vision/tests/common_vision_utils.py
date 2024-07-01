@@ -187,8 +187,8 @@ def load_fridge_dataset(add_extra_mixed_metadata=False):
     os.makedirs("data", exist_ok=True)
 
     # download data
-    download_url = ("https://cvbp-secondary.z19.web.core.windows.net/" +
-                    "datasets/image_classification/fridgeObjects.zip")
+    download_url = ("https://publictestdatasets.blob.core.windows.net/" +
+                    "computervision/fridgeObjects.zip")
     data_file = "./data/fridgeObjects.zip"
     retrieve_unzip_file(download_url, data_file)
     # get all file names into a pandas dataframe with the labels
@@ -436,9 +436,8 @@ def load_multilabel_fridge_dataset():
     os.makedirs("data", exist_ok=True)
 
     # download data
-    download_url = ("https://cvbp-secondary.z19.web.core.windows.net/" +
-                    "datasets/image_classification/" +
-                    "multilabelFridgeObjects.zip")
+    download_url = ("https://publictestdatasets.blob.core.windows.net/" +
+                    "computervision/multilabelFridgeObjects.zip")
     folder_path = './data/multilabelFridgeObjects'
     data_file = folder_path + '.zip'
     retrieve_unzip_file(download_url, data_file)
