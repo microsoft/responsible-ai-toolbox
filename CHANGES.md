@@ -24,6 +24,19 @@ this file to understand what changed.
 - bug fixes and tests
 - other
 
+## v0.36.0
+
+- educational materials
+  - Update getting-started.ipynb by @oohtmeel1 in https://github.com/microsoft/responsible-ai-toolbox/pull/2572
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - Fix robot page exception - Update StatsTableUtils.ts by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/2568
+    - Fix robot page exception on TypeError: Cannot read properties of undefined (reading 'cohort') by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/2540
+    - Fix responsibleai toolbox build failures due to dependency updates by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2571
+    - Fix build failures due to missing fridge datasets by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2573
+  - ## RAIInsights
+    - Update responsibleai to scikit-learn 1.5.1 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2570
+
 ## v0.35.1
 
 - bug fixes and tests
