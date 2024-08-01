@@ -1,4 +1,4 @@
-Flask
+Flask>=3.0.0
 Flask-Cors
 flask-socketio
 ipython<=7.16.3; python_version <= '3.6'
