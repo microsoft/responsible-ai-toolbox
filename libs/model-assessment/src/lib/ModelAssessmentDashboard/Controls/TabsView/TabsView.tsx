@@ -164,7 +164,7 @@ export class TabsView extends React.PureComponent<
                 this.props.dataset.class_names && (
                   <>
                     <div className={classNames.sectionHeader}>
-                      <Text as="h2" variant={"xxLarge"}>
+                      <Text as="h3" variant={"xxLarge"}>
                         {localization.ModelAssessment.ComponentNames.VisionTab}
                       </Text>
                     </div>
