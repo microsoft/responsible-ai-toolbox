@@ -22,6 +22,10 @@ export function describeAggregateCausalAffects(
     });
     it("should have causal analysis for decision making notebooks", () => {
       cy.get(Locators.CausalAnalysisHeader).should("exist");
+      cy.get(Locators.CausalAnalysisHeader).should(
+        "contain",
+        "The current causal effects are for cohort:"
+      );
     });
 
     it("should render information on clicking on info icon", () => {
