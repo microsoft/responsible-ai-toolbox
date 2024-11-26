@@ -117,7 +117,7 @@ jobs:
         run: pytest -s -v --durations=10
 
       - name: Upload a Build result
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist
@@ -224,7 +224,7 @@ jobs:
           node-version: ${{ env.node-version }}
       - id: download
         name: Download a Build Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist

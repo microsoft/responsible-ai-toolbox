@@ -57,7 +57,7 @@ jobs:
         working-directory: rai_core_flask
 
       - name: Upload requirements
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: requirements-dev-comp.txt
           path: rai_core_flask/requirements-dev-comp.txt
@@ -78,7 +78,7 @@ jobs:
         working-directory: rai_core_flask
 
       - name: Upload code coverage results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: rai_core_flask-code-coverage-results
           path: rai_core_flask/htmlcov
