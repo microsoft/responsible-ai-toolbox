@@ -31,7 +31,7 @@ jobs:
         run: yarn buildall
 
       - name: Upload the build result
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: raiwidgets-js
           path: raiwidgets/raiwidgets/widget
@@ -73,7 +73,7 @@ jobs:
         run: yarn install --frozen-lock-file
 
       - name: Download the UI build result
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: raiwidgets-js
           path: raiwidgets/raiwidgets/widget
@@ -110,7 +110,7 @@ jobs:
         working-directory: raiwidgets
 
       - name: Upload requirements
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: requirements-dev.txt
           path: raiwidgets/installed-requirements-dev.txt
@@ -140,7 +140,7 @@ jobs:
 
       - name: Upload e2e test screen shot
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: raiwidgets-e2e-screen-shot
           path: ./dist/cypress
