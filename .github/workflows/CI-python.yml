@@ -19,18 +19,13 @@ jobs:
         packageDirectory:
           ["responsibleai", "erroranalysis", "raiutils", "rai_test_utils"]
         operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
-        pythonVersion: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        pythonVersion: ["3.9", "3.10", "3.11"]
         exclude:
-          - operatingSystem: macos-latest
-            pythonVersion: "3.7"
-          - operatingSystem: ubuntu-latest
-            pythonVersion: "3.7"
-          - operatingSystem: windows-latest
-            pythonVersion: "3.7"
-          - operatingSystem: macos-latest
-            pythonVersion: "3.8"
           - packageDirectory: "responsibleai"
             pythonVersion: "3.11"
+          - packageDirectory: "responsibleai"
+            operatingSystem: "macos-latest"
+            pythonVersion: "3.9"
 
     runs-on: ${{ matrix.operatingSystem }}
 
@@ -69,7 +64,8 @@ jobs:
           cat installed-requirements-dev.txt
         working-directory: raiwidgets
 
-      - name: Upload requirements
+      - if: ${{ (matrix.operatingSystem == 'windows-latest') && (matrix.pythonVersion == '3.9') && (matrix.packageDirectory == 'responsibleai') }}
+        name: Upload requirements
         uses: actions/upload-artifact@v4
         with:
           name: requirements-dev.txt
@@ -83,12 +79,12 @@ jobs:
       - name: Upload code coverage results
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.packageDirectory }}-code-coverage-results
-          path: ${{ matrix.packageDirectory }}/htmlcov
+          name: ${{ matrix.packageDirectory }}-${{ matrix.pythonVersion}}-code-coverage-results
+          path: ${{ matrix.packageDirectory }}-${{ matrix.pythonVersion}}/htmlcov
         # Use always() to always run this step to publish test results when there are test failures
         if: ${{ always() }}
 
-      - if: ${{ (matrix.operatingSystem == 'windows-latest') && (matrix.pythonVersion == '3.8') }}
+      - if: ${{ (matrix.operatingSystem == 'windows-latest') && (matrix.pythonVersion == '3.9') }}
         name: Upload to codecov
         id: codecovupload1
         uses: codecov/codecov-action@v3
@@ -102,7 +98,7 @@ jobs:
           name: codecov-umbrella
           verbose: true
 
-      - if: ${{ (steps.codecovupload1.outcome == 'failure') && (matrix.pythonVersion == '3.8') && (matrix.operatingSystem == 'windows-latest') }}
+      - if: ${{ (steps.codecovupload1.outcome == 'failure') && (matrix.pythonVersion == '3.9') && (matrix.operatingSystem == 'windows-latest') }}
         name: Retry upload to codecov
         id: codecovupload2
         uses: codecov/codecov-action@v3
@@ -117,7 +113,7 @@ jobs:
           verbose: true
 
       - name: Set codecov status
-        if: ${{ (matrix.pythonVersion == '3.8') && (matrix.operatingSystem == 'windows-latest') }}
+        if: ${{ (matrix.pythonVersion == '3.9') && (matrix.operatingSystem == 'windows-latest') }}
         shell: bash
         run: |
           if ${{ (steps.codecovupload1.outcome == 'success') || (steps.codecovupload2.outcome == 'success') }} ; then
