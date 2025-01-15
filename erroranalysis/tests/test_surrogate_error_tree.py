@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import pytest
 from common_utils import replicate_dataset
+from ml_wrappers import wrap_model
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (ARG, COLUMN, COMPOSITE_FILTERS,
@@ -16,8 +17,9 @@ from erroranalysis._internal.constants import (ARG, COLUMN, COMPOSITE_FILTERS,
                                                OPERATION, PRED_Y, ROW_INDEX,
                                                SPLIT_FEATURE, SPLIT_INDEX,
                                                TRUE_Y, CohortFilterMethods,
-                                               CohortFilterOps, Metrics,
-                                               ModelTask, regression_metrics)
+                                               CohortFilterOps, ImageColumns,
+                                               Metrics, ModelTask,
+                                               regression_metrics)
 from erroranalysis._internal.error_analyzer import (ModelAnalyzer,
                                                     PredictionsAnalyzer)
 from erroranalysis._internal.surrogate_error_tree import (
@@ -28,11 +30,21 @@ from rai_test_utils.datasets.tabular import (
     create_adult_census_data, create_binary_classification_dataset,
     create_cancer_data, create_diabetes_data, create_iris_data,
     create_simple_titanic_data)
+from rai_test_utils.datasets.vision import (
+    get_images, load_fridge_object_detection_dataset)
 from rai_test_utils.models.model_utils import create_models_classification
 from rai_test_utils.models.sklearn import (
     create_kneighbors_classifier, create_sklearn_random_forest_regressor,
     create_titanic_pipeline)
+from rai_test_utils.models.torch import get_object_detection_fridge_model
 from raiutils.exceptions import UserConfigValidationException
+
+try:
+    import torch  # noqa: F401
+    import torchvision  # noqa: F401
+    pytorch_installed = True
+except ImportError:
+    pytorch_installed = False
 
 SIZE = 'size'
 PARENTID = 'parentId'
@@ -63,6 +75,71 @@ class DummyInvalidShapeModel:
         :rtype: numpy.ndarray
         """
         return np.zeros((X.shape[0], 1))
+
+
+class SimplifiedWrappedIndexPredictorModel:
+    """Wraps model that uses index to retrieve image data for making
+    predictions. Simplified version of the one in responsibleai-vision
+    package."""
+
+    def __init__(self, model, dataset, image_mode):
+        """Initialize the WrappedIndexPredictorModel.
+
+        :param model: The model to wrap.
+        :type model: object
+        :param dataset: The dataset to use for making predictions.
+        :type dataset: pandas.DataFrame
+        :param image_mode: The mode to open the image in.
+            See pillow documentation for all modes:
+            https://pillow.readthedocs.io/en/stable/handbook/concepts.html
+        :type image_mode: str
+        """
+        self.model = model
+        self.dataset = dataset
+        self.image_mode = image_mode
+        test = get_images(self.dataset, self.image_mode, None)
+        self.predictions = self.model.predict(test)
+        self.predict_proba = self.model.predict_proba(test)
+
+    def index_predictions(self, index, predictions):
+        """Index the predictions.
+
+        :param index: The index to use.
+        :type index: list
+        :param predictions: The predictions to index.
+        :type predictions: list
+        """
+        if not isinstance(index, list):
+            index = list(index)
+        if isinstance(predictions, list):
+            predictions = [predictions[i] for i in index]
+        else:
+            predictions = predictions[index]
+        return predictions
+
+    def predict(self, X):
+        """Predict the class labels for the provided data.
+
+        :param X: Data to predict the labels for.
+        :type X: pandas.DataFrame
+        :return: Predicted class labels.
+        :rtype: list
+        """
+        index = X.index
+        predictions = self.index_predictions(index, self.predictions)
+        return predictions
+
+    def predict_proba(self, X):
+        """Predict the class probabilities for the provided data.
+
+        :param X: Data to predict the probabilities for.
+        :type X: pandas.DataFrame
+        :return: Predicted class probabilities.
+        :rtype: list[list]
+        """
+        index = X.index
+        pred_proba = self.index_predictions(index, self.predict_proba)
+        return pred_proba
 
 
 class TestSurrogateErrorTree(object):
@@ -318,6 +395,33 @@ class TestSurrogateErrorTree(object):
         with pytest.raises(UserConfigValidationException, match=err):
             run_error_analyzer(model, X_test, y_test, feature_names,
                                AnalyzerType.MODEL)
+
+    @pytest.mark.skipif(not pytorch_installed,
+                        reason="requires torch/torchvision")
+    def test_surrogate_error_tree_object_detection(self):
+        model_task = ModelTask.OBJECT_DETECTION
+        model = get_object_detection_fridge_model()
+
+        dataset = load_fridge_object_detection_dataset()
+        dataset = dataset.iloc[:3]
+        X_test = dataset[[ImageColumns.IMAGE]]
+        y_test = dataset[[ImageColumns.LABEL]]
+        feature_names = [ImageColumns.IMAGE]
+        image_mode = 'RGB'
+        model = wrap_model(model, X_test, model_task)
+        model = SimplifiedWrappedIndexPredictorModel(model, X_test, image_mode)
+        extracted_feature_names = ["mean_pixel_value", "is_cool_image"]
+        dummy_data = [[141, True], [54, False], [212, True]]
+        ext_dataset = pd.DataFrame(data=dummy_data,
+                                   columns=extracted_feature_names)
+
+        run_error_analyzer(model,
+                           ext_dataset,
+                           y_test,
+                           feature_names,
+                           AnalyzerType.MODEL,
+                           categorical_features=[],
+                           model_task=model_task)
 
 
 def run_error_analyzer(model, X_test, y_test, feature_names,

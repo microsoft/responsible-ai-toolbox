@@ -6,3 +6,4 @@ requirements-parser==0.2.0
 rai-test-utils[object_detection]>=0.4.2
 scikit-learn<=1.5.1
 interpret-core[required]<=0.3.2
+ml-wrappers
