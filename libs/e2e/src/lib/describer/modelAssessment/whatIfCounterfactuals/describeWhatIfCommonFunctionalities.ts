@@ -8,8 +8,6 @@ import { ScatterHighchart } from "../../../../util/ScatterHighchart";
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
-// import { describeSubBarChart } from "./describeSubBarChart";
-
 export function describeWhatIfCommonFunctionalities(
   dataShape: IModelAssessmentData
 ): void {
@@ -58,12 +56,5 @@ export function describeWhatIfCommonFunctionalities(
         cy.get(Locators.WICLocalImportanceDescription).contains("Row 1");
       });
     });
-
-    // if (
-    //   !dataShape.featureImportanceData?.noLocalImportance &&
-    //   !dataShape.featureImportanceData?.noFeatureImportance
-    // ) {
-    //   describeSubBarChart(dataShape);
-    // }
   });
 }
