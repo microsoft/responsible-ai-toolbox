@@ -28,7 +28,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "builder": "@nrwl/web:rollup",
           "options": {
             "outputPath": "dist/libs/causality",
             "tsConfig": "libs/causality/tsconfig.lib.json",
@@ -68,7 +68,8 @@
           },
           "outputs": ["coverage/libs/causality"]
         }
-      }
+      },
+      "tags": []
     },
     "core-ui": {
       "root": "libs/core-ui",
@@ -97,7 +98,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "builder": "@nrwl/web:rollup",
           "options": {
             "outputPath": "dist/libs/core-ui",
             "tsConfig": "libs/core-ui/tsconfig.lib.json",
@@ -137,7 +138,8 @@
           },
           "outputs": ["coverage/libs/core-ui"]
         }
-      }
+      },
+      "tags": []
     },
     "counterfactuals": {
       "root": "libs/counterfactuals",
@@ -166,7 +168,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "builder": "@nrwl/web:rollup",
           "options": {
             "outputPath": "dist/libs/counterfactuals",
             "tsConfig": "libs/counterfactuals/tsconfig.lib.json",
@@ -206,7 +208,8 @@
           },
           "outputs": ["coverage/libs/counterfactuals"]
         }
-      }
+      },
+      "tags": []
     },
     "dashboard": {
       "root": "apps/dashboard",
@@ -215,7 +218,7 @@
       "schematics": {},
       "architect": {
         "build": {
-          "builder": "@nrwl/web:build",
+          "builder": "@nrwl/web:webpack",
           "options": {
             "baseHref": ".",
             "outputPath": "dist/apps/dashboard",
@@ -304,7 +307,8 @@
           },
           "outputs": ["coverage/apps/dashboard"]
         }
-      }
+      },
+      "tags": []
     },
     "dashboard-e2e": {
       "root": "apps/dashboard-e2e",
@@ -333,7 +337,9 @@
             ]
           }
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["dashboard"]
     },
     "dataset-explorer": {
       "root": "libs/dataset-explorer",
@@ -362,7 +368,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "builder": "@nrwl/web:rollup",
           "options": {
             "outputPath": "dist/libs/dataset-explorer",
             "tsConfig": "libs/dataset-explorer/tsconfig.lib.json",
@@ -402,7 +408,8 @@
           },
           "outputs": ["coverage/libs/dataset-explorer"]
         }
-      }
+      },
+      "tags": []
     },
     "e2e": {
       "root": "libs/e2e",
@@ -422,7 +429,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "builder": "@nrwl/web:rollup",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/libs/e2e",
@@ -454,7 +461,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "error-analysis": {
       "root": "libs/error-analysis",
@@ -483,7 +491,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "builder": "@nrwl/web:rollup",
           "options": {
             "outputPath": "dist/libs/error-analysis",
             "tsConfig": "libs/error-analysis/tsconfig.lib.json",
@@ -523,7 +531,8 @@
           },
           "outputs": ["coverage/libs/error-analysis"]
         }
-      }
+      },
+      "tags": []
     },
     "fairness": {
       "root": "libs/fairness",
@@ -552,7 +561,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "builder": "@nrwl/web:rollup",
           "options": {
             "outputPath": "dist/libs/fairness",
             "tsConfig": "libs/fairness/tsconfig.lib.json",
@@ -592,7 +601,8 @@
           },
           "outputs": ["coverage/libs/fairness"]
         }
-      }
+      },
+      "tags": []
     },
     "forecasting": {
       "root": "libs/forecasting",
@@ -600,7 +610,7 @@
       "projectType": "library",
       "architect": {
         "build": {
-          "builder": "@nrwl/web:package",
+          "builder": "@nrwl/web:rollup",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/libs/forecasting",
@@ -632,7 +642,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "interpret": {
       "root": "libs/interpret",
@@ -661,7 +672,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "builder": "@nrwl/web:rollup",
           "options": {
             "outputPath": "dist/libs/interpret",
             "tsConfig": "libs/interpret/tsconfig.lib.json",
@@ -701,7 +712,8 @@
           },
           "outputs": ["coverage/libs/interpret"]
         }
-      }
+      },
+      "tags": []
     },
     "interpret-text": {
       "root": "libs/interpret-text",
@@ -709,7 +721,7 @@
       "projectType": "library",
       "architect": {
         "build": {
-          "builder": "@nrwl/web:package",
+          "builder": "@nrwl/web:rollup",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/libs/interpret-text",
@@ -741,7 +753,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "interpret-vision": {
       "root": "libs/interpret-vision",
@@ -749,7 +762,7 @@
       "projectType": "library",
       "architect": {
         "build": {
-          "builder": "@nrwl/web:package",
+          "builder": "@nrwl/web:rollup",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/libs/interpret-vision",
@@ -781,7 +794,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "localization": {
       "root": "libs/localization",
@@ -806,7 +820,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "builder": "@nrwl/web:rollup",
           "options": {
             "outputPath": "dist/libs/localization",
             "tsConfig": "libs/localization/tsconfig.lib.json",
@@ -846,7 +860,8 @@
           },
           "outputs": ["coverage/libs/localization"]
         }
-      }
+      },
+      "tags": []
     },
     "mlchartlib": {
       "root": "libs/mlchartlib",
@@ -875,7 +890,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "builder": "@nrwl/web:rollup",
           "options": {
             "outputPath": "dist/libs/mlchartlib",
             "tsConfig": "libs/mlchartlib/tsconfig.lib.json",
@@ -915,7 +930,8 @@
           },
           "outputs": ["coverage/libs/mlchartlib"]
         }
-      }
+      },
+      "tags": []
     },
     "model-assessment": {
       "root": "libs/model-assessment",
@@ -944,7 +960,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "builder": "@nrwl/web:rollup",
           "options": {
             "outputPath": "dist/libs/model-assessment",
             "tsConfig": "libs/model-assessment/tsconfig.lib.json",
@@ -984,7 +1000,8 @@
           },
           "outputs": ["coverage/libs/model-assessment"]
         }
-      }
+      },
+      "tags": []
     },
     "widget": {
       "root": "apps/widget",
@@ -993,7 +1010,7 @@
       "schematics": {},
       "architect": {
         "build": {
-          "builder": "@nrwl/web:build",
+          "builder": "@nrwl/web:webpack",
           "options": {
             "baseHref": "/widget/",
             "outputPath": "raiwidgets/raiwidgets/widget",
@@ -1079,7 +1096,8 @@
           },
           "outputs": ["coverage/apps/widget"]
         }
-      }
+      },
+      "tags": []
     },
     "widget-e2e": {
       "root": "apps/widget-e2e",
@@ -1107,76 +1125,9 @@
             ]
           }
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["widget"]
     }
-  },
-  "cli": {
-    "defaultCollection": "@nrwl/react"
-  },
-  "schematics": {
-    "@nrwl/workspace": {
-      "library": {
-        "linter": "eslint"
-      }
-    },
-    "@nrwl/cypress": {
-      "cypress-project": {
-        "linter": "eslint"
-      }
-    },
-    "@nrwl/react": {
-      "application": {
-        "style": "none",
-        "linter": "eslint",
-        "babel": true
-      },
-      "library": {
-        "style": "none",
-        "linter": "eslint"
-      },
-      "storybook-configuration": {
-        "linter": "eslint"
-      },
-      "component": {
-        "style": "none"
-      }
-    },
-    "@nrwl/next": {
-      "application": {
-        "linter": "eslint"
-      }
-    },
-    "@nrwl/web": {
-      "application": {
-        "linter": "eslint"
-      }
-    },
-    "@nrwl/node": {
-      "application": {
-        "linter": "eslint"
-      },
-      "library": {
-        "linter": "eslint"
-      }
-    },
-    "@nrwl/nx-plugin": {
-      "plugin": {
-        "linter": "eslint"
-      }
-    },
-    "@nrwl/nest": {
-      "application": {
-        "linter": "eslint"
-      }
-    },
-    "@nrwl/express": {
-      "application": {
-        "linter": "eslint"
-      },
-      "library": {
-        "linter": "eslint"
-      }
-    }
-  },
-  "defaultProject": "dashboard"
+  }
 }
