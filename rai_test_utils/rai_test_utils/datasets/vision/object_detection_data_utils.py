@@ -17,6 +17,8 @@ from requests.packages.urllib3.util.retry import Retry
 
 # domain mapped session for reuse
 _requests_sessions = {}
+IMAGE = "image"
+LABEL = "label"
 
 
 def _get_retry_session(url):
@@ -105,7 +107,6 @@ def get_images(dataset, image_mode, transformations=None):
     :return: The images.
     :rtype: numpy.ndarray
     """
-    IMAGE = "image"
     IMAGE_URL = "image_url"
 
     column_names = dataset.columns
@@ -204,11 +205,9 @@ def load_fridge_object_detection_dataset():
     labels = load_fridge_object_detection_dataset_labels()
 
     # get all file names into a pandas dataframe with the labels
-    data = pd.DataFrame(columns=["image", "label"])
+    rows = []
     for i, file in enumerate(os.listdir("./data/odFridgeObjects/" + "images")):
         image_path = "./data/odFridgeObjects/" + "images" + "/" + file
-        data = data.append({"image": image_path,
-                            "label": labels[i]},  # folder
-                           ignore_index=True)
-
+        rows.append({IMAGE: image_path, LABEL: labels[i]})
+    data = pd.DataFrame(rows, columns=[IMAGE, LABEL])
     return data

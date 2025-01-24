@@ -53,6 +53,7 @@ DEFAULT_NUM_LEAVES = 31
 DEFAULT_MIN_CHILD_SAMPLES = 20
 CACHED_SUBTREE_FEATURES = 'cache_subtree_features'
 LEAF_VALUE = 'leaf_value'
+OBJECT = 'object'
 PREDICTION = 'prediction'
 RAW_PREDICTION = 'rawPrediction'
 PROBABILITY = 'probability'
@@ -341,10 +342,20 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
         diff = pred_y - true_y
     if not isinstance(diff, np.ndarray):
         diff = np.array(diff)
+
+    # Note: if direct conversion fails, for more complex data scenarios like
+    # object detection we need to convert to an object type for newer versions
+    # of numpy>=1.26.0
     if not isinstance(pred_y, np.ndarray):
-        pred_y = np.array(pred_y)
+        try:
+            pred_y = np.array(pred_y)
+        except ValueError:
+            pred_y = np.array(pred_y, dtype=OBJECT)
     if not isinstance(true_y, np.ndarray):
-        true_y = np.array(true_y)
+        try:
+            true_y = np.array(true_y)
+        except ValueError:
+            true_y = np.array(true_y, dtype=OBJECT)
     if is_pandas:
         input_data = input_data.to_numpy(copy=True)
 
