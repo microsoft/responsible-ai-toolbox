@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         operatingSystem: [ubuntu-latest, windows-latest]
-        pythonVersion: [3.8, 3.9, "3.10"]
+        pythonVersion: [3.9, "3.10"]
 
     runs-on: ${{ matrix.operatingSystem }}
 
@@ -71,7 +71,6 @@ jobs:
         shell: bash -l {0}
         run: |
           pip install tf-keras
-          pip install keras==2.15
 
       - name: Install dependencies
         shell: bash -l {0}
@@ -99,7 +98,8 @@ jobs:
           cat installed-requirements-dev.txt
         working-directory: raiwidgets
 
-      - name: Upload requirements
+      - if: ${{ (matrix.operatingSystem == 'windows-latest') && (matrix.pythonVersion == '3.9') }}
+        name: Upload requirements
         uses: actions/upload-artifact@v4
         with:
           name: requirements-dev.txt
@@ -120,5 +120,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: raiwidgets-e2e-screen-shot
+          name: raiwidgets-ci-notebook-vision-screen-shot-${{ matrix.operatingSystem }}-${{ matrix.pythonVersion }}
           path: dist/cypress

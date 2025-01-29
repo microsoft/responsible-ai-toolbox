@@ -21,12 +21,10 @@ sphinx==3.1.1
 sphinx-gallery==0.8.1
 pydata-sphinx-theme==0.3.0
 
-tensorflow<=2.15
+tensorflow
 transformers
 datasets
 opencv-python
 
-fastai
 mlflow
-pydantic<2.0.0
 piexif
