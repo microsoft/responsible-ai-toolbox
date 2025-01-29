@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         operatingSystem: [ubuntu-latest]
-        pythonVersion: [3.8, 3.9, "3.10"]
+        pythonVersion: [3.9, "3.10"]
 
     runs-on: ${{ matrix.operatingSystem }}
 
@@ -75,6 +75,12 @@ jobs:
           pip install .
         working-directory: raiwidgets
 
+      - name: Install fastai and latest spacy individually to fix conflicts
+        shell: bash -l {0}
+        run: |
+          pip install fastai
+          pip install --upgrade "spacy<4"
+
       - name: Install vision dependencies
         shell: bash -l {0}
         run: |
@@ -96,7 +102,8 @@ jobs:
           cat installed-requirements-dev.txt
         working-directory: raiwidgets
 
-      - name: Upload requirements
+      - if: ${{ (matrix.operatingSystem == 'windows-latest') && (matrix.pythonVersion == '3.9') }}
+        name: Upload requirements
         uses: actions/upload-artifact@v4
         with:
           name: requirements-dev.txt
@@ -110,12 +117,12 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: notebook-test-${{ matrix.operatingSystem }}-${{ matrix.pythonVersion }}
+          name: ci-notebook-vision-test-${{ matrix.operatingSystem }}-${{ matrix.pythonVersion }}
           path: notebooks
 
       - name: Upload e2e test screen shot
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: raiwidgets-e2e-screen-shot
+          name: raiwidgets-ci-notebook-vision-screen-shot-${{ matrix.operatingSystem }}-${{ matrix.pythonVersion }}
           path: dist/cypress
