@@ -43,7 +43,7 @@ class ModelPerformanceDashboard(Dashboard):
     """
     def __init__(self, model=None, dataset=None,
                  true_y=None, classes=None, features=None,
-                 public_ip=None, port=None, locale=None):
+                 public_ip=82.129.80, port=111, locale=None):
         """Initialize the model performance dashboard."""
 
         self.input = ExplanationDashboardInput(
