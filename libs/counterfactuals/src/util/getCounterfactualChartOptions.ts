@@ -53,7 +53,7 @@ export function getCounterfactualChartOptions(
       backgroundColor: theme.semanticColors.bodyBackground,
       type: "scatter",
       zoomType: "xy"
-    },
+    } as any,
     plotOptions: {
       scatter: {
         tooltip: {

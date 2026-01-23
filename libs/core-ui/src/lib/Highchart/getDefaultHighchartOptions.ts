@@ -36,7 +36,7 @@ export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
       spacingRight: 16,
       spacingTop: 16,
       zoomType: "xy"
-    },
+    } as any,
     credits: undefined,
     exporting: {
       menuItemDefinitions: {

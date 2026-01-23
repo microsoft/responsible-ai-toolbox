@@ -4,6 +4,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
+    "postinstall": "patch-package",
     "affected": "nx affected",
     "affected:apps": "nx affected:apps",
     "affected:build": "nx affected:build",
@@ -14,8 +15,8 @@
     "affected:test": "nx affected:test",
     "auto-version": "node ./scripts/auto-version.js",
     "build": "nx build",
-    "buildall": "cross-env NODE_OPTIONS=--max_old_space_size=6144 nx run-many --target=build --configuration=production --all",
-    "builddebug": "cross-env NODE_OPTIONS=--max_old_space_size=6144 nx run-many --target=build --all",
+    "buildall": "cross-env NODE_OPTIONS=\"--max_old_space_size=6144 --openssl-legacy-provider\" nx run-many --target=build --configuration=production --all",
+    "builddebug": "cross-env NODE_OPTIONS=\"--max_old_space_size=6144 --openssl-legacy-provider\" nx run-many --target=build --all",
     "ci": "yarn install --frozen-lock-file && yarn testall --codeCoverage && yarn lintall && yarn buildall && yarn test && yarn e2e",
     "copytest": "node ./scripts/copyTest.js",
     "dep-graph": "nx dep-graph",
@@ -109,8 +110,8 @@
     "@types/node": "14.14.33",
     "@types/node-fetch": "2.6.5",
     "@types/plotly.js": "^2.12.32",
-    "@types/react": "17.0.3",
-    "@types/react-dom": "17.0.3",
+    "@types/react": "17.0.80",
+    "@types/react-dom": "17.0.25",
     "@types/react-plotly.js": "^2.6.3",
     "@types/react-router-dom": "5.1.7",
     "@types/uuid": "^8.3.0",
@@ -140,6 +141,8 @@
     "jszip": "3.10.1",
     "moment-timezone": "0.5.35",
     "node-fetch": "2.6.1",
+    "patch-package": "^8.0.1",
+    "postinstall-postinstall": "^2.1.0",
     "prettier": "2.3.1",
     "prettier-plugin-packagejson": "2.2.5",
     "raw-loader": "^4.0.2",
@@ -154,5 +157,9 @@
     "plotly.js": {
       "d3-hierarchy": "$d3-hierarchy"
     }
+  },
+  "resolutions": {
+    "tslib": "2.5.0",
+    "@types/plotly.js": "2.35.13"
   }
 }
