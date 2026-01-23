@@ -1,16 +1,16 @@
 dice-ml>=0.11,<0.12
-econml>=0.14.1
+econml>=0.15.0,<0.16
 statsmodels<0.14.0
 jsonschema
 erroranalysis>=0.5.4
 interpret-community>=0.31.0
-lightgbm>=2.0.11
+lightgbm>=2.0.11,<4.0
 numpy>=1.17.2,<=1.26.2
 numba<=0.58.1
 pandas>=0.25.1,<2.0.0
 # See PR 1429 about upper bound
 scikit-learn>=0.22.1,!=1.1,<=1.5.1
-scipy>=1.4.1
+scipy>=1.4.1,<1.15
 semver~=2.13.0
 ml-wrappers
 
