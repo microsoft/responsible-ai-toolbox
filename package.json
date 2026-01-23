@@ -164,6 +164,7 @@
     "@types/react": "17.0.80",
     "@types/react-dom": "17.0.25",
     "css-loader": "6.11.0",
-    "style-loader": "3.3.4"
+    "style-loader": "3.3.4",
+    "@yarnpkg/parsers": "3.0.0-rc.48.1"
   }
 }
