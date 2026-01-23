@@ -160,6 +160,8 @@
   },
   "resolutions": {
     "tslib": "2.5.0",
-    "@types/plotly.js": "2.35.13"
+    "@types/plotly.js": "2.35.13",
+    "@types/react": "17.0.80",
+    "@types/react-dom": "17.0.25"
   }
 }
