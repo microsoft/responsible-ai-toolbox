@@ -62,14 +62,14 @@ jobs:
         run: |
           pip freeze > installed-requirements-dev.txt
           cat installed-requirements-dev.txt
-        working-directory: raiwidgets
+        working-directory: ${{ matrix.packageDirectory }}
 
       - if: ${{ (matrix.operatingSystem == 'windows-latest') && (matrix.pythonVersion == '3.9') && (matrix.packageDirectory == 'responsibleai') }}
         name: Upload requirements
         uses: actions/upload-artifact@v4
         with:
           name: requirements-dev.txt
-          path: raiwidgets/installed-requirements-dev.txt
+          path: ${{ matrix.packageDirectory }}/installed-requirements-dev.txt
 
       - name: Run tests
         run: |
@@ -80,7 +80,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.packageDirectory }}-${{ matrix.pythonVersion}}-code-coverage-results
-          path: ${{ matrix.packageDirectory }}-${{ matrix.pythonVersion}}/htmlcov
+          path: ${{ matrix.packageDirectory }}/htmlcov
         # Use always() to always run this step to publish test results when there are test failures
         if: ${{ always() }}
 
