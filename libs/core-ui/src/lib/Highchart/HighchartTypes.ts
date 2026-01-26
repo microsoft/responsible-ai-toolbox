@@ -3,9 +3,7 @@
 
 import { IColorNames } from "../util/FluentUIStyles";
 
-export type {
-  Chart as Highchart
-} from "highcharts";
+export type { Chart as Highchart } from "highcharts";
 
 export type HighchartsModuleNames = "heatmap" | "gantt" | "pattern-fill";
 
