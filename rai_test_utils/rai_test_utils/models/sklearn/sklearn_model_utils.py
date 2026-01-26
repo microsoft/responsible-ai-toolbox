@@ -77,7 +77,7 @@ def create_sklearn_logistic_regressor(X, y, pipeline=False):
     return: A sklearn logistic regressor.
     rtype: sklearn.linear_model.LogisticRegression
     """
-    lin = LogisticRegression(solver='liblinear', random_state=777)
+    lin = LogisticRegression(solver='lbfgs', random_state=777, max_iter=1000)
     if pipeline:
         lin = Pipeline([('lin', lin)])
     model = lin.fit(X, y)
