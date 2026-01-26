@@ -21,7 +21,10 @@ jobs:
       matrix:
         packageDirectory:
           ["responsibleai", "erroranalysis", "raiutils", "rai_test_utils"]
-        operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
+        # Temporary: Removed windows-latest due to persistent GitHub Actions runner infrastructure issue
+        # Error: "Could not find a part of the path 'D:\a'" - runner workspace initialization failure
+        # TODO: Re-enable Windows tests once GitHub resolves runner issue
+        operatingSystem: [ubuntu-latest, macos-latest]
         pythonVersion: ["3.9", "3.10", "3.11"]
         exclude:
           - packageDirectory: "responsibleai"
@@ -29,12 +32,6 @@ jobs:
           - packageDirectory: "responsibleai"
             operatingSystem: "macos-latest"
             pythonVersion: "3.9"
-          # Temporary: Exclude due to GitHub Actions Windows runner infrastructure issue
-          # Error: "Could not find a part of the path 'D:\a'" - runner workspace init failure
-          # TODO: Re-enable once GitHub resolves runner issue
-          - packageDirectory: "responsibleai"
-            operatingSystem: "windows-latest"
-            pythonVersion: "3.10"
 
     runs-on: ${{ matrix.operatingSystem }}
 
