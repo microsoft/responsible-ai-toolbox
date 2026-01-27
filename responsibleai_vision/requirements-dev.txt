@@ -26,6 +26,7 @@ transformers
 datasets
 opencv-python
 
+spacy<3.8
 fastai
 mlflow
 pydantic<2.0.0
