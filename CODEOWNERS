@@ -8,25 +8,25 @@
 /responsibleai @gaugup @imatiach-msft @xuke444 @kicha0 @RubyZ10 @vinuthakaranth @tongyu-microsoft @hawestra @romanlutz
 
 # App
-/apps @tongyu-microsoft @romanlutz @vinuthakaranth @xuke444 @RubyZ10 @hawestra
+/apps @imatiach-msft @tongyu-microsoft @romanlutz @vinuthakaranth @xuke444 @RubyZ10 @hawestra
 
 #causal ui
-/libs/causality @tongyu-microsoft @romanlutz @vinuthakaranth @xuke444 @RubyZ10 @hawestra
+/libs/causality @imatiach-msft @tongyu-microsoft @romanlutz @vinuthakaranth @xuke444 @RubyZ10 @hawestra
 
 #counterfactuals ui
-/libs/counterfactuals @tongyu-microsoft @romanlutz @vinuthakaranth @xuke444 @RubyZ10 @hawestra
+/libs/counterfactuals @imatiach-msft @tongyu-microsoft @romanlutz @vinuthakaranth @xuke444 @RubyZ10 @hawestra
 
 #dataset-explorer ui
-/libs/dataset-explorer @romanlutz @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10 @hawestra
+/libs/dataset-explorer @imatiach-msft @romanlutz @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10 @hawestra
 
 #error-analysis ui
 /libs/error-analysis @romanlutz @imatiach-msft @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10 @hawestra
 
 #fairness ui
-/libs/fairness @romanlutz @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10 @hawestra
+/libs/fairness @imatiach-msft @romanlutz @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10 @hawestra
 
 #interpret ui
-/libs/interpret @romanlutz @gaugup @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10 @hawestra
+/libs/interpret @imatiach-msft @romanlutz @gaugup @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10 @hawestra
 
 #interpret-text ui
 /libs/interpret-text @imatiach-msft @gaugup @tongyu-microsoft @xuke444 @RubyZ10 @vinuthakaranth @hawestra
@@ -35,7 +35,7 @@
 /libs/interpret-vision @imatiach-msft @gaugup @tongyu-microsoft @xuke444 @RubyZ10 @vinuthakaranth @hawestra
 
 #model-assessment ui
-/libs/model-assessment @romanlutz @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10 @hawestra
+/libs/model-assessment @imatiach-msft @romanlutz @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10 @hawestra
 
 #e2e tests
 /libs/e2e @vinuthakaranth @tongyu-microsoft @romanlutz @imatiach-msft @RubyZ10 @xuke444 @hawestra
