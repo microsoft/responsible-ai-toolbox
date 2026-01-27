@@ -1,0 +1,12 @@
+diff --git a/node_modules/@types/react-plotly.js/index.d.ts b/node_modules/@types/react-plotly.js/index.d.ts
+index 40fc3ba..3b6ae4a 100644
+--- a/node_modules/@types/react-plotly.js/index.d.ts
++++ b/node_modules/@types/react-plotly.js/index.d.ts
+@@ -91,6 +91,6 @@ export interface PlotParams {
+     onWebGlContextLost?: (() => void) | undefined;
+ }
+ 
+-export default class Plot extends React.PureComponent<PlotParams> {
++export default class Plot extends React.PureComponent<PlotParams, {}> {
+     render(): React.ReactNode;
+ }

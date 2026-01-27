@@ -45,7 +45,7 @@ export class HighchartWrapper extends React.Component<IHighchartWrapperProps> {
       // There is no way to override zoomType with undefined value, merge will just ignore this.
       // To be able to disable zooming, it needs to be specified explicitly.
       if (custom.disableZoom) {
-        mergedOptions.chart.zoomType = undefined;
+        (mergedOptions.chart as any).zoomType = undefined;
       }
 
       // We cannot allow consumers setting background color directly to protect our theme.

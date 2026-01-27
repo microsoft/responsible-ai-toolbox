@@ -31,7 +31,7 @@ export function getDependencyChartOptions(
       backgroundColor: colorTheme.backgroundColor,
       type: "scatter",
       zoomType: "xy"
-    },
+    } as any,
     custom: {
       disableUpdate: true
     },

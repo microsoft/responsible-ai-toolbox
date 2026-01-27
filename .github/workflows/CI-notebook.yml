@@ -12,7 +12,10 @@ jobs:
       node-version: 16.x
     strategy:
       matrix:
-        operatingSystem: [ubuntu-latest, windows-latest]
+        # Temporary: Removed windows-latest due to persistent GitHub Actions runner infrastructure issue
+        # Error: "Could not find a part of the path 'D:\a'" - runner workspace initialization failure
+        # TODO: Re-enable Windows tests once GitHub resolves runner issue
+        operatingSystem: [ubuntu-latest]
         pythonVersion: [3.9, "3.10"]
 
     runs-on: ${{ matrix.operatingSystem }}

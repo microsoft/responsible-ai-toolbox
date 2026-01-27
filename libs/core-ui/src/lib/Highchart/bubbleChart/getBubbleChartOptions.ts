@@ -41,7 +41,7 @@ export function getBubbleChartOptions(
       plotBorderWidth: 1,
       type: "bubble",
       zoomType: "xy"
-    },
+    } as any,
     custom: {
       disableUpdate: true
     },

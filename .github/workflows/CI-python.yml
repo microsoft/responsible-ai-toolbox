@@ -15,10 +15,16 @@ on:
 jobs:
   ci-python:
     strategy:
+      # Prevent one failed job from cancelling all others
+      # Helps identify if failures are specific to certain matrix combinations
+      fail-fast: false
       matrix:
         packageDirectory:
           ["responsibleai", "erroranalysis", "raiutils", "rai_test_utils"]
-        operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
+        # Temporary: Removed windows-latest due to persistent GitHub Actions runner infrastructure issue
+        # Error: "Could not find a part of the path 'D:\a'" - runner workspace initialization failure
+        # TODO: Re-enable Windows tests once GitHub resolves runner issue
+        operatingSystem: [ubuntu-latest, macos-latest]
         pythonVersion: ["3.9", "3.10", "3.11"]
         exclude:
           - packageDirectory: "responsibleai"
@@ -62,14 +68,14 @@ jobs:
         run: |
           pip freeze > installed-requirements-dev.txt
           cat installed-requirements-dev.txt
-        working-directory: raiwidgets
+        working-directory: ${{ matrix.packageDirectory }}
 
       - if: ${{ (matrix.operatingSystem == 'windows-latest') && (matrix.pythonVersion == '3.9') && (matrix.packageDirectory == 'responsibleai') }}
         name: Upload requirements
         uses: actions/upload-artifact@v4
         with:
           name: requirements-dev.txt
-          path: raiwidgets/installed-requirements-dev.txt
+          path: ${{ matrix.packageDirectory }}/installed-requirements-dev.txt
 
       - name: Run tests
         run: |
@@ -79,8 +85,8 @@ jobs:
       - name: Upload code coverage results
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.packageDirectory }}-${{ matrix.pythonVersion}}-code-coverage-results
-          path: ${{ matrix.packageDirectory }}-${{ matrix.pythonVersion}}/htmlcov
+          name: ${{ matrix.packageDirectory }}-${{ matrix.operatingSystem }}-${{ matrix.pythonVersion}}-code-coverage-results
+          path: ${{ matrix.packageDirectory }}/htmlcov
         # Use always() to always run this step to publish test results when there are test failures
         if: ${{ always() }}
 

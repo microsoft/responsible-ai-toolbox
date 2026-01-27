@@ -20,6 +20,7 @@
       }
     ],
     "import/no-unresolved": "off",
+    "import/named": "off",
     "import/order": [
       "error",
       {

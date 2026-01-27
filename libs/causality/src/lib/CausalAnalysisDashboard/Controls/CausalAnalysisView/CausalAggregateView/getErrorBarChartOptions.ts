@@ -26,7 +26,7 @@ export function getErrorBarChartOptions(
       backgroundColor: colorTheme.backgroundColor,
       type: "lowmedhigh",
       zoomType: "xy"
-    },
+    } as any,
     series: [
       {
         color: getPrimaryChartColor(theme),
