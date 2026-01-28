@@ -16,27 +16,27 @@ jobs:
       matrix:
         packageDirectory: ["responsibleai_text", "responsibleai_vision"]
         operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
-        pythonVersion: ["3.8", "3.9", "3.10"]
+        pythonVersion: ["3.9", "3.10", "3.11"]
         # TODO: re-add macos-latest once build timeout issues are resolved
         exclude:
           - packageDirectory: "responsibleai_text"
             operatingSystem: macos-latest
-            pythonVersion: "3.8"
-          - packageDirectory: "responsibleai_text"
-            operatingSystem: macos-latest
             pythonVersion: "3.9"
           - packageDirectory: "responsibleai_text"
             operatingSystem: macos-latest
             pythonVersion: "3.10"
-          - packageDirectory: "responsibleai_vision"
+          - packageDirectory: "responsibleai_text"
             operatingSystem: macos-latest
-            pythonVersion: "3.8"
+            pythonVersion: "3.11"
           - packageDirectory: "responsibleai_vision"
             operatingSystem: macos-latest
             pythonVersion: "3.9"
           - packageDirectory: "responsibleai_vision"
             operatingSystem: macos-latest
             pythonVersion: "3.10"
+          - packageDirectory: "responsibleai_vision"
+            operatingSystem: macos-latest
+            pythonVersion: "3.11"
     runs-on: ${{ matrix.operatingSystem }}
 
     steps:
