@@ -35,6 +35,7 @@ setuptools.setup(
     include_package_data=True,
     # the packages that our package is dependent on
     install_requires=requirements,
+    python_requires='>=3.9',
     # used to identify the package to various searches
     classifiers=[
         "Programming Language :: Python :: 3",
