@@ -51,13 +51,21 @@ jobs:
         name: Install pytorch on non-MacOS
         shell: bash -l {0}
         run: |
-          conda install --yes --quiet pytorch==1.13.1 "torchvision<0.15" cpuonly "numpy<1.24.0" -c pytorch
+          if [[ "${{ matrix.pythonVersion }}" == "3.11" ]]; then
+            conda install --yes --quiet pytorch torchvision cpuonly "numpy<2.0.0" -c pytorch
+          else
+            conda install --yes --quiet pytorch==1.13.1 "torchvision<0.15" cpuonly "numpy<1.24.0" -c pytorch
+          fi
 
       - if: ${{ matrix.operatingSystem == 'macos-latest' }}
         name: Install Anaconda packages on MacOS, which should not include cpuonly according to official docs
         shell: bash -l {0}
         run: |
-          conda install --yes --quiet pytorch==1.13.1 "torchvision<0.15" "numpy<1.24.0" -c pytorch
+          if [[ "${{ matrix.pythonVersion }}" == "3.11" ]]; then
+            conda install --yes --quiet pytorch torchvision "numpy<2.0.0" -c pytorch
+          else
+            conda install --yes --quiet pytorch==1.13.1 "torchvision<0.15" "numpy<1.24.0" -c pytorch
+          fi
 
       - name: Setup tools
         shell: bash -l {0}

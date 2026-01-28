@@ -150,5 +150,3 @@ Tools within the Responsible AI Toolbox can also be used with AI models offered 
 - [Hannah Westra](https://github.com/hawestra)
 - [Ziqi Ma](https://github.com/ziqi-ma)
 - [Kin Chan](https://github.com/kicha0)
-
-
