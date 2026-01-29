@@ -37,7 +37,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.node-version }}
-          cache: 'yarn'
+          cache: "yarn"
 
       - if: ${{ matrix.operatingSystem == 'macos-latest' }}
         name: Install latest numpy from conda-forge for MacOS
