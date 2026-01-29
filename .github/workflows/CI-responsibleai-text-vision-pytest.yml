@@ -89,6 +89,7 @@ jobs:
       - name: Install dependencies
         shell: bash -l {0}
         run: |
+          pip install "Pillow>=10.0.0"
           pip install captum
           pip install -r requirements-dev.txt
           pip install .

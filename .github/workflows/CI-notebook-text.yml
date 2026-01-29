@@ -95,6 +95,7 @@ jobs:
       - name: Install text dependencies
         shell: bash -l {0}
         run: |
+          pip install "Pillow>=10.0.0"
           pip install -r requirements-dev.txt --no-cache-dir
           pip install .
         working-directory: responsibleai_text
