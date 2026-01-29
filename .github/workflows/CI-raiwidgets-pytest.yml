@@ -79,20 +79,32 @@ jobs:
           pip install --upgrade setuptools
           pip install --upgrade "pip-tools<=7.1.0"
 
-      - name: Install yarn
+      - if: ${{ matrix.operatingSystem != 'macos-latest' }}
+        name: Install yarn (non-macOS)
+        shell: bash -l {0}
+        run: npm install yarn -g
+
+      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
+        name: Install yarn (macOS with Node path fix)
         shell: bash -l {0}
         run: npm install yarn -g
         env:
-          # Ensure setup-node's Node.js is used (not Homebrew)
+          # Ensure setup-node's Node.js is used (not Homebrew's Node 22)
           PATH: ${{ github.workspace }}/../_tool/node/${{ env.node-version }}/arm64/bin:${{ github.workspace }}/../_tool/node/${{ env.node-version }}/x64/bin:$PATH
 
-      - name: Install yarn dependencies
+      - if: ${{ matrix.operatingSystem != 'macos-latest' }}
+        name: Install yarn dependencies (non-macOS)
+        shell: bash -l {0}
+        run: yarn install --frozen-lock-file
+
+      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
+        name: Install yarn dependencies (macOS with Node path fix)
         shell: bash -l {0}
         run: |
           node --version
           yarn install --frozen-lock-file
         env:
-          # Ensure setup-node's Node.js is used (not Homebrew)
+          # Ensure setup-node's Node.js is used (not Homebrew's Node 22)
           PATH: ${{ github.workspace }}/../_tool/node/${{ env.node-version }}/arm64/bin:${{ github.workspace }}/../_tool/node/${{ env.node-version }}/x64/bin:$PATH
 
       - name: Build Typescript
@@ -103,6 +115,7 @@ jobs:
         shell: bash -l {0}
         run: |
           pip install -r requirements-dev.txt --ignore-installed
+          pip install "scipy>=1.4.1,<1.14" --force-reinstall --no-deps
           pip install -v -e .
         working-directory: ${{ matrix.packageDirectory }}
 
