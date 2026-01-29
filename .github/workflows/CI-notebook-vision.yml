@@ -53,7 +53,7 @@ jobs:
         shell: bash -l {0}
         run: |
           if [[ "${{ matrix.pythonVersion }}" == "3.11" ]]; then
-            conda install --yes --quiet pytorch torchvision cpuonly "numpy<2.0.0" -c pytorch
+            conda install --yes --quiet "pytorch<2.1" "torchvision<0.16" cpuonly "numpy<2.0.0" -c pytorch
           else
             conda install --yes --quiet "pytorch<2.1,>1.13.1" "torchvision<0.16" cpuonly "numpy<1.24.0" -c pytorch
           fi
@@ -63,7 +63,7 @@ jobs:
         shell: bash -l {0}
         run: |
           if [[ "${{ matrix.pythonVersion }}" == "3.11" ]]; then
-            conda install --yes --quiet pytorch torchvision "numpy<2.0.0" -c pytorch
+            conda install --yes --quiet "pytorch<2.1" "torchvision<0.16" "numpy<2.0.0" -c pytorch
           else
             conda install --yes --quiet "pytorch<2.1,>1.13.1" "torchvision<0.16" "numpy<1.24.0" -c pytorch
           fi
