@@ -51,7 +51,7 @@ jobs:
       - name: Upload requirements
         uses: actions/upload-artifact@v4
         with:
-          name: requirements-dev-comp.txt
+          name: requirements-dev-comp-${{ matrix.operatingSystem }}-py${{ matrix.pythonVersion }}
           path: rai_core_flask/requirements-dev-comp.txt
 
       - name: Install dependencies
@@ -72,7 +72,7 @@ jobs:
       - name: Upload code coverage results
         uses: actions/upload-artifact@v4
         with:
-          name: rai_core_flask-code-coverage-results
+          name: rai_core_flask-code-coverage-${{ matrix.operatingSystem }}-py${{ matrix.pythonVersion }}
           path: rai_core_flask/htmlcov
         # Use always() to always run this step to publish test results when there are test failures
         if: ${{ always() }}
