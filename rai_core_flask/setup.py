@@ -39,13 +39,12 @@ setuptools.setup(
     include_package_data=True,
     # the packages that our package is dependent on
     install_requires=requirements,
+    python_requires='>=3.9',
     extras_require=dict(
         dev=[
         ], ),
     # used to identify the package to various searches
     classifiers=[
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",

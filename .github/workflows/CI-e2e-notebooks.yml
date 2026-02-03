@@ -86,7 +86,7 @@ jobs:
       - name: Install pytorch
         shell: bash -l {0}
         run: |
-          conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
+          conda install --yes --quiet "pytorch<2.1" "torchvision<0.16" captum cpuonly "numpy<1.24.0" -c pytorch
 
       - name: Setup tools
         shell: bash -l {0}
