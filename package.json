@@ -152,6 +152,7 @@
     "jszip": "3.10.1",
     "moment-timezone": "0.5.35",
     "node-fetch": "2.6.1",
+    "null-loader": "^4.0.1",
     "patch-package": "^8.0.1",
     "postinstall-postinstall": "^2.1.0",
     "prettier": "2.3.1",

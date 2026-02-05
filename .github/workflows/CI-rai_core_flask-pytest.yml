@@ -16,8 +16,7 @@ jobs:
       # to avoid having to rerun all jobs several times
       fail-fast: false
       matrix:
-        operatingSystem:
-          [ubuntu-latest, macos-latest, windows-latest]
+        operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
         pythonVersion: ["3.9", "3.10", "3.11"]
         exclude:
           - operatingSystem: macos-latest

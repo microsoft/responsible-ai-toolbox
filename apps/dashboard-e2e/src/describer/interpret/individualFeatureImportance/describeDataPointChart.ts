@@ -17,7 +17,11 @@ export function describeDataPointChart(dataShape: IInterpretData): void {
       props.chart = new ScatterChart("#IndividualFeatureImportanceChart");
     });
     it("should render right number of points", () => {
-      expect(props.chart.Elements.length).equals(dataShape.datapoint);
+      // Wait for the chart to be fully rendered by checking for the scatter plot points
+      // Using the same selector pattern as ScatterChart.Elements getter
+      cy.get("#IndividualFeatureImportanceChart .trace.scatter .points path", {
+        timeout: 10000
+      }).should("have.length", dataShape.datapoint);
     });
 
     describe("Scatter chart clickable", () => {

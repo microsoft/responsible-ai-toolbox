@@ -45,7 +45,7 @@ const interpretDatasets = {
   bostonDataNoPredict,
   bostonDataNoY,
   breastCancerData: {
-    datapoint: 114,
+    datapoint: 115,
     datasetBarLabel: ["0 - 22", "23 - 45", "46 - 67", "68 - 90", "91 - 113"],
     defaultXAxis: "Index",
     defaultYAxis: "mean radius",
@@ -84,7 +84,7 @@ const interpretDatasets = {
     isClassification: true
   },
   ebmData: {
-    datapoint: 2,
+    datapoint: 3,
     datasetBarLabel: ["0", "1"],
     defaultXAxis: "Index",
     defaultYAxis: "Age",
@@ -93,7 +93,7 @@ const interpretDatasets = {
     noY: true
   },
   ibmData: {
-    datapoint: 20,
+    datapoint: 21,
     datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"],
     defaultXAxis: "Index",
     defaultYAxis: "Age",
@@ -132,7 +132,7 @@ const interpretDatasets = {
     isClassification: true
   },
   ibmDataInconsistent: {
-    datapoint: 20,
+    datapoint: 21,
     datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"],
     defaultXAxis: "Index",
     defaultYAxis: "Age",
@@ -172,7 +172,7 @@ const interpretDatasets = {
     ]
   },
   ibmNoClass: {
-    datapoint: 20,
+    datapoint: 21,
     datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"],
     defaultXAxis: "Index",
     defaultYAxis: "Age",
