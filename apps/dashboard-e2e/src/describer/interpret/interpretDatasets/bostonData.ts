@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 export const bostonData = {
-  datapoint: 102,
+  datapoint: 103,
   datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
   defaultXAxis: "Index",
   defaultYAxis: "CRIM",
@@ -23,7 +23,7 @@ export const bostonData = {
   ]
 };
 export const bostonDataGlobal = {
-  datapoint: 102,
+  datapoint: 103,
   datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
   defaultXAxis: "Index",
   defaultYAxis: "CRIM",
@@ -50,7 +50,7 @@ export const bostonDataNoDataset = {
   noDataset: true
 };
 export const bostonDataNoPredict = {
-  datapoint: 102,
+  datapoint: 103,
   datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
   featureNames: [
     "LSTAT",
@@ -70,7 +70,7 @@ export const bostonDataNoPredict = {
   noPredict: true
 };
 export const bostonDataNoY = {
-  datapoint: 102,
+  datapoint: 103,
   datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
   defaultXAxis: "Index",
   defaultYAxis: "CRIM",

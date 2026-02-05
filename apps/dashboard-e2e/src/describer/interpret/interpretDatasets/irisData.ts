@@ -8,7 +8,7 @@ export const irisData = {
     "Class: versicolor": 0.365,
     "Class: virginica": 0.236
   },
-  datapoint: 30,
+  datapoint: 31,
   datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
   defaultXAxis: "Index",
   defaultYAxis: "sepal length (cm)",
@@ -22,7 +22,7 @@ export const irisData = {
   isMulticlass: true
 };
 export const irisDataNoLocal = {
-  datapoint: 30,
+  datapoint: 31,
   datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
   defaultXAxis: "Index",
   defaultYAxis: "sepal length (cm)",
@@ -64,7 +64,7 @@ export const irisNoData = {
   noY: true
 };
 export const irisNoFeatures = {
-  datapoint: 30,
+  datapoint: 31,
   datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
   defaultXAxis: "Index",
   defaultYAxis: "Feature 0",
