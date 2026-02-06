@@ -1,27 +1,29 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// ***********************************************************
-// This example plugins/index.js can be used to load plugins
-//
-// You can change the location of this file or turn off loading
-// the plugins file with the 'pluginsFile' configuration option.
-//
-// You can read more here:
-// https://on.cypress.io/plugins-guide
-// ***********************************************************
-
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
 const { preprocessTypescript } = require("@nrwl/cypress/plugins/preprocessor");
 
+// Custom webpack config to ignore CSS files that some dependencies require
+// (CSS is not needed for e2e tests) and disable caching for Node 20 compatibility
+const customizeWebpackConfig = (webpackConfig) => {
+  webpackConfig.module.rules.push({
+    loader: "null-loader",
+    test: /\.css$/
+  });
+  // Disable webpack caching to ensure fresh transpilation
+  webpackConfig.cache = false;
+  return webpackConfig;
+};
+
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
 
-  // Preprocess Typescript file using Nx helper
-  on("file:preprocessor", preprocessTypescript(config));
+  // Preprocess Typescript file using Nx helper with custom webpack config
+  on("file:preprocessor", preprocessTypescript(config, customizeWebpackConfig));
   on("task", {
     log(message) {
       console.log(message);
