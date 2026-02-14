@@ -43,6 +43,7 @@ export function buildInitialModelAssessmentContext(
   const modelType = getModelTypeFromProps(props);
   const columnRanges = getColumnRanges(props.dataset, modelType);
 
+  console.log("spurious log");
   let localExplanations:
     | IMultiClassLocalFeatureImportance
     | ISingleClassLocalFeatureImportance
