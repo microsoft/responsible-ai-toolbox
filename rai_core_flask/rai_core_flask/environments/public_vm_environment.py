@@ -1,6 +1,8 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import re
+
 from flask_cors import CORS
 
 from rai_core_flask.environments.base_environment import BaseEnvironment
@@ -31,5 +33,13 @@ class PublicVMEnvironment(BaseEnvironment):
 
     def select(self, service):
         service.with_credentials = False
-        service.cors = CORS(service.app)
+        if service.allow_all_origins:
+            # User explicitly opted into allowing all origins (less secure)
+            service.cors = CORS(service.app)
+        else:
+            # Default: restrict CORS to the same host over HTTP/HTTPS
+            # on any port (notebook may run on a different port)
+            escaped_ip = re.escape(service.ip)
+            origin_pattern = rf"^https?://{escaped_ip}(:\d+)?$"
+            service.cors = CORS(service.app, origins=[origin_pattern])
         service.env_name = PUBLIC_VM
