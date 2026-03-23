@@ -62,6 +62,7 @@ class Dashboard(object):
                  locale,
                  no_inline_dashboard=False,
                  is_private_link=False,
+                 allow_all_origins=False,
                  **kwargs):
         """Initialize the dashboard."""
 
@@ -71,7 +72,8 @@ class Dashboard(object):
         try:
             self._service = FlaskHelper(ip=public_ip,
                                         port=port,
-                                        is_private_link=is_private_link)
+                                        is_private_link=is_private_link,
+                                        allow_all_origins=allow_all_origins)
         except Exception as e:
             self._service = None
             raise e

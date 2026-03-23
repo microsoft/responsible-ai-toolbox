@@ -32,10 +32,16 @@ class ResponsibleAIDashboard(Dashboard):
     :param is_private_link: If the dashboard environment is
         a private link AML workspace.
     :type is_private_link: bool
+    :param allow_all_origins: If True, allows CORS requests from any
+        origin. Defaults to False for security. Only set to True if you
+        understand the security implications (e.g., cross-origin data
+        exfiltration risks).
+    :type allow_all_origins: bool
     """
     def __init__(self, analysis: RAIInsights,
                  public_ip=None, port=None, locale=None,
                  cohort_list=None, is_private_link=False,
+                 allow_all_origins=False,
                  **kwargs):
         self.input = ResponsibleAIDashboardInput(
             analysis, cohort_list=cohort_list)
@@ -48,6 +54,7 @@ class ResponsibleAIDashboard(Dashboard):
             locale=locale,
             no_inline_dashboard=True,
             is_private_link=is_private_link,
+            allow_all_origins=allow_all_origins,
             **kwargs)
 
         def predict():
