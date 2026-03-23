@@ -31,5 +31,12 @@ class PublicVMEnvironment(BaseEnvironment):
 
     def select(self, service):
         service.with_credentials = False
-        service.cors = CORS(service.app)
+        if service.allow_all_origins:
+            # User explicitly opted into allowing all origins (less secure)
+            service.cors = CORS(service.app)
+        else:
+            # Default: restrict CORS to the same host over HTTP/HTTPS
+            # on any port (notebook may run on a different port)
+            origin_pattern = rf"https?://{service.ip}(:\d+)?"
+            service.cors = CORS(service.app, origins=[origin_pattern])
         service.env_name = PUBLIC_VM

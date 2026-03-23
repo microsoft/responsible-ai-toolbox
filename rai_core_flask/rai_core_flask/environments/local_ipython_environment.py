@@ -31,5 +31,16 @@ class LocalIPythonEnvironment(BaseEnvironment):
 
     def select(self, service):
         service.with_credentials = False
-        service.cors = CORS(service.app)
+        if service.allow_all_origins:
+            # User explicitly opted into allowing all origins (less secure)
+            service.cors = CORS(service.app)
+        else:
+            # Default: restrict CORS to localhost origins (any port)
+            origins = [
+                r"http://localhost:\d+",
+                r"https://localhost:\d+",
+                r"http://127.0.0.1:\d+",
+                r"https://127.0.0.1:\d+",
+            ]
+            service.cors = CORS(service.app, origins=origins)
         service.env_name = LOCAL

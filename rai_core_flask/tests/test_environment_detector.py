@@ -61,3 +61,30 @@ class TestEnvironmentDetector(object):
             assert isinstance(service.env, DatabricksEnvironment)
         finally:
             del os.environ[DATABRICKS_ENV_VAR]
+
+    def test_local_cors_restricted_by_default(self):
+        service = FlaskHelper()
+        assert isinstance(service.env, LocalIPythonEnvironment)
+        assert not service.allow_all_origins
+        # Verify CORS is configured (not wildcard)
+        assert hasattr(service, 'cors')
+
+    def test_local_cors_wildcard_when_opted_in(self):
+        service = FlaskHelper(allow_all_origins=True)
+        assert isinstance(service.env, LocalIPythonEnvironment)
+        assert service.allow_all_origins
+
+    def test_public_vm_cors_restricted_by_default(self, mocker):
+        mocker.patch('rai_core_flask.FlaskHelper._is_local_port_available',
+                     return_value=True)
+        service = FlaskHelper(ip="10.0.0.5", with_credentials=False)
+        assert isinstance(service.env, PublicVMEnvironment)
+        assert not service.allow_all_origins
+
+    def test_public_vm_cors_wildcard_when_opted_in(self, mocker):
+        mocker.patch('rai_core_flask.FlaskHelper._is_local_port_available',
+                     return_value=True)
+        service = FlaskHelper(ip="10.0.0.5", with_credentials=False,
+                              allow_all_origins=True)
+        assert isinstance(service.env, PublicVMEnvironment)
+        assert service.allow_all_origins
