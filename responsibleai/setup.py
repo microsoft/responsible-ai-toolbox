@@ -5,7 +5,7 @@ import os
 
 import setuptools
 
-# Version will be read from version.py
+# Version will be read from version.py file
 version = ''
 name = 'responsibleai'
 # Fetch Version
