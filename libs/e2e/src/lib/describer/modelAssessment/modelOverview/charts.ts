@@ -149,15 +149,18 @@ export function ensureChartsPivot(
   isNotebookTest: boolean,
   includeNewCohort: boolean
 ): void {
-  cy.get(Locators.ModelOverviewCohortViewDatasetCohortViewButton).click();
+  cy.get(Locators.ModelOverviewCohortViewDatasetCohortViewButton)
+    .scrollIntoView()
+    .click({ force: true });
   const availableCharts = getAvailableCharts(
     datasetShape.isRegression,
     datasetShape.isBinary
   );
   availableCharts.forEach((chartName, index) => {
-    cy.get(Locators.ModelOverviewChartPivotItems).then(($pivotItems) => {
-      $pivotItems[index].click();
-    });
+    cy.get(Locators.ModelOverviewChartPivotItems)
+      .eq(index)
+      .scrollIntoView()
+      .click({ force: true });
     assertChartVisibility(datasetShape, chartName);
 
     if (chartName === Locators.ModelOverviewMetricChart) {

@@ -79,18 +79,28 @@ jobs:
           pip install --upgrade setuptools
           pip install --upgrade "pip-tools<=7.1.0"
 
+      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
+        name: Fix Node.js PATH for macOS login shell
+        shell: bash -e {0}
+        run: |
+          set -euo pipefail
+          # setup-node puts node in PATH for non-login shells, but conda's
+          # bash -l {0} overrides it. Use GITHUB_PATH so all subsequent
+          # steps pick up setup-node's Node.js.
+          NODE_DIR=$(dirname "$(command -v node)")
+          echo "${NODE_DIR}" >> "$GITHUB_PATH"
+          echo "Node.js path configured: ${NODE_DIR}"
+          node --version
+
       - if: ${{ matrix.operatingSystem != 'macos-latest' }}
         name: Install yarn (non-macOS)
         shell: bash -l {0}
         run: npm install yarn -g
 
       - if: ${{ matrix.operatingSystem == 'macos-latest' }}
-        name: Install yarn (macOS with Node path fix)
+        name: Install yarn (macOS)
         shell: bash -l {0}
         run: npm install yarn -g
-        env:
-          # Ensure setup-node's Node.js is used (not Homebrew's Node 22)
-          PATH: ${{ github.workspace }}/../_tool/node/${{ env.node-version }}/arm64/bin:${{ github.workspace }}/../_tool/node/${{ env.node-version }}/x64/bin:$PATH
 
       - if: ${{ matrix.operatingSystem != 'macos-latest' }}
         name: Install yarn dependencies (non-macOS)
@@ -98,14 +108,11 @@ jobs:
         run: yarn install --frozen-lock-file
 
       - if: ${{ matrix.operatingSystem == 'macos-latest' }}
-        name: Install yarn dependencies (macOS with Node path fix)
+        name: Install yarn dependencies (macOS)
         shell: bash -l {0}
         run: |
           node --version
           yarn install --frozen-lock-file
-        env:
-          # Ensure setup-node's Node.js is used (not Homebrew's Node 22)
-          PATH: ${{ github.workspace }}/../_tool/node/${{ env.node-version }}/arm64/bin:${{ github.workspace }}/../_tool/node/${{ env.node-version }}/x64/bin:$PATH
 
       - name: Build Typescript
         shell: bash -l {0}
