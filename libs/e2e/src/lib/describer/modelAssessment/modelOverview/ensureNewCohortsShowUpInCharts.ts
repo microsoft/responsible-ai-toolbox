@@ -12,7 +12,9 @@ export function ensureNewCohortsShowUpInCharts(
   isNotebookTest: boolean,
   isTabular: boolean
 ): void {
-  cy.get(Locators.ModelOverviewCohortViewDatasetCohortViewButton).click();
+  cy.get(Locators.ModelOverviewCohortViewDatasetCohortViewButton)
+    .scrollIntoView()
+    .click({ force: true });
   ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     datasetShape,
     false,
