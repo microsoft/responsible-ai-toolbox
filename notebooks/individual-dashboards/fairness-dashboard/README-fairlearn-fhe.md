@@ -60,14 +60,13 @@ a starting point, not a production audit pipeline.
 | **A** (default) | `y_pred` | `y_true`, `sensitive_features`, group counts | `plaintext_sensitive_features` |
 | **B** (full encryption) | `y_pred`, per-row group masks | `y_true`, group counts | `encrypted_sensitive_features` |
 
-Circuit depth depends on the metric and is recorded as `observed_depth`
-in the envelope (e.g. `demographic_parity_difference` runs at depth 3
-under both modes; `equalized_odds_difference` and
-`equal_opportunity_difference` run at depth 6). The number of
-`rotations` and `ct_pt_muls` likewise scales with the metric and the
-sample count — always read the envelope rather than assuming a fixed
-cost. Mode B is exposed via `fairlearn_fhe.encrypt_sensitive_features`. See
-the upstream [trust-models guide](https://github.com/BAder82t/fairlearn-fhe/blob/main/docs/trust-models.md)
+Circuit depth depends on the metric, mode, and implementation details
+of a given run, and is recorded as `observed_depth` in the envelope.
+The number of `rotations` and `ct_pt_muls` likewise scales with the
+metric and the sample count — rely on the envelope rather than
+assuming fixed depth or operation counts from the README. Mode B is
+exposed via `fairlearn_fhe.encrypt_sensitive_features`. See the
+upstream [trust-models guide](https://github.com/BAder82t/fairlearn-fhe/blob/main/docs/trust-models.md)
 and [threat-model](https://github.com/BAder82t/fairlearn-fhe/blob/main/docs/threat-model.md)
 for the cost / privacy tradeoff and what the auditor learns vs does not
 learn under each mode.
