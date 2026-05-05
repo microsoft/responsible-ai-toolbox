@@ -5,7 +5,7 @@ pytest-cov
 pytest-mock==3.6.1
 
 # Required for responsibleai package tests
-deptree~=0.0.10
+pipdeptree
 xgboost<=1.0.0
 rai-test-utils==0.4.2
 # fix for recent joblib release and windows python 3.7 builds

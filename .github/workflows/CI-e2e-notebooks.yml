@@ -102,6 +102,10 @@ jobs:
           pip install -v -e .
         working-directory: raiwidgets
 
+      - name: Fix zope packages for conda/pip compatibility
+        shell: bash -l {0}
+        run: pip install --force-reinstall --no-deps zope.event zope.interface
+
       - name: Pip freeze
         shell: bash -l {0}
         run: |
