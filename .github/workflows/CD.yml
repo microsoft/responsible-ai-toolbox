@@ -29,17 +29,17 @@ jobs:
       pull-requests: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 0
 
       #setup environment
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: "3.10"
       - name: Use Node.js ${{ env.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: ${{ env.node-version }}
 
@@ -117,13 +117,13 @@ jobs:
         run: pytest -s -v --durations=10
 
       - name: Upload a Build result
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: dist
           path: dist
 
       - name: Upload dashboard ${{steps.publish_url_for_js.outputs.url}}
-        uses: Azure/cli@v1.0.0
+        uses: Azure/cli@4d518c161e2ab71cd55390087390310eec3337c9 # v1.0.0
         id: uploaddashboard
         with:
           azcliversion: 2.16.0
@@ -149,7 +149,7 @@ jobs:
 
       - if: ${{ (steps.uploaddashboard.outcome != 'failure') }}
         name: Upload responsible-ai
-        uses: Azure/cli@v1.0.0
+        uses: Azure/cli@4d518c161e2ab71cd55390087390310eec3337c9 # v1.0.0
         with:
           azcliversion: 2.16.0
           inlineScript: |
@@ -165,7 +165,7 @@ jobs:
 
       - if: ${{ (steps.uploaddashboard.outcome != 'failure') }}
         name: Upload raiwidgets
-        uses: Azure/cli@v1.0.0
+        uses: Azure/cli@4d518c161e2ab71cd55390087390310eec3337c9 # v1.0.0
         with:
           azcliversion: 2.16.0
           inlineScript: |
@@ -185,7 +185,7 @@ jobs:
 
       - if: ${{ (steps.uploaddashboard.outcome != 'failure') }}
         name: Delete old files before ${{steps.retention_date.outputs.date}}
-        uses: Azure/cli@v1.0.0
+        uses: Azure/cli@4d518c161e2ab71cd55390087390310eec3337c9 # v1.0.0
         with:
           azcliversion: 2.16.0
           inlineScript: |
@@ -219,18 +219,18 @@ jobs:
 
     steps:
       - name: Use Node.js ${{ env.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: ${{ env.node-version }}
       - id: download
         name: Download a Build Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: dist
           path: dist
       - id: publish
         name: NPM Publish
-        uses: JS-DevTools/npm-publish@v1
+        uses: JS-DevTools/npm-publish@0f451a94170d1699fd50710966d48fb26194d939 # v1.4.3
         with:
           token: ${{ secrets.NPM_TOKEN }}
           package: ${{steps.download.outputs.download-path}}/libs/${{ matrix.package }}/package.json
