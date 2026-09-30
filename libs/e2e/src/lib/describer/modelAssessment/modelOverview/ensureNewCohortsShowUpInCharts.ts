@@ -14,6 +14,8 @@ export function ensureNewCohortsShowUpInCharts(
 ): void {
   cy.get(Locators.ModelOverviewCohortViewDatasetCohortViewButton)
     .scrollIntoView()
+    .should("be.visible")
+    // Fluent UI can report this visible while its sticky container overlaps it.
     .click({ force: true });
   ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     datasetShape,

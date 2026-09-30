@@ -151,6 +151,8 @@ export function ensureChartsPivot(
 ): void {
   cy.get(Locators.ModelOverviewCohortViewDatasetCohortViewButton)
     .scrollIntoView()
+    .should("be.visible")
+    // Fluent UI can report this visible while its sticky container overlaps it.
     .click({ force: true });
   const availableCharts = getAvailableCharts(
     datasetShape.isRegression,
@@ -160,6 +162,8 @@ export function ensureChartsPivot(
     cy.get(Locators.ModelOverviewChartPivotItems)
       .eq(index)
       .scrollIntoView()
+      .should("be.visible")
+      // Pivot items can remain partially covered after scrolling in notebooks.
       .click({ force: true });
     assertChartVisibility(datasetShape, chartName);
 

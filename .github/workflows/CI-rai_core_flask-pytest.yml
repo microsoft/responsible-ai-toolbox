@@ -38,7 +38,7 @@ jobs:
         name: Setup tools for python gte 3.8
         run: |
           python -m pip install "pip<25"
-          pip install --upgrade setuptools
+          pip install --upgrade "setuptools<82"
           pip install --upgrade "pip-tools<=7.1.0"
 
       - name: Pip compile
