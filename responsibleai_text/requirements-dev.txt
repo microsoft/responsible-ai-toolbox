@@ -4,9 +4,10 @@ pytest-mock==3.6.1
 
 requirements-parser==0.2.0
 
-transformers
-datasets
-tensorflow
+transformers<4.40
+datasets<3
+spacy<3.8
+tensorflow>=2.15,<2.16
 opencv-python
 
 fastai

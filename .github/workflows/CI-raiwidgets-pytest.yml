@@ -99,6 +99,8 @@ jobs:
         shell: bash -e {0}
         run: |
           node --version
+          export npm_config_python="${CONDA}/envs/test/bin/python"
+          "$npm_config_python" --version
           yarn install --frozen-lock-file
 
       - name: Build Typescript

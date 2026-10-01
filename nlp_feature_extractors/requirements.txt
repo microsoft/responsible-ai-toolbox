@@ -2,6 +2,6 @@ datasets
 negspacy>=1.0.0
 numpy>=1.17.2
 sentencepiece
-spacy
+spacy<3.8
 tqdm
 raiutils>=0.4.2
