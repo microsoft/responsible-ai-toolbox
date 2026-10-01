@@ -50,6 +50,7 @@ jobs:
     needs: ui-build
 
     env:
+      CYPRESS_VERIFY_TIMEOUT: 120000
       node-version: 16.x
 
     strategy:
@@ -133,7 +134,9 @@ jobs:
 
       - name: Fix zope packages for conda/pip compatibility
         shell: bash -l {0}
-        run: pip install --force-reinstall --no-deps zope.event "zope.interface<8"
+        run: |
+          pip uninstall --yes zope.event zope.interface
+          pip install --no-deps "zope.event==4.5.0" "zope.interface<8"
 
       - name: Pip freeze
         shell: bash -l {0}

@@ -59,6 +59,7 @@ jobs:
     needs: ui-build
 
     env:
+      CYPRESS_VERIFY_TIMEOUT: 120000
       node-version: 16.x
 
     strategy:
@@ -120,7 +121,7 @@ jobs:
         shell: bash -l {0}
         run: |
           if [[ "${{ matrix.pythonVersion }}" == "3.11" ]]; then
-            conda install --yes --quiet "pytorch<2.1" "torchvision<0.16" cpuonly "numpy<2.0.0" -c pytorch
+            conda install --yes --quiet "pytorch<2.1" "torchvision<0.16" cpuonly "numpy<2.0.0" "mkl<2024.1" -c pytorch
           else
             conda install --yes --quiet "pytorch==1.13.1" "torchvision<0.15" cpuonly "numpy<1.24.0" -c pytorch
           fi
@@ -142,7 +143,9 @@ jobs:
 
       - name: Fix zope packages for conda/pip compatibility
         shell: bash -l {0}
-        run: pip install --force-reinstall --no-deps zope.event "zope.interface<8"
+        run: |
+          pip uninstall --yes zope.event zope.interface
+          pip install --no-deps "zope.event==4.5.0" "zope.interface<8"
 
       - if: ${{ matrix.notebookGroup == 'vis_nb_group_1'}}
         name: Install vision dependencies
