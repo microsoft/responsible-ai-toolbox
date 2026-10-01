@@ -38,7 +38,7 @@ jobs:
         run: |
           for attempt in 1 2 3; do
             if yarn install --frozen-lock-file; then
-              exit 0
+              break
             fi
             if [[ "$attempt" -eq 3 ]]; then
               exit 1
@@ -102,7 +102,7 @@ jobs:
         run: |
           for attempt in 1 2 3; do
             if yarn install --frozen-lock-file; then
-              exit 0
+              break
             fi
             if [[ "$attempt" -eq 3 ]]; then
               exit 1
@@ -132,23 +132,17 @@ jobs:
           pip install --upgrade "setuptools<82"
           pip install --upgrade "pip-tools<=7.1.0"
 
-      - name: Install backwards-compatible keras for transformers
-        shell: bash -l {0}
-        run: |
-          pip install tf-keras==2.15.1
-          pip install keras==2.15
-
       - name: Install dependencies
         shell: bash -l {0}
         run: |
-          pip install captum
+          pip install --no-deps captum==0.7.0
           pip install -r requirements-dev.txt
           pip install -v -e .
         working-directory: raiwidgets
 
       - name: Fix zope packages for conda/pip compatibility
         shell: bash -l {0}
-        run: pip install --force-reinstall --no-deps zope.event zope.interface
+        run: pip install --force-reinstall --no-deps zope.event "zope.interface<8"
 
       - if: ${{ matrix.notebookGroup == 'vis_nb_group_1'}}
         name: Install vision dependencies

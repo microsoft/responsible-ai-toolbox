@@ -314,7 +314,7 @@ class ExplainerManager(BaseManager):
         """
         is_classif_task = self._is_classification_task
         if is_classif_task:
-            global_exp = explanation[:, :, :].mean(0)
+            global_exp = explanation.mean(0)
             features = convert_to_list(global_exp.feature_names)
             scores = convert_to_list(np.abs(global_exp.values).mean(1))
             intercept = global_exp.base_values.mean(0)

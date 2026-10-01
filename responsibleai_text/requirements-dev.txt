@@ -7,9 +7,10 @@ requirements-parser==0.2.0
 transformers<4.40
 datasets<3
 spacy<3.8
-tensorflow>=2.15,<2.16
+tensorflow-intel>=2.15,<2.16; sys_platform == 'win32'
+tensorflow>=2.15,<2.16; sys_platform != 'win32'
 opencv-python
 
-fastai
+fastai<2.8
 mlflow
 pydantic<2.0.0

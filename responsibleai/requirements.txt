@@ -4,7 +4,8 @@ statsmodels<0.14.0
 jsonschema
 erroranalysis>=0.5.4
 interpret-community>=0.31.0
-lightgbm>=2.0.11,<4.0
+lightgbm>=2.0.11,<4.0; (sys_platform != 'darwin' or platform_machine != 'arm64')
+lightgbm==4.6.0; sys_platform == 'darwin' and platform_machine == 'arm64'
 numpy>=1.17.2,<=1.26.2
 numba<=0.58.1
 pandas>=0.25.1,<2.0.0
