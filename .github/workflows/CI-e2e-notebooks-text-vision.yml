@@ -60,6 +60,7 @@ jobs:
 
     env:
       CYPRESS_VERIFY_TIMEOUT: 120000
+      E2E_WIDGET_TIMEOUT_SECONDS: 7200
       node-version: 16.x
 
     strategy:
@@ -121,7 +122,7 @@ jobs:
         shell: bash -l {0}
         run: |
           if [[ "${{ matrix.pythonVersion }}" == "3.11" ]]; then
-            conda install --yes --quiet "pytorch<2.1" "torchvision<0.16" cpuonly "numpy<2.0.0" "mkl<2024.1" -c pytorch
+            conda install --yes --quiet "pytorch::pytorch==2.0.1" "pytorch::torchvision==0.15.2" "pytorch::cpuonly" "numpy<2.0.0" "mkl<2024.1"
           else
             conda install --yes --quiet "pytorch==1.13.1" "torchvision<0.15" cpuonly "numpy<1.24.0" -c pytorch
           fi

@@ -41,7 +41,10 @@ const fileNames = tabularFileNames
   .concat(textFileNames);
 const notebookHostReg = /^ResponsibleAI started at (http:\/\/localhost:\d+)$/m;
 const serveHostReg = /Web Development Server is listening at\s+(.*)$/m;
-const timeout = 4800;
+const timeout = Number(process.env.E2E_WIDGET_TIMEOUT_SECONDS || 4800);
+if (!Number.isFinite(timeout) || timeout <= 0 || timeout > 2147483) {
+  throw new Error("E2E_WIDGET_TIMEOUT_SECONDS must be a positive number.");
+}
 
 /**
  *

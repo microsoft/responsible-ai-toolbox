@@ -14,6 +14,7 @@ nbformat
 papermill
 scrapbook
 jupyter
+ipython<9
 nbval
 
 docutils<0.18
