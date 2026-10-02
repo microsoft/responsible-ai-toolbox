@@ -1,6 +1,7 @@
 numpy>=1.17.2,<2.0.0
 pandas>=0.25.1,<2.0.0 # TODO: remove ceiling on version.
 Pillow>=10.0.0
+pycocotools
 scikit-learn>=0.22.1
 scipy>=1.4.1,<1.14
 semver~=2.13.0

@@ -115,7 +115,7 @@ class TestImageUtils(object):
                            [[3, 103, 272, 358, 475, 0]],
                            [[4, 65, 289, 436, 414, 0]],
                            [[1, 130, 271, 367, 467, 0]],
-                           [[1, 144, 260, 318, 429, 0]]])
+                           [[1, 144, 260, 318, 429, 0]]], dtype=object)
         pred_y = np.array([[[3, 140, 260, 396, 469, 0]],
                            [[3, 108, 270, 237, 505, 0],
                             [1, 259, 271, 401, 450, 0]],
@@ -127,7 +127,7 @@ class TestImageUtils(object):
                            [[3, 104, 265, 360, 468, 0]],
                            [[4, 58, 284, 483, 420, 0]],
                            [[1, 128, 265, 367, 471, 0]],
-                           [[1, 137, 260, 325, 430, 0]]])
+                           [[1, 137, 260, 325, 430, 0]]], dtype=object)
         class_names = ["can", "carton", "milk_bottle", "water_bottle"]
         error_labels = generate_od_error_labels(true_y, pred_y, class_names)
         assert len(error_labels) == 10
