@@ -190,14 +190,22 @@ jobs:
         name: Run widget tests
         shell: bash -l {0}
         run: |
+          set -e
           yarn e2e-widget -n "responsibleaidashboard-fridge-image-classification-model-debugging" -f ${{ matrix.flights }}
           yarn e2e-widget -n "responsibleaidashboard-fridge-multilabel-image-classification-model-debugging" -f ${{ matrix.flights }}
-          yarn e2e-widget -n "responsibleaidashboard-fridge-object-detection-model-debugging" -f ${{ matrix.flights }}
+          if [[ "${{ matrix.operatingSystem }}" == "windows-latest" && "${{ matrix.pythonVersion }}" == "3.9" ]]; then
+            yarn e2e-widget -n "responsibleaidashboard-fridge-object-detection-model-debugging" -s "datasetExplorer.spec.ts" -f ${{ matrix.flights }}
+            yarn e2e-widget -n "responsibleaidashboard-fridge-object-detection-model-debugging" -s "modelOverview.spec.ts" -f ${{ matrix.flights }}
+            yarn e2e-widget -n "responsibleaidashboard-fridge-object-detection-model-debugging" -s "visionDataExplorer.spec.ts" -f ${{ matrix.flights }}
+          else
+            yarn e2e-widget -n "responsibleaidashboard-fridge-object-detection-model-debugging" -f ${{ matrix.flights }}
+          fi
 
       - if: ${{ matrix.notebookGroup == 'text_nb_group_1'}}
         name: Run widget tests
         shell: bash -l {0}
         run: |
+          set -e
           yarn e2e-widget -n "responsibleaidashboard-DBPedia-text-classification-model-debugging" -f ${{ matrix.flights }}
           yarn e2e-widget -n "responsibleaidashboard-blbooksgenre-binary-text-classification-model-debugging" -f ${{ matrix.flights }}
           yarn e2e-widget -n "responsibleaidashboard-covid-event-multilabel-text-classification-model-debugging" -f ${{ matrix.flights }}
