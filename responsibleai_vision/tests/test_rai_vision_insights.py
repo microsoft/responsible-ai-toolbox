@@ -138,7 +138,9 @@ class TestRAIVisionInsights(object):
                 pass
 
             def predict(self, X):
-                prediction = self.model.predict(X).tolist()
+                prediction = self.model.predict(X)
+                if isinstance(prediction, np.ndarray):
+                    prediction = prediction.tolist()
                 if len(prediction) == 1:
                     # fix ndim error for some versions of pandas in tests
                     prediction = prediction[0]
