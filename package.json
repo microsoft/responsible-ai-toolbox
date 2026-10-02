@@ -74,7 +74,7 @@
     "lodash": "^4.17.11",
     "memoize-one": "^5.1.1",
     "minimist": "^1.2.6",
-    "moment": "^2.29.4",
+    "moment": "^2.31.0",
     "plotly.js": "^2.27.1",
     "pyodide": "^0.21.3",
     "react": "^17.0.2",
