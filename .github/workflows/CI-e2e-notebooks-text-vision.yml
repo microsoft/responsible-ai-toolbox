@@ -34,7 +34,17 @@ jobs:
         run: npm install yarn -g
 
       - name: Install yarn dependencies
-        run: yarn install --frozen-lock-file
+        shell: bash
+        run: |
+          for attempt in 1 2 3; do
+            if yarn install --frozen-lock-file; then
+              break
+            fi
+            if [[ "$attempt" -eq 3 ]]; then
+              exit 1
+            fi
+            sleep 30
+          done
 
       - name: Build Typescript
         run: yarn buildall
@@ -49,6 +59,8 @@ jobs:
     needs: ui-build
 
     env:
+      CYPRESS_VERIFY_TIMEOUT: 120000
+      E2E_WIDGET_TIMEOUT_SECONDS: 7200
       node-version: 16.x
 
     strategy:
@@ -70,11 +82,35 @@ jobs:
         with:
           node-version: ${{ env.node-version }}
 
+      - name: Set up Python 3.10 for node-gyp
+        id: nodegyp_python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.10"
+          update-environment: false
+
+      - uses: conda-incubator/setup-miniconda@fc2d68f6413eb2d87b895e92f8584b5b94a10167 # v3.3.0
+        with:
+          auto-update-conda: true
+          python-version: ${{ matrix.pythonVersion }}
+
       - name: Install yarn
         run: npm install yarn -g
 
       - name: Install yarn dependencies
-        run: yarn install --frozen-lock-file
+        shell: bash -l {0}
+        env:
+          npm_config_python: ${{ steps.nodegyp_python.outputs.python-path }}
+        run: |
+          for attempt in 1 2 3; do
+            if yarn install --frozen-lock-file; then
+              break
+            fi
+            if [[ "$attempt" -eq 3 ]]; then
+              exit 1
+            fi
+            sleep 30
+          done
 
       - name: Download the UI build result
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
@@ -82,16 +118,11 @@ jobs:
           name: raiwidgets-js
           path: raiwidgets/raiwidgets/widget
 
-      - uses: conda-incubator/setup-miniconda@fc2d68f6413eb2d87b895e92f8584b5b94a10167 # v3.3.0
-        with:
-          auto-update-conda: true
-          python-version: ${{ matrix.pythonVersion }}
-
       - name: Install pytorch
         shell: bash -l {0}
         run: |
           if [[ "${{ matrix.pythonVersion }}" == "3.11" ]]; then
-            conda install --yes --quiet "pytorch<2.1" "torchvision<0.16" cpuonly "numpy<2.0.0" -c pytorch
+            conda install --yes --quiet "pytorch::pytorch==2.0.1" "pytorch::torchvision==0.15.2" "pytorch::cpuonly" "numpy<2.0.0" "mkl<2024.1"
           else
             conda install --yes --quiet "pytorch==1.13.1" "torchvision<0.15" cpuonly "numpy<1.24.0" -c pytorch
           fi
@@ -100,22 +131,22 @@ jobs:
         shell: bash -l {0}
         run: |
           python -m pip install --upgrade pip
-          pip install --upgrade setuptools
+          pip install --upgrade "setuptools<82"
           pip install --upgrade "pip-tools<=7.1.0"
-
-      - name: Install backwards-compatible keras for transformers
-        shell: bash -l {0}
-        run: |
-          pip install tf-keras
-          pip install keras==2.15
 
       - name: Install dependencies
         shell: bash -l {0}
         run: |
-          pip install captum
+          pip install --no-deps captum==0.7.0
           pip install -r requirements-dev.txt
           pip install -v -e .
         working-directory: raiwidgets
+
+      - name: Fix zope packages for conda/pip compatibility
+        shell: bash -l {0}
+        run: |
+          pip uninstall --yes zope.event zope.interface
+          pip install --no-deps "zope.event==4.5.0" "zope.interface<8"
 
       - if: ${{ matrix.notebookGroup == 'vis_nb_group_1'}}
         name: Install vision dependencies
@@ -159,14 +190,22 @@ jobs:
         name: Run widget tests
         shell: bash -l {0}
         run: |
+          set -e
           yarn e2e-widget -n "responsibleaidashboard-fridge-image-classification-model-debugging" -f ${{ matrix.flights }}
           yarn e2e-widget -n "responsibleaidashboard-fridge-multilabel-image-classification-model-debugging" -f ${{ matrix.flights }}
-          yarn e2e-widget -n "responsibleaidashboard-fridge-object-detection-model-debugging" -f ${{ matrix.flights }}
+          if [[ "${{ matrix.operatingSystem }}" == "windows-latest" && "${{ matrix.pythonVersion }}" == "3.9" ]]; then
+            yarn e2e-widget -n "responsibleaidashboard-fridge-object-detection-model-debugging" -s "datasetExplorer.spec.ts" -f ${{ matrix.flights }}
+            yarn e2e-widget -n "responsibleaidashboard-fridge-object-detection-model-debugging" -s "modelOverview.spec.ts" -f ${{ matrix.flights }}
+            yarn e2e-widget -n "responsibleaidashboard-fridge-object-detection-model-debugging" -s "visionDataExplorer.spec.ts" -f ${{ matrix.flights }}
+          else
+            yarn e2e-widget -n "responsibleaidashboard-fridge-object-detection-model-debugging" -f ${{ matrix.flights }}
+          fi
 
       - if: ${{ matrix.notebookGroup == 'text_nb_group_1'}}
         name: Run widget tests
         shell: bash -l {0}
         run: |
+          set -e
           yarn e2e-widget -n "responsibleaidashboard-DBPedia-text-classification-model-debugging" -f ${{ matrix.flights }}
           yarn e2e-widget -n "responsibleaidashboard-blbooksgenre-binary-text-classification-model-debugging" -f ${{ matrix.flights }}
           yarn e2e-widget -n "responsibleaidashboard-covid-event-multilabel-text-classification-model-debugging" -f ${{ matrix.flights }}

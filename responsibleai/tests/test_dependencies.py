@@ -28,7 +28,8 @@ EXCEPTIONS = {}
 def dep_trees():
     trees = {}
     for dep in REQUIRED_DEPENDENCIES:
-        trees[dep] = str(subprocess.check_output(['deptree', dep]))
+        trees[dep] = str(subprocess.check_output(
+            ['pipdeptree', '-p', dep]))
     return trees
 
 

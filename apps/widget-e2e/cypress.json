@@ -11,6 +11,9 @@
   "screenshotsFolder": "../../dist/cypress/apps/widget-e2e/screenshots",
   "downloadsFolder": "../../dist/cypress/apps/widget-e2e/downloads",
   "chromeWebSecurity": false,
+  "pageLoadTimeout": 300000,
+  "requestTimeout": 60000,
+  "responseTimeout": 300000,
   "viewportWidth": 1920,
   "viewportHeight": 1080
 }

@@ -41,7 +41,10 @@ const fileNames = tabularFileNames
   .concat(textFileNames);
 const notebookHostReg = /^ResponsibleAI started at (http:\/\/localhost:\d+)$/m;
 const serveHostReg = /Web Development Server is listening at\s+(.*)$/m;
-const timeout = 4800;
+const timeout = Number(process.env.E2E_WIDGET_TIMEOUT_SECONDS || 4800);
+if (!Number.isFinite(timeout) || timeout <= 0 || timeout > 2147483) {
+  throw new Error("E2E_WIDGET_TIMEOUT_SECONDS must be a positive number.");
+}
 
 /**
  *
@@ -273,7 +276,7 @@ function writeCypressSettings(hosts) {
   );
 }
 
-function e2e(watch, selectedNotebook, flights, host) {
+function e2e(watch, selectedNotebook, selectedSpec, flights, host) {
   console.log(`Running e2e for notebook ${selectedNotebook}`);
   let notebookArgs = [];
   if (selectedNotebook) {
@@ -299,7 +302,8 @@ function e2e(watch, selectedNotebook, flights, host) {
     console.log(
       `Determined notebook key ${notebookKey} for notebook ${selectedNotebook}.`
     );
-    notebookArgs = ["--spec", `**/responsibleaitoolbox${notebookKey}/**`];
+    const spec = selectedSpec ? `**/${selectedSpec}` : "**";
+    notebookArgs = ["--spec", `**/responsibleaitoolbox${notebookKey}/${spec}`];
   }
   const { status, stderr } = spawnSync(
     "node",
@@ -330,6 +334,7 @@ async function main() {
       "Skip notebook running and use host provided to run e2e: use full url 'http://localhost:5000' or port number"
     )
     .option("-n, --notebook [notebook]", "Run specific notebook")
+    .option("-s, --spec [spec]", "Run a specific spec for the notebook")
     .option(
       "-f, --flights [flights]",
       "Use flights separated by comma (no whitespace). Not specifying flights means that no flights are used."
@@ -343,8 +348,12 @@ async function main() {
     host = `http://localhost:${host}`;
   }
   const notebook = commander.opts().notebook;
+  const spec = commander.opts().spec;
   if (host && !notebook) {
     throw new Error("Notebook is required when host is specified.");
+  }
+  if (spec && !notebook) {
+    throw new Error("Notebook is required when spec is specified.");
   }
   let flights = commander.opts().flights;
   console.log("Checking flights: " + flights);
@@ -374,7 +383,7 @@ async function main() {
       );
       continue;
     }
-    e2e(watch, fileName, flights, host);
+    e2e(watch, fileName, spec, flights, host);
   }
   process.exit(0);
 }

@@ -46,13 +46,19 @@ jobs:
       - name: Setup tools
         run: |
           python -m pip install --upgrade pip
-          pip install --upgrade setuptools
+          pip install --upgrade "setuptools<82"
           pip install --upgrade "pip-tools<=7.1.0"
 
       - if: ${{ matrix.operatingSystem == 'macos-latest' }}
         name: Use Homebrew to install libomp on MacOS
         run: |
           brew install libomp
+
+      - if: ${{ (matrix.operatingSystem == 'macos-latest') && (matrix.packageDirectory == 'responsibleai') }}
+        name: Install compatible LightGBM on MacOS
+        run: |
+          pip install "cmake<4" wheel
+          pip install --no-build-isolation "lightgbm==3.3.5"
 
       - name: Install package dependencies
         run: |

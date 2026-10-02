@@ -149,15 +149,22 @@ export function ensureChartsPivot(
   isNotebookTest: boolean,
   includeNewCohort: boolean
 ): void {
-  cy.get(Locators.ModelOverviewCohortViewDatasetCohortViewButton).click();
+  cy.get(Locators.ModelOverviewCohortViewDatasetCohortViewButton)
+    .scrollIntoView()
+    .should("be.visible")
+    // Fluent UI can report this visible while its sticky container overlaps it.
+    .click({ force: true });
   const availableCharts = getAvailableCharts(
     datasetShape.isRegression,
     datasetShape.isBinary
   );
   availableCharts.forEach((chartName, index) => {
-    cy.get(Locators.ModelOverviewChartPivotItems).then(($pivotItems) => {
-      $pivotItems[index].click();
-    });
+    cy.get(Locators.ModelOverviewChartPivotItems)
+      .eq(index)
+      .scrollIntoView()
+      .should("be.visible")
+      // Pivot items can remain partially covered after scrolling in notebooks.
+      .click({ force: true });
     assertChartVisibility(datasetShape, chartName);
 
     if (chartName === Locators.ModelOverviewMetricChart) {

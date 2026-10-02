@@ -6,4 +6,6 @@ scikit-learn>=0.22.1
 lightgbm>=2.0.11
 erroranalysis>=0.5.4
 fairlearn==0.7.0
+greenlet>=1.1.2,<3; python_version == '3.9' and sys_platform == 'win32'
+gevent>=21.12.0,<24; python_version == '3.9' and sys_platform == 'win32'
 raiutils>=0.4.2

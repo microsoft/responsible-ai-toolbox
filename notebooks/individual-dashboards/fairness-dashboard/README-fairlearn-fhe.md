@@ -55,10 +55,10 @@ a starting point, not a production audit pipeline.
 
 `fairlearn-fhe` defines two encryption modes; the notebook runs **Mode A**:
 
-| Mode | Encrypted | Plaintext on auditor side | `trust_model` field |
-|------|-----------|---------------------------|---------------------|
-| **A** (default) | `y_pred` | `y_true`, `sensitive_features`, group counts | `plaintext_sensitive_features` |
-| **B** (full encryption) | `y_pred`, per-row group masks | `y_true`, group counts | `encrypted_sensitive_features` |
+| Mode                    | Encrypted                     | Plaintext on auditor side                    | `trust_model` field            |
+| ----------------------- | ----------------------------- | -------------------------------------------- | ------------------------------ |
+| **A** (default)         | `y_pred`                      | `y_true`, `sensitive_features`, group counts | `plaintext_sensitive_features` |
+| **B** (full encryption) | `y_pred`, per-row group masks | `y_true`, group counts                       | `encrypted_sensitive_features` |
 
 Circuit depth depends on the metric, mode, and implementation details
 of a given run, and is recorded as `observed_depth` in the envelope.
@@ -78,11 +78,11 @@ to demonstrate that the encrypted and plaintext metrics agree, but it
 does **not** by itself prove anything about a real two-party deployment.
 The intended split is:
 
-| Party       | Sees                                                     | Does                                          |
-|-------------|----------------------------------------------------------|-----------------------------------------------|
-| Data owner  | Plaintext `y_pred`, secret key, `y_test`, sensitive feature | Trains model, encrypts predictions, holds key |
-| Auditor     | Encrypted `y_pred`, public/eval keys, `y_test`, sensitive feature | Computes metrics on ciphertexts               |
-| Decryptor   | Final encrypted metric values                            | Decrypts the (small) metric outputs only      |
+| Party      | Sees                                                              | Does                                          |
+| ---------- | ----------------------------------------------------------------- | --------------------------------------------- |
+| Data owner | Plaintext `y_pred`, secret key, `y_test`, sensitive feature       | Trains model, encrypts predictions, holds key |
+| Auditor    | Encrypted `y_pred`, public/eval keys, `y_test`, sensitive feature | Computes metrics on ciphertexts               |
+| Decryptor  | Final encrypted metric values                                     | Decrypts the (small) metric outputs only      |
 
 In this notebook, all three roles collapse to one process. The trust
 benefit only materialises when the auditor is a separate party and never
