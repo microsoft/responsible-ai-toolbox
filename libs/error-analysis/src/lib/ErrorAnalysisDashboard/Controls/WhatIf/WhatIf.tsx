@@ -358,6 +358,9 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
         }
         this.setState({ request: undefined });
       } catch (error) {
+        if (!(error instanceof Error)) {
+          throw error;
+        }
         if (error.name === "AbortError") {
           return;
         }

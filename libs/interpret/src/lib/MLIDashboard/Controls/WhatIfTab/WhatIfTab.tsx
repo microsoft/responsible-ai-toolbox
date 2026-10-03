@@ -202,7 +202,7 @@ export class WhatIfTab extends React.PureComponent<
           this.state.sortingSeriesIndex
         )
       ) {
-        if (this.state.selectedPointsIndexes.length !== 0) {
+        if (this.state.selectedPointsIndexes.length > 0) {
           sortingSeriesIndex = 0;
           sortArray = ModelExplanationUtils.getSortIndices(
             this.selectedFeatureImportance[0].unsortedAggregateY
@@ -936,6 +936,9 @@ export class WhatIfTab extends React.PureComponent<
         }
         this.setState({ request: undefined });
       } catch (error) {
+        if (!(error instanceof Error)) {
+          throw error;
+        }
         if (error.name === "AbortError") {
           return;
         }

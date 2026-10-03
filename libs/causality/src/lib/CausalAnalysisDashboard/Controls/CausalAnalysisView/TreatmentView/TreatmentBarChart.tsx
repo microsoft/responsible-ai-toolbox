@@ -66,7 +66,9 @@ export class TreatmentBarChart extends React.PureComponent<ITreatmentBarChartPro
         },
         xaxis: {
           automargin: true,
-          title: this.context.dataset.target_column
+          title: Array.isArray(this.context.dataset.target_column)
+            ? this.context.dataset.target_column.join(", ")
+            : this.context.dataset.target_column
         },
         yaxis: {
           automargin: true

@@ -22,6 +22,7 @@ import {
   IClusterData,
   getScatterOption,
   calculateBubblePlotDataFromErrorCohort,
+  compareChartProps,
   getInitialClusterState
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -433,30 +434,16 @@ export class LargeDatasetExplorerTab extends React.Component<
   ): boolean => {
     if (this.state.chartProps) {
       this.changedKeys = [];
-      this.compareChartProps(newChartProps, this.state.chartProps);
+      compareChartProps(newChartProps, this.state.chartProps, this.changedKeys);
       return hasAxisTypeChanged(this.changedKeys);
     }
     return false;
   };
 
-  private compareChartProps = (
-    newProps: IGenericChartProps,
-    oldProps: IGenericChartProps
-  ): void => {
-    for (const key in newProps) {
-      if (typeof newProps[key] === "object") {
-        this.compareChartProps(newProps[key], oldProps[key]);
-      }
-      if (newProps[key] !== oldProps[key]) {
-        this.changedKeys.push(key);
-      }
-    }
-  };
-
   private readonly resetSeries = (newProps: IGenericChartProps): void => {
     this.changedKeys = [];
     if (this.state.chartProps) {
-      this.compareChartProps(newProps, this.state.chartProps);
+      compareChartProps(newProps, this.state.chartProps, this.changedKeys);
       const shouldResetIndexes =
         ifEnableLargeData(this.context.dataset) &&
         !_.isEqual(this.state.chartProps, newProps) &&

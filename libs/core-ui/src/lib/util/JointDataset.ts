@@ -81,7 +81,7 @@ export class JointDataset {
   // these properties should only be accessed by Cohort class,
   // which enables independent filtered views of this data
   public dataDict: Array<{ [key: string]: number }> | undefined;
-  public strDataDict: Array<{ [key: string]: string }> | undefined;
+  public strDataDict: Array<{ [key: string]: number | string }> | undefined;
   public binDict: { [key: string]: number[] | undefined } = {};
 
   private readonly _modelMeta: IExplanationModelMetadata;
@@ -460,9 +460,25 @@ export class JointDataset {
                 value = classArray.reduce((a, b) => a + b) / classArray.length;
                 break;
               }
-              // case WeightVectors.predicted: {
-              //     return classArray[this.predictedY[rowIndex]];
-              // }
+              case WeightVectors.Predicted: {
+                const predictedY =
+                  this.dataDict?.[rowIndex][JointDataset.PredictedYLabel] ??
+                  this.strDataDict?.[rowIndex][JointDataset.PredictedYLabel];
+                let predictedIndex: number | undefined;
+                if (typeof predictedY === "number") {
+                  predictedIndex = predictedY;
+                } else if (typeof predictedY === "string") {
+                  predictedIndex =
+                    this.metaDict[
+                      JointDataset.PredictedYLabel
+                    ].sortedCategoricalValues?.indexOf(predictedY);
+                }
+                value =
+                  predictedIndex === undefined || predictedIndex < 0
+                    ? 0
+                    : classArray[predictedIndex] ?? 0;
+                break;
+              }
               case WeightVectors.AbsAvg: {
                 value =
                   classArray.reduce((a, b) => a + Math.abs(b), 0) /
@@ -852,7 +868,7 @@ export class JointDataset {
     }
     if (this.strDataDict === undefined) {
       this.strDataDict = Array.from({ length: arr.length }).map((_, index) => {
-        const dict = {};
+        const dict: { [key: string]: number | string } = {};
         dict[JointDataset.IndexLabel] = index;
         return dict;
       });
@@ -866,7 +882,7 @@ export class JointDataset {
       return;
     }
     this.dataDict = Array.from({ length: arr.length }).map((_, index) => {
-      const dict = {};
+      const dict: { [key: string]: number } = {};
       dict[JointDataset.IndexLabel] = index;
       dict[JointDataset.DitherLabel] =
         2 * this.ditherScale * Math.random() - this.ditherScale;

@@ -23,7 +23,8 @@ import {
   IClusterData,
   calculateBubblePlotDataFromErrorCohort,
   getScatterOption,
-  getInitialClusterState
+  getInitialClusterState,
+  compareChartProps
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import React from "react";
@@ -207,14 +208,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
     newProps: IGenericChartProps,
     oldProps: IGenericChartProps
   ): void => {
-    for (const key in newProps) {
-      if (typeof newProps[key] === "object") {
-        this.compareChartProps(newProps[key], oldProps[key]);
-      }
-      if (newProps[key] !== oldProps[key]) {
-        this.changedKeys.push(key);
-      }
-    }
+    compareChartProps(newProps, oldProps, this.changedKeys);
   };
 
   private readonly setSeries = (newProps: IGenericChartProps): void => {

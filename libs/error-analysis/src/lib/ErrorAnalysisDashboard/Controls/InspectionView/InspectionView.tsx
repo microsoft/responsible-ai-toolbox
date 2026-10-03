@@ -286,7 +286,7 @@ export class InspectionView extends React.PureComponent<
     );
     let sortArray: number[] = [];
     let sortingSeriesIndex: number | undefined;
-    if (includedFeatureImportance.length !== 0) {
+    if (includedFeatureImportance.length > 0) {
       sortingSeriesIndex = 0;
       sortArray = ModelExplanationUtils.getSortIndices(
         includedFeatureImportance[0].unsortedAggregateY
@@ -303,7 +303,7 @@ export class InspectionView extends React.PureComponent<
 
   private getSelectionDetails(): number[] {
     const selectedRows = this._selection.getSelection();
-    const keys = selectedRows.map((row) => row[0] as number);
+    const keys = selectedRows.map((row) => Reflect.get(row, 0) as number);
     return keys;
   }
 }

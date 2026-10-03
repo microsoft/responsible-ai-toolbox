@@ -1,0 +1,51 @@
+{
+  "name": "interpret-text",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/interpret-text/src",
+  "projectType": "library",
+  "implicitDependencies": ["mlchartlib"],
+  "targets": {
+    "build": {
+      "executor": "@nx/rollup:rollup",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/interpret-text",
+        "tsConfig": "libs/interpret-text/tsconfig.lib.json",
+        "project": "libs/interpret-text/package.json",
+        "entryFile": "libs/interpret-text/src/index.ts",
+        "format": ["esm", "cjs"],
+        "buildLibsFromSource": true,
+        "external": [
+          "@responsible-ai/core-ui",
+          "@responsible-ai/interpret",
+          "@responsible-ai/localization",
+          "react/jsx-runtime"
+        ],
+        "rollupConfig": "./rollup.config.js",
+        "assets": [
+          {
+            "glob": "libs/interpret-text/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ],
+        "buildableProjectDepsInPackageJsonType": "dependencies"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/interpret-text/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/interpret-text"],
+      "options": {
+        "jestConfig": "libs/interpret-text/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

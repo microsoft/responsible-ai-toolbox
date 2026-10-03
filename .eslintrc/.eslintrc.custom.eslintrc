@@ -1,7 +1,7 @@
 {
   "extends": [
-    "plugin:@nrwl/nx/typescript",
-    "plugin:@nrwl/nx/javascript",
+    "plugin:@nx/typescript",
+    "plugin:@nx/javascript",
     "./.eslintrc.comments.eslintrc",
     "./.eslintrc.filenames.eslintrc",
     "./.eslintrc.react.eslintrc",

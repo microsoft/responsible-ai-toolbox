@@ -1,0 +1,62 @@
+{
+  "name": "e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/e2e/src",
+  "projectType": "library",
+  "implicitDependencies": ["core-ui", "interpret", "mlchartlib"],
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "libs/e2e/cypress.config.js",
+        "tsConfig": "libs/e2e/tsconfig.e2e.json"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "widget:serve:production"
+        }
+      }
+    },
+    "build": {
+      "executor": "@nx/rollup:rollup",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/e2e",
+        "tsConfig": "libs/e2e/tsconfig.lib.json",
+        "project": "libs/e2e/package.json",
+        "entryFile": "libs/e2e/src/index.ts",
+        "format": ["esm", "cjs"],
+        "buildLibsFromSource": true,
+        "external": [
+          "@responsible-ai/interpret-text",
+          "@responsible-ai/localization",
+          "react/jsx-runtime"
+        ],
+        "rollupConfig": "./rollup.config.js",
+        "assets": [
+          {
+            "glob": "libs/e2e/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ],
+        "buildableProjectDepsInPackageJsonType": "dependencies"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/e2e/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/e2e"],
+      "options": {
+        "jestConfig": "libs/e2e/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

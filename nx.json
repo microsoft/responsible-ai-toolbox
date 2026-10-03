@@ -1,89 +1,85 @@
 {
-  "npmScope": "responsible-ai",
-  "affected": {
-    "defaultBase": "main"
-  },
-  "implicitDependencies": {
-    "workspace.json": "*",
-    "package.json": {
-      "dependencies": "*",
-      "devDependencies": "*"
-    },
-    "tsconfig.base.json": "*",
-    "tslint.json": "*",
-    "nx.json": "*",
-    ".eslintrc.json": "*"
-  },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "@nrwl/workspace/tasks-runners/default",
-      "options": {}
-    }
-  },
-  "projects": {
-    "causality": {
-      "tags": []
-    },
-    "core-ui": {
-      "tags": []
-    },
-    "counterfactuals": {
-      "tags": []
-    },
-    "dashboard": {
-      "tags": []
-    },
-    "dashboard-e2e": {
-      "tags": [],
-      "implicitDependencies": ["dashboard"]
-    },
-    "dataset-explorer": {
-      "tags": []
-    },
-    "e2e": {
-      "tags": []
-    },
-    "error-analysis": {
-      "tags": []
-    },
-    "fairness": {
-      "tags": []
-    },
-    "forecasting": {
-      "tags": []
-    },
-    "interpret": {
-      "tags": []
-    },
-    "interpret-text": {
-      "tags": []
-    },
-    "interpret-vision": {
-      "tags": []
-    },
-    "localization": {
-      "tags": []
-    },
-    "mlchartlib": {
-      "tags": []
-    },
-    "model-assessment": {
-      "tags": []
-    },
-    "widget": {
-      "tags": []
-    },
-    "widget-e2e": {
-      "tags": [],
-      "implicitDependencies": ["widget"]
-    }
-  },
-  "targetDependencies": {
-    "build": [
-      {
-        "target": "build",
-        "projects": "dependencies"
-      }
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "sharedGlobals": [
+      "{workspaceRoot}/package.json",
+      "{workspaceRoot}/tsconfig.base.json",
+      "{workspaceRoot}/nx.json",
+      "{workspaceRoot}/.eslintrc.json"
     ]
-  }
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"]
+    }
+  },
+  "defaultProject": "dashboard",
+  "generators": {
+    "@nx/workspace": {
+      "library": {
+        "linter": "eslint"
+      }
+    },
+    "@nx/cypress": {
+      "cypress-project": {
+        "linter": "eslint"
+      }
+    },
+    "@nx/react": {
+      "application": {
+        "style": "none",
+        "linter": "eslint",
+        "babel": true
+      },
+      "library": {
+        "style": "none",
+        "linter": "eslint"
+      },
+      "storybook-configuration": {
+        "linter": "eslint"
+      },
+      "component": {
+        "style": "none"
+      }
+    },
+    "@nx/next": {
+      "application": {
+        "linter": "eslint"
+      }
+    },
+    "@nx/web": {
+      "application": {
+        "linter": "eslint"
+      }
+    },
+    "@nx/node": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      }
+    },
+    "@nx/plugin": {
+      "plugin": {
+        "linter": "eslint"
+      }
+    },
+    "@nx/nest": {
+      "application": {
+        "linter": "eslint"
+      }
+    },
+    "@nx/express": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      }
+    }
+  },
+  "parallel": 1,
+  "useInferencePlugins": false,
+  "defaultBase": "main"
 }

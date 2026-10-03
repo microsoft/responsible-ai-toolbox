@@ -16,6 +16,8 @@ import {
 } from "@responsible-ai/interpret-text";
 import React from "react";
 
+import { getSelectedItemIndex } from "./getSelectedItemIndex";
+
 export interface ITextLocalImportancePlotsProps {
   jointDataset: JointDataset;
   selectedItems: IObjectWithKey[];
@@ -69,14 +71,15 @@ export class TextLocalImportancePlots extends React.Component<ITextLocalImportan
 
   private getTextFeatureImportances(): ITextFeatureImportances[] {
     const featureImportances = this.props.selectedItems.map((row) => {
+      const rowIndex = getSelectedItemIndex(row);
       const textFeatureImportance =
         this.context.modelExplanationData?.precomputedExplanations
-          ?.textFeatureImportance?.[row[0]];
+          ?.textFeatureImportance?.[rowIndex];
       if (!textFeatureImportance) {
         return { baseValues: [], importances: [], prediction: [], text: [] };
       }
       const text = textFeatureImportance?.text;
-      const rowDict = this.props.jointDataset.getRow(row[0]);
+      const rowDict = this.props.jointDataset.getRow(rowIndex);
       const prediction = new Array(this.props.jointDataset.predictionClassCount)
         .fill(0)
         .map((_, index) => {
@@ -86,8 +89,8 @@ export class TextLocalImportancePlots extends React.Component<ITextLocalImportan
       const importances: number[][] | number[][][] =
         textFeatureImportance?.localExplanations;
       const baseValues = textFeatureImportance?.baseValues;
-      const trueY = this.context.dataset.true_y?.[row[0]];
-      const predictedY = this.context.dataset.predicted_y?.[row[0]];
+      const trueY = this.context.dataset.true_y?.[rowIndex];
+      const predictedY = this.context.dataset.predicted_y?.[rowIndex];
       return {
         baseValues,
         importances,

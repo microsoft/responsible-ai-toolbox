@@ -9,7 +9,7 @@ on:
 jobs:
   ci-raiwidgets-pytest:
     env:
-      node-version: 16.x
+      node-version: 22.21.1
     strategy:
       # keep running remaining matrix jobs even if one fails
       # to avoid having to rerun all jobs several times

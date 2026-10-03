@@ -109,7 +109,7 @@ export class DatasetCohort {
   ): Array<{ [key: string]: unknown }> {
     const dataDict = Array.from({ length: this.dataset.features.length }).map(
       (_, index) => {
-        const dict = {};
+        const dict: { [key: string]: unknown } = {};
         dict[DatasetCohortColumns.Index] = index;
         return dict;
       }
@@ -151,7 +151,8 @@ export class DatasetCohort {
     if (modelType === ModelTypes.Regression) {
       for (const [index, row] of dataDict.entries()) {
         dataDict[index][DatasetCohortColumns.RegressionError] = Math.abs(
-          row[DatasetCohortColumns.TrueY] - row[DatasetCohortColumns.PredictedY]
+          Number(row[DatasetCohortColumns.TrueY]) -
+            Number(row[DatasetCohortColumns.PredictedY])
         );
       }
     } else if (modelType && IsBinary(modelType)) {
@@ -162,8 +163,8 @@ export class DatasetCohort {
       // 3: TP
       for (const [index, row] of dataDict.entries()) {
         dataDict[index][DatasetCohortColumns.ClassificationError] =
-          2 * row[DatasetCohortColumns.TrueY] +
-          row[DatasetCohortColumns.PredictedY];
+          2 * Number(row[DatasetCohortColumns.TrueY]) +
+          Number(row[DatasetCohortColumns.PredictedY]);
       }
     } else if (modelType && IsMulticlass(modelType)) {
       for (const [index, row] of dataDict.entries()) {

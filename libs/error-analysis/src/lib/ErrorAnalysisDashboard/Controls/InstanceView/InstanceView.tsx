@@ -270,7 +270,7 @@ export class InstanceView extends React.Component<
             selectedAllIndexes.includes(index)
           );
         }
-        this.props.setActivePredictionTab(PredictionTabKeys[option.key]);
+        this.props.setActivePredictionTab(option.key as PredictionTabKeys);
         return {
           selectionDetails: {
             selectedAllCorrectIndexes: selectedCorrectIndexes,

@@ -15,12 +15,18 @@ export function getCounterfactualChartOptions(
   const data = plotlyProperty.data.map((series, seriesIndex) => {
     const data: any = [];
     series.x?.forEach((p, index) => {
+      const markerColor = Array.isArray(series.marker?.color)
+        ? series.marker.color[index]
+        : series.marker?.color;
+      const markerSymbol = Array.isArray(series.marker?.symbol)
+        ? series.marker.symbol[index]
+        : series.marker?.symbol;
       const temp = {
         customdata: series?.customdata?.[index],
         marker: {
           fillColor:
             seriesIndex === 0
-              ? series?.marker?.color?.[index]
+              ? markerColor
               : FluentUIStyles.fluentUIColorPalette[
                   WhatIfConstants.MAX_SELECTION + 1 + index
                 ],
@@ -28,8 +34,7 @@ export function getCounterfactualChartOptions(
             seriesIndex === 0 ? undefined : series?.marker?.line?.color,
           lineWidth: seriesIndex === 0 ? undefined : 3,
           radius: seriesIndex === 0 ? 4 : 6,
-          symbol:
-            seriesIndex === 0 ? series?.marker?.symbol?.[index] : "diamond"
+          symbol: seriesIndex === 0 ? markerSymbol : "diamond"
         },
         x: p,
         y: series?.y?.[index]

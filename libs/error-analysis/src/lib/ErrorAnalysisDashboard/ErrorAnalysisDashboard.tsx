@@ -288,10 +288,10 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         true
       )
     ];
-    const weightVectorLabels = {
+    const weightVectorLabels: Record<string | number, string> = {
       [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
     };
-    const weightVectorOptions = [];
+    const weightVectorOptions: WeightVectorOption[] = [];
     if (IsMulticlass(modelMetadata.modelType)) {
       weightVectorOptions.push(WeightVectors.AbsAvg);
     }
@@ -757,7 +757,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
   private handleGlobalTabClick = (item: PivotItem | undefined): void => {
     if (item?.props.itemKey) {
       const itemKey: string = item.props.itemKey;
-      const index: GlobalTabKeys = GlobalTabKeys[itemKey];
+      const index = itemKey as GlobalTabKeys;
       const predictionTab = PredictionTabKeys.CorrectPredictionTab;
       this.setState({
         activeGlobalTab: index,

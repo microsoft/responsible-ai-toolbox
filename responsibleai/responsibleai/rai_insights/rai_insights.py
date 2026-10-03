@@ -866,10 +866,12 @@ class RAIInsights(RAIBaseInsights):
         :rtype: pandas.DataFrame
         """
         large = use_entire_test_data and self._large_test is not None
-        pred_y = getattr(
-            self,
-            self._get_model_output_name(purpose=MethodPurpose.PREDICTION,
-                                        large=large))
+        pred_y = None
+        if self.model is not None:
+            pred_y = getattr(
+                self,
+                self._get_model_output_name(purpose=MethodPurpose.PREDICTION,
+                                            large=large))
         if large:
             test_data = self._large_test
             true_y = self._large_test[self.target_column]

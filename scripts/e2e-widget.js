@@ -5,7 +5,7 @@ const _ = require("lodash");
 const commander = require("commander");
 const { exit } = require("process");
 
-const nxPath = path.join(__dirname, "../node_modules/@nrwl/cli/bin/nx.js");
+const nxPath = require.resolve("nx/bin/nx");
 const baseDir = path.join(__dirname, "../notebooks/responsibleaidashboard");
 const tabularDir = path.join(baseDir, "tabular");
 const visionDir = path.join(baseDir, "vision");
@@ -271,7 +271,7 @@ function writeCypressSettings(hosts) {
   fs.writeFileSync(
     path.join(__dirname, "../apps/widget-e2e/cypress.env.json"),
     JSON.stringify({
-      hosts
+      hosts: Object.fromEntries(hosts.map(({ file, host }) => [file, host]))
     })
   );
 }

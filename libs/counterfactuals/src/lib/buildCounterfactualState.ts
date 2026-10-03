@@ -6,9 +6,11 @@ import {
   WeightVectors,
   JointDataset,
   ModelTypes,
-  IDataset
+  IDataset,
+  WeightVectorOption
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import { Dictionary } from "lodash";
 
 import { ICounterfactualsTabState } from "./CounterfactualsTab";
 
@@ -22,10 +24,10 @@ export function buildCounterfactualState(
   ];
   const selectedWeightVector =
     modelType === ModelTypes.Multiclass ? WeightVectors.AbsAvg : 0;
-  const weightVectorLabels = {
+  const weightVectorLabels: Dictionary<string> = {
     [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
   };
-  const weightVectorOptions = [];
+  const weightVectorOptions: WeightVectorOption[] = [];
   if (modelType === ModelTypes.Multiclass) {
     weightVectorOptions.push(WeightVectors.AbsAvg);
   }

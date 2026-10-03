@@ -17,6 +17,8 @@ import { IGlobalSeries, LocalImportancePlots } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { getSelectedItemIndex } from "./getSelectedItemIndex";
+
 export interface ITabularLocalImportancePlotsProps {
   features: string[];
   jointDataset: JointDataset;
@@ -105,7 +107,9 @@ export class TabularLocalImportancePlots extends React.Component<ITabularLocalIm
   private getViewedFeatureImportances(): IViewedFeatureImportances {
     const featureImportances = this.props.selectedItems.map(
       (row, colorIndex): IGlobalSeries => {
-        const rowDict = this.props.jointDataset.getRow(row[0]);
+        const rowDict = this.props.jointDataset.getRow(
+          getSelectedItemIndex(row)
+        );
         return {
           colorIndex,
           id: rowDict[JointDataset.IndexLabel],
@@ -127,7 +131,7 @@ export class TabularLocalImportancePlots extends React.Component<ITabularLocalIm
     );
     let sortArray: number[] = [];
     let sortingSeriesIndex: number | undefined;
-    if (featureImportances.length !== 0) {
+    if (featureImportances.length > 0) {
       sortingSeriesIndex = 0;
       sortArray = ModelExplanationUtils.getSortIndices(
         featureImportances[0].unsortedAggregateY

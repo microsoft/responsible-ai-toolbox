@@ -84,7 +84,7 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
         },
         key: "language",
         subMenuProps: {
-          items: this.getOptions(Object.keys(Language), this.onLanguageSelect)
+          items: this.getOptions(Object.values(Language), this.onLanguageSelect)
         },
         text: `Language - ${this.props.language}`
       }

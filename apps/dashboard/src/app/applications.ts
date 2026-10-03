@@ -29,9 +29,6 @@ import { irisGlobal } from "../interpret/__mock_data__/irisGlobal";
 import { irisNoData } from "../interpret/__mock_data__/irisNoData";
 import { irisNoFeatures } from "../interpret/__mock_data__/irisNoFeatures";
 import { largeFeatureCount } from "../interpret/__mock_data__/largeFeatureCount";
-import { mockForecastingData } from "../model-assessment-forecasting/__mock_data__/mockForecastingData";
-import { mockForecastingDataNoFeatures } from "../model-assessment-forecasting/__mock_data__/mockForecastingDataNoFeatures";
-import { mockForecastingDataSingleTimeSeries } from "../model-assessment-forecasting/__mock_data__/mockForecastingDataSingleTimeSeries";
 import {
   adultCensusWithFairnessDataset,
   adultCensusWithFairnessModelExplanationData,
@@ -67,6 +64,9 @@ import {
   wineCohortDataTrueY,
   wineCohortDataIndex
 } from "../model-assessment/__mock_data__/wineData";
+import { mockForecastingData } from "../model-assessment-forecasting/__mock_data__/mockForecastingData";
+import { mockForecastingDataNoFeatures } from "../model-assessment-forecasting/__mock_data__/mockForecastingDataNoFeatures";
+import { mockForecastingDataSingleTimeSeries } from "../model-assessment-forecasting/__mock_data__/mockForecastingDataSingleTimeSeries";
 
 import {
   IFairnessSetting,
@@ -84,7 +84,7 @@ import {
 import { textApplications } from "./textApplications";
 import { visionApplications } from "./visionApplications";
 
-export const applicationKeys = <const>[
+export const applicationKeys = [
   "interpret",
   "interpretText",
   "fairness",
@@ -93,7 +93,7 @@ export const applicationKeys = <const>[
   "modelAssessmentText",
   "modelAssessmentVision",
   "modelAssessmentForecasting"
-];
+] as const;
 
 export type IApplications = {
   [key in typeof applicationKeys[number]]: unknown;
@@ -111,7 +111,7 @@ export type IApplications = {
     IDataSet<IModelAssessmentDataSet>;
 };
 
-export const applications: IApplications = <const>{
+export const applications: IApplications = {
   errorAnalysis: {
     datasets: {
       adultCensusIncomeData: { classDimension: 2, data: adultCensus },
@@ -274,4 +274,4 @@ export const applications: IApplications = <const>{
   },
   modelAssessmentText: textApplications.modelAssessmentText,
   modelAssessmentVision: visionApplications.modelAssessmentVision
-};
+} as const;

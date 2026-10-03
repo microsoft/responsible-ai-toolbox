@@ -1,7 +1,7 @@
 name: Release responsibleai and raiwidgets to PyPI
 
 env:
-  node-version: 16.x
+  node-version: 22.21.1
   widgetDirectory: raiwidgets
   raiDirectory: responsibleai
   typescriptBuildOutput: dist

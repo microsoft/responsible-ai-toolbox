@@ -16,7 +16,8 @@ import {
   TelemetryLevels,
   hasAxisTypeChanged,
   IClusterData,
-  calculateBubblePlotDataFromErrorCohort
+  calculateBubblePlotDataFromErrorCohort,
+  compareChartProps as compareCoreChartProps
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 
@@ -213,14 +214,7 @@ export function compareChartProps(
   oldProps: IGenericChartProps,
   changedKeys: string[]
 ): void {
-  for (const key in newProps) {
-    if (typeof newProps[key] === "object") {
-      compareChartProps(newProps[key], oldProps[key], changedKeys);
-    }
-    if (newProps[key] !== oldProps[key]) {
-      changedKeys.push(key);
-    }
-  }
+  compareCoreChartProps(newProps, oldProps, changedKeys);
 }
 
 export function hasAxisTypeUpdated(

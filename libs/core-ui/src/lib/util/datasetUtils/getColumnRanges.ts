@@ -18,7 +18,7 @@ export function getColumnRanges(
 ): {
   [key: string]: IColumnRange;
 } {
-  const ranges = {};
+  const ranges: { [key: string]: IColumnRange } = {};
   // get dataset features' range
   dataset.feature_names.forEach((feature) => {
     const range = ifEnableLargeData(dataset)
@@ -191,6 +191,12 @@ function getRegressionErrorFeatureRange(
   return;
 }
 
+function isTwoDimensional(
+  values: number[] | number[][] | string[]
+): values is number[][] {
+  return Array.isArray(values[0]);
+}
+
 function getRange(
   dataset: IDataset,
   modelType: ModelTypes,
@@ -200,7 +206,7 @@ function getRange(
 ): void {
   let categoricalValues = dataset.class_names;
   // if it is 1D array
-  if (!Array.isArray(values[0])) {
+  if (!isTwoDimensional(values)) {
     if (modelType === ModelTypes.Regression) {
       const numbers: number[] = [];
       // this for loop is only to let it make sure values is a 1D array, so it can be used with _.max and _.min
@@ -230,6 +236,7 @@ function getRange(
       };
     }
   }
+
   // if it is 2D array
   else {
     const length = values[0].length;

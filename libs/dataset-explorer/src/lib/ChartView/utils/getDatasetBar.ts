@@ -19,19 +19,21 @@ export function getDatasetBar(
   const groupedData = new Map<string, number[]>();
   const customData = plotlyProps.data[0].customdata;
   const xData = plotlyProps.data[0].x;
-  const xDataTypeCount =
-    chartProps?.xAxis.property &&
-    jointData.metaDict[chartProps.xAxis.property].sortedCategoricalValues
-      ?.length;
+  const xDataTypeCount = chartProps?.xAxis.property
+    ? jointData.metaDict[chartProps.xAxis.property].sortedCategoricalValues
+        ?.length ?? 0
+    : 0;
   const noneGroup = "none";
 
   if (customData && xData) {
     for (const [i, customDatum] of customData.entries()) {
-      const yValue = (customDatum as any).Y ?? noneGroup;
-      if (!groupedData[yValue]) {
-        groupedData[yValue] = new Array(xDataTypeCount).fill(0);
+      const yValue = String((customDatum as { Y?: unknown }).Y ?? noneGroup);
+      let group = groupedData.get(yValue);
+      if (!group) {
+        group = new Array<number>(xDataTypeCount).fill(0);
+        groupedData.set(yValue, group);
       }
-      groupedData[yValue][xData[i]] += 1;
+      group[Number(xData[i])] += 1;
     }
   }
 
@@ -40,7 +42,7 @@ export function getDatasetBar(
       .sortedCategoricalValues ?? [noneGroup];
     groups.forEach((value) => {
       result.push({
-        data: groupedData[value],
+        data: groupedData.get(String(value)) ?? [],
         name: value
       });
     });

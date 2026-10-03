@@ -373,6 +373,9 @@ export class MultiICEPlot extends React.PureComponent<
           });
         }
       } catch (error) {
+        if (!(error instanceof Error)) {
+          throw error;
+        }
         if (error.name === "AbortError") {
           return;
         }
