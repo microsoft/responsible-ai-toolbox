@@ -121,6 +121,7 @@ export class TabsView extends React.PureComponent<
     };
     if (
       this.props.requestImportances &&
+      this.props.errorAnalysisData?.[0] &&
       this.props.dataset.task_type !== DatasetTaskType.Forecasting
     ) {
       this.props
