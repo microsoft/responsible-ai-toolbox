@@ -9,7 +9,7 @@ on:
 jobs:
   ci-notebook:
     env:
-      node-version: 16.x
+      node-version: 22.21.1
     strategy:
       matrix:
         # Temporary: Removed windows-latest due to persistent GitHub Actions runner infrastructure issue

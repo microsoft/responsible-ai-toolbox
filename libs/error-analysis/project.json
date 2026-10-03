@@ -1,0 +1,79 @@
+{
+  "name": "error-analysis",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/error-analysis/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/error-analysis/**/*.js",
+          "libs/error-analysis/**/*.jsx",
+          "libs/error-analysis/**/*.ts",
+          "libs/error-analysis/**/*.tsx",
+          "libs/error-analysis/**/*.test.ts",
+          "libs/error-analysis/**/*.test.tsx",
+          "libs/error-analysis/**/*.test.js",
+          "libs/error-analysis/**/*.test.jsx",
+          "libs/error-analysis/**/*.spec.ts",
+          "libs/error-analysis/**/*.spec.tsx",
+          "libs/error-analysis/**/*.spec.js",
+          "libs/error-analysis/**/*.spec.jsx",
+          "libs/error-analysis/**/*.d.ts"
+        ]
+      }
+    },
+    "build": {
+      "executor": "@nx/rollup:rollup",
+      "options": {
+        "outputPath": "dist/libs/error-analysis",
+        "tsConfig": "libs/error-analysis/tsconfig.lib.json",
+        "project": "libs/error-analysis/package.json",
+        "entryFile": "libs/error-analysis/src/index.ts",
+        "format": ["esm", "cjs"],
+        "buildLibsFromSource": true,
+        "external": [
+          "@fluentui/react",
+          "d3-array",
+          "d3-color",
+          "d3-hierarchy",
+          "d3-interpolate",
+          "d3-scale",
+          "d3-selection",
+          "d3-shape",
+          "highcharts",
+          "jmespath",
+          "localized-strings",
+          "lodash",
+          "memoize-one",
+          "moment",
+          "plotly.js",
+          "react-plotly.js",
+          "react",
+          "react-dom",
+          "uuid"
+        ],
+        "rollupConfig": "./rollup.config.js",
+        "assets": [
+          {
+            "glob": "README.md",
+            "input": ".",
+            "output": "."
+          }
+        ],
+        "buildableProjectDepsInPackageJsonType": "dependencies"
+      },
+      "outputs": ["{options.outputPath}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "options": {
+        "jestConfig": "libs/error-analysis/jest.config.js",
+        "passWithNoTests": true
+      },
+      "outputs": ["{workspaceRoot}/coverage/libs/error-analysis"]
+    }
+  },
+  "tags": []
+}

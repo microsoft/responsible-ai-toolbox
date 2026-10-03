@@ -9,6 +9,7 @@ import { accessorMappingFunctions } from "./accessorMappingFunctions";
 import { IData } from "./IData";
 
 interface IRow {
+  [key: string]: any;
   x: any;
   y: any;
   group: any;

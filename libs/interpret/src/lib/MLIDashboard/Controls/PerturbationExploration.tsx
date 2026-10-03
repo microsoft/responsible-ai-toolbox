@@ -262,6 +262,9 @@ export class PerturbationExploration extends React.Component<
           });
         }
       } catch (error) {
+        if (!(error instanceof Error)) {
+          throw error;
+        }
         if (error.name === "AbortError") {
           return;
         }

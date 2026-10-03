@@ -48,11 +48,26 @@ export function compareChartProps(
   oldProps: IGenericChartProps,
   changedKeys: string[]
 ): void {
-  for (const key in newProps) {
-    if (typeof newProps[key] === "object") {
-      compareChartProps(newProps[key], oldProps[key], changedKeys);
+  compareObjects(newProps, oldProps, changedKeys);
+}
+
+function compareObjects(
+  newProps: object,
+  oldProps: object,
+  changedKeys: string[]
+): void {
+  for (const key of Object.keys(newProps)) {
+    const newValue: unknown = Reflect.get(newProps, key);
+    const oldValue: unknown = Reflect.get(oldProps, key);
+    if (
+      typeof newValue === "object" &&
+      newValue !== null &&
+      typeof oldValue === "object" &&
+      oldValue !== null
+    ) {
+      compareObjects(newValue, oldValue, changedKeys);
     }
-    if (newProps[key] !== oldProps[key]) {
+    if (newValue !== oldValue) {
       changedKeys.push(key);
     }
   }

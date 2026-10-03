@@ -23,6 +23,10 @@ import { regressionKeyValue } from "./constants";
 import { localImportanceChartStyles } from "./LocalImportanceChart.styles";
 import { getSortedData } from "./localImportanceChartUtils";
 
+function isNumberArray(values: number[] | number[][]): values is number[] {
+  return values.every((value) => typeof value === "number");
+}
+
 export interface ILocalImportanceChartProps {
   rowNumber?: number;
   data?: ILocalExplanations;
@@ -169,19 +173,23 @@ export class LocalImportanceChart extends React.PureComponent<
   private generateSortedData(): void {
     const sortedData: Array<{ [key: string]: number[] | number | undefined }> =
       [];
+    const scores =
+      this.props.data?.precomputedExplanations?.localFeatureImportance.scores;
     if (IsClassifier(this.props.modelType)) {
+      const firstClassScores = scores?.[0];
       sortedData.push({
         [this.props.weightOptions[0]]: this.getAbsoluteValues(
-          this.props.data?.precomputedExplanations?.localFeatureImportance
-            .scores[0][0]
+          firstClassScores && !isNumberArray(firstClassScores)
+            ? firstClassScores[0]
+            : undefined
         )
       });
       sortedData.push(...this.addScores());
     } else {
+      const firstScores = scores?.[0];
       sortedData.push({
         [regressionKeyValue]:
-          this.props.data?.precomputedExplanations?.localFeatureImportance
-            .scores[0]
+          firstScores && isNumberArray(firstScores) ? firstScores : undefined
       });
     }
 
@@ -202,7 +210,7 @@ export class LocalImportanceChart extends React.PureComponent<
     );
     this.props.data?.precomputedExplanations?.localFeatureImportance.scores.forEach(
       (score, index) => {
-        if (score[0]) {
+        if (!isNumberArray(score) && score[0]) {
           scores[index] = { [this.props.weightOptions[index + 1]]: score[0] };
         }
       }

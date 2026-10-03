@@ -183,7 +183,7 @@ export function buildInitialExplanationContext(
     new Cohort(localization.Interpret.Cohort.defaultLabel, jointDataset, [])
   ];
   if (
-    validationCheck.errorStrings.length !== 0 &&
+    validationCheck.errorStrings.length > 0 &&
     props.telemetryHook !== undefined
   ) {
     props.telemetryHook({
@@ -192,10 +192,10 @@ export function buildInitialExplanationContext(
       message: "Invalid inputs"
     });
   }
-  const weightVectorLabels = {
+  const weightVectorLabels: Record<string | number, string> = {
     [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
   };
-  const weightVectorOptions = [];
+  const weightVectorOptions: WeightVectorOption[] = [];
   if (IsMulticlass(modelMetadata.modelType)) {
     weightVectorOptions.push(WeightVectors.AbsAvg);
   }

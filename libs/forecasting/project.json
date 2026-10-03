@@ -1,0 +1,50 @@
+{
+  "name": "forecasting",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/forecasting/src",
+  "projectType": "library",
+  "implicitDependencies": ["mlchartlib"],
+  "targets": {
+    "build": {
+      "executor": "@nx/rollup:rollup",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/forecasting",
+        "tsConfig": "libs/forecasting/tsconfig.lib.json",
+        "project": "libs/forecasting/package.json",
+        "entryFile": "libs/forecasting/src/index.ts",
+        "format": ["esm", "cjs"],
+        "buildLibsFromSource": true,
+        "external": [
+          "@responsible-ai/core-ui",
+          "@responsible-ai/localization",
+          "react/jsx-runtime"
+        ],
+        "rollupConfig": "./rollup.config.js",
+        "assets": [
+          {
+            "glob": "libs/forecasting/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ],
+        "buildableProjectDepsInPackageJsonType": "dependencies"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/forecasting/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/forecasting"],
+      "options": {
+        "jestConfig": "libs/forecasting/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

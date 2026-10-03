@@ -21,7 +21,8 @@
     {
       "files": ["**/__mock_data__/*.ts"],
       "rules": {
-        "max-lines": "off"
+        "max-lines": "off",
+        "no-loss-of-precision": "off"
       }
     }
   ]

@@ -1,5 +1,14 @@
 {
   "name": "@responsible-ai/interpret-text",
   "version": "0.0.0",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@fluentui/react": "8.58.0",
+    "@responsible-ai/core-ui": "0.0.0",
+    "@responsible-ai/interpret": "0.0.0",
+    "@responsible-ai/localization": "0.0.0",
+    "highcharts": "^10.1.0",
+    "lodash": "^4.17.11",
+    "react": "^17.0.2"
+  }
 }

@@ -13,7 +13,7 @@ export function describeFairness(
   name: keyof typeof fairnessDatasets,
   checkErrorBars = false
 ): void {
-  describe(name, () => {
+  describe(name, { testIsolation: true }, () => {
     beforeEach(() => {
       cy.visit(`#/fairness/${name}/light/english/Version-2`);
     });

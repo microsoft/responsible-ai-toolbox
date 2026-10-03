@@ -4,13 +4,22 @@
 import { modelAssessmentDatasets } from "../lib/describer/modelAssessment/datasets/modelAssessmentDatasets";
 import { RAINotebookNames } from "../lib/describer/modelAssessment/IModelAssessmentData";
 
+function isRAINotebookName(
+  name: string | number
+): name is keyof typeof RAINotebookNames {
+  return (
+    typeof name === "string" &&
+    Object.prototype.hasOwnProperty.call(RAINotebookNames, name)
+  );
+}
+
 export function visit(
   name?: keyof typeof modelAssessmentDatasets,
   relativePath = "/"
 ): void {
   let fileName: string;
   const hosts = Cypress.env().hosts;
-  if (!name || !RAINotebookNames[name]) {
+  if (!name || !isRAINotebookName(name)) {
     return;
   }
   if (!hosts || !name) {

@@ -34,7 +34,7 @@ export interface ISwarmFeaturePlotProps {
 }
 
 export interface ISwarmFeaturePlotState {
-  plotlyProps: IPlotlyProperty;
+  plotlyProps?: IPlotlyProperty;
 }
 
 export class SwarmFeaturePlot extends React.PureComponent<
@@ -46,14 +46,14 @@ export class SwarmFeaturePlot extends React.PureComponent<
     metadata: IExplanationModelMetadata,
     cohort: Cohort,
     sortVector: number[],
-    selectedOption: IComboBoxOption
+    selectedOption?: IComboBoxOption
   ) => IPlotlyProperty = memoize(
     (
       _jointDataset: JointDataset,
       metadata: IExplanationModelMetadata,
       cohort: Cohort,
       sortVector: number[],
-      selectedOption: IComboBoxOption
+      selectedOption?: IComboBoxOption
     ): IPlotlyProperty => {
       const plotlyProps = _.cloneDeep(SwarmFeaturePlot.BasePlotlyProps);
       const ditherVector = cohort.unwrap(JointDataset.DitherLabel);
@@ -85,10 +85,10 @@ export class SwarmFeaturePlot extends React.PureComponent<
           selectedOption.text
         );
         if (selectedOption.data.isNormalized) {
-          plotlyProps.data[0].marker.colorscale = [
+          _.set(plotlyProps.data[0], "marker.colorscale", [
             [0, "rgba(0,0,255,0.5)"],
             [1, "rgba(255,0,0,0.5)"]
-          ];
+          ]);
           _.set(plotlyProps.data[0], "marker.colorbar.tickvals", [0, 1]);
           _.set(plotlyProps.data[0], "marker.colorbar.ticktext", [
             localization.Interpret.AggregateImportance.low,
@@ -98,8 +98,8 @@ export class SwarmFeaturePlot extends React.PureComponent<
           _.set(plotlyProps.data[0], "marker.opacity", 0.6);
         }
       }
-      const x = [];
-      const y = [];
+      const x: number[] = [];
+      const y: number[] = [];
       sortVector.forEach((featureIndex, xIndex) => {
         x.push(
           ...new Array(numRows).fill(xIndex).map((val, i) => {

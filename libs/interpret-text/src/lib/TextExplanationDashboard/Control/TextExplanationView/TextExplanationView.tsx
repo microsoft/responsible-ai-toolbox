@@ -63,7 +63,7 @@ export class TextExplanationView extends React.Component<
       selectedToken: 0,
       // default to the first token
       singleTokenImportances: this.props.dataSummary.localExplanations[0].map(
-        (row) => row[0]
+        (row) => (Array.isArray(row) ? row[0] : row)
       ),
       // get importance for first token
       text: this.props.dataSummary.text,
@@ -220,8 +220,8 @@ export class TextExplanationView extends React.Component<
 
   private getImportanceForSingleToken(index: number): number[] {
     const expIndex = this.state.qaRadio === QAExplanationType.Start ? 0 : 1;
-    return this.props.dataSummary.localExplanations[expIndex].map(
-      (row) => row[index]
+    return this.props.dataSummary.localExplanations[expIndex].map((row) =>
+      Array.isArray(row) ? row[index] : row
     );
   }
 

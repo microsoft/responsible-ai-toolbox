@@ -13,7 +13,8 @@ import {
   rowErrorSize,
   ICounterfactualData,
   ITelemetryEvent,
-  ifEnableLargeData
+  ifEnableLargeData,
+  compareChartProps
 } from "@responsible-ai/core-ui";
 import { IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -291,14 +292,7 @@ export class CounterfactualComponent extends React.PureComponent<
     oldProps?: IGenericChartProps
   ): void => {
     if (oldProps) {
-      for (const key in newProps) {
-        if (typeof newProps[key] === "object") {
-          this.compareChartProps(newProps[key], oldProps[key]);
-        }
-        if (newProps[key] !== oldProps[key]) {
-          this.changedKeys.push(key);
-        }
-      }
+      compareChartProps(newProps, oldProps, this.changedKeys);
     }
   };
 
@@ -364,6 +358,9 @@ export class CounterfactualComponent extends React.PureComponent<
           }
           this.setState({ request: undefined });
         } catch (error) {
+          if (!(error instanceof Error)) {
+            throw error;
+          }
           if (error.name === "AbortError") {
             return;
           }

@@ -50,13 +50,15 @@ const withType: {
   [key in keyof typeof modelAssessmentDatasets]: IModelAssessmentData;
 } = modelAssessmentDatasets;
 
-const allDatasets = {
-  ...modelAssessmentDatasets,
-  ...modelAssessmentDatasetsDataBalanceExperience
-};
+type AllDatasets = typeof modelAssessmentDatasets &
+  typeof modelAssessmentDatasetsDataBalanceExperience;
 const allWithType: {
-  [key in keyof typeof allDatasets]: IModelAssessmentData;
-} = Object.assign(modelAssessmentDatasetsDataBalanceExperience);
+  [key in keyof AllDatasets]: IModelAssessmentData;
+} = Object.assign(
+  {},
+  modelAssessmentDatasets,
+  modelAssessmentDatasetsDataBalanceExperience
+);
 
 export {
   withType as modelAssessmentDatasets,

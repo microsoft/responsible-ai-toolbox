@@ -5,7 +5,7 @@ exports[`DashboardSettingDeleteButton should render successfully 1`] = `
   <CustomizedIconButton
     ariaLabel="Delete"
     iconProps={
-      Object {
+      {
         "iconName": "Delete",
       }
     }

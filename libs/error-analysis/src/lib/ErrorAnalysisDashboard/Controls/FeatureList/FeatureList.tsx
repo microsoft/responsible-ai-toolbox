@@ -380,7 +380,7 @@ export class FeatureList extends React.Component<
 
   private getSelectionDetails(): string[] {
     const selectedRows = this._selection.getSelection();
-    const keys = selectedRows.map((row) => row[0] as string);
+    const keys = selectedRows.map((row) => Reflect.get(row, 0) as string);
     return keys;
   }
 

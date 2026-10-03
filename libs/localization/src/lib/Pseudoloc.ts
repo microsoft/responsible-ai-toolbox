@@ -61,8 +61,10 @@ const identifierEnd = "}";
 const stretchFactor = 0.3; // Stretch each string by adding additional characters
 
 export class Pseudoloc {
-  public static pseudolocalizeStrings<T>(locStrings: T): T {
-    const pseudolocStrings = {};
+  public static pseudolocalizeStrings<T extends Record<string, any>>(
+    locStrings: T
+  ): T {
+    const pseudolocStrings: Record<string, any> = {};
     for (const key of Object.keys(locStrings)) {
       const value = locStrings[key];
       switch (typeof value) {

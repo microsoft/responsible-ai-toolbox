@@ -1,0 +1,72 @@
+{
+  "name": "fairness",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/fairness/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/fairness/**/*.js",
+          "libs/fairness/**/*.jsx",
+          "libs/fairness/**/*.ts",
+          "libs/fairness/**/*.tsx",
+          "libs/fairness/**/*.test.ts",
+          "libs/fairness/**/*.test.tsx",
+          "libs/fairness/**/*.test.js",
+          "libs/fairness/**/*.test.jsx",
+          "libs/fairness/**/*.spec.ts",
+          "libs/fairness/**/*.spec.tsx",
+          "libs/fairness/**/*.spec.js",
+          "libs/fairness/**/*.spec.jsx",
+          "libs/fairness/**/*.d.ts"
+        ]
+      }
+    },
+    "build": {
+      "executor": "@nx/rollup:rollup",
+      "options": {
+        "outputPath": "dist/libs/fairness",
+        "tsConfig": "libs/fairness/tsconfig.lib.json",
+        "project": "libs/fairness/package.json",
+        "entryFile": "libs/fairness/src/index.ts",
+        "format": ["esm", "cjs"],
+        "buildLibsFromSource": true,
+        "external": [
+          "@fluentui/react",
+          "highcharts",
+          "jmespath",
+          "localized-strings",
+          "lodash",
+          "memoize-one",
+          "moment",
+          "plotly.js",
+          "react-plotly.js",
+          "react",
+          "react-dom",
+          "uuid"
+        ],
+        "rollupConfig": "./rollup.config.js",
+        "assets": [
+          {
+            "glob": "README.md",
+            "input": ".",
+            "output": "."
+          }
+        ],
+        "buildableProjectDepsInPackageJsonType": "dependencies"
+      },
+      "outputs": ["{options.outputPath}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "options": {
+        "jestConfig": "libs/fairness/jest.config.js",
+        "passWithNoTests": true
+      },
+      "outputs": ["{workspaceRoot}/coverage/libs/fairness"]
+    }
+  },
+  "tags": []
+}

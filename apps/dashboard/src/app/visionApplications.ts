@@ -13,7 +13,7 @@ import {
   IModelAssessmentDataSet
 } from "./applicationInterfaces";
 
-export const applicationKeys = <const>["modelAssessmentVision"];
+export const applicationKeys = ["modelAssessmentVision"] as const;
 
 export type IApplications = {
   [key in typeof applicationKeys[number]]: unknown;
@@ -22,7 +22,7 @@ export type IApplications = {
     IDataSet<IModelAssessmentDataSet>;
 };
 
-export const visionApplications: IApplications = <const>{
+export const visionApplications: IApplications = {
   modelAssessmentVision: {
     datasets: {
       fridge: {
@@ -102,4 +102,4 @@ export const visionApplications: IApplications = <const>{
     },
     versions: { "1": 1, "2:Static-View": 2 }
   }
-};
+} as const;

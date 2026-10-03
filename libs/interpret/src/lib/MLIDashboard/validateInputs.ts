@@ -93,7 +93,10 @@ export function validateInputs(
       }
     }
   } catch (error) {
-    return error.message;
+    if (error instanceof Error) {
+      return error.message;
+    }
+    throw error;
   }
   return undefined;
 }

@@ -108,7 +108,7 @@ export class TreatmentTable extends React.PureComponent<
       data,
       rowSpan
     });
-    while (queue.length) {
+    while (queue.length > 0) {
       const len = queue.length;
       const currentRow = [];
       for (let i = 0; i < len; i++) {

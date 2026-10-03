@@ -62,10 +62,10 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
       }
     });
 
-    const items: Array<{ key: any }> = [];
+    const items: Array<Record<string, unknown>> = [];
     if (formattedBinValues.length > 0 && formattedBinValues[0]) {
       // add row for overall metrics
-      const item = {
+      const item: Record<string, unknown> = {
         binLabel: localization.Fairness.Report.overallLabel,
         key: "binLabel"
       };
@@ -76,7 +76,7 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
 
       // add rows for each group
       formattedBinValues[0].forEach((_, rowIndex) => {
-        const item = {
+        const item: Record<string, unknown> = {
           binLabel: binLabels[rowIndex],
           key: rowIndex
         };

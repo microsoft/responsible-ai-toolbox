@@ -62,8 +62,9 @@ const onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (
   if (!props) {
     return <div />;
   }
-  const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> =
-    (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />;
+  const onRenderColumnHeaderTooltip: IRenderFunction<
+    IDetailsColumnRenderTooltipProps
+  > = (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />;
   return (
     <div>
       {defaultRender?.({
@@ -205,7 +206,7 @@ export class TabularDataView extends React.Component<
 
   private getSelectionDetails(): number[] {
     const selectedRows = this._selection.getSelection();
-    const keys = selectedRows.map((row) => row[0] as number);
+    const keys = selectedRows.map((row) => Reflect.get(row, 0) as number);
     return keys;
   }
 

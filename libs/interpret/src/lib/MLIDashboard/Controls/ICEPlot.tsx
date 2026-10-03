@@ -575,6 +575,9 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
             this.setState({ abortController: undefined, fetchedData });
           }
         } catch (error) {
+          if (!(error instanceof Error)) {
+            throw error;
+          }
           if (error.name === "AbortError") {
             return;
           }
