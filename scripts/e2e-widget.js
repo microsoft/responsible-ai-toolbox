@@ -271,7 +271,7 @@ function writeCypressSettings(hosts) {
   fs.writeFileSync(
     path.join(__dirname, "../apps/widget-e2e/cypress.env.json"),
     JSON.stringify({
-      hosts
+      hosts: Object.fromEntries(hosts.map(({ file, host }) => [file, host]))
     })
   );
 }

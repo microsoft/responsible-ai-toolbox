@@ -17,8 +17,7 @@ export function visit(
   name?: keyof typeof modelAssessmentDatasets,
   relativePath = "/"
 ): void {
-  let fileName: string;
-  const hosts = Cypress.env().hosts;
+  const hosts = Cypress.env().hosts as Record<string, string> | undefined;
   if (!name || !isRAINotebookName(name)) {
     return;
   }
@@ -26,11 +25,12 @@ export function visit(
     cy.visit(relativePath);
     return;
   }
-  const hostDetails = hosts.find((obj: { file: string }) => {
-    fileName = RAINotebookNames[name];
-    return obj.file === fileName;
-  });
-  const url = new URL(relativePath, hostDetails.host);
+  const fileName = RAINotebookNames[name];
+  const host = hosts[fileName];
+  if (!host) {
+    throw new Error(`No host configured for ${fileName}.`);
+  }
+  const url = new URL(relativePath, host);
   cy.task("log", url.href);
   cy.visit(url.href);
 }
