@@ -22,12 +22,13 @@ this file to understand what changed.
 - new features
 - breaking changes
   - Update the ResponsibleAI dependency stack to Pandas 2, DiCE 0.12,
-    EconML 0.16, and LightGBM 4 for NumPy 2 compatibility.
+    SciPy 1.13, scikit-learn 1.4.2, Statsmodels 0.14.2, EconML 0.16,
+    and LightGBM 4.4 for NumPy 2 compatibility.
 - bug fixes and tests
   - Support both NumPy 1.x and 2.x across the core Python packages and add
     compatibility regression coverage.
-  - Keep the legacy text and vision package stacks on NumPy and Pandas 1.x
-    until their PyTorch dependency floors can support NumPy 2.
+  - Keep the legacy text and vision package stacks on NumPy 1.x until their
+    PyTorch dependency floors can support NumPy 2.
 - other
 
 ## v0.36.0

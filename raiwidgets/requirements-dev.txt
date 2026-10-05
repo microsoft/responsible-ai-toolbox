@@ -9,7 +9,7 @@ requirements-parser==0.2.0
 wheel
 
 fairlearn==0.7.0
-ml-wrappers>=0.6.0
+ml-wrappers>=0.6.0,<0.7
 sktime
 pmdarima
 

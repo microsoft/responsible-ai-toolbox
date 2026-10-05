@@ -46,19 +46,30 @@ def test_fairness_metrics_accept_numpy_arrays():
 def test_fairlearn_metric_frame_supports_pandas_2():
     """Verify the dashboard's Fairlearn version works with Pandas 2."""
     metric_frame = MetricFrame(
-        metrics=selection_rate,
+        metrics={
+            'selection_rate': selection_rate,
+            'selection_rate_bounds': precision_wilson
+        },
         y_true=[0, 1, 0, 1],
         y_pred=[0, 1, 1, 1],
         sensitive_features=['a', 'a', 'b', 'b'])
 
-    assert metric_frame.by_group.to_dict() == {'a': 0.5, 'b': 1.0}
+    assert metric_frame.overall['selection_rate'] == 0.75
+    assert metric_frame.by_group['selection_rate'].to_dict() == {
+        'a': 0.5, 'b': 1.0}
+    assert metric_frame.overall['selection_rate_bounds'] == (
+        0.2077, 0.9385)
 
 
-def test_lightgbm_dataset_accepts_list_labels():
+@pytest.mark.parametrize('labels', [
+    [0, 0, 1, 1],
+    pd.Series([0, 0, 1, 1], dtype='int64')
+])
+def test_lightgbm_dataset_accepts_array_like_labels(labels):
     """Verify LightGBM uses NumPy 2 compatible array conversion."""
     dataset = Dataset(
         np.array([[0.0], [1.0], [2.0], [3.0]]),
-        label=[0, 0, 1, 1])
+        label=labels)
 
     dataset.construct()
     assert dataset.num_data() == 4
