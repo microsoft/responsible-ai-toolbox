@@ -2,14 +2,15 @@
 # Licensed under the MIT License.
 
 from collections import Counter
-from http.client import HTTPMessage
+from io import BytesIO
 from math import isclose
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 from urllib.parse import urlparse
 
 import numpy as np
 from common_vision_utils import (load_clearsight_object_detection_dataset,
                                  load_fridge_object_detection_dataset)
+from urllib3.response import HTTPResponse
 
 from responsibleai_vision.common.constants import ImageColumns
 from responsibleai_vision.utils.image_reader import \
@@ -86,8 +87,8 @@ class TestImageUtils(object):
         # requests_send_mock.side_effect =
         request_mock.side_effect = [
             IOError(),
-            Mock(status=500, msg=HTTPMessage("test")),
-            Mock(status=200, msg=HTTPMessage("test")),
+            HTTPResponse(body=BytesIO(), status=500),
+            HTTPResponse(body=BytesIO(), status=200),
         ]
         session = image_reader_get_retry_session(url)
 
