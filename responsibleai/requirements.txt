@@ -1,17 +1,19 @@
 dice-ml>=0.12,<0.13
 econml>=0.16.0,<0.17
-statsmodels<0.15.0
+statsmodels>=0.14.2,<0.15.0
 jsonschema
 erroranalysis>=0.6.0
-interpret-community>=0.32.0
-lightgbm>=4.0,<5
+interpret-community>=0.32.0,<0.33
+interpret-core==0.6.9
+shap==0.46.0
+lightgbm>=4.4.0,<5
 numpy>=1.17.2,<3
-pandas>=2.0.0,<3
+pandas>=2.2.2,<3
 # See PR 1429 about upper bound
-scikit-learn>=0.22.1,!=1.1,<=1.5.1
-scipy>=1.4.1,<1.15
+scikit-learn>=1.4.2,<=1.5.1
+scipy>=1.13.0,<1.15
 semver~=2.13.0
-ml-wrappers>=0.6.0
+ml-wrappers>=0.6.0,<0.7
 
 # Pinned dependencies
 networkx>=3.2.1,<4
