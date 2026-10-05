@@ -1,5 +1,5 @@
-numpy
-pandas
+numpy<3
+pandas<3
 requests
 scikit-learn
 scipy

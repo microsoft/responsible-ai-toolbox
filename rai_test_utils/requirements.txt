@@ -1,5 +1,5 @@
-numpy
-pandas
+numpy<3
+pandas<3
 scikit-learn
 scipy
 shap

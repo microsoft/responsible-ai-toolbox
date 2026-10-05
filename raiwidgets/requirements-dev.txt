@@ -28,4 +28,5 @@ sphinx==5.0.2
 sphinx-gallery==0.10.0
 pydata-sphinx-theme==0.7.2
 
+../erroranalysis/.
 ../responsibleai/.

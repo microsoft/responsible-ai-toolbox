@@ -6,6 +6,8 @@
 import numpy as np
 import pandas as pd
 import pytest
+from fairlearn.metrics import MetricFrame, selection_rate
+from lightgbm import Dataset
 
 from erroranalysis._internal.matrix_filter import bin_data
 from raiutils.exceptions import UserConfigValidationException
@@ -39,6 +41,27 @@ def test_fairness_metrics_accept_numpy_arrays():
 
     assert precision_wilson(y_true, y_pred) == (0.2077, 0.9385)
     assert false_positive_rate_wilson(y_true, y_pred) == (0.0945, 0.9055)
+
+
+def test_fairlearn_metric_frame_supports_pandas_2():
+    """Verify the dashboard's Fairlearn version works with Pandas 2."""
+    metric_frame = MetricFrame(
+        metrics=selection_rate,
+        y_true=[0, 1, 0, 1],
+        y_pred=[0, 1, 1, 1],
+        sensitive_features=['a', 'a', 'b', 'b'])
+
+    assert metric_frame.by_group.to_dict() == {'a': 0.5, 'b': 1.0}
+
+
+def test_lightgbm_dataset_accepts_list_labels():
+    """Verify LightGBM uses NumPy 2 compatible array conversion."""
+    dataset = Dataset(
+        np.array([[0.0], [1.0], [2.0], [3.0]]),
+        label=[0, 0, 1, 1])
+
+    dataset.construct()
+    assert dataset.num_data() == 4
 
 
 def test_quantile_binning_uses_supported_categorical_api():
