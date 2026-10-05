@@ -58,7 +58,7 @@ jobs:
         name: Install compatible LightGBM on MacOS
         run: |
           pip install "cmake<4" wheel
-          pip install --no-build-isolation "lightgbm==3.3.5"
+          pip install --no-build-isolation "lightgbm>=4,<5"
 
       - name: Install package dependencies
         run: |

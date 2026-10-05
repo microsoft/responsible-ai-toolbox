@@ -1,6 +1,6 @@
-numpy>=1.17.2
-pandas>=0.25.1
+numpy>=1.17.2,<3
+pandas>=0.25.1,<3
 scipy>=1.4.1
 scikit-learn>=0.22.1
-lightgbm>=2.0.11
+lightgbm>=4.0,<5
 raiutils>=0.4.2

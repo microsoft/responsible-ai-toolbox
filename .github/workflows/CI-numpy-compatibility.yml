@@ -10,8 +10,6 @@ on:
       - "rai_test_utils/**"
       - "raiutils/**"
       - "responsibleai/**"
-      - "responsibleai_text/**"
-      - "responsibleai_vision/**"
       - "raiwidgets/**"
       - "numpy_compatibility_tests/**"
       - ".github/workflows/CI-numpy-compatibility.yml"
@@ -36,13 +34,14 @@ jobs:
       - name: Install packages with NumPy ${{ matrix.numpyVersion }}
         run: |
           python -m pip install --upgrade pip "setuptools<82"
-          pip install "numpy==${{ matrix.numpyVersion }}"
-          pip install -e ./raiutils
-          pip install -e ./erroranalysis
-          pip install -e ./rai_test_utils
-          pip install -e ./responsibleai
-          pip install -e ./raiwidgets
-          pip install "numpy==${{ matrix.numpyVersion }}" pytest
+          echo "numpy==${{ matrix.numpyVersion }}" > numpy-constraints.txt
+          PIP_CONSTRAINT=numpy-constraints.txt pip install \
+            "numpy==${{ matrix.numpyVersion }}" pytest \
+            -e ./raiutils \
+            -e ./erroranalysis \
+            -e ./rai_test_utils \
+            -e ./responsibleai \
+            -e ./raiwidgets
 
       - name: Verify dependency consistency
         run: |

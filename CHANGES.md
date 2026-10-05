@@ -10,8 +10,6 @@ Each set of changes should be grouped by
 - new features
 - breaking changes
 - bug fixes and tests
-  - Support both NumPy 1.x and 2.x across the Python packages and add
-    compatibility regression coverage.
 - other
 
 Note that it is not required to have an entry for every pull request.
@@ -23,7 +21,13 @@ this file to understand what changed.
 - educational materials
 - new features
 - breaking changes
+  - Update the ResponsibleAI dependency stack to Pandas 2, DiCE 0.12,
+    EconML 0.16, and LightGBM 4 for NumPy 2 compatibility.
 - bug fixes and tests
+  - Support both NumPy 1.x and 2.x across the core Python packages and add
+    compatibility regression coverage.
+  - Keep the legacy text and vision package stacks on NumPy and Pandas 1.x
+    until their PyTorch dependency floors can support NumPy 2.
 - other
 
 ## v0.36.0
