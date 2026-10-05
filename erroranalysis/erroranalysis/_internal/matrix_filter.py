@@ -462,7 +462,7 @@ def bin_data(df, feat, bins, quantile_binning=False):
         cats = pd.IntervalIndex(indexes, closed=zero_interval.closed,
                                 dtype=bindf.cat.categories.dtype,
                                 name=bindf.cat.categories.name)
-        bindf.cat.categories = cats
+        bindf = bindf.cat.rename_categories(cats)
         # re-bin data according to new categories, otherwise can have
         # issues with precision when using pd.qcut.
         # Specifically, it can bin some points incorrectly for low precision,

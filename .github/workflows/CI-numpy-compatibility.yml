@@ -1,0 +1,54 @@
+name: CI NumPy compatibility
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    paths:
+      - "erroranalysis/**"
+      - "rai_test_utils/**"
+      - "raiutils/**"
+      - "responsibleai/**"
+      - "responsibleai_text/**"
+      - "responsibleai_vision/**"
+      - "raiwidgets/**"
+      - "numpy_compatibility_tests/**"
+      - ".github/workflows/CI-numpy-compatibility.yml"
+
+jobs:
+  ci-numpy-compatibility:
+    strategy:
+      fail-fast: false
+      matrix:
+        numpyVersion: ["1.26.4", "2.0.2", "2.2.6"]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.11"
+
+      - name: Install packages with NumPy ${{ matrix.numpyVersion }}
+        run: |
+          python -m pip install --upgrade pip "setuptools<82"
+          pip install "numpy==${{ matrix.numpyVersion }}"
+          pip install -e ./raiutils
+          pip install -e ./erroranalysis
+          pip install -e ./rai_test_utils
+          pip install -e ./responsibleai
+          pip install -e ./raiwidgets
+          pip install "numpy==${{ matrix.numpyVersion }}" pytest
+
+      - name: Verify dependency consistency
+        run: |
+          python -c "import numpy; assert numpy.__version__ == '${{ matrix.numpyVersion }}'"
+          pip check
+
+      - name: Run NumPy compatibility tests
+        run: |
+          pytest numpy_compatibility_tests -v

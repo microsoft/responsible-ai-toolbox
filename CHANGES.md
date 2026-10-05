@@ -10,6 +10,8 @@ Each set of changes should be grouped by
 - new features
 - breaking changes
 - bug fixes and tests
+  - Support both NumPy 1.x and 2.x across the Python packages and add
+    compatibility regression coverage.
 - other
 
 Note that it is not required to have an entry for every pull request.
