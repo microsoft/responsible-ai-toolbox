@@ -1,5 +1,15 @@
 {
   "name": "@responsible-ai/mlchartlib",
   "version": "0.0.0",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@fluentui/react": "8.58.0",
+    "jmespath": "^0.15.0",
+    "lodash": "^4.17.11",
+    "moment": "^2.29.4",
+    "plotly.js": "^2.27.1",
+    "react": "^17.0.2",
+    "react-plotly.js": "^2.6.0",
+    "uuid": "^9.0.1"
+  }
 }

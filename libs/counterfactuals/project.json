@@ -1,0 +1,72 @@
+{
+  "name": "counterfactuals",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/counterfactuals/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/counterfactuals/**/*.js",
+          "libs/counterfactuals/**/*.jsx",
+          "libs/counterfactuals/**/*.ts",
+          "libs/counterfactuals/**/*.tsx",
+          "libs/counterfactuals/**/*.test.ts",
+          "libs/counterfactuals/**/*.test.tsx",
+          "libs/counterfactuals/**/*.test.js",
+          "libs/counterfactuals/**/*.test.jsx",
+          "libs/counterfactuals/**/*.spec.ts",
+          "libs/counterfactuals/**/*.spec.tsx",
+          "libs/counterfactuals/**/*.spec.js",
+          "libs/counterfactuals/**/*.spec.jsx",
+          "libs/counterfactuals/**/*.d.ts"
+        ]
+      }
+    },
+    "build": {
+      "executor": "@nx/rollup:rollup",
+      "options": {
+        "outputPath": "dist/libs/counterfactuals",
+        "tsConfig": "libs/counterfactuals/tsconfig.lib.json",
+        "project": "libs/counterfactuals/package.json",
+        "entryFile": "libs/counterfactuals/src/index.ts",
+        "format": ["esm", "cjs"],
+        "buildLibsFromSource": true,
+        "external": [
+          "@fluentui/react",
+          "highcharts",
+          "jmespath",
+          "localized-strings",
+          "lodash",
+          "memoize-one",
+          "moment",
+          "plotly.js",
+          "react-plotly.js",
+          "react",
+          "react-dom",
+          "uuid"
+        ],
+        "rollupConfig": "./rollup.config.js",
+        "assets": [
+          {
+            "glob": "README.md",
+            "input": ".",
+            "output": "."
+          }
+        ],
+        "buildableProjectDepsInPackageJsonType": "dependencies"
+      },
+      "outputs": ["{options.outputPath}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "options": {
+        "jestConfig": "libs/counterfactuals/jest.config.js",
+        "passWithNoTests": true
+      },
+      "outputs": ["{workspaceRoot}/coverage/libs/counterfactuals"]
+    }
+  },
+  "tags": []
+}

@@ -154,7 +154,8 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
       dict[JointDataset.IndexLabel] = val;
       return dict;
     });
-    plotlyProps.data[0].type = chartProps.chartType;
+    plotlyProps.data[0].type =
+      chartProps.chartType === "bubble" ? "scatter" : chartProps.chartType;
     plotlyProps.data[0].mode = PlotlyMode.Markers;
     plotlyProps.data[0].marker = {
       color: FluentUIStyles.fluentUIColorPalette[this.props.cohortIndex]

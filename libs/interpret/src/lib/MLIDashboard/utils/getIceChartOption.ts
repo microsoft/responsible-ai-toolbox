@@ -30,12 +30,7 @@ export function getIceChartOption(
   xData?: Array<number | string>,
   yData?: number[][] | number[][][]
 ): any {
-  if (
-    yData === undefined ||
-    xData === undefined ||
-    yData.length === 0 ||
-    yData.some((row: number[] | number[][]) => row === undefined)
-  ) {
+  if (yData === undefined || xData === undefined || yData.length === 0) {
     return undefined;
   }
   const data: IData[] = map<number[] | number[][]>(

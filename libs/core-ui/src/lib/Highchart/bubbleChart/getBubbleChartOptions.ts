@@ -3,6 +3,7 @@
 
 import { getTheme } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
+import { Point } from "highcharts";
 
 import {
   IHighchartBubbleData,
@@ -58,14 +59,15 @@ export function getBubbleChartOptions(
         point: {
           events: {
             click(): void {
+              const point = this as Point & IHighchartBubbleData;
               const clusterData: IClusterData = {
-                indexSeries: this["indexSeries"],
-                x: this["x"],
-                xMap: this["xMap"],
-                xSeries: this["xSeries"],
-                y: this["y"],
-                yMap: this["yMap"],
-                ySeries: this["ySeries"]
+                indexSeries: point.indexSeries,
+                x: point.x,
+                xMap: point.xMap,
+                xSeries: point.xSeries,
+                y: point.y,
+                yMap: point.yMap,
+                ySeries: point.ySeries
               };
               const scatterPlotData = getScatterOption(
                 clusterData,
@@ -80,7 +82,7 @@ export function getBubbleChartOptions(
               );
 
               onBubbleClick && onBubbleClick(scatterPlotData, clusterData);
-              onIndexSeriesUpdated && onIndexSeriesUpdated(this["indexSeries"]);
+              onIndexSeriesUpdated && onIndexSeriesUpdated(point.indexSeries);
             }
           }
         }

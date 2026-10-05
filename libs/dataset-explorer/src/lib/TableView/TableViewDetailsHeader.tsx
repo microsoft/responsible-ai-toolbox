@@ -21,8 +21,9 @@ export function generateOnRenderDetailsHeader(
     if (!props) {
       return <Stack />;
     }
-    const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> =
-      (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />;
+    const onRenderColumnHeaderTooltip: IRenderFunction<
+      IDetailsColumnRenderTooltipProps
+    > = (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />;
     return (
       <Stack>
         {defaultRender?.({

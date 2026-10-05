@@ -9,7 +9,7 @@ on:
 jobs:
   ui-build:
     env:
-      node-version: 16.x
+      node-version: 22.21.1
 
     runs-on: windows-latest
 
@@ -51,7 +51,7 @@ jobs:
 
     env:
       CYPRESS_VERIFY_TIMEOUT: 120000
-      node-version: 16.x
+      node-version: 22.21.1
 
     strategy:
       fail-fast: false

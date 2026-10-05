@@ -25,6 +25,29 @@ REGRESSION_ERROR = 'Regression error'
 
 
 class TestCohortFilterRAIInsights(object):
+    def test_cohort_filter_without_model(self):
+        X_train, X_test, y_train, y_test, feature_names = \
+            create_housing_data()
+        X_train = pd.DataFrame(X_train, columns=feature_names)
+        X_test = pd.DataFrame(X_test, columns=feature_names)
+        feature = feature_names[0]
+        threshold = X_test[feature].median()
+        filters = [{ARG: [threshold],
+                    COLUMN: feature,
+                    METHOD: CohortFilterMethods.METHOD_GREATER}]
+        train = X_train.copy()
+        train["target"] = y_train
+        test = X_test.copy()
+        test["target"] = y_test
+        rai_insights = RAIInsights(
+            None, train, test, "target", ModelTask.REGRESSION)
+
+        filtered_data = rai_insights.get_filtered_test_data(
+            filters, [], include_original_columns_only=True)
+
+        expected = X_test.loc[X_test[feature] > threshold]
+        assert expected.equals(filtered_data)
+
     def test_cohort_filter_equal(self):
         X_train, X_test, y_train, y_test, feature_names, _ = \
             create_iris_pandas()

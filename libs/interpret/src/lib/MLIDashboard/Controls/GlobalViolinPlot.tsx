@@ -30,7 +30,7 @@ export interface IGlobalViolinPlotProps {
 }
 
 export interface IGlobalViolinPlotState {
-  plotlyProps: IPlotlyProperty;
+  plotlyProps?: IPlotlyProperty;
 }
 
 export class GlobalViolinPlot extends React.PureComponent<
@@ -42,7 +42,7 @@ export class GlobalViolinPlot extends React.PureComponent<
     metadata: IExplanationModelMetadata,
     cohort: Cohort,
     sortVector: number[],
-    selectedOption: IComboBoxOption
+    selectedOption?: IComboBoxOption
   ) => IPlotlyProperty = memoize(
     (
       _jointDataset: JointDataset,

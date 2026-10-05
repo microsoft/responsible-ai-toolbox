@@ -1,0 +1,51 @@
+{
+  "name": "interpret-vision",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/interpret-vision/src",
+  "projectType": "library",
+  "implicitDependencies": ["mlchartlib"],
+  "targets": {
+    "build": {
+      "executor": "@nx/rollup:rollup",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/interpret-vision",
+        "tsConfig": "libs/interpret-vision/tsconfig.lib.json",
+        "project": "libs/interpret-vision/package.json",
+        "entryFile": "libs/interpret-vision/src/index.ts",
+        "format": ["esm", "cjs"],
+        "buildLibsFromSource": true,
+        "external": [
+          "@responsible-ai/core-ui",
+          "@responsible-ai/localization",
+          "react/jsx-runtime",
+          "vott-ct"
+        ],
+        "rollupConfig": "./rollup.config.js",
+        "assets": [
+          {
+            "glob": "libs/interpret-vision/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ],
+        "buildableProjectDepsInPackageJsonType": "dependencies"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/interpret-vision/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/interpret-vision"],
+      "options": {
+        "jestConfig": "libs/interpret-vision/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

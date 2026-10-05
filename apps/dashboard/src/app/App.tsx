@@ -10,21 +10,35 @@ import { Redirect, generatePath } from "react-router-dom";
 
 import { App as ErrorAnalysis } from "../error-analysis/App";
 import { App as Fairness } from "../fairness/App";
-import { App as InterpretText } from "../interpret-text/App";
 import { App as Interpret } from "../interpret/App";
+import { App as InterpretText } from "../interpret-text/App";
+import { App as ModelAssessment } from "../model-assessment/App";
 import { App as ModelAssessmentForecasting } from "../model-assessment-forecasting/App";
 import { App as ModelAssessmentText } from "../model-assessment-text/App";
 import { App as ModelAssessmentVision } from "../model-assessment-vision/App";
-import { App as ModelAssessment } from "../model-assessment/App";
 
 import { AppHeader } from "./AppHeader";
 import { applications, IApplications, applicationKeys } from "./applications";
 import { IAppSetting, routeKey } from "./IAppSetting";
 import { themes } from "./themes";
 
-interface IAppState extends Required<IAppSetting> {
+function hasKey<T extends object>(
+  value: T,
+  key: string | undefined
+): key is Extract<keyof T, string> {
+  return key !== undefined && Object.prototype.hasOwnProperty.call(value, key);
+}
+
+function isLanguage(value: string | undefined): value is Language {
+  const languages: readonly string[] = Object.values(Language);
+  return value !== undefined && languages.includes(value);
+}
+
+interface IAppState extends Omit<Required<IAppSetting>, "language" | "theme"> {
   application: keyof IApplications;
   iteration: number;
+  language: Language;
+  theme: keyof typeof themes;
 }
 
 export class App extends React.Component<IAppSetting, IAppState> {
@@ -67,7 +81,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
                 ].classDimension
               }
               theme={themes[this.state.theme]}
-              language={Language[this.state.language]}
+              language={this.state.language}
               version={
                 applications[this.state.application].versions[
                   this.state.version
@@ -83,7 +97,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
                 ].data
               }
               theme={themes[this.state.theme]}
-              language={Language[this.state.language]}
+              language={this.state.language}
               version={
                 applications[this.state.application].versions[
                   this.state.version
@@ -99,7 +113,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
                 ].data
               }
               theme={themes[this.state.theme]}
-              language={Language[this.state.language]}
+              language={this.state.language}
               version={
                 applications[this.state.application].versions[
                   this.state.version
@@ -121,7 +135,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
                 ].classDimension
               }
               theme={theme}
-              language={Language[this.state.language]}
+              language={this.state.language}
               version={
                 applications[this.state.application].versions[
                   this.state.version
@@ -135,7 +149,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
                 this.state.dataset
               ]}
               theme={themes[this.state.theme]}
-              language={Language[this.state.language]}
+              language={this.state.language}
               version={
                 applications[this.state.application].versions[
                   this.state.version
@@ -150,7 +164,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
                 this.state.dataset
               ]}
               theme={themes[this.state.theme]}
-              language={Language[this.state.language]}
+              language={this.state.language}
               version={
                 applications[this.state.application].versions[
                   this.state.version
@@ -165,7 +179,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
                 this.state.dataset
               ]}
               theme={themes[this.state.theme]}
-              language={Language[this.state.language]}
+              language={this.state.language}
               version={
                 applications[this.state.application].versions[
                   this.state.version
@@ -180,7 +194,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
                 this.state.dataset
               ]}
               theme={themes[this.state.theme]}
-              language={Language[this.state.language]}
+              language={this.state.language}
               version={
                 applications[this.state.application].versions[
                   this.state.version
@@ -218,14 +232,8 @@ export class App extends React.Component<IAppSetting, IAppState> {
           : props.dataset,
       featureFlights: props.featureFlights ?? "",
       iteration: props.iteration + 1,
-      language:
-        !props.language || !Language[props.language]
-          ? Language.En
-          : props.language,
-      theme:
-        !props.theme || !themes[props.theme]
-          ? Object.keys(themes)[0]
-          : props.theme,
+      language: isLanguage(props.language) ? props.language : Language.En,
+      theme: hasKey(themes, props.theme) ? props.theme : "1 - light",
       version:
         !props.version || !applications[application].versions[props.version]
           ? Object.keys(applications[application].versions)[0]

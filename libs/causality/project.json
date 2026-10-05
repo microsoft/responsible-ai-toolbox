@@ -1,0 +1,72 @@
+{
+  "name": "causality",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/causality/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/causality/**/*.js",
+          "libs/causality/**/*.jsx",
+          "libs/causality/**/*.ts",
+          "libs/causality/**/*.tsx",
+          "libs/causality/**/*.test.ts",
+          "libs/causality/**/*.test.tsx",
+          "libs/causality/**/*.test.js",
+          "libs/causality/**/*.test.jsx",
+          "libs/causality/**/*.spec.ts",
+          "libs/causality/**/*.spec.tsx",
+          "libs/causality/**/*.spec.js",
+          "libs/causality/**/*.spec.jsx",
+          "libs/causality/**/*.d.ts"
+        ]
+      }
+    },
+    "build": {
+      "executor": "@nx/rollup:rollup",
+      "options": {
+        "outputPath": "dist/libs/causality",
+        "tsConfig": "libs/causality/tsconfig.lib.json",
+        "project": "libs/causality/package.json",
+        "entryFile": "libs/causality/src/index.ts",
+        "format": ["esm", "cjs"],
+        "buildLibsFromSource": true,
+        "external": [
+          "@fluentui/react",
+          "highcharts",
+          "jmespath",
+          "localized-strings",
+          "lodash",
+          "memoize-one",
+          "moment",
+          "plotly.js",
+          "react-plotly.js",
+          "react",
+          "react-dom",
+          "uuid"
+        ],
+        "rollupConfig": "./rollup.config.js",
+        "assets": [
+          {
+            "glob": "README.md",
+            "input": ".",
+            "output": "."
+          }
+        ],
+        "buildableProjectDepsInPackageJsonType": "dependencies"
+      },
+      "outputs": ["{options.outputPath}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "options": {
+        "jestConfig": "libs/causality/jest.config.js",
+        "passWithNoTests": true
+      },
+      "outputs": ["{workspaceRoot}/coverage/libs/causality"]
+    }
+  },
+  "tags": []
+}

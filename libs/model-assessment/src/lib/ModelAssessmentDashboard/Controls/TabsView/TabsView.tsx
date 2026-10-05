@@ -88,10 +88,10 @@ export class TabsView extends React.PureComponent<
 
   public constructor(props: ITabsViewProps) {
     super(props);
-    const weightVectorLabels = {
+    const weightVectorLabels: Dictionary<string> = {
       [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
     };
-    const weightVectorOptions = [];
+    const weightVectorOptions: WeightVectorOption[] = [];
     if (IsClassifier(props.modelMetadata.modelType)) {
       weightVectorOptions.push(WeightVectors.AbsAvg);
     }
@@ -121,7 +121,8 @@ export class TabsView extends React.PureComponent<
     };
     if (
       this.props.requestImportances &&
-      this.context.dataset.task_type !== DatasetTaskType.Forecasting
+      this.props.errorAnalysisData?.[0] &&
+      this.props.dataset.task_type !== DatasetTaskType.Forecasting
     ) {
       this.props
         .requestImportances([], new AbortController().signal)

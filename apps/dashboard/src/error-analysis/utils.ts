@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { strict as assert } from "assert";
-
 import _ from "lodash";
 
 import { dummyMatrixData } from "./__mock_data__/dummyMatrix";
@@ -210,19 +208,14 @@ export function generateJsonMatrix(dataset: DatasetName) {
 
 export function createJsonImportancesGenerator(
   featureNames: string[],
-  dataset: DatasetName
+  _dataset: DatasetName
 ) {
+  if (!Object.values(DatasetName).includes(_dataset)) {
+    throw new TypeError("Unsupported dataset.");
+  }
   return (_data: any[], signal: AbortSignal): Promise<any> => {
     const promise = new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
-        assert(
-          dataset === DatasetName.BreastCancer ||
-            dataset === DatasetName.AdultCensusIncome ||
-            dataset === DatasetName.Boston ||
-            dataset === DatasetName.BreastCancerPrecision ||
-            dataset === DatasetName.BreastCancerRecall ||
-            dataset === DatasetName.Wine
-        );
         resolve(featureNames.map(() => Math.random()));
       }, 300);
       signal.addEventListener("abort", () => {

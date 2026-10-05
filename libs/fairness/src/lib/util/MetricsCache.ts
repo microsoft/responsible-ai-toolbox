@@ -84,8 +84,8 @@ export class MetricsCache {
     ).overall;
 
     if (
-      falsePositiveRateMetric === Number.NaN ||
-      truePositiveRateMetric === Number.NaN
+      Number.isNaN(falsePositiveRateMetric) ||
+      Number.isNaN(truePositiveRateMetric)
     ) {
       return { overall: Number.NaN };
     }

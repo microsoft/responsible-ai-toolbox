@@ -16,7 +16,7 @@ on:
 jobs:
   ci-notebook-vision:
     env:
-      node-version: 16.x
+      node-version: 22.21.1
     strategy:
       matrix:
         operatingSystem: [ubuntu-latest]

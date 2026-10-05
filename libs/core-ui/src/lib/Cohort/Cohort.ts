@@ -213,19 +213,23 @@ export class Cohort {
           case FilterMethods.Equal:
             return rowVal === filter.arg[0];
           case FilterMethods.GreaterThan:
-            return rowVal > filter.arg[0];
+            return typeof rowVal === "number" && rowVal > filter.arg[0];
           case FilterMethods.GreaterThanEqualTo:
-            return rowVal >= filter.arg[0];
+            return typeof rowVal === "number" && rowVal >= filter.arg[0];
           case FilterMethods.LessThan:
-            return rowVal < filter.arg[0];
+            return typeof rowVal === "number" && rowVal < filter.arg[0];
           case FilterMethods.LessThanEqualTo:
-            return rowVal <= filter.arg[0];
+            return typeof rowVal === "number" && rowVal <= filter.arg[0];
           case FilterMethods.Includes:
             return (filter.arg as number[]).includes(Number(rowVal));
           case FilterMethods.Excludes:
             return !(filter.arg as number[]).includes(Number(rowVal));
           case FilterMethods.InTheRangeOf:
-            return rowVal >= filter.arg[0] && rowVal <= filter.arg[1];
+            return (
+              typeof rowVal === "number" &&
+              rowVal >= filter.arg[0] &&
+              rowVal <= filter.arg[1]
+            );
           default:
             return false;
         }

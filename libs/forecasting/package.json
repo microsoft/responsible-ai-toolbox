@@ -1,5 +1,12 @@
 {
   "name": "@responsible-ai/forecasting",
   "version": "0.0.0",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@fluentui/react": "8.58.0",
+    "@responsible-ai/core-ui": "0.0.0",
+    "@responsible-ai/localization": "0.0.0",
+    "highcharts": "^10.1.0",
+    "react": "^17.0.2"
+  }
 }

@@ -1,0 +1,72 @@
+{
+  "name": "mlchartlib",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/mlchartlib/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/mlchartlib/**/*.js",
+          "libs/mlchartlib/**/*.jsx",
+          "libs/mlchartlib/**/*.ts",
+          "libs/mlchartlib/**/*.tsx",
+          "libs/mlchartlib/**/*.test.ts",
+          "libs/mlchartlib/**/*.test.tsx",
+          "libs/mlchartlib/**/*.test.js",
+          "libs/mlchartlib/**/*.test.jsx",
+          "libs/mlchartlib/**/*.spec.ts",
+          "libs/mlchartlib/**/*.spec.tsx",
+          "libs/mlchartlib/**/*.spec.js",
+          "libs/mlchartlib/**/*.spec.jsx",
+          "libs/mlchartlib/**/*.d.ts"
+        ]
+      }
+    },
+    "build": {
+      "executor": "@nx/rollup:rollup",
+      "options": {
+        "outputPath": "dist/libs/mlchartlib",
+        "tsConfig": "libs/mlchartlib/tsconfig.lib.json",
+        "project": "libs/mlchartlib/package.json",
+        "entryFile": "libs/mlchartlib/src/index.ts",
+        "format": ["esm", "cjs"],
+        "buildLibsFromSource": true,
+        "external": [
+          "@fluentui/react",
+          "highcharts",
+          "jmespath",
+          "localized-strings",
+          "lodash",
+          "memoize-one",
+          "moment",
+          "plotly.js",
+          "react-plotly.js",
+          "react",
+          "react-dom",
+          "uuid"
+        ],
+        "rollupConfig": "./rollup.config.js",
+        "assets": [
+          {
+            "glob": "README.md",
+            "input": ".",
+            "output": "."
+          }
+        ],
+        "buildableProjectDepsInPackageJsonType": "dependencies"
+      },
+      "outputs": ["{options.outputPath}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "options": {
+        "jestConfig": "libs/mlchartlib/jest.config.js",
+        "passWithNoTests": true
+      },
+      "outputs": ["{workspaceRoot}/coverage/libs/mlchartlib"]
+    }
+  },
+  "tags": []
+}

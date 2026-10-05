@@ -12,7 +12,6 @@ export abstract class Chart<TElement extends IChartElement> {
   public constructor(protected container: string) {
     return;
   }
-  public abstract get Elements(): TElement[];
   public get VisibleElements(): TElement[] {
     const svgWidth = this.getSvgWidth();
     if (!svgWidth) {
@@ -20,6 +19,7 @@ export abstract class Chart<TElement extends IChartElement> {
     }
     return this.Elements.filter((b) => b && b.right < svgWidth);
   }
+  public abstract get Elements(): TElement[];
   protected getHtmlElements(selector: string): HTMLElement[] {
     return cy
       .$$(

@@ -123,7 +123,7 @@ export function getPlotlyProps(
   props.data = ChartBuilder.buildPlotlySeries(props.data[0], data).map(
     (series) => {
       if (series.name) {
-        series.name = dashboardContext.modelNames[series.name];
+        series.name = dashboardContext.modelNames[Number(series.name)];
       }
 
       series.customdata = [];

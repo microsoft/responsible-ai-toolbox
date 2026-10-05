@@ -1,37 +1,63 @@
-const nrwlConfig = require("@nrwl/react/plugins/webpack.js"); // require the main @nrwl/react/plugins/webpack configuration function.
-const crypto = require("crypto");
+const { withReact } = require("@nx/react");
+const { composePlugins, withNx } = require("@nx/webpack");
 
-// Check if we need legacy OpenSSL provider workaround for Node 17+
-// This sets the hash function to one that works without legacy OpenSSL
-const nodeMajorVersion = parseInt(process.versions.node.split(".")[0], 10);
-const needsHashWorkaround = nodeMajorVersion >= 17;
-
-module.exports = (config) => {
-  nrwlConfig(config); // first call it so that it @nrwl/react plugin adds its configs,
-
-  // Fix for Node 17+ OpenSSL compatibility issue with webpack 4
-  // Instead of requiring --openssl-legacy-provider, we use md5 hash which is available
-  if (needsHashWorkaround) {
-    // Try to use md4, fall back gracefully
-    try {
-      crypto.createHash("md4");
-    } catch (e) {
-      // md4 not available, use sha256 instead
-      const originalCreateHash = crypto.createHash;
-      crypto.createHash = (algorithm) =>
-        originalCreateHash(algorithm === "md4" ? "sha256" : algorithm);
+function withSvgr() {
+  return (config) => {
+    const svgLoaderIndex = config.module.rules.findIndex(
+      (rule) =>
+        typeof rule === "object" && rule.test?.toString().includes("svg")
+    );
+    if (svgLoaderIndex !== -1) {
+      config.module.rules.splice(svgLoaderIndex, 1);
     }
-  }
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: [
+        {
+          loader: require.resolve("@svgr/webpack"),
+          options: {
+            exportType: "named",
+            namedExport: "ReactComponent",
+            ref: true,
+            svgo: false,
+            titleProp: true
+          }
+        }
+      ]
+    });
+    return config;
+  };
+}
 
-  config.node = {
-    module: "empty",
-    dgram: "empty",
-    dns: "mock",
-    fs: "empty",
-    http2: "empty",
-    net: "empty",
-    tls: "empty",
-    child_process: "empty"
+module.exports = composePlugins(withNx(), withReact(), withSvgr(), (config) => {
+  config.experiments = {
+    ...config.experiments,
+    outputModule: false
+  };
+  config.output.chunkFormat = "array-push";
+  config.output.chunkLoading = "jsonp";
+  config.output.module = false;
+  config.output.publicPath = "";
+  const htmlPlugin = config.plugins.find(
+    (plugin) => plugin.constructor.name === "HtmlWebpackPlugin"
+  );
+  if (htmlPlugin) {
+    htmlPlugin.options.scriptLoading = "defer";
+    htmlPlugin.userOptions.scriptLoading = "defer";
+  }
+  config.resolve.fallback = {
+    ...config.resolve.fallback,
+    assert: require.resolve("assert/"),
+    child_process: false,
+    dgram: false,
+    dns: false,
+    fs: false,
+    http2: false,
+    module: false,
+    net: false,
+    stream: require.resolve("stream-browserify"),
+    tls: false,
+    url: require.resolve("url/")
   };
   config.module.rules.push({
     test: /\.py$/i,
@@ -51,4 +77,4 @@ module.exports = (config) => {
     });
   }
   return config;
-};
+});

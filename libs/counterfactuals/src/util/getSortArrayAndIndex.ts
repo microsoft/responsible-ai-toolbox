@@ -29,7 +29,7 @@ export function getSortArrayAndIndex(
       sortingSeriesIndex === undefined ||
       !selectedPointsIndexes.includes(sortingSeriesIndex)
     ) {
-      if (selectedPointsIndexes.length !== 0) {
+      if (selectedPointsIndexes.length > 0) {
         sortingSeriesIndex = 0;
         sortArray = ModelExplanationUtils.getSortIndices(
           selectedFeatureImportance[0].unsortedAggregateY

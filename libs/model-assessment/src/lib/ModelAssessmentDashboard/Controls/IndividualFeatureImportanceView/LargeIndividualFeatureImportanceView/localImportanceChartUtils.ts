@@ -44,7 +44,7 @@ export function getSortedData(
   const sortedX = unSortedX
     ? sortedLocalExplanationsIndices.map((i) => unSortedX[i])
     : [];
-  sortedX.forEach((x: string, index: string | number) => {
+  sortedX.forEach((x: string, index: number) => {
     localExplanationsData.push({
       label: x,
       value: sortedLocalExplanationsData[index] || -Infinity

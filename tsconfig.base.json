@@ -29,7 +29,6 @@
     "isolatedModules": true,
     "noEmit": true,
     "strict": true,
-    "suppressImplicitAnyIndexErrors": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noImplicitAny": true,

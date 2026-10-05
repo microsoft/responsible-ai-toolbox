@@ -28,10 +28,10 @@ export class TextExplanationDashboard extends React.PureComponent<
      * Initializes the dashboard with its state
      */
     super(props);
-    const weightVectorLabels = {
+    const weightVectorLabels: Record<string | number, string> = {
       [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
     };
-    const weightVectorOptions = [];
+    const weightVectorOptions: WeightVectorOption[] = [];
     weightVectorOptions.push(WeightVectors.AbsAvg);
     props.dataSummary.classNames?.forEach((name, index) => {
       weightVectorLabels[index] = localization.formatString(

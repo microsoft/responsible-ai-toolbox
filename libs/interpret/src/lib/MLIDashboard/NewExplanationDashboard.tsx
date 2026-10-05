@@ -129,7 +129,7 @@ export class NewExplanationDashboard extends React.PureComponent<
               </Text>
             </MessageBar>
           )}
-          {this.state.validationWarnings.length !== 0 && (
+          {this.state.validationWarnings.length > 0 && (
             <MessageBar
               id="ErrorMessage"
               onDismiss={this.clearWarning}

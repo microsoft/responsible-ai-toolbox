@@ -1,0 +1,98 @@
+{
+  "migrations": [
+    {
+      "cli": "nx",
+      "version": "20.8.0-beta.0",
+      "requires": {
+        "cypress": ">=14.0.0"
+      },
+      "description": "Replaces the `experimentalSkipDomainInjection` configuration option with the new `injectDocumentDomain` configuration option.",
+      "implementation": "./src/migrations/update-20-8-0/set-inject-document-domain",
+      "package": "@nx/cypress",
+      "name": "set-inject-document-domain"
+    },
+    {
+      "cli": "nx",
+      "version": "20.8.0-beta.0",
+      "requires": {
+        "cypress": ">=14.0.0"
+      },
+      "description": "Removes the `experimentalFetchPolyfill` configuration option.",
+      "implementation": "./src/migrations/update-20-8-0/remove-experimental-fetch-polyfill",
+      "package": "@nx/cypress",
+      "name": "remove-experimental-fetch-polyfill"
+    },
+    {
+      "cli": "nx",
+      "version": "20.8.0-beta.0",
+      "requires": {
+        "cypress": ">=14.0.0"
+      },
+      "description": "Replaces the `experimentalJustInTimeCompile` configuration option with the new `justInTimeCompile` configuration option.",
+      "implementation": "./src/migrations/update-20-8-0/replace-experimental-just-in-time-compile",
+      "package": "@nx/cypress",
+      "name": "replace-experimental-just-in-time-compile"
+    },
+    {
+      "cli": "nx",
+      "version": "20.8.0-beta.0",
+      "requires": {
+        "cypress": ">=14.0.0"
+      },
+      "description": "Updates the module specifier for the Component Testing `mount` function.",
+      "implementation": "./src/migrations/update-20-8-0/update-component-testing-mount-imports",
+      "package": "@nx/cypress",
+      "name": "update-component-testing-mount-imports"
+    },
+    {
+      "version": "22.1.0-beta.6",
+      "requires": {
+        "cypress": ">=15.0.0"
+      },
+      "description": "Renames `cy.exec().its('code')` usages to the new `exitCode` property introduced in Cypress v15.",
+      "implementation": "./src/migrations/update-22-1-0/rename-cy-exec-code-property",
+      "package": "@nx/cypress",
+      "name": "rename-cy-exec-code-property"
+    },
+    {
+      "version": "22.1.0-beta.6",
+      "requires": {
+        "cypress": ">=15.0.0"
+      },
+      "description": "Updates the deprecated `Cypress.SelectorPlayground` API to `Cypress.ElementSelector` and removes the unsupported `onElement` option.",
+      "implementation": "./src/migrations/update-22-1-0/update-selector-playground-api",
+      "package": "@nx/cypress",
+      "name": "update-selector-playground-api"
+    },
+    {
+      "version": "22.1.0-beta.6",
+      "requires": {
+        "cypress": ">=15.0.0"
+      },
+      "description": "For Angular component testing projects below v18, switches to the fallback `@cypress/angular` harness required by Cypress v15.",
+      "implementation": "./src/migrations/update-22-1-0/update-angular-component-testing-support",
+      "package": "@nx/cypress",
+      "name": "update-angular-component-testing-support"
+    },
+    {
+      "version": "21.3.0-beta.3",
+      "requires": {
+        "jest": ">=30.0.0"
+      },
+      "description": "Replace removed matcher aliases in Jest v30 with their corresponding matcher",
+      "implementation": "./src/migrations/update-21-3-0/replace-removed-matcher-aliases",
+      "package": "@nx/jest",
+      "name": "replace-removed-matcher-aliases"
+    },
+    {
+      "version": "22.3.2-beta.0",
+      "requires": {
+        "jest": ">=30.0.0"
+      },
+      "description": "Replace removed matcher aliases in Jest v30 with their corresponding matcher",
+      "implementation": "./src/migrations/update-21-3-0/replace-removed-matcher-aliases",
+      "package": "@nx/jest",
+      "name": "replace-removed-matcher-aliases-v22-3"
+    }
+  ]
+}

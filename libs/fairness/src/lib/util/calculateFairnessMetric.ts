@@ -182,7 +182,7 @@ export function calculateFairnessMetric(
 
   const bins = value.bins
     .slice()
-    .filter((x) => x !== undefined && !Number.isNaN(x) && !_.isArray(x[0])); // filters out confidence bounds
+    .filter((x) => typeof x === "number" && !Number.isNaN(x));
 
   const min = _.min(bins);
   const max = _.max(bins);
