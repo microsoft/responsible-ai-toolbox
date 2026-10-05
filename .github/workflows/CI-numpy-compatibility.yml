@@ -1,0 +1,71 @@
+name: CI NumPy compatibility
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    paths:
+      - "erroranalysis/**"
+      - "rai_test_utils/**"
+      - "raiutils/**"
+      - "responsibleai/**"
+      - "raiwidgets/**"
+      - "numpy_compatibility_tests/**"
+      - ".github/workflows/CI-numpy-compatibility.yml"
+
+jobs:
+  ci-numpy-compatibility:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - numpyVersion: "1.26.4"
+            dependencySet: latest
+          - numpyVersion: "2.0.2"
+            dependencySet: latest
+          - numpyVersion: "2.0.2"
+            dependencySet: minimum
+          - numpyVersion: "2.2.6"
+            dependencySet: latest
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.11"
+
+      - name: Install ${{ matrix.dependencySet }} dependencies with NumPy ${{ matrix.numpyVersion }}
+        run: |
+          python -m pip install --upgrade pip "setuptools<82"
+          constraint_file="${{ github.workspace }}/numpy-constraints.txt"
+          echo "numpy==${{ matrix.numpyVersion }}" > "$constraint_file"
+          if [[ "${{ matrix.dependencySet }}" == "minimum" ]]; then
+            cat >> "$constraint_file" <<EOF
+          pandas==2.2.2
+          scipy==1.13.0
+          scikit-learn==1.4.2
+          statsmodels==0.14.2
+          lightgbm==4.4.0
+          EOF
+          fi
+          PIP_CONSTRAINT="$constraint_file" pip install \
+            "numpy==${{ matrix.numpyVersion }}" pytest \
+            -e ./raiutils \
+            -e ./erroranalysis \
+            -e ./rai_test_utils \
+            -e ./responsibleai \
+            -e ./raiwidgets
+
+      - name: Verify dependency consistency
+        run: |
+          python -c "import numpy; assert numpy.__version__ == '${{ matrix.numpyVersion }}'"
+          pip check
+
+      - name: Run NumPy compatibility tests
+        run: |
+          pytest numpy_compatibility_tests -v

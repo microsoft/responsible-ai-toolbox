@@ -1,21 +1,21 @@
-dice-ml>=0.11,<0.12
-econml>=0.15.0,<0.16
-statsmodels<0.14.0
+dice-ml>=0.12,<0.13
+econml>=0.16.0,<0.17
+statsmodels>=0.14.2,<0.15.0
 jsonschema
-erroranalysis>=0.5.4
-interpret-community>=0.31.0
-lightgbm>=2.0.11,<4.0
-numpy>=1.17.2,<=1.26.2
-numba<=0.58.1
-pandas>=0.25.1,<2.0.0
+erroranalysis>=0.6.0
+interpret-community>=0.32.0,<0.33
+interpret-core==0.6.9
+shap==0.46.0
+lightgbm>=4.4.0,<5
+numpy>=1.17.2,<3
+pandas>=2.2.2,<3
 # See PR 1429 about upper bound
-scikit-learn>=0.22.1,!=1.1,<=1.5.1
-scipy>=1.4.1,<1.15
+scikit-learn>=1.4.2,<=1.5.1
+scipy>=1.13.0,<1.15
 semver~=2.13.0
-ml-wrappers
+ml-wrappers>=0.6.0,<0.7
 
 # Pinned dependencies
-networkx<=2.5
-ipykernel<=6.8.0; python_version <= '3.7'
-ipykernel>=6.22.0; python_version > '3.7'
+networkx>=3.2.1,<4
+ipykernel>=6.22.0
 raiutils>=0.4.2

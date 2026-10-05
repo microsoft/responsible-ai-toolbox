@@ -78,10 +78,12 @@ jobs:
         shell: bash -l {0}
         run: |
           pip install --upgrade "Pillow>=10.0.0"
-          pip install "scipy>=1.4.1,<1.14"
           pip install --no-deps captum==0.7.0
           pip install -r requirements-dev.txt
-          pip install .
+          pip install -e ../raiutils -e ../erroranalysis -e ../responsibleai
+          grep -v '^responsibleai' requirements.txt > requirements-ci.txt
+          pip install -r requirements-ci.txt
+          pip install --no-deps .
         working-directory: ${{ matrix.packageDirectory }}
 
       - if: ${{ matrix.packageDirectory == 'responsibleai_text' }}
@@ -100,14 +102,15 @@ jobs:
         name: Install vision package
         shell: bash -l {0}
         run: |
-          pip install -v -e .
+          pip install --no-deps -v -e .
         working-directory: ${{ matrix.packageDirectory }}
 
       - if: ${{ (matrix.packageDirectory == 'responsibleai_text') }}
         name: Install text package
         shell: bash -l {0}
         run: |
-          pip install -v -e .[qa]
+          pip install evaluate bert_score nltk rouge_score
+          pip install --no-deps -v -e .
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Run tests
