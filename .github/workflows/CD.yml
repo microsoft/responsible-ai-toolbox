@@ -140,7 +140,7 @@ jobs:
         continue-on-error: true
 
       - if: ${{ (github.event_name  == 'pull_request') && (steps.uploaddashboard.outcome != 'failure') }}
-        uses: unsplash/comment-on-pr@master
+        uses: unsplash/comment-on-pr@b5610c6125a7197eaec80072ea35ef53e1fc6035 # v1.3.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
