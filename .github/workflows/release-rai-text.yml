@@ -74,7 +74,7 @@ jobs:
       # publish to PyPI
       - name: Publish responsibleai-text package to Test PyPI
         if: ${{ github.event.inputs.type == 'Test' }}
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RESPONSIBLEAI_TEXT }}
@@ -82,7 +82,7 @@ jobs:
           packages_dir: responsibleai_text/dist/
       - name: Publish responsibleai-text package to PyPI
         if: ${{ github.event.inputs.type == 'Prod' }}
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RESPONSIBLEAI_TEXT }}

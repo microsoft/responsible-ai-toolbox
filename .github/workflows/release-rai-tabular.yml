@@ -280,7 +280,7 @@ jobs:
 
       - name: Publish responsibleai package to Test PyPI
         if: ${{ github.event.inputs.releaseType == 'Test' && matrix.package == 'responsibleai' }}
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RESPONSIBLEAI }}
@@ -289,7 +289,7 @@ jobs:
 
       - name: Publish responsibleai package to Prod PyPI
         if: ${{ github.event.inputs.releaseType == 'Prod' && matrix.package == 'responsibleai' }}
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RESPONSIBLEAI }}
@@ -297,7 +297,7 @@ jobs:
 
       - name: Publish raiwidgets package to Test PyPI
         if: ${{ github.event.inputs.releaseType == 'Test' && matrix.package == 'raiwidgets' }}
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RAIWIDGETS }}
@@ -306,7 +306,7 @@ jobs:
 
       - name: Publish raiwidgets package to Prod PyPI
         if: ${{ github.event.inputs.releaseType == 'Prod' && matrix.package == 'raiwidgets' }}
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RAIWIDGETS }}
