@@ -166,7 +166,15 @@ def compute_error_tree_on_dataset(
         indexes.append(analyzer.feature_names.index(feature))
     dataset_sub_names = np.array(analyzer.feature_names)[np.array(indexes)]
     dataset_sub_names = list(dataset_sub_names)
+    classes = analyzer.classes
     if not is_spark(dataset):
+        if classes is None and analyzer.metric in (
+                Metrics.FALSE_NEGATIVE_RATE, Metrics.FALSE_POSITIVE_RATE,
+                Metrics.SELECTION_RATE):
+            # Infer once from the full analyzer, before cohort or tree splits
+            # can remove a class. Reuse the same vocabulary in every node.
+            classes = get_ordered_classes(
+                None, analyzer.true_y, analyzer.pred_y)
         booster, dataset_indexed_df, cat_info = get_surrogate_booster_local(
             dataset, analyzer, is_model_analyzer, indexes,
             dataset_sub_names, max_depth, num_leaves, min_child_samples)
@@ -188,7 +196,7 @@ def compute_error_tree_on_dataset(
                     [],
                     dataset_sub_names,
                     metric=analyzer.metric,
-                    classes=analyzer.classes)
+                    classes=classes)
     return tree
 
 
