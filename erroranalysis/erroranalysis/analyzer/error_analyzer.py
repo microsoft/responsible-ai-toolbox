@@ -25,6 +25,7 @@ from erroranalysis._internal.surrogate_error_tree import \
     compute_error_tree as _compute_error_tree
 from erroranalysis._internal.surrogate_error_tree import \
     compute_error_tree_on_dataset as _compute_error_tree_on_dataset
+from erroranalysis._internal.surrogate_error_tree import compute_metric_value
 from erroranalysis._internal.utils import generate_random_unique_indexes
 from erroranalysis._internal.version_checker import check_pandas_version
 from erroranalysis.error_correlation_methods import (
@@ -531,7 +532,9 @@ class BaseAnalyzer(ABC):
         """
         if self.metric != Metrics.ERROR_RATE:
             metric_func = metric_to_func[self.metric]
-            metric_value = metric_func(self.pred_y, self.true_y)
+            metric_value = compute_metric_value(
+                metric_func, self.classes, self.true_y,
+                self.pred_y, self.metric)
         else:
             total = len(self.true_y)
             if total == 0:
@@ -820,4 +823,6 @@ class PredictionsAnalyzer(BaseAnalyzer):
             and true y labels.
         :rtype: numpy.ndarray
         """
+        if self._model_task == ModelTask.REGRESSION:
+            return np.asarray(self.pred_y) - np.asarray(self.true_y)
         return self.pred_y != self.true_y

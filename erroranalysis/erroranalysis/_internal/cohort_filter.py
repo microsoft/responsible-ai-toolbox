@@ -181,6 +181,10 @@ class FilterDataWithCohortFilters:
         """Creates the classification outcome data for binary
         classification scenario.
 
+        The second class is positive. Outcome codes match the dashboard:
+        0 is true negative, 1 false positive, 2 false negative,
+        and 3 true positive.
+
         :param true_y: The true labels.
         :type true_y: list or numpy.ndarray
         :param pred_y: The predicted labels.
@@ -200,18 +204,18 @@ class FilterDataWithCohortFilters:
         for i in range(len(true_y)):
             if true_y[i] == pred_y[i]:
                 if true_y[i] == classes[0]:
-                    # True positive == 0
+                    # True negative == 0
                     classification_outcome.append(0)
                 else:
-                    # True negative == 3
+                    # True positive == 3
                     classification_outcome.append(3)
             else:
                 if true_y[i] == classes[0]:
-                    # False negative == 2
-                    classification_outcome.append(2)
-                else:
                     # False positive == 1
                     classification_outcome.append(1)
+                else:
+                    # False negative == 2
+                    classification_outcome.append(2)
         return classification_outcome
 
     def _compute_multiclass_classification_outcome_data(

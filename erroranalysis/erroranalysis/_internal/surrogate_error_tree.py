@@ -942,7 +942,10 @@ def compute_metrics_local(df, metric, total, classes):
     elif (metric in precision_metrics or
           metric in recall_metrics or
           metric in f1_metrics or
-          metric == Metrics.ACCURACY_SCORE):
+          metric in (Metrics.ACCURACY_SCORE,
+                     Metrics.FALSE_NEGATIVE_RATE,
+                     Metrics.FALSE_POSITIVE_RATE,
+                     Metrics.SELECTION_RATE)):
         pred_y, true_y, error = get_classification_metric_data(df)
         func = metric_to_func[metric]
         metric_value = compute_metric_value(func, classes, true_y,
@@ -1068,6 +1071,9 @@ def get_classification_metric_data(df):
 def compute_metric_value(func, classes, true_y, pred_y, metric):
     """Compute metric from the given function, true and predicted values.
 
+    Binary metrics use the second class in the declared or inferred order
+    as the positive class.
+
     :param func: The metric function to evaluate.
     :type func: function
     :param classes: List of classes.
@@ -1084,8 +1090,13 @@ def compute_metric_value(func, classes, true_y, pred_y, metric):
     requires_pos_label = (metric == Metrics.RECALL_SCORE or
                           metric == Metrics.PRECISION_SCORE or
                           metric == Metrics.F1_SCORE)
-    if requires_pos_label:
+    requires_classes = (metric == Metrics.FALSE_NEGATIVE_RATE or
+                        metric == Metrics.FALSE_POSITIVE_RATE or
+                        metric == Metrics.SELECTION_RATE)
+    if requires_pos_label or requires_classes:
         ordered_labels = get_ordered_classes(classes, true_y, pred_y)
+        if requires_classes:
+            return func(true_y, pred_y, classes=ordered_labels)
         if ordered_labels is not None and len(ordered_labels) == 2:
             return func(true_y, pred_y, pos_label=ordered_labels[1])
     return func(true_y, pred_y)

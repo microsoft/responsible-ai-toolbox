@@ -18,6 +18,9 @@ MACRO = 'macro'
 def _confusion_matrix_helper(y_true, y_pred, classes=None):
     """Helper function for computing confusion matrix.
 
+    The second class is positive. If classes are omitted, sklearn's
+    sorted label order is used.
+
     :param y_true: True labels.
     :type y_true: numpy.ndarray
     :param y_pred: Predicted labels.
@@ -28,12 +31,14 @@ def _confusion_matrix_helper(y_true, y_pred, classes=None):
              and true negative.
     :rtype: Tuple[int, int, int, int]
     """
-    tp, fp, fn, tn = confusion_matrix(y_true, y_pred, labels=classes).ravel()
+    tn, fp, fn, tp = confusion_matrix(y_true, y_pred, labels=classes).ravel()
     return tp, fp, fn, tn
 
 
 def false_negative_rate(y_true, y_pred, classes=None):
     """Compute the false negative rate for binary classification tasks.
+
+    The second class is positive, using sorted labels if classes are omitted.
 
     :param y_true: True labels.
     :type y_true: numpy.ndarray
@@ -51,6 +56,8 @@ def false_negative_rate(y_true, y_pred, classes=None):
 def false_positive_rate(y_true, y_pred, classes=None):
     """Compute the false positive rate for binary classification tasks.
 
+    The second class is positive, using sorted labels if classes are omitted.
+
     :param y_true: True labels.
     :type y_true: numpy.ndarray
     :param y_pred: Predicted labels.
@@ -67,6 +74,8 @@ def false_positive_rate(y_true, y_pred, classes=None):
 def selection_rate(y_true, y_pred, classes=None):
     """Compute the selection rate for binary classification tasks.
 
+    The second class is positive, using sorted labels if classes are omitted.
+
     :param y_true: True labels.
     :type y_true: numpy.ndarray
     :param y_pred: Predicted labels.
@@ -77,7 +86,7 @@ def selection_rate(y_true, y_pred, classes=None):
     :rtype: float
     """
     tp, fp, fn, tn = _confusion_matrix_helper(y_true, y_pred, classes)
-    return (fn + tp) / (tp + fp + fn + tn)
+    return (fp + tp) / (tp + fp + fn + tn)
 
 
 def micro_precision_score(y_true, y_pred):
