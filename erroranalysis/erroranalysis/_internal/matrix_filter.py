@@ -119,6 +119,14 @@ def compute_matrix_on_dataset(analyzer, features, dataset,
     input_data = dataset.drop(columns=dropped_cols)
     is_pandas = isinstance(analyzer.dataset, pd.DataFrame)
     metric = analyzer.metric
+    classes = analyzer.classes
+    if classes is None and metric in (
+            Metrics.FALSE_NEGATIVE_RATE, Metrics.FALSE_POSITIVE_RATE,
+            Metrics.SELECTION_RATE, Metrics.PRECISION_SCORE,
+            Metrics.RECALL_SCORE, Metrics.F1_SCORE):
+        # A filtered cohort can omit a class present in the full analyzer.
+        # Keep the positive label and binary vocabulary stable in every bin.
+        classes = get_ordered_classes(None, analyzer.true_y, analyzer.pred_y)
     if is_pandas:
         true_y = true_y.to_numpy()
     else:
@@ -233,7 +241,7 @@ def compute_matrix_on_dataset(analyzer, features, dataset,
                                        rownames=[feat1],
                                        colnames=[feat2])
         else:
-            aggfunc = _get_agg_func(metric, analyzer.classes, true_y, pred_y)
+            aggfunc = _get_agg_func(metric, classes, true_y, pred_y)
             matrix_total = pd.crosstab(tabdf1,
                                        tabdf2,
                                        rownames=[feat1],
@@ -295,7 +303,7 @@ def compute_matrix_on_dataset(analyzer, features, dataset,
             cut_err = df_err
         # Compute the given metric for each group, if not using error rate
         if metric != Metrics.ERROR_RATE:
-            aggfunc = _get_agg_func(metric, analyzer.classes, true_y, pred_y)
+            aggfunc = _get_agg_func(metric, classes, true_y, pred_y)
             cutdf_err = pd.DataFrame(cut_err)
             cutdf_err['metric_values'] = list(zip(df_err[TRUE_Y],
                                                   df_err[PRED_Y]))

@@ -170,7 +170,8 @@ def compute_error_tree_on_dataset(
     if not is_spark(dataset):
         if classes is None and analyzer.metric in (
                 Metrics.FALSE_NEGATIVE_RATE, Metrics.FALSE_POSITIVE_RATE,
-                Metrics.SELECTION_RATE):
+                Metrics.SELECTION_RATE, Metrics.PRECISION_SCORE,
+                Metrics.RECALL_SCORE, Metrics.F1_SCORE):
             # Infer once from the full analyzer, before cohort or tree splits
             # can remove a class. Reuse the same vocabulary in every node.
             classes = get_ordered_classes(
@@ -947,6 +948,9 @@ def compute_metrics_local(df, metric, total, classes):
     elif metric == Metrics.R2_SCORE:
         pred_y, true_y, error = get_regression_metric_data(df)
         metric_value = r2_score(true_y, pred_y)
+    elif metric == Metrics.MEAN_PREDICTION:
+        pred_y, true_y, error = get_regression_metric_data(df)
+        metric_value = metric_to_func[metric](true_y, pred_y)
     elif (metric in precision_metrics or
           metric in recall_metrics or
           metric in f1_metrics or

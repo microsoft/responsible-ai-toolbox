@@ -43,6 +43,9 @@ def make_inferred_class_analyzer(
     Metrics.FALSE_NEGATIVE_RATE,
     Metrics.FALSE_POSITIVE_RATE,
     Metrics.SELECTION_RATE,
+    Metrics.PRECISION_SCORE,
+    Metrics.RECALL_SCORE,
+    Metrics.F1_SCORE,
 ])
 def test_binary_tree_infers_classes_before_single_class_leaves(
         labels, correct_class_index, metric, analyzer_type):
@@ -70,10 +73,17 @@ def test_binary_tree_infers_classes_before_single_class_leaves(
         expected_root = correct_class_index
         expected_correct = 0 if correct_class_index == 0 else np.nan
         expected_incorrect = np.nan if correct_class_index == 0 else 1
-    else:
+    elif metric == Metrics.SELECTION_RATE:
         expected_root = correct_class_index
         expected_correct = correct_class_index
         expected_incorrect = correct_class_index
+    else:
+        root_scores = {Metrics.PRECISION_SCORE: 0.5,
+                       Metrics.RECALL_SCORE: 1,
+                       Metrics.F1_SCORE: 2 / 3}
+        expected_root = root_scores[metric] * correct_class_index
+        expected_correct = correct_class_index
+        expected_incorrect = 0
 
     assert root["metricValue"] == pytest.approx(expected_root)
     np.testing.assert_allclose(
@@ -88,6 +98,12 @@ def test_binary_tree_infers_classes_before_single_class_leaves(
     (Metrics.FALSE_POSITIVE_RATE, 0, 0),
     (Metrics.SELECTION_RATE, 0, 0),
     (Metrics.SELECTION_RATE, 1, 1),
+    (Metrics.PRECISION_SCORE, 0, 0),
+    (Metrics.PRECISION_SCORE, 1, 1),
+    (Metrics.RECALL_SCORE, 0, 0),
+    (Metrics.RECALL_SCORE, 1, 1),
+    (Metrics.F1_SCORE, 0, 0),
+    (Metrics.F1_SCORE, 1, 1),
 ])
 def test_binary_tree_retains_inferred_classes_for_single_class_cohort(
         labels, metric, correct_class_index, expected, analyzer_type):
