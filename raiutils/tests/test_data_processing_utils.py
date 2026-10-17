@@ -63,6 +63,16 @@ class TestConvertToStringListDict:
         assert isinstance(arr, list)
         assert np.array_equal(arr, [0, 1, 4])
 
+    def test_empty_list(self):
+        result = convert_to_string_list_dict("Base {0}", [], [])
+
+        assert result == {"Base 0": []}
+
+    def test_empty_list_rejects_inconsistent_length(self):
+        with pytest.raises(
+                ValueError, match="inconsistent numbers of samples"):
+            convert_to_string_list_dict("Base {0}", [], [0])
+
     def test_dict(self):
         input = {"a": np.array([0, 1, 2]), "b": pd.Series(data=[3, 4, 5])}
         sample_array = [2, 3, 4]
@@ -104,6 +114,47 @@ class TestConvertToStringListDict:
         arr = result["Base 1"]
         assert isinstance(arr, list)
         assert np.array_equal(arr, [2, 6, 7])
+
+    @pytest.mark.parametrize("values, expected", [
+        (np.array([42]), {"Base 0": [42]}),
+        (np.array([[42]]), {"Base 0": [42]}),
+        (np.array([[42, 43]]), {"Base 0": [42], "Base 1": [43]}),
+    ], ids=["singleton-vector", "single-cell", "single-row"])
+    def test_numpy_single_sample(self, values, expected):
+        result = convert_to_string_list_dict("Base {0}", values, [0])
+
+        assert result == expected
+
+    @pytest.mark.parametrize("values, expected", [
+        (np.array([[0], [1], [4]]), {"Base 0": [0, 1, 4]}),
+        (np.array([[0, 2], [1, 6], [4, 7]]),
+         {"Base 0": [0, 1, 4], "Base 1": [2, 6, 7]}),
+    ], ids=["column-vector", "matrix"])
+    def test_numpy_preserves_sample_axis(self, values, expected):
+        result = convert_to_string_list_dict("Base {0}", values, [2, 3, 4])
+
+        assert result == expected
+
+    @pytest.mark.parametrize("values, expected", [
+        (np.array([[[0], [1], [4]]]), {"Base 0": [0, 1, 4]}),
+        (np.array([[[0, 2], [1, 6], [4, 7]]]),
+         {"Base 0": [0, 1, 4], "Base 1": [2, 6, 7]}),
+    ], ids=["wrapped-vector", "wrapped-matrix"])
+    def test_numpy_singleton_wrappers(self, values, expected):
+        # Retain the existing treatment of singleton dimensions above 2D.
+        result = convert_to_string_list_dict("Base {0}", values, [2, 3, 4])
+
+        assert result == expected
+
+    @pytest.mark.parametrize("values", [
+        [0, 1], np.array([0, 1]), pd.Series([0, 1]),
+    ], ids=["list", "array", "series"])
+    def test_dict_rejects_inconsistent_lengths(self, values):
+        predictions = {"matching": [0, 1, 2], "mismatching": values}
+
+        with pytest.raises(
+                ValueError, match="inconsistent numbers of samples"):
+            convert_to_string_list_dict("Base {0}", predictions, [2, 3, 4])
 
 
 class TestConvertToList:
@@ -231,6 +282,39 @@ class TestSerializationUtilities:
         values = ['a', 'b', 'a', np.nan, 'a', 'b']
         result = serialize_json_safe(values)
         assert result == ['a', 'b', 'a', 0, 'a', 'b']
+
+    @pytest.mark.parametrize("dtype", [np.float16, np.float32, np.float64,
+                                       np.longdouble])
+    @pytest.mark.parametrize("value", [np.nan, np.inf, -np.inf],
+                             ids=["nan", "positive-inf", "negative-inf"])
+    def test_numpy_nonfinite_scalars_are_json_safe(self, dtype, value):
+        result = serialize_json_safe(dtype(value))
+
+        assert result == 0
+        assert json.dumps(result, allow_nan=False) == "0"
+
+    def test_nested_numpy_nonfinite_scalars_are_json_safe(self):
+        values = {"values": [np.float16(np.nan), np.float32(np.inf),
+                             np.float64(-np.inf)]}
+
+        result = serialize_json_safe(values)
+
+        assert result == {"values": [0, 0, 0]}
+        assert json.loads(json.dumps(result, allow_nan=False)) == result
+
+    @pytest.mark.parametrize("value, expected", [
+        (np.float16(1.5), 1.5),
+        (np.float32(-2.5), -2.5),
+        (np.float64(3.5), 3.5),
+        (np.int64(42), 42),
+        (np.bool_(True), True),
+    ], ids=["float16", "float32", "float64", "int64", "bool"])
+    def test_numpy_finite_scalars_are_preserved(self, value, expected):
+        result = serialize_json_safe(value)
+
+        assert result == expected
+        assert type(result) is type(expected)
+        assert json.loads(json.dumps(result, allow_nan=False)) == expected
 
     def test_serialize_json_safe_aggregate_types(self):
         o = {

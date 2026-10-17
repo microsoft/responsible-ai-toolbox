@@ -98,7 +98,7 @@ def convert_to_string_list_dict(
             check_consistent_length(column, sample_array)
             result[col_name] = convert_to_list(column)
     elif isinstance(ys, list):
-        if np.isscalar(ys[0]):
+        if not ys or np.isscalar(ys[0]):
             f_arr = np.atleast_1d(np.squeeze(np.asarray(ys)))
             assert len(f_arr.shape) == 1  # Sanity check
             check_consistent_length(f_arr, sample_array)
@@ -107,10 +107,15 @@ def convert_to_string_list_dict(
             raise ValueError(_LIST_NONSCALAR)
     elif isinstance(ys, dict):
         for k, v in ys.items():
+            check_consistent_length(v, sample_array)
             result[k] = convert_to_list(v)
     else:
         # Assume it's something which can go into np.as_array
-        f_arr = np.squeeze(np.asarray(ys, dtype=object))
+        f_arr = np.asarray(ys, dtype=object)
+        # Preserve sample and column axes, including single-row inputs.
+        # Retain the existing treatment of higher-dimensional wrappers.
+        if f_arr.ndim > 2:
+            f_arr = np.squeeze(f_arr)
         if len(f_arr.shape) == 1:
             check_consistent_length(f_arr, sample_array)
             result[base_name_format.format(0)] = convert_to_list(f_arr)
@@ -153,6 +158,8 @@ def serialize_json_safe(o: Any):
         return tuple(serialize_json_safe(v) for v in o)
     elif isinstance(o, np.ndarray):
         return serialize_json_safe(o.tolist())
+    elif isinstance(o, np.floating) and not np.isfinite(o):
+        return 0
     elif hasattr(o, 'item'):
         return o.item()  # numpy types
     elif hasattr(o, '__dict__'):
