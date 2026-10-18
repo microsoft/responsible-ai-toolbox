@@ -26,7 +26,8 @@ from erroranalysis._internal.surrogate_error_tree import \
 from erroranalysis._internal.surrogate_error_tree import \
     compute_error_tree_on_dataset as _compute_error_tree_on_dataset
 from erroranalysis._internal.surrogate_error_tree import compute_metric_value
-from erroranalysis._internal.utils import generate_random_unique_indexes
+from erroranalysis._internal.utils import (compute_regression_residuals,
+                                           generate_random_unique_indexes)
 from erroranalysis._internal.version_checker import check_pandas_version
 from erroranalysis.error_correlation_methods import (
     compute_ebm_global_importance, compute_gbm_global_importance)
@@ -726,7 +727,8 @@ class ModelAnalyzer(BaseAnalyzer):
             ]
             return diff
         else:
-            return self.model.predict(self.dataset) - self.true_y
+            return compute_regression_residuals(
+                self.model.predict(self.dataset), self.true_y)
 
     @property
     def pred_y(self):
@@ -824,5 +826,5 @@ class PredictionsAnalyzer(BaseAnalyzer):
         :rtype: numpy.ndarray
         """
         if self._model_task == ModelTask.REGRESSION:
-            return np.asarray(self.pred_y) - np.asarray(self.true_y)
-        return self.pred_y != self.true_y
+            return compute_regression_residuals(self.pred_y, self.true_y)
+        return np.asarray(self.pred_y) != np.asarray(self.true_y)

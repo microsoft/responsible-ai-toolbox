@@ -13,6 +13,20 @@ except ImportError:
     pass
 
 
+def compute_regression_residuals(pred_y, true_y):
+    """Subtract predictions and labels without unsigned integer wraparound."""
+    predictions = np.asarray(pred_y)
+    labels = np.asarray(true_y)
+    dtype = np.result_type(predictions.dtype, labels.dtype)
+    if np.issubdtype(dtype, np.unsignedinteger):
+        # uint64 needs Python integers: int64 cannot hold its full range,
+        # and float64 would lose precision before subtracting nearby values.
+        signed_dtype = object if dtype.itemsize == 8 else np.int64
+        predictions = predictions.astype(signed_dtype)
+        labels = labels.astype(signed_dtype)
+    return predictions - labels
+
+
 def generate_random_unique_indexes(count, nnz):
     """Utility to generate a list of random unique indexes in memory.
 
