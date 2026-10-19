@@ -19,6 +19,7 @@ from erroranalysis._internal.constants import (DIFF, PRED_Y, ROW_INDEX, TRUE_Y,
 from erroranalysis._internal.metrics import (get_ordered_classes,
                                              is_multi_agg_metric,
                                              metric_to_func)
+from erroranalysis._internal.utils import compute_regression_residuals
 from raiutils.exceptions import UserConfigValidationException
 
 module_logger = logging.getLogger(__name__)
@@ -152,7 +153,7 @@ def compute_matrix_on_dataset(analyzer, features, dataset,
             for image_idx in range(len(true_y))
         ]
     else:
-        diff = pred_y - true_y
+        diff = compute_regression_residuals(pred_y, true_y)
     if not isinstance(diff, np.ndarray):
         diff = np.array(diff)
     if not isinstance(pred_y, np.ndarray):

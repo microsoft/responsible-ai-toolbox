@@ -8,8 +8,7 @@ from enum import Enum
 import numpy as np
 import pandas as pd
 from lightgbm import Booster, LGBMClassifier, LGBMRegressor
-from sklearn.metrics import (mean_absolute_error, mean_squared_error,
-                             median_absolute_error, r2_score)
+from sklearn.metrics import mean_squared_error, median_absolute_error, r2_score
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
@@ -939,7 +938,7 @@ def compute_metrics_local(df, metric, total, classes):
         error = 0
     elif metric == Metrics.MEAN_ABSOLUTE_ERROR:
         pred_y, true_y, error = get_regression_metric_data(df)
-        metric_value = mean_absolute_error(true_y, pred_y)
+        metric_value = metric_to_func[metric](true_y, pred_y)
     elif metric == Metrics.MEAN_SQUARED_ERROR:
         pred_y, true_y, error = get_regression_metric_data(df)
         metric_value = mean_squared_error(true_y, pred_y)

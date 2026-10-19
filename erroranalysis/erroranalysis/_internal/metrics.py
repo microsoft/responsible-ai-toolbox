@@ -10,6 +10,7 @@ from sklearn.metrics import (accuracy_score, confusion_matrix, f1_score,
 from erroranalysis._internal.constants import (Metrics, ModelTask, f1_metrics,
                                                precision_metrics,
                                                recall_metrics)
+from erroranalysis._internal.utils import compute_regression_residuals
 
 MICRO = 'micro'
 MACRO = 'macro'
@@ -246,9 +247,27 @@ def is_multi_agg_metric(metric):
             metric in f1_metrics)
 
 
+def _mean_absolute_error(y_true, y_pred):
+    """Compute single-output integer MAE before floating-point presentation.
+
+    Preserve sklearn behavior for other types, shapes and invalid inputs.
+    """
+    labels = np.asarray(y_true)
+    predictions = np.asarray(y_pred)
+    if (labels.ndim == predictions.ndim == 1 and
+            labels.shape == predictions.shape and labels.size > 0 and
+            np.issubdtype(labels.dtype, np.integer) and
+            np.issubdtype(predictions.dtype, np.integer)):
+        residuals = compute_regression_residuals(predictions, labels)
+        # Python scalars keep abs(INT64_MIN) and the sum representable.
+        # Convert only the final mean to the existing floating-point metric.
+        return sum(abs(value) for value in residuals.tolist()) / labels.size
+    return mean_absolute_error(y_true, y_pred)
+
+
 metric_to_func = {
     Metrics.MEAN_PREDICTION: mean_prediction,
-    Metrics.MEAN_ABSOLUTE_ERROR: mean_absolute_error,
+    Metrics.MEAN_ABSOLUTE_ERROR: _mean_absolute_error,
     Metrics.MEAN_SQUARED_ERROR: mean_squared_error,
     Metrics.MEDIAN_ABSOLUTE_ERROR: median_absolute_error,
     Metrics.R2_SCORE: r2_score,
