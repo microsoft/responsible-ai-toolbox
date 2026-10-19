@@ -1,10 +1,10 @@
-numpy>=1.17.2,<=1.26.2
-pandas>=0.25.1,<2.0.0
-scipy>=1.4.1,<1.14
+numpy>=1.17.2,<3
+pandas>=2.2.2,<3
+scipy>=1.13.0,<1.14
 rai-core-flask>=0.7.6
-scikit-learn>=0.22.1
-lightgbm>=2.0.11
-erroranalysis>=0.5.4
+scikit-learn>=1.4.2,<=1.5.1
+lightgbm>=4.4.0,<5
+erroranalysis>=0.6.0
 fairlearn==0.7.0
 greenlet>=1.1.2,<3; python_version == '3.9' and sys_platform == 'win32'
 gevent>=21.12.0,<24; python_version == '3.9' and sys_platform == 'win32'

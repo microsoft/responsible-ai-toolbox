@@ -1,5 +1,5 @@
-numpy<2.0.0
-pandas
+numpy<3
+pandas>=2.2.2,<3
 requests
-scikit-learn
-scipy
+scikit-learn>=1.4.2,<=1.5.1
+scipy>=1.13.0,<1.15

@@ -88,7 +88,9 @@ jobs:
         run: |
           pip install --upgrade "Pillow>=10.0.0"
           pip install -r requirements-dev.txt
-          pip install .
+          grep -v '^responsibleai' requirements.txt > requirements-ci.txt
+          pip install -r requirements-ci.txt
+          pip install --no-deps .
         working-directory: responsibleai_vision
 
       - if: ${{ matrix.operatingSystem == 'windows-latest' }}
