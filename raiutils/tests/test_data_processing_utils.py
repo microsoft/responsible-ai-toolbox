@@ -316,6 +316,46 @@ class TestSerializationUtilities:
         assert type(result) is type(expected)
         assert json.loads(json.dumps(result, allow_nan=False)) == expected
 
+    @pytest.mark.parametrize("value", ["1.25", "-2.5", "0", "-0"])
+    def test_finite_longdouble_scalars_are_json_numbers(self, value):
+        result = serialize_json_safe(np.longdouble(value))
+
+        assert type(result) is float
+        assert result == float(value)
+        assert json.loads(json.dumps(result, allow_nan=False)) == result
+        assert np.signbit(result) == np.signbit(np.longdouble(value))
+
+    def test_nested_longdouble_arrays_are_json_safe(self):
+        values = {"values": (np.longdouble('1.25'),
+                             np.array([2.5, -3.75], np.longdouble))}
+
+        result = serialize_json_safe(values)
+
+        assert json.loads(json.dumps(result, allow_nan=False)) == {
+            "values": [1.25, [2.5, -3.75]]}
+
+    def test_longdouble_rounds_to_python_float_precision(self):
+        value = np.longdouble('1.234567890123456789')
+        result = serialize_json_safe(value)
+
+        assert type(result) is float
+        assert result == float(value)
+        assert json.loads(json.dumps(result, allow_nan=False)) == result
+
+    @pytest.mark.parametrize("sign", [1, -1])
+    @pytest.mark.parametrize("boundary", ["overflow", "underflow"])
+    def test_finite_longdouble_outside_float_range_is_rejected(
+            self, sign, boundary):
+        if np.finfo(np.longdouble).max <= np.finfo(float).max:
+            pytest.skip("longdouble has no extended exponent range here")
+        value = (np.finfo(np.longdouble).max if boundary == "overflow"
+                 else np.finfo(np.longdouble).tiny)
+        value = np.longdouble(sign) * value
+        assert np.isfinite(value) and value != 0
+
+        with pytest.raises(ValueError, match="Python float range"):
+            serialize_json_safe({"values": np.array([value])})
+
     def test_serialize_json_safe_aggregate_types(self):
         o = {
             'a': [1, 2, 3],
