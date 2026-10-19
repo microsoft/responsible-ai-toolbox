@@ -135,6 +135,11 @@ def serialize_json_safe(o: Any):
     """
     Convert a value into something that is safe to parse as JSON.
 
+    NumPy floating scalars are rounded to Python float precision. Non-finite
+    values map to zero. Finite values that overflow to infinity or underflow
+    to zero during conversion raise ValueError instead of silently changing
+    their range.
+
     :param o: Object to make JSON safe.
     :type o: Any
     :return: Serialized object.
@@ -158,8 +163,14 @@ def serialize_json_safe(o: Any):
         return tuple(serialize_json_safe(v) for v in o)
     elif isinstance(o, np.ndarray):
         return serialize_json_safe(o.tolist())
-    elif isinstance(o, np.floating) and not np.isfinite(o):
-        return 0
+    elif isinstance(o, np.floating):
+        if not np.isfinite(o):
+            return 0
+        value = float(o)
+        if not np.isfinite(value) or (value == 0 and o != 0):
+            raise ValueError("NumPy floating value is outside Python float "
+                             "range")
+        return value
     elif hasattr(o, 'item'):
         return o.item()  # numpy types
     elif hasattr(o, '__dict__'):
