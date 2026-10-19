@@ -24,7 +24,8 @@ from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
                                                regression_metrics)
 from erroranalysis._internal.metrics import get_ordered_classes, metric_to_func
 from erroranalysis._internal.process_categoricals import process_categoricals
-from erroranalysis._internal.utils import is_spark
+from erroranalysis._internal.utils import (compute_regression_residuals,
+                                           is_spark)
 from raiutils.exceptions import UserConfigValidationException
 
 module_logger = logging.getLogger(__name__)
@@ -1062,7 +1063,9 @@ def get_regression_metric_data(df):
     pred_y = df[PRED_Y]
     true_y = df[TRUE_Y]
     # total abs error at the node
-    error = sum(abs(pred_y - true_y))
+    residuals = compute_regression_residuals(pred_y, true_y)
+    # Convert NumPy integer scalars before summing to avoid total overflow.
+    error = sum(np.abs(residuals).tolist())
     return pred_y, true_y, error
 
 

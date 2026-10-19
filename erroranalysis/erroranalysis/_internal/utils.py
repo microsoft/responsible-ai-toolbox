@@ -14,14 +14,16 @@ except ImportError:
 
 
 def compute_regression_residuals(pred_y, true_y):
-    """Subtract predictions and labels without unsigned integer wraparound."""
+    """Subtract integer inputs without wraparound or rounding."""
     predictions = np.asarray(pred_y)
     labels = np.asarray(true_y)
-    dtype = np.result_type(predictions.dtype, labels.dtype)
-    if np.issubdtype(dtype, np.unsignedinteger):
-        # uint64 needs Python integers: int64 cannot hold its full range,
-        # and float64 would lose precision before subtracting nearby values.
-        signed_dtype = object if dtype.itemsize == 8 else np.int64
+    if (np.issubdtype(predictions.dtype, np.integer) and
+            np.issubdtype(labels.dtype, np.integer)):
+        # Inspect operands before promotion: mixing int64 and uint64 would
+        # otherwise round to float64. Python integers also keep abs(INT64_MIN)
+        # and differences spanning the full 64-bit range representable.
+        size = max(predictions.dtype.itemsize, labels.dtype.itemsize)
+        signed_dtype = object if size == 8 else np.int64
         predictions = predictions.astype(signed_dtype)
         labels = labels.astype(signed_dtype)
     return predictions - labels
