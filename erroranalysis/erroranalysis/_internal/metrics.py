@@ -10,6 +10,7 @@ from sklearn.metrics import (accuracy_score, confusion_matrix, f1_score,
 from erroranalysis._internal.constants import (Metrics, ModelTask, f1_metrics,
                                                precision_metrics,
                                                recall_metrics)
+from erroranalysis._internal.utils import compute_regression_residuals
 
 MICRO = 'micro'
 MACRO = 'macro'
@@ -17,6 +18,9 @@ MACRO = 'macro'
 
 def _confusion_matrix_helper(y_true, y_pred, classes=None):
     """Helper function for computing confusion matrix.
+
+    The second class is positive. If classes are omitted, sklearn's
+    sorted label order is used.
 
     :param y_true: True labels.
     :type y_true: numpy.ndarray
@@ -28,12 +32,14 @@ def _confusion_matrix_helper(y_true, y_pred, classes=None):
              and true negative.
     :rtype: Tuple[int, int, int, int]
     """
-    tp, fp, fn, tn = confusion_matrix(y_true, y_pred, labels=classes).ravel()
+    tn, fp, fn, tp = confusion_matrix(y_true, y_pred, labels=classes).ravel()
     return tp, fp, fn, tn
 
 
 def false_negative_rate(y_true, y_pred, classes=None):
     """Compute the false negative rate for binary classification tasks.
+
+    The second class is positive, using sorted labels if classes are omitted.
 
     :param y_true: True labels.
     :type y_true: numpy.ndarray
@@ -51,6 +57,8 @@ def false_negative_rate(y_true, y_pred, classes=None):
 def false_positive_rate(y_true, y_pred, classes=None):
     """Compute the false positive rate for binary classification tasks.
 
+    The second class is positive, using sorted labels if classes are omitted.
+
     :param y_true: True labels.
     :type y_true: numpy.ndarray
     :param y_pred: Predicted labels.
@@ -67,6 +75,8 @@ def false_positive_rate(y_true, y_pred, classes=None):
 def selection_rate(y_true, y_pred, classes=None):
     """Compute the selection rate for binary classification tasks.
 
+    The second class is positive, using sorted labels if classes are omitted.
+
     :param y_true: True labels.
     :type y_true: numpy.ndarray
     :param y_pred: Predicted labels.
@@ -77,7 +87,7 @@ def selection_rate(y_true, y_pred, classes=None):
     :rtype: float
     """
     tp, fp, fn, tn = _confusion_matrix_helper(y_true, y_pred, classes)
-    return (fn + tp) / (tp + fp + fn + tn)
+    return (fp + tp) / (tp + fp + fn + tn)
 
 
 def micro_precision_score(y_true, y_pred):
@@ -237,9 +247,27 @@ def is_multi_agg_metric(metric):
             metric in f1_metrics)
 
 
+def _mean_absolute_error(y_true, y_pred):
+    """Compute single-output integer MAE before floating-point presentation.
+
+    Preserve sklearn behavior for other types, shapes and invalid inputs.
+    """
+    labels = np.asarray(y_true)
+    predictions = np.asarray(y_pred)
+    if (labels.ndim == predictions.ndim == 1 and
+            labels.shape == predictions.shape and labels.size > 0 and
+            np.issubdtype(labels.dtype, np.integer) and
+            np.issubdtype(predictions.dtype, np.integer)):
+        residuals = compute_regression_residuals(predictions, labels)
+        # Python scalars keep abs(INT64_MIN) and the sum representable.
+        # Convert only the final mean to the existing floating-point metric.
+        return sum(abs(value) for value in residuals.tolist()) / labels.size
+    return mean_absolute_error(y_true, y_pred)
+
+
 metric_to_func = {
     Metrics.MEAN_PREDICTION: mean_prediction,
-    Metrics.MEAN_ABSOLUTE_ERROR: mean_absolute_error,
+    Metrics.MEAN_ABSOLUTE_ERROR: _mean_absolute_error,
     Metrics.MEAN_SQUARED_ERROR: mean_squared_error,
     Metrics.MEDIAN_ABSOLUTE_ERROR: median_absolute_error,
     Metrics.R2_SCORE: r2_score,

@@ -13,6 +13,22 @@ except ImportError:
     pass
 
 
+def compute_regression_residuals(pred_y, true_y):
+    """Subtract integer inputs without wraparound or rounding."""
+    predictions = np.asarray(pred_y)
+    labels = np.asarray(true_y)
+    if (np.issubdtype(predictions.dtype, np.integer) and
+            np.issubdtype(labels.dtype, np.integer)):
+        # Inspect operands before promotion: mixing int64 and uint64 would
+        # otherwise round to float64. Python integers also keep abs(INT64_MIN)
+        # and differences spanning the full 64-bit range representable.
+        size = max(predictions.dtype.itemsize, labels.dtype.itemsize)
+        signed_dtype = object if size == 8 else np.int64
+        predictions = predictions.astype(signed_dtype)
+        labels = labels.astype(signed_dtype)
+    return predictions - labels
+
+
 def generate_random_unique_indexes(count, nnz):
     """Utility to generate a list of random unique indexes in memory.
 

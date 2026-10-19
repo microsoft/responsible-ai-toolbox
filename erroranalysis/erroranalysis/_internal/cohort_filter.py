@@ -12,7 +12,8 @@ from erroranalysis._internal.constants import (ARG, COLUMN, COMPOSITE_FILTERS,
                                                CohortFilterMethods,
                                                CohortFilterOps, ModelTask)
 from erroranalysis._internal.metrics import get_ordered_classes
-from erroranalysis._internal.utils import is_spark
+from erroranalysis._internal.utils import (compute_regression_residuals,
+                                           is_spark)
 
 MODEL = 'model'
 CLASSIFICATION_OUTCOME = 'Classification outcome'
@@ -124,7 +125,7 @@ class FilterDataWithCohortFilters:
                 # Note: we make a non-deep copy of the input DataFrame since
                 # we will add columns below
                 df = df.copy()
-        self._add_filter_cols(df, filters)
+        self._add_filter_cols(df, (filters or []) + (composite_filters or []))
         df = self._apply_recursive_filter(
             df, filters, self.categorical_features, self.categories)
         df = self._apply_recursive_filter(
@@ -148,11 +149,7 @@ class FilterDataWithCohortFilters:
         if (model_task == ModelTask.CLASSIFICATION or
             model_task == ModelTask.OBJECT_DETECTION) \
                 and filters:
-            for filter in filters:
-                if COLUMN in filter:
-                    column = filter[COLUMN]
-                    if column == CLASSIFICATION_OUTCOME:
-                        return True
+            return self._filters_has_column(filters, CLASSIFICATION_OUTCOME)
         return False
 
     def _filters_has_regression_error(self, filters):
@@ -169,17 +166,27 @@ class FilterDataWithCohortFilters:
         # is included in filters, and if it is then
         # compute the necessary column data on the fly
         if model_task == ModelTask.REGRESSION and filters:
-            for filter in filters:
-                if COLUMN in filter:
-                    column = filter[COLUMN]
-                    if column == REGRESSION_ERROR:
-                        return True
+            return self._filters_has_column(filters, REGRESSION_ERROR)
+        return False
+
+    def _filters_has_column(self, filters, column):
+        """Find a column in flat filters or nested composite filters."""
+        for filter in filters:
+            if filter.get(COLUMN) == column:
+                return True
+            if self._filters_has_column(
+                    filter.get(COMPOSITE_FILTERS, []), column):
+                return True
         return False
 
     def _compute_binary_classification_outcome_data(self, true_y, pred_y,
                                                     classes):
         """Creates the classification outcome data for binary
         classification scenario.
+
+        The second class is positive. Outcome codes match the dashboard:
+        0 is true negative, 1 false positive, 2 false negative,
+        and 3 true positive.
 
         :param true_y: The true labels.
         :type true_y: list or numpy.ndarray
@@ -200,18 +207,18 @@ class FilterDataWithCohortFilters:
         for i in range(len(true_y)):
             if true_y[i] == pred_y[i]:
                 if true_y[i] == classes[0]:
-                    # True positive == 0
+                    # True negative == 0
                     classification_outcome.append(0)
                 else:
-                    # True negative == 3
+                    # True positive == 3
                     classification_outcome.append(3)
             else:
                 if true_y[i] == classes[0]:
-                    # False negative == 2
-                    classification_outcome.append(2)
-                else:
                     # False positive == 1
                     classification_outcome.append(1)
+                else:
+                    # False negative == 2
+                    classification_outcome.append(2)
         return classification_outcome
 
     def _compute_multiclass_classification_outcome_data(
@@ -254,16 +261,7 @@ class FilterDataWithCohortFilters:
         :return: The regression error data.
         :rtype: list
         """
-        regression_error = []
-        if not isinstance(pred_y, np.ndarray):
-            pred_y = np.array(pred_y)
-
-        if not isinstance(true_y, np.ndarray):
-            true_y = np.array(true_y)
-
-        for i in range(len(true_y)):
-            regression_error.append(abs(true_y[i] - pred_y[i]))
-        return regression_error
+        return np.abs(compute_regression_residuals(pred_y, true_y)).tolist()
 
     def _add_filter_cols(self, df, filters):
         """Adds special columns to the dataset for filtering

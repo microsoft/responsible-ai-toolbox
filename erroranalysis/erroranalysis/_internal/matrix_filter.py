@@ -5,6 +5,7 @@ import logging
 import math
 import warnings
 from abc import ABC, abstractmethod
+from functools import partial
 
 import numpy as np
 import pandas as pd
@@ -18,6 +19,7 @@ from erroranalysis._internal.constants import (DIFF, PRED_Y, ROW_INDEX, TRUE_Y,
 from erroranalysis._internal.metrics import (get_ordered_classes,
                                              is_multi_agg_metric,
                                              metric_to_func)
+from erroranalysis._internal.utils import compute_regression_residuals
 from raiutils.exceptions import UserConfigValidationException
 
 module_logger = logging.getLogger(__name__)
@@ -118,6 +120,14 @@ def compute_matrix_on_dataset(analyzer, features, dataset,
     input_data = dataset.drop(columns=dropped_cols)
     is_pandas = isinstance(analyzer.dataset, pd.DataFrame)
     metric = analyzer.metric
+    classes = analyzer.classes
+    if classes is None and metric in (
+            Metrics.FALSE_NEGATIVE_RATE, Metrics.FALSE_POSITIVE_RATE,
+            Metrics.SELECTION_RATE, Metrics.PRECISION_SCORE,
+            Metrics.RECALL_SCORE, Metrics.F1_SCORE):
+        # A filtered cohort can omit a class present in the full analyzer.
+        # Keep the positive label and binary vocabulary stable in every bin.
+        classes = get_ordered_classes(None, analyzer.true_y, analyzer.pred_y)
     if is_pandas:
         true_y = true_y.to_numpy()
     else:
@@ -143,7 +153,7 @@ def compute_matrix_on_dataset(analyzer, features, dataset,
             for image_idx in range(len(true_y))
         ]
     else:
-        diff = pred_y - true_y
+        diff = compute_regression_residuals(pred_y, true_y)
     if not isinstance(diff, np.ndarray):
         diff = np.array(diff)
     if not isinstance(pred_y, np.ndarray):
@@ -232,13 +242,7 @@ def compute_matrix_on_dataset(analyzer, features, dataset,
                                        rownames=[feat1],
                                        colnames=[feat2])
         else:
-            if is_multi_agg_metric(metric):
-                ordered_labels = get_ordered_classes(analyzer.classes,
-                                                     true_y, pred_y)
-                aggfunc = _MultiMetricAggFunc(metric_to_func[metric],
-                                              ordered_labels, metric)
-            else:
-                aggfunc = _AggFunc(metric_to_func[metric])
+            aggfunc = _get_agg_func(metric, classes, true_y, pred_y)
             matrix_total = pd.crosstab(tabdf1,
                                        tabdf2,
                                        rownames=[feat1],
@@ -300,13 +304,7 @@ def compute_matrix_on_dataset(analyzer, features, dataset,
             cut_err = df_err
         # Compute the given metric for each group, if not using error rate
         if metric != Metrics.ERROR_RATE:
-            if is_multi_agg_metric(metric):
-                ordered_labels = get_ordered_classes(analyzer.classes,
-                                                     true_y, pred_y)
-                aggfunc = _MultiMetricAggFunc(metric_to_func[metric],
-                                              ordered_labels, metric)
-            else:
-                aggfunc = _AggFunc(metric_to_func[metric])
+            aggfunc = _get_agg_func(metric, classes, true_y, pred_y)
             cutdf_err = pd.DataFrame(cut_err)
             cutdf_err['metric_values'] = list(zip(df_err[TRUE_Y],
                                                   df_err[PRED_Y]))
@@ -673,6 +671,20 @@ class _MultiMetricAggFunc(_BaseAggFunc):
         if self.num_labels > 2:
             zero_array = zero_array * self.num_labels
         return (0, zero_array, zero_array, zero_array, zero_array, 0)
+
+
+def _get_agg_func(metric, classes, true_y, pred_y):
+    """Create a metric aggregation with the full dataset's class ordering."""
+    func = metric_to_func[metric]
+    if is_multi_agg_metric(metric):
+        ordered_labels = get_ordered_classes(classes, true_y, pred_y)
+        return _MultiMetricAggFunc(func, ordered_labels, metric)
+    if metric in (Metrics.FALSE_NEGATIVE_RATE,
+                  Metrics.FALSE_POSITIVE_RATE,
+                  Metrics.SELECTION_RATE):
+        ordered_labels = get_ordered_classes(classes, true_y, pred_y)
+        func = partial(func, classes=ordered_labels)
+    return _AggFunc(func)
 
 
 def matrix_2d(categories1, categories2, matrix_counts,

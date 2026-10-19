@@ -8,8 +8,7 @@ from enum import Enum
 import numpy as np
 import pandas as pd
 from lightgbm import Booster, LGBMClassifier, LGBMRegressor
-from sklearn.metrics import (mean_absolute_error, mean_squared_error,
-                             median_absolute_error, r2_score)
+from sklearn.metrics import mean_squared_error, median_absolute_error, r2_score
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
@@ -24,7 +23,8 @@ from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
                                                regression_metrics)
 from erroranalysis._internal.metrics import get_ordered_classes, metric_to_func
 from erroranalysis._internal.process_categoricals import process_categoricals
-from erroranalysis._internal.utils import is_spark
+from erroranalysis._internal.utils import (compute_regression_residuals,
+                                           is_spark)
 from raiutils.exceptions import UserConfigValidationException
 
 module_logger = logging.getLogger(__name__)
@@ -166,7 +166,16 @@ def compute_error_tree_on_dataset(
         indexes.append(analyzer.feature_names.index(feature))
     dataset_sub_names = np.array(analyzer.feature_names)[np.array(indexes)]
     dataset_sub_names = list(dataset_sub_names)
+    classes = analyzer.classes
     if not is_spark(dataset):
+        if classes is None and analyzer.metric in (
+                Metrics.FALSE_NEGATIVE_RATE, Metrics.FALSE_POSITIVE_RATE,
+                Metrics.SELECTION_RATE, Metrics.PRECISION_SCORE,
+                Metrics.RECALL_SCORE, Metrics.F1_SCORE):
+            # Infer once from the full analyzer, before cohort or tree splits
+            # can remove a class. Reuse the same vocabulary in every node.
+            classes = get_ordered_classes(
+                None, analyzer.true_y, analyzer.pred_y)
         booster, dataset_indexed_df, cat_info = get_surrogate_booster_local(
             dataset, analyzer, is_model_analyzer, indexes,
             dataset_sub_names, max_depth, num_leaves, min_child_samples)
@@ -188,7 +197,7 @@ def compute_error_tree_on_dataset(
                     [],
                     dataset_sub_names,
                     metric=analyzer.metric,
-                    classes=analyzer.classes)
+                    classes=classes)
     return tree
 
 
@@ -929,7 +938,7 @@ def compute_metrics_local(df, metric, total, classes):
         error = 0
     elif metric == Metrics.MEAN_ABSOLUTE_ERROR:
         pred_y, true_y, error = get_regression_metric_data(df)
-        metric_value = mean_absolute_error(true_y, pred_y)
+        metric_value = metric_to_func[metric](true_y, pred_y)
     elif metric == Metrics.MEAN_SQUARED_ERROR:
         pred_y, true_y, error = get_regression_metric_data(df)
         metric_value = mean_squared_error(true_y, pred_y)
@@ -939,10 +948,16 @@ def compute_metrics_local(df, metric, total, classes):
     elif metric == Metrics.R2_SCORE:
         pred_y, true_y, error = get_regression_metric_data(df)
         metric_value = r2_score(true_y, pred_y)
+    elif metric == Metrics.MEAN_PREDICTION:
+        pred_y, true_y, error = get_regression_metric_data(df)
+        metric_value = metric_to_func[metric](true_y, pred_y)
     elif (metric in precision_metrics or
           metric in recall_metrics or
           metric in f1_metrics or
-          metric == Metrics.ACCURACY_SCORE):
+          metric in (Metrics.ACCURACY_SCORE,
+                     Metrics.FALSE_NEGATIVE_RATE,
+                     Metrics.FALSE_POSITIVE_RATE,
+                     Metrics.SELECTION_RATE)):
         pred_y, true_y, error = get_classification_metric_data(df)
         func = metric_to_func[metric]
         metric_value = compute_metric_value(func, classes, true_y,
@@ -1047,7 +1062,9 @@ def get_regression_metric_data(df):
     pred_y = df[PRED_Y]
     true_y = df[TRUE_Y]
     # total abs error at the node
-    error = sum(abs(pred_y - true_y))
+    residuals = compute_regression_residuals(pred_y, true_y)
+    # Convert NumPy integer scalars before summing to avoid total overflow.
+    error = sum(np.abs(residuals).tolist())
     return pred_y, true_y, error
 
 
@@ -1068,6 +1085,9 @@ def get_classification_metric_data(df):
 def compute_metric_value(func, classes, true_y, pred_y, metric):
     """Compute metric from the given function, true and predicted values.
 
+    Binary metrics use the second class in the declared or inferred order
+    as the positive class.
+
     :param func: The metric function to evaluate.
     :type func: function
     :param classes: List of classes.
@@ -1084,8 +1104,13 @@ def compute_metric_value(func, classes, true_y, pred_y, metric):
     requires_pos_label = (metric == Metrics.RECALL_SCORE or
                           metric == Metrics.PRECISION_SCORE or
                           metric == Metrics.F1_SCORE)
-    if requires_pos_label:
+    requires_classes = (metric == Metrics.FALSE_NEGATIVE_RATE or
+                        metric == Metrics.FALSE_POSITIVE_RATE or
+                        metric == Metrics.SELECTION_RATE)
+    if requires_pos_label or requires_classes:
         ordered_labels = get_ordered_classes(classes, true_y, pred_y)
+        if requires_classes:
+            return func(true_y, pred_y, classes=ordered_labels)
         if ordered_labels is not None and len(ordered_labels) == 2:
             return func(true_y, pred_y, pos_label=ordered_labels[1])
     return func(true_y, pred_y)

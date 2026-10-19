@@ -112,7 +112,7 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
         metric_value = (error / total) * 100
     else:
         metric_func = metric_to_func[metric]
-        metric_value = metric_func(model_analyzer.pred_y,
-                                   model_analyzer.true_y)
+        metric_value = metric_func(model_analyzer.true_y,
+                                   model_analyzer.pred_y)
 
     assert root_stats[RootKeys.METRIC_VALUE] == metric_value
