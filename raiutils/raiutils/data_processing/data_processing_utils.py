@@ -98,7 +98,7 @@ def convert_to_string_list_dict(
             check_consistent_length(column, sample_array)
             result[col_name] = convert_to_list(column)
     elif isinstance(ys, list):
-        if np.isscalar(ys[0]):
+        if not ys or np.isscalar(ys[0]):
             f_arr = np.atleast_1d(np.squeeze(np.asarray(ys)))
             assert len(f_arr.shape) == 1  # Sanity check
             check_consistent_length(f_arr, sample_array)
@@ -107,10 +107,15 @@ def convert_to_string_list_dict(
             raise ValueError(_LIST_NONSCALAR)
     elif isinstance(ys, dict):
         for k, v in ys.items():
+            check_consistent_length(v, sample_array)
             result[k] = convert_to_list(v)
     else:
         # Assume it's something which can go into np.as_array
-        f_arr = np.squeeze(np.asarray(ys, dtype=object))
+        f_arr = np.asarray(ys, dtype=object)
+        # Preserve sample and column axes, including single-row inputs.
+        # Retain the existing treatment of higher-dimensional wrappers.
+        if f_arr.ndim > 2:
+            f_arr = np.squeeze(f_arr)
         if len(f_arr.shape) == 1:
             check_consistent_length(f_arr, sample_array)
             result[base_name_format.format(0)] = convert_to_list(f_arr)
@@ -129,6 +134,11 @@ def convert_to_string_list_dict(
 def serialize_json_safe(o: Any):
     """
     Convert a value into something that is safe to parse as JSON.
+
+    NumPy floating scalars are rounded to Python float precision. Non-finite
+    values map to zero. Finite values that overflow to infinity or underflow
+    to zero during conversion raise ValueError instead of silently changing
+    their range.
 
     :param o: Object to make JSON safe.
     :type o: Any
@@ -153,6 +163,14 @@ def serialize_json_safe(o: Any):
         return tuple(serialize_json_safe(v) for v in o)
     elif isinstance(o, np.ndarray):
         return serialize_json_safe(o.tolist())
+    elif isinstance(o, np.floating):
+        if not np.isfinite(o):
+            return 0
+        value = float(o)
+        if not np.isfinite(value) or (value == 0 and o != 0):
+            raise ValueError("NumPy floating value is outside Python float "
+                             "range")
+        return value
     elif hasattr(o, 'item'):
         return o.item()  # numpy types
     elif hasattr(o, '__dict__'):
