@@ -16,10 +16,19 @@ from erroranalysis._internal.constants import (DIFF, PRED_Y, ROW_INDEX, TRUE_Y,
                                                MatrixParams, MetricKeys,
                                                Metrics, ModelTask,
                                                metric_to_display_name)
-from erroranalysis._internal.metrics import (get_ordered_classes,
+from erroranalysis._internal.metrics import (encode_classification_labels,
+                                             get_ordered_classes,
                                              is_multi_agg_metric,
-                                             metric_to_func)
-from erroranalysis._internal.utils import compute_regression_residuals
+                                             metric_to_func,
+                                             resolve_analyzer_classes,
+                                             validate_ordered_classes)
+from erroranalysis._internal.utils import (classification_labels_equal,
+                                           coerce_integer_array,
+                                           compute_classification_diff,
+                                           compute_regression_residuals,
+                                           normalize_multioutput_array,
+                                           normalize_single_output_array,
+                                           pack_multioutput_rows)
 from raiutils.exceptions import UserConfigValidationException
 
 module_logger = logging.getLogger(__name__)
@@ -121,21 +130,37 @@ def compute_matrix_on_dataset(analyzer, features, dataset,
     is_pandas = isinstance(analyzer.dataset, pd.DataFrame)
     metric = analyzer.metric
     classes = analyzer.classes
-    if classes is None and metric in (
-            Metrics.FALSE_NEGATIVE_RATE, Metrics.FALSE_POSITIVE_RATE,
-            Metrics.SELECTION_RATE, Metrics.PRECISION_SCORE,
-            Metrics.RECALL_SCORE, Metrics.F1_SCORE):
-        # A filtered cohort can omit a class present in the full analyzer.
-        # Keep the positive label and binary vocabulary stable in every bin.
-        classes = get_ordered_classes(None, analyzer.true_y, analyzer.pred_y)
-    if is_pandas:
-        true_y = true_y.to_numpy()
-    else:
+    integer_true_y = coerce_integer_array(true_y)
+    if integer_true_y is not None:
+        true_y = integer_true_y
+    elif is_pandas:
+        true_y = normalize_single_output_array(true_y)
+    if not is_pandas:
         input_data = input_data.to_numpy()
     if is_model_analyzer:
         pred_y = analyzer.model.predict(input_data)
+    multi_true_y = normalize_multioutput_array(true_y)
+    multi_pred_y = normalize_multioutput_array(pred_y)
+    is_multioutput = multi_true_y is not None and multi_pred_y is not None
+    if not is_multioutput and metric in (
+            Metrics.FALSE_NEGATIVE_RATE, Metrics.FALSE_POSITIVE_RATE,
+            Metrics.SELECTION_RATE, Metrics.PRECISION_SCORE,
+            Metrics.RECALL_SCORE, Metrics.F1_SCORE):
+        # Resolve once on the selected cohort and reuse in every bin.
+        classes = resolve_analyzer_classes(
+            analyzer, classes, true_y, pred_y,
+            require_two_classes=metric in (
+                Metrics.FALSE_NEGATIVE_RATE,
+                Metrics.FALSE_POSITIVE_RATE,
+                Metrics.SELECTION_RATE))
     if analyzer.model_task == ModelTask.CLASSIFICATION:
-        diff = pred_y != true_y
+        diff = compute_classification_diff(pred_y, true_y)
+        pred_y = normalize_single_output_array(pred_y)
+        true_y = normalize_single_output_array(true_y)
+        if pred_y.dtype.kind == "S":
+            pred_y = pred_y.astype(object)
+        if true_y.dtype.kind == "S":
+            true_y = true_y.astype(object)
     elif analyzer.model_task == ModelTask.OBJECT_DETECTION:
         if not pytorch_installed:
             raise ModuleNotFoundError(
@@ -157,7 +182,9 @@ def compute_matrix_on_dataset(analyzer, features, dataset,
     if not isinstance(diff, np.ndarray):
         diff = np.array(diff)
     if not isinstance(pred_y, np.ndarray):
-        pred_y = np.array(pred_y)
+        integer_predictions = coerce_integer_array(pred_y)
+        pred_y = (integer_predictions if integer_predictions is not None
+                  else np.array(pred_y))
     if not isinstance(true_y, np.ndarray):
         true_y = np.array(true_y)
     indexes = []
@@ -183,9 +210,29 @@ def compute_matrix_on_dataset(analyzer, features, dataset,
     if metric == Metrics.ERROR_RATE:
         df_err = df_err[df_err[DIFF]]
     else:
-        df_err[TRUE_Y] = true_y
-        df_err[PRED_Y] = pred_y
+        if normalize_multioutput_array(true_y) is None:
+            true_y = normalize_single_output_array(true_y)
+        if normalize_multioutput_array(pred_y) is None:
+            pred_y = normalize_single_output_array(pred_y)
+        df_err[TRUE_Y] = (
+            pd.Series(
+                pack_multioutput_rows(true_y),
+                index=df_err.index, dtype=object)
+            if normalize_multioutput_array(true_y) is not None or
+            getattr(true_y, "dtype", None) == object else true_y)
+        df_err[PRED_Y] = (
+            pd.Series(
+                pack_multioutput_rows(pred_y),
+                index=df_err.index, dtype=object)
+            if normalize_multioutput_array(pred_y) is not None or
+            getattr(pred_y, "dtype", None) == object else pred_y)
+    label_columns = None
+    if metric != Metrics.ERROR_RATE:
+        label_columns = (
+            df_err[TRUE_Y].copy(), df_err[PRED_Y].copy())
     df_err = convert_dtypes(df_err)
+    if label_columns is not None:
+        df_err[TRUE_Y], df_err[PRED_Y] = label_columns
     # construct matrix
     matrix = []
     if len(dataset_sub_names) == 2:
@@ -585,7 +632,7 @@ class _AggFunc(_BaseAggFunc):
 
 class _MultiMetricAggFunc(_BaseAggFunc):
     """Aggregation function for multiple metrics."""
-    def __init__(self, aggfunc, labels, metric):
+    def __init__(self, aggfunc, labels, metric, multioutput=False):
         """Initialize the aggregation function.
 
         :param aggfunc: The aggregation function.
@@ -596,10 +643,20 @@ class _MultiMetricAggFunc(_BaseAggFunc):
         :type metric: str
         """
         super(_MultiMetricAggFunc, self).__init__(aggfunc)
+        self.classes = labels
+        self.multioutput = multioutput
         self.num_labels = len(labels)
+        self.positive_label = labels[1] if self.num_labels == 2 else None
+        self.positive_index = next((
+            index for index, label in enumerate(labels)
+            if classification_labels_equal(label, 1)), None)
+        if self.num_labels == 2:
+            self.positive_index = 1
+        elif self.positive_index is None:
+            self.positive_index = -1
         if self.num_labels == 2:
             # for binary classification case, choose positive class label
-            self.labels = [labels[1]]
+            self.labels = [self.positive_label]
         else:
             self.labels = labels
         self.metric = metric
@@ -616,10 +673,26 @@ class _MultiMetricAggFunc(_BaseAggFunc):
             matrix and error count.
         :rtype: (int, list, list, list, list, int)
         """
-        pred_y = np.array(pred_y)
-        true_y = np.array(true_y)
+        if self.multioutput:
+            true_y = normalize_multioutput_array(true_y)
+            pred_y = normalize_multioutput_array(pred_y)
+            conf_matrix = multilabel_confusion_matrix(true_y, pred_y)
+            metric_value = self.aggfunc(true_y, pred_y)
+            error = compute_classification_diff(pred_y, true_y).sum()
+            return (
+                metric_value,
+                conf_matrix[:, 1, 1].tolist(),
+                conf_matrix[:, 0, 1].tolist(),
+                conf_matrix[:, 1, 0].tolist(),
+                conf_matrix[:, 0, 0].tolist(),
+                error,
+            )
+        true_y, pred_y = encode_classification_labels(
+            self.classes, true_y, pred_y)
+        labels = [1] if self.num_labels == 2 else \
+            np.arange(self.num_labels)
         conf_matrix = multilabel_confusion_matrix(true_y, pred_y,
-                                                  labels=self.labels)
+                                                  labels=labels)
         tp_sum = conf_matrix[:, 1, 1]
         diff = pred_y != true_y
         error = diff.sum()
@@ -628,9 +701,11 @@ class _MultiMetricAggFunc(_BaseAggFunc):
         # needed for recall metrics
         fn_sum = conf_matrix[:, 1, 0]
         tn_sum = conf_matrix[:, 0, 0]
-        if self.num_labels == 2 and self.metric != Metrics.ACCURACY_SCORE:
+        if (self.metric in (
+                Metrics.PRECISION_SCORE, Metrics.RECALL_SCORE,
+                Metrics.F1_SCORE)):
             metric_value = self.aggfunc(true_y, pred_y,
-                                        pos_label=self.labels[0])
+                                        pos_label=self.positive_index)
         else:
             metric_value = self.aggfunc(true_y, pred_y)
         return (metric_value, tp_sum.tolist(),
@@ -668,7 +743,7 @@ class _MultiMetricAggFunc(_BaseAggFunc):
         :rtype: (int, list, list, list, list, int)
         """
         zero_array = [0]
-        if self.num_labels > 2:
+        if self.multioutput or self.num_labels > 2:
             zero_array = zero_array * self.num_labels
         return (0, zero_array, zero_array, zero_array, zero_array, 0)
 
@@ -677,12 +752,28 @@ def _get_agg_func(metric, classes, true_y, pred_y):
     """Create a metric aggregation with the full dataset's class ordering."""
     func = metric_to_func[metric]
     if is_multi_agg_metric(metric):
-        ordered_labels = get_ordered_classes(classes, true_y, pred_y)
+        multi_true_y = normalize_multioutput_array(true_y)
+        multi_pred_y = normalize_multioutput_array(pred_y)
+        if multi_true_y is not None and multi_pred_y is not None:
+            labels = list(range(multi_true_y.shape[1]))
+            return _MultiMetricAggFunc(
+                func, labels, metric, multioutput=True)
+        if metric in (Metrics.PRECISION_SCORE, Metrics.RECALL_SCORE,
+                      Metrics.F1_SCORE):
+            ordered_labels = validate_ordered_classes(
+                classes, true_y, pred_y, require_two_classes=False)
+            if len(ordered_labels) == 2:
+                validate_ordered_classes(
+                    ordered_labels, true_y, pred_y,
+                    require_two_classes=True)
+        else:
+            ordered_labels = get_ordered_classes(classes, true_y, pred_y)
         return _MultiMetricAggFunc(func, ordered_labels, metric)
     if metric in (Metrics.FALSE_NEGATIVE_RATE,
                   Metrics.FALSE_POSITIVE_RATE,
                   Metrics.SELECTION_RATE):
-        ordered_labels = get_ordered_classes(classes, true_y, pred_y)
+        ordered_labels = validate_ordered_classes(
+            classes, true_y, pred_y)
         func = partial(func, classes=ordered_labels)
     return _AggFunc(func)
 
