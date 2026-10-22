@@ -1,6 +1,7 @@
 pytest==7.0.1
 pytest-cov
 pytest-mock==3.6.1
+python-dateutil<3.0.0
 
 requirements-parser==0.2.0
 rai-test-utils[object_detection]>=0.4.2
