@@ -74,7 +74,7 @@ class DummyInvalidShapeModel:
             will cause an error.
         :rtype: numpy.ndarray
         """
-        return np.zeros((X.shape[0], 1))
+        return np.zeros((X.shape[0], 2))
 
 
 class SimplifiedWrappedIndexPredictorModel:
@@ -390,7 +390,7 @@ class TestSurrogateErrorTree(object):
         X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
         model = DummyInvalidShapeModel()
         err = re.escape("The surrogate model could not be trained. "
-                        "The shape of the diff array is invalid: (30, 30). "
+                        "Predictions and labels must have the same shape. "
                         "Please check the prediction function of the model.")
         with pytest.raises(UserConfigValidationException, match=err):
             run_error_analyzer(model, X_test, y_test, feature_names,

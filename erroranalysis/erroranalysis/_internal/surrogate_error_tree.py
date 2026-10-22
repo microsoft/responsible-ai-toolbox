@@ -8,7 +8,8 @@ from enum import Enum
 import numpy as np
 import pandas as pd
 from lightgbm import Booster, LGBMClassifier, LGBMRegressor
-from sklearn.metrics import mean_squared_error, median_absolute_error, r2_score
+from scipy import sparse
+from sklearn.metrics import r2_score
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
@@ -21,10 +22,21 @@ from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
                                                precision_metrics,
                                                recall_metrics,
                                                regression_metrics)
-from erroranalysis._internal.metrics import get_ordered_classes, metric_to_func
+from erroranalysis._internal.metrics import (encode_classification_labels,
+                                             get_ordered_classes,
+                                             metric_to_func,
+                                             resolve_analyzer_classes,
+                                             validate_ordered_classes)
 from erroranalysis._internal.process_categoricals import process_categoricals
-from erroranalysis._internal.utils import (compute_regression_residuals,
-                                           is_spark)
+from erroranalysis._internal.utils import (classification_labels_equal,
+                                           coerce_integer_array,
+                                           compute_classification_diff,
+                                           compute_regression_residuals,
+                                           is_spark,
+                                           normalize_multioutput_array,
+                                           normalize_single_output_array,
+                                           object_label_series,
+                                           pack_multioutput_rows)
 from raiutils.exceptions import UserConfigValidationException
 
 module_logger = logging.getLogger(__name__)
@@ -168,18 +180,22 @@ def compute_error_tree_on_dataset(
     dataset_sub_names = list(dataset_sub_names)
     classes = analyzer.classes
     if not is_spark(dataset):
-        if classes is None and analyzer.metric in (
-                Metrics.FALSE_NEGATIVE_RATE, Metrics.FALSE_POSITIVE_RATE,
-                Metrics.SELECTION_RATE, Metrics.PRECISION_SCORE,
-                Metrics.RECALL_SCORE, Metrics.F1_SCORE):
-            # Infer once from the full analyzer, before cohort or tree splits
-            # can remove a class. Reuse the same vocabulary in every node.
-            classes = get_ordered_classes(
-                None, analyzer.true_y, analyzer.pred_y)
         booster, dataset_indexed_df, cat_info = get_surrogate_booster_local(
             dataset, analyzer, is_model_analyzer, indexes,
             dataset_sub_names, max_depth, num_leaves, min_child_samples)
         cat_ind_reindexed, categories_reindexed = cat_info
+        if analyzer.metric in (
+                Metrics.FALSE_NEGATIVE_RATE, Metrics.FALSE_POSITIVE_RATE,
+                Metrics.SELECTION_RATE, Metrics.PRECISION_SCORE,
+                Metrics.RECALL_SCORE, Metrics.F1_SCORE):
+            # Resolve once on the selected cohort and reuse in every node.
+            classes = resolve_analyzer_classes(
+                analyzer, classes, dataset_indexed_df[TRUE_Y],
+                dataset_indexed_df[PRED_Y],
+                require_two_classes=analyzer.metric in (
+                    Metrics.FALSE_NEGATIVE_RATE,
+                    Metrics.FALSE_POSITIVE_RATE,
+                    Metrics.SELECTION_RATE))
     else:
         booster, dataset_indexed_df = get_surrogate_booster_pyspark(
             dataset, analyzer, max_depth, num_leaves, min_child_samples)
@@ -323,14 +339,25 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
         dropped_cols.append(PRED_Y)
     input_data = filtered_df.drop(columns=dropped_cols)
     is_pandas = isinstance(analyzer.dataset, pd.DataFrame)
-    if is_pandas:
-        true_y = true_y.to_numpy()
-    else:
+    integer_true_y = coerce_integer_array(true_y)
+    if integer_true_y is not None:
+        true_y = integer_true_y
+    elif is_pandas:
+        true_y = normalize_single_output_array(true_y)
+    if not is_pandas:
         input_data = input_data.to_numpy(copy=True)
     if is_model_analyzer:
         pred_y = analyzer.model.predict(input_data)
     if analyzer.model_task == ModelTask.CLASSIFICATION:
-        diff = pred_y != true_y
+        try:
+            diff = compute_classification_diff(pred_y, true_y)
+        except ValueError as ex:
+            raise UserConfigValidationException(
+                "The surrogate model could not be trained. Predictions and "
+                "labels must have the same shape. Please check the "
+                "prediction function of the model.") from ex
+        pred_y = normalize_single_output_array(pred_y)
+        true_y = normalize_single_output_array(true_y)
     elif analyzer.model_task == ModelTask.OBJECT_DETECTION:
         if not pytorch_installed:
             raise ModuleNotFoundError(
@@ -348,7 +375,13 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
             for image_idx in range(len(true_y))
         ]
     else:
-        diff = pred_y - true_y
+        try:
+            diff = compute_regression_residuals(pred_y, true_y)
+        except ValueError as ex:
+            raise UserConfigValidationException(
+                "The surrogate model could not be trained. Predictions and "
+                "labels must have the same shape. Please check the "
+                "prediction function of the model.") from ex
     if not isinstance(diff, np.ndarray):
         diff = np.array(diff)
 
@@ -356,10 +389,14 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
     # object detection we need to convert to an object type for newer versions
     # of numpy>=1.26.0
     if not isinstance(pred_y, np.ndarray):
-        try:
-            pred_y = np.array(pred_y)
-        except ValueError:
-            pred_y = np.array(pred_y, dtype=OBJECT)
+        integer_predictions = coerce_integer_array(pred_y)
+        if integer_predictions is not None:
+            pred_y = integer_predictions
+        else:
+            try:
+                pred_y = np.array(pred_y)
+            except ValueError:
+                pred_y = np.array(pred_y, dtype=OBJECT)
     if not isinstance(true_y, np.ndarray):
         try:
             true_y = np.array(true_y)
@@ -397,8 +434,24 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
     filtered_indexed_df = pd.DataFrame(dataset_sub_features,
                                        columns=dataset_sub_names)
     filtered_indexed_df[DIFF] = diff
-    filtered_indexed_df[TRUE_Y] = true_y
-    filtered_indexed_df[PRED_Y] = pred_y
+    if normalize_multioutput_array(true_y) is None:
+        true_y = normalize_single_output_array(true_y)
+    if normalize_multioutput_array(pred_y) is None:
+        pred_y = normalize_single_output_array(pred_y)
+    true_multioutput = normalize_multioutput_array(true_y)
+    pred_multioutput = normalize_multioutput_array(pred_y)
+    true_dtype = getattr(true_y, "dtype", None)
+    pred_dtype = getattr(pred_y, "dtype", None)
+    filtered_indexed_df[TRUE_Y] = (
+        object_label_series(pack_multioutput_rows(true_y))
+        if true_multioutput is not None or
+        getattr(true_dtype, "kind", None) in ("M", "O", "m")
+        else true_y)
+    filtered_indexed_df[PRED_Y] = (
+        object_label_series(pack_multioutput_rows(pred_y))
+        if pred_multioutput is not None or
+        getattr(pred_dtype, "kind", None) in ("M", "O", "m")
+        else pred_y)
     return surrogate._Booster, filtered_indexed_df, categorical_info
 
 
@@ -941,10 +994,10 @@ def compute_metrics_local(df, metric, total, classes):
         metric_value = metric_to_func[metric](true_y, pred_y)
     elif metric == Metrics.MEAN_SQUARED_ERROR:
         pred_y, true_y, error = get_regression_metric_data(df)
-        metric_value = mean_squared_error(true_y, pred_y)
+        metric_value = metric_to_func[metric](true_y, pred_y)
     elif metric == Metrics.MEDIAN_ABSOLUTE_ERROR:
         pred_y, true_y, error = get_regression_metric_data(df)
-        metric_value = median_absolute_error(true_y, pred_y)
+        metric_value = metric_to_func[metric](true_y, pred_y)
     elif metric == Metrics.R2_SCORE:
         pred_y, true_y, error = get_regression_metric_data(df)
         metric_value = r2_score(true_y, pred_y)
@@ -960,8 +1013,13 @@ def compute_metrics_local(df, metric, total, classes):
                      Metrics.SELECTION_RATE)):
         pred_y, true_y, error = get_classification_metric_data(df)
         func = metric_to_func[metric]
-        metric_value = compute_metric_value(func, classes, true_y,
-                                            pred_y, metric)
+        classes_are_resolved = metric in (
+            Metrics.FALSE_NEGATIVE_RATE, Metrics.FALSE_POSITIVE_RATE,
+            Metrics.SELECTION_RATE, Metrics.PRECISION_SCORE,
+            Metrics.RECALL_SCORE, Metrics.F1_SCORE)
+        metric_value = compute_metric_value(
+            func, classes, true_y, pred_y, metric,
+            classes_are_resolved=classes_are_resolved)
         success = total - error
     else:
         func = metric_to_func[metric]
@@ -1082,7 +1140,8 @@ def get_classification_metric_data(df):
     return pred_y, true_y, error
 
 
-def compute_metric_value(func, classes, true_y, pred_y, metric):
+def compute_metric_value(func, classes, true_y, pred_y, metric,
+                         classes_are_resolved=False):
     """Compute metric from the given function, true and predicted values.
 
     Binary metrics use the second class in the declared or inferred order
@@ -1107,10 +1166,42 @@ def compute_metric_value(func, classes, true_y, pred_y, metric):
     requires_classes = (metric == Metrics.FALSE_NEGATIVE_RATE or
                         metric == Metrics.FALSE_POSITIVE_RATE or
                         metric == Metrics.SELECTION_RATE)
-    if requires_pos_label or requires_classes:
-        ordered_labels = get_ordered_classes(classes, true_y, pred_y)
+    classification_metrics = (
+        Metrics.ACCURACY_SCORE, Metrics.F1_SCORE, Metrics.MICRO_F1_SCORE,
+        Metrics.MACRO_F1_SCORE, Metrics.PRECISION_SCORE,
+        Metrics.MICRO_PRECISION_SCORE, Metrics.MACRO_PRECISION_SCORE,
+        Metrics.RECALL_SCORE, Metrics.MICRO_RECALL_SCORE,
+        Metrics.MACRO_RECALL_SCORE, Metrics.FALSE_NEGATIVE_RATE,
+        Metrics.FALSE_POSITIVE_RATE, Metrics.SELECTION_RATE)
+    if metric in classification_metrics:
+        if sparse.issparse(true_y) or sparse.issparse(pred_y):
+            return func(true_y, pred_y)
+        raw_true_y = normalize_multioutput_array(true_y)
+        raw_pred_y = normalize_multioutput_array(pred_y)
+        if raw_true_y is not None and raw_pred_y is not None:
+            return func(raw_true_y, raw_pred_y)
+        if classes_are_resolved:
+            ordered_labels = validate_ordered_classes(
+                classes, true_y, pred_y,
+                require_two_classes=requires_classes)
+        else:
+            ordered_labels = get_ordered_classes(classes, true_y, pred_y)
+        if requires_pos_label and len(ordered_labels) == 2:
+            validate_ordered_classes(
+                ordered_labels, true_y, pred_y,
+                require_two_classes=True)
+        true_y, pred_y = encode_classification_labels(
+            ordered_labels, true_y, pred_y)
         if requires_classes:
-            return func(true_y, pred_y, classes=ordered_labels)
-        if ordered_labels is not None and len(ordered_labels) == 2:
-            return func(true_y, pred_y, pos_label=ordered_labels[1])
+            return func(
+                true_y, pred_y, classes=np.arange(len(ordered_labels)))
+        if requires_pos_label:
+            positive_index = next((
+                index for index, label in enumerate(ordered_labels)
+                if classification_labels_equal(label, 1)), None)
+            if len(ordered_labels) == 2:
+                positive_index = 1
+            if positive_index is None:
+                positive_index = -1
+            return func(true_y, pred_y, pos_label=positive_index)
     return func(true_y, pred_y)

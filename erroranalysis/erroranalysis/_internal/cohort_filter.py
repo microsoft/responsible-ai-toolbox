@@ -11,13 +11,58 @@ from erroranalysis._internal.constants import (ARG, COLUMN, COMPOSITE_FILTERS,
                                                ROW_INDEX, TRUE_Y,
                                                CohortFilterMethods,
                                                CohortFilterOps, ModelTask)
-from erroranalysis._internal.metrics import get_ordered_classes
-from erroranalysis._internal.utils import (compute_regression_residuals,
-                                           is_spark)
+from erroranalysis._internal.metrics import (encode_classification_labels,
+                                             get_ordered_classes,
+                                             validate_ordered_classes)
+from erroranalysis._internal.utils import (compute_classification_diff,
+                                           compute_regression_residuals,
+                                           is_spark,
+                                           normalize_multioutput_array,
+                                           normalize_single_output_array,
+                                           object_label_series)
 
 MODEL = 'model'
 CLASSIFICATION_OUTCOME = 'Classification outcome'
 REGRESSION_ERROR = 'Regression error'
+
+
+def _get_object_detection_values(values):
+    """Return one object cell per sample for nested labels."""
+    if isinstance(values, pd.DataFrame):
+        if values.shape[1] != 1:
+            raise ValueError(
+                "Object detection labels must have exactly one column")
+        values = values.iloc[:, 0]
+    elif isinstance(values, np.ndarray) and \
+            values.ndim == 2 and values.shape[1] == 1:
+        values = values[:, 0]
+    result = np.empty(len(values), dtype=object)
+    result[:] = list(values)
+    return result
+
+
+def _get_cohort_values(values):
+    """Return scalar labels or one object cell per multi-output row."""
+    multioutput = normalize_multioutput_array(values)
+    if multioutput is not None:
+        result = np.empty(len(multioutput), dtype=object)
+        result[:] = list(multioutput)
+        return result
+    normalized = normalize_single_output_array(values)
+    if normalized.ndim == 2 and normalized.shape[1] > 1:
+        result = np.empty(len(normalized), dtype=object)
+        result[:] = list(normalized)
+        return result
+    return normalized
+
+
+def _assign_label_column(df, column, values):
+    """Assign object labels without pandas temporal or numeric inference."""
+    if (isinstance(values, np.ndarray) and
+            values.dtype.kind in ("M", "O", "m")):
+        df[column] = object_label_series(values, index=df.index)
+    else:
+        df[column] = values
 
 
 def filter_from_cohort(analyzer, filters, composite_filters,
@@ -197,29 +242,15 @@ class FilterDataWithCohortFilters:
         :return: The classification outcome data.
         :rtype: list
         """
-        classification_outcome = []
-        if not isinstance(pred_y, np.ndarray):
-            pred_y = np.array(pred_y)
-
-        if not isinstance(true_y, np.ndarray):
-            true_y = np.array(true_y)
-
-        for i in range(len(true_y)):
-            if true_y[i] == pred_y[i]:
-                if true_y[i] == classes[0]:
-                    # True negative == 0
-                    classification_outcome.append(0)
-                else:
-                    # True positive == 3
-                    classification_outcome.append(3)
-            else:
-                if true_y[i] == classes[0]:
-                    # False positive == 1
-                    classification_outcome.append(1)
-                else:
-                    # False negative == 2
-                    classification_outcome.append(2)
-        return classification_outcome
+        true_codes = encode_classification_labels(
+            classes, true_y, allow_unknown=True)[0]
+        matches = ~compute_classification_diff(pred_y, true_y)
+        true_negative_class = true_codes == 0
+        return np.where(
+            matches,
+            np.where(true_negative_class, 0, 3),
+            np.where(true_negative_class, 1, 2),
+        ).tolist()
 
     def _compute_multiclass_classification_outcome_data(
             self, true_y, pred_y):
@@ -233,22 +264,7 @@ class FilterDataWithCohortFilters:
         :return: The classification outcome data.
         :rtype: list
         """
-        classification_outcome = []
-        if not isinstance(pred_y, np.ndarray):
-            pred_y = np.array(pred_y)
-
-        if not isinstance(true_y, np.ndarray):
-            true_y = np.array(true_y)
-
-        for i in range(len(true_y)):
-            if true_y[i] == pred_y[i]:
-                # Correct prediction == 0
-                classification_outcome.append(0)
-            else:
-                # Incorrect prediction == 1
-                classification_outcome.append(1)
-
-        return classification_outcome
+        return compute_classification_diff(pred_y, true_y).astype(int).tolist()
 
     def _compute_regression_error_data(self, true_y, pred_y):
         """Computes the per instance absolute difference
@@ -278,14 +294,31 @@ class FilterDataWithCohortFilters:
 
         if isinstance(self.true_y, str):
             df.rename(columns={self.true_y: TRUE_Y})
+        elif self.model_task in (
+                ModelTask.OBJECT_DETECTION,
+                ModelTask.MULTILABEL_IMAGE_CLASSIFICATION):
+            _assign_label_column(
+                df, TRUE_Y, _get_object_detection_values(self.true_y))
         else:
-            df[TRUE_Y] = self.true_y
+            _assign_label_column(
+                df, TRUE_Y, _get_cohort_values(self.true_y))
 
         if self.model is None:
-            df[PRED_Y] = self.pred_y
+            if self.model_task in (
+                    ModelTask.OBJECT_DETECTION,
+                    ModelTask.MULTILABEL_IMAGE_CLASSIFICATION):
+                _assign_label_column(
+                    df, PRED_Y,
+                    _get_object_detection_values(self.pred_y))
+            else:
+                _assign_label_column(
+                    df, PRED_Y, _get_cohort_values(self.pred_y))
 
         if not is_spark(df):
-            df[ROW_INDEX] = np.arange(0, len(self.true_y))
+            row_count = (self.true_y.shape[0]
+                         if hasattr(self.true_y, "shape")
+                         else len(self.true_y))
+            df[ROW_INDEX] = np.arange(0, row_count)
         if has_classification_outcome:
             if PRED_Y in df:
                 pred_y = df[PRED_Y]
@@ -294,11 +327,51 @@ class FilterDataWithCohortFilters:
                 pred_y = self.model.predict(
                     df.drop(columns=[TRUE_Y, ROW_INDEX]))
 
+            multi_true_y = normalize_multioutput_array(self.true_y)
+            multi_pred_y = normalize_multioutput_array(pred_y)
+            if multi_true_y is not None and multi_pred_y is not None:
+                df[CLASSIFICATION_OUTCOME] = \
+                    self._compute_multiclass_classification_outcome_data(
+                        multi_true_y, multi_pred_y)
+                return
+
+            model_classes = getattr(self.model, "classes_", None)
+            declared_classes = self.classes
+            if declared_classes is None and model_classes is not None:
+                model_order = get_ordered_classes(
+                    model_classes, self.true_y, pred_y)
+                if model_order is model_classes and len(model_classes) == 2:
+                    declared_classes = model_classes
+            true_labels = normalize_single_output_array(self.true_y).ravel()
+            nonmissing_true_labels = [
+                label for label in true_labels
+                if not (
+                    np.asarray(pd.isna(label)).ndim == 0 and
+                    bool(pd.isna(label)))
+            ]
             classes = get_ordered_classes(
-                self.classes, self.true_y, pred_y)
+                declared_classes, nonmissing_true_labels,
+                nonmissing_true_labels)
+            if declared_classes is None or classes is not declared_classes:
+                if model_classes is not None and declared_classes is not None:
+                    model_order = get_ordered_classes(
+                        model_classes, self.true_y, pred_y)
+                    if model_order is model_classes and \
+                            len(model_classes) == 2:
+                        classes = model_classes
+                    else:
+                        classes = get_ordered_classes(
+                            None, self.true_y, pred_y)
+                else:
+                    classes = get_ordered_classes(
+                        None, self.true_y, pred_y)
 
             # calculate classification outcome and add to df
             if len(classes) == 2:
+                validate_ordered_classes(
+                    classes, nonmissing_true_labels,
+                    nonmissing_true_labels,
+                    require_two_classes=True)
                 df[CLASSIFICATION_OUTCOME] = \
                     self._compute_binary_classification_outcome_data(
                         self.true_y, pred_y, classes)

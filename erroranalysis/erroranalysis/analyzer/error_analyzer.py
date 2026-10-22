@@ -19,14 +19,16 @@ from erroranalysis._internal.matrix_filter import \
     compute_matrix as _compute_matrix
 from erroranalysis._internal.matrix_filter import \
     compute_matrix_on_dataset as _compute_matrix_on_dataset
-from erroranalysis._internal.metrics import metric_to_func
+from erroranalysis._internal.metrics import (metric_to_func,
+                                             resolve_analyzer_classes)
 from erroranalysis._internal.process_categoricals import process_categoricals
 from erroranalysis._internal.surrogate_error_tree import \
     compute_error_tree as _compute_error_tree
 from erroranalysis._internal.surrogate_error_tree import \
     compute_error_tree_on_dataset as _compute_error_tree_on_dataset
 from erroranalysis._internal.surrogate_error_tree import compute_metric_value
-from erroranalysis._internal.utils import (compute_regression_residuals,
+from erroranalysis._internal.utils import (compute_classification_diff,
+                                           compute_regression_residuals,
                                            generate_random_unique_indexes)
 from erroranalysis._internal.version_checker import check_pandas_version
 from erroranalysis.error_correlation_methods import (
@@ -533,9 +535,26 @@ class BaseAnalyzer(ABC):
         """
         if self.metric != Metrics.ERROR_RATE:
             metric_func = metric_to_func[self.metric]
+            pred_y = self.pred_y
+            classes = self.classes
+            classes_are_resolved = False
+            if self.metric in (
+                    Metrics.FALSE_NEGATIVE_RATE,
+                    Metrics.FALSE_POSITIVE_RATE,
+                    Metrics.SELECTION_RATE,
+                    Metrics.PRECISION_SCORE,
+                    Metrics.RECALL_SCORE,
+                    Metrics.F1_SCORE):
+                classes = resolve_analyzer_classes(
+                    self, classes, self.true_y, pred_y,
+                    require_two_classes=self.metric in (
+                        Metrics.FALSE_NEGATIVE_RATE,
+                        Metrics.FALSE_POSITIVE_RATE,
+                        Metrics.SELECTION_RATE))
+                classes_are_resolved = True
             metric_value = compute_metric_value(
-                metric_func, self.classes, self.true_y,
-                self.pred_y, self.metric)
+                metric_func, classes, self.true_y, pred_y, self.metric,
+                classes_are_resolved=classes_are_resolved)
         else:
             total = len(self.true_y)
             if total == 0:
@@ -707,7 +726,8 @@ class ModelAnalyzer(BaseAnalyzer):
         :rtype: numpy.ndarray
         """
         if self._model_task == ModelTask.CLASSIFICATION:
-            return self.model.predict(self.dataset) != self.true_y
+            return compute_classification_diff(
+                self.model.predict(self.dataset), self.true_y)
         elif self._model_task == ModelTask.OBJECT_DETECTION:
             if not pytorch_installed:
                 raise ModuleNotFoundError(
@@ -827,4 +847,4 @@ class PredictionsAnalyzer(BaseAnalyzer):
         """
         if self._model_task == ModelTask.REGRESSION:
             return compute_regression_residuals(self.pred_y, self.true_y)
-        return np.asarray(self.pred_y) != np.asarray(self.true_y)
+        return compute_classification_diff(self.pred_y, self.true_y)
