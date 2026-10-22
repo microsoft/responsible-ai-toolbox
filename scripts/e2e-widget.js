@@ -278,6 +278,15 @@ function writeCypressSettings(hosts) {
 
 function e2e(watch, selectedNotebook, selectedSpec, flights, host) {
   console.log(`Running e2e for notebook ${selectedNotebook}`);
+  const e2eEnv = { ...process.env };
+  if (process.platform === "win32") {
+    e2eEnv.ELECTRON_EXTRA_LAUNCH_ARGS = [
+      process.env.ELECTRON_EXTRA_LAUNCH_ARGS,
+      "--disable-gpu"
+    ]
+      .filter(Boolean)
+      .join(" ");
+  }
   let notebookArgs = [];
   if (selectedNotebook) {
     // remove prefix "responsibleaidashboard"
@@ -316,7 +325,8 @@ function e2e(watch, selectedNotebook, selectedSpec, flights, host) {
     ],
     {
       stdio: "inherit",
-      cwd: path.join(__dirname, "..")
+      cwd: path.join(__dirname, ".."),
+      env: e2eEnv
     }
   );
   if (status) {

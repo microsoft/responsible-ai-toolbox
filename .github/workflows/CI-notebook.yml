@@ -68,6 +68,7 @@ jobs:
         run: |
           pip install -r requirements-dev.txt
           pip install .
+          pip install -v -e ../raiutils
         working-directory: raiwidgets
 
       - name: Pip freeze

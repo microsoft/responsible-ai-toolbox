@@ -56,6 +56,21 @@ class TestRetryFunction:
         expected_time_taken = 0
         assert abs(time_taken - expected_time_taken) < self._DELTA
 
+    def test_error_preserves_last_exception(self):
+        attempts = 0
+
+        def func():
+            nonlocal attempts
+            attempts += 1
+            raise ConnectionError('service unavailable {0}'.format(attempts))
+
+        with pytest.raises(RuntimeError, match='test failed') as ex:
+            retry_function(func, 'test', 'test failed',
+                           max_retries=2, retry_delay=0)
+
+        assert isinstance(ex.value.__cause__, ConnectionError)
+        assert str(ex.value.__cause__) == 'service unavailable 2'
+
     def test_error_with_float_delay(self):
         x = 'a'
 
