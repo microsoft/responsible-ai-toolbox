@@ -22,6 +22,7 @@ def retry_function(function, action_name, err_msg,
         does not return a result.
     :rtype: object
     """
+    last_exception = None
     for i in range(max_retries):
         try:
             print("{0} attempt {1} of {2}".format(
@@ -29,6 +30,7 @@ def retry_function(function, action_name, err_msg,
             result = function()
             break
         except Exception as e:
+            last_exception = e
             print("{0} attempt failed with exception:".format(action_name))
             print(e)
             if i + 1 != max_retries:
@@ -40,6 +42,6 @@ def retry_function(function, action_name, err_msg,
                     time.sleep(retry_delay)
                 retry_delay = retry_delay * 2
     else:
-        raise RuntimeError(err_msg)
+        raise RuntimeError(err_msg) from last_exception
 
     return result

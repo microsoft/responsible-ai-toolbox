@@ -2,11 +2,13 @@
 # Licensed under the MIT License.
 
 import os
+import re
 
 import nbformat as nbf
 import papermill as pm
 import pytest
 import scrapbook as sb
+from papermill.exceptions import PapermillExecutionError
 
 RACE_GROUP_SIZES_ADULT = {
     'White': 41762,
@@ -23,6 +25,23 @@ VISION = RESPONSIBLEAIDASHBOARD + 'vision/'
 ERROR_ANALYSIS_DASHBOARD = INDIVIDUAL_DASHBOARDS + 'erroranalysis-dashboard/'
 EXPLANATION_DASHBOARD = INDIVIDUAL_DASHBOARDS + 'explanation-dashboard/'
 FAIRNESS_DASHBOARD = INDIVIDUAL_DASHBOARDS + 'fairness-dashboard/'
+DATASET_TRANSPORT_FAILURES = (
+    'ConnectionError',
+    'ConnectionResetError',
+    'ConnectTimeout',
+    'HTTPError',
+    'IncompleteRead',
+    'OpenMLServerException',
+    'ReadTimeout',
+    'RemoteDisconnected',
+    'SSLError',
+    'TimeoutError',
+    'URLError',
+)
+DATASET_TRANSPORT_FAILURE_PATTERN = re.compile(
+    r'^(?:[A-Za-z_]\w*\.)*(?:{})\s*:'.format(
+        '|'.join(DATASET_TRANSPORT_FAILURES)),
+    re.MULTILINE)
 
 
 class ScrapSpec:
@@ -49,6 +68,34 @@ class ScrapSpec:
         self._expected = value
 
 
+def _is_dataset_transport_failure(error):
+    error_text = str(error)
+    return (
+        'RuntimeError: Failed to download dataset' in error_text and
+        DATASET_TRANSPORT_FAILURE_PATTERN.search(error_text) is not None
+    )
+
+
+@pytest.mark.notebooks
+@pytest.mark.parametrize('failure', DATASET_TRANSPORT_FAILURES)
+def test_dataset_transport_failure_is_detected(failure):
+    error = RuntimeError(
+        'urllib.error.{}: service unavailable\n'
+        'RuntimeError: Failed to download dataset'.format(failure))
+
+    assert _is_dataset_transport_failure(error)
+
+
+@pytest.mark.notebooks
+def test_dataset_non_transport_failure_is_not_detected():
+    error = RuntimeError(
+        '    except URLError:\n'
+        'ValueError: unexpected dataset schema\n'
+        'RuntimeError: Failed to download dataset')
+
+    assert not _is_dataset_transport_failure(error)
+
+
 def append_scrapbook_commands(input_nb_path, output_nb_path, scrap_specs):
     notebook = nbf.read(input_nb_path, as_version=4)
     notebook = nbf.v4.upgrade(notebook, from_version=4, from_minor=2)
@@ -70,7 +117,9 @@ def append_scrapbook_commands(input_nb_path, output_nb_path, scrap_specs):
     nbf.write(notebook, output_nb_path)
 
 
-def assay_one_notebook(notebook_path, notebook_name, test_values):
+def assay_one_notebook(
+        notebook_path, notebook_name, test_values,
+        skip_on_dataset_download_failure=False):
     """Test a single notebook.
 
     This uses nbformat to append `nteract-scrapbook` commands to the
@@ -94,7 +143,13 @@ def assay_one_notebook(notebook_path, notebook_name, test_values):
     output_notebook = f"{processed_dir_name}{notebook_name}.output.ipynb"
 
     append_scrapbook_commands(input_notebook, processed_notebook, test_values)
-    pm.execute_notebook(processed_notebook, output_notebook)
+    try:
+        pm.execute_notebook(processed_notebook, output_notebook)
+    except PapermillExecutionError as ex:
+        if (skip_on_dataset_download_failure and
+                _is_dataset_transport_failure(ex)):
+            pytest.skip("External dataset download is unavailable")
+        raise
     nb = sb.read_notebook(output_notebook)
 
     for k, v in test_values.items():
@@ -120,7 +175,9 @@ def test_fairness_dashboard_loan_allocation():
             'grid_32', 'grid_33', 'grid_34', 'grid_35'
         ])
 
-    assay_one_notebook(nb_path, nb_name, test_values)
+    assay_one_notebook(
+        nb_path, nb_name, test_values,
+        skip_on_dataset_download_failure=True)
 
 
 @pytest.mark.notebooks
@@ -149,7 +206,9 @@ def test_fairness_interpretability_dashboard_loan_allocation():
             'grid_33', 'grid_34', 'grid_35'
         ])
 
-    assay_one_notebook(nb_path, nb_name, test_values)
+    assay_one_notebook(
+        nb_path, nb_name, test_values,
+        skip_on_dataset_download_failure=True)
 
 
 @pytest.mark.notebooks
