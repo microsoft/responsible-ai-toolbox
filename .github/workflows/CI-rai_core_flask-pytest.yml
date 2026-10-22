@@ -48,7 +48,7 @@ jobs:
         working-directory: rai_core_flask
 
       - name: Upload requirements
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: requirements-dev-comp-${{ matrix.operatingSystem }}-py${{ matrix.pythonVersion }}
           path: rai_core_flask/requirements-dev-comp.txt
@@ -69,7 +69,7 @@ jobs:
         working-directory: rai_core_flask
 
       - name: Upload code coverage results
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: rai_core_flask-code-coverage-${{ matrix.operatingSystem }}-py${{ matrix.pythonVersion }}
           path: rai_core_flask/htmlcov
@@ -79,7 +79,7 @@ jobs:
       - if: ${{ (matrix.operatingSystem == 'windows-latest') && (matrix.pythonVersion == '3.8') }}
         name: Upload to codecov
         id: codecovupload1
-        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: rai_core_flask
@@ -93,7 +93,7 @@ jobs:
       - if: ${{ (steps.codecovupload1.outcome == 'failure') && (matrix.pythonVersion == '3.8') && (matrix.operatingSystem == 'windows-latest') }}
         name: Retry upload to codecov
         id: codecovupload2
-        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: rai_core_flask
