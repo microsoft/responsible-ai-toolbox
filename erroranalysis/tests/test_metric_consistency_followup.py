@@ -87,6 +87,10 @@ class ReverseBinaryMetadataModel(BinaryMetadataModel):
     classes_ = np.array([1, 0])
 
 
+class StringMetadataModel(BinaryMetadataModel):
+    classes_ = np.array(["no", "yes"])
+
+
 class MulticlassMetadataModel:
     classes_ = np.array([0, 1, 2])
 
@@ -774,7 +778,7 @@ def test_filtered_binary_prf_preserves_full_multiclass_vocabulary(
     (Metrics.F1_SCORE, 2 / 3),
 ])
 @pytest.mark.parametrize("view", ["heatmap", "tree"])
-def test_filtered_prf_uses_inferred_or_model_class_order(
+def test_filtered_prf_uses_inferred_binary_class_order(
         kind, metric, expected, view):
     dataset = pd.DataFrame({"row": np.arange(6), "group": np.zeros(6)})
     labels = np.ones(6, dtype=int)
@@ -797,8 +801,7 @@ def test_filtered_prf_uses_inferred_or_model_class_order(
         COLUMN: "row",
         METHOD: CohortFilterMethods.METHOD_RANGE,
     }]
-    if kind == "predictions":
-        expected = 0
+    expected = 0
 
     if view == "heatmap":
         heatmap = analyzer.compute_matrix(["group", None], filters, None)
@@ -2258,6 +2261,436 @@ def test_outcome_inference_includes_prediction_only_binary_class():
 
     assert false_negative["row"].tolist() == [0]
     assert true_positive["row"].tolist() == [1]
+
+
+def test_display_classes_use_compatible_model_classes_for_outcomes():
+    model = FixedPredictionModel(np.ones(2, dtype=int))
+    model.classes_ = np.array([0, 1])
+    analyzer = ModelAnalyzer(
+        model,
+        pd.DataFrame({"row": [0, 1]}),
+        [1, 1],
+        ["row"],
+        [],
+        model_task=ModelTask.CLASSIFICATION,
+        metric=Metrics.ERROR_RATE,
+        classes=["negative", "positive"],
+    )
+
+    filtered = filter_from_cohort(
+        analyzer,
+        [{
+            ARG: [3],
+            COLUMN: "Classification outcome",
+            METHOD: CohortFilterMethods.METHOD_INCLUDES,
+        }],
+        None,
+        include_original_columns_only=True,
+    )
+
+    assert filtered["row"].tolist() == [0, 1]
+
+
+@pytest.mark.parametrize("labels,predictions,expected_false_positive", [
+    ([1, 1], [1, 2], [1]),
+    ([np.nan, 1], [1, 1], [0]),
+])
+def test_outcome_model_class_fallback_matches_observed_vocabulary(
+        labels, predictions, expected_false_positive):
+    model = FixedPredictionModel(np.asarray(predictions, dtype=object))
+    model.classes_ = np.array([0, 1])
+    analyzer = ModelAnalyzer(
+        model,
+        pd.DataFrame({"row": [0, 1]}),
+        labels,
+        ["row"],
+        [],
+        model_task=ModelTask.CLASSIFICATION,
+        metric=Metrics.FALSE_POSITIVE_RATE,
+        classes=["negative", "positive"],
+    )
+
+    filtered = filter_from_cohort(
+        analyzer,
+        [{
+            ARG: [1],
+            COLUMN: "Classification outcome",
+            METHOD: CohortFilterMethods.METHOD_INCLUDES,
+        }],
+        None,
+        include_original_columns_only=True,
+    )
+
+    assert filtered["row"].tolist() == expected_false_positive
+
+
+def test_outcome_does_not_adopt_multiclass_model_for_binary_observations():
+    model = FixedPredictionModel(np.array([1, 1]))
+    model.classes_ = np.array([0, 1, 2])
+    analyzer = ModelAnalyzer(
+        model,
+        pd.DataFrame({"row": [0, 1]}),
+        [0, 1],
+        ["row"],
+        [],
+        model_task=ModelTask.CLASSIFICATION,
+        metric=Metrics.SELECTION_RATE,
+        classes=["negative", "positive"],
+    )
+
+    true_positive = filter_from_cohort(
+        analyzer,
+        [{
+            ARG: [3],
+            COLUMN: "Classification outcome",
+            METHOD: CohortFilterMethods.METHOD_INCLUDES,
+        }],
+        None,
+        include_original_columns_only=True,
+    )
+
+    assert true_positive["row"].tolist() == [1]
+
+
+def test_outcome_rejects_model_order_with_oov_prediction():
+    model = FixedPredictionModel(np.array([0, 2]))
+    model.classes_ = np.array([1, 0])
+    analyzer = ModelAnalyzer(
+        model,
+        pd.DataFrame({"row": [0, 1]}),
+        [0, 0],
+        ["row"],
+        [],
+        model_task=ModelTask.CLASSIFICATION,
+        metric=Metrics.SELECTION_RATE,
+    )
+
+    false_positive = filter_from_cohort(
+        analyzer,
+        [{
+            ARG: [1],
+            COLUMN: "Classification outcome",
+            METHOD: CohortFilterMethods.METHOD_INCLUDES,
+        }],
+        None,
+        include_original_columns_only=True,
+    )
+
+    assert false_positive["row"].tolist() == [1]
+
+
+def test_display_classes_preserve_compatible_model_class_order():
+    analyzer = ModelAnalyzer(
+        ReverseBinaryMetadataModel(),
+        pd.DataFrame({"feature": [0, 1]}),
+        [0, 1],
+        ["feature"],
+        [],
+        model_task=ModelTask.CLASSIFICATION,
+        metric=Metrics.SELECTION_RATE,
+        classes=["negative", "positive"],
+    )
+
+    root = analyzer.compute_root_stats()[RootKeys.METRIC_VALUE]
+    heatmap = analyzer.compute_matrix(["feature", None], None, None)
+    tree = analyzer.compute_error_tree(
+        ["feature"], None, None, min_child_samples=1)
+
+    assert root == 1
+    assert all(
+        cell["metricValue"] == 1 for cell in heatmap["matrix"][0])
+    assert tree[0]["metricValue"] == 1
+
+
+def test_incompatible_model_classes_do_not_leak_into_inferred_classes():
+    analyzer = ModelAnalyzer(
+        StringMetadataModel(),
+        pd.DataFrame({"feature": [0, 1]}),
+        [0, 0],
+        ["feature"],
+        [],
+        model_task=ModelTask.CLASSIFICATION,
+        metric=Metrics.SELECTION_RATE,
+    )
+
+    root = analyzer.compute_root_stats()[RootKeys.METRIC_VALUE]
+    heatmap = analyzer.compute_matrix(["feature", None], None, None)
+    tree = analyzer.compute_error_tree(
+        ["feature"], None, None, min_child_samples=1)
+
+    assert root == 0
+    assert all(
+        cell["metricValue"] == 0 for cell in heatmap["matrix"][0])
+    assert tree[0]["metricValue"] == 0
+
+
+@pytest.mark.parametrize("view", ["heatmap", "tree"])
+def test_sparse_model_multilabel_predictions_preserve_dimensions(view):
+    predictions = sparse.csr_matrix([[1, 0], [0, 1], [1, 1]])
+    analyzer = ModelAnalyzer(
+        FixedPredictionModel(predictions),
+        pd.DataFrame({"feature": [0, 0, 1]}),
+        predictions.copy(),
+        ["feature"],
+        [],
+        model_task=ModelTask.MULTILABEL_IMAGE_CLASSIFICATION,
+        metric=Metrics.ACCURACY_SCORE,
+    )
+
+    if view == "heatmap":
+        heatmap = analyzer.compute_matrix(["feature", None], None, None)
+        assert all(
+            cell["metricValue"] == 1 for cell in heatmap["matrix"][0])
+    else:
+        tree = analyzer.compute_error_tree(
+            ["feature"], None, None, min_child_samples=1)
+        assert tree[0]["metricValue"] == 1
+
+
+def test_inferred_missing_class_is_preserved_across_views():
+    labels = [np.nan, 1]
+    analyzer = PredictionsAnalyzer(
+        labels.copy(),
+        pd.DataFrame({"feature": [0, 1]}),
+        labels,
+        ["feature"],
+        [],
+        model_task=ModelTask.CLASSIFICATION,
+        metric=Metrics.SELECTION_RATE,
+    )
+
+    root = analyzer.compute_root_stats()[RootKeys.METRIC_VALUE]
+    heatmap = analyzer.compute_matrix(["feature", None], None, None)
+    tree = analyzer.compute_error_tree(
+        ["feature"], None, None, min_child_samples=1)
+
+    assert root == 0.5
+    assert sorted([
+        cell["metricValue"] for cell in heatmap["matrix"][0]
+    ]) == [0, 1]
+    assert tree[0]["metricValue"] == 0.5
+
+
+@pytest.mark.parametrize("missing_label", [None, pd.NA, pd.NaT])
+def test_nonfloat_inferred_missing_classes_work_across_views(missing_label):
+    labels = [missing_label, 1]
+    analyzer = PredictionsAnalyzer(
+        labels.copy(),
+        pd.DataFrame({"feature": [0, 1]}),
+        labels,
+        ["feature"],
+        [],
+        model_task=ModelTask.CLASSIFICATION,
+        metric=Metrics.SELECTION_RATE,
+    )
+
+    root = analyzer.compute_root_stats()[RootKeys.METRIC_VALUE]
+    heatmap = analyzer.compute_matrix(["feature", None], None, None)
+    tree = analyzer.compute_error_tree(
+        ["feature"], None, None, min_child_samples=1)
+
+    assert root == 0.5
+    assert sorted([
+        cell["metricValue"] for cell in heatmap["matrix"][0]
+    ]) == [0, 1]
+    assert tree[0]["metricValue"] == 0.5
+
+
+def test_selected_missing_class_is_not_replaced_by_full_true_vocabulary():
+    analyzer = PredictionsAnalyzer(
+        [0, 1, np.nan, 1],
+        pd.DataFrame({"selected": [0, 0, 1, 1]}),
+        [0, 1, np.nan, 1],
+        ["selected"],
+        [],
+        model_task=ModelTask.CLASSIFICATION,
+        metric=Metrics.SELECTION_RATE,
+    )
+    filters = [{
+        ARG: [1],
+        COLUMN: "selected",
+        METHOD: CohortFilterMethods.METHOD_EQUAL,
+    }]
+
+    heatmap = analyzer.compute_matrix(["selected", None], filters, None)
+    tree = analyzer.compute_error_tree(
+        ["selected"], filters, None, min_child_samples=1)
+
+    assert heatmap["matrix"][0][0]["metricValue"] == 0.5
+    assert tree[0]["metricValue"] == 0.5
+
+
+def test_mixed_unit_temporal_lists_preserve_original_scalars():
+    far_future = np.datetime64("3000-01-01", "D")
+    wrapped = far_future.astype("datetime64[ns]")
+    present = np.datetime64("2025-01-01", "ns")
+    analyzer = PredictionsAnalyzer(
+        [far_future, present],
+        pd.DataFrame({"feature": [0, 1]}),
+        [wrapped, present],
+        ["feature"],
+        [],
+        model_task=ModelTask.CLASSIFICATION,
+        metric=Metrics.ERROR_RATE,
+    )
+
+    assert analyzer.get_diff().tolist() == [True, False]
+
+
+def test_mixed_unit_timedelta_lists_preserve_original_scalars():
+    far_future = np.timedelta64(10**8, "D")
+    wrapped = far_future.astype("timedelta64[ns]")
+    one_ns = np.timedelta64(1, "ns")
+    analyzer = PredictionsAnalyzer(
+        [far_future, one_ns],
+        pd.DataFrame({"feature": [0, 1]}),
+        [wrapped, one_ns],
+        ["feature"],
+        [],
+        model_task=ModelTask.CLASSIFICATION,
+        metric=Metrics.ERROR_RATE,
+    )
+
+    assert analyzer.get_diff().tolist() == [True, False]
+
+
+@pytest.mark.parametrize("unit", ["ps", "D"])
+def test_temporal_arrays_remain_exact_in_cohort_views(unit):
+    if unit == "ps":
+        labels = np.array([1, 2], dtype="datetime64[ps]")
+        predictions = np.array([1, 1], dtype="datetime64[ps]")
+    else:
+        labels = np.array(["3000-01-01", "2025-01-01"], dtype="datetime64[D]")
+        predictions = labels.astype("datetime64[ns]")
+    analyzer = PredictionsAnalyzer(
+        predictions,
+        pd.DataFrame({"feature": [0, 1]}),
+        labels,
+        ["feature"],
+        [],
+        model_task=ModelTask.CLASSIFICATION,
+        metric=Metrics.ERROR_RATE,
+    )
+
+    heatmap = analyzer.compute_matrix(["feature", None], None, None)
+    tree = analyzer.compute_error_tree(
+        ["feature"], None, None, min_child_samples=1)
+
+    assert analyzer.compute_root_stats()[RootKeys.METRIC_VALUE] == 50
+    assert sum(
+        cell["falseCount"] for cell in heatmap["matrix"][0]) == 1
+    assert tree[0]["metricValue"] == 0.5
+
+
+@pytest.mark.parametrize("missing_label", [np.nan, pd.NA])
+def test_excluded_missing_labels_do_not_change_inferred_cohort_classes(
+        missing_label):
+    analyzer = PredictionsAnalyzer(
+        [0, 0, 1, 0],
+        pd.DataFrame({"feature": [0, 0, 1, 999]}),
+        [0, 0, 1, missing_label],
+        ["feature"],
+        [],
+        model_task=ModelTask.CLASSIFICATION,
+        metric=Metrics.SELECTION_RATE,
+    )
+    filters = [{
+        ARG: [0],
+        COLUMN: "feature",
+        METHOD: CohortFilterMethods.METHOD_EQUAL,
+    }]
+
+    heatmap = analyzer.compute_matrix(["feature", None], filters, None)
+    tree = analyzer.compute_error_tree(
+        ["feature"], filters, None, min_child_samples=1)
+
+    assert heatmap["matrix"][0][0]["metricValue"] == 0
+    assert tree[0]["metricValue"] == 0
+
+
+def test_partial_model_class_overlap_uses_complete_inferred_vocabulary():
+    model = FixedPredictionModel(np.ones(2, dtype=int))
+    model.classes_ = np.array([0, 2])
+    analyzer = ModelAnalyzer(
+        model,
+        pd.DataFrame({"feature": [0, 1]}),
+        [0, 1],
+        ["feature"],
+        [],
+        model_task=ModelTask.CLASSIFICATION,
+        metric=Metrics.SELECTION_RATE,
+        classes=["negative", "positive"],
+    )
+
+    root = analyzer.compute_root_stats()[RootKeys.METRIC_VALUE]
+    heatmap = analyzer.compute_matrix(["feature", None], None, None)
+    tree = analyzer.compute_error_tree(
+        ["feature"], None, None, min_child_samples=1)
+
+    assert root == 1
+    assert all(
+        cell["metricValue"] == 1 for cell in heatmap["matrix"][0])
+    assert tree[0]["metricValue"] == 1
+
+
+@pytest.mark.parametrize("metric", [
+    Metrics.PRECISION_SCORE,
+    Metrics.RECALL_SCORE,
+    Metrics.F1_SCORE,
+])
+def test_multiclass_model_metadata_does_not_override_binary_data(metric):
+    model = FixedPredictionModel(np.array([0, 2, 0, 2]))
+    model.classes_ = np.array([0, 1, 2])
+    analyzer = ModelAnalyzer(
+        model,
+        pd.DataFrame({"feature": [0, 0, 1, 1]}),
+        [0, 2, 0, 2],
+        ["feature"],
+        [],
+        model_task=ModelTask.CLASSIFICATION,
+        metric=metric,
+        classes=["zero", "one", "two"],
+    )
+
+    root = analyzer.compute_root_stats()[RootKeys.METRIC_VALUE]
+    heatmap = analyzer.compute_matrix(["feature", None], None, None)
+    tree = analyzer.compute_error_tree(
+        ["feature"], None, None, min_child_samples=1)
+
+    assert root == 1
+    assert all(
+        cell["metricValue"] == 1 for cell in heatmap["matrix"][0])
+    assert tree[0]["metricValue"] == 1
+
+
+@pytest.mark.parametrize("labels", [
+    [0, 0, 2],
+    [0, 1, 2],
+])
+def test_excluded_labels_do_not_veto_selected_model_class_order(labels):
+    model = FixedPredictionModel(np.array([0, 0, 2]))
+    model.classes_ = np.array([1, 0])
+    analyzer = ModelAnalyzer(
+        model,
+        pd.DataFrame({"feature": [0, 0, 1]}),
+        labels,
+        ["feature"],
+        [],
+        model_task=ModelTask.CLASSIFICATION,
+        metric=Metrics.SELECTION_RATE,
+    )
+    filters = [{
+        ARG: [0],
+        COLUMN: "feature",
+        METHOD: CohortFilterMethods.METHOD_EQUAL,
+    }]
+
+    heatmap = analyzer.compute_matrix(["feature", None], filters, None)
+    tree = analyzer.compute_error_tree(
+        ["feature"], filters, None, min_child_samples=1)
+
+    assert heatmap["matrix"][0][0]["metricValue"] == 1
+    assert tree[0]["metricValue"] == 1
 
 
 @pytest.mark.parametrize("metric,expected", [

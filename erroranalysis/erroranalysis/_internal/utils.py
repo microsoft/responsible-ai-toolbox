@@ -61,7 +61,8 @@ def coerce_integer_array(values):
         array = np.asarray(values)
     except ValueError:
         return None
-    if np.issubdtype(array.dtype, np.integer):
+    if (np.issubdtype(array.dtype, np.integer) and
+            array.dtype.kind not in ("M", "m")):
         return array
     if array.dtype != object and hasattr(values, "dtype"):
         return None
@@ -91,6 +92,9 @@ def compute_integer_residuals(predictions, labels):
 
 def normalize_single_output_array(values):
     """Return an array with a single-output column vector flattened."""
+    if hasattr(values, "toarray") and not isinstance(
+            values, (np.ndarray, pd.DataFrame, pd.Series)):
+        values = values.toarray()
     dtype = getattr(values, "dtype", None)
     array = None
     if (isinstance(values, pd.Categorical) or
@@ -200,7 +204,8 @@ def normalize_single_output_array(values):
         if (array.dtype.kind in ("U", "S") and any(
                 not isinstance(value, (str, bytes))
                 for value in object_array.ravel())) or infer_dtype in (
-                    "integer-na", "mixed", "mixed-integer-float"):
+                    "datetime64", "integer-na", "mixed",
+                    "mixed-integer-float", "timedelta", "timedelta64"):
             array = object_array
     if array.ndim == 2 and array.shape[1] == 1:
         return array[:, 0]
@@ -278,6 +283,13 @@ def pack_multioutput_rows(values):
     rows = np.empty(len(matrix), dtype=object)
     rows[:] = list(matrix)
     return rows
+
+
+def object_label_series(values, index=None):
+    """Create a pandas Series without coercing temporal label scalars."""
+    objects = np.empty(len(values), dtype=object)
+    objects[:] = list(values)
+    return pd.Series(objects, index=index, dtype=object)
 
 
 def _datetime_label_key(value):

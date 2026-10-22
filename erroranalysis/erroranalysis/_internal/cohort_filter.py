@@ -18,7 +18,8 @@ from erroranalysis._internal.utils import (compute_classification_diff,
                                            compute_regression_residuals,
                                            is_spark,
                                            normalize_multioutput_array,
-                                           normalize_single_output_array)
+                                           normalize_single_output_array,
+                                           object_label_series)
 
 MODEL = 'model'
 CLASSIFICATION_OUTCOME = 'Classification outcome'
@@ -57,8 +58,9 @@ def _get_cohort_values(values):
 
 def _assign_label_column(df, column, values):
     """Assign object labels without pandas temporal or numeric inference."""
-    if isinstance(values, np.ndarray) and values.dtype == object:
-        df[column] = pd.Series(values, index=df.index, dtype=object)
+    if (isinstance(values, np.ndarray) and
+            values.dtype.kind in ("M", "O", "m")):
+        df[column] = object_label_series(values, index=df.index)
     else:
         df[column] = values
 
@@ -313,7 +315,10 @@ class FilterDataWithCohortFilters:
                     df, PRED_Y, _get_cohort_values(self.pred_y))
 
         if not is_spark(df):
-            df[ROW_INDEX] = np.arange(0, len(self.true_y))
+            row_count = (self.true_y.shape[0]
+                         if hasattr(self.true_y, "shape")
+                         else len(self.true_y))
+            df[ROW_INDEX] = np.arange(0, row_count)
         if has_classification_outcome:
             if PRED_Y in df:
                 pred_y = df[PRED_Y]
@@ -333,7 +338,10 @@ class FilterDataWithCohortFilters:
             model_classes = getattr(self.model, "classes_", None)
             declared_classes = self.classes
             if declared_classes is None and model_classes is not None:
-                declared_classes = model_classes
+                model_order = get_ordered_classes(
+                    model_classes, self.true_y, pred_y)
+                if model_order is model_classes and len(model_classes) == 2:
+                    declared_classes = model_classes
             true_labels = normalize_single_output_array(self.true_y).ravel()
             nonmissing_true_labels = [
                 label for label in true_labels
@@ -345,7 +353,18 @@ class FilterDataWithCohortFilters:
                 declared_classes, nonmissing_true_labels,
                 nonmissing_true_labels)
             if declared_classes is None or classes is not declared_classes:
-                classes = get_ordered_classes(None, self.true_y, pred_y)
+                if model_classes is not None and declared_classes is not None:
+                    model_order = get_ordered_classes(
+                        model_classes, self.true_y, pred_y)
+                    if model_order is model_classes and \
+                            len(model_classes) == 2:
+                        classes = model_classes
+                    else:
+                        classes = get_ordered_classes(
+                            None, self.true_y, pred_y)
+                else:
+                    classes = get_ordered_classes(
+                        None, self.true_y, pred_y)
 
             # calculate classification outcome and add to df
             if len(classes) == 2:

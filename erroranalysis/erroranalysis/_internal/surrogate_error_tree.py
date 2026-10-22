@@ -35,6 +35,7 @@ from erroranalysis._internal.utils import (classification_labels_equal,
                                            is_spark,
                                            normalize_multioutput_array,
                                            normalize_single_output_array,
+                                           object_label_series,
                                            pack_multioutput_rows)
 from raiutils.exceptions import UserConfigValidationException
 
@@ -437,14 +438,20 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
         true_y = normalize_single_output_array(true_y)
     if normalize_multioutput_array(pred_y) is None:
         pred_y = normalize_single_output_array(pred_y)
+    true_multioutput = normalize_multioutput_array(true_y)
+    pred_multioutput = normalize_multioutput_array(pred_y)
+    true_dtype = getattr(true_y, "dtype", None)
+    pred_dtype = getattr(pred_y, "dtype", None)
     filtered_indexed_df[TRUE_Y] = (
-        pd.Series(pack_multioutput_rows(true_y), dtype=object)
-        if normalize_multioutput_array(true_y) is not None or
-        getattr(true_y, "dtype", None) == object else true_y)
+        object_label_series(pack_multioutput_rows(true_y))
+        if true_multioutput is not None or
+        getattr(true_dtype, "kind", None) in ("M", "O", "m")
+        else true_y)
     filtered_indexed_df[PRED_Y] = (
-        pd.Series(pack_multioutput_rows(pred_y), dtype=object)
-        if normalize_multioutput_array(pred_y) is not None or
-        getattr(pred_y, "dtype", None) == object else pred_y)
+        object_label_series(pack_multioutput_rows(pred_y))
+        if pred_multioutput is not None or
+        getattr(pred_dtype, "kind", None) in ("M", "O", "m")
+        else pred_y)
     return surrogate._Booster, filtered_indexed_df, categorical_info
 
 

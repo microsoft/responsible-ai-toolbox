@@ -28,6 +28,7 @@ from erroranalysis._internal.utils import (classification_labels_equal,
                                            compute_regression_residuals,
                                            normalize_multioutput_array,
                                            normalize_single_output_array,
+                                           object_label_series,
                                            pack_multioutput_rows)
 from raiutils.exceptions import UserConfigValidationException
 
@@ -214,18 +215,22 @@ def compute_matrix_on_dataset(analyzer, features, dataset,
             true_y = normalize_single_output_array(true_y)
         if normalize_multioutput_array(pred_y) is None:
             pred_y = normalize_single_output_array(pred_y)
+        true_multioutput = normalize_multioutput_array(true_y)
+        pred_multioutput = normalize_multioutput_array(pred_y)
+        true_dtype = getattr(true_y, "dtype", None)
+        pred_dtype = getattr(pred_y, "dtype", None)
         df_err[TRUE_Y] = (
-            pd.Series(
-                pack_multioutput_rows(true_y),
-                index=df_err.index, dtype=object)
-            if normalize_multioutput_array(true_y) is not None or
-            getattr(true_y, "dtype", None) == object else true_y)
+            object_label_series(
+                pack_multioutput_rows(true_y), index=df_err.index)
+            if true_multioutput is not None or
+            getattr(true_dtype, "kind", None) in ("M", "O", "m")
+            else true_y)
         df_err[PRED_Y] = (
-            pd.Series(
-                pack_multioutput_rows(pred_y),
-                index=df_err.index, dtype=object)
-            if normalize_multioutput_array(pred_y) is not None or
-            getattr(pred_y, "dtype", None) == object else pred_y)
+            object_label_series(
+                pack_multioutput_rows(pred_y), index=df_err.index)
+            if pred_multioutput is not None or
+            getattr(pred_dtype, "kind", None) in ("M", "O", "m")
+            else pred_y)
     label_columns = None
     if metric != Metrics.ERROR_RATE:
         label_columns = (

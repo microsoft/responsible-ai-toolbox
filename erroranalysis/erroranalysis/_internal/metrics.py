@@ -453,9 +453,13 @@ def get_ordered_classes(classes, true_y, pred_y):
 def resolve_analyzer_classes(analyzer, classes, true_y, pred_y,
                              require_two_classes=True):
     """Resolve one stable vocabulary for the selected cohort."""
-    observed = _combine_unique_labels(
-        true_y, pred_y, skip_missing=True)
+    observed = _combine_unique_labels(true_y, pred_y)
     full_true = _get_unique_labels(analyzer.true_y, skip_missing=True)
+    observed_outside_full_true = _get_invalid_labels(full_true, observed)
+    selected_missing_is_outside_full_true = (
+        observed_outside_full_true and
+        all(_is_missing_label(label)
+            for label in observed_outside_full_true))
     if classes is not None:
         if not observed:
             validate_ordered_classes(
@@ -469,26 +473,23 @@ def resolve_analyzer_classes(analyzer, classes, true_y, pred_y,
                 classes, true_y, pred_y,
                 require_two_classes=require_two_classes)
             return classes
-        if len(full_true) == 2:
-            return _sort_labels(full_true)
-        if not require_two_classes and len(full_true) >= 2:
-            cohort_labels = _combine_unique_labels(
-                full_true, observed, skip_missing=True)
-            return _sort_labels(cohort_labels)
         model_classes = getattr(
             getattr(analyzer, "model", None), "classes_", None)
         if model_classes is not None:
             model_labels = _get_unique_labels(
                 model_classes, skip_missing=True)
-            reference_labels = _combine_unique_labels(
-                observed, full_true, skip_missing=True)
-            overlap = (not reference_labels or
-                       len(_get_invalid_labels(
-                           model_labels, reference_labels)) <
-                       len(reference_labels))
-            if overlap and (len(model_labels) == 2 or (
-                    not require_two_classes and len(model_labels) > 2)):
+            reference_labels = observed
+            compatible = (
+                not _get_invalid_labels(model_labels, reference_labels))
+            if compatible and len(model_labels) == 2:
                 return model_labels
+        if selected_missing_is_outside_full_true and len(observed) >= 2:
+            return _sort_labels(observed)
+        if len(full_true) == 2:
+            return _sort_labels(full_true)
+        if not require_two_classes and len(full_true) >= 2:
+            cohort_labels = _combine_unique_labels(full_true, observed)
+            return _sort_labels(cohort_labels)
         if len(observed) >= 2:
             return _sort_labels(observed)
     else:
@@ -497,22 +498,19 @@ def resolve_analyzer_classes(analyzer, classes, true_y, pred_y,
         if model_classes is not None:
             model_labels = _get_unique_labels(
                 model_classes, skip_missing=True)
-            reference_labels = _combine_unique_labels(
-                observed, full_true, skip_missing=True)
-            overlap = (not reference_labels or
-                       len(_get_invalid_labels(
-                           model_labels, reference_labels)) <
-                       len(reference_labels))
-            if overlap and len(model_labels) >= 2:
+            reference_labels = observed
+            compatible = (
+                not _get_invalid_labels(model_labels, reference_labels))
+            if compatible and len(model_labels) == 2:
                 return model_labels
+        if selected_missing_is_outside_full_true and len(observed) >= 2:
+            return _sort_labels(observed)
         if not require_two_classes:
             if len(full_true) == 1:
-                cohort_labels = _combine_unique_labels(
-                    full_true, observed, skip_missing=True)
+                cohort_labels = _combine_unique_labels(full_true, observed)
                 return _sort_labels(cohort_labels)
             if len(full_true) >= 2:
-                cohort_labels = _combine_unique_labels(
-                    full_true, observed, skip_missing=True)
+                cohort_labels = _combine_unique_labels(full_true, observed)
                 return _sort_labels(cohort_labels)
         if len(full_true) == 2:
             return _sort_labels(full_true)
@@ -524,7 +522,9 @@ def resolve_analyzer_classes(analyzer, classes, true_y, pred_y,
         return _sort_labels(labels)
     model_classes = getattr(getattr(analyzer, "model", None), "classes_", None)
     if model_classes is not None:
-        labels = _combine_unique_labels(labels, model_classes)
+        model_labels = _get_unique_labels(model_classes, skip_missing=True)
+        if not _get_invalid_labels(model_labels, labels):
+            labels = _combine_unique_labels(labels, model_labels)
     if classes is None and require_two_classes and len(labels) == 1:
         if classification_labels_equal(labels[0], 1):
             labels.insert(0, INFERRED_ABSENT_POSITIVE_CLASS)
@@ -552,6 +552,8 @@ def validate_ordered_classes(classes, true_y, pred_y,
     if any(label is INFERRED_ABSENT_POSITIVE_CLASS for label in classes):
         return classes
     class_keys = [classification_label_key(label) for label in classes]
+    if any(key[0] == "missing" for key in class_keys):
+        return classes
     temporal_tags = {
         "datetime", "datetime-instant", "time-aware", "time-naive",
         "timedelta", "timedelta-months"}
