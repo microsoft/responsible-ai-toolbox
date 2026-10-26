@@ -3438,8 +3438,8 @@
 
 "@nx/cypress@22.7.10":
   version "22.7.10"
-  resolved "https://ms-feed-25.pkgs.visualstudio.com/1es-public/_packaging/npm-public/npm/registry/@nx/cypress/-/cypress-22.7.10.tgz#605da0065f5280a0765493dc786afc5147787d10"
-  integrity sha1-YF2gBl9SgKB2VJPceGr8UUd4fRA=
+  resolved "https://registry.yarnpkg.com/@nx/cypress/-/cypress-22.7.10.tgz#605da0065f5280a0765493dc786afc5147787d10"
+  integrity sha512-Wk6s0PBNoudvF4WD5peUMoZ+b8pvg1i/5jtNU1w9BkvTISycRCx5bXmQynVIwUCew2CTtnwJr44/5vvsamYYNQ==
   dependencies:
     "@nx/devkit" "22.7.10"
     "@nx/eslint" "22.7.10"
@@ -3452,8 +3452,8 @@
 
 "@nx/devkit@22.7.10":
   version "22.7.10"
-  resolved "https://ms-feed-25.pkgs.visualstudio.com/1es-public/_packaging/npm-public/npm/registry/@nx/devkit/-/devkit-22.7.10.tgz#24cb1ed70871b95142f0f440dea2e337a24d293b"
-  integrity sha1-JMse1whxuVFC8PRA3qLjN6JNKTs=
+  resolved "https://registry.yarnpkg.com/@nx/devkit/-/devkit-22.7.10.tgz#24cb1ed70871b95142f0f440dea2e337a24d293b"
+  integrity sha512-Ej13dSngr3VQLofUqFxku9c/A02znmg9yPhV2V0oTGwluQ1FIWuzbapjJ6uiU7L04AOnD9gZlSzKU8RfE0lXEA==
   dependencies:
     "@zkochan/js-yaml" "0.0.7"
     ejs "5.0.1"
@@ -3465,8 +3465,8 @@
 
 "@nx/eslint-plugin@22.7.10":
   version "22.7.10"
-  resolved "https://ms-feed-25.pkgs.visualstudio.com/1es-public/_packaging/npm-public/npm/registry/@nx/eslint-plugin/-/eslint-plugin-22.7.10.tgz#e897e261ff9607a3412298473c45b830b0f742f7"
-  integrity sha1-6JfiYf+WB6NBIphHPEW4MLD3Qvc=
+  resolved "https://registry.yarnpkg.com/@nx/eslint-plugin/-/eslint-plugin-22.7.10.tgz#e897e261ff9607a3412298473c45b830b0f742f7"
+  integrity sha512-ldaXtHUee47VyarFNQ2pj5TzpsZOBHvN0lQ5EMO2Q23vkDim9enjd8KfbTRqr0CRFSwOkyGRGaKQ5mBuQdOLYw==
   dependencies:
     "@nx/devkit" "22.7.10"
     "@nx/js" "22.7.10"
@@ -3482,8 +3482,8 @@
 
 "@nx/eslint@22.7.10":
   version "22.7.10"
-  resolved "https://ms-feed-25.pkgs.visualstudio.com/1es-public/_packaging/npm-public/npm/registry/@nx/eslint/-/eslint-22.7.10.tgz#c4dc15d6df1e7cb2a6eeaaa28a7ae1e11b3c9bc2"
-  integrity sha1-xNwV1t8efLKm7qqiinrh4Rs8m8I=
+  resolved "https://registry.yarnpkg.com/@nx/eslint/-/eslint-22.7.10.tgz#c4dc15d6df1e7cb2a6eeaaa28a7ae1e11b3c9bc2"
+  integrity sha512-84RZhpLSoseZVnhwiYsQo1nxwmBrlbh7k3/pwTGgv1fdz1fHcSUrjNlRAb0ovoaoi/hw5DEURTS3FpECH92RzQ==
   dependencies:
     "@nx/devkit" "22.7.10"
     "@nx/js" "22.7.10"
@@ -3493,8 +3493,8 @@
 
 "@nx/jest@22.7.10":
   version "22.7.10"
-  resolved "https://ms-feed-25.pkgs.visualstudio.com/1es-public/_packaging/npm-public/npm/registry/@nx/jest/-/jest-22.7.10.tgz#3541741958afd51cddd9ad59a243ed25adabeff8"
-  integrity sha1-NUF0GViv1Rzd2a1ZokPtJa2r7/g=
+  resolved "https://registry.yarnpkg.com/@nx/jest/-/jest-22.7.10.tgz#3541741958afd51cddd9ad59a243ed25adabeff8"
+  integrity sha512-kk/3Mx/tMHHFOcumUNs0cA2sYZbwsL1gPos1M1y+FlOyAY31miS2sXX8v9mvwdSkB+QOcjwlWzpf6D32KTitBw==
   dependencies:
     "@jest/reporters" "^30.0.2"
     "@jest/test-result" "^30.0.2"
@@ -3514,8 +3514,8 @@
 
 "@nx/js@22.7.10":
   version "22.7.10"
-  resolved "https://ms-feed-25.pkgs.visualstudio.com/1es-public/_packaging/npm-public/npm/registry/@nx/js/-/js-22.7.10.tgz#b20b448050f75ffb1a4af9f267d95bc54a862f93"
-  integrity sha1-sgtEgFD3X/saSvnyZ9lbxUqGL5M=
+  resolved "https://registry.yarnpkg.com/@nx/js/-/js-22.7.10.tgz#b20b448050f75ffb1a4af9f267d95bc54a862f93"
+  integrity sha512-1t2hYhBZ3DF8veWbCOYlfAZgUev9EXMz6Dbcadmwa3FtxTIPOFxJdMCATxJIVXCeN8x2dOaytO7eKMi17ptoFA==
   dependencies:
     "@babel/core" "^7.23.2"
     "@babel/plugin-proposal-decorators" "^7.22.7"
@@ -3546,8 +3546,8 @@
 
 "@nx/module-federation@22.7.10":
   version "22.7.10"
-  resolved "https://ms-feed-25.pkgs.visualstudio.com/1es-public/_packaging/npm-public/npm/registry/@nx/module-federation/-/module-federation-22.7.10.tgz#ff15ea0cdc35896ddb4574c4436ee9d805fc2905"
-  integrity sha1-/xXqDNw1iW3bRXTEQ27p2AX8KQU=
+  resolved "https://registry.yarnpkg.com/@nx/module-federation/-/module-federation-22.7.10.tgz#ff15ea0cdc35896ddb4574c4436ee9d805fc2905"
+  integrity sha512-9yp7LVGpqULE+52Opd3n92kak8+X37HFLVRgLUyKtbT0eZnxC0MbcuTsm9KOgrYrE3YSweuTTBIkHA8XWOke4w==
   dependencies:
     "@module-federation/enhanced" "^2.3.3"
     "@module-federation/node" "^2.7.21"
@@ -3614,8 +3614,8 @@
 
 "@nx/react@22.7.10":
   version "22.7.10"
-  resolved "https://ms-feed-25.pkgs.visualstudio.com/1es-public/_packaging/npm-public/npm/registry/@nx/react/-/react-22.7.10.tgz#842a47b42aa5d890e0af6c43e7ef815b5a0f7567"
-  integrity sha1-hCpHtCql2JDgr2xD5++BW1oPdWc=
+  resolved "https://registry.yarnpkg.com/@nx/react/-/react-22.7.10.tgz#842a47b42aa5d890e0af6c43e7ef815b5a0f7567"
+  integrity sha512-N5BiKqRLRz2DKE/R2u7TW5EK5a4R5EcyPwJRu5jKMHAVT7WgTGDk+4eOZC6oP6+TUah4h3/jJL9aib39NVbsiQ==
   dependencies:
     "@nx/devkit" "22.7.10"
     "@nx/eslint" "22.7.10"
@@ -3636,8 +3636,8 @@
 
 "@nx/rollup@22.7.10":
   version "22.7.10"
-  resolved "https://ms-feed-25.pkgs.visualstudio.com/1es-public/_packaging/npm-public/npm/registry/@nx/rollup/-/rollup-22.7.10.tgz#e90697ec76a2f0d01e85838dd316fea0216c92d2"
-  integrity sha1-6QaX7Hai8NAehYON0xb+oCFsktI=
+  resolved "https://registry.yarnpkg.com/@nx/rollup/-/rollup-22.7.10.tgz#e90697ec76a2f0d01e85838dd316fea0216c92d2"
+  integrity sha512-YQN4+Z0q35/3qFQh0CnZw7pHw70bLN7No6FnVdWdOP0e8WpB2H+08lwsmTDdhKtnt2AqOuGBSB5xc30JZy7ngA==
   dependencies:
     "@nx/devkit" "22.7.10"
     "@nx/js" "22.7.10"
@@ -3659,8 +3659,8 @@
 
 "@nx/vite@22.7.10":
   version "22.7.10"
-  resolved "https://ms-feed-25.pkgs.visualstudio.com/1es-public/_packaging/npm-public/npm/registry/@nx/vite/-/vite-22.7.10.tgz#5965747ba64dc697a5b9ecbb35501e34cb383bbd"
-  integrity sha1-WWV0e6ZNxpeluey7NVAeNMs4O70=
+  resolved "https://registry.yarnpkg.com/@nx/vite/-/vite-22.7.10.tgz#5965747ba64dc697a5b9ecbb35501e34cb383bbd"
+  integrity sha512-a+4qE2Kc00UY6xvSTWEb8NnfgAisumXaTxkoFduD1xBJdULvpLqyIGLzUyS7rumiVnHpttKt7Twx2utBXwZqvg==
   dependencies:
     "@nx/devkit" "22.7.10"
     "@nx/js" "22.7.10"
@@ -3675,8 +3675,8 @@
 
 "@nx/vitest@22.7.10":
   version "22.7.10"
-  resolved "https://ms-feed-25.pkgs.visualstudio.com/1es-public/_packaging/npm-public/npm/registry/@nx/vitest/-/vitest-22.7.10.tgz#b16a0baafd097ca1aeee821a4da8cf1716823068"
-  integrity sha1-sWoLqv0JfKGu7oIaTajPFxaCMGg=
+  resolved "https://registry.yarnpkg.com/@nx/vitest/-/vitest-22.7.10.tgz#b16a0baafd097ca1aeee821a4da8cf1716823068"
+  integrity sha512-xqGbqJyZDpTS0wxz+Nfr0PYfANDdpDf5lm1pZiP5hB4K73SYCmv/piLKoNTZ3MaVZuRj3n/GoZqny6O8VZS/wQ==
   dependencies:
     "@nx/devkit" "22.7.10"
     "@nx/js" "22.7.10"
@@ -3686,8 +3686,8 @@
 
 "@nx/web@22.7.10":
   version "22.7.10"
-  resolved "https://ms-feed-25.pkgs.visualstudio.com/1es-public/_packaging/npm-public/npm/registry/@nx/web/-/web-22.7.10.tgz#2cb83ce0abe87b63d0acc72739838f9dee33afbe"
-  integrity sha1-LLg84Kvoe2PQrMcnOYOPne4zr74=
+  resolved "https://registry.yarnpkg.com/@nx/web/-/web-22.7.10.tgz#2cb83ce0abe87b63d0acc72739838f9dee33afbe"
+  integrity sha512-P7J75+GIYUg363dZd3fbwao7DaLE5EGfWRZFPra9KogJzNEljhrepGsn1HinNxnIGZFyI39ZnCLvC5wukLwr7g==
   dependencies:
     "@nx/devkit" "22.7.10"
     "@nx/js" "22.7.10"
@@ -3698,8 +3698,8 @@
 
 "@nx/webpack@22.7.10":
   version "22.7.10"
-  resolved "https://ms-feed-25.pkgs.visualstudio.com/1es-public/_packaging/npm-public/npm/registry/@nx/webpack/-/webpack-22.7.10.tgz#4cc8704af665338c820eb4537d2249696b61cffc"
-  integrity sha1-TMhwSvZlM4yCDrRTfSJJaWthz/w=
+  resolved "https://registry.yarnpkg.com/@nx/webpack/-/webpack-22.7.10.tgz#4cc8704af665338c820eb4537d2249696b61cffc"
+  integrity sha512-hEiSoovmgj2ArO7IxBLDBHABYrigLPvUB2XW9z8kCsJVjW7ynHIKAMU/IYXRM02EI/MpwZB4pBsxuJZrrwYo3w==
   dependencies:
     "@babel/core" "^7.23.2"
     "@nx/devkit" "22.7.10"
@@ -3740,8 +3740,8 @@
 
 "@nx/workspace@22.7.10":
   version "22.7.10"
-  resolved "https://ms-feed-25.pkgs.visualstudio.com/1es-public/_packaging/npm-public/npm/registry/@nx/workspace/-/workspace-22.7.10.tgz#16977afb99ae2fbd24ddb286a9d44a720b3928dd"
-  integrity sha1-Fpd6+5muL70k3bKGqdRKcgs5KN0=
+  resolved "https://registry.yarnpkg.com/@nx/workspace/-/workspace-22.7.10.tgz#16977afb99ae2fbd24ddb286a9d44a720b3928dd"
+  integrity sha512-9icInHx6p/wDCrYYRFccNVTjx1T32bTmNMXUUOQbAsjT8KGsXfHBQv10sF8MU6nQLoFDCdlXr6CqMnQnQjMdWg==
   dependencies:
     "@nx/devkit" "22.7.10"
     "@zkochan/js-yaml" "0.0.7"
