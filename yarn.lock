@@ -10351,10 +10351,10 @@ he@^1.2.0:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha1-hK5l+n6vsWX922FWauFLrwVmTw8=
 
-highcharts@^10.1.0:
-  version "10.3.3"
-  resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-10.3.3.tgz#b8acca24f2d4b1f2f726540734166e59e07b35c4"
-  integrity sha512-r7wgUPQI9tr3jFDn3XT36qsNwEIZYcfgz4mkKEA6E4nn5p86y+u1EZjazIG4TRkl5/gmGRtkBUiZW81g029RIw==
+highcharts@^11.4.9:
+  version "11.4.9"
+  resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-11.4.9.tgz#511bcfc7e46eeb8c37155c2d9c4ef8630ab03bac"
+  integrity sha512-LSFxFZBeffm45OUiTDntYfzZPCbMTs0oyg6lxsE6EHhdIWhlq/8WTYkHlEUHl3+vabdgWP7+EQx0DkoaaE/4rg==
 
 history@^4.9.0:
   version "4.10.1"
