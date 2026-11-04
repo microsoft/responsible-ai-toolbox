@@ -9,6 +9,20 @@ import { IColorNames } from "../util/FluentUIStyles";
 import { getChartColors, getChartColorsMap } from "./ChartColors";
 import { IHighchartsConfig } from "./IHighchartsConfig";
 
+function getStyleProperty(
+  style: object | undefined,
+  property: string
+): string | undefined {
+  if (!style || !(property in style)) {
+    return undefined;
+  }
+
+  const value: unknown = Reflect.get(style, property);
+  return typeof value === "string" || typeof value === "number"
+    ? value.toString()
+    : undefined;
+}
+
 export function getHighchartsTheme(
   chartOptions: IHighchartsConfig,
   theme: ITheme,
@@ -72,10 +86,10 @@ export function getHighchartsTheme(
       style: {
         color: bodySubtext,
         fontSize:
-          chartOptions.subtitle?.style?.fontSize ||
+          getStyleProperty(chartOptions.subtitle?.style, "fontSize") ||
           smallFont.fontSize?.toString(),
         fontWeight:
-          chartOptions.subtitle?.style?.fontWeight ||
+          getStyleProperty(chartOptions.subtitle?.style, "fontWeight") ||
           smallFont.fontWeight?.toString()
       }
     },
@@ -83,10 +97,10 @@ export function getHighchartsTheme(
       style: {
         color: bodyText,
         fontSize:
-          chartOptions.title?.style?.fontSize ||
+          getStyleProperty(chartOptions.title?.style, "fontSize") ||
           mediumFont.fontSize?.toString(),
         fontWeight:
-          chartOptions.title?.style?.fontWeight ||
+          getStyleProperty(chartOptions.title?.style, "fontWeight") ||
           mediumFont.fontWeight?.toString()
       }
     },
