@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 export function checkNumBars(locator: string, expectedNumBars: number): void {
-  cy.get(`${locator} svg g.highcharts-series-group rect`).should(
+  cy.get(`${locator} svg g.highcharts-series-group .highcharts-point`).should(
     "have.length",
     expectedNumBars
   );
