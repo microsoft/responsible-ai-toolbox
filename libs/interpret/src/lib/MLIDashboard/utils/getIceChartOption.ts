@@ -91,7 +91,7 @@ export function getIceChartOption(
   return {
     chart: {
       backgroundColor: theme.semanticColors.bodyBackground,
-      type: rangeType === RangeTypes.Categorical ? "scatter" : ""
+      type: rangeType === RangeTypes.Categorical ? "scatter" : "line"
     },
     plotOptions: {
       line: {

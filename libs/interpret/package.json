@@ -8,7 +8,7 @@
     "@responsible-ai/dataset-explorer": "0.0.0",
     "@responsible-ai/localization": "0.0.0",
     "@responsible-ai/mlchartlib": "0.0.0",
-    "highcharts": "^10.1.0",
+    "highcharts": "^11.4.9",
     "jmespath": "^0.15.0",
     "localized-strings": "^0.2.4",
     "lodash": "^4.17.11",
