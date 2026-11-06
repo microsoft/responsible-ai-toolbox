@@ -21,6 +21,8 @@ this file to understand what changed.
 - educational materials
 - new features
 - breaking changes
+  - Add NumPy 1.x/2.x and Pandas 2 support to erroranalysis, with updated
+    Pandas, SciPy, scikit-learn, and LightGBM dependency ranges.
 - bug fixes and tests
 - other
 

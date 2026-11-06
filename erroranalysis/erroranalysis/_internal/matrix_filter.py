@@ -231,13 +231,20 @@ def compute_matrix_on_dataset(analyzer, features, dataset,
             if pred_multioutput is not None or
             getattr(pred_dtype, "kind", None) in ("M", "O", "m")
             else pred_y)
-    label_columns = None
+    metric_columns = None
     if metric != Metrics.ERROR_RATE:
-        label_columns = (
-            df_err[TRUE_Y].copy(), df_err[PRED_Y].copy())
-    df_err = convert_dtypes(df_err)
-    if label_columns is not None:
-        df_err[TRUE_Y], df_err[PRED_Y] = label_columns
+        metric_columns = {
+            DIFF: df_err[DIFF].copy(),
+            TRUE_Y: df_err[TRUE_Y].copy(),
+            PRED_Y: df_err[PRED_Y].copy(),
+        }
+    if metric_columns is not None:
+        df_err = convert_dtypes(
+            df_err.drop(columns=list(metric_columns)))
+        for column, values in metric_columns.items():
+            df_err[column] = values
+    else:
+        df_err = convert_dtypes(df_err)
     # construct matrix
     matrix = []
     if len(dataset_sub_names) == 2:
@@ -512,7 +519,7 @@ def bin_data(df, feat, bins, quantile_binning=False):
         cats = pd.IntervalIndex(indexes, closed=zero_interval.closed,
                                 dtype=bindf.cat.categories.dtype,
                                 name=bindf.cat.categories.name)
-        bindf.cat.categories = cats
+        bindf = bindf.cat.rename_categories(cats)
         # re-bin data according to new categories, otherwise can have
         # issues with precision when using pd.qcut.
         # Specifically, it can bin some points incorrectly for low precision,

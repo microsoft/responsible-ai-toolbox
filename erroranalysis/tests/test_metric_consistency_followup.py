@@ -1034,7 +1034,7 @@ def test_sparse_integer_metrics_use_exact_residuals():
 
 
 @pytest.mark.parametrize("dtype", [
-    "Sparse[Int8]", "Sparse[UInt8]", "Sparse[Int64]", "Sparse[UInt64]",
+    "Sparse[int8]", "Sparse[uint8]", "Sparse[int64]", "Sparse[uint64]",
 ])
 def test_sparse_nullable_integer_metrics_remain_exact(dtype):
     predictions = pd.Series([2, 1], dtype=dtype)

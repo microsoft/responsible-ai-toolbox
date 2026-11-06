@@ -291,6 +291,11 @@ class FilterDataWithCohortFilters:
         has_classification_outcome = self._filters_has_classification_outcome(
             filters)
         has_regression_error = self._filters_has_regression_error(filters)
+        if self.model is None and self.pred_y is None and (
+                has_classification_outcome or has_regression_error):
+            raise ValueError(
+                "A model or predicted labels are required to filter by "
+                "classification outcome or regression error.")
 
         if isinstance(self.true_y, str):
             df.rename(columns={self.true_y: TRUE_Y})
@@ -304,13 +309,13 @@ class FilterDataWithCohortFilters:
                 df, TRUE_Y, _get_cohort_values(self.true_y))
 
         if self.model is None:
-            if self.model_task in (
+            if self.pred_y is not None and self.model_task in (
                     ModelTask.OBJECT_DETECTION,
                     ModelTask.MULTILABEL_IMAGE_CLASSIFICATION):
                 _assign_label_column(
                     df, PRED_Y,
                     _get_object_detection_values(self.pred_y))
-            else:
+            elif self.pred_y is not None:
                 _assign_label_column(
                     df, PRED_Y, _get_cohort_values(self.pred_y))
 

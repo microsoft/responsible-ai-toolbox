@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import sys
 import time
 
 import numpy as np
@@ -99,6 +100,8 @@ class TestImportances(object):
     def test_large_data_importances(self, error_correlation_method):
         # mutual information can be very costly for large number of rows
         # hence, assert we downsample to compute importances for large data
+        if error_correlation_method == EBM and sys.platform == 'darwin':
+            pytest.skip('EBM timing is unstable on macOS runners')
         X_train, y_train, X_test, y_test, _ = \
             create_binary_classification_dataset(NUM_SAMPLE_ROWS)
         feature_names = list(X_train.columns)
