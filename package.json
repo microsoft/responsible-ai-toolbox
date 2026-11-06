@@ -70,7 +70,7 @@
     "jmespath": "^0.15.0",
     "json5": "^2.1.0",
     "localized-strings": "^0.2.4",
-    "lodash": "^4.17.11",
+    "lodash": "^4.18.1",
     "memoize-one": "^5.1.1",
     "minimist": "^1.2.6",
     "moment": "^2.31.0",
