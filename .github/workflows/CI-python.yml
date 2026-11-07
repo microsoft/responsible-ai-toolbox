@@ -12,6 +12,9 @@ on:
       - "responsibleai/**"
       - ".github/workflows/CI-python.yml"
 
+permissions:
+  contents: read
+
 jobs:
   ci-python:
     strategy:
@@ -133,3 +136,71 @@ jobs:
           else
             exit 1
           fi
+
+  ci-erroranalysis-published-stack:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.10"
+
+      - name: Install package and published stack
+        working-directory: erroranalysis
+        run: |
+          python -m pip install --upgrade pip "setuptools<82" wheel
+          pip install -r requirements-dev.txt
+          pip install -e .
+          pip install --force-reinstall --no-deps \
+            "numpy==1.26.2" \
+            "pandas==1.5.3" \
+            "scipy==1.13.1" \
+            "scikit-learn==1.5.1" \
+            "lightgbm==3.3.5" \
+            "interpret-core[required]==0.6.9"
+          pip check
+
+      - name: Run erroranalysis tests
+        working-directory: erroranalysis
+        run: |
+          pytest -s -v --durations=10 --doctest-modules
+
+  ci-erroranalysis-spark:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Java 11
+        uses: actions/setup-java@f2beeb24e141e01a676f977032f5a29d81c9e27e # v5.1.0
+        with:
+          distribution: temurin
+          java-version: "11"
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.11"
+
+      - name: Install Spark test dependencies
+        working-directory: erroranalysis
+        run: |
+          python -m pip install --upgrade pip "setuptools<82"
+          pip install \
+            -r requirements-dev.txt \
+            -e . \
+            "numpy==1.26.4" \
+            "pandas==2.2.3" \
+            "pyarrow<26" \
+            "pyspark==3.5.9" \
+            "synapseml==1.1.3"
+          pip check
+          python -c "import pyarrow, pyspark.pandas"
+
+      - name: Run SynapseML LightGBM Spark test
+        working-directory: erroranalysis
+        run: |
+          pytest -s -v tests/test_pyspark_surrogate_error_tree.py
