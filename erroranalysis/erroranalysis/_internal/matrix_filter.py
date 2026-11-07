@@ -231,20 +231,6 @@ def compute_matrix_on_dataset(analyzer, features, dataset,
             if pred_multioutput is not None or
             getattr(pred_dtype, "kind", None) in ("M", "O", "m")
             else pred_y)
-    metric_columns = None
-    if metric != Metrics.ERROR_RATE:
-        metric_columns = {
-            DIFF: df_err[DIFF].copy(),
-            TRUE_Y: df_err[TRUE_Y].copy(),
-            PRED_Y: df_err[PRED_Y].copy(),
-        }
-    if metric_columns is not None:
-        df_err = convert_dtypes(
-            df_err.drop(columns=list(metric_columns)))
-        for column, values in metric_columns.items():
-            df_err[column] = values
-    else:
-        df_err = convert_dtypes(df_err)
     # construct matrix
     matrix = []
     if len(dataset_sub_names) == 2:
