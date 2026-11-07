@@ -12,6 +12,9 @@ on:
       - "responsibleai/**"
       - ".github/workflows/CI-python.yml"
 
+permissions:
+  contents: read
+
 jobs:
   ci-python:
     strategy:

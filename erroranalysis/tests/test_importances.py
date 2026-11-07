@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import functools
 import sys
 import time
 
@@ -29,6 +30,23 @@ MUTUAL_INFO = ErrorCorrelationMethods.MUTUAL_INFO
 EBM = ErrorCorrelationMethods.EBM
 GBM_SHAP = ErrorCorrelationMethods.GBM_SHAP
 GBM_ERROR_SAMPLES_TOL = 6
+
+
+@pytest.fixture(autouse=True)
+def limit_ebm_test_rounds(monkeypatch):
+    from erroranalysis.error_correlation_methods import ebm
+
+    if ebm.ebm_installed:
+        monkeypatch.setattr(
+            ebm,
+            'ExplainableBoostingClassifier',
+            functools.partial(
+                ebm.ExplainableBoostingClassifier, max_rounds=100))
+        monkeypatch.setattr(
+            ebm,
+            'ExplainableBoostingRegressor',
+            functools.partial(
+                ebm.ExplainableBoostingRegressor, max_rounds=100))
 
 
 class TestImportances(object):
