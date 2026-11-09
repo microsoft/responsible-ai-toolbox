@@ -6,7 +6,8 @@ erroranalysis>=0.6.0
 interpret-community>=0.33.0,<0.34
 interpret-core==0.6.9
 shap==0.46.0
-lightgbm>=4.4.0,<5
+# LightGBM 4.6+ rejects EconML CausalAnalysis AutoML's feature projection.
+lightgbm>=4.4.0,<4.6
 numpy>=1.17.2,<3
 pandas>=2.2.2,<3
 # See PR 1429 about upper bound
