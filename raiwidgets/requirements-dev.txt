@@ -11,6 +11,8 @@ wheel
 fairlearn==0.7.0
 ml-wrappers>=0.6.0,<0.7
 sktime
+# pmdarima 2.0.4 is the last Python 3.9 release and is incompatible with NumPy 2.
+numpy<2; python_version == '3.9'
 pmdarima
 
 # fix for recent joblib release and windows python 3.7 builds

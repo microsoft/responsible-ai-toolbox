@@ -62,6 +62,12 @@ jobs:
           scikit-learn==1.4.2
           statsmodels==0.14.2
           lightgbm==4.4.0
+          dice-ml==0.12
+          econml==0.16.0
+          interpret-community==0.33.0
+          interpret-core==0.6.9
+          ml-wrappers==0.6.4
+          networkx==3.2.1
           EOF
           fi
           PIP_CONSTRAINT="$constraint_file" pip install \

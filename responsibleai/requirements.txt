@@ -3,7 +3,7 @@ econml>=0.16.0,<0.17
 statsmodels>=0.14.2,<0.15.0
 jsonschema
 erroranalysis>=0.6.0
-interpret-community>=0.32.0,<0.33
+interpret-community>=0.33.0,<0.34
 interpret-core==0.6.9
 shap==0.46.0
 lightgbm>=4.4.0,<5
@@ -13,7 +13,7 @@ pandas>=2.2.2,<3
 scikit-learn>=1.4.2,<=1.5.1
 scipy>=1.13.0,<1.15
 semver~=2.13.0
-ml-wrappers>=0.6.0,<0.7
+ml-wrappers>=0.6.4,<0.7
 
 # Pinned dependencies
 networkx>=3.2.1,<4
