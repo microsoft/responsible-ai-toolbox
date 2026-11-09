@@ -103,13 +103,13 @@ def load_flowers_dataset(upscale=False):
     image1 = storage_url + container_path + 'image_00001.jpg'
     image2 = storage_url + container_path + 'image_00002.jpg'
     images = [image1, image2]
-    data = pd.DataFrame(columns=[ImageColumns.IMAGE.value,
-                                 ImageColumns.LABEL.value])
-    for image_path in images:
-        data = data.append({ImageColumns.IMAGE.value: image_path,
-                            ImageColumns.LABEL.value: 'pink primrose'},
-                           ignore_index=True)
-    return data
+    return pd.DataFrame([
+        {
+            ImageColumns.IMAGE.value: image_path,
+            ImageColumns.LABEL.value: 'pink primrose'
+        }
+        for image_path in images
+    ])
 
 
 class DummyFlowersClassifier():
@@ -192,7 +192,7 @@ def load_fridge_dataset(add_extra_mixed_metadata=False):
     data_file = "./data/fridgeObjects.zip"
     retrieve_unzip_file(download_url, data_file)
     # get all file names into a pandas dataframe with the labels
-    data = pd.DataFrame(columns=[IMAGE, LABEL])
+    rows = []
     for folder in os.listdir("./data/fridgeObjects"):
         for file in os.listdir("./data/fridgeObjects/" + folder):
             image_path = "./data/fridgeObjects/" + folder + "/" + file
@@ -204,9 +204,8 @@ def load_fridge_dataset(add_extra_mixed_metadata=False):
                     exif_dict['1st'][piexif.ImageIFD.XPComment] = comment
                     exif_bytes = piexif.dump(exif_dict)
                     im.save(image_path, exif=exif_bytes)
-            data = data.append({IMAGE: image_path, LABEL: folder},
-                               ignore_index=True)
-    return data
+            rows.append({IMAGE: image_path, LABEL: folder})
+    return pd.DataFrame(rows, columns=[IMAGE, LABEL])
 
 
 def load_fridge_object_detection_dataset_labels(automl_format=False):
@@ -401,7 +400,7 @@ class ImageTransforms(object):
         str of image labels.
         '''
         os.makedirs(path, exist_ok=True)
-        for i, img_path in (self.data[ImageColumns.IMAGE.value]).iteritems():
+        for i, img_path in self.data[ImageColumns.IMAGE.value].items():
             image = Image.open(img_path)
             if transform == ImageTransformEnum.RESIZE:
                 image = image.resize(size)

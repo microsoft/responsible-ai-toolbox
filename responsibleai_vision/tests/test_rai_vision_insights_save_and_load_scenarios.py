@@ -56,7 +56,7 @@ class TestRAIVisionInsightsSaveAndLoadScenarios(object):
         data = data[0:1]
         # stack two of the same image since we need same
         # image sizes for pytorch model
-        data = data.append(data).reset_index(drop=True)
+        data = data.iloc[[0, 0]].reset_index(drop=True)
         pred = create_raw_torchvision_classification_model()
         test = data
         class_names = data[ImageColumns.LABEL.value].unique()
