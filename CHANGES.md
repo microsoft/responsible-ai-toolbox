@@ -22,6 +22,7 @@ this file to understand what changed.
 - new features
   - Add NumPy 1.x/2.x and Pandas 2 support to erroranalysis.
 - breaking changes
+  - Require Python 3.9 or later for erroranalysis.
 - bug fixes and tests
   - Raise a clear error when outcome filters cannot be computed without a
     model or predictions.
