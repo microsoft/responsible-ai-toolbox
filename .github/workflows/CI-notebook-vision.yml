@@ -84,7 +84,7 @@ jobs:
         working-directory: raiwidgets
 
       - name: Install vision dependencies
-        shell: bash -l {0}
+        shell: bash -el {0}
         run: |
           pip install --upgrade "Pillow>=10.0.0"
           pip install -r requirements-dev.txt
