@@ -39,8 +39,10 @@ def test_fairness_metrics_accept_numpy_arrays():
     y_true = np.array([0, 0, 1, 1])
     y_pred = np.array([0, 1, 1, 1])
 
-    assert precision_wilson(y_true, y_pred) == (0.2077, 0.9385)
-    assert false_positive_rate_wilson(y_true, y_pred) == (0.0945, 0.9055)
+    assert precision_wilson(y_true, y_pred) == pytest.approx(
+        (0.2077, 0.9385))
+    assert false_positive_rate_wilson(y_true, y_pred) == pytest.approx(
+        (0.0945, 0.9055))
 
 
 def test_fairlearn_metric_frame_supports_pandas_2():
@@ -57,8 +59,8 @@ def test_fairlearn_metric_frame_supports_pandas_2():
     assert metric_frame.overall['selection_rate'] == 0.75
     assert metric_frame.by_group['selection_rate'].to_dict() == {
         'a': 0.5, 'b': 1.0}
-    assert metric_frame.overall['selection_rate_bounds'] == (
-        0.2077, 0.9385)
+    assert metric_frame.overall['selection_rate_bounds'] == pytest.approx(
+        (0.2077, 0.9385))
 
 
 @pytest.mark.parametrize('labels', [
