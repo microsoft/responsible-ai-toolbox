@@ -4,7 +4,6 @@
 """Defines the error correlation computation using LightGBM with TreeShap."""
 
 import numpy as np
-import shap
 from lightgbm import LGBMClassifier, LGBMRegressor
 
 from erroranalysis._internal.constants import ModelTask
@@ -25,6 +24,8 @@ def compute_gbm_global_importance(input_data, diff, model_task,
         error.
     :rtype: list[float]
     """
+    import shap
+
     is_classification = model_task == ModelTask.CLASSIFICATION
     if is_classification:
         model = LGBMClassifier()
