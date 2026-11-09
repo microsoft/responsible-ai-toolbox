@@ -56,8 +56,12 @@ except ImportError:
 try:
     import pyspark.sql.functions as F
     from synapse.ml.lightgbm import LightGBMClassifier, LightGBMRegressor
-except ImportError:
-    pass
+except (AttributeError, ImportError):
+    F = None
+    LightGBMClassifier = None
+    LightGBMRegressor = None
+    module_logger.debug(
+        "PySpark or SynapseML support is unavailable.", exc_info=True)
 
 MODEL = 'model'
 DEFAULT_MAX_DEPTH = 3
@@ -479,6 +483,9 @@ def get_surrogate_booster_pyspark(filtered_df, analyzer, max_depth,
         scored dataset.
     :rtype: (Booster, pyspark.sql.DataFrame)
     """
+    if F is None:
+        raise ModuleNotFoundError(
+            "PySpark and SynapseML are required for Spark error analysis.")
     # compute the pred_y column
     scored_data = analyzer.model.transform(filtered_df.to_spark())
     diff_data = scored_data.withColumn(

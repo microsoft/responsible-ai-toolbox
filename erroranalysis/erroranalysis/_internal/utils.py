@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import datetime
+import logging
 import math
 import numbers
 import random
@@ -11,12 +12,21 @@ from decimal import Decimal
 import numpy as np
 import pandas as pd
 
-try:
-    import pyspark.pandas as ps
-    spark_available = True
-except ImportError:
-    spark_available = False
-    pass
+module_logger = logging.getLogger(__name__)
+
+
+def _load_pyspark_pandas():
+    try:
+        import pyspark.pandas as ps
+        return ps
+    except (AttributeError, ImportError):
+        module_logger.debug(
+            "PySpark pandas support is unavailable.", exc_info=True)
+        return None
+
+
+ps = _load_pyspark_pandas()
+spark_available = ps is not None
 
 
 class _ArrowTemporalScalar:

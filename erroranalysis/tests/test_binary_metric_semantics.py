@@ -7,7 +7,9 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
+from erroranalysis._internal.cohort_filter import (CLASSIFICATION_OUTCOME,
+                                                   REGRESSION_ERROR,
+                                                   FilterDataWithCohortFilters)
 from erroranalysis._internal.constants import (ARG, COLUMN, METHOD,
                                                CohortFilterMethods, ModelTask)
 from erroranalysis._internal.metrics import (false_negative_rate,
@@ -106,3 +108,45 @@ def test_binary_cohort_filters_select_requested_outcome(
         filters, [], include_original_columns_only=True)
 
     assert actual["row"].tolist() == [expected_row]
+
+
+def test_cohort_filter_without_model_or_predictions():
+    dataset = pd.DataFrame({"feature": [0, 1, 2]})
+    cohort_filter = FilterDataWithCohortFilters(
+        model=None,
+        dataset=dataset,
+        features=["feature"],
+        categorical_features=[],
+        categories=[],
+        true_y=np.array([1.0, 2.0, 3.0]),
+        pred_y=None,
+        model_task=ModelTask.REGRESSION)
+    filters = [{COLUMN: "feature", ARG: [0],
+                METHOD: CohortFilterMethods.METHOD_GREATER}]
+
+    actual = cohort_filter.filter_data_from_cohort(
+        filters, [], include_original_columns_only=True)
+
+    assert actual["feature"].tolist() == [1, 2]
+
+
+@pytest.mark.parametrize(("column", "model_task"), [
+    (CLASSIFICATION_OUTCOME, ModelTask.CLASSIFICATION),
+    (REGRESSION_ERROR, ModelTask.REGRESSION),
+])
+def test_outcome_filter_without_model_or_predictions_raises(
+        column, model_task):
+    cohort_filter = FilterDataWithCohortFilters(
+        model=None,
+        dataset=pd.DataFrame({"feature": [0, 1, 2]}),
+        features=["feature"],
+        categorical_features=[],
+        categories=[],
+        true_y=np.array([0, 1, 0]),
+        pred_y=None,
+        model_task=model_task)
+    filters = [{COLUMN: column, ARG: [0],
+                METHOD: CohortFilterMethods.METHOD_GREATER}]
+
+    with pytest.raises(ValueError, match="model or predicted labels"):
+        cohort_filter.filter_data_from_cohort(filters, [])

@@ -20,8 +20,13 @@ this file to understand what changed.
 
 - educational materials
 - new features
+  - Add NumPy 1.x/2.x and Pandas 2 support to erroranalysis.
 - breaking changes
 - bug fixes and tests
+  - Raise a clear error when outcome filters cannot be computed without a
+    model or predictions.
+  - Allow non-Spark error analysis to load when an installed PySpark version
+    is incompatible with NumPy 2.
 - other
 
 ## v0.36.0

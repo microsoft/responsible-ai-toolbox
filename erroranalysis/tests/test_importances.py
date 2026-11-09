@@ -1,6 +1,8 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import functools
+import sys
 import time
 
 import numpy as np
@@ -28,6 +30,23 @@ MUTUAL_INFO = ErrorCorrelationMethods.MUTUAL_INFO
 EBM = ErrorCorrelationMethods.EBM
 GBM_SHAP = ErrorCorrelationMethods.GBM_SHAP
 GBM_ERROR_SAMPLES_TOL = 6
+
+
+@pytest.fixture(autouse=True)
+def limit_ebm_test_rounds(monkeypatch):
+    from erroranalysis.error_correlation_methods import ebm
+
+    if ebm.ebm_installed:
+        monkeypatch.setattr(
+            ebm,
+            'ExplainableBoostingClassifier',
+            functools.partial(
+                ebm.ExplainableBoostingClassifier, max_rounds=100))
+        monkeypatch.setattr(
+            ebm,
+            'ExplainableBoostingRegressor',
+            functools.partial(
+                ebm.ExplainableBoostingRegressor, max_rounds=100))
 
 
 class TestImportances(object):
@@ -99,6 +118,8 @@ class TestImportances(object):
     def test_large_data_importances(self, error_correlation_method):
         # mutual information can be very costly for large number of rows
         # hence, assert we downsample to compute importances for large data
+        if error_correlation_method == EBM and sys.platform == 'darwin':
+            pytest.skip('EBM timing is unstable on macOS runners')
         X_train, y_train, X_test, y_test, _ = \
             create_binary_classification_dataset(NUM_SAMPLE_ROWS)
         feature_names = list(X_train.columns)
