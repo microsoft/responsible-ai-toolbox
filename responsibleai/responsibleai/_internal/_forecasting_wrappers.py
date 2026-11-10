@@ -101,7 +101,9 @@ class _WrappedForecastingModel(BaseWrappedModel):
         # responsibleai package.
         from sktime.forecasting.base import ForecastingHorizon
         return ForecastingHorizon(
-            pd.to_datetime(X[self._time_feature].unique()).sort_values(),
+            pd.DatetimeIndex(
+                pd.to_datetime(
+                    X[self._time_feature].unique())).sort_values(),
             is_relative=False)
 
     def _apply_sktime_method(self, method, X):

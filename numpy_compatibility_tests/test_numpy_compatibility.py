@@ -7,7 +7,9 @@ import numpy as np
 import pandas as pd
 import pytest
 from fairlearn.metrics import MetricFrame, selection_rate
+from fairlearn.reductions import DemographicParity, GridSearch
 from lightgbm import Dataset
+from sklearn.linear_model import LogisticRegression
 
 from erroranalysis._internal.matrix_filter import bin_data
 from raiutils.exceptions import UserConfigValidationException
@@ -61,6 +63,25 @@ def test_fairlearn_metric_frame_supports_pandas_2():
         'a': 0.5, 'b': 1.0}
     assert metric_frame.overall['selection_rate_bounds'] == pytest.approx(
         (0.2077, 0.9385))
+
+
+def test_fairlearn_grid_search_supports_pandas_2():
+    """Verify Fairlearn reductions do not use removed Pandas APIs."""
+    features = np.array([
+        [0.0], [0.2], [0.8], [1.0], [1.2], [1.8], [2.0], [2.2]
+    ])
+    labels = np.array([0, 0, 0, 1, 0, 1, 1, 1])
+    sensitive_features = pd.Series(
+        ['a', 'a', 'b', 'b', 'a', 'a', 'b', 'b'])
+    mitigator = GridSearch(
+        LogisticRegression(solver='liblinear'),
+        constraints=DemographicParity(),
+        grid_size=3)
+
+    mitigator.fit(
+        features, labels, sensitive_features=sensitive_features)
+
+    assert len(mitigator.predictors_) > 0
 
 
 @pytest.mark.parametrize('labels', [
