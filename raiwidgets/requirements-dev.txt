@@ -8,9 +8,12 @@ requirements-parser==0.2.0
 
 wheel
 
-fairlearn==0.7.0
-ml-wrappers>=0.4.0
+fairlearn>=0.8.0,<0.9
+ml-wrappers>=0.6.0,<0.7
 sktime
+# Notebook CI uses PyTorch <2.1, which cannot bridge to NumPy 2.
+# pmdarima 2.0.4, the final Python 3.9 release, also requires NumPy 1.
+numpy<2
 pmdarima
 
 # fix for recent joblib release and windows python 3.7 builds
@@ -28,4 +31,5 @@ sphinx==5.0.2
 sphinx-gallery==0.10.0
 pydata-sphinx-theme==0.7.2
 
+../erroranalysis/.
 ../responsibleai/.

@@ -78,7 +78,7 @@ jobs:
         shell: bash -l {0}
         run: |
           pip install "cmake<4" wheel
-          pip install --no-build-isolation "lightgbm==3.3.5"
+          pip install --no-build-isolation "lightgbm>=4.4,<5"
 
       - if: ${{ matrix.operatingSystem != 'macos-latest' }}
         name: Install yarn (non-macOS)
@@ -116,7 +116,7 @@ jobs:
           else
             pip install -r requirements-dev.txt --ignore-installed
           fi
-          pip install "scipy>=1.4.1,<1.14" --force-reinstall --no-deps
+          pip install "scipy>=1.13,<1.14" --force-reinstall --no-deps
           pip install -v -e .
         working-directory: ${{ matrix.packageDirectory }}
 

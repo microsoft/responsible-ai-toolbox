@@ -23,11 +23,19 @@ this file to understand what changed.
   - Add NumPy 1.x/2.x and Pandas 2 support to erroranalysis.
 - breaking changes
   - Require Python 3.9 or later for erroranalysis.
+  - Update the ResponsibleAI dependency stack to Pandas 2, DiCE 0.12,
+    SciPy 1.13, scikit-learn 1.4.2, Statsmodels 0.14.2, EconML 0.16,
+    Fairlearn 0.8, and LightGBM 4.4-4.5 for NumPy 2 compatibility.
 - bug fixes and tests
   - Raise a clear error when outcome filters cannot be computed without a
     model or predictions.
   - Allow non-Spark error analysis to load when an installed PySpark version
     is incompatible with NumPy 2.
+  - Support both NumPy 1.x and 2.x across the core Python packages and add
+    compatibility regression coverage.
+  - Keep the legacy text and vision package stacks on NumPy 1.x until their
+    PyTorch dependency floors can support NumPy 2.
+  - Update forecasting and text/vision test paths for removed Pandas 2 APIs.
 - other
 
 ## v0.36.0
