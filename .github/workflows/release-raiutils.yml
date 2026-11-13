@@ -11,7 +11,8 @@ on:
 
 jobs:
   release-raiutils:
-    runs-on: ubuntu-latest
+    # Ubuntu 26.04 has no setup-python build for Python 3.9.
+    runs-on: ubuntu-24.04
     steps:
       - name: fail if Test nor Prod
         if: ${{ ! (github.event.inputs.type == 'Test' || github.event.inputs.type == 'Prod') }}
