@@ -24,8 +24,7 @@ jobs:
         # Temporary: Removed windows-latest due to persistent GitHub Actions runner infrastructure issue
         # Error: "Could not find a part of the path 'D:\a'" - runner workspace initialization failure
         # TODO: Re-enable Windows tests once GitHub resolves runner issue
-        # Ubuntu 26.04 has no setup-python build for Python 3.9.
-        operatingSystem: [ubuntu-24.04, macos-latest]
+        operatingSystem: [ubuntu-latest, macos-latest]
         pythonVersion: ["3.9", "3.10", "3.11"]
         exclude:
           - packageDirectory: "responsibleai"
@@ -34,7 +33,8 @@ jobs:
             operatingSystem: "macos-latest"
             pythonVersion: "3.9"
 
-    runs-on: ${{ matrix.operatingSystem }}
+    # Ubuntu 26.04 has no setup-python build for Python 3.9.
+    runs-on: ${{ matrix.operatingSystem == 'ubuntu-latest' && matrix.pythonVersion == '3.9' && 'ubuntu-24.04' || matrix.operatingSystem }}
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
