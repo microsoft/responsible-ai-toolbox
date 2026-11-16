@@ -20,42 +20,32 @@ export function describeWhatIf(datasetShape: IInterpretData): void {
       !datasetShape.errorMessage
     ) {
       it("should update when text field change", () => {
-        const selector = datasetShape.isClassification
-          ? "#WhatIfNewProbability"
-          : "#WhatIfNewPredictedValue";
-        const predict = getText(selector);
-        const fieldSelector = "#WhatIfFeatureTextField";
-        setValue(fieldSelector, "1");
-        cy.get(selector).should("not.have.text", predict);
+        checkPredictionUpdate(datasetShape, () => {
+          setValue("#WhatIfFeatureTextField", "1");
+        });
       });
       it("should update when combo box change", () => {
-        const selector = datasetShape.isClassification
-          ? "#WhatIfNewProbability"
-          : "#WhatIfNewPredictedValue";
-        const predict = getText(`${selector}:first`);
         const fieldSelector = "#WhatIfFeatureComboBox";
         const comboBoxValue = getText(fieldSelector);
         if (comboBoxValue) {
-          setValue(fieldSelector, "1");
-          cy.get(selector).should("not.have.text", predict);
+          checkPredictionUpdate(datasetShape, () => {
+            setValue(fieldSelector, "1");
+          });
         }
       });
       it("should update when combo box select new value", () => {
-        const selector = datasetShape.isClassification
-          ? "#WhatIfNewProbability"
-          : "#WhatIfNewPredictedValue";
-        const predict = getText(`${selector}:first`);
         const fieldSelector = "#WhatIfFeatureComboBox-input";
         const comboBoxValue = getValue(fieldSelector);
         if (comboBoxValue) {
-          cy.get(fieldSelector)
-            .siblings("button")
-            .click()
-            .get(
-              `#WhatIfFeatureComboBox-list button:not(:contains("${comboBoxValue}")):first`
-            )
-            .click();
-          cy.get(selector).should("not.have.text", predict);
+          checkPredictionUpdate(datasetShape, () => {
+            cy.get(fieldSelector)
+              .siblings("button")
+              .click()
+              .get(
+                `#WhatIfFeatureComboBox-list button:not(:contains("${comboBoxValue}")):first`
+              )
+              .click();
+          });
         }
       });
       it("should save data point from dropdown option", () => {
@@ -69,6 +59,27 @@ export function describeWhatIf(datasetShape: IInterpretData): void {
           "None created yet"
         );
       });
+    }
+
+    function checkPredictionUpdate(
+      datasetShape: IInterpretData,
+      updateFeature: () => void
+    ): void {
+      const selector = datasetShape.isClassification
+        ? "#WhatIfNewProbability"
+        : "#WhatIfNewPredictedValue";
+      cy.get(selector)
+        .should("be.visible")
+        .invoke("text")
+        .then((previousPrediction) => {
+          // The demo model uses random predictions, rounded to three decimal places.
+          const prediction = previousPrediction === "0.25" ? 0.75 : 0.25;
+          cy.window().then((window) => {
+            cy.stub(window.Math, "random").returns(prediction);
+          });
+          updateFeature();
+          cy.get(selector).should("have.text", prediction.toString());
+        });
     }
   });
 }
