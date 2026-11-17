@@ -358,6 +358,6 @@ jobs:
           access: public
           # tag: next
 
-      - if: steps.publish.type != 'none'
+      - if: steps.publish.outputs.type != ''
         run: |
           echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
