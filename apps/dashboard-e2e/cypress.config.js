@@ -17,6 +17,8 @@ function setupNodeEvents(on, config) {
 }
 
 module.exports = defineConfig({
+  // External icon-font downloads must not delay the page load event.
+  blockHosts: ["res.cdn.office.net", "res-1.cdn.office.net"],
   chromeWebSecurity: false,
   downloadsFolder: "../../dist/cypress/apps/dashboard-e2e/downloads",
   execTimeout: 300000,

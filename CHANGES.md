@@ -37,6 +37,8 @@ this file to understand what changed.
   - Keep the legacy text and vision package stacks on NumPy 1.x until their
     PyTorch dependency floors can support NumPy 2.
   - Update forecasting and text/vision test paths for removed Pandas 2 APIs.
+  - Prevent dashboard browser tests from waiting on external Fluent UI icon
+    font downloads before the page load event.
 - other
 
 ## v0.36.0
