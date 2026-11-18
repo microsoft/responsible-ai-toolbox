@@ -39,30 +39,31 @@ this file to understand what changed.
     0.37.0; Python 3.7 and 3.8 are no longer supported. The independently
     released erroranalysis, raiutils, and rai-test-utils packages also require
     Python 3.9 or later.
-  - Require Fairlearn 0.8 or later for Pandas 2 reductions compatibility.
+  - Require Fairlearn `>=0.8.0,<0.9` for raiwidgets Pandas 2 reductions
+    compatibility; raiwidgets 0.36.0 required `fairlearn==0.7.0`.
   - Support NumPy 2 while retaining broad runtime ranges for coherent older
     environments. Key direct runtime constraints are below; exact tested
     combinations belong in CI and image constraints, not universal package
     pins. Other requirements and platform markers remain in package metadata.
 
-    | Dependency          | responsibleai 0.37.0 | raiwidgets 0.37.0 |
-    | ------------------- | -------------------- | ----------------- |
-    | numpy               | `>=1.17.2,<3`        | `>=1.17.2,<3`     |
-    | pandas              | `>=0.25.1,<3`        | `>=0.25.1,<3`      |
-    | scipy               | `>=1.4.1,<1.15`      | `>=1.4.1,<1.14`    |
+    | Dependency          | responsibleai 0.37.0     | raiwidgets 0.37.0  |
+    | ------------------- | ------------------------ | ------------------ |
+    | numpy               | `>=1.17.2,<3`            | `>=1.17.2,<3`      |
+    | pandas              | `>=0.25.1,<3`            | `>=0.25.1,<3`      |
+    | scipy               | `>=1.4.1,<1.15`          | `>=1.4.1,<1.14`    |
     | scikit-learn        | `>=0.22.1,!=1.1,<=1.5.1` | `>=0.22.1,<=1.5.1` |
-    | lightgbm            | `>=2.0.11,<4.6`      | `>=2.0.11,<5`      |
-    | dice-ml             | `>=0.11,<0.13`       | Not direct        |
-    | econml              | `>=0.15.0,<0.17`     | Not direct        |
-    | statsmodels         | `<0.15.0`            | Not direct        |
-    | interpret-community | `>=0.31.0,<0.34`     | Not direct        |
-    | ml-wrappers         | `>=0.5.4,<0.7`       | Not direct        |
-    | networkx            | `<4`                 | Not direct        |
-    | fairlearn           | Not direct           | `>=0.8.0,<0.9`    |
-    | erroranalysis       | `>=0.6.0`            | `>=0.6.0`         |
-    | raiutils            | `>=0.4.3`            | `>=0.4.3`         |
-    | rai-core-flask      | Not direct           | `>=0.7.6`         |
-    | responsibleai       | Not direct           | `==0.37.0`        |
+    | lightgbm            | `>=2.0.11,<4.6`          | `>=2.0.11,<5`      |
+    | dice-ml             | `>=0.11,<0.13`           | Not direct         |
+    | econml              | `>=0.15.0,<0.17`         | Not direct         |
+    | statsmodels         | `<0.15.0`                | Not direct         |
+    | interpret-community | `>=0.31.0,<0.34`         | Not direct         |
+    | ml-wrappers         | `>=0.5.4,<0.7`           | Not direct         |
+    | networkx            | `<4`                     | Not direct         |
+    | fairlearn           | Not direct               | `>=0.8.0,<0.9`     |
+    | erroranalysis       | `>=0.6.0`                | `>=0.6.0`          |
+    | raiutils            | `>=0.4.3`                | `>=0.4.3`          |
+    | rai-core-flask      | Not direct               | `>=0.7.6`          |
+    | responsibleai       | Not direct               | `==0.37.0`         |
 
     "Not direct" does not mean unconstrained: raiwidgets depends on the matching
     responsibleai version and inherits its dependencies. Installing both uses
@@ -72,16 +73,16 @@ this file to understand what changed.
 
     These are declared ranges, not a guarantee that every cross-product works:
     transitive requirements can impose higher effective minimums. DiCE 0.11
-    requires Pandas 1.x, while DiCE 0.12 requires Pandas 2.x. Keep older Pandas
+    requires Pandas <2, while DiCE 0.12 requires Pandas >=2. Keep older Pandas
     wheels on NumPy 1 even when their metadata lacks a NumPy upper bound.
     Official NumPy-2-compatible Pandas wheels start at 2.2.2; this is not a
     universal Pandas minimum for NumPy 1 environments.
 
-  - Published responsibleai-vision 0.3.8 requires Pandas <2. The broader
-    tabular ranges remove the previous direct Pandas conflict, but do not
-    establish universal runtime compatibility or NumPy 2 support for vision.
-    Existing vision images need a coherent legacy NumPy 1/Pandas 1/DiCE 0.11
-    stack and image-level constraints.
+  - Published responsibleai-vision 0.3.8 requires Pandas <2. The tabular
+    Pandas range still includes Pandas 1.x and does not conflict with that
+    cap at the metadata level. This does not establish universal runtime
+    compatibility or NumPy 2 support for vision. Existing vision images need
+    a coherent legacy NumPy 1/Pandas 1/DiCE 0.11 stack and image-level constraints.
 
 - bug fixes and tests
   - Raise a clear error when outcome filters cannot be computed without a
