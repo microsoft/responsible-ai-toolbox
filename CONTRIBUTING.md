@@ -123,6 +123,29 @@ once.
 
 ### Testing
 
+#### Python dependency compatibility
+
+Runtime requirements describe broad supported dependency ranges, not a Docker
+image lockfile. Keep reproducible version selections in CI constraints or the
+consuming image's environment definition. Retain runtime bounds for known
+incompatibilities; do not raise all runtime floors just to select a NumPy 2
+test environment.
+
+The NumPy compatibility workflow exercises a Python 3.9 legacy stack
+(NumPy 1.23.5, Pandas 1.5.3, DiCE 0.11, EconML 0.15.1), Pandas 1.5.3 with
+newer dependencies, and NumPy 1.x/2.x with the newer stack. Its NumPy 2
+baseline uses Pandas 2.2.2 and DiCE 0.12. These are compatible combinations,
+not a guarantee that every cross-product of the runtime ranges works.
+In particular, DiCE 0.11 requires Pandas below 2, and older Pandas wheels
+must remain on NumPy 1 even when their metadata omits that upper bound.
+Keep those versions together in downstream Docker constraints.
+
+Fairlearn remains at least 0.8 because older reductions use APIs removed in
+Pandas 2. ResponsibleAI caps LightGBM below 4.6 because its stricter feature
+validation breaks EconML causal AutoML projections. Interpret Community's
+own requirements select compatible SHAP, Interpret Core, and ml-wrappers
+versions; avoid overriding that selection with unconditional exact pins.
+
 #### Run e2e tests locally with mock data
 
 1. git clone <https://github.com/microsoft/responsible-ai-toolbox>
