@@ -22,6 +22,8 @@ this file to understand what changed.
 - new features
 - breaking changes
 - bug fixes and tests
+  - Preserve the doctype in served dashboard pages to prevent
+    oversized dropdown options caused by browser quirks mode.
   - Fix the tabular release notebook environment's PyTorch/MKL incompatibility
     and check PyTorch imports before running notebook tests.
 - other

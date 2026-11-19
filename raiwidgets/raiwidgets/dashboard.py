@@ -23,6 +23,9 @@ class InLineScript(HTMLParser):
         self.content = ""
         self.load_widget_file = load_widget_file
 
+    def handle_decl(self, decl):
+        self.content += f'<!{decl}>'
+
     def handle_starttag(self, tag, attrs):
         if tag == "script":
             src = None
