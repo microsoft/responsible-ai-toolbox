@@ -1,6 +1,11 @@
 {
   "name": "@responsible-ai/core-ui",
   "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microsoft/responsible-ai-toolbox.git",
+    "directory": "libs/core-ui"
+  },
   "license": "MIT",
   "dependencies": {
     "@fluentui/react": "8.58.0",

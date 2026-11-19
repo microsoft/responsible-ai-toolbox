@@ -1,6 +1,11 @@
 {
   "name": "@responsible-ai/localization",
   "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microsoft/responsible-ai-toolbox.git",
+    "directory": "libs/localization"
+  },
   "license": "MIT",
   "dependencies": {
     "localized-strings": "^0.2.4",

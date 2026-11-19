@@ -1,6 +1,11 @@
 {
   "name": "@responsible-ai/fairness",
   "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microsoft/responsible-ai-toolbox.git",
+    "directory": "libs/fairness"
+  },
   "license": "MIT",
   "dependencies": {
     "@fluentui/react": "8.58.0",

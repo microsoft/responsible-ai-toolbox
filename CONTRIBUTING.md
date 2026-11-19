@@ -265,6 +265,70 @@ ampersand (`&`), e.g., `feature_flights="flight1&flight2&flight3"`.
 In the dashboard test environment (using `yarn start`) you have a dropdown to
 select which flights should be active.
 
+## npm publishing
+
+The npm publishing jobs in `release-rai-tabular.yml` and `CD.yml` use
+[npm trusted publishing](https://docs.npmjs.com/trusted-publishers/) through
+GitHub Actions OIDC, rather than a stored `NPM_TOKEN`. The publishing jobs
+use GitHub-hosted runners, grant `id-token: write`, and install a pinned npm
+11 version with OIDC support. Keep Node at least 22.14.0 and npm at least
+11.5.1 when updating these jobs. Each package's `repository` metadata must
+continue to identify this GitHub repository for publishing and provenance.
+
+### One-time migration checklist
+
+Coordinate this migration with the next production release. Do not merge
+the OIDC workflow change before the npm-side configuration below is ready:
+merging to `main` triggers the CD publisher immediately.
+
+1. As an authorized npm package administrator, open each package's settings
+   and add **two** GitHub Actions trusted publishers, one per workflow.
+   Use organization **microsoft**, repository **responsible-ai-toolbox**,
+   and workflow filenames **release-rai-tabular.yml** and **CD.yml**
+   (case-sensitive filenames only, not `.github/workflows/` paths).
+   Leave the environment name blank because these jobs do not use a
+   GitHub environment. Explicitly allow **direct publishing (`npm publish`)**;
+   the default stage-only permission does not permit these workflows.
+2. Apply this configuration to all 14 packages under `@responsible-ai`:
+   `core-ui`, `forecasting`, `mlchartlib`, `dataset-explorer`, `causality`,
+   `counterfactuals`, `fairness`, `interpret`, `interpret-text`,
+   `interpret-vision`, `localization`, `error-analysis`, `model-assessment`,
+   and `e2e`.
+3. Merge the workflow change and verify that CD publishes successfully.
+   Run the next production release from `main` with a **new version** and
+   verify all 14 npm publishing jobs. Each newly configured publisher must
+   complete its first real publication within **two days** of configuration;
+   CD does not validate the separate release-workflow publisher.
+   An expired configuration must be deleted and recreated.
+4. After both workflows have published successfully through OIDC, revoke
+   the old npm automation token and remove the GitHub `NPM_TOKEN` secret
+   once no other workflows or repositories depend on that credential.
+   Package administrators can then require 2FA and disallow traditional
+   publishing tokens in npm package settings; OIDC continues to work.
+
+### Release checks and recovery
+
+The release workflow still requires a maintainer to dispatch it. A `Test`
+release publishes Python packages to TestPyPI but only **dry-runs** npm.
+It does not prove that npm trusted publishing is configured correctly or
+validate a new publisher. A `Prod` release publishes npm packages
+automatically after the existing unit and notebook tests pass.
+Both publishers set their existing `latest` dist-tag explicitly because
+npm 11 requires an explicit tag for CD prereleases and for maintenance
+releases below an already-published stable version.
+
+Verify publication with `npm view @responsible-ai/<package>@<version> version`
+for each package, rather than relying only on the action's summary message.
+
+The existing npm action skips versions already published, so retry only
+failed publishing jobs from the original run after correcting a failure;
+do not rerun successful PyPI uploads or recreate the version tag. The npm
+matrix does not cancel other packages when one package fails.
+
+OIDC removes manual npm-token rotation, not all failure modes. Missing or
+expired trust configurations, a mismatched workflow filename or repository,
+registry outages, and genuine build/test failures still fail visibly.
+
 ### Code approvals
 
 Once you have made your code changes locally, committed them and verified them, you can send a pull request (in short form written as PR) to [responsible-ai-toolbox](https://github.com/microsoft/responsible-ai-toolbox). For more information on how to create a pull request, please see [Proposing changes to your work with pull requests](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests).
