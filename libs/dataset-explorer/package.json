@@ -1,12 +1,12 @@
 {
   "name": "@responsible-ai/dataset-explorer",
-  "version": "0.0.0",
+  "version": "0.37.0",
   "license": "MIT",
   "dependencies": {
     "@fluentui/react": "8.58.0",
-    "@responsible-ai/core-ui": "0.0.0",
-    "@responsible-ai/localization": "0.0.0",
-    "@responsible-ai/mlchartlib": "0.0.0",
+    "@responsible-ai/core-ui": "0.37.0",
+    "@responsible-ai/localization": "0.37.0",
+    "@responsible-ai/mlchartlib": "0.37.0",
     "highcharts": "^11.4.9",
     "jmespath": "^0.15.0",
     "localized-strings": "^0.2.4",

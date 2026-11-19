@@ -1,6 +1,6 @@
 {
   "name": "@responsible-ai/mlchartlib",
-  "version": "0.0.0",
+  "version": "0.37.0",
   "license": "MIT",
   "dependencies": {
     "@fluentui/react": "8.58.0",

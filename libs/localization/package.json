@@ -1,6 +1,6 @@
 {
   "name": "@responsible-ai/localization",
-  "version": "0.0.0",
+  "version": "0.37.0",
   "license": "MIT",
   "dependencies": {
     "localized-strings": "^0.2.4",
