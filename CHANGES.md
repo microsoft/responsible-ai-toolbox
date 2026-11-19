@@ -20,10 +20,70 @@ this file to understand what changed.
 
 - educational materials
 - new features
-  - Add NumPy 1.x/2.x and Pandas 2 support to erroranalysis.
 - breaking changes
-  - Require Python 3.9 or later for erroranalysis.
-  - Require Fairlearn 0.8 or later for Pandas 2 reductions compatibility.
+- bug fixes and tests
+- other
+
+## v0.37.0
+
+- educational materials
+  - Add encrypted fairness-metrics example using fairlearn-fhe by @BAder82t in https://github.com/microsoft/responsible-ai-toolbox/pull/2623
+  - Add README for encrypted fairness-metrics notebook by @BAder82t in https://github.com/microsoft/responsible-ai-toolbox/pull/2624
+  - Correct co-occurrences typo in data balance README by @avalyset in https://github.com/microsoft/responsible-ai-toolbox/pull/2631
+  - Correct erroranalysis Python support documentation by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2667
+- new features
+  - Add NumPy 1.x/2.x and Pandas 2 support to erroranalysis by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2665
+- breaking changes
+
+  - Require Python 3.9 or later for responsibleai 0.37.0 and raiwidgets
+    0.37.0; Python 3.7 and 3.8 are no longer supported. The independently
+    released erroranalysis, raiutils, and rai-test-utils packages also require
+    Python 3.9 or later.
+  - Require Fairlearn `>=0.8.0,<0.9` for raiwidgets Pandas 2 reductions
+    compatibility; raiwidgets 0.36.0 required `fairlearn==0.7.0`.
+  - Support NumPy 2 while retaining broad runtime ranges for coherent older
+    environments. Key direct runtime constraints are below; exact tested
+    combinations belong in CI and image constraints, not universal package
+    pins. Other requirements and platform markers remain in package metadata.
+
+    | Dependency          | responsibleai 0.37.0     | raiwidgets 0.37.0  |
+    | ------------------- | ------------------------ | ------------------ |
+    | numpy               | `>=1.17.2,<3`            | `>=1.17.2,<3`      |
+    | pandas              | `>=0.25.1,<3`            | `>=0.25.1,<3`      |
+    | scipy               | `>=1.4.1,<1.15`          | `>=1.4.1,<1.14`    |
+    | scikit-learn        | `>=0.22.1,!=1.1,<=1.5.1` | `>=0.22.1,<=1.5.1` |
+    | lightgbm            | `>=2.0.11,<4.6`          | `>=2.0.11,<5`      |
+    | dice-ml             | `>=0.11,<0.13`           | Not direct         |
+    | econml              | `>=0.15.0,<0.17`         | Not direct         |
+    | statsmodels         | `<0.15.0`                | Not direct         |
+    | interpret-community | `>=0.31.0,<0.34`         | Not direct         |
+    | ml-wrappers         | `>=0.5.4,<0.7`           | Not direct         |
+    | networkx            | `<4`                     | Not direct         |
+    | fairlearn           | Not direct               | `>=0.8.0,<0.9`     |
+    | erroranalysis       | `>=0.6.0`                | `>=0.6.0`          |
+    | raiutils            | `>=0.4.3`                | `>=0.4.3`          |
+    | rai-core-flask      | Not direct               | `>=0.7.6`          |
+    | responsibleai       | Not direct               | `==0.37.0`         |
+
+    "Not direct" does not mean unconstrained: raiwidgets depends on the matching
+    responsibleai version and inherits its dependencies. Installing both uses
+    the intersection of their constraints, including SciPy `>=1.4.1,<1.14`,
+    LightGBM `>=2.0.11,<4.6`, and the scikit-learn `!=1.1` exclusion.
+    Interpret Core and SHAP are selected transitively, without direct exact pins.
+
+    These are declared ranges, not a guarantee that every cross-product works:
+    transitive requirements can impose higher effective minimums. DiCE 0.11
+    requires Pandas <2, while DiCE 0.12 requires Pandas >=2. Keep older Pandas
+    wheels on NumPy 1 even when their metadata lacks a NumPy upper bound.
+    Official NumPy-2-compatible Pandas wheels start at 2.2.2; this is not a
+    universal Pandas minimum for NumPy 1 environments.
+
+  - Published responsibleai-vision 0.3.8 requires Pandas <2. The tabular
+    Pandas range still includes Pandas 1.x and does not conflict with that
+    cap at the metadata level. This does not establish universal runtime
+    compatibility or NumPy 2 support for vision. Existing vision images need
+    a coherent legacy NumPy 1/Pandas 1/DiCE 0.11 stack and image-level constraints.
+
 - bug fixes and tests
   - Raise a clear error when outcome filters cannot be computed without a
     model or predictions.
@@ -33,13 +93,66 @@ this file to understand what changed.
     compatibility regression coverage.
   - Retain broad runtime dependency ranges, including Pandas 1.x, DiCE 0.11,
     EconML 0.15, and the older scientific stack. Keep exact compatibility
-    combinations in CI constraints rather than production package pins.
-  - Keep the legacy text and vision package stacks on NumPy 1.x until their
-    PyTorch dependency floors can support NumPy 2.
-  - Update forecasting and text/vision test paths for removed Pandas 2 APIs.
+    combinations in CI constraints rather than production package pins by
+    @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2678
   - Prevent dashboard browser tests from waiting on external Fluent UI icon
     font downloads before the page load event.
+  - Keep the in-repository text and vision package stacks on NumPy 1.x until
+    their PyTorch dependency floors can support NumPy 2. Publishing these
+    updated source packages requires separate releases, which are not part
+    of this tabular release.
+  - Update forecasting and text/vision test paths for removed Pandas 2 APIs.
+  - ## Responsible AI Dashboard
+    - Fix the Vision data explorer heading accessibility by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/2578
+    - Support NumPy 1.x and 2.x by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2642
+  - ## RAI Vision and Text
+    - Remove detection extra from torchmetrics install by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2590
+  - ## Error analysis
+    - Fix object detection conversion with complex predictions and NumPy >=1.26.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2594
+    - Correct metrics, cohort outcomes and regression residuals by @0-Actual in https://github.com/microsoft/responsible-ai-toolbox/pull/2649
+    - Fix error analysis metric consistency by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2652
+  - ## RAIUtils
+    - Fix conversion boundaries and JSON-safe NumPy scalars by @0-Actual in https://github.com/microsoft/responsible-ai-toolbox/pull/2648
+  - ## Build and test infrastructure
+    - Fix builds and update to Python 3.9 as default in tests by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2593
+    - Fix dependency compatibility for Node 16 and Python library breaking changes by @imatiach-msft with @Copilot in https://github.com/microsoft/responsible-ai-toolbox/pull/2608
+    - Fix rai-core-flask CI pip 25.x compatibility and artifact upload conflicts by @imatiach-msft with @Copilot in https://github.com/microsoft/responsible-ai-toolbox/pull/2609
+    - Update Cypress configuration and test assertions by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2612
+    - Fix widget-e2e maplibre-gl CSS compilation by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2613
+    - Fix CI pipeline failures across all workflows by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2620
+    - Harden notebook CI against external failures by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2653
+    - Use latest Ubuntu with separate Python 3.9 compatibility lanes by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2671
+    - Fix Python setup for rai-test-utils releases by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2673
+    - Fix tabular release npm publish output condition by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2676
 - other
+  - ## Package releases and dependency updates
+    - Release erroranalysis 0.5.5 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2595
+    - Merge CORS origin restrictions for rai-core-flask by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2618
+    - Prepare rai-core-flask 0.7.7 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2619
+      - This separate package version is not yet published to PyPI. The current
+        raiwidgets dependency floor remains rai-core-flask >=0.7.6, so this
+        tabular release does not guarantee the CORS hardening. Publishing
+        0.7.7 and raising that floor require separate release/dependency work.
+    - Release erroranalysis 0.6.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2666
+    - Release raiutils 0.4.3 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2670
+    - Release rai-test-utils 0.4.3 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2674
+    - Update tabular packages to released utility versions by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2675
+  - ## Toolchain and dependency maintenance
+    - Upgrade Nx to 22.7.7 and Node.js to 22.21.1 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2562
+    - Consolidate Dependabot dependency and GitHub Actions updates by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2641
+    - Consolidate Dependabot dependency and GitHub Actions updates by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2657
+    - Consolidate action pinning and security dependency updates by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2660
+    - Bump the github-actions group with 4 updates by @dependabot[bot] in https://github.com/microsoft/responsible-ai-toolbox/pull/2661
+    - Bump Highcharts from 10.3.3 to 11.4.9 by @dependabot[bot] in https://github.com/microsoft/responsible-ai-toolbox/pull/2662
+    - Bump Lodash from 4.17.23 to 4.18.1 by @dependabot[bot] in https://github.com/microsoft/responsible-ai-toolbox/pull/2663
+    - Bump qs from 6.16.0 to 6.16.2 by @dependabot[bot] in https://github.com/microsoft/responsible-ai-toolbox/pull/2664
+    - Bump the github-actions group with 4 updates by @dependabot[bot] in https://github.com/microsoft/responsible-ai-toolbox/pull/2668
+  - ## Repository maintenance
+    - Update localization from JUNO by @csigs in https://github.com/microsoft/responsible-ai-toolbox/pull/2598
+    - Add @imatiach-msft as code owner to all repository paths by @imatiach-msft with @Copilot in https://github.com/microsoft/responsible-ai-toolbox/pull/2611
+    - Pin GitHub Actions to full-length commit SHAs by @danfiedler-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/2628
+
+**Full Changelog**: https://github.com/microsoft/responsible-ai-toolbox/compare/v0.36.0...v0.37.0
 
 ## v0.36.0
 
