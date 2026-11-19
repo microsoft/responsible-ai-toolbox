@@ -224,7 +224,8 @@ jobs:
       - name: Install pytorch
         shell: bash -l {0}
         run: |
-          conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
+          # Newer MKL drops iJIT_NotifyEvent, which the Conda PyTorch build needs.
+          conda install --yes --quiet pytorch torchvision captum cpuonly "mkl<2024.1" -c pytorch
 
       - name: install requirements.txt for raiwidgets
         shell: bash -l {0}
@@ -240,6 +241,11 @@ jobs:
         shell: bash -l {0}
         run: find ./ -name '*.whl' -exec pip install {} \;
         working-directory: ${{ env.widgetDirectory }}
+
+      - name: Verify PyTorch runtime
+        shell: bash -l {0}
+        run: |
+          python -c "import torch; import torchvision; print(torch.__version__, torchvision.__version__)"
 
       - name: Run widget tests without flights
         shell: bash -l {0}

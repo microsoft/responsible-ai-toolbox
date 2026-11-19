@@ -22,6 +22,8 @@ this file to understand what changed.
 - new features
 - breaking changes
 - bug fixes and tests
+  - Fix the tabular release notebook environment's PyTorch/MKL incompatibility
+    and check PyTorch imports before running notebook tests.
 - other
 
 ## v0.37.0
