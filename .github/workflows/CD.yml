@@ -197,7 +197,11 @@ jobs:
     if: ${{ github.event_name  == 'push' || github.event_name  == 'workflow_dispatch' }}
     needs: cd-build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     strategy:
+      fail-fast: false
       matrix:
         package:
           [
@@ -222,6 +226,9 @@ jobs:
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: ${{ env.node-version }}
+          package-manager-cache: false
+      - name: Install npm with trusted publishing support
+        run: npm install --global npm@11.21.2
       - id: download
         name: Download a Build Artifact
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
@@ -232,11 +239,10 @@ jobs:
         name: NPM Publish
         uses: JS-DevTools/npm-publish@0fd2f4369c5d6bcfcde6091a7c527d810b9b5c3f # v4.1.5
         with:
-          token: ${{ secrets.NPM_TOKEN }}
           package: ${{steps.download.outputs.download-path}}/libs/${{ matrix.package }}/package.json
           dry-run: false
           access: public
-          # tag: next
-      - if: steps.publish.type != 'none'
+          tag: latest
+      - if: steps.publish.outputs.type != ''
         run: |
           echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"

@@ -1,6 +1,11 @@
 {
   "name": "@responsible-ai/interpret-vision",
   "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microsoft/responsible-ai-toolbox.git",
+    "directory": "libs/interpret-vision"
+  },
   "license": "MIT",
   "dependencies": {
     "@fluentui/react": "8.58.0",

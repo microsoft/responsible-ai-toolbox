@@ -1,6 +1,11 @@
 {
   "name": "@responsible-ai/e2e",
   "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microsoft/responsible-ai-toolbox.git",
+    "directory": "libs/e2e"
+  },
   "license": "MIT",
   "dependencies": {
     "@responsible-ai/interpret-text": "0.0.0",
