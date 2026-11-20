@@ -50,9 +50,9 @@ export function describeCohortFunctionality(
         cy.get(Locators.CohortSettingsButton).click();
         cy.get(Locators.CohortSettingsCreateNewCohortButton).click();
         cy.get(Locators.CohortPredictedYButton).click();
-        cy.get(Locators.CohortPredictedYValuesCaretButton).click({
-          scrollBehavior: false
-        });
+        cy.get(Locators.CohortPredictedYValuesInput)
+          .focus()
+          .type("{alt}{downarrow}");
         cy.get(Locators.CohortEditPanel)
           .find("[role='listbox']")
           .should("be.visible")
@@ -61,14 +61,27 @@ export function describeCohortFunctionality(
               $options.find(Locators.CohortPredictedYGFirstOptionCheckbox)
                 .length > 0
             ) {
-              cy.get(Locators.CohortPredictedYGFirstOption)
+              cy.get(Locators.CohortEditPanel)
+                .find("[role='option']")
                 .first()
-                .click({ scrollBehavior: false });
-              cy.get(Locators.CohortPredictedYValuesCaretButton).click({
+                .should("be.checked");
+              cy.get(Locators.CohortPredictedYValuesInput).type(
+                "{home}{enter}",
+                { scrollBehavior: false }
+              );
+              cy.get(Locators.CohortEditPanel)
+                .find("[role='option']")
+                .first()
+                .should("not.be.checked");
+              cy.get(Locators.CohortPredictedYValuesInput).type("{esc}", {
                 scrollBehavior: false
               });
+              cy.get(Locators.CohortEditPanel)
+                .find("[role='listbox']")
+                .should("not.exist");
               cy.get(Locators.CohortPredictedYValuesInput)
                 .invoke("attr", "placeholder")
+                .should("not.be.empty")
                 .then((text) => {
                   cy.get(Locators.CohortAddFilterButton).click();
                   cy.get(Locators.CohortEditorSaveButton).first().click();
@@ -76,13 +89,14 @@ export function describeCohortFunctionality(
                   cy.get(Locators.EditButtons).last().click();
                   cy.get(Locators.CohortPredictedYButton).click();
                   cy.get(Locators.CohortPredictedYValuesInput).should(
-                    "have.attr",
-                    "value",
+                    "have.value",
                     text
                   );
                 });
             } else {
-              cy.get(Locators.CohortPredictedYValuesCaretButton).click();
+              cy.get(Locators.CohortPredictedYValuesInput).type("{esc}", {
+                scrollBehavior: false
+              });
             }
           });
         cy.get(Locators.CancelButton).click();

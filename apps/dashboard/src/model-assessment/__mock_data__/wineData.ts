@@ -13,6 +13,7 @@ import {
 
 export const wineData: IDataset = {
   categorical_features: [],
+  class_names: ["Class 0", "Class 1", "Class 2"],
   feature_metadata: undefined,
   feature_names: [
     "alcohol",
