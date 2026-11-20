@@ -65,6 +65,7 @@ export function describeAxisFlyouts(dataShape: IModelAssessmentData): void {
           cy.get(Locators.WhatIfScatterChartXAxis).click();
           cy.get(Locators.AxisFeatureDropdown).click();
           cy.get(Locators.AxisFeatureDropdownOption).should("have.length", 2);
+          cy.get(Locators.WhatIfScatterChartSelectFeatureCaretButton).click();
           cy.get(Locators.WhatIfScatterChartFlyoutCancel).click();
         });
 
@@ -78,7 +79,7 @@ export function describeAxisFlyouts(dataShape: IModelAssessmentData): void {
           cy.get(Locators.AxisFeatureDropdown).click();
           cy.get(
             `${Locators.AxisFeatureDropdownOptionGeneral} button:contains('${dataShape.whatIfCounterfactualsData?.newClassValue}')`
-          ).click();
+          ).click({ scrollBehavior: false });
           cy.get(Locators.WhatIfScatterChartFlyoutApply).click();
           cy.get(
             `${Locators.WhatIfScatterChartXAxisLabelUpdatedGeneral}  button:contains('${dataShape.whatIfCounterfactualsData?.newClassValue}')`

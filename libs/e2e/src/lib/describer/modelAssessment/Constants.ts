@@ -182,7 +182,7 @@ export enum Locators {
   AggregateBalanceMeasuresTableRows = "#aggregateBalanceMeasures .ms-DetailsRow",
   ForecastingDashboard = "#ModelAssessmentDashboard #ForecastingDashboard",
   ForecastingTimeSeriesDropdown = "#ForecastingDashboard #ForecastingTimeSeriesDropdown",
-  ForecastingTimeSeriesDropdownOptions = "#ForecastingDashboard button[role='option']",
+  ForecastingTimeSeriesDropdownOptions = "button[role='option'][id^='ForecastingTimeSeriesDropdown-list']",
   ForecastingTransformationCreationButton = "#ForecastingWhatIfTransformationCreationButton",
   ForecastingTransformationsTable = "#ForecastingDashboard #ForecastingWhatIfTransformationsTable",
   ForecastingTransformationValueField = "#ForecastingWhatIfTransformationValueField",

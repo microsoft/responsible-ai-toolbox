@@ -128,7 +128,6 @@ export class ForecastingDashboard extends React.Component<
                 }
                 placeholder={localization.Forecasting.selectTimeSeries}
                 disabled={false}
-                calloutProps={{ doNotLayer: true }}
               />
             )}
           </Stack.Item>

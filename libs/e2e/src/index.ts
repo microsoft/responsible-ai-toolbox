@@ -17,3 +17,4 @@ export * from "./lib/describer/modelAssessment/datasets/modelAssessmentDatasets"
 export * from "./lib/describer/modelAssessment/IModelAssessmentData";
 export * from "./lib/describer/modelAssessment/visionDataExplorer/describeVisionDataExplorer";
 export * from "./util/visit";
+export * from "./util/dropdown";
