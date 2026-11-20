@@ -52,7 +52,7 @@ export function describeCohortFunctionality(
         cy.get(Locators.CohortPredictedYButton).click();
         cy.get(Locators.CohortPredictedYValuesInput)
           .focus()
-          .type("{alt}{downarrow}");
+          .type("{alt}{downarrow}", { scrollBehavior: false });
         cy.get(Locators.CohortEditPanel)
           .find("[role='listbox']")
           .should("be.visible")
