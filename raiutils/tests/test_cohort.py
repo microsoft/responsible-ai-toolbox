@@ -116,6 +116,12 @@ class TestCohortFilter:
             CohortFilter(method=CohortFilterMethods.METHOD_RANGE,
                          arg=['val', 2], column="age")
 
+    @pytest.mark.parametrize('arg', [[0.5, 3], [1, 2.5]])
+    def test_cohort_filter_validate_in_range_mixed_numeric_args(
+            self, arg):
+        CohortFilter(method=CohortFilterMethods.METHOD_RANGE,
+                     arg=arg, column="age")
+
     @pytest.mark.parametrize('method',
                              CohortFilterMethods.SINGLE_VALUE_METHODS)
     def test_cohort_filter_serialization_single_value_methods(self, method):
@@ -315,6 +321,21 @@ class TestCohortFilterDataValidations:
                 target_column="target",
                 categorical_features=[],
                 is_classification=False)
+
+    def test_validate_with_test_data_regression_error_mixed_numeric_args(
+            self):
+        cohort_filter = CohortFilter(
+            method=CohortFilterMethods.METHOD_RANGE,
+            arg=[0, 2.5],
+            column=CohortFilter.REGRESSION_ERROR)
+        cohort = Cohort(name="Cohort New")
+        cohort.add_cohort_filter(cohort_filter)
+
+        cohort._validate_with_test_data(
+            test_data=get_toy_regression_dataset(),
+            target_column="target",
+            categorical_features=[],
+            is_classification=False)
 
     @pytest.mark.parametrize('target_filter_type',
                              [CohortFilter.PREDICTED_Y,

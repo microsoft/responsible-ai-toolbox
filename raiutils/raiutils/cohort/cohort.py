@@ -148,8 +148,7 @@ class CohortFilter:
                     "cohort method {0}.".format(
                         CohortFilterMethods.METHOD_RANGE)
                 )
-            if (not all(isinstance(entry, int) for entry in arg) and
-                    not all(isinstance(entry, float) for entry in arg)):
+            if not all(isinstance(entry, (int, float)) for entry in arg):
                 raise UserConfigValidationException(
                     "Expected int or float type for arg "
                     "with cohort method {0}.".format(
@@ -288,8 +287,8 @@ class CohortFilter:
                     )
                 )
 
-            if not all(isinstance(entry, int) for entry in self.arg) and \
-                    not all(isinstance(entry, float) for entry in self.arg):
+            if not all(isinstance(entry, (int, float))
+                       for entry in self.arg):
                 raise UserConfigValidationException(
                     "All entries in arg should be of type int or float"
                     " for {} cohort.".format(CohortFilter.REGRESSION_ERROR)
