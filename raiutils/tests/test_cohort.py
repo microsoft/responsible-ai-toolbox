@@ -3,6 +3,7 @@
 
 import json
 
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -432,6 +433,39 @@ class TestCohortFilterDataValidations:
             cohort_filter._validate_with_test_data(
                 test_data=test_data,
                 target_column="target",
+                categorical_features=['type'],
+                is_classification=True)
+
+    @pytest.mark.parametrize('mixed_value', [np.nan, None, 1])
+    def test_validate_categorical_dataset_with_mixed_values(
+            self, mixed_value):
+        test_data = pd.DataFrame({
+            'type': pd.Series(
+                ['red', mixed_value, 'blue'], dtype=object),
+            'target': ['A', 'B', 'A']
+        })
+        cohort_filter = CohortFilter(
+            method=CohortFilterMethods.METHOD_INCLUDES,
+            arg=['red'],
+            column='type')
+
+        cohort_filter._validate_with_test_data(
+            test_data=test_data,
+            target_column='target',
+            categorical_features=['type'],
+            is_classification=True)
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="Found a category {0} in arg which is not present "
+                      "in test data column {1}.".format('green', 'type')):
+            cohort_filter = CohortFilter(
+                method=CohortFilterMethods.METHOD_INCLUDES,
+                arg=['green'],
+                column='type')
+            cohort_filter._validate_with_test_data(
+                test_data=test_data,
+                target_column='target',
                 categorical_features=['type'],
                 is_classification=True)
 

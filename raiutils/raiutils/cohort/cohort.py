@@ -331,8 +331,7 @@ class CohortFilter:
                             CohortFilterMethods.METHOD_INCLUDES)
                     )
 
-                categories = np.unique(
-                    test_data[self.column].values).tolist()
+                categories = test_data[self.column].unique().tolist()
 
                 for entry in self.arg:
                     if entry not in categories:
