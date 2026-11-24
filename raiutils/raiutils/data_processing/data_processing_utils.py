@@ -157,7 +157,8 @@ def serialize_json_safe(o: Any):
     elif isinstance(o, (datetime.date, datetime.time, datetime.timedelta)):
         return o.__str__()
     elif (isinstance(o, (np.datetime64, np.timedelta64)) and
-          np.datetime_data(o.dtype)[0] in _SUB_NANOSECOND_UNITS):
+          (np.datetime_data(o.dtype)[0] in _SUB_NANOSECOND_UNITS or
+           np.datetime_data(o.dtype)[1] != 1)):
         return str(o)
     elif isinstance(o, np.datetime64):
         try:
