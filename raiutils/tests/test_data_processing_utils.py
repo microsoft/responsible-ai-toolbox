@@ -239,9 +239,17 @@ class TestSerializationUtilities:
          "2024-01-02 00:00:00"),
         (np.timedelta64(1, "D"), "1 days 00:00:00"),
         (np.datetime64("NaT", "ns"), "NaT"),
+        (np.datetime64(1, "500m"), str(np.datetime64(1, "500m"))),
+        (np.datetime64(1, "as"), str(np.datetime64(1, "as"))),
+        (np.timedelta64(1, "M"), str(np.timedelta64(1, "M"))),
+        (np.timedelta64(1, "ps"), str(np.timedelta64(1, "ps"))),
+        (np.timedelta64(2**62, "D"),
+         str(np.timedelta64(2**62, "D"))),
     ])
     def test_serialize_temporal_scalars(self, value, expected):
         assert serialize_json_safe(value) == expected
+        assert json.loads(json.dumps(
+            value, default=serialize_json_safe)) == expected
 
     def test_temporal_values_are_json_safe(self):
         datetimes = np.array([
@@ -249,6 +257,13 @@ class TestSerializationUtilities:
             ["2024-01-03", "2024-01-04"],
         ], dtype="datetime64[ns]")
         timedeltas = np.array([1, 2], dtype="timedelta64[D]")
+        ambiguous_timedeltas = np.array([
+            np.timedelta64(1, "M"), np.timedelta64(2, "M")])
+        expected_ambiguous_timedeltas = ["1 months", "2 months"]
+        multiplier_datetimes = np.array([
+            np.datetime64(1, "500m"), np.datetime64(2, "500m")])
+        expected_multiplier_datetimes = [
+            "1970-01-01T08:20", "1970-01-01T16:40"]
 
         assert json.dumps(
             {"d": datetimes}, default=serialize_json_safe) == (
@@ -261,6 +276,16 @@ class TestSerializationUtilities:
             {"d": np.array(np.datetime64("2024-01-02", "ns"))},
             default=serialize_json_safe) == (
                 '{"d": "2024-01-02 00:00:00"}')
+        assert serialize_json_safe(
+            ambiguous_timedeltas) == expected_ambiguous_timedeltas
+        assert json.loads(json.dumps(
+            ambiguous_timedeltas,
+            default=serialize_json_safe)) == expected_ambiguous_timedeltas
+        assert serialize_json_safe(
+            multiplier_datetimes) == expected_multiplier_datetimes
+        assert json.loads(json.dumps(
+            multiplier_datetimes,
+            default=serialize_json_safe)) == expected_multiplier_datetimes
 
     def test_embedded_object(self):
         class A:
