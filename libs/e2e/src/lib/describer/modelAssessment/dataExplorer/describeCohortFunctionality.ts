@@ -50,9 +50,9 @@ export function describeCohortFunctionality(
         cy.get(Locators.CohortSettingsButton).click();
         cy.get(Locators.CohortSettingsCreateNewCohortButton).click();
         cy.get(Locators.CohortPredictedYButton).click();
-        cy.get(Locators.CohortPredictedYValuesInput)
-          .focus()
-          .type("{alt}{downarrow}", { scrollBehavior: false });
+        cy.get(Locators.CohortPredictedYValuesCaretButton).click({
+          scrollBehavior: false
+        });
         cy.get(Locators.CohortEditPanel)
           .find("[role='listbox']")
           .should("be.visible")
@@ -65,15 +65,16 @@ export function describeCohortFunctionality(
                 .find("[role='option']")
                 .first()
                 .should("be.checked");
-              cy.get(Locators.CohortPredictedYValuesInput).type(
-                "{home}{enter}",
-                { scrollBehavior: false }
-              );
+              cy.get(Locators.CohortEditPanel)
+                .find(Locators.CohortPredictedYGFirstOptionCheckbox)
+                .first()
+                .find("label")
+                .click({ scrollBehavior: false });
               cy.get(Locators.CohortEditPanel)
                 .find("[role='option']")
                 .first()
                 .should("not.be.checked");
-              cy.get(Locators.CohortPredictedYValuesInput).type("{esc}", {
+              cy.get(Locators.CohortPredictedYValuesCaretButton).click({
                 scrollBehavior: false
               });
               cy.get(Locators.CohortEditPanel)
@@ -94,7 +95,7 @@ export function describeCohortFunctionality(
                   );
                 });
             } else {
-              cy.get(Locators.CohortPredictedYValuesInput).type("{esc}", {
+              cy.get(Locators.CohortPredictedYValuesCaretButton).click({
                 scrollBehavior: false
               });
             }

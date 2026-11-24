@@ -35,7 +35,7 @@ export function describeAxisFlyouts(dataShape: IModelAssessmentData): void {
         cy.get(Locators.AxisFeatureDropdown).click();
         cy.get(
           `${Locators.AxisFeatureDropdownOptionGeneral} button:contains('${dataShape.whatIfCounterfactualsData?.yAxisNewValue}')`
-        ).click();
+        ).click({ scrollBehavior: false });
         cy.get(Locators.WhatIfScatterChartFlyoutApply).click();
         cy.get(
           `${Locators.WhatIfScatterChartYAxis} button:contains('${dataShape.whatIfCounterfactualsData?.yAxisNewValue}')`
