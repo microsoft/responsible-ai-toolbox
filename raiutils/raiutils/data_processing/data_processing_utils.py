@@ -153,8 +153,12 @@ def serialize_json_safe(o: Any):
         if isinstance(o, str):
             return json.dumps(o)[1:-1]
         return o
-    elif isinstance(o, datetime.datetime) or isinstance(o, pd.Timestamp):
+    elif isinstance(o, (datetime.date, datetime.time, datetime.timedelta)):
         return o.__str__()
+    elif isinstance(o, np.datetime64):
+        return pd.Timestamp(o).__str__()
+    elif isinstance(o, np.timedelta64):
+        return pd.Timedelta(o).__str__()
     elif isinstance(o, dict):
         return {k: serialize_json_safe(v, ) for k, v in o.items()}
     elif isinstance(o, list):
@@ -162,6 +166,10 @@ def serialize_json_safe(o: Any):
     elif isinstance(o, tuple):
         return tuple(serialize_json_safe(v) for v in o)
     elif isinstance(o, np.ndarray):
+        if o.dtype.kind in {'M', 'm'}:
+            if o.ndim == 0:
+                return serialize_json_safe(o[()])
+            return [serialize_json_safe(v) for v in o]
         return serialize_json_safe(o.tolist())
     elif isinstance(o, np.floating):
         if not np.isfinite(o):

@@ -228,6 +228,40 @@ class TestConvertToList:
 
 class TestSerializationUtilities:
 
+    @pytest.mark.parametrize("value, expected", [
+        (datetime.date(2024, 1, 2), "2024-01-02"),
+        (datetime.time(3, 4, 5, 6), "03:04:05.000006"),
+        (datetime.timedelta(days=1, seconds=2, microseconds=3),
+         "1 day, 0:00:02.000003"),
+        (pd.Timedelta("1D"), "1 days 00:00:00"),
+        (np.datetime64("2024-01-02"), "2024-01-02 00:00:00"),
+        (np.datetime64("2024-01-02T00:00:00.000000000"),
+         "2024-01-02 00:00:00"),
+        (np.timedelta64(1, "D"), "1 days 00:00:00"),
+        (np.datetime64("NaT", "ns"), "NaT"),
+    ])
+    def test_serialize_temporal_scalars(self, value, expected):
+        assert serialize_json_safe(value) == expected
+
+    def test_temporal_values_are_json_safe(self):
+        datetimes = np.array([
+            ["2024-01-02", "NaT"],
+            ["2024-01-03", "2024-01-04"],
+        ], dtype="datetime64[ns]")
+        timedeltas = np.array([1, 2], dtype="timedelta64[D]")
+
+        assert json.dumps(
+            {"d": datetimes}, default=serialize_json_safe) == (
+                '{"d": [["2024-01-02 00:00:00", "NaT"], '
+                '["2024-01-03 00:00:00", "2024-01-04 00:00:00"]]}')
+        assert json.dumps(
+            {"d": timedeltas}, default=serialize_json_safe) == (
+                '{"d": ["1 days 00:00:00", "2 days 00:00:00"]}')
+        assert json.dumps(
+            {"d": np.array(np.datetime64("2024-01-02", "ns"))},
+            default=serialize_json_safe) == (
+                '{"d": "2024-01-02 00:00:00"}')
+
     def test_embedded_object(self):
         class A:
             def __init__(self):
