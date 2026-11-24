@@ -455,6 +455,20 @@ class TestCohortFilterDataValidations:
             categorical_features=['type'],
             is_classification=True)
 
+        with pytest.raises(
+                UserConfigValidationException,
+                match="Found a category {0} in arg which is not present "
+                      "in test data column {1}.".format('green', 'type')):
+            cohort_filter = CohortFilter(
+                method=CohortFilterMethods.METHOD_INCLUDES,
+                arg=['green'],
+                column='type')
+            cohort_filter._validate_with_test_data(
+                test_data=test_data,
+                target_column='target',
+                categorical_features=['type'],
+                is_classification=True)
+
 
 class TestCohort:
     def test_cohort_configuration_validations(self):
