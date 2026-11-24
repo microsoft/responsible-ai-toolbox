@@ -8,7 +8,17 @@ for (const dataset of ["adultCensusIncomeData", "wineData"]) {
     let initialCohorts: number;
 
     before(() => {
-      cy.visit(`/#/modelAssessment/${dataset}/1-light/en/1`);
+      cy.visit(`/#/modelAssessment/${dataset}/1-light/en/1`, {
+        onBeforeLoad(win) {
+          // Static cohorts do not need training progress moving and dismissing menus.
+          cy.stub(win, "Worker").returns({
+            addEventListener: cy.stub(),
+            postMessage: cy.stub()
+          });
+        },
+        // A distinct query reloads the document instead of only changing its hash.
+        qs: { cohortFixture: dataset }
+      });
       cy.document().its("compatMode").should("equal", "CSS1Compat");
       cy.get("#dataAnalysisPivot .ms-Pivot-link").eq(1).click();
       cy.get("#cohortSettings").click();
