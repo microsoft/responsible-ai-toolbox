@@ -71,6 +71,8 @@ class CohortFilter:
         self.column = column
 
     def __eq__(self, cohort_filter: Any):
+        if not isinstance(cohort_filter, CohortFilter):
+            return NotImplemented
         return self.method == cohort_filter.method and \
             self.arg == cohort_filter.arg and \
             self.column == cohort_filter.column
@@ -361,6 +363,8 @@ class Cohort:
         self.cohort_filter_list = None
 
     def __eq__(self, cohort: Any):
+        if not isinstance(cohort, Cohort):
+            return NotImplemented
         same_name = self.name == cohort.name
         if self.cohort_filter_list is None and \
                 cohort.cohort_filter_list is None:
