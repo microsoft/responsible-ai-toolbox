@@ -161,6 +161,8 @@ class CounterfactualConfig(BaseConfig):
         self.explainer = None
 
     def __eq__(self, other_cf_config):
+        if not isinstance(other_cf_config, CounterfactualConfig):
+            return NotImplemented
         return (
             self.method == other_cf_config.method and
             self.continuous_features == other_cf_config.continuous_features and

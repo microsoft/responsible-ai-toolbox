@@ -5,6 +5,7 @@ import pytest
 
 from raiutils.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
+from responsibleai.managers.error_analysis_manager import ErrorAnalysisConfig
 
 
 class TestFeatureMetadata:
@@ -151,6 +152,15 @@ class TestFeatureMetadata:
 
         assert feature_metadata_1 == feature_metadata_2
         assert feature_metadata_1 != feature_metadata_3
+
+    @pytest.mark.parametrize(
+        'other', [None, 'feature metadata',
+                  ErrorAnalysisConfig(3, 31, 20, None)])
+    def test_feature_metadata_not_equal_to_other_types(self, other):
+        feature_metadata = FeatureMetadata()
+
+        assert feature_metadata != other
+        assert feature_metadata in [other, feature_metadata]
 
     def test_feature_metadata_input_types(self):
         with pytest.raises(
