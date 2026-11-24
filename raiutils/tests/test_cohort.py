@@ -30,6 +30,14 @@ def get_toy_regression_dataset():
 
 
 class TestCohortFilter:
+    @pytest.mark.parametrize('other', [None, 1, Cohort('Cohort')])
+    def test_cohort_filter_not_equal_to_other_types(self, other):
+        cohort_filter = CohortFilter(
+            method=CohortFilterMethods.METHOD_LESS, arg=[1], column='age')
+
+        assert cohort_filter != other
+        assert cohort_filter in [other, cohort_filter]
+
     def test_cohort_filter_validate_method(self):
         with pytest.raises(
                 UserConfigValidationException,
@@ -471,6 +479,16 @@ class TestCohortFilterDataValidations:
 
 
 class TestCohort:
+    @pytest.mark.parametrize(
+        'other',
+        [None, 'Cohort',
+         CohortFilter(CohortFilterMethods.METHOD_LESS, [1], 'age')])
+    def test_cohort_not_equal_to_other_types(self, other):
+        cohort = Cohort('Cohort')
+
+        assert cohort != other
+        assert cohort in [other, cohort]
+
     def test_cohort_configuration_validations(self):
         with pytest.raises(
             UserConfigValidationException,
