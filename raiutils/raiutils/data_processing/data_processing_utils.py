@@ -13,6 +13,7 @@ from sklearn.utils import check_consistent_length
 _DF_COLUMN_BAD_NAME = "DataFrame column names must be strings."\
     " Name '{0}' is of type {1}"
 _LIST_NONSCALAR = "Lists must be of scalar types"
+_SUB_NANOSECOND_UNITS = {'ps', 'fs', 'as'}
 _TOO_MANY_DIMS = "Array must have at most two dimensions"
 
 
@@ -153,8 +154,22 @@ def serialize_json_safe(o: Any):
         if isinstance(o, str):
             return json.dumps(o)[1:-1]
         return o
-    elif isinstance(o, datetime.datetime) or isinstance(o, pd.Timestamp):
+    elif isinstance(o, (datetime.date, datetime.time, datetime.timedelta)):
         return o.__str__()
+    elif (isinstance(o, (np.datetime64, np.timedelta64)) and
+          (np.datetime_data(o.dtype)[0] in _SUB_NANOSECOND_UNITS or
+           np.datetime_data(o.dtype)[1] != 1)):
+        return str(o)
+    elif isinstance(o, np.datetime64):
+        try:
+            return pd.Timestamp(o).__str__()
+        except ValueError:
+            return str(o)
+    elif isinstance(o, np.timedelta64):
+        try:
+            return pd.Timedelta(o).__str__()
+        except ValueError:
+            return str(o)
     elif isinstance(o, dict):
         return {k: serialize_json_safe(v, ) for k, v in o.items()}
     elif isinstance(o, list):
@@ -162,6 +177,10 @@ def serialize_json_safe(o: Any):
     elif isinstance(o, tuple):
         return tuple(serialize_json_safe(v) for v in o)
     elif isinstance(o, np.ndarray):
+        if o.dtype.kind in {'M', 'm'}:
+            if o.ndim == 0:
+                return serialize_json_safe(o[()])
+            return [serialize_json_safe(v) for v in o]
         return serialize_json_safe(o.tolist())
     elif isinstance(o, np.floating):
         if not np.isfinite(o):
