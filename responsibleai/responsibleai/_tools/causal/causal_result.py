@@ -299,7 +299,7 @@ class CausalResult(BaseResult['CausalResult']):
 
         # Check for a categorical feature
         for cat_feature in sorted(categoricals)[::-1]:
-            pattern = f'({cat_feature})_(.+)'
+            pattern = f'({re.escape(str(cat_feature))})_(.+)'
             match = re.match(pattern, tree_feature)
             if match is not None:
                 feature = match.group(1)
