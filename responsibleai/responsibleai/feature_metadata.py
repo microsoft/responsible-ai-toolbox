@@ -104,6 +104,8 @@ class FeatureMetadata:
                  metadata.
         :rtype: bool
         """
+        if not isinstance(other_feature_metadata, FeatureMetadata):
+            return NotImplemented
         return self.identity_feature_name == \
             other_feature_metadata.identity_feature_name and \
             self.datetime_features == \

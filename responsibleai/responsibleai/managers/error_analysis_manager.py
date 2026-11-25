@@ -183,6 +183,8 @@ class ErrorAnalysisConfig(BaseConfig):
         :return: True if the given config is equal to the current config.
         :rtype: boolean
         """
+        if not isinstance(other_ea_config, ErrorAnalysisConfig):
+            return NotImplemented
         return (
             self.max_depth == other_ea_config.max_depth and
             self.num_leaves == other_ea_config.num_leaves and
