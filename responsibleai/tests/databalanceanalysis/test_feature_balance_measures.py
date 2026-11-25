@@ -11,6 +11,39 @@ from .conftest import SYNTHETIC_DATA_GENDER, SYNTHETIC_DATA_LABEL
 
 
 class TestFeatureBalanceMeasures:
+    @pytest.mark.parametrize(
+        "values,no_positive_value",
+        [
+            (["a", "a", "b", "b", "c", "c"], "c"),
+            ([1, 1, 2, 2, 3, 3], 3),
+        ],
+    )
+    def test_value_without_positive_rows(self, values, no_positive_value):
+        data = pd.DataFrame(
+            {"group": values, "label": [1, 0, 1, 1, 0, 0]}
+        )
+        expected_data = data.copy()
+        expected_data["group"] = expected_data["group"].astype("category")
+
+        actual = FeatureBalanceMeasures(
+            cols_of_interest=["group"], label_col="label", pos_label=1
+        ).measures(data)
+        expected = FeatureBalanceMeasures(
+            cols_of_interest=["group"], label_col="label", pos_label=1
+        ).measures(expected_data)
+
+        pd.testing.assert_frame_equal(actual, expected)
+        first_to_missing = actual[
+            (actual["ClassA"] == values[0]) &
+            (actual["ClassB"] == no_positive_value)
+        ].iloc[0]
+        assert first_to_missing["StatisticalParity"] == 0.5
+        missing_pairs = actual[
+            (actual["ClassA"] == no_positive_value) |
+            (actual["ClassB"] == no_positive_value)
+        ]
+        assert not missing_pairs.iloc[:, 3:].isna().any().any()
+
     def test_synthetic_data(
         self, synthetic_data, expected_feature_balance_measures_gender
     ):

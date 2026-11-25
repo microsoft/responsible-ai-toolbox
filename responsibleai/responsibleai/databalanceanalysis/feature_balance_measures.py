@@ -410,9 +410,12 @@ class FeatureBalanceMeasures(BalanceMeasures):
             ][col_of_interest]
             .value_counts()
             .rename(FeatureBalanceMeasures.PROB_POS_FEATURE) / num_rows
-        ).fillna(0)
+        )
 
         new_df = pd.concat([p_feature_col, p_pos_feature_col], axis=1)
+        new_df[FeatureBalanceMeasures.PROB_POS_FEATURE] = new_df[
+            FeatureBalanceMeasures.PROB_POS_FEATURE
+        ].fillna(0)
         new_df[FeatureBalanceMeasures.PROB_POSITIVE] = (
             df[
                 df[label_col].astype("str") == str(pos_label)
