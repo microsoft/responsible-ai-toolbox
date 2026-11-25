@@ -6,6 +6,8 @@ on:
   pull_request:
     branches: [main]
     paths:
+      - "package.json"
+      - "yarn.lock"
       - "raiwidgets/**"
       - "responsibleai_vision/**"
       - "responsibleai_text/**"
