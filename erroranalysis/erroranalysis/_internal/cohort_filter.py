@@ -492,8 +492,8 @@ class FilterDataWithCohortFilters:
                         arg0i = filter[ARG][0]
                         arg_cat = categories[cat_idx][arg0i]
                         if isinstance(arg_cat, str):
-                            queries.append("`{}` == '{}'".format(colname,
-                                                                 arg_cat))
+                            queries.append("`{}` == {!r}".format(colname,
+                                                                 str(arg_cat)))
                         else:
                             queries.append("`{}` == {}".format(colname,
                                                                arg_cat))
@@ -550,14 +550,14 @@ class FilterDataWithCohortFilters:
             if is_categorical:
                 cat_idx = categorical_features.index(colname)
                 if isinstance(categories[cat_idx][arg], str):
-                    arg_val = "'{}'".format(str(categories[cat_idx][arg]))
+                    arg_val = "{!r}".format(str(categories[cat_idx][arg]))
                 else:
                     arg_val = "{}".format(str(categories[cat_idx][arg]))
             elif is_label and self.classes is not None:
                 class_value = self.classes[arg]
                 format_str = "{}"
                 if isinstance(class_value, str):
-                    format_str = "'{}'"
+                    format_str = "{!r}"
                 arg_val = format_str.format(str(self.classes[arg]))
             else:
                 arg_val = arg

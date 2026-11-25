@@ -271,6 +271,64 @@ class TestCohortFilter(object):
                            model_task,
                            filters=filters)
 
+    @pytest.mark.parametrize(
+        'method',
+        [CohortFilterMethods.METHOD_INCLUDES,
+         CohortFilterMethods.METHOD_EXCLUDES,
+         CohortFilterMethods.METHOD_EQUAL])
+    @pytest.mark.parametrize('value', ["S'ton", 'Q\\b'])
+    def test_cohort_filter_categorical_special_characters(
+            self, method, value):
+        X_train, X_test, y_train, y_test, numeric, categorical = \
+            create_simple_titanic_data()
+        replacements = {'S': "S'ton", 'Q': 'Q\\b'}
+        X_train[EMBARKED] = X_train[EMBARKED].replace(replacements)
+        X_test[EMBARKED] = X_test[EMBARKED].replace(replacements)
+        feature_names = categorical + numeric
+        clf = create_titanic_pipeline(X_train, y_train)
+        categories = np.unique(X_test[EMBARKED]).tolist()
+        filters = [{ARG: [categories.index(value)],
+                    COLUMN: EMBARKED,
+                    METHOD: method}]
+        validation_data = create_validation_data(X_test, y_test)
+        if method == CohortFilterMethods.METHOD_EXCLUDES:
+            validation_filter = X_test[EMBARKED] != value
+        else:
+            validation_filter = X_test[EMBARKED] == value
+        validation_data = validation_data.loc[validation_filter]
+        run_error_analyzer(validation_data,
+                           clf,
+                           X_test,
+                           y_test,
+                           feature_names,
+                           categorical,
+                           ModelTask.CLASSIFICATION,
+                           filters=filters)
+
+    @pytest.mark.parametrize('value', ["seto'sa", 'versi\\bcolor'])
+    def test_cohort_filter_target_special_characters(self, value):
+        X_train, X_test, y_train, y_test, feature_names, classes = \
+            create_iris_pandas(use_str_labels=True)
+        renamed_classes = ["seto'sa", 'versi\\bcolor', classes[2]]
+        replacements = dict(zip(classes, renamed_classes))
+        y_train = np.array([replacements[label] for label in y_train])
+        y_test = np.array([replacements[label] for label in y_test])
+        filters = [{ARG: [renamed_classes.index(value)],
+                    COLUMN: TRUE_Y,
+                    METHOD: CohortFilterMethods.METHOD_INCLUDES}]
+        validation_data = create_validation_data(X_test, y_test)
+        validation_data = validation_data.loc[y_test == value]
+        model = create_sklearn_svm_classifier(X_train, y_train)
+        run_error_analyzer(validation_data,
+                           model,
+                           X_test,
+                           y_test,
+                           feature_names,
+                           [],
+                           ModelTask.CLASSIFICATION,
+                           filters=filters,
+                           classes=renamed_classes)
+
     @pytest.mark.parametrize('arg, outcome', [([1, 2], False), ([0, 3], True)])
     def test_cohort_filter_binary_classification_outcome(self, arg, outcome):
         X_train, X_test, y_train, y_test, numeric, categorical = \
