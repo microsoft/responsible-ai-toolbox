@@ -1,6 +1,6 @@
 # Requirements for raiwidgets development
 
-pytest==7.0.1
+pytest==9.0.3
 pytest-cov
 pytest-mock==3.6.1
 
