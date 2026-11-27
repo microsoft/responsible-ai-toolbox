@@ -44,7 +44,11 @@ class ServedModelWrapper:
         try:
             response = post_with_retries(uri, input_data, headers,
                                          max_retries=15, retry_delay=30)
-        except Exception:
+        except Exception as ex:
+            raise RuntimeError(
+                "Could not retrieve predictions. "
+                f"Request to the model server failed: {ex}") from ex
+        if 400 <= response.status_code < 600:
             raise RuntimeError(
                 "Could not retrieve predictions. "
                 f"Model server returned status code {response.status_code} "
