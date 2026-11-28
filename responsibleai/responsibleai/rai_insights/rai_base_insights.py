@@ -151,7 +151,9 @@ class RAIBaseInsights(ABC):
                                 json.dumps(dtypes))
             self._write_to_file(data_directory /
                                 (Metadata.TRAIN + FileFormats.JSON),
-                                self.train.to_json(orient='split'))
+                                self.train.to_json(orient='split',
+                                                   date_format='iso',
+                                                   date_unit='ns'))
 
         dtypes = self.test.dtypes.astype(str).to_dict()
         self._write_to_file(data_directory /
@@ -159,7 +161,9 @@ class RAIBaseInsights(ABC):
                             json.dumps(dtypes))
         self._write_to_file(data_directory /
                             (Metadata.TEST + FileFormats.JSON),
-                            self.test.to_json(orient='split'))
+                            self.test.to_json(orient='split',
+                                              date_format='iso',
+                                              date_unit='ns'))
 
         self._write_to_file(Path(path) /
                             (SerializationAttributes.RAI_VERSION_JSON),

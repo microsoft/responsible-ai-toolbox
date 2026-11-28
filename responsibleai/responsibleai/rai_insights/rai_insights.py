@@ -1102,7 +1102,9 @@ class RAIInsights(RAIBaseInsights):
                 SerializationAttributes.LARGE_TEST_JSON)
             self._write_to_file(
                 large_test_path,
-                self._large_test.to_json(orient='split'))
+                self._large_test.to_json(orient='split',
+                                         date_format='iso',
+                                         date_unit='ns'))
 
     def _save_metadata(self, path):
         """Save the metadata like target column, categorical features,
