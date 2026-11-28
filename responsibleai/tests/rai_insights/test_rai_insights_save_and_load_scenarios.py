@@ -27,6 +27,63 @@ LABELS = 'labels'
 
 class TestRAIInsightsSaveAndLoadScenarios(object):
 
+    @pytest.mark.parametrize('maximum_rows_for_test', [5000, 1])
+    @pytest.mark.parametrize(
+        ('train_time_value', 'test_time_value', 'timezone'),
+        [
+            pytest.param(
+                '2020-01-01', '2021-02-01', None,
+                id='naive-midnight'),
+            pytest.param(
+                '2020-01-01 12:34:56.123457',
+                '2021-02-01 12:34:56.123457', None,
+                id='naive-microsecond'),
+            pytest.param(
+                '2020-01-01', '2021-02-01', 'US/Eastern',
+                id='timezone-aware'),
+        ])
+    def test_save_load_preserves_temporal_columns(
+            self, maximum_rows_for_test, train_time_value, test_time_value,
+            timezone):
+        train_time = pd.to_datetime([train_time_value, None])
+        test_time = pd.to_datetime([test_time_value, None])
+        if timezone is not None:
+            train_time = train_time.tz_localize(timezone)
+            test_time = test_time.tz_localize(timezone)
+
+        train = pd.DataFrame({
+            'time': train_time,
+            'target': [1.0, 2.0]
+        })
+        test = pd.DataFrame({
+            'time': test_time,
+            'target': [3.0, 4.0]
+        })
+        feature_metadata = FeatureMetadata(datetime_features=['time'])
+
+        rai_insights = RAIInsights(
+            model=None,
+            train=train,
+            test=test,
+            target_column='target',
+            task_type=ModelTask.FORECASTING,
+            maximum_rows_for_test=maximum_rows_for_test,
+            feature_metadata=feature_metadata,
+            forecasting_enabled=True)
+
+        with TemporaryDirectory() as tmpdir:
+            save_path = Path(tmpdir) / 'rai_insights'
+            rai_insights.save(save_path)
+            loaded = RAIInsights.load(save_path)
+
+        pd.testing.assert_frame_equal(loaded.train, train)
+        if maximum_rows_for_test < len(test):
+            pd.testing.assert_frame_equal(loaded.test, test.iloc[:1])
+            pd.testing.assert_frame_equal(loaded._large_test, test)
+        else:
+            pd.testing.assert_frame_equal(loaded.test, test)
+            assert loaded._large_test is None
+
     def test_rai_insights_empty_save_load_save(self):
         X_train, y_train, X_test, y_test, classes = \
             create_binary_classification_dataset()
